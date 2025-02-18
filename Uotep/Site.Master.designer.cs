@@ -15,6 +15,15 @@ namespace Uotep
     {
 
         /// <summary>
+        /// Controllo menuHome.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor menuHome;
+
+        /// <summary>
         /// Controllo menuAmministratore.
         /// </summary>
         /// <remarks>
@@ -105,13 +114,13 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuManTabelle;
 
         /// <summary>
-        /// Controllo menuFureria.
+        /// Controllo menuSegreteria.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuFureria;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSegreteria;
 
         /// <summary>
         /// Controllo menuEsci.

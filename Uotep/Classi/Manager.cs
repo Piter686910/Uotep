@@ -1045,6 +1045,31 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable GetFileByFascicoloData(CaricaFile fl)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            if (!String.IsNullOrEmpty( fl.fascicolo) && !String.IsNullOrEmpty( fl.data))
+                sql = "SELECT * FROM File_Caricati where fascicolo = " + @fl.fascicolo + " and Data = '" + fl.data + "'";
+            else if (!String.IsNullOrEmpty(fl.fascicolo))
+            {
+                sql = "SELECT * FROM File_Caricati where fascicolo = '" + @fl.fascicolo + "'";
+            }
+            else
+            {
+                sql = "SELECT * FROM File_Caricati where Data = '" + fl.data + "'";
+
+            }
+
+
+            
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getPratica(Int32 protocollo, DateTime data, string sigla)
         {
             DataTable tb = new DataTable();
@@ -1747,11 +1772,71 @@ namespace Uotep.Classi
         }
 
         /// <summary>
-        /// inserimento tabella operatori
+        /// carica file in tabella 
         /// </summary>
-        /// <param name="op"></param>
+        /// <param name="fl"></param>
         /// <returns></returns>
 
+        public Boolean InsFile(CaricaFile fl)
+        {
+            bool resp = true;
+            string sql_file = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_file = "insert into file_caricati (fascicolo, data,matricola, folder,nomefile)" +
+                   " Values('" + @fl.fascicolo.Replace("'", "''") + "','" + @fl.data + "','" + fl.matricola.Replace("'", "''") + "','" + fl.folder.Replace("'", "''") +
+                   "','" + fl.nomefile.Replace("'", "''") + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_file;
+                        testoSql = "carica file";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("matricola:" + fl.matricola + ", data: " + fl.data + "nomefile: " + fl.nomefile + " - " + ex.Message + @" - Errore in inserimento dati in tabella carica file");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
         public Boolean InsOperatore(Operatore op)
         {
             bool resp = true;
@@ -1813,7 +1898,7 @@ namespace Uotep.Classi
 
         }
 
-        //FINE INSERIMENTO
+
         public Boolean InsRappUote(RappUote rapp)
         {
             bool resp = true;
@@ -1903,6 +1988,7 @@ namespace Uotep.Classi
             }
 
         }
+        //FINE INSERIMENTO
         public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita)
         {
             string sql = string.Empty;

@@ -52,7 +52,7 @@
                 </div>
                 <div class="navbar-collapse collapse" style="font-weight:bold !important">
                     <ul class="nav navbar-nav" >
-                        <li><a runat="server" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
+                        <li><a id="menuHome" runat="server"  visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
                         <li runat="server"  id="menuAmministratore" visible="false" ><a  runat="server" style="color: #ffffff !important"  href="~/View/Dashboard">Dashboard</a></li>
                         <%--<li runat="server" id="menuCoordinamentoAtti" visible="false"><a runat="server" href="~/View/PagComandi">Coordinamento Atti</a></li>--%>
 
@@ -78,8 +78,8 @@
                         <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
 
                         <%--<li runat="server" id="menuAccertatori" visible="false"><a runat="server" href="~/View/SchedaIntervento">Scheda Intervento</a></li>--%>
-                        <li runat="server" id="menuFureria" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/PagScheda">Fureria</a></li>
-                        <li runat="server" id="menuEsci" ><a style="color: #ffffff !important"  <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI </asp:LinkButton></a></li>
+                        <li runat="server" id="menuSegreteria" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/Segreteria">Segreteria</a></li>
+                        <li runat="server" id="menuEsci"> <a style="color: #ffffff !important"  <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
                     </ul>
                 </div>
                

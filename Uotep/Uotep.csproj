@@ -153,6 +153,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\Segreteria.aspx" />
     <Content Include="View\ManutenzioneTabelle.aspx" />
     <Content Include="View\Default.aspx" />
     <Content Include="favicon.ico" />
@@ -223,6 +224,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classi\Enumerate.cs" />
     <Compile Include="Classi\Manager.cs" />
+    <Compile Include="Classi\CaricaFile.cs" />
     <Compile Include="Classi\Operatore.cs" />
     <Compile Include="Classi\Principale.cs" />
     <Compile Include="Classi\RappUote.cs" />
@@ -234,6 +236,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="View\Segreteria.aspx.cs">
+      <DependentUpon>Segreteria.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Segreteria.aspx.designer.cs">
+      <DependentUpon>Segreteria.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\ManutenzioneTabelle.aspx.cs">
       <DependentUpon>ManutenzioneTabelle.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -32,7 +32,9 @@ namespace Uotep
                                 menuAccertatori.Visible = false;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
-                                menuFureria.Visible = false;
+                                menuSegreteria.Visible = false;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
                                 if (Session["profilo"].ToString() != "1")
                                 {
                                     menuNuovaScheda.Visible = false;
@@ -50,7 +52,9 @@ namespace Uotep
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
-                                menuFureria.Visible = false;
+                                menuSegreteria.Visible = false;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
                                 if (Session["profilo"].ToString() != "1")
                                 {
                                     menuNuovaScheda.Visible = false;
@@ -60,13 +64,16 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
+
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
-                                menuFureria.Visible = false;
+                                menuSegreteria.Visible = false;
                                 menuAmministratore.Visible = false;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
 
                                 if (Session["profilo"].ToString() == "1")
                                 {
@@ -74,15 +81,27 @@ namespace Uotep
                                     menuRicercaScheda.Visible = true;
                                 }
                                 break;
+                            case "segreteria":
+                                // Mostra voci per utenti standard
+                                menuCoordinamentoAtti.Visible = false;
+                                menuAccertatori.Visible = false;
+                                menuSegreteria.Visible = true;
+                                menuAmministratore.Visible = false;
+                                menuEsci.Visible = true;
+                                menuHome.Visible=true;
+                                
+                                break;
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
-                                menuFureria.Visible = true;
+                                menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = true;
                                 menuManTabelle.Visible = true;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;
