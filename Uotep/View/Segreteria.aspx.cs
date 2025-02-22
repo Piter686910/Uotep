@@ -82,16 +82,16 @@ namespace Uotep
             fl.nomefile = filePath;
 
             Boolean ins = mn.InsFile(fl);
-            //if (ins)
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File inserito correttamente." + "'); $('#errorModal').modal('show');", true);
+            if (ins)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File " + fl.nomefile + " inserito correttamente." + "'); $('#errorModal').modal('show');", true);
 
-            //}
-            //else
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#errorModal').modal('show');", true);
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#errorModal').modal('show');", true);
 
-            //}
+            }
         }
 
         protected void Ricerca_Click(object sender, EventArgs e)
@@ -140,20 +140,39 @@ namespace Uotep
         {
             if (e.CommandName == "Select")
             {
-                // Ottieni il valore dell'ID dalla CommandArgument
-                //string selectedValue = e.CommandArgument.ToString();
-
-
+                // Ottieni l'indice della riga cliccata
                 string[] args = e.CommandArgument.ToString().Split(';');
-                string numeroF = args[0];
-                string data = args[1];
-                string nomefile = args[2];
-                string folder = args[3];
-                
-                
-                Process.Start(new ProcessStartInfo(folder+nomefile) { UseShellExecute = true });
-                
+                int rowIndex = Convert.ToInt32(args[0]);
+                string numeroF = args[1];
+                string data = args[2];
+                string nomefile = args[3];
+                string folder = args[4];
+
+              
+
+                GridViewRow row = GVRicercaFile.Rows[rowIndex];
+
+                // Recupera il nome del file dalla riga
+                string fileName = nomefile; // row.Cells[0].Text; // Assumi che sia nella prima colonna
+                string baseUrl = "http://10.6.1.250/uotep/files/";
+                string userId = Vuser; // Se necessario, recupera dinamicamente l'ID utente
+
+                // Costruisci l'URL del file
+                string fileUrl = $"{baseUrl}{fileName}?user={userId}";
+
+                // Apri il file in una nuova scheda
+                Response.Redirect(fileUrl, false);
+
+                // Trova il controllo HyperLink nella riga e aggiorna l'URL
+               // HyperLink link = (HyperLink)row.FindControl("btnSelect");
+                //if (link != null)
+                //{
+                //    //link.NavigateUrl = wordOnlineUrl;
+                //    link.NavigateUrl = fileUrl;
+                //    link.Visible = true; // Mostra il link
+                //}
             }
+            
         }
         
         //protected void apripopup_Click(object sender, EventArgs e)

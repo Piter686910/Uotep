@@ -68,9 +68,15 @@
                                     <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
                                     <asp:TemplateField>
                                         <ItemTemplate>
-                                            <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>' CssClass="btn btn-success btn-sm" />
+                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>' CssClass="btn btn-success btn-sm" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
+                                   
+                                   <%-- <asp:TemplateField HeaderText="Link">
+                                        <ItemTemplate>
+                                            <asp:HyperLink ID="HyperLink1" runat="server" Text="Apri File" CommandName="AddLink" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>'></asp:HyperLink>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>--%>
                                 </Columns>
                             </asp:GridView>
 
@@ -82,7 +88,7 @@
                     <!-- Colonna Destra -->
                     <div id="divDestra" runat="server" class="col-md-6">
 
-                       
+
                         <div class="col-md-6" style="margin-top: 20px!important">
                             <div class="form-group mb-3">
                                 <asp:Button ID="btCarica" Text="Carica" runat="server" OnClick="Carica_Click" ToolTip="Carica File" CssClass="btn btn-primary px-4" Visible="false" />

@@ -1,14 +1,10 @@
 ﻿using Microsoft.Ajax.Utilities;
-using Microsoft.Reporting.Map.WebForms.BingMaps;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
-using System.Web.Services;
-using System.Windows.Forms;
 
 namespace Uotep.Classi
 {
@@ -568,14 +564,14 @@ namespace Uotep.Classi
 
         //}
         ///// <summary>
-        ///// autocomplete giudice
+        ///// autocomplete operatori
         ///// </summary>
         ///// <returns></returns>
-        //public AutoCompleteStringCollection GetAutoCompleteGiudice(Manager mn)
+        //public AutoCompleteStringCollection GetAutoCompleteOperatori(Manager mn)
         //{
         //    AutoCompleteStringCollection txtBox = new AutoCompleteStringCollection();
         //    //OleDbCommand cmd = null;
-        //    String select = "SELECT giudice FROM giudice";
+        //    String select = "SELECT dip_cognome FROM Dipendenti";
 
         //    //OleDbConnection conn = new OleDbConnection(ConnString);
         //    SqlConnection conn = new SqlConnection(ConnString);
@@ -774,8 +770,7 @@ namespace Uotep.Classi
         public DataTable getListQuartiere()
         {
             DataTable tb = new DataTable();
-            // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
-            string sql = "SELECT MIN(id_quartiere) AS ID, quartiere FROM Quart GROUP BY quartiere ORDER BY quartiere";
+            string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -797,9 +792,11 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
+            //string sql = "SELECT max(nr_protocollo) + 1 FROM Principale";
+            //string sql = "SELECT anno, max(nr_protocollo) FROM Principale where anno=" + anno + " group by anno";
+            string sql = "SELECT MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND anno = '" + anno + "'";
+            //max select
 
-            //string sql = " SELECT anno, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO ='" + anno + "'";
-            string sql = "SELECT ANNO, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO = '" + anno + "' GROUP BY ANNO";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -827,17 +824,7 @@ namespace Uotep.Classi
         public DataTable getListProvvAg()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM TipoNotaAG order by tipologia";
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-
-                return tb = FillTable(sql, conn);
-            }
-        }
-        public DataTable getListInviati()
-        {
-            DataTable tb = new DataTable();
-            string sql = "SELECT * FROM inviati order by inviata";
+            string sql = "SELECT tipologia FROM TipoNotaAG order by tipologia";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -851,14 +838,13 @@ namespace Uotep.Classi
         public DataTable getListIndirizzo()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT toponimo  FROM Quart order by toponimo";
+            string sql = "SELECT toponimo FROM Quart order by toponimo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
                 return tb = FillTable(sql, conn);
             }
         }
-
         /// <summary>
         /// ricerca per protocollo
         /// </summary>
@@ -868,7 +854,7 @@ namespace Uotep.Classi
         public DataTable getListPrototocollo(string protocollo, string anno)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "'";
+            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = " + anno;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -879,7 +865,7 @@ namespace Uotep.Classi
         /// ricerca per procedimento penale
         /// </summary>
         /// <param name="procedimento"></param>
-
+     
         /// <returns></returns>
         public DataTable getListProcedimento(string procedimento)
         {
@@ -904,7 +890,7 @@ namespace Uotep.Classi
             DateTime dtda = System.Convert.ToDateTime(datada);
             DateTime dta = System.Convert.ToDateTime(dataa);
 
-            string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'";
+            string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() +"'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -920,7 +906,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-
+            
 
             string sql = "SELECT * FROM Principale where Rif_Prot_Gen = '" + protgen + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -998,7 +984,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="datacarico"></param>
         /// <returns></returns>
-        public DataTable getListDataCarico(string datacaricoDa, string datacaricoA)
+        public DataTable getListDataCarico(string datacaricoDa,string  datacaricoA)
         {
             DataTable tb = new DataTable();
             DateTime dtda = System.Convert.ToDateTime(datacaricoDa);
@@ -1047,32 +1033,7 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable GetFileByFascicoloData(CaricaFile fl)
-        {
-            string sql = string.Empty;
-            DataTable tb = new DataTable();
-            if (!String.IsNullOrEmpty( fl.fascicolo) && !String.IsNullOrEmpty( fl.data))
-                sql = "SELECT * FROM File_Caricati where fascicolo = " + @fl.fascicolo + " and Data = '" + fl.data + "'";
-            else if (!String.IsNullOrEmpty(fl.fascicolo))
-            {
-                sql = "SELECT * FROM File_Caricati where fascicolo = '" + @fl.fascicolo + "'";
-            }
-            else
-            {
-                sql = "SELECT * FROM File_Caricati where Data = '" + fl.data + "'";
-
-            }
-
-
-            
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-
-                return tb = FillTable(sql, conn);
-            }
-        }
-        public DataTable getPratica(Int32 protocollo, DateTime data, string sigla)
+        public DataTable getPratica(Int32 protocollo, DateTime data, string matricola, string sigla)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'";
@@ -1386,521 +1347,6 @@ namespace Uotep.Classi
             return table;
 
         }
-        //INSERIMENTI
-        /// <summary>
-        /// inserimento tabella Tipologia Nota Ag
-        /// </summary>
-        /// <param name="TipologiaNotaAg"></param>
-        /// <returns></returns>
-        public Boolean InserisciTipologiaNotaAg(string TipologiaNotaAg)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into Tipologia (Tipologia)" +
-                   " Values('" + TipologiaNotaAg.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "TipologiaNotaAg";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Tipologia Nota Ag:" + TipologiaNotaAg + ", " + ex.Message + @" - Errore in inserimento tabella Tipologia Nota Ag ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        /// <summary>
-        /// inseriemento tabella Tipologia
-        /// </summary>
-        /// <param name="Tipologia"></param>
-        /// <returns></returns>
-        public Boolean InserisciTipologia(string Tipologia)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into Tipologia (Tipologia)" +
-                   " Values('" + Tipologia.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "Tipologia";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Tipologia:" + Tipologia + ", " + ex.Message + @" - Errore in inserimento tabella Tipologia ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        /// <summary>
-        /// inserimento tabella provenienza
-        /// </summary>
-        /// <param name="Provenienza"></param>
-        /// <returns></returns>
-        public Boolean InserisciProvenienza(string Provenienza)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into Provenienza (Provenienza)" +
-                   " Values('" + Provenienza.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "Provenienza";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Provenienza:" + Provenienza + ", " + ex.Message + @" - Errore in inserimento tabella Provenienza ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        /// <summary>
-        /// inserimento tabella scaturito
-        /// </summary>
-        /// <param name="Scaturito"></param>
-        /// <returns></returns>
-        public Boolean InserisciScaturito(string Scaturito)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into Scaturito (Scaturito)" +
-                   " Values('" + Scaturito.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "Scaturito";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Scaturito:" + Scaturito + ", " + ex.Message + @" - Errore in inserimento tabella Scaturito ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        /// <summary>
-        /// isnserimento tabella incviata
-        /// </summary>
-        /// <param name="inviata"></param>
-        /// <returns></returns>
-        public Boolean InserisciInviata(string inviata)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into inviata (inviata)" +
-                   " Values('" + inviata.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "inviata";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Inviata:" + inviata + ", " + ex.Message + @" - Errore in inserimento tabella inviata ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        /// <summary>
-        /// isnserimento tabella giudice
-        /// </summary>
-        /// <param name="giudice"></param>
-        /// <returns></returns>
-        /// 
-        public Boolean InserisciGiudice(string giudice)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into giudice (giudice)" +
-                   " Values('" + @giudice.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "giudice";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("Giudice:" + giudice + ", " + ex.Message + @" - Errore in inserimento tabella giudice ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-
-        /// <summary>
-        /// carica file in tabella 
-        /// </summary>
-        /// <param name="fl"></param>
-        /// <returns></returns>
-
-        public Boolean InsFile(CaricaFile fl)
-        {
-            bool resp = true;
-            string sql_file = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_file = "insert into file_caricati (fascicolo, data,matricola, folder,nomefile)" +
-                   " Values('" + @fl.fascicolo.Replace("'", "''") + "','" + @fl.data + "','" + fl.matricola.Replace("'", "''") + "','" + fl.folder.Replace("'", "''") +
-                   "','" + fl.nomefile.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_file;
-                        testoSql = "carica file";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("matricola:" + fl.matricola + ", data: " + fl.data + "nomefile: " + fl.nomefile + " - " + ex.Message + @" - Errore in inserimento dati in tabella carica file");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-        public Boolean InsOperatore(Operatore op)
-        {
-            bool resp = true;
-            string sql_pratica = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_pratica = "insert into operatore (matricola, passw, profilo,nota, area, macroarea,ruolo, reset, pwstandard,nominativo)" +
-                   " Values('" + @op.matricola + "','" + @op.passw.Replace("'", "''") + "','" + @op.profilo + "','" + @op.nota.Replace("'", "''") + "','" + @op.area.Replace("'", "''") +
-                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_pratica;
-                        testoSql = "operatore";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("matricola:" + op.matricola + ", " + ex.Message + @" - Errore in inserimento dati ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
-        }
-
-
         public Boolean InsRappUote(RappUote rapp)
         {
             bool resp = true;
@@ -1918,7 +1364,7 @@ namespace Uotep.Classi
                     "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
                     "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                     "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-                    "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola)" +
+                    "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni)" +
               " Values('" + rapp.pratica + "','" +
                 //@rapp.ora + "','" +
                 @rapp.data + "','" +
@@ -1959,7 +1405,7 @@ namespace Uotep.Classi
                 @rapp.attività_interna + "','" +
                 @rapp.nota.Replace("'", "''") + "','" +
                 @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-                @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "')";
+                @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" +  @rapp.conProt + "','" + @rapp.senzaProt  +  "')";
                     command.CommandText = sql_ins;
                     command.ExecuteNonQuery();
 
@@ -1977,7 +1423,7 @@ namespace Uotep.Classi
 
                     using (StreamWriter sw = File.AppendText(LogFile))
                     {
-                        sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
+                        sw.WriteLine("matricola:" + rapp.pratica + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
                         sw.Close();
                     }
 
@@ -1990,7 +1436,6 @@ namespace Uotep.Classi
             }
 
         }
-        //FINE INSERIMENTO
         public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita)
         {
             string sql = string.Empty;
@@ -2071,25 +1516,6 @@ namespace Uotep.Classi
 
 
         }
-        /// <summary>
-        /// cercala scheda per id 
-        /// </summary>
-
-        /// <param name="pattuglia"></param>
-        /// <returns></returns>
-        public DataTable GetSchedaById(string Idschedaa)
-        {
-            string sql = string.Empty;
-            DataTable tb = new DataTable();
-            sql = "SELECT * FROM RappUote where id_rapp_scheda = '" + Idschedaa + "'";
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                return tb = FillTable(sql, conn);
-            }
-
-
-        }
         public Boolean SavePratica(Principale p)
         {
             bool resp = true;
@@ -2098,7 +1524,6 @@ namespace Uotep.Classi
 
             try
             {
-
                 sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
                     "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
                    " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
@@ -2129,7 +1554,7 @@ namespace Uotep.Classi
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("protocollo " + p.nrProtocollo + ", matricola:" + p.matricola + ", data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in inserimento dati ");
+                            sw.WriteLine("matricola:" + p.matricola + ",data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in inserimento dati ");
                             sw.Close();
                         }
 
@@ -2178,8 +1603,8 @@ namespace Uotep.Classi
                      "', rapp_contr_da_segn ='" + @rapp.contrDaSegn + "', rapp_attivita_interna = '" + @rapp.attività_interna + "', rapp_nota = '" + @rapp.nota +
                      "', rapp_data_consegna_intervento ='" + @rapp.data_consegna_intervento +
                      "', rapp_con_protezioni ='" + @rapp.conProt +
-                     "', rapp_senza_protezioni ='" + @rapp.senzaProt +
-                     "', rapp_matricola ='" + @rapp.matricola.Trim() + "'" +
+                     "', rapp_senza_protezioni ='" + @rapp.senzaProt + "'" +
+
 
                      " where rapp_numero_pratica = '" + @rapp.pratica + "'";
 
@@ -2461,7 +1886,66 @@ namespace Uotep.Classi
             return resp;
 
         }
-        
+        public Boolean InsOperatore(Operatore op)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_pratica = "insert into operatore (matricola, passw, profilo,nota, area, macroarea,ruolo, reset, pwstandard,nominativo)" +
+                   " Values('" + @op.matricola + "','" + @op.passw.Replace("'", "''") + "','" + @op.profilo + "','" + @op.nota.Replace("'", "''") + "','" + @op.area.Replace("'", "''") +
+                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "operatore";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("matricola:" + op.matricola + ", " + ex.Message + @" - Errore in inserimento dati ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
 
     }
 }

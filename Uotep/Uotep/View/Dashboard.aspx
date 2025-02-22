@@ -71,13 +71,10 @@
                             <div class="form-group text-center mt-4" style="text-align: left !important">
                                 <asp:Label ID="Label6" runat="server" Text="Ruolo" CssClass="form-label d-block mb-2"></asp:Label>
                                 <asp:DropDownList ID="DdlRuolo" runat="server" CssClass="form-control">
-                                    <asp:ListItem Text="admin"> </asp:ListItem>
                                     <asp:ListItem Text="accertatori"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamento ag"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamento pg"> </asp:ListItem>
+                                    <asp:ListItem Text="coordinamento atti"> </asp:ListItem>
                                     <asp:ListItem Text="MasterAG"> </asp:ListItem>
-                                    <asp:ListItem Text="segreteria"> </asp:ListItem>
-                                    <asp:ListItem Text="superAdmin"> </asp:ListItem>
+                                    <asp:ListItem Text="admin"> </asp:ListItem>
                                 </asp:DropDownList>
                             </div>
                         </div>
@@ -117,7 +114,7 @@
             role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+                    <h5 class="modal-title" id="modalLabel">ERRORE</h5>
 
                 </div>
                 <div class="modal-body">

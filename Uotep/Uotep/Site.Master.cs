@@ -27,14 +27,11 @@ namespace Uotep
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
                             case "coordinamento atti":
-                                // Mostra voci specifiche per coordinamento ag
+                                // Mostra voci specifiche per coordinamento atti
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = false;
                                 menuAmministratore.Visible = false;
-                                menuManTabelle.Visible = true;
-                                menuSegreteria.Visible = false;
-                                menuEsci.Visible = true;
-                                menuHome.Visible = true;
+                                menuFureria.Visible = false;
                                 if (Session["profilo"].ToString() != "1")
                                 {
                                     menuNuovaScheda.Visible = false;
@@ -44,17 +41,13 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                
                                 break;
                             case "coordinamento pg":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
-                                menuManTabelle.Visible = true;
-                                menuSegreteria.Visible = false;
-                                menuEsci.Visible = true;
-                                menuHome.Visible = true;
+                                menuFureria.Visible = false;
                                 if (Session["profilo"].ToString() != "1")
                                 {
                                     menuNuovaScheda.Visible = false;
@@ -64,16 +57,13 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
-                                menuCoordinamentoAtti.Visible = false;
+                                menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
-                                menuSegreteria.Visible = true;
+                                menuFureria.Visible = false;
                                 menuAmministratore.Visible = false;
-                                menuEsci.Visible = true;
-                                menuHome.Visible = true;
 
                                 if (Session["profilo"].ToString() == "1")
                                 {
@@ -81,27 +71,14 @@ namespace Uotep
                                     menuRicercaScheda.Visible = true;
                                 }
                                 break;
-                            case "segreteria":
-                                // Mostra voci per utenti standard
-                                menuCoordinamentoAtti.Visible = false;
-                                menuAccertatori.Visible = false;
-                                menuSegreteria.Visible = true;
-                                menuAmministratore.Visible = false;
-                                menuEsci.Visible = true;
-                                menuHome.Visible=true;
-                                
-                                break;
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
-                                menuSegreteria.Visible = true;
+                                menuFureria.Visible = true;
                                 menuAmministratore.Visible = true;
-                                menuManTabelle.Visible = true;
-                                menuEsci.Visible = true;
-                                menuHome.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;
