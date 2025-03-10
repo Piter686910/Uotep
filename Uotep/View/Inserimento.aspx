@@ -19,7 +19,7 @@
         }
 
         //giudice
-        function filterDropdown() {
+        function filterDropdownGiudice() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtGiudice");
             filter = input.value.toUpperCase();
@@ -257,6 +257,47 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
+        //Indirizzo
+        function filterDropdownIndirizzo() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtIndirizzo");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlIndirizzo.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListIndirizzo.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+
     </script>
 
     <div class="jumbotron">
@@ -284,7 +325,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdown()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfGiudice" runat="server" />
                         </div>
@@ -339,12 +380,17 @@
                         <div class="row">
                             <!-- DropDownList occupa metà spazio -->
                             <div class="col-md-6">
-                                <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    <asp:HiddenField ID="HfIndirizzo" runat="server" />
+                                </div>
+
+                                <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
                             </div>
                             <!-- TextBox occupa metà spazio -->
-                            <div class="col-md-6">
+                            <%--<div class="col-md-6">
                                 <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
-                            </div>
+                            </div>--%>
                         </div>
                     </div>
 
@@ -365,7 +411,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-
                         <label for="txtTipoAtto">Tipologia Atto</label>
                         <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
@@ -442,8 +487,8 @@
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
-                        <label for="txtIndirizzo">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
+                        <label for="txtIndirizzoQuartiere">Indirizzo:</label>
+                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
 
                     </div>
 
@@ -486,7 +531,7 @@
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
-                        <label for="txtIndirizzo">Testo:</label>
+                        <label for="txtTestoProvenienza">Inserisci nuova provenienza:</label>
                         <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci una provenienza" />
 
                     </div>

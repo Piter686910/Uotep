@@ -884,7 +884,8 @@ namespace Uotep.Classi
         public DataTable getListIndirizzo()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT toponimo  FROM Quart order by toponimo";
+           // string sql = "SELECT specie,toponimo  FROM Quart order by toponimo";
+            string sql = "SELECT ISNULL(Specie, '') + ' ' + ISNULL(toponimo, '') AS SpecieToponimo FROM  Quart";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 

@@ -29,17 +29,163 @@
         function hideModal() {
             $('#ModalRicerca').modal('hide');
         }
-        //nuuoooo
-        //function showModal(message) {
-        //    document.getElementById("errorMessage").innerText = message;
-        //    document.getElementById("customErrorModal").style.display = "block";
-        //}
+        //quartiere
+        function filterDropdownQuartiere() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtQuartiere");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
 
-        //// Funzione per chiudere la modale
-        //function closeModal() {
-        //    document.getElementById("customErrorModal").style.display = "none";
-        //}
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //Inviata
+        function filterDropdownInviata() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtInviata");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlInviati.ClientID %>');
+     options = dropdown.getElementsByTagName("option");
+     var suggestionsListDiv = document.getElementById('<%= suggestionsListInviata.ClientID %>');
+     // Pulisci la lista dei suggerimenti precedenti
+     suggestionsListDiv.innerHTML = "";
+
+     var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+     for (i = 0; i < options.length; i++) {
+         txtValue = options[i].textContent || options[i].innerText;
+         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+             suggestionsFound = true; // Trovato almeno un suggerimento
+             var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+             suggestionElement.textContent = txtValue;
+             suggestionElement.style.padding = "5px";
+             suggestionElement.style.cursor = "pointer";
+             suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+             suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+             suggestionElement.addEventListener('click', function () {
+                 input.value = this.textContent;
+                 suggestionsListDiv.style.display = "none";
+                 return false;
+             });
+             suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+         }
+     }
+
+     // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+     if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+         suggestionsListDiv.style.display = "block";
+     } else {
+         suggestionsListDiv.style.display = "none";
+     }
+ }
+       
+        function filterDropdownIndirizzo() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtIndirizzo");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlIndirizzo.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListIndirizzo.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //scaturito
+        function filterDropdownScaturito() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtScaturito");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlScaturito.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListScaturito.ClientID %>');
+            suggestionsListDiv.innerHTML = ""; // Pulisci la lista dei suggerimenti precedenti
+
+            var suggestionsFound = false;
+
+            if (filter.length > 0) { // Esegui il filtro solo se c'è testo nell'input
+                for (i = 0; i < options.length; i++) {
+                    txtValue = options[i].textContent || options[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        suggestionsFound = true;
+                        var suggestionElement = document.createElement("div");
+                        suggestionElement.textContent = txtValue;
+                        suggestionElement.classList.add("suggestion-item"); // Aggiungi una classe CSS per lo stile
+                        suggestionElement.addEventListener('mouseover', function () { this.classList.add('suggestion-hover'); }); // Effetto hover con classe CSS
+                        suggestionElement.addEventListener('mouseout', function () { this.classList.remove('suggestion-hover'); });
+                        suggestionElement.addEventListener('click', function () {
+                            input.value = this.textContent;
+                            suggestionsListDiv.style.display = "none";
+                        });
+                        suggestionsListDiv.appendChild(suggestionElement);
+                    }
+                }
+            }
+
+            if (suggestionsFound) {
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
     </script>
     <style>
         .custom-border {
@@ -293,17 +439,25 @@
                 <div class="row">
 
                     <div class="col-md-3">
-                        <label for="DdlIndirizzo">Indirizzo</label>
-                        <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" />
+                        <label for="txtIndirizzo">Indirizzo</label>
+                        <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 400px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfIndirizzo" runat="server" />
+                        </div>
+                        <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none"/>
                     </div>
-                    <div class="col-md-3">
+                   <%-- <div class="col-md-3">
                         <label for="txtVia"></label>
                         <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
-                    </div>
+                    </div>--%>
 
-                    <div class="col-md-3">
-                        <label for="DdlQuartiere">Quartiere</label>
-                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
+                    <div class="col-md-3" style="margin-left:257px!important">
+                        <label for="txtQuartiere">Quartiere</label>
+                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfQuartiere" runat="server" />
+                        </div>
+                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none"/>
                     </div>
 
                 </div>
@@ -325,9 +479,12 @@
                     <div class="col-md-3">
                         <label for="txtScaturito">Scaturito</label>
 
-                        <!-- DropDownList occupa metà spazio -->
                         <div class="form-group mb-3">
-                            <asp:DropDownList ID="DdlScaturito" runat="server" CssClass="form-control" />
+                        <asp:TextBox ID="txtScaturito" runat="server" AutoPostBack="false" onkeyup="filterDropdownScaturito()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListScaturito" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfScaturito" runat="server" />
+                        </div>
+                            <asp:DropDownList ID="DdlScaturito" runat="server" CssClass="form-control" Style="display: none"/>
                         </div>
                     </div>
 
@@ -346,10 +503,13 @@
                         <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" />
                     </div>
                     <div class="col-md-3">
-                        <label for="txtinviata" class="form-label">Inviata</label>
+                        <label for="txtInviata" class="form-label">Inviata</label>
+                        <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfInviata" runat="server" />
+                        </div>
 
-                        <%--<asp:TextBox ID="txtinviata" runat="server" CssClass="form-control" />--%>
-                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" />
+                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none"/>
                     </div>
                     <div class="col-md-3">
                         <label for="txtDataInvio" class="form-label">Il</label>
@@ -367,7 +527,7 @@
             </div>
             <div class="row">
                 <div class="col-12 text-center">
-                    <%--                <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
+                    <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
                     <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
                     <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
                 </div>
@@ -381,14 +541,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Popup di Ricerca</h5>
+                    <h5 class="modal-title" id="modalLabel">Ricerca quartiere</h5>
 
                 </div>
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
                         <label for="txtIndirizzo">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
+                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
 
                     </div>
                     <%--<div class="form-group">
@@ -425,10 +585,10 @@
     </div>
 
     <%-- Modale ricerca fascicolo --%>
-    <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" >
+    <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">
             <%--<div class="container" id="DivDettagli" runat="server">--%>
-            <div class="modal-content" >
+            <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
 

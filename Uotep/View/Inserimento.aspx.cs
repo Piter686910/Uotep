@@ -195,14 +195,14 @@ namespace Uotep
 
                 p.tipoProvvedimentoAG = txtTipoProv.Text;
             }
-            if (DdlIndirizzo.SelectedValue == "0")
+            if (String.IsNullOrEmpty(txtIndirizzo.Text))
             {
                 p.indirizzo = String.Empty;
             }
             else
             {
-                p.indirizzo = DdlIndirizzo.SelectedItem.Text;
-                p.via = txtVia.Text;
+                p.indirizzo = txtIndirizzo.Text;
+                p.via = string.Empty;
 
             }
             if (String.IsNullOrEmpty(txtQuartiere.Text))
@@ -214,15 +214,7 @@ namespace Uotep
                 p.quartiere = txtQuartiere.Text;
                 //p.quartiere = lblQuartiere.Text;
             }
-            //if (DdlTipoProvvAg.SelectedValue == "0")
-            //{
-            //    p.tipoProvvedimentoAG = String.Empty;
-            //}
-            //else
-            //{
-            //    p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
-            //}
-
+           
             p.rif_Prot_Gen = txtRifProtGen.Text;
            
 
@@ -281,12 +273,16 @@ namespace Uotep
             HfInviata.Value = string.Empty;     
             txtTipoAtto.Text = string.Empty;
             HfTipoAtto.Value = string.Empty;
+            txtIndirizzo.Text = string.Empty;
+            HfIndirizzo.Value = string.Empty;
             txtProvenienza.Text = string.Empty;
             HfProvenienza.Value = string.Empty;
+            txtTipoProv.Text = string.Empty;
+            HfTipoProv.Value = string.Empty;
             txPratica.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
-            txtVia.Text = String.Empty;
+          //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
@@ -355,7 +351,7 @@ namespace Uotep
 
 
             //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
-            indirizzo = txtIndirizzo.Text.Trim();
+            indirizzo = txtIndirizzoQuartiere.Text.Trim();
 
 
             //string specie = txtSpecie.Text.Trim();
@@ -400,7 +396,7 @@ namespace Uotep
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
-                DdlIndirizzo.DataTextField = "Toponimo"; // Il campo visibile
+                DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlIndirizzo.DataBind();
                // DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
@@ -409,9 +405,10 @@ namespace Uotep
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
-                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAtto.DataBind();
-               // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
+
+                // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaProvenienza = mn.getListProvenienza();
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
