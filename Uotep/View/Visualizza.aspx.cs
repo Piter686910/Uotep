@@ -38,22 +38,7 @@ namespace Uotep
         {
             NascondiDiv();
 
-            txtAnnoRicerca.Text = String.Empty;
-            txtNProtocollo.Text = String.Empty;
-            txtProcPenale.Text = String.Empty;
-            //date per div evasa
-            txtDataDa.Text = String.Empty;
-            txtDataA.Text = String.Empty;
-            //
-            txtProtGen.Text = String.Empty;
-            txtPratica.Text = String.Empty;
-            txtRicProvenienza.Text = String.Empty;
-            txtRicNominativo.Text = String.Empty;
-            txtRicAccertatori.Text = String.Empty;
-            txtRicIndirizzo.Text = String.Empty;
-            txtDatCaricoA.Text = String.Empty;
-            txtDatCaricoDa.Text = String.Empty;
-            txtRicGiudice.Text = String.Empty;
+            Pulisci();
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
@@ -107,9 +92,10 @@ namespace Uotep
             {
                 gvPopup.DataSource = pratica;
                 gvPopup.DataBind();
-                DivDettagli.Visible = true;
-                DivRicerca.Visible = false;
+                //DivDettagli.Visible = true;
+                //DivRicerca.Visible = false;
                 DivGrid.Visible = true;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
             }
             else
             {
@@ -120,12 +106,14 @@ namespace Uotep
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
-
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            Pulisci();
         }
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+
         }
         protected void gvPopup_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -146,7 +134,7 @@ namespace Uotep
                     string[] values = commandArgument.Split('|');
 
                     // Assicurati che ci siano almeno 3 valori
-                    if (values.Length == 3)
+                    if (values.Length == 4)
                     {
                         protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
                         matricola = values[1];     // Matricola
@@ -224,7 +212,10 @@ namespace Uotep
                             txtRifProtGen.Text = pratica.Rows[0].ItemArray[23].ToString();
 
                             // Puoi anche chiudere il popup se necessario
-                            //ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
+                            DivDettagli.Visible = true;
+                            DivRicerca.Visible = false;
+                            Pulisci();
                         }
                         else
                         {
@@ -249,7 +240,26 @@ namespace Uotep
                 }
             }
         }
+        private void Pulisci()
+        {
+            txtAnnoRicerca.Text = String.Empty;
+            txtNProtocollo.Text = String.Empty;
+            txtProcPenale.Text = String.Empty;
+            //date per div evasa
+            txtDataDa.Text = String.Empty;
+            txtDataA.Text = String.Empty;
+            //
+            txtProtGen.Text = String.Empty;
+            txtPratica.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtDatCaricoA.Text = String.Empty;
+            txtDatCaricoDa.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
 
+        }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)

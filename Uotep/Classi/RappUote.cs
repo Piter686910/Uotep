@@ -17,7 +17,7 @@ namespace Uotep.Classi
         public Boolean resa = false;
         public Boolean segnalazione = false;
         public Boolean esposti = false;
-        public int num_esposti = 0;
+        public string num_esposti = string.Empty;
         public Boolean notifica = false;
         public Boolean iniziativa = false;
         public Boolean cdr = false;

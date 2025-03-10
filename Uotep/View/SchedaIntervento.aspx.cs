@@ -119,11 +119,11 @@ namespace Uotep
                 rap.uotp = rdUotp.Checked;
                 if (String.IsNullOrEmpty(txt_numEspostiSegn.Text))
                 {
-                    rap.num_esposti = 0;
+                    rap.num_esposti = string.Empty;
                 }
                 else
                 {
-                    rap.num_esposti = System.Convert.ToInt32(txt_numEspostiSegn.Text);
+                    rap.num_esposti = txt_numEspostiSegn.Text;
                 }
 
                 rap.nota = txtNote.Text;
@@ -408,7 +408,7 @@ namespace Uotep
         {
             Manager mn = new Manager();
             //DataTable schede =
-            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at);
+            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at,0);
             if (table.Rows.Count > 0)
             {
                 //GVRicecaScheda.DataSource = table;

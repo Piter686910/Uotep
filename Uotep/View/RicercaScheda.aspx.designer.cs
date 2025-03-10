@@ -177,6 +177,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btSalva;
 
         /// <summary>
+        /// Controllo btStampa.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btStampa;
+
+        /// <summary>
         /// Controllo btModificaScheda.
         /// </summary>
         /// <remarks>
@@ -535,6 +544,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView GVRicecaScheda;
+
+        /// <summary>
+        /// Controllo HfIdScheda.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfIdScheda;
 
         /// <summary>
         /// Controllo btRicScheda.

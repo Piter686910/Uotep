@@ -1,0 +1,4 @@
+matricola:s448,data ins:26/02/2025 00:00:00, I dati stringa o binari verranno troncati nella tabella 'DB_ArchivioPratiche.dbo.RappUote', colonna 'rapp_numero_pratica'. Valore troncato: (24949, 249).
+L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 
+matricola:s448,data ins:26/02/2025 00:00:00, I dati stringa o binari verranno troncati nella tabella 'DB_ArchivioPratiche.dbo.RappUote', colonna 'rapp_numero_pratica'. Valore troncato: (24949, 249).
+L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 

@@ -71,10 +71,18 @@ namespace Uotep
                 DataTable Scaturito = mn.getListScaturito();
                 DdlScaturito.DataSource = Scaturito; // Imposta il DataSource della DropDownList
                 DdlScaturito.DataTextField = "Scaturito"; // Il campo visibile
-                 DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
+                DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
 
                 DdlScaturito.DataBind();
                 DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+
+                DataTable Inviati = mn.getListInviati();
+                DdlInviati.DataSource = Inviati; // Imposta il DataSource della DropDownList
+                DdlInviati.DataTextField = "Inviata"; // Il campo visibile
+                DdlInviati.DataValueField = "Id_inviata"; // Il valore associato a ogni opzione
+
+                DdlInviati.DataBind();
+                DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
             {
@@ -168,7 +176,7 @@ namespace Uotep
             txtAnnoRicerca.Text = String.Empty;
             txPratica.Text = String.Empty;
             txtNProtocollo.Text = String.Empty;
-            txtProcPenale.Text =  String.Empty;
+            txtProcPenale.Text = String.Empty;
             txtDataDa.Text = String.Empty;
             txtDataA.Text = String.Empty;
             txtProtGen.Text = String.Empty;
@@ -247,9 +255,10 @@ namespace Uotep
             {
                 gvPopupD.DataSource = pratica;
                 gvPopupD.DataBind();
-                DivDettagli.Visible = true;
-                DivRicerca.Visible = false;
+                //DivDettagli.Visible = true;
+                //DivRicerca.Visible = false;
                 DivGrid.Visible = true;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
             }
 
 
@@ -337,24 +346,34 @@ namespace Uotep
                         TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[6].ToString();
                         txtProdPenNr.Text = pratica.Rows[0].ItemArray[7].ToString();
                         txtNominativo.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        DdlIndirizzo.SelectedItem.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[9].ToString()))
+                            DdlIndirizzo.SelectedItem.Text = pratica.Rows[0].ItemArray[9].ToString();
                         txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[11]);
                         txtDataDataEvasa.Text = pratica.Rows[0].ItemArray[12].ToString();
-                        DdlInviati.SelectedItem.Text = pratica.Rows[0].ItemArray[13].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+                            DdlInviati.SelectedItem.Text = pratica.Rows[0].ItemArray[13].ToString();
                         txtDataInvio.Text = pratica.Rows[0].ItemArray[14].ToString();
-                        DdlScaturito.SelectedItem.Text = pratica.Rows[0].ItemArray[15].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+
+                            DdlScaturito.SelectedItem.Text = pratica.Rows[0].ItemArray[15].ToString();
                         txtAccertatori.Text = pratica.Rows[0].ItemArray[16].ToString();
                         txtDataCarico.Text = pratica.Rows[0].ItemArray[17].ToString();
                         txPratica.Text = pratica.Rows[0].ItemArray[18].ToString();
-                        DdlQuartiere.SelectedItem.Text = pratica.Rows[0].ItemArray[19].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[19].ToString()))
+
+                            DdlQuartiere.SelectedItem.Text = pratica.Rows[0].ItemArray[19].ToString();
                         txtNote.Text = pratica.Rows[0].ItemArray[20].ToString();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[21].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[23].ToString();
 
                         // Puoi anche chiudere il popup se necessario
-                        ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true);
+                      //  ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true); // Puoi anche chiudere il popup se necessario
+                        ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
+                        DivDettagli.Visible = true;
+                        DivRicerca.Visible = false;
+                        Pulisci();
                     }
                     else
                     {
@@ -413,7 +432,8 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
-
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            Pulisci();
         }
         protected void NascondiDiv()
         {

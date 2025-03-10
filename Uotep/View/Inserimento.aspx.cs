@@ -15,6 +15,7 @@ namespace Uotep
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
+        String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
 
         protected void Page_Load(object sender, EventArgs e)
@@ -24,6 +25,8 @@ namespace Uotep
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
+                Ruolo = Session["ruolo"].ToString();
+
             }
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
@@ -36,6 +39,10 @@ namespace Uotep
             if (!IsPostBack)
             {
                 CaricaDLL();
+                if (Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+                {
+                    DdlSigla.SelectedValue = "PG";
+                }
                 //Manager mn = new Manager();
                 //DataTable tb = mn.MaxNPr(annoCorr);
                 txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
@@ -64,9 +71,28 @@ namespace Uotep
             }
 
         }
+        public void Convalida()
+        {
+           
+            if (!String.IsNullOrEmpty( HfGiudice.Value))
+            {
+                txtInsGiudice.Text = HfGiudice.Value;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
+              
+            }
+            if (!String.IsNullOrEmpty(HfTipoProv.Value))
+            {
+                txtTipoProv.Text = HfTipoProv.Value;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
+
+            }
+
+
+        }
 
         protected void Salva_Click(object sender, EventArgs e)
         {
+           
             int protocollo = 0;
             Principale p = new Principale();
             p.anno = annoCorr;
@@ -109,20 +135,31 @@ namespace Uotep
             p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
             //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
             p.nominativo = txtNominativo.Text;
-            if (DdlGiudice.SelectedValue == "0")
+            //if (DdlGiudice.SelectedValue == "0")
+            //{
+            //    p.giudice = String.Empty;
+            //}
+            if (String.IsNullOrEmpty(txtGiudice.Text))
             {
                 p.giudice = String.Empty;
             }
             else
             {
-                p.giudice = DdlGiudice.SelectedItem.Text;
+                
+                Boolean resp = mn.getGiudice(txtGiudice.Text);
+                if (!resp)
+                {
+                    HfGiudice.Value = txtGiudice.Text;
+                }
+                
+                p.giudice = txtGiudice.Text;
             }
 
-            if (DdlProvenienza.SelectedValue == "0")
+            if (String.IsNullOrEmpty(txtProvenienza.Text))
             {
                 if (!String.IsNullOrEmpty(txtTestoProvenienza.Text))
                 {
-                    p.provenienza = DdlProvenienza.SelectedItem.Text;
+                    p.provenienza = txtProvenienza.Text;
                 }
 
                 else
@@ -130,27 +167,34 @@ namespace Uotep
             }
             else
             {
-                p.provenienza = DdlProvenienza.SelectedItem.Text;
+                p.provenienza = txtProvenienza.Text;
             }
-            if (DdlTipoAtto.SelectedValue == "0")
+            if (String.IsNullOrEmpty(txtTipoAtto.Text))
             {
-                
+
                 p.tipologia_atto = String.Empty;
             }
             else
             {
-                p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                p.tipologia_atto = txtTipoAtto.Text;
             }
-            if (DdlTipoProvvAg.SelectedValue == "0")
+
+
+            if (String.IsNullOrEmpty(txtTipoProv.Text))
             {
                 p.tipoProvvedimentoAG = String.Empty;
             }
             else
             {
-                p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
-            }
 
-            p.rif_Prot_Gen = txtRifProtGen.Text;
+                Boolean resp = mn.getTipoProv(txtTipoProv.Text);
+                if (!resp)
+                {
+                    HfTipoProv.Value = txtTipoProv.Text;
+                }
+
+                p.tipoProvvedimentoAG = txtTipoProv.Text;
+            }
             if (DdlIndirizzo.SelectedValue == "0")
             {
                 p.indirizzo = String.Empty;
@@ -161,15 +205,26 @@ namespace Uotep
                 p.via = txtVia.Text;
 
             }
-            if (DdlQuartiere.SelectedValue == "0")
+            if (String.IsNullOrEmpty(txtQuartiere.Text))
             {
                 p.quartiere = String.Empty;
             }
             else
             {
-                p.quartiere = DdlQuartiere.SelectedItem.Text;
+                p.quartiere = txtQuartiere.Text;
                 //p.quartiere = lblQuartiere.Text;
             }
+            //if (DdlTipoProvvAg.SelectedValue == "0")
+            //{
+            //    p.tipoProvvedimentoAG = String.Empty;
+            //}
+            //else
+            //{
+            //    p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
+            //}
+
+            p.rif_Prot_Gen = txtRifProtGen.Text;
+           
 
             p.note = txtNote.Text;
             p.evasa = CkEvasa.Checked;
@@ -180,7 +235,16 @@ namespace Uotep
 
             //p.accertatori = null;
             //p.scaturito = null;
-            p.inviata = DdlInviati.SelectedItem.Text;
+            if (String.IsNullOrEmpty(txtInviata.Text))
+            {
+                p.inviata = String.Empty;
+            }
+            else
+            {
+                p.inviata = txtInviata.Text;
+               
+            }
+            //p.inviata = DdlInviati.SelectedItem.Text;
             if (!string.IsNullOrEmpty(txtDataInvio.Text))
             {
                 p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
@@ -198,14 +262,27 @@ namespace Uotep
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+
                 Pulisci();
             }
         }
         private void Pulisci()
         {
+            Convalida();
             //txtProt.Text = String.Empty;
             txtTestoProvenienza.Text = string.Empty;
+            txtGiudice.Text = string.Empty; 
+            txtInsGiudice.Text = string.Empty;
+            HfGiudice.Value = string.Empty;
+            txtQuartiere.Text = string.Empty;   
+            HfQuartiere.Value = string.Empty;
+            txtInviata.Text = string.Empty;
+            HfInviata.Value = string.Empty;     
+            txtTipoAtto.Text = string.Empty;
+            HfTipoAtto.Value = string.Empty;
+            txtProvenienza.Text = string.Empty;
+            HfProvenienza.Value = string.Empty;
             txPratica.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
@@ -219,6 +296,28 @@ namespace Uotep
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
             CaricaDLL();
+
+        }
+        //popup giudice
+        protected void apripopupGiudice_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
+        }
+        //tipo prov
+        protected void apripopupTipoProv_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
+        }
+        protected void chiudipopupTipoProv_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModaTipoProv')); modal.hide();", true);
+
+        }
+        protected void chiudipopupGiudice_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalGiudice')); modal.hide();", true);
 
         }
         //popup provenienza
@@ -242,6 +341,12 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+
+        }
+        protected void chiudipopupErrore_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 
         }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
@@ -291,14 +396,14 @@ namespace Uotep
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
-                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzo.DataTextField = "Toponimo"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlIndirizzo.DataBind();
-                DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaTipoAtto = mn.getListTipologia();
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
@@ -306,7 +411,7 @@ namespace Uotep
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
                 DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAtto.DataBind();
-                DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaProvenienza = mn.getListProvenienza();
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
@@ -314,7 +419,7 @@ namespace Uotep
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
                 DdlProvenienza.DataBind();
-                DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+             //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaGiudice = mn.getListGiudice();
                 DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
@@ -322,7 +427,7 @@ namespace Uotep
                 DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
 
                 DdlGiudice.DataBind();
-                DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
                 DataTable RicercaProvvAg = mn.getListProvvAg();
@@ -331,14 +436,14 @@ namespace Uotep
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-                DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+             //   DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaInviati = mn.getListInviati();
                 DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
                 DdlInviati.DataTextField = "Inviata"; // Il campo visibile
                 DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
                 DdlInviati.DataBind();
-                DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
             {
@@ -375,17 +480,29 @@ namespace Uotep
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
-                DdlQuartiere.SelectedItem.Text = selectedValue;
+                txtQuartiere.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
 
-        
+
 
         protected void btInsProvenienza_Click(object sender, EventArgs e)
         {
-            DdlProvenienza.SelectedItem.Text = txtTestoProvenienza.Text;
+            txtProvenienza.Text = txtTestoProvenienza.Text;
+        }
+        protected void btInsGiudice_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciGiudice(HfGiudice.Value);
+            //DdlProvenienza.SelectedItem.Text = txtTestoProvenienza.Text;
+        }
+
+        protected void btProv_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
         }
     }
 }

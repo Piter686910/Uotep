@@ -1,140 +1,105 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="test.aspx.cs" Inherits="Uote._test" %>
-
+﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="test.aspx.cs" Inherits="Uote.test" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <script>
 
-        $(document).ready(function () {
-            // Funzione per aprire il modal e impostare il messaggio
-            function showModal(message) {
-                $('#modalMessage').text(message);  // Imposta il messaggio nel modal
-                $('#myModal').modal('show');       // Mostra il modal
+
+    <style>
+        #suggestionsList {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+            #suggestionsList ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
             }
 
-            // Esempio di come chiamare la funzione
-            $('#btnopen').click(function () {
-                showModal('Questo è un messaggio di esempio!'); // Passa il messaggio al modal
-            });
-        });
+            #suggestionsList li {
+                padding: 5px;
+                cursor: pointer;
+            }
+
+                #suggestionsList li:hover {
+                    background-color: #f0f0f0;
+                }
+    </style>
 
 
-        //function showModal() {
-        //    //$('#myModal').modal({ show: true });
+    <div>
+        <label for="txtInput">Digita un nome:</label>
+<asp:TextBox ID="txtInput" runat="server" CssClass="form-control" AutoPostBack="false" onkeyup="filterDropdown()" style="width: 200px;" ClientIDMode="Static"></asp:TextBox>
+<div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;"> <!-- Stili base per la lista suggerimenti -->
+</div>
+    <div class="form-group mb-3">
+    <label for="DdlGiudice">Giudice</label>
+    <asp:DropDownList ID="DdlGiudice" runat="server" CssClass="form-control" />
 
-        // var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-        // myModal.show();
+</div>
+<script type="text/javascript">
+    function filterDropdown() {
+        var input, filter, dropdown, options, i, txtValue;
+        input = document.getElementById("txtInput");
+        filter = input.value.toUpperCase();
+        dropdown = document.getElementById("MainContent_DdlGiudice");
+        options = dropdown.getElementsByTagName("option");
+        var suggestionsListDiv = document.getElementById("MainContent_suggestionsList");
 
-        //function ShowErrorMessage(message) {
-        //    $('#errorModal').modal('show');
-        //}
-        //$('#openModal').click(function () {
-        //           const myModal = new bootstrap.Modal(document.getElementById('myModal'));
-        //           myModal.show();
-        //       });
-        // document.getElementById('openModal').addEventListener('click', function () {
-        //const myModal = new bootstrap.Modal(document.getElementById('myModal'));
-        //myModal.show();
-        //}
-    </script>
+        // Pulisci la lista dei suggerimenti precedenti
+        suggestionsListDiv.innerHTML = "";
 
+        var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
+        for (i = 0; i < options.length; i++) {
+            txtValue = options[i].textContent || options[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                suggestionsFound = true; // Trovato almeno un suggerimento
+                var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                suggestionElement.textContent = txtValue;
+                suggestionElement.style.padding = "5px";
+                suggestionElement.style.cursor = "pointer";
+                suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
 
-    <div class="jumbotron">
-        <h1>ARCHIVIO PRATICHE U.O.T.E.</h1>
-        <p class="lead"></p>
-    </div>
+                //suggestionElement.onclick = function () { // Al click, inserisci il testo nel textbox
 
+                //    console.log("Suggerimento selezionato:", this.textContent); // DEBUG: Verifica il suggerimento cliccato
+                //    console.log("Elemento input:", input); // DEBUG: Verifica l'elemento input
 
+                //    input.value = this.textContent; // Imposta il valore nel textbox
 
+                //    console.log("Valore textbox dopo impostazione:", input.value); // DEBUG: Verifica il valore impostato
 
-       <div class="panel panel-default">
-        <div class="form-group mb-3">
-        </div>
-        <div class="panel-heading">
-            <h3 class="panel-title" style="font-weight: bold;">Intervento</h3>
-        </div>
-        <div class="form-check">
-            <asp:CheckBox ID="CkAttivita" runat="server" AutoPostBack="true" OnCheckedChanged="CkAttivita_CheckedChanged1" />
-            <%--<asp:CheckBox ID="CkAttivita" runat="server" CssClass="form-check-input" AutoPostBack="false" onchange='toggleDiv(this.id, \"txtPratica\")' />--%>
-            <label class="form-check-label ms-3" for="CkAttivita">Attività Interna</label>
-        </div>
-        <div class="panel-body" id="divTesta" runat="server">
-            <div class="jumbotron">
-                <div style="margin-top: -50px!important">
-                    <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-                    <p class="text-center lead">COMPILAZIONE SCHEDA INTERVENTO</p>
-                </div>
+                //    suggestionsListDiv.style.display = "none"; // Nascondi la lista suggerimenti
 
-                <div class="container">
-                    <div class="row">
-                        <!-- Colonna 1 -->
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="txtPratica">Nr Pratica</label>
-                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
-                                <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtPratica" ErrorMessage="Inserire numero pratica" ForeColor="Red">
-                                </asp:RequiredFieldValidator>--%>
-                            </div>
+                //    // Importante: Previeni l'Autopostback immediato (se è questo il problema)
+                //    return false; // Aggiungi per prevenire l'autopostback se interferisce
+                //};
 
-                            <div class="form-group mb-3">
-                                <label for="txtIndirizzo">Indirizzo</label>
-                                <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" />
-                            </div>
+                suggestionElement.addEventListener('click', function () {
+                    console.log("Funzione addEventListener CLICK ESEGUITA per:", this.textContent); // DEBUG: Verifica addEventListener
+                    input.value = this.textContent;
+                    suggestionsListDiv.style.display = "none";
+                    return false;
+                });
+                suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+            }
+        }
 
-                            <div class="form-group mb-3">
-                                <label for="txtNominativo">Nominativo</label>
-                                <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
-                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtNominativo" ErrorMessage="Inserire nominativo" ForeColor="Red">
-                                </asp:RequiredFieldValidator>--%>
-                            </div>
+        // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+        if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+            suggestionsListDiv.style.display = "block";
+        } else {
+            suggestionsListDiv.style.display = "none";
+        }
+    }
+</script>
 
-
-                        </div>
-
-                        <!-- Colonna 2 -->
-                        <div class="col-md-3 d-flex flex-column justify-content-center">
-                            <div class="form-group mb-3">
-                                <label for="TxtDataIntervento">Data Intervento</label>
-                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ErrorMessage="Inserire data intervento" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
-                            </div>
-
-                            <div class="form-group mb-3" style="margin-top: -20px!important">
-                                <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" />
-                                <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ErrorMessage="Inserire data intervento" ForeColor="Red">
-                                </asp:RequiredFieldValidator>--%>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label for="DdlPattuglia">Pattuglia</label>
-                                <asp:DropDownList ID="DdlPattuglia" runat="server" CssClass="form-control" />
-                                <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control"></asp:ListBox>
-                            </div>
-
-                        </div>
-
-                        <!-- Colonna 3 -->
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="txtNote">Note</label>
-                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="1" />
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                     <div class="row">
-                    <div class="col-12 text-center">
-                        <asp:Button ID="btA" runat="server" Text="Aggiungi" CssClass="btn btn-primary me-3" OnClick="btA_Click" />
-                       <%-- <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" />--%>
-                    </div>
-                </div>
-                </div>
-               
-            </div>
-        </div>
-    </div>
 </asp:Content>
+
+
+

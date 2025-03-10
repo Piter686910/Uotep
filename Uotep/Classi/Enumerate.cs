@@ -10,11 +10,13 @@
         public enum Profilo
         {
             Admin = 0,
-            Agente = 1,
+            Accertatore = 1,
             MasterAG = 2,
-            MasterFureria = 3,
-            MasterSegreteria = 4,
-            Segreteria = 5
+            Archivio = 3,
+            CoordinamentoAtti = 4,
+            PG = 5,
+            SuperAdmin = 6,
+            CoordinamentoPg = 7
         }
     }
 }

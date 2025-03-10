@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtNote">Note</label>
-                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3" />
+                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"  />
                             </div>
                         </div>
 
@@ -139,11 +139,13 @@
                 <div class="row">
                     <div class="col-12">
                         <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Salva Scheda" CssClass="btn btn-primary me-3" OnClick="btSalva_Click" Enabled="false" />
+
                     </div>
                 </div>
             </div>
         </div>
 
+                                <asp:Button ID="btStampa" runat="server"  Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
 
     </div>
 
@@ -205,7 +207,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Esposto n°</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control2" MaxLength="10" />
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control" MaxLength="10" />
                                 <%--<asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ValidationGroup="bottoni" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>--%>
                             </div>
                             <div class="form-check mb-2">
@@ -383,21 +385,22 @@
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicecaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
-                            <Columns>
+                            <columns>
                                 <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" />
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
                                 <asp:TemplateField>
-                                    <ItemTemplate>
+                                    <itemtemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("rapp_numero_pratica") + ";" + Eval("rapp_nominativo") + ";" + Eval("rapp_pattuglia") + ";" + Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />
-                                    </ItemTemplate>
+                                    </itemtemplate>
                                 </asp:TemplateField>
-                            </Columns>
+                            </columns>
                         </asp:GridView>
 
                     </div>
                 </div>
+                <asp:HiddenField id="HfIdScheda" runat="server"   />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />

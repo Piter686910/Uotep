@@ -18,11 +18,250 @@
             $('#myModal').modal('hide');
         }
 
+        //giudice
+        function filterDropdown() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtGiudice");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlGiudice.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsList.ClientID %>');
+            suggestionsListDiv.innerHTML = ""; // Pulisci la lista dei suggerimenti precedenti
+
+            var suggestionsFound = false;
+
+            if (filter.length > 0) { // Esegui il filtro solo se c'è testo nell'input
+                for (i = 0; i < options.length; i++) {
+                    txtValue = options[i].textContent || options[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        suggestionsFound = true;
+                        var suggestionElement = document.createElement("div");
+                        suggestionElement.textContent = txtValue;
+                        suggestionElement.classList.add("suggestion-item"); // Aggiungi una classe CSS per lo stile
+                        suggestionElement.addEventListener('mouseover', function () { this.classList.add('suggestion-hover'); }); // Effetto hover con classe CSS
+                        suggestionElement.addEventListener('mouseout', function () { this.classList.remove('suggestion-hover'); });
+                        suggestionElement.addEventListener('click', function () {
+                            input.value = this.textContent;
+                            suggestionsListDiv.style.display = "none";
+                        });
+                        suggestionsListDiv.appendChild(suggestionElement);
+                    }
+                }
+            }
+
+            if (suggestionsFound) {
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+
+        //tipo provvedimento
+        function filterDropdownTipoProv() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtTipoProv");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlTipoProvvAg.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            // var suggestionsListDiv = document.getElementById("MainContent_suggestionsList");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListTipoProv.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //quartiere
+        function filterDropdownQuartiere() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtQuartiere");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //provenienza
+        function filterDropdownProvenienza() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtProvenienza");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlProvenienza.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListProvenienza.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //tipo atto
+        function filterDropdownTipoAtto() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtTipoAtto");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListTipoAtto.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+        //Inviata
+        function filterDropdownInviata() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtInviata");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlInviati.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListInviata.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
+
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
     </script>
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-           <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">INSERISCI DATI</p>
         </div>
         <div class="container">
@@ -35,6 +274,7 @@
                         <label for="Ddltipo">/</label>
                         <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1">
                             <asp:ListItem Text="ED"> </asp:ListItem>
+                            <asp:ListItem Text="TP"> </asp:ListItem>
                             <asp:ListItem Text="PG"> </asp:ListItem>
                         </asp:DropDownList>
                     </div>
@@ -43,33 +283,51 @@
                         <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="DdlGiudice">Giudice</label>
-                        <asp:DropDownList ID="DdlGiudice" runat="server" CssClass="form-control" />
+                        <label for="txtGiudice">Giudice</label>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdown()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfGiudice" runat="server" />
+                        </div>
+                        <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
                     </div>
                     <div class="form-group mb-3">
                         <label for="DdlTipoProvvAg">Tipo Provvedimento AG</label>
-                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" />
+
+                        <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfTipoProv" runat="server" />
+
+                        </div>
+
+                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" Style="display: none;" />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="DdlQuartiere">Quartiere</label>
-                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
+                        <label for="txtQuartiere">Quartiere</label>
+                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfQuartiere" runat="server" />
+                        </div>
+                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                     <div class="form-group mb-3">
-                         <asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click"/>
-                        <label for="DdlProvenienza">Provenienza</label>
-                        
-                        <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" />
-                        
+                        <asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />
+                        <label for="txtProvenienza">Provenienza</label>
+                        <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfProvenienza" runat="server" />
+                        </div>
+                        <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
+
                         <asp:RequiredFieldValidator ID="rqProvenienza" runat="server" ControlToValidate="DdlProvenienza" ErrorMessage="inserire la provenienza">
 
                         </asp:RequiredFieldValidator>
-                        
+
                     </div>
                 </div>
 
                 <!-- Colonna Destra -->
                 <div class="col-md-6">
-                   
+
                     <div class="form-group mb-3">
                         <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
                         <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
@@ -99,16 +357,22 @@
                         <label for="txtNominativo">Nominativo</label>
                         <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                     </div>
-                   
+
                     <div class="form-group mb-3">
-                         
+
                         <label for="txPratica">Pratica</label>
                         <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="DdlTipoAtto">Tipologia Atto</label>
-                        <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />
+
+                        <label for="txtTipoAtto">Tipologia Atto</label>
+                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                        </div>
+
+                        <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                 </div>
 
@@ -138,9 +402,13 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="txtinviata" class="form-label">Inviata</label>
-                        <%--<asp:TextBox ID="txtinviata" runat="server" CssClass="form-control" />--%>
-                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" />
+                        <label for="txtInviata" class="form-label">Inviata</label>
+                        <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            <asp:HiddenField ID="HfInviata" runat="server" />
+                        </div>
+
+                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -161,6 +429,7 @@
             </div>
         </div>
     </div>
+
     <!-- Modale Bootstrap quartiere -->
 
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -207,64 +476,113 @@
         </div>
     </div>
     <!-- Modale Bootstrap provenienza -->
-     <div class="modal fade" id="myModalProvenienza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-     <div class="modal-dialog">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h5 class="modal-title" id="modalLabel1">Inserisci testo per la provenienza</h5>
+    <div class="modal fade" id="myModalProvenienza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel1">Inserisci testo per la provenienza</h5>
 
-             </div>
-             <div class="modal-body">
-                 <!-- Campi di input per la ricerca -->
-                 <div class="form-group">
-                     <label for="txtIndirizzo">Testo:</label>
-                     <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci una provenienza" />
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
+                        <label for="txtIndirizzo">Testo:</label>
+                        <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci una provenienza" />
 
-                 </div>
+                    </div>
 
-               
-             </div>
-             <div class="modal-footer">
-                 <!-- Bottone per avviare la ricerca -->
-                 <asp:Button ID="btInsProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btInsProvenienza_Click" />
-                 <asp:Button ID="Button3" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupProvenienza_Click" />
-             </div>
-         </div>
-     </div>
- </div>
 
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btInsProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btInsProvenienza_Click" />
+                    <asp:Button ID="Button3" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupProvenienza_Click" />
+                </div>
+            </div>
+            v>
+        </div>
+    </div>
+    <!-- Modale Bootstrap giudice -->
+    <div class="modal fade" id="myModalGiudice" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                .
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel1">Inserisci nuovo giudice</h5>
+
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
+                        <label for="txtInsGiudice">Giudice:</label>
+                        <asp:TextBox ID="txtInsGiudice" runat="server" CssClass="form-control" />
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="Button1" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btInsGiudice_Click" />
+                    <asp:Button ID="Button4" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupGiudice_Click" />
+                </div>
+            </div>
+            v>
+        </div>
+    </div>
+    <!-- Modale Bootstrap tipo provvedimento -->
+    <div class="modal fade" id="myModaTipoProv" tabindex="-1" aria-labelledby="modalLabel" aria-hen="true">
+        <div class="modalalog">
+            <div class="modal-cont">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel1">Inserisci nuovo tipo provvedimento</h5>
+
+                    <div>
+                        <div class="modal-body">
+                            <%-- Campi di input per la ricerca ----%>
+                            <div class="form-group">
+                                <label for="txtInsTipoProv">Provvedimento:</label>
+                                <asp:TextBox ID="txtInsTipoProv" runat="server" CssClass="form-control" />
+                            </div>
+
+                            <div>
+                                <div class="modal-footer">
+                                    <%--      Bottone per avviare la ricerca -- --%>
+                                    <asp:Button ID="btProv" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btProv_Click" />
+                                    <asp:Button ID="Button6" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupTipoProv_Click" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
+        <div class="modal-dialog">
+            <%--role="document">--%>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
                 </div>
                 <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
+
                     <div class="form-group">
 
                         <p id="errorMessage" style="color: red"></p>
-                        
+
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupErrore_Click" />
                 </div>
             </div>
         </div>
     </div>
-    <%-- <div id="popupModal" class="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 1000; width: 400px;">
-        <h4>Inserisci Indirizzo</h4>
-        <asp:TextBox ID="txtSpecie" runat="server" CssClass="form-control" placeholder="specie" />
-        <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Inserisci indirizzo" />
-        <asp:Button ID="btnCercaQuartiere" runat="server" Text="Cerca Quartiere" CssClass="btn btn-success mt-3" OnClick="RicercaQuartiere_Click" />
-        <asp:Label ID="lblQuartiere" runat="server" CssClass="mt-3 d-block" />
-        <button onclick="closePopup()" class="btn btn-secondary mt-3">Chiudi</button>
-    </div>
-    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999;"></div>--%>
+
 </asp:Content>

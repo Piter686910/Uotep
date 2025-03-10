@@ -814,6 +814,16 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        public DataTable getMatricolaOperatore(string nominativo)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT matricola FROM operatore where nominativo = '" + nominativo + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getListOperatore()
         {
             DataTable tb = new DataTable();
@@ -823,6 +833,29 @@ namespace Uotep.Classi
 
                 return tb = FillTable(sql, conn);
             }
+        }
+        public Boolean getTipoProv(string tipo)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM TipoNotaAG where tipologia = '" + tipo + "'";
+           
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+
+                tb = ds.Tables[0];
+                if (tb.Rows.Count > 0)
+                    return true;
+                else
+
+                    return false; ;
+            }
+
         }
         public DataTable getListProvvAg()
         {
@@ -945,6 +978,28 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public Boolean getGiudice(string giudice)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM Giudice where giudice = '" + giudice + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+
+                tb = ds.Tables[0];
+                if (tb != null)
+                    return true;
+                else
+
+                    return false; ;
+            }
+        }
         /// <summary>
         /// ricerca per provenienza
         /// </summary>
@@ -1047,11 +1102,25 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable GetFileByOperatore(string matricola)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM File_Caricati where matricola = '" + matricola + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable GetFileByFascicoloData(CaricaFile fl)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-            if (!String.IsNullOrEmpty( fl.fascicolo) && !String.IsNullOrEmpty( fl.data))
+            if (!String.IsNullOrEmpty(fl.fascicolo) && !String.IsNullOrEmpty(fl.data))
                 sql = "SELECT * FROM File_Caricati where fascicolo = " + @fl.fascicolo + " and Data = '" + fl.data + "'";
             else if (!String.IsNullOrEmpty(fl.fascicolo))
             {
@@ -1064,7 +1133,8 @@ namespace Uotep.Classi
             }
 
 
-            
+
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1991,7 +2061,7 @@ namespace Uotep.Classi
 
         }
         //FINE INSERIMENTO
-        public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita)
+        public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita, int id)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
@@ -2012,6 +2082,11 @@ namespace Uotep.Classi
             {
                 DateTime dtI = System.Convert.ToDateTime(dataI);
                 sql = "SELECT * FROM RappUote where rapp_data = '" + dtI.ToShortDateString() + "' order by rapp_data";
+            }
+            if (id > 0)
+            {
+
+                sql = "SELECT * FROM RappUote where id_rapp_scheda =" + id + "";
             }
             if (attivita == true)
             {
@@ -2461,7 +2536,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        
+
 
     }
 }

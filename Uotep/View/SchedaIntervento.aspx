@@ -222,8 +222,8 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Esposto n°</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control2" MaxLength="10" />
-                                <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control"  />
+                                <%--<asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>--%>
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckIniziativa" runat="server" CssClass="form-check-input" />
