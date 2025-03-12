@@ -984,11 +984,11 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="inviata"></param>
         /// <returns></returns>
-        public Boolean getGiudice(string inviata)
+        public Boolean getGiudice(string giudice)
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM inviati where giudice = '" + inviata + "'";
+            string sql = "SELECT * FROM giudice where giudice = '" + giudice + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -1005,15 +1005,15 @@ namespace Uotep.Classi
 
         }
         /// <summary>
-        /// ricerca singolo giudice
+        /// ricerca singolo inviati
         /// </summary>
-        /// <param name="giudice"></param>
+        /// <param name="inviata"></param>
         /// <returns></returns>
-        public Boolean getInviata(string giudice)
+        public Boolean getInviata(string inviata)
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Giudice where giudice = '" + giudice + "'";
+            string sql = "SELECT * FROM inviati where inviata = '" + inviata + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
