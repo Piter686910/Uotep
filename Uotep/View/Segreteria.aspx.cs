@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
@@ -90,7 +91,7 @@ namespace Uotep
             CaricaFile fl = new CaricaFile();
             Boolean ins = false;
             string filePath = string.Empty;
-            fl.matricola = Vuser;
+            fl.matricola = Session["user"].ToString();
 
             fl.fascicolo = TxtFascicolo.Text;
             fl.folder = CartellaSegreteria;
@@ -103,13 +104,15 @@ namespace Uotep
             {
                 // La data è valida e nel formato corretto
                 //lbmess.Text = "Data valida: " + dataValidata.ToString("dd-MM-yyyy");
-               
+
                 //fl.data = System.Convert.ToDateTime(txtDataI.Text).ToShortDateString();
                 if (FLFilein.HasFile)
                 {
                     string fileNameWithoutExt = Path.GetFileNameWithoutExtension(FLFilein.FileName); // Nome senza estensio
                     string[] a = fileNameWithoutExt.Split('_');
 
+
+                    bool salva = false;
 
 
                     string fileExtension = Path.GetExtension(FLFilein.FileName); // Estrai l'estensione
@@ -122,34 +125,47 @@ namespace Uotep
                     //filePath = CartellaSegreteria + FLFilein.FileName;
 
                     fl.nomefile = newFileName;
-
-                    if (!File.Exists(filePath))
+                    long maxSizeInBytes = 4 * 1024 * 1024; // 4MB in bytes
+                    //FileInfo fileInfo = new FileInfo(FLFilein.FileBytes);
+                    //long fileSizeInBytes = fileInfo.Length;
+                    if (FLFilein.FileBytes.Length >= maxSizeInBytes)
                     {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Il file deve essere minore di 4 mega bytes" + "'); $('#errorModal').modal('show');", true);
 
-                        FLFilein.SaveAs(filePath);
-                        //File.SetAttributes(filePath, FileAttributes.ReadOnly);
-                        //Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
-                        //Document doc = wordApp.Documents.Open(filePath);
+                        
 
-                        //// Imposta il documento in modalità sola lettura senza password
-                        //doc.Protect(WdProtectionType.wdAllowOnlyReading);
                     }
+                    else
+                    {
+                        if (!File.Exists(filePath))
+                        {
 
+                            FLFilein.SaveAs(filePath);
+                            salva = true;
 
+                            //File.SetAttributes(filePath, FileAttributes.ReadOnly);
+                            //Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
+                            //Document doc = wordApp.Documents.Open(filePath);
 
-                    ins = mn.InsFile(fl);
+                            //// Imposta il documento in modalità sola lettura senza password
+                            //doc.Protect(WdProtectionType.wdAllowOnlyReading);
+                        }
+
+                    }
+                    if (salva)
+                        ins = mn.InsFile(fl);
+                    if (ins)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File " + fl.nomefile + " inserito correttamente." + "'); $('#myModal').modal('show');", true);
+
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#myModal').modal('show');", true);
+
+                    }
                 }
 
-                if (ins)
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File " + fl.nomefile + " inserito correttamente." + "'); $('#myModal').modal('show');", true);
-
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#myModal').modal('show');", true);
-
-                }
             }
             else
             {
