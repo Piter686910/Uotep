@@ -329,6 +329,8 @@
                         <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfGiudice" runat="server" />
                         </div>
+                        <asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />
+
                         <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
                     </div>
                     <div class="form-group mb-3">
@@ -339,24 +341,25 @@
                             <asp:HiddenField ID="HfTipoProv" runat="server" />
 
                         </div>
-
+                        <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
                         <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" Style="display: none;" />
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtQuartiere">Quartiere</label>
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfQuartiere" runat="server" />
+                           
                         </div>
                         <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                     <div class="form-group mb-3">
-                        <asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />
+                        <%--<asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />--%>
                         <label for="txtProvenienza">Provenienza</label>
                         <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfProvenienza" runat="server" />
                         </div>
+                        <asp:Button ID="btSalvaProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaProvenienza_Click" Visible="false" />
                         <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
 
                         <asp:RequiredFieldValidator ID="rqProvenienza" runat="server" ControlToValidate="DdlProvenienza" ErrorMessage="inserire la provenienza">
@@ -416,7 +419,7 @@
                         <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfTipoAtto" runat="server" />
                         </div>
-
+                        <asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />
                         <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                 </div>
@@ -452,7 +455,7 @@
                         <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfInviata" runat="server" />
                         </div>
-
+                        <asp:Button ID="btSalvaInviata" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaInviata_Click" Visible="false" />
                         <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                 </div>
@@ -476,7 +479,6 @@
     </div>
 
     <!-- Modale Bootstrap quartiere -->
-
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -525,14 +527,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel1">Inserisci testo per la provenienza</h5>
+                    <h5 class="modal-title" id="modalLabel3">Inserisci testo per la provenienza</h5>
 
                 </div>
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
-                        <label for="txtTestoProvenienza">Inserisci nuova provenienza:</label>
-                        <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci una provenienza" />
+                        <label for="txtTestoProvenienza">Provenienza:</label>
+                        <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci la provenienza" />
 
                     </div>
 
@@ -551,10 +553,8 @@
     <div class="modal fade" id="myModalGiudice" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                .
-
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel1">Inserisci nuovo giudice</h5>
+                    <h5 class="modal-title" id="modalLabel4">Inserisci nuovo giudice</h5>
 
                 </div>
                 <div class="modal-body">
@@ -578,8 +578,8 @@
     </div>
     <!-- Modale Bootstrap tipo provvedimento -->
     <div class="modal fade" id="myModaTipoProv" tabindex="-1" aria-labelledby="modalLabel" aria-hen="true">
-        <div class="modalalog">
-            <div class="modal-cont">
+       <div class="modal-dialog">
+             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel1">Inserisci nuovo tipo provvedimento</h5>
 
@@ -604,6 +604,62 @@
             </div>
         </div>
     </div>
+    <!-- Modale Bootstrap tipo atto -->
+<div class="modal fade" id="myModalTipoAtto" tabindex="-1" aria-labelledby="modalLabel" aria-hen="true">
+   <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel5">Inserisci nuovo tipologia atto</h5>
+
+                <div>
+                    <div class="modal-body">
+                        <%-- Campi di input per la ricerca ----%>
+                        <div class="form-group">
+                            <label for="txtInsAtto">Tipologia Atto:</label>
+                            <asp:TextBox ID="txtInsTipoAtto" runat="server" CssClass="form-control" />
+                        </div>
+
+                        <div>
+                            <div class="modal-footer">
+                                <%--      Bottone per avviare la ricerca -- --%>
+                                <asp:Button ID="btInsTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btInsTipoAtto_Click" />
+                                <asp:Button ID="Button7" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupTipoAtto_Click" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- Modale Bootstrap tipo atto -->
+<div class="modal fade" id="myModalInviata" tabindex="-1" aria-labelledby="modalLabel" aria-hen="true">
+   <div class="modal-dialog">
+         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel6">Inserisci nuovo valore</h5>
+
+                <div>
+                    <div class="modal-body">
+                        <%-- Campi di input per la ricerca ----%>
+                        <div class="form-group">
+                            <label for="txtInsInviata">Inviata:</label>
+                            <asp:TextBox ID="txtInsInviata" runat="server" CssClass="form-control" />
+                        </div>
+
+                        <div>
+                            <div class="modal-footer">
+                                <%--      Bottone per avviare la ricerca -- --%>
+                                <asp:Button ID="btInsInviata" runat="server" CssClass="btn btn-primary" Text="Inserisci" OnClick="btInsInviata_Click" />
+                                <asp:Button ID="Button8" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupInviata_Click" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">

@@ -979,7 +979,37 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public Boolean getGiudice(string giudice)
+        /// <summary>
+        /// ricerca singolo inviata
+        /// </summary>
+        /// <param name="inviata"></param>
+        /// <returns></returns>
+        public Boolean getGiudice(string inviata)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM inviati where giudice = '" + inviata + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                    return true;
+                else
+                    return false; ;
+            }
+
+        }
+        /// <summary>
+        /// ricerca singolo giudice
+        /// </summary>
+        /// <param name="giudice"></param>
+        /// <returns></returns>
+        public Boolean getInviata(string giudice)
         {
             DataTable tb = new DataTable();
 
@@ -992,17 +1022,62 @@ namespace Uotep.Classi
                 da = new SqlDataAdapter(sql, conn);
                 ds = new DataSet();
                 da.Fill(ds);
-
-                tb = ds.Tables[0];
-                if (tb != null)
+                if (ds.Tables[0].Rows.Count > 0)
                     return true;
                 else
-
                     return false; ;
             }
         }
         /// <summary>
-        /// ricerca per provenienza
+        /// ricerca la singola provenienza
+        /// </summary>
+        /// <param name="provenienza"></param>
+        /// <returns></returns>
+        public Boolean getProvenienza(string provenienza)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM provenienza where provenienza = '" + provenienza + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                    return true;
+                else
+                    return false; ;
+            }
+        }
+        /// <summary>
+        /// ricerca singolo tipo atto
+        /// </summary>
+        /// <param name="tipoatto"></param>
+        /// <returns></returns>
+        public Boolean getTipoAtto(string tipoatto)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM tipologia where tipo_nota = '" + tipoatto + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                    return true;
+                else
+                    return false; ;
+            }
+        }
+        /// <summary>
+        /// ricerca lista per provenienza
         /// </summary>
         /// <param name="provenienza"></param>
         /// <returns></returns>
@@ -1471,7 +1546,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "insert into Tipologia (Tipologia)" +
+                sql_pratica = "insert into TipoNotaAG (Tipologia)" +
                    " Values('" + TipologiaNotaAg.Replace("'", "''") + "')";
 
 
@@ -1535,7 +1610,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "insert into Tipologia (Tipologia)" +
+                sql_pratica = "insert into Tipologia (tipo_nota)" +
                    " Values('" + Tipologia.Replace("'", "''") + "')";
 
 
@@ -1727,7 +1802,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "insert into inviata (inviata)" +
+                sql_pratica = "insert into inviati (inviata)" +
                    " Values('" + inviata.Replace("'", "''") + "')";
 
 
