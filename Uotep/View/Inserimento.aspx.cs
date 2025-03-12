@@ -73,26 +73,26 @@ namespace Uotep
         }
         public void Convalida()
         {
-           
-            if (!String.IsNullOrEmpty( HfGiudice.Value))
-            {
-                txtInsGiudice.Text = HfGiudice.Value;
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
-              
-            }
+
+            if (!String.IsNullOrEmpty(HfGiudice.Value))
+                btSalvaGiudice.Visible = true;
+
             if (!String.IsNullOrEmpty(HfTipoProv.Value))
-            {
-                txtTipoProv.Text = HfTipoProv.Value;
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
+                btSalvaTipoProvv.Visible = true;
 
-            }
+            if (!String.IsNullOrEmpty(HfProvenienza.Value))
+                btSalvaProvenienza.Visible = true;
 
+            if (!String.IsNullOrEmpty(HfTipoAtto.Value))
+                btSalvaTipoAtto.Visible = true;
 
+            if (!String.IsNullOrEmpty(HfInviata.Value))
+                btSalvaInviata.Visible = true;
         }
 
         protected void Salva_Click(object sender, EventArgs e)
         {
-           
+
             int protocollo = 0;
             Principale p = new Principale();
             p.anno = annoCorr;
@@ -145,30 +145,33 @@ namespace Uotep
             }
             else
             {
-                
+
                 Boolean resp = mn.getGiudice(txtGiudice.Text);
                 if (!resp)
                 {
                     HfGiudice.Value = txtGiudice.Text;
                 }
-                
+
                 p.giudice = txtGiudice.Text;
             }
 
             if (String.IsNullOrEmpty(txtProvenienza.Text))
             {
-                if (!String.IsNullOrEmpty(txtTestoProvenienza.Text))
-                {
-                    p.provenienza = txtProvenienza.Text;
-                }
 
-                else
-                    p.provenienza = String.Empty;
+                p.provenienza = string.Empty;
             }
+
             else
             {
+                Boolean resp = mn.getProvenienza(txtProvenienza.Text);
+                if (!resp)
+                {
+                    HfProvenienza.Value = txtProvenienza.Text;
+                }
                 p.provenienza = txtProvenienza.Text;
             }
+
+
             if (String.IsNullOrEmpty(txtTipoAtto.Text))
             {
 
@@ -176,6 +179,11 @@ namespace Uotep
             }
             else
             {
+                Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                if (!resp)
+                {
+                    HfTipoAtto.Value = txtTipoAtto.Text;
+                }
                 p.tipologia_atto = txtTipoAtto.Text;
             }
 
@@ -214,9 +222,9 @@ namespace Uotep
                 p.quartiere = txtQuartiere.Text;
                 //p.quartiere = lblQuartiere.Text;
             }
-           
+
             p.rif_Prot_Gen = txtRifProtGen.Text;
-           
+
 
             p.note = txtNote.Text;
             p.evasa = CkEvasa.Checked;
@@ -233,8 +241,13 @@ namespace Uotep
             }
             else
             {
+                Boolean resp = mn.getInviata(txtInviata.Text);
+                if (!resp)
+                {
+                    HfInviata.Value = txtInviata.Text;
+                }
                 p.inviata = txtInviata.Text;
-               
+
             }
             //p.inviata = DdlInviati.SelectedItem.Text;
             if (!string.IsNullOrEmpty(txtDataInvio.Text))
@@ -263,26 +276,42 @@ namespace Uotep
         {
             Convalida();
             //txtProt.Text = String.Empty;
-            txtTestoProvenienza.Text = string.Empty;
-            txtGiudice.Text = string.Empty; 
-            txtInsGiudice.Text = string.Empty;
-            HfGiudice.Value = string.Empty;
-            txtQuartiere.Text = string.Empty;   
-            HfQuartiere.Value = string.Empty;
-            txtInviata.Text = string.Empty;
-            HfInviata.Value = string.Empty;     
-            txtTipoAtto.Text = string.Empty;
-            HfTipoAtto.Value = string.Empty;
+
+            if (String.IsNullOrEmpty(HfGiudice.Value))
+            {
+                txtGiudice.Text = string.Empty;
+                txtInsGiudice.Text = string.Empty;
+
+            }
+            if (String.IsNullOrEmpty(HfTipoProv.Value))
+            {
+                txtTipoProv.Text = string.Empty;
+                txtInsTipoProv.Text = string.Empty;
+            }
+
+            txtQuartiere.Text = string.Empty;
+            if (String.IsNullOrEmpty(HfInviata.Value))
+            {
+                txtInviata.Text = string.Empty;
+                txtInsInviata.Text = string.Empty;
+            }
+            if (String.IsNullOrEmpty(HfProvenienza.Value))
+            {
+                txtTipoAtto.Text = string.Empty;
+                txtInsTipoAtto.Text = string.Empty;
+            }
+           
             txtIndirizzo.Text = string.Empty;
             HfIndirizzo.Value = string.Empty;
-            txtProvenienza.Text = string.Empty;
-            HfProvenienza.Value = string.Empty;
-            txtTipoProv.Text = string.Empty;
-            HfTipoProv.Value = string.Empty;
+            if (String.IsNullOrEmpty(HfProvenienza.Value))
+            {
+                txtTestoProvenienza.Text = string.Empty;
+                txtProvenienza.Text = string.Empty;
+            }
             txPratica.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
-          //  txtVia.Text = String.Empty;
+            //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
@@ -304,10 +333,23 @@ namespace Uotep
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
         }
+
+        protected void chiudipopupTipoAtto_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalTipoAtto')); modal.hide();", true);
+
+        }
         protected void chiudipopupTipoProv_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModaTipoProv')); modal.hide();", true);
+
+        }
+        protected void chiudipopupInviata_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalInviata')); modal.hide();", true);
 
         }
         protected void chiudipopupGiudice_Click(object sender, EventArgs e)
@@ -392,14 +434,14 @@ namespace Uotep
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
-               // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlIndirizzo.DataBind();
-               // DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaTipoAtto = mn.getListTipologia();
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
@@ -416,7 +458,7 @@ namespace Uotep
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
                 DdlProvenienza.DataBind();
-             //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaGiudice = mn.getListGiudice();
                 DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
@@ -433,14 +475,14 @@ namespace Uotep
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-             //   DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //   DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaInviati = mn.getListInviati();
                 DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
                 DdlInviati.DataTextField = "Inviata"; // Il campo visibile
                 DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
                 DdlInviati.DataBind();
-               // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
             {
@@ -488,18 +530,105 @@ namespace Uotep
         protected void btInsProvenienza_Click(object sender, EventArgs e)
         {
             txtProvenienza.Text = txtTestoProvenienza.Text;
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
+            if (ins)
+            {
+                HfProvenienza.Value = string.Empty;
+                txtTestoProvenienza.Text = string.Empty;
+                txtProvenienza.Text = string.Empty;
+            }
+        }
+        protected void btInsTipoAtto_Click(object sender, EventArgs e)
+        {
+            txtTipoAtto.Text = txtInsTipoAtto.Text;
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
+            if (ins)
+            {
+                HfTipoAtto.Value = string.Empty;
+                txtInsTipoAtto.Text = string.Empty;
+                txtTipoAtto.Text = string.Empty;
+            }
+        }
+        protected void btInsInviata_Click(object sender, EventArgs e)
+        {
+            //txtInviata.Text = txtInsInviata.Text;
+            //Manager mn = new Manager();
+            //Boolean ins = mn.InserisciInviata(HfInviata.Value);
+            //if (ins)
+            //{
+            //    HfInviata.Value = string.Empty;
+            //    txtInsInviata.Text = string.Empty;
+            //    txtInviata.Text = string.Empty;
+            //}
         }
         protected void btInsGiudice_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             Boolean ins = mn.InserisciGiudice(HfGiudice.Value);
-            //DdlProvenienza.SelectedItem.Text = txtTestoProvenienza.Text;
+            if (ins)
+            {
+                HfGiudice.Value = string.Empty;
+                txtInsGiudice.Text = string.Empty;
+                txtGiudice.Text = string.Empty;
+            }
         }
-
+        //inserisce nuovo valore IN TABELLA tipo nota ag
         protected void btProv_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
+            if (ins)
+            {
+                HfTipoProv.Value = string.Empty;
+                txtInsTipoProv.Text = string.Empty;
+                txtTipoProv.Text = string.Empty;
+            }
+        }
+
+        protected void btSalvaGiudice_Click(object sender, EventArgs e)
+        {
+            txtInsGiudice.Text = HfGiudice.Value;
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
+        }
+
+        protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
+        {
+            txtInsTipoProv.Text = HfTipoProv.Value;
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
+
+        }
+
+        protected void btSalvaProvenienza_Click(object sender, EventArgs e)
+        {
+            txtTestoProvenienza.Text = HfProvenienza.Value;
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalProvenienza').modal('show');", true);
+        }
+
+
+        protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
+        {
+            txtInsTipoAtto.Text = HfTipoAtto.Value;
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalTipoAtto').modal('show');", true);
+
+        }
+
+      
+
+        protected void btSalvaInviata_Click(object sender, EventArgs e)
+        {
+            //txtInsInviata.Text = HfInviata.Value;
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalInviata').modal('show');", true);
+            //txtInviata.Text = txtInsInviata.Text;
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciInviata(HfInviata.Value);
+            if (ins)
+            {
+                HfInviata.Value = string.Empty;
+                //txtInsInviata.Text = string.Empty;
+                txtInviata.Text = string.Empty;
+            }
         }
     }
 }
