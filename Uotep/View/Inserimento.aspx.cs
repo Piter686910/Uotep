@@ -280,32 +280,27 @@ namespace Uotep
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
                 txtGiudice.Text = string.Empty;
-                txtInsGiudice.Text = string.Empty;
 
             }
             if (String.IsNullOrEmpty(HfTipoProv.Value))
             {
                 txtTipoProv.Text = string.Empty;
-                txtInsTipoProv.Text = string.Empty;
             }
 
             txtQuartiere.Text = string.Empty;
             if (String.IsNullOrEmpty(HfInviata.Value))
             {
                 txtInviata.Text = string.Empty;
-                txtInsInviata.Text = string.Empty;
             }
             if (String.IsNullOrEmpty(HfProvenienza.Value))
             {
                 txtTipoAtto.Text = string.Empty;
-                txtInsTipoAtto.Text = string.Empty;
             }
            
             txtIndirizzo.Text = string.Empty;
             HfIndirizzo.Value = string.Empty;
             if (String.IsNullOrEmpty(HfProvenienza.Value))
             {
-                txtTestoProvenienza.Text = string.Empty;
                 txtProvenienza.Text = string.Empty;
             }
             txPratica.Text = String.Empty;
@@ -525,109 +520,76 @@ namespace Uotep
             }
         }
 
+       
+       
+       
 
-
-        protected void btInsProvenienza_Click(object sender, EventArgs e)
-        {
-            txtProvenienza.Text = txtTestoProvenienza.Text;
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
-            if (ins)
-            {
-                HfProvenienza.Value = string.Empty;
-                txtTestoProvenienza.Text = string.Empty;
-                txtProvenienza.Text = string.Empty;
-            }
-        }
-        protected void btInsTipoAtto_Click(object sender, EventArgs e)
-        {
-            txtTipoAtto.Text = txtInsTipoAtto.Text;
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
-            if (ins)
-            {
-                HfTipoAtto.Value = string.Empty;
-                txtInsTipoAtto.Text = string.Empty;
-                txtTipoAtto.Text = string.Empty;
-            }
-        }
-        protected void btInsInviata_Click(object sender, EventArgs e)
-        {
-            //txtInviata.Text = txtInsInviata.Text;
-            //Manager mn = new Manager();
-            //Boolean ins = mn.InserisciInviata(HfInviata.Value);
-            //if (ins)
-            //{
-            //    HfInviata.Value = string.Empty;
-            //    txtInsInviata.Text = string.Empty;
-            //    txtInviata.Text = string.Empty;
-            //}
-        }
-        protected void btInsGiudice_Click(object sender, EventArgs e)
+        protected void btSalvaGiudice_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             Boolean ins = mn.InserisciGiudice(HfGiudice.Value);
             if (ins)
             {
                 HfGiudice.Value = string.Empty;
-                txtInsGiudice.Text = string.Empty;
                 txtGiudice.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
             }
         }
-        //inserisce nuovo valore IN TABELLA tipo nota ag
-        protected void btProv_Click(object sender, EventArgs e)
+
+        protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
             if (ins)
             {
                 HfTipoProv.Value = string.Empty;
-                txtInsTipoProv.Text = string.Empty;
                 txtTipoProv.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
             }
-        }
-
-        protected void btSalvaGiudice_Click(object sender, EventArgs e)
-        {
-            txtInsGiudice.Text = HfGiudice.Value;
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
-        }
-
-        protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
-        {
-            txtInsTipoProv.Text = HfTipoProv.Value;
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
-
         }
 
         protected void btSalvaProvenienza_Click(object sender, EventArgs e)
         {
-            txtTestoProvenienza.Text = HfProvenienza.Value;
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalProvenienza').modal('show');", true);
+            
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
+            if (ins)
+            {
+                HfProvenienza.Value = string.Empty;
+                txtProvenienza.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
         }
 
 
         protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
         {
-            txtInsTipoAtto.Text = HfTipoAtto.Value;
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalTipoAtto').modal('show');", true);
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
+            if (ins)
+            {
+                HfTipoAtto.Value = string.Empty;
+                txtTipoAtto.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
+            }
         }
 
       
 
         protected void btSalvaInviata_Click(object sender, EventArgs e)
         {
-            //txtInsInviata.Text = HfInviata.Value;
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalInviata').modal('show');", true);
-            //txtInviata.Text = txtInsInviata.Text;
             Manager mn = new Manager();
             Boolean ins = mn.InserisciInviata(HfInviata.Value);
             if (ins)
             {
                 HfInviata.Value = string.Empty;
-                //txtInsInviata.Text = string.Empty;
                 txtInviata.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
             }
         }
     }
