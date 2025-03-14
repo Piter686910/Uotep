@@ -92,7 +92,7 @@ namespace Uotep
             Boolean ins = false;
             string filePath = string.Empty;
             fl.matricola = Session["user"].ToString();
-
+            fl.cancella=ckDelete.Checked;
             fl.fascicolo = TxtFascicolo.Text;
             fl.folder = CartellaSegreteria;
 
@@ -182,7 +182,7 @@ namespace Uotep
             CaricaFile fl = new CaricaFile();
             string filePath = string.Empty;
             Boolean ric = false;
-
+        
             if (!string.IsNullOrEmpty(TxtFascicolo.Text))
             {
                 fl.fascicolo = TxtFascicolo.Text;

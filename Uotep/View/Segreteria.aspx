@@ -47,11 +47,11 @@
                                     <asp:Label ID="Label4" runat="server" Text="Data" CssClass="form-label d-block mb-2"></asp:Label>
 
                                     <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control" placeholder="dd-MM-yyyy" />
-                                    <asp:RequiredFieldValidator ID="RqData" runat="server"  ControlToValidate="txtDataI" ErrorMessage="Inserire la data" ForeColor="Red" ValidationGroup="bt">
+                                    <asp:RequiredFieldValidator ID="RqData" runat="server" ControlToValidate="txtDataI" ErrorMessage="Inserire la data" ForeColor="Red" ValidationGroup="bt">
 
                                     </asp:RequiredFieldValidator>
-                                   
-                                    <asp:Label  id="lbmess" runat="server" ForeColor="Red"></asp:Label>
+
+                                    <asp:Label ID="lbmess" runat="server" ForeColor="Red"></asp:Label>
                                 </div>
                             </div>
                         </div>
@@ -82,6 +82,13 @@
                                 <asp:DropDownList ID="DdlOperatore" runat="server" CssClass="form-control" />
                             </div>
                         </div>
+                        <!-- Etichetta flag per la cancellazione -->
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:CheckBox ID="ckDelete" runat="server" CssClass="form-check-input"/>
+                                <label class="form-check-label" for="ckDelete"> Può essere eliminato</label>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <!-- GridView nel popup -->
                             <asp:GridView ID="GVRicercaFile" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
@@ -93,6 +100,7 @@
                                     <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
                                     <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="100%" />
                                     <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
+                                     
                                     <asp:TemplateField>
                                         <ItemTemplate>
                                             <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>' CssClass="btn btn-success btn-sm" />
