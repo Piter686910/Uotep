@@ -198,12 +198,17 @@ namespace Uotep
             Boolean ret = true;
             if (String.IsNullOrEmpty(LPattugliaCompleta.ToString()))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserire la pattuglia." + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire la pattuglia." + "'); $('#errorModal').modal('show');", true);
 
                 ret = false;
-                return ret;
-            }
 
+            }
+            if (ckEsposto.Checked && String.IsNullOrEmpty(txt_numEspostiSegn.Text))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Se hai selezionato esposti è necessario inserire il numero di esposti." + "'); $('#errorModal').modal('show');", true);
+
+                ret = false;
+            }
             return ret;
         }
         protected void apripopup_Click(object sender, EventArgs e)
@@ -408,7 +413,7 @@ namespace Uotep
         {
             Manager mn = new Manager();
             //DataTable schede =
-            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at,0);
+            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0);
             if (table.Rows.Count > 0)
             {
                 //GVRicecaScheda.DataSource = table;
@@ -445,6 +450,7 @@ namespace Uotep
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
+
     }
 
 }

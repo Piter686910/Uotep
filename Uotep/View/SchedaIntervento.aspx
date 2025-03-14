@@ -101,7 +101,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtNote">Note</label>
-                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3" />
+                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" MaxLength="100" />
                             </div>
                         </div>
 
@@ -223,7 +223,7 @@
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Esposto n°</label>
                                 <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control"  />
-                                <%--<asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>--%>
+                                <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckIniziativa" runat="server" CssClass="form-check-input" />
