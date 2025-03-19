@@ -201,19 +201,7 @@
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">Modifica Pratica</p>
 
-            <!-- Contenitore per centrare -->
-            <%--<div id="DivRicerca" runat="server" class="d-flex flex-column justify-content-center align-items-center" style="height: 300px;">
-                <!-- Righe di input con Bootstrap -->
-                <div class="d-flex gap-3 w-50">
-                    <label for="txtNPratica">Nr Protocollo</label>
-                    <asp:TextBox ID="txtNPratica" runat="server" CssClass="form-control" placeholder="Nr Protocollo" />
-                    <label for="txtAnnoRicerca">Anno</label>
-                    <asp:TextBox ID="txtAnnoRicerca" runat="server" CssClass="form-control" placeholder="Anno" />
-                    <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
-
-                </div>
-
-            </div>--%>
+           
             <!-- Contenitore per centrare -->
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
