@@ -91,6 +91,18 @@ namespace Uotep
                                 menuHome.Visible=true;
                                 
                                 break;
+                            case "archivio":
+                                // Mostra voci per utenti standard
+                                menuHome.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                menuCoordinamentoAtti.Visible = false;
+                                menuAccertatori.Visible = false;
+                                menuSegreteria.Visible = false;
+                                menuAmministratore.Visible = false;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
+
+                                break;
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;

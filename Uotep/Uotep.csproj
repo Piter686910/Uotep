@@ -294,7 +294,7 @@
     <Content Include="View\Inserimento.aspx" />
     <Content Include="View\Modifica.aspx" />
     <Content Include="View\ModificaRiservata.aspx" />
-    <Content Include="View\PagComandi.aspx" />
+    <Content Include="View\InserimentoArchivio.aspx" />
     <Content Include="View\test.aspx" />
     <Content Include="View\Visualizza.aspx" />
     <Content Include="Web.config" />
@@ -415,12 +415,12 @@
     <Compile Include="View\ModificaRiservata.aspx.designer.cs">
       <DependentUpon>ModificaRiservata.aspx</DependentUpon>
     </Compile>
-    <Compile Include="View\PagComandi.aspx.cs">
-      <DependentUpon>PagComandi.aspx</DependentUpon>
+    <Compile Include="View\InserimentoArchivio.aspx.cs">
+      <DependentUpon>InserimentoArchivio.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="View\PagComandi.aspx.designer.cs">
-      <DependentUpon>PagComandi.aspx</DependentUpon>
+    <Compile Include="View\InserimentoArchivio.aspx.designer.cs">
+      <DependentUpon>InserimentoArchivio.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\test.aspx.cs">
       <DependentUpon>test.aspx</DependentUpon>

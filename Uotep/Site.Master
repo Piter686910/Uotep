@@ -55,7 +55,7 @@
                     <ul class="nav navbar-nav" >
                         <li><a id="menuHome" runat="server"  visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
                         <li runat="server"  id="menuAmministratore" visible="false" ><a  runat="server" style="color: #ffffff !important"  href="~/View/Dashboard">Dashboard</a></li>
-                        <%--<li runat="server" id="menuCoordinamentoAtti" visible="false"><a runat="server" href="~/View/PagComandi">Coordinamento Atti</a></li>--%>
+                        <li runat="server" id="menuArchivioUote" visible="false"><a runat="server" style="color: #ffffff !important"  href="~/View/InserimentoArchivio">Archivio</a></li>
 
 
                         <li runat="server" id="menuCoordinamentoAtti" visible="false" class="dropdown">
