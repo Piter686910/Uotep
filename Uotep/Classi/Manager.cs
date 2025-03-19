@@ -150,6 +150,38 @@ namespace Uotep.Classi
                 return resp;
             }
         }
+        public Boolean DeleteFileCaricati(String nomefile)
+        {
+
+            String Del_FileCaricati = "delete from File_Caricati where nomefile = '" + nomefile + "'";
+
+            String testoSql = String.Empty;
+
+            Boolean resp = false;
+
+            using (SqlConnection conn1 = new SqlConnection(ConnString))
+            {
+                conn1.Open();
+                SqlCommand command = conn1.CreateCommand();
+
+                try
+                {
+
+                    command.CommandText = Del_FileCaricati;
+                    testoSql = "FileCaricati";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn1.Close();
+                return resp;
+            }
+        }
 
         //public Boolean UpdAna(Anagrafica ana, Accertamenti acc, String id)
         //{
@@ -838,7 +870,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM TipoNotaAG where tipologia = '" + tipo + "'";
-           
+
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -884,7 +916,7 @@ namespace Uotep.Classi
         public DataTable getListIndirizzo()
         {
             DataTable tb = new DataTable();
-           // string sql = "SELECT specie,toponimo  FROM Quart order by toponimo";
+            // string sql = "SELECT specie,toponimo  FROM Quart order by toponimo";
             string sql = "SELECT ISNULL(Specie, '') + ' ' + ISNULL(toponimo, '') AS SpecieToponimo FROM  Quart";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -979,6 +1011,19 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getStatisticaByMeseAnno(string mese, int anno)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+
+            }
+
+        }
+
         /// <summary>
         /// ricerca singolo inviata
         /// </summary>
@@ -1933,9 +1978,9 @@ namespace Uotep.Classi
 
             try
             {
-                sql_file = "insert into file_caricati (fascicolo, data,matricola, folder,nomefile)" +
+                sql_file = "insert into file_caricati (fascicolo, data,matricola, folder,nomefile,cancella)" +
                    " Values('" + @fl.fascicolo.Replace("'", "''") + "','" + @fl.data + "','" + fl.matricola.Replace("'", "''") + "','" + fl.folder.Replace("'", "''") +
-                   "','" + fl.nomefile.Replace("'", "''") + "')";
+                   "','" + fl.nomefile.Replace("'", "''") + "','" + fl.cancella + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2047,86 +2092,133 @@ namespace Uotep.Classi
         }
 
 
-        public Boolean InsRappUote(RappUote rapp)
+        public Boolean InsRappUote(RappUote rapp, Statistiche stat, string txt)
         {
             bool resp = true;
-            string sql_ins = String.Empty;
+            string sql_insRap = String.Empty;
+            string sql_Statistiche = String.Empty;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
+
+                SqlTransaction transaction = null;
                 SqlCommand command = conn.CreateCommand();
+
+                transaction = conn.BeginTransaction("trans");
+                command.Transaction = transaction;
+
 
                 try
                 {
-                    sql_ins = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
-                    "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
-                    "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
-                    "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
-                    "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-                    "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola)" +
-              " Values('" + rapp.pratica + "','" +
-                //@rapp.ora + "','" +
-                @rapp.data + "','" +
-                @rapp.nominativo.Replace("'", "''") + "','" +
-                @rapp.indirizzo.Replace("'", "''") + "','" +
-                @rapp.pattuglia.Replace("'", "''") + "','" +
-                @rapp.delegaAG + "','" +
-                @rapp.resa + "','" +
-                @rapp.segnalazione + "','" +
-                @rapp.esposti + "','" +
-                @rapp.num_esposti + "','" +
-                @rapp.notifica + "','" +
-                @rapp.iniziativa + "','" +
-                @rapp.cdr + "','" +
-                @rapp.coordinatore + "','" +
-                @rapp.relazione + "','" +
-                @rapp.cnr + "','" +
-                @rapp.annotazionePG + "','" +
-                @rapp.verbaleSeq + "','" +
-                @rapp.esitoDelega + "','" +
-                @rapp.contestazioneAmm + "','" +
-                @rapp.convalida + "','" +
-                @rapp.dissequestroDef + "','" +
-                @rapp.dissequestroTemp + "','" +
-                @rapp.rimozione + "','" +
-                @rapp.riapposizione + "','" +
-                @rapp.violazioneSigilli + "','" +
-                @rapp.controlliScia + "','" +
-                @rapp.accertAvvenutoRip + "','" +
-                @rapp.totale + "','" +
-                @rapp.parziale + "','" +
-                @rapp.violazioneBeniCult + "','" +
-                @rapp.contrCantSuoloPubb + "','" +
-                @rapp.contrEdiliDPI + "','" +
-                @rapp.contr_cantiereSeq + "','" +
-                @rapp.contrDaEsposti + "','" +
-                @rapp.contrDaSegn + "','" +
-                @rapp.attività_interna + "','" +
-                @rapp.nota.Replace("'", "''") + "','" +
-                @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-                @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "')";
-                    command.CommandText = sql_ins;
+                    if (txt == "ins")
+                    {
+
+
+                        sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
+                            ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
+                            ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti) " +
+                        " Values('" + stat.mese.ToUpper() + "'," + stat.anno + "," + stat.relazioni + "," + stat.ponteggi + "," + stat.dpi + "," +
+                          stat.esposti_ricevuti + "," + stat.esposti_evasi + "," + stat.ripristino_tot_par + "," + stat.controlli_scia + "," + stat.contr_cant_daily + "," + stat.cnr + "," +
+                          stat.annotazioni + "," + stat.notifiche + "," + stat.sequestri + "," + stat.riapp_sigilli + "," + stat.deleghe_ricevute + "," +
+                          stat.deleghe_esitate + "," + stat.cnr_annotazioni + "," + stat.interrogazioni + "," + stat.denunce_uff + "," + stat.convalide + "," +
+                          stat.demolizioni + "," + stat.violazione_sigilli + "," + stat.dissequestri + "," + stat.dissequestri_temp + "," + stat.riapp_sigilli + "," +
+                          stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + ")";
+
+                    }
+                    else
+                    {
+                        sql_Statistiche = "update statistiche set relazioni = " + @stat.relazioni + ",ponteggi = " + @stat.ponteggi + ",dpi =" + @stat.dpi + ",esposti_ricevuti=" + @stat.esposti_ricevuti +
+                        ",esposti_evasi =" + @stat.esposti_evasi + ",ripristino_tot_par =" + @stat.ripristino_tot_par + ",controlli_scia = " + @stat.controlli_scia +
+                        ",contr_cant_daily =" + @stat.contr_cant_daily + ",cnr = " +
+                        "" + @stat.cnr + ",annotazioni = " + @stat.annotazioni + ",deleghe_esitate = " + @stat.deleghe_esitate +
+                        ",sequestri =" + @stat.sequestri + ",riapp_sigilli = " + @stat.riapp_sigilli + ",deleghe_ricevute =" + @stat.deleghe_ricevute + 
+                        ",cnr_annotazioni =" + @stat.cnr_annotazioni + ",interrogazioni =" + @stat.interrogazioni + ",denunce_uff =" + @stat.denunce_uff + ",convalide =" + @stat.convalide +
+                        ",demolizioni =" + @stat.demolizioni + ",violazione_sigilli =" + @stat.violazione_sigilli + ",dissequestri =" + @stat.dissequestri +
+                        ",dissequestri_temp =" + @stat.dissequestri_temp + ",rimozione_sigilli =" + @stat.rimozione_sigilli + ",controlli_42_04 =" + @stat.controlli_42_04 +
+                        ",contr_cant_suolo_pubb =" + @stat.contr_cant_suolo_pubb + ",contr_lavori_edili =" + @stat.contr_lavori_edili + ",contr_cant =" + @stat.contr_cant +
+                        ",contr_nato_da_esposti =" + @stat.contr_nato_da_esposti +
+
+
+                        " where mese = '" + @stat.mese + "' and anno = " + stat.anno ;
+
+
+                    }
+
+                    sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
+                     "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
+                     "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
+                     "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
+                     "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
+                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola)" +
+               " Values('" + rapp.pratica + "','" +
+                 //@rapp.ora + "','" +
+                 @rapp.data + "','" +
+                 @rapp.nominativo.Replace("'", "''") + "','" +
+                 @rapp.indirizzo.Replace("'", "''") + "','" +
+                 @rapp.pattuglia.Replace("'", "''") + "','" +
+                 @rapp.delegaAG + "','" +
+                 @rapp.resa + "','" +
+                 @rapp.segnalazione + "','" +
+                 @rapp.esposti + "','" +
+                 @rapp.num_esposti + "','" +
+                 @rapp.notifica + "','" +
+                 @rapp.iniziativa + "','" +
+                 @rapp.cdr + "','" +
+                 @rapp.coordinatore + "','" +
+                 @rapp.relazione + "','" +
+                 @rapp.cnr + "','" +
+                 @rapp.annotazionePG + "','" +
+                 @rapp.verbaleSeq + "','" +
+                 @rapp.esitoDelega + "','" +
+                 @rapp.contestazioneAmm + "','" +
+                 @rapp.convalida + "','" +
+                 @rapp.dissequestroDef + "','" +
+                 @rapp.dissequestroTemp + "','" +
+                 @rapp.rimozione + "','" +
+                 @rapp.riapposizione + "','" +
+                 @rapp.violazioneSigilli + "','" +
+                 @rapp.controlliScia + "','" +
+                 @rapp.accertAvvenutoRip + "','" +
+                 @rapp.totale + "','" +
+                 @rapp.parziale + "','" +
+                 @rapp.violazioneBeniCult + "','" +
+                 @rapp.contrCantSuoloPubb + "','" +
+                 @rapp.contrEdiliDPI + "','" +
+                 @rapp.contr_cantiereSeq + "','" +
+                 @rapp.contrDaEsposti + "','" +
+                 @rapp.contrDaSegn + "','" +
+                 @rapp.attività_interna + "','" +
+                 @rapp.nota.Replace("'", "''") + "','" +
+                 @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
+                 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "')";
+                    command.CommandText = sql_insRap;
                     command.ExecuteNonQuery();
 
+
+                    command.CommandText = sql_Statistiche;
+                    command.ExecuteNonQuery();
+                    transaction.Commit();
                     resp = true;
-
-
                 }
 
                 catch (Exception ex)
                 {
-                    if (!File.Exists(LogFile))
+                    if (transaction != null)
                     {
-                        using (StreamWriter sw = File.CreateText(LogFile)) { }
-                    }
+                        transaction.Rollback();
 
-                    using (StreamWriter sw = File.AppendText(LogFile))
-                    {
-                        sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
-                        sw.Close();
-                    }
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
 
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
+                            sw.Close();
+                        }
+                    }
                     resp = false;
 
 
