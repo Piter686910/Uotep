@@ -1277,7 +1277,7 @@ namespace Uotep
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Totale:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_280 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(280 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
@@ -1287,7 +1287,7 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Totale:");
-                                descriptionParagraph.SetFixedPosition(startX_270, startY_accertamentoRip, 100);
+                                descriptionParagraph.SetFixedPosition(280, startY_accertamentoRip, 100);
                                 document.Add(descriptionParagraph);
                             }
                             // Parziale 

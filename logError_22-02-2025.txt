@@ -1,4 +1,0 @@
-matricola:s276,data ins:10/02/2025 00:00:00, Violazione del vincolo PRIMARY KEY 'PK_Rapportino'. Non è possibile inserire la chiave duplicata nell'oggetto 'dbo.RappUote'. Valore della chiave duplicata: (47694     ).
-L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 
-matricola:3092,data ins:10/12/2024 00:00:00, Violazione del vincolo PRIMARY KEY 'PK_Rapportino'. Non è possibile inserire la chiave duplicata nell'oggetto 'dbo.RappUote'. Valore della chiave duplicata: (423       ).
-L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 

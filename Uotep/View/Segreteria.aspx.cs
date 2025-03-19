@@ -92,7 +92,7 @@ namespace Uotep
             Boolean ins = false;
             string filePath = string.Empty;
             fl.matricola = Session["user"].ToString();
-            fl.cancella=ckDelete.Checked;
+            fl.cancella = ckDelete.Checked;
             fl.fascicolo = TxtFascicolo.Text;
             fl.folder = CartellaSegreteria;
 
@@ -132,8 +132,6 @@ namespace Uotep
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Il file deve essere minore di 4 mega bytes" + "'); $('#errorModal').modal('show');", true);
 
-                        
-
                     }
                     else
                     {
@@ -150,6 +148,13 @@ namespace Uotep
                             //// Imposta il documento in modalità sola lettura senza password
                             //doc.Protect(WdProtectionType.wdAllowOnlyReading);
                         }
+                        else
+                        {
+                            File.Delete(filePath);
+                            Boolean resp = mn.DeleteFileCaricati(newFileName);
+                            FLFilein.SaveAs(filePath);
+                            salva = resp;
+                        }
 
                     }
                     if (salva)
@@ -161,6 +166,16 @@ namespace Uotep
                     }
                     else
                     {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Nomefile:" + newFileName + @" - Errore in carica ddl file Segreteria.cs ");
+                            sw.Close();
+                        }
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#myModal').modal('show');", true);
 
                     }
@@ -182,7 +197,7 @@ namespace Uotep
             CaricaFile fl = new CaricaFile();
             string filePath = string.Empty;
             Boolean ric = false;
-        
+
             if (!string.IsNullOrEmpty(TxtFascicolo.Text))
             {
                 fl.fascicolo = TxtFascicolo.Text;

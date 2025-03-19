@@ -56,16 +56,185 @@
         <!-- Contenitore per centrare -->
         <div id="DivRicerca" runat="server" class="d-flex flex-column justify-content-center align-items-center" style="height: 300px;">
             <!-- Righe di input con Bootstrap -->
-            <div class="d-flex gap-3 w-50">
+            <%--<div class="d-flex gap-3 w-50">
                 <label for="txtProtoloccolRicerca">Nr Protocollo</label>
                 <asp:TextBox ID="txtProtoloccolRicerca" runat="server" CssClass="form-control" placeholder="Nr Protocollo" />
                 <label for="txtAnnoRicerca">Anno</label>
                 <asp:TextBox ID="txtAnnoRicerca" runat="server" CssClass="form-control" placeholder="Anno" />
                 <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
 
+            </div>--%>
+            <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
+                <div class="d-flex justify-content-center mt-4">
+
+                    <p>
+                        <!-- Pulsanti -->
+                        <asp:Button ID="btNProtocollo" runat="server" OnClick="btNProtocollo_Click" Text="Nr. Protocollo" CssClass="btn btn-primary mx-2" ToolTip="Ricerca per numero protocollo" />
+                        <asp:Button ID="btProcPenale" runat="server" OnClick="btProcPenale_Click" Text="Proc. Penale" ToolTip="Ricerca Procedimento Penale" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btProtGen" runat="server" OnClick="btProtGen_Click" Text="Rif. Prot. Gen." ToolTip="Ricerca Protocollo Generale" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btEvaseAg" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+
+                    </p>
+                    <p>
+                        <!-- Pulsanti -->
+                        <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo." ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Carico" ToolTip="Ricerca Data Carico" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
+                    </p>
+                </div>
+
+            </asp:Panel>
+        </div>
+        <%--  --%>
+        <div id="DivRicercaButton" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
+            <!-- Righe di input ricerche  -->
+            <div class="col-md-4 custom-border">
+                <%-- DIV RICERCA PROTOCOLLO --%>
+                <div id="DivProtocollo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label2" runat="server" Text="Nr Protocollo" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtNProtocollo" ErrorMessage="Inserire numero pratica" ForeColor="Red" ValidationGroup="bt">
+
+                    </asp:RequiredFieldValidator>
+                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" />
+
+
+                    <asp:Label ID="Label3" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:RequiredFieldValidator ID="rqanno" runat="server" ControlToValidate="txtAnnoRicerca" ErrorMessage="Inserire l'anno per la ricerca" ForeColor="Red" ValidationGroup="bt">
+
+                    </asp:RequiredFieldValidator>
+                    <asp:TextBox ID="txtAnnoRicerca" runat="server" CssClass="form-control" placeholder="Anno" />
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA PROocedimento penale --%>
+                <div id="DivProcPenale" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label4" runat="server" Text="Nr Procediemnto Penale" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" />
+
+
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA evasa ag --%>
+                <div id="DivEvasaAg" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label5" runat="server" Text="Data Inizio Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
+
+                    <asp:Label ID="Label6" runat="server" Text="Data Fine Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtDataA" runat="server" CssClass="form-control" placeholder="Data Fine" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA rif protocollo generale --%>
+                <div id="DivProtGen" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label7" runat="server" Text="Rif. Protocollo Generale" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA pratica --%>
+                <div id="DivPratica" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label8" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA giudice --%>
+                <div id="DivGiudice" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label9" runat="server" Text="Giudice" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA provenienza --%>
+                <div id="DivProvenienza" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label10" runat="server" Text="Provenienza" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA nominativo --%>
+                <div id="DivNominativo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label11" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA Accertatori --%>
+                <div id="DivAccertatori" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label12" runat="server" Text="Accertatori" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA Indirizzo --%>
+                <div id="DivIndirizzo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label13" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA data carico --%>
+                <div id="DivDataCarico" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label14" runat="server" Text="Data Carico Da" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtDatCaricoDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
+
+                    <asp:Label ID="Label15" runat="server" Text="Data Carico A" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtDatCaricoA" runat="server" CssClass="form-control" placeholder="Data Fine" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
             </div>
         </div>
-
+        <%--  --%>
 
         <asp:Label ID="lblmessage" runat="server" ForeColor="Red" Font-Bold="true"></asp:Label>
         <%-- campi nascosti --%>
