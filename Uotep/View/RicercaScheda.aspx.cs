@@ -570,15 +570,53 @@ namespace Uotep
             ckViolazioneSigilli.Checked = false;
 
         }
-        //stampa
+        private void stampaX(float x, float y, Document document, Boolean X)
+        {
+            float boxSize = 10;
+            float boxVerticalOffset = 5f;
+            // Ottieni il PdfDocument e PdfCanvas
+            PdfDocument pdfDocument = document.GetPdfDocument();
+            PdfCanvas canvas = new PdfCanvas(pdfDocument.GetFirstPage());
 
+            // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
+            float xPosBox = x;
+            float yPosBox = y - (boxSize / 2) + boxVerticalOffset;
+
+            // --- Disegna il riquadro ---
+            canvas.SetStrokeColor(ColorConstants.BLACK);
+            canvas.SetLineWidth(0.8f);
+            canvas.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
+
+            // --- Posizione della "X" (centro del riquadro) ---
+            float xPosText = xPosBox + (boxSize / 2);
+            float yPosText = y;
+            if (X == true)
+            {
+
+
+                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
+                canvas.BeginText()
+                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
+                         .SetColor(ColorConstants.BLACK, true)
+                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
+                         .ShowText("X")
+                         .EndText();
+            }
+        }
+        
+        /// <summary>
+        /// prepara la stampa del pdf
+        /// </summary>
+        /// <param name="schede"></param>
         public void CreaPdf(DataTable schede)
         {
             float boxSize = 10;
-            float boxVerticalOffset = 4f;
+            //float boxVerticalOffset = 4f;
             float startX_270 = 270;
-;
+            ;
             float startX_70 = 70;
+            float startX_55 = 55;
+            float startX_50 = 50;
             float startX_400 = 400;
             float startX_350 = 350;
             float startX_450 = 450;
@@ -630,7 +668,7 @@ namespace Uotep
                             float x = 65;
                             float y = 645;
                             float width = 490;
-                           
+
                             PdfCanvas canvas = new PdfCanvas(pdf.GetFirstPage());
                             canvas.MoveTo(x, y) // Inizia la linea nel punto (x, y)
                                   .LineTo(x + width, y) // Traccia la linea orizzontale fino a (x + width, y)
@@ -641,46 +679,24 @@ namespace Uotep
                             string delegaAGString = delegaAG ? "X" : "";
 
                             // --- Posizione di riferimento INIZIALE per la X e il Riquadro (lato SINISTRO) ---
-                            float startX_70_DelegaAG = 70; // Posizione X iniziale SPECIFICA per "Delega AG"
+                            // float startX_70_DelegaAG = 70; // Posizione X iniziale SPECIFICA per "Delega AG"
                             float startY_DelegaAG = startY; // Use the dynamic startY
 
                             if (delegaAGString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Delega = new PdfCanvas(pdfDocument.GetFirstPage());
+                                stampaX(startX_50, startY_DelegaAG, document, true);
 
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_DelegaAG;
-                                float yPosBox = startY_DelegaAG - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Delega.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Delega.SetLineWidth(0.8f);
-                                canvas_Delega.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_DelegaAG;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Delega.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
-
-                                // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Delega AG:");
-                                descriptionParagraph.SetFixedPosition(startX_70_DelegaAG + boxSize + 5, startY_DelegaAG - 5, 200);
-                                document.Add(descriptionParagraph);
+                            // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
+                            Paragraph descriptionParagraph = new Paragraph("Delega AG:");
+                            descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_DelegaAG - 5, 200);
+                            document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_DelegaAG, document, false);
                                 // --- Solo la descrizione "Delega AG:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Delega AG:");
-                                descriptionParagraph.SetFixedPosition(startX_70_DelegaAG, startY_DelegaAG, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_DelegaAG, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -690,47 +706,25 @@ namespace Uotep
                             string resaString = resaNullable.HasValue && resaNullable.Value ? "X" : "";
 
                             // --- Posizione di riferimento per "Resa" ---
-                            float startX_70_Resa = 70; // Use startX_70 for single column
+                            // float startX_70_Resa = 70; // Use startX_70 for single column
                             float startY_Resa = startY; // Use the dynamic startY
 
 
                             if (resaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Resa = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_Resa;
-                                float yPosBox = startY_Resa - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Resa.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Resa.SetLineWidth(0.8f);
-                                canvas_Resa.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Resa;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Resa.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Resa, document,true);
 
                                 // --- Paragrafo per la descrizione "Resa:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Resa:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Resa + boxSize + 5, startY_Resa - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Resa - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Resa, document, false);
                                 // --- Solo la descrizione "Resa:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Resa:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Resa, startY_Resa, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_Resa, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -740,47 +734,25 @@ namespace Uotep
                             string segnalazioneString = segnalazioneNullable.HasValue && segnalazioneNullable.Value ? "X" : "";
 
                             // --- Posizione di riferimento per "Segnalazione" ---
-                            float startX_70_Segnalazione = 70; // Use startX_70 for single column
+                            //float startX_70_Segnalazione = 70; // Use startX_70 for single column
                             float startY_Segnalazione = startY; // Use the dynamic startY
 
 
                             if (segnalazioneString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_segnalazione = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_Segnalazione;
-                                float yPosBox = startY_Segnalazione - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_segnalazione.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_segnalazione.SetLineWidth(0.8f);
-                                canvas_segnalazione.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Segnalazione;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_segnalazione.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Segnalazione, document,true);
 
                                 // --- Paragrafo per la descrizione "Segnalazione:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Segnalazione:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Segnalazione + boxSize + 5, startY_Segnalazione - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Segnalazione - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Segnalazione, document, false);
                                 // --- Solo la descrizione "Segnalazione:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Segnalazione:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Segnalazione, startY_Segnalazione, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_Segnalazione, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -789,58 +761,36 @@ namespace Uotep
                             bool? espostoNullable = schede.Rows[0].ItemArray[9] as bool?;
                             string espostoString = espostoNullable.HasValue && espostoNullable.Value ? "X" : "";
                             // --- Posizione di riferimento per "Esposto" ---
-                            float startX_70_Esposto = 70; // Use startX_70 for single column
+
                             float startY_Esposto = startY; // Use the dynamic startY
 
                             if (espostoString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_espostoString = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_Esposto;
-                                float yPosBox = startY_Esposto - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_espostoString.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_espostoString.SetLineWidth(0.8f);
-                                canvas_espostoString.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Esposto;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_espostoString.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Esposto, document,true);
 
                                 // --- Paragrafo per la descrizione "Esposto:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Esposto:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Esposto + boxSize + 5, startY_Esposto - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Esposto - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Esposto, document, false);
                                 // --- Solo la descrizione "Esposto:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Esposto:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Esposto, startY_Esposto, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_Esposto, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
 
                             // Num. Esposto
                             // --- Posizione di riferimento per "Num. Esposto" ---
-                            
+
                             float startY_NumEsposto = startY_430; //
-                            
+
 
                             document.Add(new Paragraph($"Num. Esposto: {schede.Rows[0].ItemArray[10]}").SetFixedPosition(startX_270, startY_Esposto, 200));
-                            
+
                             startY -= lineHeight; // Move to the next line
 
                             // Notifica
@@ -852,38 +802,16 @@ namespace Uotep
 
                             if (notificaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Notifica = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70;
-                                float yPosBox = startY_Notifica - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Notifica.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Notifica.SetLineWidth(0.8f);
-                                canvas_Notifica.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Notifica;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Notifica.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Notifica, document, true);
 
                                 // --- Paragrafo per la descrizione "Notifica:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Notifica:");
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_Notifica - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Notifica - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Notifica, document, false);
                                 // --- Solo la descrizione "Notifica:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Notifica:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_Notifica, 200);
@@ -896,45 +824,23 @@ namespace Uotep
                             bool? iniziativaNullable = schede.Rows[0].ItemArray[12] as bool?;
                             string iniziativaString = iniziativaNullable.HasValue && iniziativaNullable.Value ? "X" : "";
                             // --- Posizione di riferimento per "Iniziativa" ---
-                            float startX_70_Iniziativa = 70; // Use startX_70 for single column
+
                             float startY_Iniziativa = startY; // Use the dynamic startY
                             if (iniziativaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Iniziativa = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_Iniziativa;
-                                float yPosBox = startY_Iniziativa - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Iniziativa.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Iniziativa.SetLineWidth(0.8f);
-                                canvas_Iniziativa.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Iniziativa;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Iniziativa.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Iniziativa, document, true);
 
                                 // --- Paragrafo per la descrizione "Iniziativa:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Iniziativa:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Iniziativa + boxSize + 5, startY_Iniziativa - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Iniziativa - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Iniziativa, document, false);
                                 // --- Solo la descrizione "Iniziativa:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Iniziativa:");
-                                descriptionParagraph.SetFixedPosition(startX_70_Iniziativa, startY_Iniziativa, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_Iniziativa, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -943,45 +849,23 @@ namespace Uotep
                             bool? cdrNullable = schede.Rows[0].ItemArray[13] as bool?;
                             string cdrString = cdrNullable.HasValue && cdrNullable.Value ? "X" : "";
                             // --- Posizione di riferimento per "CDR" ---
-                            float startX_70_CDR = 70; // Use startX_70 for single column
+
                             float startY_CDR = startY; // Use the dynamic startY
                             if (cdrString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_CDR = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70_CDR;
-                                float yPosBox = startY_CDR - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_CDR.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_CDR.SetLineWidth(0.8f);
-                                canvas_CDR.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_CDR;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_CDR.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_CDR, document, true);
 
                                 // --- Paragrafo per la descrizione "CDR:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("CDR:");
-                                descriptionParagraph.SetFixedPosition(startX_70_CDR + boxSize + 5, startY_CDR - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_CDR - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_CDR, document, false);
                                 // --- Solo la descrizione "CDR:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("CDR:");
-                                descriptionParagraph.SetFixedPosition(startX_70_CDR, startY_CDR, 200);
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_CDR, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line 470
@@ -990,42 +874,20 @@ namespace Uotep
                             bool? coordinatorediturnoNullable = schede.Rows[0].ItemArray[14] as bool?;
                             string coordinatorediturnoString = coordinatorediturnoNullable.HasValue && coordinatorediturnoNullable.Value ? "X" : "";
                             // --- Posizione di riferimento per "Coordinatore di turno" ---
-                           // float startX_70_Coord = 70; // Use startX_70 for single column
+                            // float startX_70_Coord = 70; // Use startX_70 for single column
                             float startY_Coord = startY; // Use the dynamic startY 450
                             if (coordinatorediturnoString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Coordinatore = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70;
-                                float yPosBox = startY_Coord - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Coordinatore.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Coordinatore.SetLineWidth(0.8f);
-                                canvas_Coordinatore.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Coord;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Coordinatore.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_Coord, document, true);
 
                                 // --- Paragrafo per la descrizione "Coordinatore:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_Coord - 5, 200);
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Coord - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Coord, document, false);
                                 // --- Solo la descrizione "Coordinatore:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_Coord, 200);
@@ -1044,7 +906,7 @@ namespace Uotep
                             startY -= lineHeight; // Move to the next line
                             // ATTI REDATTI
                             document.Add(new Paragraph("ATTI REDATTI").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
-                           
+
                             startY -= lineHeight; // Move to the next line
                             // Relazione
                             bool? relazioneNullable = schede.Rows[0].ItemArray[15] as bool?;
@@ -1055,39 +917,18 @@ namespace Uotep
 
                             if (relazioneString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_Relazione = new PdfCanvas(pdfDocument.GetFirstPage());
+                                stampaX(startX_50, startY_Relazione, document, true);
 
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startX_DelegaAG per questo campo
-                                float yPosBox = startY_Relazione - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_Relazione.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_Relazione.SetLineWidth(0.8f);
-                                canvas_Relazione.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Relazione;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_Relazione.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Relazione:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_Relazione - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Relazione - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Relazione, document, false);
                                 // --- Solo la descrizione "relazione:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Relazione:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_Relazione, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1100,39 +941,17 @@ namespace Uotep
                             float startY_CNR = startY; // Use the dynamic startY
                             if (cnrString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_CNR = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startX_DelegaAG per questo campo
-                                float yPosBox = startY_CNR - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_CNR.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_CNR.SetLineWidth(0.8f);
-                                canvas_CNR.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_CNR;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_CNR.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_CNR, document, true);
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("CNR:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_CNR - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_CNR - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_CNR, document, false);
                                 // --- Solo la descrizione "Delega AG:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("CNR:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_CNR, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1145,39 +964,17 @@ namespace Uotep
                             float startY_AnnotazionePG = startY; // Use the dynamic startY
                             if (annotazionepgString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_AnnotazionePG = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startY_AnnotazionePG per questo campo
-                                float yPosBox = startY_AnnotazionePG - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_AnnotazionePG.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_AnnotazionePG.SetLineWidth(0.8f);
-                                canvas_AnnotazionePG.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_AnnotazionePG;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_AnnotazionePG.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_AnnotazionePG, document, true);
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Annotazione PG:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_AnnotazionePG - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_AnnotazionePG - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_AnnotazionePG, document, false);
                                 // --- Solo la descrizione "Delega AG:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Annotazione PG:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_AnnotazionePG, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1191,39 +988,17 @@ namespace Uotep
                             float startY_VerbaleSequestro = startY; // Use the dynamic startY
                             if (verbalesequestroString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_VerbaleSequestro = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startX_DelegaAG per questo campo
-                                float yPosBox = startY_VerbaleSequestro - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_VerbaleSequestro.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_VerbaleSequestro.SetLineWidth(0.8f);
-                                canvas_VerbaleSequestro.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_VerbaleSequestro;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_VerbaleSequestro.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_VerbaleSequestro, document, true);
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Verbale Sequestro:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_VerbaleSequestro - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_VerbaleSequestro - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_VerbaleSequestro, document, false);
                                 // --- Solo la descrizione "esito delega:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Verbale Sequestro:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_VerbaleSequestro, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1236,39 +1011,17 @@ namespace Uotep
                             float startY_EsitoDelega = startY; // Use the dynamic startY
                             if (esitodelegaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_EsitoDelega = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startY_EsitoDelega per questo campo
-                                float yPosBox = startY_EsitoDelega - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_EsitoDelega.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_EsitoDelega.SetLineWidth(0.8f);
-                                canvas_EsitoDelega.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_EsitoDelega;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_EsitoDelega.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_EsitoDelega, document, true);
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Esito Delega:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_EsitoDelega - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_EsitoDelega - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_EsitoDelega, document, false);
                                 // --- Solo la descrizione "esito Delega :", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Esito Delega:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_EsitoDelega, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1281,39 +1034,17 @@ namespace Uotep
                             float startY_ContestazioneAmministrativa = startY; // Use the dynamic startY
                             if (contestazioneamministrativaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas canvas_ContestazioneAmministrativa = new PdfCanvas(pdfDocument.GetFirstPage());
-
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startX_DelegaAG per questo campo
-                                float yPosBox = startY_ContestazioneAmministrativa - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                canvas_ContestazioneAmministrativa.SetStrokeColor(ColorConstants.BLACK);
-                                canvas_ContestazioneAmministrativa.SetLineWidth(0.8f);
-                                canvas_ContestazioneAmministrativa.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_ContestazioneAmministrativa;
-
-                                // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-                                canvas_ContestazioneAmministrativa.BeginText()
-                                         .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                         .SetColor(ColorConstants.BLACK, true)
-                                          .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                         .ShowText("X")
-                                         .EndText();
+                                stampaX(startX_50, startY_ContestazioneAmministrativa, document, true);
 
                                 // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Contestazione Amministrativa:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_ContestazioneAmministrativa - 5, 200); // Usa startX_DelegaAG e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_ContestazioneAmministrativa - 5, 200); // Usa startX_DelegaAG e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_ContestazioneAmministrativa, document, false);
                                 // --- Solo la descrizione "Delega AG:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Contestazione Amministrativa:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_ContestazioneAmministrativa, 200); // Usa startX_DelegaAG and startY_DelegaAG
@@ -1342,40 +1073,18 @@ namespace Uotep
                             float startY_Convalida = startY; // Use the dynamic startY
                             if (convalidaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas pdfCanvas_Convalida = new PdfCanvas(pdfDocument.GetFirstPage());
+                                stampaX(startX_50, startY_Convalida, document, true);
 
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Usa startX_Convalida per questo campo
-                                float yPosBox = startY_Convalida - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                pdfCanvas_Convalida.SetStrokeColor(ColorConstants.BLACK);
-                                pdfCanvas_Convalida.SetLineWidth(0.8f);
-                                pdfCanvas_Convalida.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_Convalida;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                pdfCanvas_Convalida.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
 
                                 // --- Paragrafo per la descrizione "Convalida:", posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Convalida:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX_Convalida + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_Convalida - 5, 200); // Usa startX_Convalida e spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Convalida - 5, 200); // Usa startX_Convalida e spazio
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
+                                stampaX(startX_50, startY_Convalida, document, false);
                                 // --- Solo la descrizione "Convalida:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("Convalida:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_Convalida, 200); // Usa startX_Convalida
@@ -1388,40 +1097,18 @@ namespace Uotep
                             float startY_DissequestroDefinitivo = startY; // Use the dynamic startY
                             if (dissequestrodefinitivoString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas pdfCanvasDF = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_DissequestroDefinitivo - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_DissequestroDefinitivo, document, true);
 
-                                // --- Disegna il riquadro ---
-                                pdfCanvasDF.SetStrokeColor(ColorConstants.BLACK);
-                                pdfCanvasDF.SetLineWidth(0.8f);
-                                pdfCanvasDF.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_DissequestroDefinitivo;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                pdfCanvasDF.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Dissequestro Definitivo:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_DissequestroDefinitivo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_DissequestroDefinitivo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_DissequestroDefinitivo, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Dissequestro Definitivo:");
@@ -1430,46 +1117,24 @@ namespace Uotep
                             }
                             startY -= lineHeight; // Move to the next line
 
-                          // Violazione sigilli
+                            // Violazione sigilli
                             bool? violazionesigilliNullable = schede.Rows[0].ItemArray[26] as bool?;
                             string violazionesigilliString = violazionesigilliNullable.HasValue && violazionesigilliNullable.Value ? "X" : "";
                             float startY_violazionesigilli = startY; // Use the dynamic startY
                             if (violazionesigilliString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Violazionesigilli = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_violazionesigilli - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_violazionesigilli, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Violazionesigilli.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Violazionesigilli.SetLineWidth(0.8f);
-                                Canvas_Violazionesigilli.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_violazionesigilli;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Violazionesigilli.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Violazione sigilli:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_violazionesigilli - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_violazionesigilli - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_violazionesigilli, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Violazione sigilli:");
@@ -1483,40 +1148,18 @@ namespace Uotep
                             float startY_dissequestrotemporaneo = startY; // Use the dynamic startY
                             if (dissequestrotemporaneoString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_DissequestroTemporaneo = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_dissequestrotemporaneo - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_dissequestrotemporaneo, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_DissequestroTemporaneo.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_DissequestroTemporaneo.SetLineWidth(0.8f);
-                                Canvas_DissequestroTemporaneo.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_dissequestrotemporaneo;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_DissequestroTemporaneo.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Dissequestro Temporaneo:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_dissequestrotemporaneo, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Dissequestro Temporaneo:");
@@ -1527,34 +1170,11 @@ namespace Uotep
                             // Rimozione
                             bool? rimozioneNullable = schede.Rows[0].ItemArray[24] as bool?;
                             string rimozioneString = rimozioneNullable.HasValue && rimozioneNullable.Value ? "X" : "";
-                           // float startY_Rimozione = startX_270; // Use the dynamic startY
+                            // float startY_Rimozione = startX_270; // Use the dynamic startY
                             if (rimozioneString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Rimozione = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_270; // Riquadro inizia a startX
-                                float yPosBox = startY_dissequestrotemporaneo - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                Canvas_Rimozione.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Rimozione.SetLineWidth(0.8f);
-                                Canvas_Rimozione.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_dissequestrotemporaneo;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Rimozione.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
+                                stampaX(startX_270, startY_dissequestrotemporaneo, document,true);
+                               
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Rimozione:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
@@ -1564,6 +1184,7 @@ namespace Uotep
                             }
                             else
                             {
+                                stampaX(startX_270, startY_dissequestrotemporaneo, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Rimozione:");
@@ -1576,31 +1197,8 @@ namespace Uotep
                             //document.Add(new Paragraph($"Riapposizione: {riapposizioneString}").SetFixedPosition(400, 430, 80));
                             if (riapposizioneString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Riapposizione = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_400; // Riquadro inizia a startX
-                                float yPosBox = startY_dissequestrotemporaneo - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                Canvas_Riapposizione.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Riapposizione.SetLineWidth(0.8f);
-                                Canvas_Riapposizione.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_dissequestrotemporaneo;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Riapposizione.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
+                                stampaX(startX_400, startY_dissequestrotemporaneo, document,true);
+                               
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
@@ -1610,6 +1208,7 @@ namespace Uotep
                             }
                             else
                             {
+                                stampaX(startX_400, startY_dissequestrotemporaneo, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
@@ -1623,40 +1222,18 @@ namespace Uotep
                             float startY_violazioniCodici = startY; // Use the dynamic startY
                             if (violazioniCodiciString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Violaz = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_violazioniCodici - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_violazioniCodici, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Violaz.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Violaz.SetLineWidth(0.8f);
-                                Canvas_Violaz.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_violazioniCodici;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Violaz.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Violaz. Cod. Beni Culturali:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_violazioniCodici - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_violazioniCodici - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_violazioniCodici, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Violaz. Cod. Beni Culturali:");
@@ -1670,40 +1247,18 @@ namespace Uotep
                             float startY_accertamentoRip = startY; // Use the dynamic startY
                             if (accertamentoRipString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Accertamento = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_accertamentoRip - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_accertamentoRip, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Accertamento.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Accertamento.SetLineWidth(0.8f);
-                                Canvas_Accertamento.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_accertamentoRip;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Accertamento.BeginText()
-                             .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                             .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                             .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                             //.MoveTextCursorToPosition(xPosText - 2.5f, yPosText + 2.5f) // Sposta il cursore al centro (aggiustamenti)
-                             .ShowText("X") // Scrive la "X"
-                             .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Accertamento avvenuto ripristino:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_accertamentoRip - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_accertamentoRip - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_accertamentoRip, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Accertamento avvenuto ripristino:");
@@ -1716,39 +1271,19 @@ namespace Uotep
                             // document.Add(new Paragraph($"Totale: {totaleRipString}").SetFixedPosition(270, 390, 100));
                             if (totaleRipString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Totale = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_270; // Riquadro inizia a startX
-                                float yPosBox = startY_accertamentoRip - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                Canvas_Totale.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Totale.SetLineWidth(0.8f);
-                                Canvas_Totale.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_accertamentoRip;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Totale.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
+                                stampaX(startX_270, startY_accertamentoRip, document,true);
+                                //// Ottieni il PdfDocument e PdfCanvas
+                               
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Totale:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_270 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_280 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_270, startY_accertamentoRip, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Totale:");
@@ -1761,30 +1296,8 @@ namespace Uotep
                             //document.Add(new Paragraph($"Parziale:  {parzialeRipString}").SetFixedPosition(350, 390, 100));
                             if (parzialeRipString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Parziale = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_350; // Riquadro inizia a startX
-                                float yPosBox = startY_accertamentoRip - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_350, startY_accertamentoRip, document,true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Parziale.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Parziale.SetLineWidth(0.8f);
-                                Canvas_Parziale.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_accertamentoRip;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Parziale.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Parziale:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
@@ -1794,6 +1307,7 @@ namespace Uotep
                             }
                             else
                             {
+                                stampaX(startX_350, startY_accertamentoRip, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Parziale:");
@@ -1807,39 +1321,18 @@ namespace Uotep
                             float startY_scia = startY; // Use the dynamic startY
                             if (sciaString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_ControlliScia = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_scia - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_scia, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_ControlliScia.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_ControlliScia.SetLineWidth(0.8f);
-                                Canvas_ControlliScia.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_scia;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_ControlliScia.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Controlli Scia:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_scia - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_scia - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_scia, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Controlli Scia:");
@@ -1865,42 +1358,20 @@ namespace Uotep
                             float startY_contrAree = startY; // Use the dynamic startY
                             if (contrAreeString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Controlloaree = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_contrAree - (boxSize / 2) + boxVerticalOffset;
-
-                                // --- Disegna il riquadro ---
-                                Canvas_Controlloaree.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Controlloaree.SetLineWidth(0.8f);
-                                Canvas_Controlloaree.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrAree;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Controlloaree.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
+                                stampaX(startX_50, startY_contrAree, document, true);
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico (impalcature):");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_contrAree - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrAree - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_contrAree, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-                                Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico (impalcature):");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_contrAree, 800);
                                 document.Add(descriptionParagraph);
                             }
@@ -1911,42 +1382,21 @@ namespace Uotep
                             float startY_contrSeq = startY; // Use the dynamic startY
                             if (contrSeqString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_ControlloCantiere = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_contrSeq - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_contrSeq, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_ControlloCantiere.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_ControlloCantiere.SetLineWidth(0.8f);
-                                Canvas_ControlloCantiere.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrSeq;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_ControlloCantiere.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_contrSeq - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrSeq - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_contrSeq, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---rel
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_contrSeq, 800);
                                 document.Add(descriptionParagraph);
                             }
@@ -1957,39 +1407,18 @@ namespace Uotep
                             float startY_contrEsp = startY; // Use the dynamic startY
                             if (contrEspString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Controlloesposti = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_contrEsp - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_contrEsp, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Controlloesposti.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Controlloesposti.SetLineWidth(0.8f);
-                                Canvas_Controlloesposti.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrEsp;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Controlloesposti.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Controllo nato da esposti:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_contrEsp - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrEsp - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_contrEsp, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Controllo nato da esposti:");
@@ -2003,39 +1432,18 @@ namespace Uotep
                             float startY_contrSegn = startY; // Use the dynamic startY
                             if (contrSegnString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Controllosegnalazioni = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_contrSegn - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_contrSegn, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Controllosegnalazioni.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Controllosegnalazioni.SetLineWidth(0.8f);
-                                Canvas_Controllosegnalazioni.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrSegn;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Controllosegnalazioni.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Controllo nato da segnalazioni:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_contrSegn - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrSegn - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
                             {
+                                stampaX(startX_50, startY_contrSegn, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Controllo nato da segnalazioni:");
@@ -2049,38 +1457,17 @@ namespace Uotep
                             float startY_contrEdil = startY; // Use the dynamic startY
                             if (contrEdilString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Controllilavori = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_70; // Riquadro inizia a startX
-                                float yPosBox = startY_contrEdil - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_50, startY_contrEdil, document, true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Controllilavori.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Controllilavori.SetLineWidth(0.8f);
-                                Canvas_Controllilavori.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrEdil;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Controllilavori.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Controlli lavori edili con/senza protezione (d.p.i.):");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_70 + boxSize + 5, startY_contrEdil - 5, 600); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrEdil - 5, 600); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
                             else
+                                stampaX(startX_50, startY_contrEdil, document, false);
                             {
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
@@ -2088,37 +1475,15 @@ namespace Uotep
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_contrEdil, 800);
                                 document.Add(descriptionParagraph);
                             }
-                            
+
                             // Con (d.p.i.)
                             bool? contrConDpiNullable = schede.Rows[0].ItemArray[44] as bool?;
                             string contrConDpiString = contrConDpiNullable.HasValue && contrConDpiNullable.Value ? "X" : "";
                             //document.Add(new Paragraph($"Con  {contrConDpiString}").SetFixedPosition(350, 250, 70));
                             if (contrConDpiString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_Condpi = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_350; // Riquadro inizia a startX
-                                float yPosBox = startY_contrEdil - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_350, startY_contrEdil, document,true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_Condpi.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_Condpi.SetLineWidth(0.8f);
-                                Canvas_Condpi.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrEdil;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_Condpi.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Con (d.p.i.):");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
@@ -2128,6 +1493,7 @@ namespace Uotep
                             }
                             else
                             {
+                                stampaX(startX_350, startY_contrEdil, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Con (d.p.i.):");
@@ -2140,30 +1506,8 @@ namespace Uotep
                             // document.Add(new Paragraph($"Senza  {contrSenzaDpiString}").SetFixedPosition(450, 250, 70));
                             if (contrSenzaDpiString == "X")
                             {
-                                // Ottieni il PdfDocument e PdfCanvas
-                                PdfDocument pdfDocument = document.GetPdfDocument();
-                                PdfCanvas Canvas_senzadpi = new PdfCanvas(pdfDocument.GetFirstPage());
-                                //float boxVerticalOffsetDf = 4f;
-                                // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-                                float xPosBox = startX_450; // Riquadro inizia a startX
-                                float yPosBox = startY_contrEdil - (boxSize / 2) + boxVerticalOffset;
+                                stampaX(startX_450, startY_contrEdil, document,true);
 
-                                // --- Disegna il riquadro ---
-                                Canvas_senzadpi.SetStrokeColor(ColorConstants.BLACK);
-                                Canvas_senzadpi.SetLineWidth(0.8f);
-                                Canvas_senzadpi.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-                                // --- Posizione della "X" (centro del riquadro) ---
-                                float xPosText = xPosBox + (boxSize / 2);
-                                float yPosText = startY_contrEdil;
-
-                                // --- Aggiungi la "X" usando iText.Layout.Canvas ---
-                                Canvas_senzadpi.BeginText()
-                                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-                                 .SetColor(ColorConstants.BLACK, true) // Colore della X (nero)
-                                 .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-                                 .ShowText("X") // Scrive la "X"
-                                 .EndText();
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
@@ -2173,6 +1517,7 @@ namespace Uotep
                             }
                             else
                             {
+                                stampaX(startX_450, startY_contrEdil, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
