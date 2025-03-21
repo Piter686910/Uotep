@@ -76,70 +76,65 @@ namespace Uotep
             //if (!String.IsNullOrEmpty(HfTipoAtto.Value))
             //    btSalvaTipoAtto.Visible = true;
 
-           
+
         }
 
         protected void Salva_Click(object sender, EventArgs e)
         {
-
-
-            Principale p = new Principale();
-            p.anno = annoCorr;
-            DateTime giorno = DateTime.Now;
-            p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
-
-
-            //
             Manager mn = new Manager();
 
+            ArchivioUote arch = new ArchivioUote();
+            arch.arch_numPratica = txtPratica.Text;
+            //DateTime giorno = DateTime.Now;
+            arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
+            arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
+            arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
+            arch.arch_tipologia = txtTipoAtto.Text;
+            arch.arch_note = txtNote.Text;
+            arch.arch_quartiere = txtQuartiere.Text;
+            arch.arch_matricola = Session["user"].ToString();
+            arch.arch_indirizzo = txtIndirizzo.Text;
+            arch.arch_nominativo = txtNominativo.Text;
+            arch.arch_responsabile = txtResponsabile.Text;
+            arch.arch_vincoli = CkVincoli.Checked;
+            arch.arch_suoloPub = CkSuoloPubblico.Checked;
+            arch.arch_1089 = Ck1089.Checked;
+            arch.arch_evasa = CkEvasa.Checked;
+            arch.arch_demolita = CkDemolita.Checked;
+            arch.arch_inCarico = txtInCarico.Text;
 
 
+            Boolean ins = mn.SavePraticaArchivioUote(arch);
+            if (!ins)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
 
-
-
-            //Boolean ins = mn.SavePratica(p);
-            //if (!ins)
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
-            //}
-            //else
-            //{
-            //    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
-
-            //    Pulisci();
-            //}
+                Pulisci();
+            }
         }
         private void Pulisci()
         {
-            Convalida();
-            //txtProt.Text = String.Empty;
 
-            //if (String.IsNullOrEmpty(HfGiudice.Value))
-            //{
-            //    txtGiudice.Text = string.Empty;
-
-            //}
-
-
-            //txtQuartiere.Text = string.Empty;
-            //if (String.IsNullOrEmpty(HfInviata.Value))
-            //{
-            //    txtInviata.Text = string.Empty;
-            //}
-
-
-            //txtIndirizzo.Text = string.Empty;
-            //HfIndirizzo.Value = string.Empty;
-
-            //txtPratica.Text = String.Empty;
-            //txtDataInserimento.Text = String.Empty;
-
-
-            //txtNominativo.Text = String.Empty;
-
-            //txtNote.Text = String.Empty;
-            //txtDataNascita.Text = String.Empty;
-
+            txtPratica.Text = String.Empty;
+            txtGiudice.Text = string.Empty;
+            txtQuartiere.Text = string.Empty;
+            txtInCarico.Text = string.Empty;
+            txtTipoAtto.Text = string.Empty;
+            txtIndirizzo.Text = string.Empty;
+            txtResponsabile.Text = string.Empty;
+            txtDataInserimento.Text = String.Empty;
+            txtNominativo.Text = String.Empty;
+            txtDataUltimoIntervento.Text = String.Empty;
+            txtNote.Text = String.Empty;
+            txtDataNascita.Text = String.Empty;
+            Ck1089.Checked = false;
+            CkSuoloPubblico.Checked = false;
+            CkDemolita.Checked = false;
+            CkVincoli.Checked = false;
             CkEvasa.Checked = false;
             CaricaDLL();
 
@@ -212,11 +207,7 @@ namespace Uotep
         {
             string indirizzo = string.Empty;
 
-
-            //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
             indirizzo = txtIndirizzoQuartiere.Text.Trim();
-
-
             //string specie = txtSpecie.Text.Trim();
 
             if (!string.IsNullOrEmpty(indirizzo))
@@ -231,15 +222,15 @@ namespace Uotep
                     gvPopup.DataBind();
 
                 }
-                else
-                {
-                    //lblQuartiere.Text = "Quartiere non trovato.";
-                }
+                //else
+                //{
+                //    lblQuartiere.Text = "Quartiere non trovato.";
+                //}
             }
-            else
-            {
-                //lblQuartiere.Text = "Inserisci un indirizzo valido.";
-            }
+            //else
+            //{
+            //    lblQuartiere.Text = "Inserisci un indirizzo valido.";
+            //}
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
@@ -250,25 +241,25 @@ namespace Uotep
             try
             {
                 Manager mn = new Manager();
-                //DataTable RicercaQuartiere = mn.getListQuartiere();
-                //DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                //DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                ////DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
-                //DdlQuartiere.DataBind();
+                DataTable RicercaQuartiere = mn.getListQuartiere();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+                DdlQuartiere.DataBind();
                 //// DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                //DataTable RicercaIndirizzo = mn.getListIndirizzo();
-                //DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
-                //DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
-                //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
-                //DdlIndirizzo.DataBind();
+                DataTable RicercaIndirizzo = mn.getListIndirizzo();
+                DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
+                DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
+                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+                DdlIndirizzo.DataBind();
                 //// DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                //DataTable RicercaTipoAtto = mn.getListTipologia();
-                //DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
-                //DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
-                //DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
-                //DdlTipoAtto.DataBind();
+                DataTable RicercaTipoAtto = mn.getListTipologia();
+                DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
+                DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
+                DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                DdlTipoAtto.DataBind();
                 // DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
 
                 // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
@@ -326,39 +317,12 @@ namespace Uotep
                 string selectedValue = e.CommandArgument.ToString();
 
                 // Imposta il valore nel TextBox
-                //txtSelectedValue.Text = selectedValue;
-                //txtQuartiere.Text = selectedValue;
+                txtQuartiere.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
 
-        protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            //Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
-            //if (ins)
-            //{
-            //    HfTipoAtto.Value = string.Empty;
-            //    txtTipoAtto.Text = string.Empty;
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
-            //}
-        }
-
-
-
-        protected void btSalvaInviata_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            //Boolean ins = mn.InserisciInviata(HfInviata.Value);
-            //if (ins)
-            //{
-            //    HfInviata.Value = string.Empty;
-            //    txtInviata.Text = string.Empty;
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
-
-            //}
-        }
     }
 }

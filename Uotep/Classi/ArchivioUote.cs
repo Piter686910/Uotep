@@ -10,7 +10,7 @@ namespace Uotep.Classi
 
         public string arch_numPratica = string.Empty;
         public DateTime arch_dataIns;
-        public DateTime arch_ult_intervento;
+        public DateTime arch_datault_intervento;
         public string arch_indirizzo = string.Empty;
         public string arch_responsabile = string.Empty;
         public string arch_nominativo = string.Empty;

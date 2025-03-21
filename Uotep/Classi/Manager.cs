@@ -150,6 +150,11 @@ namespace Uotep.Classi
                 return resp;
             }
         }
+        /// <summary>
+        /// cancella i file per nome
+        /// </summary>
+        /// <param name="nomefile"></param>
+        /// <returns></returns>
         public Boolean DeleteFileCaricati(String nomefile)
         {
 
@@ -179,6 +184,39 @@ namespace Uotep.Classi
                     resp = false;
                 }
                 conn1.Close();
+                return resp;
+            }
+        }
+        /// <summary>
+        /// cancella i file con flag cancella a true
+        /// </summary>
+        /// <returns></returns>
+        public Boolean DeleteFileScaricati()
+        {
+            String Del_FileCaricati = "delete from File_Caricati where cancella = 'True'";
+
+            String testoSql = String.Empty;
+            Boolean resp = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+                try
+                {
+
+                    command.CommandText = Del_FileCaricati;
+                    testoSql = "FileCaricati";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn.Close();
                 return resp;
             }
         }
@@ -1237,6 +1275,28 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        /// <summary>
+        /// elenca i file cancellabili
+        /// </summary>
+        /// <returns>datatable</returns>
+        public DataTable GetFileScaricati()
+        {
+
+            string sql = "select ISNULL(folder, '') +  ISNULL(nomefile, '') AS percorso  from File_Caricati where cancella = 'True'";
+
+
+            String testoSql = String.Empty;
+            DataTable tb = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+               
+                 return   tb = FillTable(sql, conn);
+            
+            }
+        }
         public DataTable GetFileByFascicoloData(CaricaFile fl)
         {
             string sql = string.Empty;
@@ -1252,10 +1312,6 @@ namespace Uotep.Classi
                 sql = "SELECT * FROM File_Caricati where Data = '" + fl.data + "'";
 
             }
-
-
-
-
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2333,6 +2389,75 @@ namespace Uotep.Classi
 
 
         }
+        public Boolean SavePraticaArchivioUote(ArchivioUote arch)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+
+                sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_nominativo,arch_dataNascita," +
+                    "arch_tipologia,arch_quartiere,arch_inCarico,arch_demolita,arch_1089,arch_suoloPub,arch_evasa,arch_vincoli,arch_note,arch_allegati,arch_matricola)" +
+                   " Values('" + @arch.arch_numPratica + "','" +  @arch.arch_dataIns + "','" + @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") +
+                   "','" + @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_nominativo.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
+                   @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_demolita + "','" + @arch.arch_1089 + "','" +
+                   @arch.arch_suoloPub + "','" + @arch.arch_evasa + "','" + @arch.arch_vincoli + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola  + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "Principale";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento dati ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+        /// <summary>
+        /// Salva il nuovo fascicolo protocollo
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public Boolean SavePratica(Principale p)
         {
             bool resp = true;
@@ -2469,7 +2594,64 @@ namespace Uotep.Classi
             return resp;
 
         }
+        /// <summary>
+        /// imposta flag cancellazione
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Boolean UpdFileCaricati(int id)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
 
+            try
+            {
+                sql_pratica = "update File_Caricati set cancella = 'True'" + " where id_file = " + id ;
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "File_Caricati";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Id FIle:" + id  + ", " + ex.Message + @" - Errore in update File_Caricati ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
         public Boolean UpdPratica(Principale p, string oldMat, DateTime olddate)
         {
             bool resp = true;

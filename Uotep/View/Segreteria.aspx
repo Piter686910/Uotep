@@ -85,8 +85,8 @@
                         <!-- Etichetta flag per la cancellazione -->
                         <div class="form-group mb-3">
                             <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:CheckBox ID="ckDelete" runat="server" CssClass="form-check-input"/>
-                                <label class="form-check-label" for="ckDelete"> Può essere eliminato</label>
+                                <asp:Label ID="Label6" runat="server" Text="Cancella file già scaricati" CssClass="form-label d-block mb-2"></asp:Label>
+                                <asp:Button ID="btCancellaScaricati" Text="Cancella" runat="server" OnClick="btCancellaScaricati_Click" ToolTip="Cancella File" CssClass="btn btn-primary px-4"   />
                             </div>
                         </div>
                         <div class="form-group">
@@ -100,18 +100,13 @@
                                     <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
                                     <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="100%" />
                                     <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
-                                     
+
                                     <asp:TemplateField>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>' CssClass="btn btn-success btn-sm" />
+                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
 
-                                    <%-- <asp:TemplateField HeaderText="Link">
-                                        <ItemTemplate>
-                                            <asp:HyperLink ID="HyperLink1" runat="server" Text="Apri File" CommandName="AddLink" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>'></asp:HyperLink>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>--%>
                                 </Columns>
                             </asp:GridView>
 

@@ -106,6 +106,7 @@ namespace Uotep
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
@@ -125,6 +126,7 @@ namespace Uotep
                             case "superAdmin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;

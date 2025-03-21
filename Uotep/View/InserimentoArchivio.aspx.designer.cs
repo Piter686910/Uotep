@@ -51,13 +51,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtIndirizzo;
 
         /// <summary>
-        /// Controllo suggestionsListIndirizzo.
+        /// Controllo suggestionsListI.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListIndirizzo;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListI;
 
         /// <summary>
         /// Controllo DdlIndirizzo.
@@ -87,13 +87,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtQuartiere;
 
         /// <summary>
-        /// Controllo suggestionsListQuartiere.
+        /// Controllo suggestionsListQ.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListQuartiere;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListQ;
 
         /// <summary>
         /// Controllo DdlQuartiere.
@@ -150,13 +150,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtGiudice;
 
         /// <summary>
-        /// Controllo suggestionsList.
+        /// Controllo suggestionsListG.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsList;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListG;
 
         /// <summary>
         /// Controllo DdlGiudice.
@@ -177,13 +177,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtInCarico;
 
         /// <summary>
-        /// Controllo suggestionsListInviata.
+        /// Controllo suggestionsListInCarico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListInviata;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListInCarico;
 
         /// <summary>
         /// Controllo DdlInviati.
@@ -204,22 +204,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
 
         /// <summary>
-        /// Controllo suggestionsListTipoAtto.
+        /// Controllo suggestionsListTA.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoAtto;
-
-        /// <summary>
-        /// Controllo HfTipoAtto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfTipoAtto;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTA;
 
         /// <summary>
         /// Controllo DdlTipoAtto.

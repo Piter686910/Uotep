@@ -92,7 +92,7 @@ namespace Uotep
             Boolean ins = false;
             string filePath = string.Empty;
             fl.matricola = Session["user"].ToString();
-            fl.cancella = ckDelete.Checked;
+
             fl.fascicolo = TxtFascicolo.Text;
             fl.folder = CartellaSegreteria;
 
@@ -265,7 +265,7 @@ namespace Uotep
                 string data = args[2];    // Potrebbe non essere usato nel percorso del file
                 string nomefile = args[3];
                 string folder = args[4];   // Potrebbe non essere usato direttamente nel percorso, ma estratto dal codice originale
-
+                int id_file = Convert.ToInt32(args[5]);
                 GridViewRow row = GVRicercaFile.Rows[rowIndex];
 
                 // Recupera il nome del file dalla riga (già estratto da CommandArgument come nomefile)
@@ -309,6 +309,9 @@ namespace Uotep
                             Response.Flush();
                             Response.End();
                         }
+                        Manager mn = new Manager();
+
+                        bool upd = mn.UpdFileCaricati(id_file);
                     }
                     catch (Exception ex)
                     {
@@ -362,6 +365,35 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+
+        }
+
+        protected void btCancellaScaricati_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean upd = false;
+            //controllo se ci sono file con flag cancella a true per essere cancellati
+            System.Data.DataTable dt = mn.GetFileScaricati();
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+
+                    File.Delete(dt.Rows[i].ItemArray[i].ToString());
+                }
+
+                upd = mn.DeleteFileScaricati();
+                if (upd)
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File cancellati." + "'); $('#myModal').modal('show');", true);
+
+
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non ci sono file da cancellare." + "'); $('#myModal').modal('show');", true);
+
+            }
+
 
         }
     }
