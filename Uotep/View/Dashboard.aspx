@@ -82,6 +82,12 @@
                                 </asp:DropDownList>
                             </div>
                         </div>
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:Label ID="Label8" runat="server" Text="Elenco Personale" CssClass="form-label d-block mb-2"></asp:Label>
+                                <asp:DropDownList ID="DdlPersonale" runat="server" CssClass="form-control" />
+                            </div>
+                        </div>
                         <div class="col-md-6" style="margin-top: 20px!important">
                             <div class="form-group mb-3">
                                 <asp:Button Text="OK" runat="server" OnClick="InsOpetratore_Click" ToolTip="Inserisci" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />

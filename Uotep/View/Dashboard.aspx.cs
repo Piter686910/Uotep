@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using Uotep.Classi;
 
 namespace Uotep
@@ -13,6 +15,15 @@ namespace Uotep
             {
                 Vuser = Session["user"].ToString();
 
+            }
+            if (!IsPostBack)
+            {
+                Manager mn = new Manager();
+                DataTable CaricaOperatori = mn.getListOperatore();
+                DdlPersonale.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
+                DdlPersonale.DataTextField = "Nominativo"; // Il campo visibile
+                DdlPersonale.Items.Insert(0, new ListItem("", "0"));
+                DdlPersonale.DataBind();
             }
         }
 
