@@ -99,9 +99,11 @@ namespace Uotep
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = false;
                                 menuAmministratore.Visible = false;
+
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-
+                              //  RicercaArchivio.Visible = true;
+                               
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard

@@ -42,6 +42,24 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuArchivioUote;
 
         /// <summary>
+        /// Controllo A1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor A1;
+
+        /// <summary>
+        /// Controllo A2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor A2;
+
+        /// <summary>
         /// Controllo menuCoordinamentoAtti.
         /// </summary>
         /// <remarks>
