@@ -92,184 +92,191 @@ namespace Uotep
 
         protected void Salva_Click(object sender, EventArgs e)
         {
-
-            int protocollo = 0;
-            Principale p = new Principale();
-            p.anno = annoCorr;
-            DateTime giorno = DateTime.Now;
-            p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
-
-
-            //
-            Manager mn = new Manager();
-            DataTable tb = mn.MaxNPr(annoCorr);
-            txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-            if (tb.Rows.Count > 0)
+            try
             {
-                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
+                int protocollo = 0;
+                Principale p = new Principale();
+                p.anno = annoCorr;
+                DateTime giorno = DateTime.Now;
+                p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
 
-                if (System.Convert.ToInt16(annoCorr) <= annoMAx)
+
+                //
+                Manager mn = new Manager();
+                DataTable tb = mn.MaxNPr(annoCorr);
+                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                if (tb.Rows.Count > 0)
                 {
-                    protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                    txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
+                    txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
+
+                    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
+                    {
+                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
+                    }
+                    else
+                    {
+                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                        txtProt.Text = protocollo.ToString();
+
+                    }
                 }
                 else
                 {
-                    protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                    txtProt.Text = protocollo.ToString();
+                    txtProt.Text = "1";
 
                 }
-            }
-            else
-            {
-                txtProt.Text = "1";
-
-            }
-            p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-            //
+                p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
+                //
 
 
 
-            p.sigla = DdlSigla.SelectedItem.Text;
-            p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-            //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-            p.nominativo = txtNominativo.Text;
-            //if (DdlGiudice.SelectedValue == "0")
-            //{
-            //    p.giudice = String.Empty;
-            //}
-            if (String.IsNullOrEmpty(txtGiudice.Text))
-            {
-                p.giudice = String.Empty;
-            }
-            else
-            {
-
-                Boolean resp = mn.getGiudice(txtGiudice.Text);
-                if (!resp)
+                p.sigla = DdlSigla.SelectedItem.Text;
+                p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                p.nominativo = txtNominativo.Text;
+                //if (DdlGiudice.SelectedValue == "0")
+                //{
+                //    p.giudice = String.Empty;
+                //}
+                if (String.IsNullOrEmpty(txtGiudice.Text))
                 {
-                    HfGiudice.Value = txtGiudice.Text;
+                    p.giudice = String.Empty;
                 }
-
-                p.giudice = txtGiudice.Text;
-            }
-
-            if (String.IsNullOrEmpty(txtProvenienza.Text))
-            {
-
-                p.provenienza = string.Empty;
-            }
-
-            else
-            {
-                Boolean resp = mn.getProvenienza(txtProvenienza.Text);
-                if (!resp)
+                else
                 {
-                    HfProvenienza.Value = txtProvenienza.Text;
+
+                    Boolean resp = mn.getGiudice(txtGiudice.Text);
+                    if (!resp)
+                    {
+                        HfGiudice.Value = txtGiudice.Text;
+                    }
+
+                    p.giudice = txtGiudice.Text;
                 }
-                p.provenienza = txtProvenienza.Text;
-            }
 
-
-            if (String.IsNullOrEmpty(txtTipoAtto.Text))
-            {
-
-                p.tipologia_atto = String.Empty;
-            }
-            else
-            {
-                Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
-                if (!resp)
+                if (String.IsNullOrEmpty(txtProvenienza.Text))
                 {
-                    HfTipoAtto.Value = txtTipoAtto.Text;
+
+                    p.provenienza = string.Empty;
                 }
-                p.tipologia_atto = txtTipoAtto.Text;
-            }
 
-
-            if (String.IsNullOrEmpty(txtTipoProv.Text))
-            {
-                p.tipoProvvedimentoAG = String.Empty;
-            }
-            else
-            {
-
-                Boolean resp = mn.getTipoProv(txtTipoProv.Text);
-                if (!resp)
+                else
                 {
-                    HfTipoProv.Value = txtTipoProv.Text;
+                    Boolean resp = mn.getProvenienza(txtProvenienza.Text);
+                    if (!resp)
+                    {
+                        HfProvenienza.Value = txtProvenienza.Text;
+                    }
+                    p.provenienza = txtProvenienza.Text;
                 }
 
-                p.tipoProvvedimentoAG = txtTipoProv.Text;
-            }
-            if (String.IsNullOrEmpty(txtIndirizzo.Text))
-            {
-                p.indirizzo = String.Empty;
-            }
-            else
-            {
-                p.indirizzo = txtIndirizzo.Text;
-                p.via = string.Empty;
 
-            }
-            if (String.IsNullOrEmpty(txtQuartiere.Text))
-            {
-                p.quartiere = String.Empty;
-            }
-            else
-            {
-                p.quartiere = txtQuartiere.Text;
-                //p.quartiere = lblQuartiere.Text;
-            }
-
-            p.rif_Prot_Gen = txtRifProtGen.Text;
-
-
-            p.note = txtNote.Text;
-            p.evasa = CkEvasa.Checked;
-            if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-            {
-                p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-            }
-
-            //p.accertatori = null;
-            //p.scaturito = null;
-            if (String.IsNullOrEmpty(txtInviata.Text))
-            {
-                p.inviata = String.Empty;
-            }
-            else
-            {
-                Boolean resp = mn.getInviata(txtInviata.Text);
-                if (!resp)
+                if (String.IsNullOrEmpty(txtTipoAtto.Text))
                 {
-                    HfInviata.Value = txtInviata.Text;
+
+                    p.tipologia_atto = String.Empty;
                 }
-                p.inviata = txtInviata.Text;
+                else
+                {
+                    Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                    if (!resp)
+                    {
+                        HfTipoAtto.Value = txtTipoAtto.Text;
+                    }
+                    p.tipologia_atto = txtTipoAtto.Text;
+                }
 
+
+                if (String.IsNullOrEmpty(txtTipoProv.Text))
+                {
+                    p.tipoProvvedimentoAG = String.Empty;
+                }
+                else
+                {
+
+                    Boolean resp = mn.getTipoProv(txtTipoProv.Text);
+                    if (!resp)
+                    {
+                        HfTipoProv.Value = txtTipoProv.Text;
+                    }
+
+                    p.tipoProvvedimentoAG = txtTipoProv.Text;
+                }
+                if (String.IsNullOrEmpty(txtIndirizzo.Text))
+                {
+                    p.indirizzo = String.Empty;
+                }
+                else
+                {
+                    p.indirizzo = txtIndirizzo.Text;
+                    p.via = string.Empty;
+
+                }
+                if (String.IsNullOrEmpty(txtQuartiere.Text))
+                {
+                    p.quartiere = String.Empty;
+                }
+                else
+                {
+                    p.quartiere = txtQuartiere.Text;
+                    //p.quartiere = lblQuartiere.Text;
+                }
+
+                p.rif_Prot_Gen = txtRifProtGen.Text;
+
+
+                p.note = txtNote.Text;
+                p.evasa = CkEvasa.Checked;
+                if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
+                {
+                    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
+                }
+
+                //p.accertatori = null;
+                //p.scaturito = null;
+                if (String.IsNullOrEmpty(txtInviata.Text))
+                {
+                    p.inviata = String.Empty;
+                }
+                else
+                {
+                    Boolean resp = mn.getInviata(txtInviata.Text);
+                    if (!resp)
+                    {
+                        HfInviata.Value = txtInviata.Text;
+                    }
+                    p.inviata = txtInviata.Text;
+
+                }
+                //p.inviata = DdlInviati.SelectedItem.Text;
+                if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                {
+                    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                }
+
+                p.procedimentoPen = txtProdPenNr.Text;
+                p.matricola = Vuser;
+                p.data_ins_pratica = DateTime.Now.ToLocalTime();
+
+
+                Boolean ins = mn.SavePratica(p);
+                if (!ins)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+
+                    Pulisci();
+                }
             }
-            //p.inviata = DdlInviati.SelectedItem.Text;
-            if (!string.IsNullOrEmpty(txtDataInvio.Text))
+            catch (Exception ex)
             {
-                p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-            }
 
-            p.procedimentoPen = txtProdPenNr.Text;
-            p.matricola = Vuser;
-            p.data_ins_pratica = DateTime.Now.ToLocalTime();
-
-
-            Boolean ins = mn.SavePratica(p);
-            if (!ins)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
-            }
-            else
-            {
-                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
-
-                Pulisci();
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
             }
         }
         private void Pulisci()
@@ -296,7 +303,7 @@ namespace Uotep
             {
                 txtTipoAtto.Text = string.Empty;
             }
-           
+
             txtIndirizzo.Text = string.Empty;
             HfIndirizzo.Value = string.Empty;
             if (String.IsNullOrEmpty(HfProvenienza.Value))
@@ -491,6 +498,7 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
                     sw.Close();
                 }
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
             }
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -520,9 +528,9 @@ namespace Uotep
             }
         }
 
-       
-       
-       
+
+
+
 
         protected void btSalvaGiudice_Click(object sender, EventArgs e)
         {
@@ -552,7 +560,7 @@ namespace Uotep
 
         protected void btSalvaProvenienza_Click(object sender, EventArgs e)
         {
-            
+
             Manager mn = new Manager();
             Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
             if (ins)
@@ -578,7 +586,7 @@ namespace Uotep
             }
         }
 
-      
+
 
         protected void btSalvaInviata_Click(object sender, EventArgs e)
         {

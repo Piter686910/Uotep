@@ -106,14 +106,18 @@
                 </div>
                 <div class="col-md-6" style="margin-top: 20px!important">
                     <div class="form-group mb-3">
-                        <asp:Button Text="OK" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+                        <asp:Button Text="Reset" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+                        <asp:Button Text="Elimina" runat="server" OnClick="Elimina_Click" ToolTip="Elimina Utente" CssClass="btn btn-primary px-4" />
+
                     </div>
                 </div>
             </div>
+
             <!-- Pulsante Login -->
             <div class="form-group text-center mt-4">
                 <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
                 <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" ToolTip="Nuovo Utente" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+
             </div>
         </div>
     </asp:Panel>

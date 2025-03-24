@@ -150,6 +150,38 @@ namespace Uotep.Classi
                 return resp;
             }
         }
+        public Boolean DeleteMatricola(String matricola)
+        {
+
+            String Del_operatore = "delete from operatore where matricola = '" + matricola + "'";
+
+            String testoSql = String.Empty;
+
+            Boolean resp = false;
+
+            using (SqlConnection conn1 = new SqlConnection(ConnString))
+            {
+                conn1.Open();
+                SqlCommand command = conn1.CreateCommand();
+
+                try
+                {
+
+                    command.CommandText = Del_operatore;
+                    testoSql = "operatore";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn1.Close();
+                return resp;
+            }
+        }
         /// <summary>
         /// cancella i file per nome
         /// </summary>
@@ -1292,9 +1324,9 @@ namespace Uotep.Classi
             {
                 conn.Open();
                 SqlCommand command = conn.CreateCommand();
-               
-                 return   tb = FillTable(sql, conn);
-            
+
+                return tb = FillTable(sql, conn);
+
             }
         }
         public DataTable GetFileByFascicoloData(CaricaFile fl)
@@ -1312,6 +1344,40 @@ namespace Uotep.Classi
                 sql = "SELECT * FROM File_Caricati where Data = '" + fl.data + "'";
 
             }
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable getPraticaArchivioUoteById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable getPraticaArchivioUote(string pratica, string nominativo, string indirizzo, string[] catasto)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            if (!String.IsNullOrEmpty(pratica))
+                sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica.Replace("'", "''") + "'";
+            if (!String.IsNullOrEmpty(nominativo))
+                sql = "SELECT * FROM ArchivioUote where arch_nominativo like '%" + nominativo.Replace("'", "''") + "%'";
+            if (!String.IsNullOrEmpty(indirizzo))
+                sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
+
+            //if (!String.IsNullOrEmpty(catasto))
+            //    sql = "SELECT * FROM ArchivioUote where arch_nominativo = '" + nominativo + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2188,7 +2254,7 @@ namespace Uotep.Classi
                         ",esposti_evasi =" + @stat.esposti_evasi + ",ripristino_tot_par =" + @stat.ripristino_tot_par + ",controlli_scia = " + @stat.controlli_scia +
                         ",contr_cant_daily =" + @stat.contr_cant_daily + ",cnr = " +
                         "" + @stat.cnr + ",annotazioni = " + @stat.annotazioni + ",deleghe_esitate = " + @stat.deleghe_esitate +
-                        ",sequestri =" + @stat.sequestri + ",riapp_sigilli = " + @stat.riapp_sigilli + ",deleghe_ricevute =" + @stat.deleghe_ricevute + 
+                        ",sequestri =" + @stat.sequestri + ",riapp_sigilli = " + @stat.riapp_sigilli + ",deleghe_ricevute =" + @stat.deleghe_ricevute +
                         ",cnr_annotazioni =" + @stat.cnr_annotazioni + ",interrogazioni =" + @stat.interrogazioni + ",denunce_uff =" + @stat.denunce_uff + ",convalide =" + @stat.convalide +
                         ",demolizioni =" + @stat.demolizioni + ",violazione_sigilli =" + @stat.violazione_sigilli + ",dissequestri =" + @stat.dissequestri +
                         ",dissequestri_temp =" + @stat.dissequestri_temp + ",rimozione_sigilli =" + @stat.rimozione_sigilli + ",controlli_42_04 =" + @stat.controlli_42_04 +
@@ -2196,7 +2262,7 @@ namespace Uotep.Classi
                         ",contr_nato_da_esposti =" + @stat.contr_nato_da_esposti +
 
 
-                        " where mese = '" + @stat.mese + "' and anno = " + stat.anno ;
+                        " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
 
                     }
@@ -2400,10 +2466,10 @@ namespace Uotep.Classi
 
                 sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_nominativo,arch_dataNascita," +
                     "arch_tipologia,arch_quartiere,arch_inCarico,arch_demolita,arch_1089,arch_suoloPub,arch_evasa,arch_vincoli,arch_note,arch_allegati,arch_matricola)" +
-                   " Values('" + @arch.arch_numPratica + "','" +  @arch.arch_dataIns + "','" + @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") +
+                   " Values('" + @arch.arch_numPratica + "','" + @arch.arch_dataIns + "','" + @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") +
                    "','" + @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_nominativo.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_demolita + "','" + @arch.arch_1089 + "','" +
-                   @arch.arch_suoloPub + "','" + @arch.arch_evasa + "','" + @arch.arch_vincoli + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola  + "')";
+                   @arch.arch_suoloPub + "','" + @arch.arch_evasa + "','" + @arch.arch_vincoli + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2607,7 +2673,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "update File_Caricati set cancella = 'True'" + " where id_file = " + id ;
+                sql_pratica = "update File_Caricati set cancella = 'True'" + " where id_file = " + id;
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2632,7 +2698,7 @@ namespace Uotep.Classi
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("Id FIle:" + id  + ", " + ex.Message + @" - Errore in update File_Caricati ");
+                            sw.WriteLine("Id FIle:" + id + ", " + ex.Message + @" - Errore in update File_Caricati ");
                             sw.Close();
                         }
 

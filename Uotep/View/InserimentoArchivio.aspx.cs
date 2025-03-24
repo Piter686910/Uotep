@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
@@ -7,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 
 namespace Uotep
@@ -20,7 +22,9 @@ namespace Uotep
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["PaginaChiamante"] != null)
+            
+                Session.Remove("PaginaChiamante");
 
             if (Session["user"] != null)
             {
@@ -38,82 +42,204 @@ namespace Uotep
             ProtocolloLiteral.Text = decodedText;
             if (!IsPostBack)
             {
+                //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+                if (Session["ListRicerca"] != null)
+                {
+                    Manager mn = new Manager();
+                    List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                    String[] ar = ListRicerca.ToArray();
+                    // ArchivioUote arc = new ArchivioUote();
+                    DataTable arc = new DataTable();
+                    switch (ar[0])
+                    {
+                        case "Pratica":
+                            arc = mn.getPraticaArchivioUote(ar[1], null, null, null);
+                            break;
+                        case "Nominativo":
+                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null);
+                            break;
+                        case "Indirizzo":
+                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null);
+                            break;
+                            //case "Catasto":
+                            //    break;
+                    }
+                    if (arc.Rows.Count > 0)
+                    {
+                        apripopupPratica_Click(sender, e);
+                        GVRicercaPratica.DataSource = arc;
+                        GVRicercaPratica.DataBind();
+                        //segnalo he sono in modifica prartica
+                        HfStato.Value = "Mod";
+                        txtPratica.Enabled = false;
+                    }
+                }
+                else
+                {
+                    txtPratica.Enabled = true;
+                    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+                }
                 CaricaDLL();
 
-                //Manager mn = new Manager();
-                //DataTable tb = mn.MaxNPr(annoCorr);
-                txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-                //if (tb.Rows.Count > 0)
-                //{
-                //    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
-
-                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                //    }
-                //    else
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();
-
-                //    }
-                //}
-                //else
-                //{
-                //    txtProt.Text = "1";
-
-                //}
             }
 
         }
-        public void Convalida()
+        protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
         {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id_Archivio").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+            }
+        }
+        protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                //string selectedValue = e.CommandArgument.ToString();
 
 
+                string[] args = e.CommandArgument.ToString().Split(';');
+                int idP = System.Convert.ToInt32(args[0]);
+                string Npratica = args[1];
 
-            //if (!String.IsNullOrEmpty(HfTipoAtto.Value))
-            //    btSalvaTipoAtto.Visible = true;
+
+                // Imposta il valore nel TextBox
+                //txtSelectedValue.Text = selectedValue;
+                txtPratica.Text = Npratica;
+
+                Manager mn = new Manager();
+                //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+                DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+                if (pratica.Rows.Count > 0)
+                {
+                    FillScheda(pratica);
+
+                }
+
+                // Chiudi il popup
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            }
+        }
+        protected void FillScheda(DataTable rap)
+        {
+            txtNominativo.Text = rap.Rows[0].ItemArray[6].ToString();
+            txtIndirizzo.Text = rap.Rows[0].ItemArray[4].ToString();
+            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[2].ToString()))
+            {
+                DateTime dataIntervento = System.Convert.ToDateTime(rap.Rows[0].ItemArray[2].ToString()); // Recupera la data dal DataTable
+                txtDataInserimento.Text = dataIntervento.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                                                                                 //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
+            }
+            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[3].ToString()))
+            {
+                DateTime dataModifica = System.Convert.ToDateTime(rap.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+                txtDataUltimoIntervento.Text = dataModifica.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                                                                                    //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
+            }
+            txtResponsabile.Text = rap.Rows[0].ItemArray[5].ToString();
+            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[7].ToString()))
+            {
+                DateTime dataNascita = System.Convert.ToDateTime(rap.Rows[0].ItemArray[7].ToString()); // Recupera la data dal DataTable
+                txtDataNascita.Text = dataNascita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                                                                          //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
+            }
+            txtTipoAtto.Text = rap.Rows[0].ItemArray[8].ToString();
+            txtQuartiere.Text = rap.Rows[0].ItemArray[9].ToString();
+            txtInCarico.Text = rap.Rows[0].ItemArray[10].ToString();
+            txtNote.Text = rap.Rows[0].ItemArray[16].ToString();
+
+            CkDemolita.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[11]);
+
+            Ck1089.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[12]);
+            CkSuoloPubblico.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[13]);
+            CkEvasa.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[14]);
+            CkVincoli.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[15]);
+
+
+        }
+        public Boolean Convalida()
+        {
+            bool resp = false;
+
+
+            if (!String.IsNullOrEmpty(txtPratica.Text))
+                resp = true;
+
+
+            return resp;
 
 
         }
 
         protected void Salva_Click(object sender, EventArgs e)
         {
-            Manager mn = new Manager();
-
-            ArchivioUote arch = new ArchivioUote();
-            arch.arch_numPratica = txtPratica.Text;
-            //DateTime giorno = DateTime.Now;
-            arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
-            arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
-            arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
-            arch.arch_tipologia = txtTipoAtto.Text;
-            arch.arch_note = txtNote.Text;
-            arch.arch_quartiere = txtQuartiere.Text;
-            arch.arch_matricola = Session["user"].ToString();
-            arch.arch_indirizzo = txtIndirizzo.Text;
-            arch.arch_nominativo = txtNominativo.Text;
-            arch.arch_responsabile = txtResponsabile.Text;
-            arch.arch_vincoli = CkVincoli.Checked;
-            arch.arch_suoloPub = CkSuoloPubblico.Checked;
-            arch.arch_1089 = Ck1089.Checked;
-            arch.arch_evasa = CkEvasa.Checked;
-            arch.arch_demolita = CkDemolita.Checked;
-            arch.arch_inCarico = txtInCarico.Text;
-
-
-            Boolean ins = mn.SavePraticaArchivioUote(arch);
-            if (!ins)
+            try
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                Boolean resp = Convalida();
+                if (resp)
+                {
+
+                    Manager mn = new Manager();
+
+                    ArchivioUote arch = new ArchivioUote();
+                    arch.arch_numPratica = txtPratica.Text;
+                    //DateTime giorno = DateTime.Now;
+                    arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
+                    if (HfStato.Value == "Mod")
+                    {
+                        arch.arch_datault_intervento = System.Convert.ToDateTime(DateTime.Now.Date.ToShortDateString());
+
+                    }
+                    if (!String.IsNullOrEmpty(txtDataNascita.Text))
+                    {
+                        arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
+
+                    }
+                    arch.arch_tipologia = txtTipoAtto.Text;
+                    arch.arch_note = txtNote.Text;
+                    arch.arch_quartiere = txtQuartiere.Text;
+                    arch.arch_matricola = Session["user"].ToString();
+                    arch.arch_indirizzo = txtIndirizzo.Text;
+                    arch.arch_nominativo = txtNominativo.Text;
+                    arch.arch_responsabile = txtResponsabile.Text;
+                    arch.arch_vincoli = CkVincoli.Checked;
+                    arch.arch_suoloPub = CkSuoloPubblico.Checked;
+                    arch.arch_1089 = Ck1089.Checked;
+                    arch.arch_evasa = CkEvasa.Checked;
+                    arch.arch_demolita = CkDemolita.Checked;
+                    arch.arch_inCarico = txtInCarico.Text;
+
+
+                    Boolean ins = mn.SavePraticaArchivioUote(arch);
+                    if (!ins)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                        HfStato.Value = string.Empty;
+                        Pulisci();
+                    }
+                }
+                else
+                    // Mostra il modale con uno script
+                    errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
+                    apripopuperrorModal_Click(sender, e);
+               // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
             }
-            else
+            catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
-
-                Pulisci();
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/InserimentoArchivio.aspx";
+                Response.Redirect("~/Contact.aspx");
             }
         }
         private void Pulisci()
@@ -139,58 +265,20 @@ namespace Uotep
             CaricaDLL();
 
         }
-        //popup giudice
-        protected void apripopupGiudice_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
-        }
-        //tipo prov
-        protected void apripopupTipoProv_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
-        }
 
-        protected void chiudipopupTipoAtto_Click(object sender, EventArgs e)
+        protected void apripopupPratica_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalTipoAtto')); modal.hide();", true);
-
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
         }
-        protected void chiudipopupTipoProv_Click(object sender, EventArgs e)
+        protected void apripopuperrorModal_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModaTipoProv')); modal.hide();", true);
-
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
         }
-        protected void chiudipopupInviata_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalInviata')); modal.hide();", true);
-
-        }
-        protected void chiudipopupGiudice_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalGiudice')); modal.hide();", true);
-
-        }
-        //popup provenienza
-        protected void apripopupProvenienza_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalProvenienza').modal('show');", true);
-        }
-        protected void chiudipopupProvenienza_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalProvenienza')); modal.hide();", true);
-
-        }
-
-        //popup quartiere
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
         }
+
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
@@ -199,7 +287,6 @@ namespace Uotep
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 
         }
@@ -242,46 +329,32 @@ namespace Uotep
             {
                 Manager mn = new Manager();
                 DataTable RicercaQuartiere = mn.getListQuartiere();
-                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
-                DdlQuartiere.DataBind();
-                //// DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DdlQuartiereI.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiereI.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiereI.DataBind();
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
-                DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
-                DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
-                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
-                DdlIndirizzo.DataBind();
-                //// DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DdlIndirizzoI.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
+                DdlIndirizzoI.DataTextField = "SpecieToponimo"; // Il campo visibile
+                DdlIndirizzoI.DataBind();
 
                 DataTable RicercaTipoAtto = mn.getListTipologia();
-                DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
-                DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
-                DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
-                DdlTipoAtto.DataBind();
-                // DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
-
-                // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-
-
+                DdlTipoAttoI.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
+                DdlTipoAttoI.DataTextField = "Tipo_Nota"; // Il campo visibile
+                DdlTipoAttoI.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                DdlTipoAttoI.DataBind();
 
                 DataTable RicercaGiudice = mn.getListGiudice();
-                DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
-                DdlGiudice.DataTextField = "Giudice"; // Il campo visibile
-                DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
-
-                DdlGiudice.DataBind();
-                //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-
-
+                DdlGiudiceI.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
+                DdlGiudiceI.DataTextField = "Giudice"; // Il campo visibile
+                DdlGiudiceI.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
+                DdlGiudiceI.DataBind();
 
                 DataTable RicercaInviati = mn.getListInviati();
-                DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
-                DdlInviati.DataTextField = "Inviata"; // Il campo visibile
-                DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
-                DdlInviati.DataBind();
-                // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DdlInviatiI.DataSource = RicercaInviati; // Imposta il DataSource //della DropDownList
+                DdlInviatiI.DataTextField = "Inviata"; // Il campo visibile
+                DdlInviatiI.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
+                DdlInviatiI.DataBind();
             }
             catch (Exception ex)
             {
@@ -322,7 +395,5 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
-
-
     }
 }

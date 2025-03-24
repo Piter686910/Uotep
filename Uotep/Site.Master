@@ -60,8 +60,8 @@
                        <li runat="server" id="menuArchivioUote" visible="false" class="dropdown">
                          <a runat="server" style="color: #ffffff !important" ref="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
                              <ul class="dropdown-menu">
-                                  <li><a id="A1" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
-                                  <li><a id="A2" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
+                                  <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
+                                  <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
 
                              </ul>
                         </li>

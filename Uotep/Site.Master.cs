@@ -12,7 +12,7 @@ namespace Uotep
 {
     public partial class SiteMaster : MasterPage
     {
-        DataTable profilo= new DataTable();
+        DataTable profilo = new DataTable();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -44,7 +44,7 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                
+
                                 break;
                             case "coordinamentopg":
                                 // Mostra voci specifiche per coordinamento pg
@@ -88,8 +88,8 @@ namespace Uotep
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
-                                menuHome.Visible=true;
-                                
+                                menuHome.Visible = true;
+
                                 break;
                             case "archivio":
                                 // Mostra voci per utenti standard
@@ -102,8 +102,8 @@ namespace Uotep
 
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                              //  RicercaArchivio.Visible = true;
-                               
+                                RicercaArchivio.Visible = true;
+                                InserimentoArchivio.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -117,6 +117,9 @@ namespace Uotep
                                 menuManTabelle.Visible = true;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
+                                RicercaArchivio.Visible = true;
+                                InserimentoArchivio.Visible = true;
+
 
                                 //*
                                 InserimentoAtti.Visible = true;
@@ -159,6 +162,7 @@ namespace Uotep
             Session.Remove("user");
             Session.Remove("profilo");
             Session.Remove("ruolo");
+            Session.Remove("ListRicerca");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

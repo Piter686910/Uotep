@@ -32,6 +32,7 @@ namespace Uotep
             divNewUtente.Visible = false;
             divDestra.Visible = false;
             divReset.Visible = true;
+            
         }
         protected void ModificaP_Click(object sender, EventArgs e)
         {
@@ -87,7 +88,6 @@ namespace Uotep
         protected void Login1_LoginError(object sender, EventArgs e)
         {
 
-
             // Mostra il modale con uno script
             ScriptManager.RegisterStartupScript(this, GetType(), "showModal", "$('#errorModal').modal('show');", true);
         }
@@ -100,6 +100,19 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
 
+        }
+
+        protected void Elimina_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean del = mn.DeleteMatricola(txtResetMatricola.Text);
+            if (del)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola cancellata." + "'); $('#errorModal').modal('show');", true);
+
+            }
+            else
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola non trovata." + "'); $('#errorModal').modal('show');", true);
         }
     }
 }

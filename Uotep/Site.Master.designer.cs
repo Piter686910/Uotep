@@ -42,22 +42,22 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuArchivioUote;
 
         /// <summary>
-        /// Controllo A1.
+        /// Controllo InserimentoArchivio.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor A1;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor InserimentoArchivio;
 
         /// <summary>
-        /// Controllo A2.
+        /// Controllo RicercaArchivio.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor A2;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivio;
 
         /// <summary>
         /// Controllo menuCoordinamentoAtti.
