@@ -23,7 +23,7 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["PaginaChiamante"] != null)
-            
+
                 Session.Remove("PaginaChiamante");
 
             if (Session["user"] != null)
@@ -61,8 +61,9 @@ namespace Uotep
                         case "Indirizzo":
                             arc = mn.getPraticaArchivioUote(null, null, ar[1], null);
                             break;
-                            //case "Catasto":
-                            //    break;
+                        case "Catasto":
+                            arc = mn.getPraticaArchivioUote(null, null, null, ar);
+                            break;
                     }
                     if (arc.Rows.Count > 0)
                     {
@@ -163,6 +164,12 @@ namespace Uotep
             CkVincoli.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[15]);
 
 
+            txtSezione.Text = rap.Rows[0].ItemArray[19].ToString().ToUpper();
+            TxtFoglio.Text = rap.Rows[0].ItemArray[20].ToString();
+            TxtParticella.Text = rap.Rows[0].ItemArray[21].ToString();
+            TxtSub.Text = rap.Rows[0].ItemArray[22].ToString();
+
+
         }
         public Boolean Convalida()
         {
@@ -170,13 +177,17 @@ namespace Uotep
 
 
             if (!String.IsNullOrEmpty(txtPratica.Text))
-                resp = true;
-
-
+            resp=true;
+                
             return resp;
-
-
         }
+
+
+
+           
+
+
+        
 
         protected void Salva_Click(object sender, EventArgs e)
         {
@@ -214,7 +225,11 @@ namespace Uotep
                     arch.arch_1089 = Ck1089.Checked;
                     arch.arch_evasa = CkEvasa.Checked;
                     arch.arch_demolita = CkDemolita.Checked;
-                    arch.arch_inCarico = txtInCarico.Text;
+                    arch.arch_sezione = txtSezione.Text;
+                    arch.arch_foglio = TxtFoglio.Text;
+                    arch.arch_particella = TxtParticella.Text;
+                    arch.arch_sub = TxtSub.Text;
+
 
 
                     Boolean ins = mn.SavePraticaArchivioUote(arch);
@@ -232,8 +247,8 @@ namespace Uotep
                 else
                     // Mostra il modale con uno script
                     errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
-                    apripopuperrorModal_Click(sender, e);
-               // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
+                apripopuperrorModal_Click(sender, e);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
             }
             catch (Exception ex)
             {

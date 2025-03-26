@@ -105,6 +105,42 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlQuartiereI;
 
         /// <summary>
+        /// Controllo txtSezione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSezione;
+
+        /// <summary>
+        /// Controllo TxtFoglio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtFoglio;
+
+        /// <summary>
+        /// Controllo TxtParticella.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtParticella;
+
+        /// <summary>
+        /// Controllo TxtSub.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtSub;
+
+        /// <summary>
         /// Controllo txtNote.
         /// </summary>
         /// <remarks>
@@ -265,6 +301,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CkDemolita;
+
+        /// <summary>
+        /// Controllo hdnConfermaUtente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnConfermaUtente;
 
         /// <summary>
         /// Controllo txtIndirizzoQuartiere.

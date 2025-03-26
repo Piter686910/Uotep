@@ -26,5 +26,9 @@ namespace Uotep.Classi
         public string arch_note = string.Empty;
         public string arch_allegati = string.Empty;
         public string arch_matricola = string.Empty;
+        public string arch_sezione = string.Empty;
+        public string arch_foglio = string.Empty;
+        public string arch_particella = string.Empty;
+        public string arch_sub = string.Empty;
     }
 }
