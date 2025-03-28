@@ -1376,9 +1376,9 @@ namespace Uotep.Classi
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
 
-            if (!String.IsNullOrEmpty(catasto[1]))
-                sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
-                   "' and arch_sub= '" + catasto[4] + "'";
+            //if (!String.IsNullOrEmpty(catasto[1]))
+            //    sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
+            //       "' and arch_sub= '" + catasto[4] + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {

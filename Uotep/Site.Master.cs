@@ -160,6 +160,7 @@ namespace Uotep
         protected void Esci_Click(object sender, EventArgs e)
         {
             Session.Remove("user");
+            Session.Remove("POP");
             Session.Remove("profilo");
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");

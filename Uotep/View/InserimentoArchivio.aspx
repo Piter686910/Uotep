@@ -7,7 +7,9 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+        function HideErrorMessage(message) {
+            $('#errorModal').modal('hide');
+        }
         // Mostra il popup
         function showModal() {
             $('#myModal').modal('show');
@@ -279,7 +281,7 @@
                     <div class="form-group mb-3">
                         <label for="txtSezione">Dati Catastali</label>
                         <div class="form-group mb-3">
-                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 60px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione" ></asp:TextBox>
+                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 60px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
                             <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 60px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
                             <asp:TextBox ID="TxtParticella" runat="server" MaxLength="5" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part.lla"></asp:TextBox>
                             <asp:TextBox ID="TxtSub" runat="server" MaxLength="4" Style="width: 70px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub"></asp:TextBox>
@@ -295,103 +297,108 @@
 
                 </div>
 
-        <!-- Colonna Destra -->
-        <div class="col-md-6">
+                <!-- Colonna Destra -->
+                <div class="col-md-6">
 
-            <div class="form-group mb-3">
-                <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
-                <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" Enabled="false" />
-            </div>
+                    <div class="form-group mb-3">
+                        <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
+                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" Enabled="false" />
+                    </div>
 
-            <div class="form-group mb-3">
-                <label for="txtNominativo">Nominativo</label>
-                <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
-            </div>
+                    <div class="form-group mb-3">
+                        <label for="txtNominativo">Nominativo</label>
+                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="rqNominativo" runat="server" ControlToValidate="txtNominativo" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
+                        </asp:RequiredFieldValidator>
 
-            <div class="form-group mb-3">
-                <label for="txtResponsabile">Responsabile</label>
-                <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+                    </div>
 
-            </div>
-            <div class="form-group mb-3">
-                <label for="txtGiudice">Giudice</label>
-                <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                    <div class="form-group mb-3">
+                        <label for="txtResponsabile">Responsabile</label>
+                        <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtGiudice">Giudice</label>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+
+                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
+                    </div>
+
+
+
+
+                    <div class="form-group mb-3">
+
+                        <label for="txtInCarico" class="form-label">In Carico</label>
+                        <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+                        <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
+
+                    </div>
+
+
+
+                    <div class="form-group mb-3">
+                        <label for="txtTipoAtto">Tipologia Atto</label>
+                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
+                    </div>
                 </div>
 
-                <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
             </div>
 
 
-
-
-            <div class="form-group mb-3">
-
-                <label for="txtInCarico" class="form-label">In Carico</label>
-                <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+            <div class="row ">
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+                    </div>
                 </div>
-                <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
-
-            </div>
-
-
-
-            <div class="form-group mb-3">
-                <label for="txtTipoAtto">Tipologia Atto</label>
-                <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group">
+                        <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="Ck1089">1089</label>
+                    </div>
                 </div>
-                <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
+
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group">
+                        <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group">
+                        <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group">
+                        <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
+                    </div>
+                </div>
+
+            </div>
+            <asp:HiddenField ID="hdnConfermaUtente" runat="server" Value="false" />
+            <div class="row">
+                <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
+                <div class="col-12 text-center">
+                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva"  ValidationGroup="bt" />
+                    <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
+                    <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+
+                </div>
             </div>
         </div>
-
-    </div>
-
-
-    <div class="row ">
-        <div class="col-md-2 d-flex align-items-center">
-            <div class="form-check">
-                <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-            </div>
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-            <div class="form-group">
-                <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="Ck1089">1089</label>
-            </div>
-        </div>
-
-        <div class="col-md-2 d-flex align-items-center">
-            <div class="form-group">
-                <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
-            </div>
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-            <div class="form-group">
-                <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
-            </div>
-        </div>
-        <div class="col-md-2 d-flex align-items-center">
-            <div class="form-group">
-                <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
-            </div>
-        </div>
-
-    </div>
-<asp:HiddenField ID="hdnConfermaUtente" runat="server" Value="false" />    <div class="row">
-        <div class="col-12 text-center">
-            <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3"   />
-            <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
-            <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-
-        </div>
-    </div>
-    </div>
     </div>
 
     <!-- Modale Bootstrap quartiere -->

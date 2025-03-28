@@ -168,6 +168,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtNominativo;
 
         /// <summary>
+        /// Controllo rqNominativo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rqNominativo;
+
+        /// <summary>
         /// Controllo txtResponsabile.
         /// </summary>
         /// <remarks>
@@ -310,6 +319,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField hdnConfermaUtente;
+
+        /// <summary>
+        /// Controllo lblRisultatoAzione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblRisultatoAzione;
+
+        /// <summary>
+        /// Controllo btSalva.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btSalva;
 
         /// <summary>
         /// Controllo txtIndirizzoQuartiere.
