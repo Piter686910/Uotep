@@ -87,6 +87,7 @@ namespace Uotep
             }
             else
             {
+                //aspetta la conferma da parte utente
                 if (Request.Form["__EVENTTARGET"] != null && Request.Form["__EVENTTARGET"] == btSalva.UniqueID && hdnConfermaUtente.Value == "true")
                 {
                     EseguiAzioneConfermata(); // Chiama la funzione per eseguire l'azione dopo la conferma OK
@@ -98,9 +99,7 @@ namespace Uotep
         }
         private void EseguiAzioneConfermata()
         {
-            // **Codice da eseguire SOLO se l'utente ha cliccato "OK" nel popup di conferma.**
-            //lblRisultatoAzione.Text = "Azione confermata dall'utente ed eseguita!";
-            //lblRisultatoAzione.Visible = true;
+
             okPopup = true;
 
         }
@@ -202,22 +201,25 @@ namespace Uotep
         {
             bool resp = false;
 
-
-
             if (!String.IsNullOrEmpty(txtPratica.Text))
 
             {
                 resp = true;
-                Manager mn = new Manager();
-                DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null);
-                if (dt.Rows.Count > 0)
+                if (HfStato.Value != "Mod")
                 {
-                    //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
-                    // **2. Registra JavaScript per mostrare il popup (se necessario)**
-                    if (Session["POP"].ToString() == "si")
-                    {
 
-                        string script = $@"
+
+                    //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
+                    Manager mn = new Manager();
+                    DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null);
+                    if (dt.Rows.Count > 0)
+                    {
+                        //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
+                        // **2. Registra JavaScript per mostrare il popup (se necessario)**
+                        if (Session["POP"].ToString() == "si")
+                        {
+
+                            string script = $@"
                 function showConfirmPopup() {{
                     if (confirm('stai modificando un pratica già esistente, confermi?')) {{
                         document.getElementById('{hdnConfermaUtente.ClientID}').value = 'true';
@@ -228,17 +230,19 @@ namespace Uotep
                 }}
                 window.onload = function() {{ showConfirmPopup(); }}; ";
 
-                        ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
-                    }
-                    Session["POP"] = "no";
+                            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
+                        }
+                        Session["POP"] = "no";
 
-                    //se annullo imposto il popup a si
-                    if (hdnConfermaUtente.Value=="false")
-                    {
-                        Session["POP"] = "si";
+                        //se annullo imposto il popup a si
+                        if (hdnConfermaUtente.Value == "false")
+                        {
+                            Session["POP"] = "si";
+                        }
                     }
                 }
-
+                else
+                    okPopup = true;
             }
 
 
@@ -252,7 +256,9 @@ namespace Uotep
                 Boolean resp = Convalida();
                 if (resp)
                 {
+
                     if (okPopup)
+                    //se ho ricevuto ok dal popup
                     {
 
                         okPopup = false;
@@ -289,8 +295,6 @@ namespace Uotep
                         arch.arch_particella = TxtParticella.Text;
                         arch.arch_sub = TxtSub.Text;
 
-
-
                         Boolean ins = mn.SavePraticaArchivioUote(arch);
                         if (!ins)
                         {
@@ -300,9 +304,16 @@ namespace Uotep
                         }
                         else
                         {
-                            errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
+                            if (HfStato.Value == "Mod")
+
+                                errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " modificata correttamente .";
+
+                            else
+                                errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
                             ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
                             HfStato.Value = string.Empty;
+
+                            Session.Remove("ListRicerca");
                             Pulisci();
                         }
                     }
