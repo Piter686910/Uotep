@@ -149,7 +149,7 @@ namespace Uotep
                     FillScheda(pratica);
 
                 }
-
+                Session.Remove("ListRicerca");
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
@@ -220,26 +220,59 @@ namespace Uotep
                         {
 
                             string script = $@"
-                function showConfirmPopup() {{
-                    if (confirm('stai modificando un pratica già esistente, confermi?')) {{
-                        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'true';
-                        {Page.ClientScript.GetPostBackEventReference(btSalva, "")}; 
-                    }} else {{
-                        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'false';
-                    }}
-                }}
-                window.onload = function() {{ showConfirmPopup(); }}; ";
+            function showConfirmModal() {{
+                document.getElementById('modalMessaggioBody').innerText = 'stai modificando un pratica già esistente, confermi?'; 
+                $('#confermaModal').modal('show'); // Mostra il modale Bootstrap (jQuery required)
+            }}
+            window.onload = function() {{ showConfirmModal(); }};
+        ";
 
-                            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
+                            ClientScript.RegisterStartupScript(this.GetType(), "showModalScript", script, true);
                         }
-                        Session["POP"] = "no";
 
-                        //se annullo imposto il popup a si
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        //        string script = $@"
+                        //function showConfirmPopup() {{
+                        //    if (confirm('stai modificando un pratica già esistente, confermi?')) {{
+                        //        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'true';
+                        //        {Page.ClientScript.GetPostBackEventReference(btSalva, "")}; 
+                        //    }} else {{
+                        //        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'false';
+                        //    }}
+                        //}}
+                        //window.onload = function() {{ showConfirmPopup(); }}; ";
+
+                        //            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
+                        //        }
+                        //        Session["POP"] = "no";
+
+                        //        //se annullo imposto il popup a si
                         if (hdnConfermaUtente.Value == "false")
                         {
                             Session["POP"] = "si";
                         }
                     }
+                    else
+                        okPopup = true;
                 }
                 else
                     okPopup = true;
@@ -312,9 +345,10 @@ namespace Uotep
                                 errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
                             ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
                             HfStato.Value = string.Empty;
-
+                            Session["POP"] = "si";
                             Session.Remove("ListRicerca");
                             Pulisci();
+                            txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
                         }
                     }
                 }

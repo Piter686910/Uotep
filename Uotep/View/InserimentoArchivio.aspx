@@ -28,6 +28,16 @@
         function hideModal() {
             $('#ModalPratica').modal('hide');
         }
+        $(document).ready(function () {
+            $('#btnModalOk').click(function () {
+                document.getElementById('<%=hdnConfermaUtente.ClientID%>').value = 'true';
+            __doPostBack('<%=btSalva.UniqueID%>', ''); // Forza PostBack
+            $('#confermaModal').modal('hide'); // Chiudi il modale dopo aver gestito l'OK
+        });
+        });
+
+
+
         //giudice
         function filterDropdownGiudice() {
             var input, filter, dropdown, options, i, txtValue;
@@ -511,5 +521,26 @@
             </div>
         </div>
     </div>
+
+    <!-- Modale per conferma inserimento -->
+<div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confermaModalLabel">Conferma Azione</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalMessaggioBody">
+                <!-- Il messaggio verrà inserito qui tramite JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="btnModalOk">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </asp:Content>
