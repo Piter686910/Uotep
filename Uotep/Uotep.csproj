@@ -242,6 +242,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\RicercaArchivio.aspx" />
     <Content Include="View\Segreteria.aspx" />
     <Content Include="View\ManutenzioneTabelle.aspx" />
     <Content Include="View\Default.aspx" />
@@ -327,6 +328,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="View\RicercaArchivio.aspx.cs">
+      <DependentUpon>RicercaArchivio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\RicercaArchivio.aspx.designer.cs">
+      <DependentUpon>RicercaArchivio.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\Segreteria.aspx.cs">
       <DependentUpon>Segreteria.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

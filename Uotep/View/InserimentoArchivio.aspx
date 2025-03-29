@@ -28,12 +28,13 @@
         function hideModal() {
             $('#ModalPratica').modal('hide');
         }
+        //popup per la conferma inserimento
         $(document).ready(function () {
             $('#btnModalOk').click(function () {
                 document.getElementById('<%=hdnConfermaUtente.ClientID%>').value = 'true';
-            __doPostBack('<%=btSalva.UniqueID%>', ''); // Forza PostBack
-            $('#confermaModal').modal('hide'); // Chiudi il modale dopo aver gestito l'OK
-        });
+                __doPostBack('<%=btSalva.UniqueID%>', ''); // Forza PostBack
+                $('#confermaModal').modal('hide'); // Chiudi il modale dopo aver gestito l'OK
+            });
         });
 
 
@@ -402,7 +403,7 @@
             <div class="row">
                 <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
                 <div class="col-12 text-center">
-                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva"  ValidationGroup="bt" />
+                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
                     <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
                     <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
@@ -523,24 +524,25 @@
     </div>
 
     <!-- Modale per conferma inserimento -->
-<div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confermaModalLabel">Conferma Azione</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body" id="modalMessaggioBody">
-                <!-- Il messaggio verrà inserito qui tramite JavaScript -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-                <button type="button" class="btn btn-primary" id="btnModalOk">OK</button>
+    <div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confermaModalLabel">Conferma Azione</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalMessaggioBody" style="color: red;">
+                    <!-- Il messaggio verrà inserito qui tramite JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnModalOk">OK</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </asp:Content>
