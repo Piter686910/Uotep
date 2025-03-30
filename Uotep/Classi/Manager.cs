@@ -1376,9 +1376,9 @@ namespace Uotep.Classi
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
 
-            //if (!String.IsNullOrEmpty(catasto[1]))
-            //    sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
-            //       "' and arch_sub= '" + catasto[4] + "'";
+            if (!String.IsNullOrEmpty(catasto[1]))
+                sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
+                   "' and arch_sub= '" + catasto[4] + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2273,7 +2273,7 @@ namespace Uotep.Classi
                      "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
                      "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                      "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola)" +
+                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +
                  @rapp.data + "','" +
@@ -2314,7 +2314,7 @@ namespace Uotep.Classi
                  @rapp.attività_interna + "','" +
                  @rapp.nota.Replace("'", "''") + "','" +
                  @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-                 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "')";
+                 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "')";
                     command.CommandText = sql_insRap;
                     command.ExecuteNonQuery();
 
@@ -2614,7 +2614,8 @@ namespace Uotep.Classi
                      "', rapp_data_consegna_intervento ='" + @rapp.data_consegna_intervento +
                      "', rapp_con_protezioni ='" + @rapp.conProt +
                      "', rapp_senza_protezioni ='" + @rapp.senzaProt +
-                     "', rapp_matricola ='" + @rapp.matricola.Trim() + "'" +
+                     "', rapp_matricola ='" + @rapp.matricola.Trim()  +
+                     "', rapp_non_avvenuto ='" + @rapp.non_avvenuto + "'" +
 
                      " where rapp_numero_pratica = '" + @rapp.pratica + "'";
 

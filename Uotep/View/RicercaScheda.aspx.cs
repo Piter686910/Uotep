@@ -247,6 +247,7 @@ namespace Uotep
             rdUotp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[42]);
             rdCon.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[44]);
             rdSenza.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[45]);
+            rdNonAvvenuto.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[47]);
         }
 
         protected void btA_Click(object sender, EventArgs e)
@@ -427,6 +428,7 @@ namespace Uotep
                 rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
                 rap.contr_cantiereSeq = ckControlliCant.Checked;
                 rap.matricola = Vuser;
+                rap.non_avvenuto= rdNonAvvenuto.Checked;
                 if (String.IsNullOrEmpty(txt_numEspostiSegn.Text))
                 {
                     rap.num_esposti = string.Empty;
@@ -613,13 +615,15 @@ namespace Uotep
             float boxSize = 10;
             //float boxVerticalOffset = 4f;
             float startX_270 = 270;
-            ;
+            float startX_290 = 290;
             float startX_70 = 70;
             float startX_55 = 55;
             float startX_50 = 50;
             float startX_400 = 400;
             float startX_350 = 350;
+            float startX_370 = 370;
             float startX_450 = 450;
+            float startX_470 = 470;
             float startY_430 = 430;
 
             float lineHeight = 15f;
@@ -1178,7 +1182,7 @@ namespace Uotep
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Rimozione:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_270 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_290 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
@@ -1188,7 +1192,7 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Rimozione:");
-                                descriptionParagraph.SetFixedPosition(startX_270, startY_dissequestrotemporaneo, 200);
+                                descriptionParagraph.SetFixedPosition(startX_290, startY_dissequestrotemporaneo, 200);
                                 document.Add(descriptionParagraph);
                             }
                             // Riapposizione
@@ -1202,7 +1206,7 @@ namespace Uotep
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_400 + boxSize + 5, startY_dissequestrotemporaneo - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_450 + boxSize + 5, startY_dissequestrotemporaneo - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
@@ -1212,7 +1216,7 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
-                                descriptionParagraph.SetFixedPosition(startX_400, startY_dissequestrotemporaneo, 100);
+                                descriptionParagraph.SetFixedPosition(startX_450, startY_dissequestrotemporaneo, 100);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -1301,7 +1305,7 @@ namespace Uotep
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Parziale:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_350 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_370 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
@@ -1311,7 +1315,31 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Parziale:");
-                                descriptionParagraph.SetFixedPosition(startX_350, startY_accertamentoRip, 100);
+                                descriptionParagraph.SetFixedPosition(startX_370, startY_accertamentoRip, 100);
+                                document.Add(descriptionParagraph);
+                            }
+                            // Non Avvenuto 
+                            bool? NonAvvenutoRipNullable = schede.Rows[0].ItemArray[47] as bool?;
+                            string NonAvvenutoRipString = NonAvvenutoRipNullable.HasValue && NonAvvenutoRipNullable.Value ? "X" : "";
+                            
+                            if (NonAvvenutoRipString == "X")
+                            {
+                                stampaX(startX_450, startY_accertamentoRip, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Non Avvenuto:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_450, startY_accertamentoRip, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Non Avvenuto:");
+                                descriptionParagraph.SetFixedPosition(startX_470, startY_accertamentoRip, 100);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
@@ -1497,7 +1525,7 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Con (d.p.i.):");
-                                descriptionParagraph.SetFixedPosition(startX_350, startY_contrEdil, 100);
+                                descriptionParagraph.SetFixedPosition(startX_370, startY_contrEdil, 100);
                                 document.Add(descriptionParagraph);
                             }
                             // Senza (d.p.i.)
@@ -1511,7 +1539,7 @@ namespace Uotep
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
                                 Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_450 + boxSize + 5, startY_contrEdil - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_contrEdil - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
 
                             }
@@ -1521,7 +1549,7 @@ namespace Uotep
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
-                                descriptionParagraph.SetFixedPosition(startX_450, startY_contrEdil, 100);
+                                descriptionParagraph.SetFixedPosition(startX_470, startY_contrEdil, 100);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line

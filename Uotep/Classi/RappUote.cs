@@ -56,5 +56,6 @@ namespace Uotep.Classi
         public Boolean conProt = false;
         public Boolean senzaProt = false;
         public string matricola = string.Empty;
+        public Boolean non_avvenuto = false;
     }
 }

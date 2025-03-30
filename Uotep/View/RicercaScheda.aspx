@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtNote">Note</label>
-                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3"  />
+                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3" />
                             </div>
                         </div>
 
@@ -145,7 +145,7 @@
             </div>
         </div>
 
-                                <asp:Button ID="btStampa" runat="server"  Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
+        <asp:Button ID="btStampa" runat="server" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
 
     </div>
 
@@ -298,6 +298,8 @@
                                     <label class="form-check-label" for="ckAccertAvvenutoRipr">Accertamento avvenuto ripristino [</label>
                                     <asp:RadioButton ID="rdTotale" runat="server" GroupName="AccertamentoGroup" Text="Totale" />
                                     <asp:RadioButton ID="rdParziale" runat="server" GroupName="AccertamentoGroup" Text="Parziale" />
+                                    <asp:RadioButton ID="rdNonAvvenuto" runat="server" GroupName="AccertamentoGroup" Text="Non Avvenuto" />
+
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
@@ -385,22 +387,22 @@
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicecaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
-                            <columns>
+                            <Columns>
                                 <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" />
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
                                 <asp:TemplateField>
-                                    <itemtemplate>
+                                    <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("rapp_numero_pratica") + ";" + Eval("rapp_nominativo") + ";" + Eval("rapp_pattuglia") + ";" + Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />
-                                    </itemtemplate>
+                                    </ItemTemplate>
                                 </asp:TemplateField>
-                            </columns>
+                            </Columns>
                         </asp:GridView>
 
                     </div>
                 </div>
-                <asp:HiddenField id="HfIdScheda" runat="server"   />
+                <asp:HiddenField ID="HfIdScheda" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />

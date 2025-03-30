@@ -172,6 +172,7 @@ namespace Uotep
                 }
                 rap.totale = rdTotale.Checked;
                 rap.parziale = rdParziale.Checked;
+                rap.non_avvenuto = rdNonAvvenuto.Checked;
                 if (rdSenza.Checked || rdCon.Checked)
                 {
                     stat.dpi = 1;
@@ -223,7 +224,7 @@ namespace Uotep
                 stat.mese = MeseCorrente;
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
                 string txt = "";
-                VerificaStatistiche(stat,out  txt);
+                VerificaStatistiche(stat, out txt);
                 Boolean resp = mn.InsRappUote(rap, stat, txt);
                 if (!resp)
                 {
@@ -294,6 +295,7 @@ namespace Uotep
             rdParziale.Checked = false;
             rdRiapposizione.Checked = false;
             rdTotale.Checked = false;
+            rdNonAvvenuto.Checked = false;
             rdRimozione.Checked = false;
             rdUote.Checked = false;
             rdUotp.Checked = false;
@@ -344,17 +346,20 @@ namespace Uotep
 
                 ret = false;
             }
-            if (ckDisseqTemp.Checked && (rdRimozione.Checked==false && rdRiapposizione.Checked==false))
+            if (ckDisseqTemp.Checked && (rdRimozione.Checked == false && rdRiapposizione.Checked == false))
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
 
                 ret = false;
             }
-            if (ckAccertAvvenutoRipr.Checked && (rdTotale.Checked == false && rdParziale.Checked == false))
+            if (ckAccertAvvenutoRipr.Checked==false)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale." + "'); $('#errorModal').modal('show');", true);
+                if (rdTotale.Checked == false || rdParziale.Checked == false || rdNonAvvenuto.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale o Non Avvenuto ." + "'); $('#errorModal').modal('show');", true);
 
-                ret = false;
+                    ret = false;
+                }
             }
             if (ckControlliLavoriEdiliSenzaProt.Checked && (rdCon.Checked == false && rdSenza.Checked == false))
             {

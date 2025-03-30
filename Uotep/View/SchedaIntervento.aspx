@@ -159,9 +159,9 @@
                     <div class="col-6">
                         <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Salva Scheda" CssClass="btn btn-primary me-3" OnClick="Salva_Click" />
                     </div>
-                    <div class="col-6">
+                    <%--<div class="col-6">
                         <asp:Button ID="btStampa" runat="server" ValidationGroup="bt" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
-                    </div>
+                    </div>--%>
                 </div>
             </div>
         </div>
@@ -313,6 +313,8 @@
                                     <label class="form-check-label" for="ckAccertAvvenutoRipr">Accertamento avvenuto ripristino [</label>
                                     <asp:RadioButton ID="rdTotale" runat="server" GroupName="AccertamentoGroup" Text="Totale" />
                                     <asp:RadioButton ID="rdParziale" runat="server" GroupName="AccertamentoGroup" Text="Parziale" />
+                                    <asp:RadioButton ID="rdNonAvvenuto" runat="server" GroupName="AccertamentoGroup" Text="Non Avvenuto" />
+
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
