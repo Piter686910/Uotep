@@ -2438,6 +2438,26 @@ namespace Uotep.Classi
 
         }
         /// <summary>
+        /// preleva le statistiche per mese e anno
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public DataTable GetStatistiche(string mese, int anno)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno ;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+            }
+
+
+        }
+
+        /// <summary>
         /// cercala scheda per id 
         /// </summary>
 
