@@ -83,6 +83,8 @@
                                <ul class="dropdown-menu">
                                          <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
                                          <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
+                                         <li><a id="Statistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
+
                                </ul>
                          </li>
                          <%-- manutenzione tabelle --%>

@@ -39,6 +39,8 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
+                                    Statistiche.Visible= true;
+
                                 }
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
@@ -79,6 +81,7 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
+                                    Statistiche.Visible = false;
                                 }
                                 break;
                             case "PG":
@@ -126,6 +129,7 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
+                                Statistiche.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
