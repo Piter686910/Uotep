@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Web;
@@ -103,14 +104,6 @@ namespace Uotep
             okPopup = true;
 
         }
-        private void EseguiAzioneSenzaConferma()
-        {
-            // **Codice da eseguire se NON serve la conferma (es. query DB non restituisce dati specifici)**
-            lblRisultatoAzione.Text = "Azione eseguita senza richiesta di conferma (nessun dato specifico trovato).";
-            lblRisultatoAzione.Visible = true;
-            // ... (Qui puoi inserire una logica alternativa o semplicemente non fare nulla) ...
-        }
-
         protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -154,46 +147,78 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
-        protected void FillScheda(DataTable rap)
+        protected void FillScheda(DataTable arc)
         {
-            txtNominativo.Text = rap.Rows[0].ItemArray[6].ToString();
-            txtIndirizzo.Text = rap.Rows[0].ItemArray[4].ToString();
-            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[2].ToString()))
+
+
+            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[2].ToString()))
             {
-                DateTime dataIntervento = System.Convert.ToDateTime(rap.Rows[0].ItemArray[2].ToString()); // Recupera la data dal DataTable
+                switch (arc.Rows[0].ItemArray[2].ToString())
+                {
+                    case "BIS":
+                        CkBis.Checked = true;
+                        break;
+                    case "TRIS":
+                        CkTris.Checked = true;
+                        break;
+                    case "QUATER":
+                        CkQuater.Checked = true;
+                        break;
+
+                }
+
+            }
+
+            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[3].ToString()))
+            {
+                DateTime dataIntervento = System.Convert.ToDateTime(arc.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
                 txtDataInserimento.Text = dataIntervento.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                                                                                  //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
             }
-            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[3].ToString()))
+            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[4].ToString()))
             {
-                DateTime dataModifica = System.Convert.ToDateTime(rap.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+                DateTime dataModifica = System.Convert.ToDateTime(arc.Rows[0].ItemArray[4].ToString()); // Recupera la data dal DataTable
                 txtDataUltimoIntervento.Text = dataModifica.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                                                                                     //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
             }
-            txtResponsabile.Text = rap.Rows[0].ItemArray[5].ToString();
-            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[7].ToString()))
+            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[24].ToString()))
             {
-                DateTime dataNascita = System.Convert.ToDateTime(rap.Rows[0].ItemArray[7].ToString()); // Recupera la data dal DataTable
+                DateTime dataInizioAtt = System.Convert.ToDateTime(arc.Rows[0].ItemArray[24].ToString()); // Recupera la data dal DataTable
+                txtDataInizioAttivita.Text = dataInizioAtt.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            }
+
+            txtIndirizzo.Text = arc.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtResponsabile.Text = arc.Rows[0].ItemArray[6].ToString().ToUpper();
+            txtNatoA.Text = arc.Rows[0].ItemArray[7].ToString().ToUpper();
+            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[8].ToString()))
+            {
+                DateTime dataNascita = System.Convert.ToDateTime(arc.Rows[0].ItemArray[8].ToString()); // Recupera la data dal DataTable
                 txtDataNascita.Text = dataNascita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                                                                           //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
             }
-            txtTipoAtto.Text = rap.Rows[0].ItemArray[8].ToString();
-            txtQuartiere.Text = rap.Rows[0].ItemArray[9].ToString();
-            txtInCarico.Text = rap.Rows[0].ItemArray[10].ToString();
-            txtNote.Text = rap.Rows[0].ItemArray[16].ToString();
-
-            CkDemolita.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[11]);
-
-            Ck1089.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[12]);
-            CkSuoloPubblico.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[13]);
-            CkEvasa.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[14]);
-            CkVincoli.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[15]);
-
-
-            txtSezione.Text = rap.Rows[0].ItemArray[19].ToString().ToUpper();
-            TxtFoglio.Text = rap.Rows[0].ItemArray[20].ToString();
-            TxtParticella.Text = rap.Rows[0].ItemArray[21].ToString();
-            TxtSub.Text = rap.Rows[0].ItemArray[22].ToString();
+            txtInCarico.Text = arc.Rows[0].ItemArray[9].ToString();
+            CkEvasa.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[10]);
+            txtNote.Text = arc.Rows[0].ItemArray[11].ToString();
+            txtTipoAtto.Text = arc.Rows[0].ItemArray[12].ToString();
+            txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
+            CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
+            CkVincoli.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[15]);
+            Ck1089.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[16]);
+            CkDemolita.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[17]);
+            //txtAllegati.Text= arc.Rows[0].ItemArray[18].ToString();
+            //txtmatricola.Text= arc.Rows[0].ItemArray[19].ToString();
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[20].ToString()))
+                txtSezione.Text = arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[21].ToString()))
+                TxtFoglio.Text = arc.Rows[0].ItemArray[21].ToString();
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[22].ToString()))
+                TxtParticella.Text = arc.Rows[0].ItemArray[22].ToString();
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[23].ToString()))
+                TxtSub.Text = arc.Rows[0].ItemArray[23].ToString();
+            CkPropPriv.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[25]);
+            CkPropComunale.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[26]);
+            CkPropBeniCult.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[27]);
+            CkPropAltri.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[28]);
 
 
         }
@@ -229,25 +254,6 @@ namespace Uotep
 
                             ClientScript.RegisterStartupScript(this.GetType(), "showModalScript", script, true);
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                         //        string script = $@"
@@ -299,65 +305,100 @@ namespace Uotep
 
                         ArchivioUote arch = new ArchivioUote();
                         arch.arch_numPratica = txtPratica.Text;
-                        //DateTime giorno = DateTime.Now;
-                        arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
-                        if (HfStato.Value == "Mod")
+                        if (CkBis.Checked && CkTris.Checked && CkQuater.Checked)
                         {
-                            arch.arch_datault_intervento = System.Convert.ToDateTime(DateTime.Now.Date.ToShortDateString());
+                            errorMessage.InnerText = @"Non è possibile selezionare BIS, TRIS E QUATER CONTEMPORANEAMENTE.";
+                            apripopuperrorModal_Click(sender, e);
 
-                        }
-                        if (!String.IsNullOrEmpty(txtDataNascita.Text))
-                        {
-                            arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
-
-                        }
-                        arch.arch_tipologia = txtTipoAtto.Text;
-                        arch.arch_note = txtNote.Text;
-                        arch.arch_quartiere = txtQuartiere.Text;
-                        arch.arch_matricola = Session["user"].ToString();
-                        arch.arch_indirizzo = txtIndirizzo.Text;
-                        arch.arch_nominativo = txtNominativo.Text;
-                        arch.arch_responsabile = txtResponsabile.Text;
-                        arch.arch_vincoli = CkVincoli.Checked;
-                        arch.arch_suoloPub = CkSuoloPubblico.Checked;
-                        arch.arch_1089 = Ck1089.Checked;
-                        arch.arch_evasa = CkEvasa.Checked;
-                        arch.arch_demolita = CkDemolita.Checked;
-                        arch.arch_sezione = txtSezione.Text;
-                        arch.arch_foglio = TxtFoglio.Text;
-                        arch.arch_particella = TxtParticella.Text;
-                        arch.arch_sub = TxtSub.Text;
-
-                        Boolean ins = mn.SavePraticaArchivioUote(arch);
-                        if (!ins)
-                        {
-                            errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
-
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
                         }
                         else
                         {
+
+
+                            if (CkBis.Checked)
+                            {
+                                arch.arch_bis = "BIS";
+                            }
+                            if (CkTris.Checked)
+                            {
+                                arch.arch_bis = "TRIS";
+                            }
+                            if (CkQuater.Checked)
+                            {
+                                arch.arch_bis = "QUATER";
+                            }
+                            //DateTime giorno = DateTime.Now;
+                            arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
                             if (HfStato.Value == "Mod")
+                            {
+                                arch.arch_datault_intervento = System.Convert.ToDateTime(DateTime.Now.Date.ToShortDateString());
 
-                                errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " modificata correttamente .";
+                            }
+                            if (!String.IsNullOrEmpty(txtDataNascita.Text))
+                            {
+                                
+                                arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
 
+                            }
+                            if (!String.IsNullOrEmpty(txtDataInizioAttivita.Text))
+                            {
+                                arch.arch_dataInizioAttivita = System.Convert.ToDateTime(txtDataInizioAttivita.Text);
+
+                            }
+                            arch.arch_inCarico = txtInCarico.Text;
+                            arch.arch_tipologia = txtTipoAtto.Text;
+                            arch.arch_note = txtNote.Text;
+                            arch.arch_quartiere = txtQuartiere.Text;
+                            arch.arch_matricola = Session["user"].ToString();
+                            arch.arch_indirizzo = txtIndirizzo.Text;
+                            arch.arch_natoA = txtNatoA.Text;
+                            arch.arch_responsabile = txtResponsabile.Text;
+                            arch.arch_vincoli = CkVincoli.Checked;
+                            arch.arch_suoloPub = CkSuoloPubblico.Checked;
+                            arch.arch_1089 = Ck1089.Checked;
+                            arch.arch_evasa = CkEvasa.Checked;
+                            arch.arch_demolita = CkDemolita.Checked;
+                            //arch.arch_allegati = txtAllegati.Text;
+                            arch.arch_sezione = txtSezione.Text;
+                            arch.arch_foglio = TxtFoglio.Text;
+                            arch.arch_particella = TxtParticella.Text;
+                            arch.arch_sub = TxtSub.Text;
+                            arch.arch_propPriv = CkPropPriv.Checked;
+                            arch.arch_propBeniCult = CkPropBeniCult.Checked;
+                            arch.arch_propComune = CkPropComunale.Checked;
+                            arch.arch_propAltriEnti = CkPropAltri.Checked;
+
+                            Boolean ins = mn.SavePraticaArchivioUote(arch);
+                            if (!ins)
+                            {
+                                errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
+
+                                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                            }
                             else
-                                errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
-                            HfStato.Value = string.Empty;
-                            Session["POP"] = "si";
-                            Session.Remove("ListRicerca");
-                            Pulisci();
-                            txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+                            {
+                                if (HfStato.Value == "Mod")
+
+                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " modificata correttamente .";
+
+                                else
+                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
+                                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                                HfStato.Value = string.Empty;
+                                Session["POP"] = "si";
+                                Session.Remove("ListRicerca");
+                                Pulisci();
+                                txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+                            }
                         }
                     }
-                }
-                else
-                {
-                    // Mostra il modale con uno script
-                    errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
-                    apripopuperrorModal_Click(sender, e);
-                    // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
+                    else
+                    {
+                        // Mostra il modale con uno script
+                        errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
+                        apripopuperrorModal_Click(sender, e);
+                        // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
+                    }
                 }
             }
             catch (Exception ex)
@@ -378,7 +419,9 @@ namespace Uotep
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = string.Empty;
             txtDataInserimento.Text = String.Empty;
-            txtNominativo.Text = String.Empty;
+            txtDataInizioAttivita.Text = String.Empty;
+            txtNatoA.Text = String.Empty;
+            //txtAllegati.Text = String.Empty;
             txtDataUltimoIntervento.Text = String.Empty;
             txtNote.Text = String.Empty;
             txtDataNascita.Text = String.Empty;
@@ -387,6 +430,17 @@ namespace Uotep
             CkDemolita.Checked = false;
             CkVincoli.Checked = false;
             CkEvasa.Checked = false;
+            CkBis.Checked = false;
+            CkTris.Checked = false; 
+            CkQuater.Checked = false;   
+            CkPropAltri.Checked = false;
+            CkPropBeniCult.Checked = false;    
+            CkPropComunale.Checked = false;
+            CkPropPriv.Checked = false;
+            txtSezione.Text = string.Empty;
+            TxtFoglio.Text = string.Empty;
+            TxtParticella.Text = string.Empty;
+            TxtSub.Text = string.Empty;
             CaricaDLL();
 
         }

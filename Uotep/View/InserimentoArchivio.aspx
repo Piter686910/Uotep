@@ -251,12 +251,22 @@
                     <div class="form-group mb-3">
                         <label for="txtPratica">Nr Pratica</label>
                         <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control1" ForeColor="Red" Font-Bold="true" />
+                        <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkBis">Bis</label>
+                        <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkTris">Tris</label>
+                        <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkQuater">Quater</label>
 
 
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtDataInserimento">Data Inserimento</label>
                         <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtDataInizioAttivita">Data Inizio Attività</label>
+                        <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control" Font-Bold="true" />
                     </div>
 
                     <!-- Indirizzo e TextBox sulla stessa riga -->
@@ -277,12 +287,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="txtDataNascita">Data Nascita</label>
-
-                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-
-                    </div>
-                    <div class="form-group mb-3">
                         <label for="txtQuartiere">Quartiere</label>
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQ" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
@@ -300,11 +304,20 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="txtGiudice">Giudice</label>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
 
-                        <label for="txtNote">Note</label>
-                        <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
-
+                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
                     </div>
+
+            <div class="col-12 ">
+                <div class="form-group mb-3">
+                    <label for="txtNote">Note</label>
+                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"/>
+                </div>
+            </div>
 
                 </div>
 
@@ -315,31 +328,33 @@
                         <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
                         <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" Enabled="false" />
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label for="txtNominativo">Nominativo</label>
-                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
-                        <asp:RequiredFieldValidator ID="rqNominativo" runat="server" ControlToValidate="txtNominativo" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
-                        </asp:RequiredFieldValidator>
-
-                    </div>
-
                     <div class="form-group mb-3">
                         <label for="txtResponsabile">Responsabile</label>
                         <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="rqResponsabile" runat="server" ControlToValidate="txtResponsabile" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
+                        </asp:RequiredFieldValidator>
 
                     </div>
                     <div class="form-group mb-3">
-                        <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
+                        <label for="txtDataNascita">Data Nascita</label>
 
-                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
+                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+
                     </div>
 
+                    <div class="form-group mb-3">
+                        <label for="txtNatoA">Nato A</label>
+                        <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
 
 
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtTipoAtto">Tipologia Atto</label>
+                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
+                    </div>
 
                     <div class="form-group mb-3">
 
@@ -352,19 +367,9 @@
                     </div>
 
 
-
-                    <div class="form-group mb-3">
-                        <label for="txtTipoAtto">Tipologia Atto</label>
-                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
-                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
                 </div>
 
             </div>
-
-
             <div class="row ">
                 <div class="col-md-2 d-flex align-items-center">
                     <div class="form-check">
@@ -397,6 +402,34 @@
                         <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
                     </div>
                 </div>
+
+            </div>
+            <div class="row ">
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Privata</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Comunale</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Beni Cult.</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Altri Enti</label>
+                    </div>
+                </div>
+
 
             </div>
             <asp:HiddenField ID="hdnConfermaUtente" runat="server" Value="false" />
@@ -458,7 +491,7 @@
     </div>
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width:100%">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
@@ -473,7 +506,7 @@
                             <Columns>
                                 <asp:BoundField DataField="id_Archivio" HeaderText="ID" />
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
-                                <asp:BoundField DataField="arch_nominativo" HeaderText="Nominativo" />
+                                <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
                                 <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />

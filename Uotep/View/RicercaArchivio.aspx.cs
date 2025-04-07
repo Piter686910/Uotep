@@ -42,7 +42,7 @@ namespace Uotep
             txtFoglio.Text = string.Empty;
             txtSez.Text = string.Empty;
             txtIndirizzo.Text = string.Empty;
-            txtNominativo.Text = String.Empty;
+            txtResponsabile.Text = String.Empty;
 
 
         }
@@ -51,10 +51,10 @@ namespace Uotep
         protected void Ricerca_Click(object sender, EventArgs e)
         {
 
-            if (!string.IsNullOrEmpty(txtNominativo.Text))
+            if (!string.IsNullOrEmpty(txtResponsabile.Text))
             {
                 // Crea una lista 
-                List<string> ListRicerca = new List<string> { "Nominativo", txtNominativo.Text };
+                List<string> ListRicerca = new List<string> { "Nominativo", txtResponsabile.Text };
 
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = ListRicerca;

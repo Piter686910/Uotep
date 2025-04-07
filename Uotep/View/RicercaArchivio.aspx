@@ -31,7 +31,7 @@
 
                     <p>
                         <!-- Pulsanti -->
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Responsabile" ToolTip="Ricerca Responsabile" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
@@ -73,9 +73,9 @@
                 <%-- DIV RICERCA nominativo --%>
                 <div id="DivNominativo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label9" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label9" runat="server" Text="Responsabile" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" />
+                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" placeholder="Responsabile" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />

@@ -1376,7 +1376,7 @@ namespace Uotep.Classi
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
 
-            if (!String.IsNullOrEmpty(catasto[1]))
+            if (catasto!=null)
                 sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
                    "' and arch_sub= '" + catasto[4] + "'";
 
@@ -2485,14 +2485,17 @@ namespace Uotep.Classi
             try
             {
 
-                sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_nominativo,arch_dataNascita," +
-                    "arch_tipologia,arch_quartiere,arch_inCarico,arch_demolita,arch_1089,arch_suoloPub,arch_evasa,arch_vincoli,arch_note,arch_allegati,arch_matricola)" +
-                   " Values('" + @arch.arch_numPratica + "','" + @arch.arch_dataIns + "','" + @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") +
-                   "','" + @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_nominativo.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
-                   @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_demolita + "','" + @arch.arch_1089 + "','" +
-                   @arch.arch_suoloPub + "','" + @arch.arch_evasa + "','" + @arch.arch_vincoli + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "')";
+                sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
+                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub)" +
+                   " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
+                   @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + 
+                   @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
+                   @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
+                   @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
+                   @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
+                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','"+ @arch.arch_foglio + "','"+ @arch.arch_particella + "','" + @arch.arch_sub  + "')";
 
-
+                
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
@@ -2501,7 +2504,7 @@ namespace Uotep.Classi
                     try
                     {
                         command.CommandText = sql_pratica;
-                        testoSql = "Principale";
+                        testoSql = "ArchivioUote";
                         int res = command.ExecuteNonQuery();
                     }
 
