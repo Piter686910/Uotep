@@ -110,14 +110,33 @@
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
                                 <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
-
+                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
+                                </asp:RequiredFieldValidator>--%>
+                                <asp:RegularExpressionValidator
+                                    ID="RegularExpressionValidator1"
+                                    runat="server"
+                                    ControlToValidate="TxtDataIntervento"
+                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                                    ErrorMessage="la data deve essere dd/mm/aaaa"
+                                    ForeColor="Red"
+                                    ValidationGroup="bt"
+                                    Display="Static">
+                                </asp:RegularExpressionValidator>
                             </div>
 
                             <div class="form-group mb-3" style="margin-top: -20px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
                                 <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" />
+                                <asp:RegularExpressionValidator
+                                    ID="RegularExpressionValidator2"
+                                    runat="server"
+                                    ControlToValidate="txtDataConsegna"
+                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                                    ErrorMessage="la data deve essere dd/mm/aaaa"
+                                    ForeColor="Red"
+                                    ValidationGroup="bt"
+                                    Display="Static">
+                                </asp:RegularExpressionValidator>
                             </div>
 
                             <div class="form-group mb-3">
@@ -222,7 +241,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Esposto n°</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control"  />
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control" />
                                 <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>
                             </div>
                             <div class="form-check mb-2">

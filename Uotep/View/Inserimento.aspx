@@ -348,7 +348,6 @@
                         <label for="txtQuartiere">Quartiere</label>
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                           
                         </div>
                         <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
@@ -446,6 +445,17 @@
                     <div class="form-group">
                         <label for="txtDataDataEvasa" class="form-label">In data</label>
                         <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" />
+                        <asp:RegularExpressionValidator
+                            ID="RegularExpressionValidator2"
+                            runat="server"
+                            ControlToValidate="txtDataDataEvasa"
+                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                            ErrorMessage="la data deve essere dd/mm/aaaa"
+                            ForeColor="Red"
+                            ValidationGroup="bt"
+                            Display="Static">
+                        </asp:RegularExpressionValidator>
+
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -463,6 +473,17 @@
                     <div class="form-group">
                         <label for="txtDataInvio" class="form-label">Il</label>
                         <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" />
+                        <asp:RegularExpressionValidator
+                            ID="RegularExpressionValidator1"
+                            runat="server"
+                            ControlToValidate="txtDataInvio"
+                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                            ErrorMessage="la data deve essere dd/mm/aaaa"
+                            ForeColor="Red"
+                            ValidationGroup="bt"
+                            Display="Static">
+                        </asp:RegularExpressionValidator>
+
                     </div>
                 </div>
             </div>
@@ -522,7 +543,7 @@
             </div>
         </div>
     </div>
-    
+
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
