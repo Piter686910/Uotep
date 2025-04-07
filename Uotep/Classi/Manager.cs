@@ -1376,7 +1376,7 @@ namespace Uotep.Classi
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
 
-            if (catasto!=null)
+            if (catasto != null)
                 sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
                    "' and arch_sub= '" + catasto[4] + "'";
 
@@ -2214,7 +2214,82 @@ namespace Uotep.Classi
 
         }
 
+        public Boolean InsStatPg(Boolean exist, Statistiche stat)
+        {
+            bool resp = true;
 
+            string sql_Statistiche = String.Empty;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+
+                SqlCommand command = conn.CreateCommand();
+
+
+                try
+                {
+
+                    
+                    if (!exist)
+
+
+
+                        sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
+                            ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
+                            ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti) " +
+                        " Values('" + stat.mese.ToUpper() + "'," + stat.anno + "," + stat.relazioni + "," + stat.ponteggi + "," + stat.dpi + "," +
+                          stat.esposti_ricevuti + "," + stat.esposti_evasi + "," + stat.ripristino_tot_par + "," + stat.controlli_scia + "," + stat.contr_cant_daily + "," + stat.cnr + "," +
+                          stat.annotazioni + "," + stat.notifiche + "," + stat.sequestri + "," + stat.riapp_sigilli + "," + stat.deleghe_ricevute + "," +
+                          stat.deleghe_esitate + "," + stat.cnr_annotazioni + "," + stat.interrogazioni + "," + stat.denunce_uff + "," + stat.convalide + "," +
+                          stat.demolizioni + "," + stat.violazione_sigilli + "," + stat.dissequestri + "," + stat.dissequestri_temp + "," + stat.riapp_sigilli + "," +
+                          stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + ")";
+
+
+                    else
+                    {
+                        sql_Statistiche = "update statistiche set interrogazioni = " + stat.interrogazioni +
+
+
+                        " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
+
+
+                    }
+
+
+
+                    command.CommandText = sql_Statistiche;
+                    command.ExecuteNonQuery();
+
+                    resp = true;
+                }
+            
+
+                catch (Exception ex)
+                {
+
+
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in inserimento statistiche ");
+                    sw.Close();
+                }
+
+                resp = false;
+
+
+            }
+            conn.Close();
+            return resp;
+        }
+
+        }
         public Boolean InsRappUote(RappUote rapp, Statistiche stat, string txt)
         {
             bool resp = true;
@@ -2447,7 +2522,7 @@ namespace Uotep.Classi
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-            sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno ;
+            sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2488,14 +2563,14 @@ namespace Uotep.Classi
                 sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
                     "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub)" +
                    " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
-                   @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + 
+                   @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
                    @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
                    @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
                    @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
-                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','"+ @arch.arch_foglio + "','"+ @arch.arch_particella + "','" + @arch.arch_sub  + "')";
+                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "')";
 
-                
+
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
@@ -2637,7 +2712,7 @@ namespace Uotep.Classi
                      "', rapp_data_consegna_intervento ='" + @rapp.data_consegna_intervento +
                      "', rapp_con_protezioni ='" + @rapp.conProt +
                      "', rapp_senza_protezioni ='" + @rapp.senzaProt +
-                     "', rapp_matricola ='" + @rapp.matricola.Trim()  +
+                     "', rapp_matricola ='" + @rapp.matricola.Trim() +
                      "', rapp_non_avvenuto ='" + @rapp.non_avvenuto + "'" +
 
                      " where rapp_numero_pratica = '" + @rapp.pratica + "'";

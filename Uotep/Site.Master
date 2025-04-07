@@ -89,7 +89,16 @@
                          </li>
                          <%-- manutenzione tabelle --%>
                         <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
-                        <li runat="server" id="menuSegreteria" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/Segreteria">Ufficio PG</a></li>
+                  
+                        <li runat="server" id="menuSegreteria" visible="false" class="dropdown">
+                            <a runat="server" style="color: #ffffff !important" href="~/View/Segreteria" class="dropdown-toggle" data-toggle="dropdown">Ufficio PG <span class="caret"></span></a>
+                               <ul class="dropdown-menu">
+                                         <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
+                                         <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
+
+                               </ul>
+                         </li>
+
                         <li runat="server" id="menuEsci" visible="false"> <a style="color: #ffffff !important"   <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
                     </ul>
                 </div>

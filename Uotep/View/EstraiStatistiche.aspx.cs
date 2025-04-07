@@ -109,21 +109,7 @@ namespace Uotep
             //txt.Text = stat.Rows[0].ItemArray[29].ToString();
         }
 
-     
-        private Boolean Convalida()
-        {
-            Boolean ret = true;
-            
 
-            return ret;
-        }
-       
-       
-        private void Pulisci()
-        {
-           
-
-        }
        
 
         protected void btEsegui_Click(object sender, EventArgs e)
