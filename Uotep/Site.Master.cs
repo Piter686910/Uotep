@@ -123,6 +123,8 @@ namespace Uotep
                                 menuHome.Visible = true;
                                 RicercaArchivio.Visible = true;
                                 InserimentoArchivio.Visible = true;
+                                StatistichePg.Visible = true;
+                                PG.Visible = true;
 
 
                                 //*
@@ -145,6 +147,8 @@ namespace Uotep
                                 menuManTabelle.Visible = true;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
+                                StatistichePg.Visible = true;
+                                PG.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;
