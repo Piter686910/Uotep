@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -14,7 +15,7 @@ namespace Uotep
 {
     public partial class RicercaArchivio : Page
     {
-       
+        public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -43,6 +44,15 @@ namespace Uotep
             txtSez.Text = string.Empty;
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = String.Empty;
+            Ck1089.Checked = false;
+            CkDemolita.Checked = false;
+            CkEvasa.Checked = false;
+            CkPropAltri.Checked = false;
+            CkPropBeniCult.Checked = false;
+            CkPropComunale.Checked = false;
+            CkPropPriv.Checked = false;
+            CkSuoloPubblico.Checked = false;
+            CkVincoli.Checked = false;
 
 
         }
@@ -111,6 +121,8 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = true;
             DivPratica.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivRicerca.Visible = true;
         }
 
         protected void btIndirizzo_Click(object sender, EventArgs e)
@@ -119,6 +131,8 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivRicerca.Visible = true;
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
@@ -127,6 +141,8 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivRicerca.Visible = true;
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
@@ -134,9 +150,41 @@ namespace Uotep
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
+            DivEstraiDb.Visible = false;
             DivPratica.Visible = true;
+            DivRicerca.Visible = true;
         }
 
+        protected void btEstraiParziale_Click(object sender, EventArgs e)
+        {
+            DivEstraiDb.Visible = true;
+            DivRicerca.Visible = false;
+        }
+
+        protected void Estrai_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            //DataTable dt = mn.getArchivioUoteParziale();
+        }
+
+        protected void btEstraiTotale_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            DataTable dt = mn.getArchivioUoteTotale();
+            
+            // 2. Esporta la DataTable in Excel
+            string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(dt, "Dati");
+                //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
+                ws.Column(1).Delete(); // Elimina la prima colonna
+                ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+
+                wb.SaveAs(filePath);  // Salva il file
+
+            }
+        }
 
     }
 }

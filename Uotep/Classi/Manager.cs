@@ -1365,6 +1365,72 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        /// <summary>
+        /// estrazione parziale 
+        /// 
+        /// </summary>
+        /// <param name="ckevasa"></param>
+        /// <param name="ck1089"></param>
+        /// <param name="cksp"></param>
+        /// <param name="ckvincoli"></param>
+        /// <param name="ckdemolita"></param>
+        /// <param name="ckpp"></param>
+        /// <param name="ckpc"></param>
+        /// <param name="ckpbc"></param>
+        /// <param name="ckae"></param>
+        /// <returns></returns>
+        public DataTable getArchivioUoteParziale( Boolean ckevasa, Boolean ck1089, Boolean cksp, Boolean ckvincoli, Boolean ckdemolita, Boolean ckpp, Boolean ckpc, Boolean ckpbc, Boolean ckae)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            if (ckevasa)
+                sql = "SELECT * FROM ArchivioUote where arch_evasa = 'True'";
+            if (ck1089)
+                sql = "SELECT * FROM ArchivioUote where arch_1089 = 'True'";
+            if (cksp)
+                sql = "SELECT * FROM ArchivioUote where arch_suoloPub = 'True'";
+            if (ckvincoli)
+                sql = "SELECT * FROM ArchivioUote where arch_vincoli = 'True'";
+            if (ckdemolita)
+                sql = "SELECT * FROM ArchivioUote where arch_demolita = 'True'";
+            if (ckpp)
+                sql = "SELECT * FROM ArchivioUote where arch_propPriv = 'True'";
+
+            if (ckpc)
+                sql = "SELECT * FROM ArchivioUote where arch_propComune = 'True'";
+
+            if (ckpbc)
+                sql = "SELECT * FROM ArchivioUote where arch_propBeniCult ='True'";
+
+            if (ckae)
+                sql = "SELECT * FROM ArchivioUote where arch_propAltriEnti ='True'";
+
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        /// <summary>
+        /// estrazione totale del DB
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getArchivioUoteTotale()
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+           
+             sql = "SELECT * FROM ArchivioUote";
+           
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getPraticaArchivioUote(string pratica, string nominativo, string indirizzo, string[] catasto)
         {
             string sql = string.Empty;
