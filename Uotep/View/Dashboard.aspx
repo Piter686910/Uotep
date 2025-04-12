@@ -73,12 +73,19 @@
                                 <asp:DropDownList ID="DdlRuolo" runat="server" CssClass="form-control">
                                     <asp:ListItem Text="admin"> </asp:ListItem>
                                     <asp:ListItem Text="accertatori"> </asp:ListItem>
+                                    <asp:ListItem Text="archivio"> </asp:ListItem>
                                     <asp:ListItem Text="coordinamento ag"> </asp:ListItem>
                                     <asp:ListItem Text="coordinamento pg"> </asp:ListItem>
                                     <asp:ListItem Text="MasterAG"> </asp:ListItem>
                                     <asp:ListItem Text="segreteria"> </asp:ListItem>
                                     <asp:ListItem Text="superAdmin"> </asp:ListItem>
                                 </asp:DropDownList>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:Label ID="Label8" runat="server" Text="Elenco Personale" CssClass="form-label d-block mb-2"></asp:Label>
+                                <asp:DropDownList ID="DdlPersonale" runat="server" CssClass="form-control" />
                             </div>
                         </div>
                         <div class="col-md-6" style="margin-top: 20px!important">
@@ -99,14 +106,18 @@
                 </div>
                 <div class="col-md-6" style="margin-top: 20px!important">
                     <div class="form-group mb-3">
-                        <asp:Button Text="OK" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+                        <asp:Button Text="Reset" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+                        <asp:Button Text="Elimina" runat="server" OnClick="Elimina_Click" ToolTip="Elimina Utente" CssClass="btn btn-primary px-4" />
+
                     </div>
                 </div>
             </div>
+
             <!-- Pulsante Login -->
             <div class="form-group text-center mt-4">
                 <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
                 <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" ToolTip="Nuovo Utente" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+
             </div>
         </div>
     </asp:Panel>

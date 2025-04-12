@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Inserimento.aspx.cs" Inherits="Uotep.Inserimento" %>
+﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="InserimentoArchivio.aspx.cs" Inherits="Uotep.InserimentoArchivio" %>
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -7,7 +7,9 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+        function HideErrorMessage(message) {
+            $('#errorModal').modal('hide');
+        }
         // Mostra il popup
         function showModal() {
             $('#myModal').modal('show');
@@ -18,14 +20,33 @@
             $('#myModal').modal('hide');
         }
 
+        function showModal() {
+            $('#ModalPratica').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalPratica').modal('hide');
+        }
+        //popup per la conferma inserimento
+        $(document).ready(function () {
+            $('#btnModalOk').click(function () {
+                document.getElementById('<%=hdnConfermaUtente.ClientID%>').value = 'true';
+                __doPostBack('<%=btSalva.UniqueID%>', ''); // Forza PostBack
+                $('#confermaModal').modal('hide'); // Chiudi il modale dopo aver gestito l'OK
+            });
+        });
+
+
+
         //giudice
         function filterDropdownGiudice() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtGiudice");
             filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlGiudice.ClientID %>');
+            dropdown = document.getElementById('<%= DdlGiudiceI.ClientID %>');
             options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsList.ClientID %>');
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListG.ClientID %>');
             suggestionsListDiv.innerHTML = ""; // Pulisci la lista dei suggerimenti precedenti
 
             var suggestionsFound = false;
@@ -55,96 +76,14 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
-
-        //tipo provvedimento
-        function filterDropdownTipoProv() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtTipoProv");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlTipoProvvAg.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            // var suggestionsListDiv = document.getElementById("MainContent_suggestionsList");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListTipoProv.ClientID %>');
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
-
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
-
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    suggestionElement.addEventListener('click', function () {
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
-                    });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
-
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
         //quartiere
         function filterDropdownQuartiere() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtQuartiere");
             filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
+            dropdown = document.getElementById('<%= DdlQuartiereI.ClientID %>');
             options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
-
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
-
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    suggestionElement.addEventListener('click', function () {
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
-                    });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
-
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
-        //provenienza
-        function filterDropdownProvenienza() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtProvenienza");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlProvenienza.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListProvenienza.ClientID %>');
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQ.ClientID %>');
             // Pulisci la lista dei suggerimenti precedenti
             suggestionsListDiv.innerHTML = "";
 
@@ -182,9 +121,9 @@
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtTipoAtto");
             filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+            dropdown = document.getElementById('<%= DdlTipoAttoI.ClientID %>');
             options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListTipoAtto.ClientID %>');
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListTA.ClientID %>');
             // Pulisci la lista dei suggerimenti precedenti
             suggestionsListDiv.innerHTML = "";
 
@@ -220,11 +159,11 @@
         //Inviata
         function filterDropdownInviata() {
             var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtInviata");
+            input = document.getElementById("txtInCarico");
             filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlInviati.ClientID %>');
+            dropdown = document.getElementById('<%= DdlInviatiI.ClientID %>');
             options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListInviata.ClientID %>');
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListInCarico.ClientID %>');
             // Pulisci la lista dei suggerimenti precedenti
             suggestionsListDiv.innerHTML = "";
 
@@ -262,9 +201,9 @@
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtIndirizzo");
             filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlIndirizzo.ClientID %>');
+            dropdown = document.getElementById('<%= DdlIndirizzoI.ClientID %>');
             options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListIndirizzo.ClientID %>');
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListI.ClientID %>');
             // Pulisci la lista dei suggerimenti precedenti
             suggestionsListDiv.innerHTML = "";
 
@@ -299,81 +238,35 @@
         }
 
     </script>
-
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">INSERISCI DATI</p>
+            <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>
         </div>
+
         <div class="container">
-            <div class="row">
+            <div class="row align-items-start">
                 <!-- Colonna Sinistra -->
                 <div class="col-md-6">
                     <div class="form-group mb-3">
-                        <label for="txtProt">Nr Protocollo</label>
-                        <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
-                        <label for="Ddltipo">/</label>
-                        <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1">
-                            <asp:ListItem Text="ED"> </asp:ListItem>
-                            <asp:ListItem Text="TP"> </asp:ListItem>
-                            <asp:ListItem Text="PG"> </asp:ListItem>
-                        </asp:DropDownList>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtDataArrivo">Data Arrivo</label>
-                        <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfGiudice" runat="server" />
-                        </div>
-                        <asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />
+                        <label for="txtPratica">Nr Pratica</label>
+                        <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control1" ForeColor="Red" Font-Bold="true" />
+                        <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkBis">Bis</label>
+                        <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkTris">Tris</label>
+                        <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkQuater">Quater</label>
 
-                        <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="DdlTipoProvvAg">Tipo Provvedimento AG</label>
-
-                        <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfTipoProv" runat="server" />
-
-                        </div>
-                        <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" Style="display: none;" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtQuartiere">Quartiere</label>
-                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
-                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <%--<asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />--%>
-                        <label for="txtProvenienza">Provenienza</label>
-                        <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfProvenienza" runat="server" />
-                        </div>
-                        <asp:Button ID="btSalvaProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaProvenienza_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
-
-                        <asp:RequiredFieldValidator ID="rqProvenienza" runat="server" ControlToValidate="DdlProvenienza" ErrorMessage="inserire la provenienza">
-
-                        </asp:RequiredFieldValidator>
 
                     </div>
-                </div>
-
-                <!-- Colonna Destra -->
-                <div class="col-md-6">
-
                     <div class="form-group mb-3">
-                        <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
-                        <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
+                        <label for="txtDataInserimento">Data Inserimento</label>
+                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtDataInizioAttivita">Data Inizio Attività</label>
+                        <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control" Font-Bold="true" />
                     </div>
 
                     <!-- Indirizzo e TextBox sulla stessa riga -->
@@ -383,114 +276,167 @@
                             <!-- DropDownList occupa metà spazio -->
                             <div class="col-md-6">
                                 <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                    <asp:HiddenField ID="HfIndirizzo" runat="server" />
+                                <div id="suggestionsListI" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 </div>
 
-                                <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
+                                <asp:DropDownList ID="DdlIndirizzoI" runat="server" CssClass="form-control" Style="display: none" />
                             </div>
-                            <!-- TextBox occupa metà spazio -->
-                            <%--<div class="col-md-6">
-                                <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
-                            </div>--%>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="txtQuartiere">Quartiere</label>
+                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListQ" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+                        <asp:DropDownList ID="DdlQuartiereI" runat="server" CssClass="form-control" Style="display: none" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtSezione">Dati Catastali</label>
+                        <div class="form-group mb-3">
+                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 60px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
+                            <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 60px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
+                            <asp:TextBox ID="TxtParticella" runat="server" MaxLength="5" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part.lla"></asp:TextBox>
+                            <asp:TextBox ID="TxtSub" runat="server" MaxLength="4" Style="width: 70px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub"></asp:TextBox>
+
                         </div>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="txtGiudice">Giudice</label>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+
+                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
+                    </div>
+
+            <div class="col-12 ">
+                <div class="form-group mb-3">
+                    <label for="txtNote">Note</label>
+                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"/>
+                </div>
+            </div>
+
+                </div>
+
+                <!-- Colonna Destra -->
+                <div class="col-md-6">
 
                     <div class="form-group mb-3">
-                        <label for="txtProdPenNr">Procedimento Penale nr</label>
-                        <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control" />
+                        <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
+                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" Enabled="false" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtResponsabile">Responsabile</label>
+                        <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="rqResponsabile" runat="server" ControlToValidate="txtResponsabile" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
+                        </asp:RequiredFieldValidator>
+
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtDataNascita">Data Nascita</label>
+
+                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="txtNominativo">Nominativo</label>
-                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
+                        <label for="txtNatoA">Nato A</label>
+                        <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
+
+
                     </div>
-
-                    <div class="form-group mb-3">
-
-                        <label for="txPratica">Pratica</label>
-                        <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
-                    </div>
-
                     <div class="form-group mb-3">
                         <label for="txtTipoAtto">Tipologia Atto</label>
                         <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                        <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         </div>
-                        <asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
+                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
-                </div>
 
-            </div>
-
-            <div class="row">
-                <div class="col-12">
                     <div class="form-group mb-3">
-                        <label for="txtNote">Eventuali Note</label>
-                        <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
-                    </div>
-                </div>
-            </div>
 
-            <div class="row align-items-center mb-3">
-                <div class="col-md-3 d-flex align-items-center">
+                        <label for="txtInCarico" class="form-label">In Carico</label>
+                        <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>
+                        <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
+
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="row ">
+                <div class="col-md-2 d-flex align-items-center">
                     <div class="form-check">
                         <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2 d-flex align-items-center">
                     <div class="form-group">
-                        <label for="txtDataDataEvasa" class="form-label">In data</label>
-                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator2"
-                            runat="server"
-                            ControlToValidate="txtDataDataEvasa"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
+                        <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="Ck1089">1089</label>
+                    </div>
+                </div>
 
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-group">
+                        <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2 d-flex align-items-center">
                     <div class="form-group">
-                        <label for="txtInviata" class="form-label">Inviata</label>
-                        <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfInviata" runat="server" />
-                        </div>
-                        <asp:Button ID="btSalvaInviata" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaInviata_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
+                        <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2 d-flex align-items-center">
                     <div class="form-group">
-                        <label for="txtDataInvio" class="form-label">Il</label>
-                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator1"
-                            runat="server"
-                            ControlToValidate="txtDataInvio"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
+                        <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
+                    </div>
+                </div>
 
-                    </div>
-                </div>
             </div>
+            <div class="row ">
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Privata</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Comunale</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Beni Cult.</label>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Altri Enti</label>
+                    </div>
+                </div>
 
+
+            </div>
+            <asp:HiddenField ID="hdnConfermaUtente" runat="server" Value="false" />
             <div class="row">
+                <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
                 <div class="col-12 text-center">
-                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
                     <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
                     <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
@@ -543,7 +489,47 @@
             </div>
         </div>
     </div>
+    <%-- Modale ricerca pratica --%>
+    <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:100%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
 
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <!-- GridView nel popup -->
+                        <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP">
+                            <Columns>
+                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" />
+                                <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
+                                <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
+                                <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
+                                <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
+                                <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
+
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_Archivio") + ";" + Eval("arch_numPratica")   %>' CssClass="btn btn-success btn-sm" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
+
+                    </div>
+                </div>
+                <asp:HiddenField ID="HfStato" runat="server" />
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -557,7 +543,7 @@
 
                     <div class="form-group">
 
-                        <p id="errorMessage" style="color: red"></p>
+                        <p id="errorMessage" runat="server" style="color: red"></p>
 
                     </div>
 
@@ -565,6 +551,28 @@
                 <div class="modal-footer">
 
                     <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupErrore_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale per conferma inserimento -->
+    <div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confermaModalLabel">Conferma Azione</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalMessaggioBody" style="color: red;">
+                    <!-- Il messaggio verrà inserito qui tramite JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnModalOk">OK</button>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
                 </div>
             </div>
         </div>

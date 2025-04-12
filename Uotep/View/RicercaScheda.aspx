@@ -139,11 +139,13 @@
                 <div class="row">
                     <div class="col-12">
                         <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Salva Scheda" CssClass="btn btn-primary me-3" OnClick="btSalva_Click" Enabled="false" />
+
                     </div>
                 </div>
             </div>
         </div>
 
+        <asp:Button ID="btStampa" runat="server" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
 
     </div>
 
@@ -205,7 +207,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Esposto n°</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control2" MaxLength="10" />
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control" MaxLength="10" />
                                 <%--<asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ValidationGroup="bottoni" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{5}"></asp:RegularExpressionValidator>--%>
                             </div>
                             <div class="form-check mb-2">
@@ -296,6 +298,8 @@
                                     <label class="form-check-label" for="ckAccertAvvenutoRipr">Accertamento avvenuto ripristino [</label>
                                     <asp:RadioButton ID="rdTotale" runat="server" GroupName="AccertamentoGroup" Text="Totale" />
                                     <asp:RadioButton ID="rdParziale" runat="server" GroupName="AccertamentoGroup" Text="Parziale" />
+                                    <asp:RadioButton ID="rdNonAvvenuto" runat="server" GroupName="AccertamentoGroup" Text="Non Avvenuto" />
+
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
@@ -398,6 +402,7 @@
 
                     </div>
                 </div>
+                <asp:HiddenField ID="HfIdScheda" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />

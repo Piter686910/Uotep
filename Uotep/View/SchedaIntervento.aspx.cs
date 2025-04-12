@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -52,11 +53,14 @@ namespace Uotep
         protected void Salva_Click(object sender, EventArgs e)
         {
             Boolean continua = Convalida();
+            String MeseCorrente = DateTime.Now.ToString("MMMM");
+            String AnnoCorrente = DateTime.Now.ToString("yyyy");
+            Manager mn = new Manager();
 
             if (continua)
             {
                 RappUote rap = new RappUote();
-
+                Statistiche stat = new Statistiche();
 
                 rap.nominativo = txtNominativo.Text.ToUpper();
                 rap.indirizzo = txtIndirizzo.Text;
@@ -83,47 +87,131 @@ namespace Uotep
                 //oraapp = dtOra.Value);
                 //rap.ora = dtOra.Value;
                 rap.pratica = txtPratica.Text;
+                if (ckDelega.Checked)
+                {
+                    stat.deleghe_ricevute = 1;
+                }
                 rap.delegaAG = ckDelega.Checked;
                 rap.resa = ckResa.Checked;
                 rap.segnalazione = ckSegnalazione.Checked;
+
                 rap.esposti = ckEsposto.Checked;
+                if (!ckNotifica.Checked)
+                {
+                    stat.notifiche = 1;
+                }
                 rap.notifica = ckNotifica.Checked;
                 rap.iniziativa = ckIniziativa.Checked;
                 rap.cdr = ckCdr.Checked;
                 rap.coordinatore = ckCoordinatore.Checked;
+                if (ckRelazione.Checked)
+                {
+                    stat.relazioni = 1;
+                }
                 rap.relazione = ckRelazione.Checked;
+                if (ckCnr.Checked)
+                {
+                    stat.cnr = 1;
+                }
                 rap.cnr = ckCnr.Checked;
+                if (ckAnnotazionePG.Checked)
+                {
+                    stat.annotazioni = 1;
+                }
                 rap.annotazionePG = ckAnnotazionePG.Checked;
+                if (ckVerbaleSeq.Checked)
+                {
+                    stat.sequestri = 1;
+                }
                 rap.verbaleSeq = ckVerbaleSeq.Checked;
+                if (ckEsitoDelega.Checked)
+                {
+                    stat.deleghe_esitate = 1;
+                }
                 rap.esitoDelega = ckEsitoDelega.Checked;
                 rap.contestazioneAmm = ckContestazioneAmm.Checked;
+                if (ckConvalida.Checked)
+                {
+                    stat.convalide = 1;
+                }
                 rap.convalida = ckConvalida.Checked;
+                if (ckDisseqDefinitivo.Checked)
+                {
+                    stat.dissequestri = 1;
+                }
                 rap.dissequestroDef = ckDisseqDefinitivo.Checked;
+                if (ckDisseqTemp.Checked)
+                {
+                    stat.dissequestri_temp = 1;
+                }
                 rap.dissequestroTemp = ckDisseqTemp.Checked;
+                if (rdRimozione.Checked)
+                {
+                    stat.rimozione_sigilli = 1;
+                }
                 rap.rimozione = rdRimozione.Checked;
+                if (rdRiapposizione.Checked)
+                {
+                    stat.riapp_sigilli = 1;
+                }
                 rap.riapposizione = rdRiapposizione.Checked;
+                if (ckViolazioneSigilli.Checked)
+                {
+                    stat.violazione_sigilli = 1;
+                }
                 rap.violazioneSigilli = ckViolazioneSigilli.Checked;
+                if (ckControlliSCIA.Checked)
+                {
+                    stat.controlli_scia = 1;
+                }
                 rap.controlliScia = ckControlliSCIA.Checked;
                 rap.accertAvvenutoRip = ckAccertAvvenutoRipr.Checked;
+                if (rdTotale.Checked || rdParziale.Checked)
+                {
+                    stat.ripristino_tot_par = 1;
+                }
                 rap.totale = rdTotale.Checked;
                 rap.parziale = rdParziale.Checked;
+                rap.non_avvenuto = rdNonAvvenuto.Checked;
+                if (rdSenza.Checked || rdCon.Checked)
+                {
+                    stat.dpi = 1;
+                }
                 rap.conProt = rdCon.Checked;
                 rap.senzaProt = rdSenza.Checked;
+                if (ckViolazioneBeniCult.Checked)
+                {
+                    stat.controlli_42_04 = 1;
+                }
                 rap.violazioneBeniCult = ckViolazioneBeniCult.Checked;
+                if (ckContrSuoloPubblico.Checked)
+                {
+                    stat.contr_cant_suolo_pubb = 1;
+                }
                 rap.contrCantSuoloPubb = ckContrSuoloPubblico.Checked;
+                if (ckControlliCant.Checked)
+                {
+                    stat.contr_cant = 1;
+                }
                 rap.contr_cantiereSeq = ckControlliCant.Checked;
+
                 rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
+                if (ckControlloDaEsposti.Checked || ckControlliDaSegnalazioni.Checked)
+                {
+                    stat.esposti_ricevuti = 1;
+                }
                 rap.contrDaEsposti = ckControlloDaEsposti.Checked;
                 rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
                 rap.uote = rdUote.Checked;
                 rap.uotp = rdUotp.Checked;
                 if (String.IsNullOrEmpty(txt_numEspostiSegn.Text))
                 {
-                    rap.num_esposti = 0;
+                    rap.num_esposti = string.Empty;
                 }
                 else
                 {
-                    rap.num_esposti = System.Convert.ToInt32(txt_numEspostiSegn.Text);
+                    rap.num_esposti = txt_numEspostiSegn.Text;
+                    stat.esposti_evasi = System.Convert.ToInt32(rap.num_esposti);
                 }
 
                 rap.nota = txtNote.Text;
@@ -133,9 +221,11 @@ namespace Uotep
                     rap.data_consegna_intervento = System.Convert.ToDateTime(txtDataConsegna.Text);
                 }
                 rap.dataInserimento = DateTime.Now;
-                Manager mn = new Manager();
-
-                Boolean resp = mn.InsRappUote(rap);
+                stat.mese = MeseCorrente;
+                stat.anno = System.Convert.ToInt16(AnnoCorrente);
+                string txt = "";
+                VerificaStatistiche(stat, out txt);
+                Boolean resp = mn.InsRappUote(rap, stat, txt);
                 if (!resp)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
@@ -145,6 +235,52 @@ namespace Uotep
                     Pulisci();
                 }
             }
+        }
+        private Statistiche VerificaStatistiche(Statistiche stat, out string txt)
+        {
+
+            Manager mn = new Manager();
+            DataTable dt = new DataTable();
+            dt = mn.getStatisticaByMeseAnno(stat.mese, stat.anno);
+            if (dt.Rows.Count > 0)
+            {
+                stat.mese = dt.Rows[0].ItemArray[1].ToString().Trim();
+                stat.anno = System.Convert.ToInt32(dt.Rows[0].ItemArray[2]);
+                stat.relazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[3]);
+                stat.ponteggi += System.Convert.ToInt32(dt.Rows[0].ItemArray[4]);
+                stat.dpi += System.Convert.ToInt32(dt.Rows[0].ItemArray[5]);
+                stat.esposti_ricevuti += System.Convert.ToInt32(dt.Rows[0].ItemArray[6]);
+                stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
+                stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
+                stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
+                stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);
+                stat.cnr += System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);
+                stat.annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);
+                stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
+                stat.sequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);
+                stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
+                stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
+                stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
+                stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);
+                stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
+                stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
+                stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
+                stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
+                stat.violazione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);
+                stat.dissequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[24]);
+                stat.dissequestri_temp += System.Convert.ToInt32(dt.Rows[0].ItemArray[25]);
+                stat.rimozione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[26]);
+                stat.controlli_42_04 += System.Convert.ToInt32(dt.Rows[0].ItemArray[27]);
+                stat.contr_cant_suolo_pubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);
+                stat.contr_lavori_edili += System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);
+                stat.contr_cant += System.Convert.ToInt32(dt.Rows[0].ItemArray[30]);
+                stat.contr_nato_da_esposti += System.Convert.ToInt32(dt.Rows[0].ItemArray[31]);
+                txt = "upd";
+            }
+            else
+                txt = "ins";
+
+            return stat;
         }
         private void Pulisci()
         {
@@ -159,6 +295,7 @@ namespace Uotep
             rdParziale.Checked = false;
             rdRiapposizione.Checked = false;
             rdTotale.Checked = false;
+            rdNonAvvenuto.Checked = false;
             rdRimozione.Checked = false;
             rdUote.Checked = false;
             rdUotp.Checked = false;
@@ -198,12 +335,38 @@ namespace Uotep
             Boolean ret = true;
             if (String.IsNullOrEmpty(LPattugliaCompleta.ToString()))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserire la pattuglia." + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire la pattuglia." + "'); $('#errorModal').modal('show');", true);
 
                 ret = false;
-                return ret;
-            }
 
+            }
+            if (ckEsposto.Checked && String.IsNullOrEmpty(txt_numEspostiSegn.Text))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Se hai selezionato esposti è necessario inserire il numero di esposti." + "'); $('#errorModal').modal('show');", true);
+
+                ret = false;
+            }
+            if (ckDisseqTemp.Checked && (rdRimozione.Checked == false && rdRiapposizione.Checked == false))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
+
+                ret = false;
+            }
+            if (ckAccertAvvenutoRipr.Checked==true)
+            {
+                if (rdTotale.Checked == false || rdParziale.Checked == false || rdNonAvvenuto.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale o Non Avvenuto ." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckControlliLavoriEdiliSenzaProt.Checked && (rdCon.Checked == false && rdSenza.Checked == false))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Con o Senza." + "'); $('#errorModal').modal('show');", true);
+
+                ret = false;
+            }
             return ret;
         }
         protected void apripopup_Click(object sender, EventArgs e)
@@ -408,7 +571,7 @@ namespace Uotep
         {
             Manager mn = new Manager();
             //DataTable schede =
-            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at);
+            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0);
             if (table.Rows.Count > 0)
             {
                 //GVRicecaScheda.DataSource = table;
@@ -445,6 +608,7 @@ namespace Uotep
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
+
     }
 
 }

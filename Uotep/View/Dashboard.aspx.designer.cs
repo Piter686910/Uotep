@@ -168,6 +168,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlRuolo;
 
         /// <summary>
+        /// Controllo Label8.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label8;
+
+        /// <summary>
+        /// Controllo DdlPersonale.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlPersonale;
+
+        /// <summary>
         /// Controllo divReset.
         /// </summary>
         /// <remarks>

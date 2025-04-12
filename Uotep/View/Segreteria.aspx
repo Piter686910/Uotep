@@ -11,7 +11,7 @@
     </script>
     <div class="jumbotron">
         <h1>Caricamento file</h1>
-        <p class="lead">Il nome del file da caricare deve composto nel seguente modo: fascicolo_data</p>
+        <p class="lead"></p>
     </div>
     <%-- LOGIN --%>
     <asp:Panel ID="pnlGestFile" runat="server" CssClass="text-center">
@@ -32,8 +32,29 @@
                                 </asp:RequiredFieldValidator>
                             </div>
                         </div>
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:Label ID="Label3" runat="server" Text="Numero Fascicolo" CssClass="form-label d-block mb-2"></asp:Label>
+                                <%--<label for="txPratica">Numero Fascicolo</label>--%>
+                                <asp:TextBox ID="txtNrFascicolo" runat="server" CssClass="form-control form-control-sm w-50" />
+                                <asp:RequiredFieldValidator ID="RqFascicolo" runat="server" ControlToValidate="txtNrFascicolo" ErrorMessage="Inserire il numero fascicolo" ForeColor="Red" ValidationGroup="bt">
 
+                                </asp:RequiredFieldValidator>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div class="form-group text-center mt-4" style="text-align: left !important">
 
+                                    <asp:Label ID="Label4" runat="server" Text="Data" CssClass="form-label d-block mb-2"></asp:Label>
+
+                                    <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control" placeholder="dd-MM-yyyy" />
+                                    <asp:RequiredFieldValidator ID="RqData" runat="server" ControlToValidate="txtDataI" ErrorMessage="Inserire la data" ForeColor="Red" ValidationGroup="bt">
+
+                                    </asp:RequiredFieldValidator>
+
+                                    <asp:Label ID="lbmess" runat="server" ForeColor="Red"></asp:Label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -54,7 +75,20 @@
 
                             </div>
                         </div>
-
+                        <!-- Etichetta Operartore -->
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:Label ID="Label5" runat="server" Text="Operatore" CssClass="form-label d-block mb-2"></asp:Label>
+                                <asp:DropDownList ID="DdlOperatore" runat="server" CssClass="form-control" />
+                            </div>
+                        </div>
+                        <!-- Etichetta flag per la cancellazione -->
+                        <div class="form-group mb-3">
+                            <div class="form-group text-center mt-4" style="text-align: left !important">
+                                <asp:Label ID="Label6" runat="server" Text="Cancella file già scaricati" CssClass="form-label d-block mb-2"></asp:Label>
+                                <asp:Button ID="btCancellaScaricati" Text="Cancella" runat="server" OnClick="btCancellaScaricati_Click" ToolTip="Cancella File" CssClass="btn btn-primary px-4"   />
+                            </div>
+                        </div>
                         <div class="form-group">
                             <!-- GridView nel popup -->
                             <asp:GridView ID="GVRicercaFile" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
@@ -66,17 +100,13 @@
                                     <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
                                     <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="100%" />
                                     <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
+
                                     <asp:TemplateField>
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>' CssClass="btn btn-success btn-sm" />
+                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                   
-                                   <%-- <asp:TemplateField HeaderText="Link">
-                                        <ItemTemplate>
-                                            <asp:HyperLink ID="HyperLink1" runat="server" Text="Apri File" CommandName="AddLink" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") + ";"  %>'></asp:HyperLink>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>--%>
+
                                 </Columns>
                             </asp:GridView>
 
@@ -91,7 +121,7 @@
 
                         <div class="col-md-6" style="margin-top: 20px!important">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btCarica" Text="Carica" runat="server" OnClick="Carica_Click" ToolTip="Carica File" CssClass="btn btn-primary px-4" Visible="false" />
+                                <asp:Button ID="btCarica" Text="Carica" runat="server" OnClick="Carica_Click" ToolTip="Carica File" CssClass="btn btn-primary px-4" Visible="false" ValidationGroup="bt" />
                                 <asp:Button ID="btRicerca" Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Cerca File" CssClass="btn btn-primary px-4" Visible="false" />
                             </div>
                         </div>
@@ -103,7 +133,7 @@
     </asp:Panel>
 
     <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"
             role="document">
             <div class="modal-content">
@@ -121,7 +151,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <%--<asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />--%>
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>

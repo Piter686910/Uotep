@@ -55,8 +55,16 @@
                     <ul class="nav navbar-nav" >
                         <li><a id="menuHome" runat="server"  visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
                         <li runat="server"  id="menuAmministratore" visible="false" ><a  runat="server" style="color: #ffffff !important"  href="~/View/Dashboard">Dashboard</a></li>
-                        <%--<li runat="server" id="menuCoordinamentoAtti" visible="false"><a runat="server" href="~/View/PagComandi">Coordinamento Atti</a></li>--%>
+                        
 
+                       <li runat="server" id="menuArchivioUote" visible="false" class="dropdown">
+                         <a runat="server" style="color: #ffffff !important" ref="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
+                             <ul class="dropdown-menu">
+                                  <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
+                                  <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
+
+                             </ul>
+                        </li>
 
                         <li runat="server" id="menuCoordinamentoAtti" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti <span class="caret"></span></a>
@@ -64,7 +72,9 @@
                                          <li><a id="InserimentoAtti" runat="server" visible="false" href="~/View/Inserimento">Inserimento Atti</a></li>
                                          <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
                                          <li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>
-                                         <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>                               </ul>
+                                         <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
+
+                               </ul>
                          </li>
 
 
@@ -73,13 +83,22 @@
                                <ul class="dropdown-menu">
                                          <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
                                          <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
+                                         <li><a id="Statistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
+
                                </ul>
                          </li>
                          <%-- manutenzione tabelle --%>
                         <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
+                  
+                        <li runat="server" id="menuSegreteria" visible="false" class="dropdown">
+                            <a runat="server" style="color: #ffffff !important" href="~/View/Segreteria" class="dropdown-toggle" data-toggle="dropdown">Ufficio PG <span class="caret"></span></a>
+                               <ul class="dropdown-menu">
+                                         <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
+                                         <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
 
-                        <%--<li runat="server" id="menuAccertatori" visible="false"><a runat="server" href="~/View/SchedaIntervento">Scheda Intervento</a></li>--%>
-                        <li runat="server" id="menuSegreteria" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/Segreteria">Ufficio PG</a></li>
+                               </ul>
+                         </li>
+
                         <li runat="server" id="menuEsci" visible="false"> <a style="color: #ffffff !important"   <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
                     </ul>
                 </div>

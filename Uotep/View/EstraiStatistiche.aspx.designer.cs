@@ -11,233 +11,278 @@ namespace Uotep
 {
 
 
-    public partial class Segreteria
+    public partial class EstraiStatistiche
     {
 
         /// <summary>
-        /// Controllo pnlGestFile.
+        /// Controllo divTesta.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlGestFile;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTesta;
 
         /// <summary>
-        /// Controllo divCaricaFile.
+        /// Controllo txtMese.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCaricaFile;
+        protected global::System.Web.UI.WebControls.TextBox txtMese;
 
         /// <summary>
-        /// Controllo Label2.
+        /// Controllo txtAnno.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.TextBox txtAnno;
 
         /// <summary>
-        /// Controllo FLFilein.
+        /// Controllo btEsegui.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FLFilein;
+        protected global::System.Web.UI.WebControls.Button btEsegui;
 
         /// <summary>
-        /// Controllo RqFile.
+        /// Controllo divDettagli.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RqFile;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDettagli;
 
         /// <summary>
-        /// Controllo Label3.
+        /// Controllo txtRelazioni.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label3;
+        protected global::System.Web.UI.WebControls.TextBox txtRelazioni;
 
         /// <summary>
-        /// Controllo txtNrFascicolo.
+        /// Controllo TxtPonteggi.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNrFascicolo;
+        protected global::System.Web.UI.WebControls.TextBox TxtPonteggi;
 
         /// <summary>
-        /// Controllo RqFascicolo.
+        /// Controllo txtDPI.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RqFascicolo;
+        protected global::System.Web.UI.WebControls.TextBox txtDPI;
 
         /// <summary>
-        /// Controllo Label4.
+        /// Controllo txtEspostiRicevuti.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label4;
+        protected global::System.Web.UI.WebControls.TextBox txtEspostiRicevuti;
 
         /// <summary>
-        /// Controllo txtDataI.
+        /// Controllo txtCNR.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDataI;
+        protected global::System.Web.UI.WebControls.TextBox txtCNR;
 
         /// <summary>
-        /// Controllo RqData.
+        /// Controllo txtAnnotazioni.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RqData;
+        protected global::System.Web.UI.WebControls.TextBox txtAnnotazioni;
 
         /// <summary>
-        /// Controllo lbmess.
+        /// Controllo txtDelegheEsitate.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbmess;
+        protected global::System.Web.UI.WebControls.TextBox txtDelegheEsitate;
 
         /// <summary>
-        /// Controllo divSegreteria.
+        /// Controllo txtCnrAnnotazioni.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSegreteria;
+        protected global::System.Web.UI.WebControls.TextBox txtCnrAnnotazioni;
 
         /// <summary>
-        /// Controllo lblm.
+        /// Controllo txtInterrogatori.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblm;
+        protected global::System.Web.UI.WebControls.TextBox txtInterrogatori;
 
         /// <summary>
-        /// Controllo TxtFascicolo.
+        /// Controllo txtConvalide.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TxtFascicolo;
+        protected global::System.Web.UI.WebControls.TextBox txtConvalide;
 
         /// <summary>
-        /// Controllo Label1.
+        /// Controllo txtViolazioneSigilli.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.TextBox txtViolazioneSigilli;
 
         /// <summary>
-        /// Controllo TxtData.
+        /// Controllo txtDissequestriTemp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TxtData;
+        protected global::System.Web.UI.WebControls.TextBox txtDissequestriTemp;
 
         /// <summary>
-        /// Controllo Label5.
+        /// Controllo txtRimozioneSigilli.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label5;
+        protected global::System.Web.UI.WebControls.TextBox txtRimozioneSigilli;
 
         /// <summary>
-        /// Controllo DdlOperatore.
+        /// Controllo txtEspostiEvasi.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlOperatore;
+        protected global::System.Web.UI.WebControls.TextBox txtEspostiEvasi;
 
         /// <summary>
-        /// Controllo Label6.
+        /// Controllo txtRipristino.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
+        protected global::System.Web.UI.WebControls.TextBox txtRipristino;
 
         /// <summary>
-        /// Controllo btCancellaScaricati.
+        /// Controllo txtControlliScia.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btCancellaScaricati;
+        protected global::System.Web.UI.WebControls.TextBox txtControlliScia;
 
         /// <summary>
-        /// Controllo GVRicercaFile.
+        /// Controllo txtControlliCant.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GVRicercaFile;
+        protected global::System.Web.UI.WebControls.TextBox txtControlliCant;
 
         /// <summary>
-        /// Controllo divDestra.
+        /// Controllo txtNotifiche.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDestra;
+        protected global::System.Web.UI.WebControls.TextBox txtNotifiche;
 
         /// <summary>
-        /// Controllo btCarica.
+        /// Controllo txtSequestri.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btCarica;
+        protected global::System.Web.UI.WebControls.TextBox txtSequestri;
 
         /// <summary>
-        /// Controllo btRicerca.
+        /// Controllo txtRiapposizioneSigilli.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btRicerca;
+        protected global::System.Web.UI.WebControls.TextBox txtRiapposizioneSigilli;
+
+        /// <summary>
+        /// Controllo txtDelegheRicevute.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDelegheRicevute;
+
+        /// <summary>
+        /// Controllo txtDenunceUff.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDenunceUff;
+
+        /// <summary>
+        /// Controllo txtDemolizioni.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDemolizioni;
+
+        /// <summary>
+        /// Controllo txtDissequestri.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDissequestri;
+
+        /// <summary>
+        /// Controllo txtControlliDLGS.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtControlliDLGS;
 
         /// <summary>
         /// Controllo Button2.

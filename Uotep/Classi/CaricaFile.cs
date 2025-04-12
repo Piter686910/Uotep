@@ -14,6 +14,7 @@ namespace Uotep.Classi
         public String data = string.Empty;
         public String folder = string.Empty;
         public String nomefile = string.Empty;
+        public Boolean cancella;
 
     }
 }

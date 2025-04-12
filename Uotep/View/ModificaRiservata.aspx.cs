@@ -69,18 +69,18 @@ namespace Uotep
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
-            Manager mn = new Manager();
-            DataTable pratica = mn.getListPrototocollo(txtProtoloccolRicerca.Text, txtAnnoRicerca.Text);
-            if (pratica.Rows.Count > 0)
-            {
-                gvPopupProtocolli.DataSource = pratica;
-                gvPopupProtocolli.DataBind();
+            //Manager mn = new Manager();
+            //DataTable pratica = mn.getListPrototocollo(txtProtoloccolRicerca.Text, txtAnnoRicerca.Text);
+            //if (pratica.Rows.Count > 0)
+            //{
+            //    gvPopupProtocolli.DataSource = pratica;
+            //    gvPopupProtocolli.DataBind();
 
 
-            }
-            DivGrid.Visible = true;
-            DivDettagli.Visible = true;
-            DivRicerca.Visible = false;
+            //}
+            //DivGrid.Visible = true;
+            //DivDettagli.Visible = true;
+            //DivRicerca.Visible = false;
 
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -414,7 +414,7 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivGrid.Visible = false;
             txtAnnoRicerca.Text = String.Empty;
-            txtProtoloccolRicerca.Text = String.Empty;
+            //txtProtoloccolRicerca.Text = String.Empty;
         }
         protected void gvPopupProtocolli_RowDataBound(object sender, GridViewRowEventArgs e)
         {

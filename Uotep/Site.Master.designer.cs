@@ -33,6 +33,33 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuAmministratore;
 
         /// <summary>
+        /// Controllo menuArchivioUote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuArchivioUote;
+
+        /// <summary>
+        /// Controllo InserimentoArchivio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor InserimentoArchivio;
+
+        /// <summary>
+        /// Controllo RicercaArchivio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivio;
+
+        /// <summary>
         /// Controllo menuCoordinamentoAtti.
         /// </summary>
         /// <remarks>
@@ -105,6 +132,15 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor menuRicercaScheda;
 
         /// <summary>
+        /// Controllo Statistiche.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor Statistiche;
+
+        /// <summary>
         /// Controllo menuManTabelle.
         /// </summary>
         /// <remarks>
@@ -121,6 +157,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSegreteria;
+
+        /// <summary>
+        /// Controllo StatistichePg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor StatistichePg;
+
+        /// <summary>
+        /// Controllo PG.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor PG;
 
         /// <summary>
         /// Controllo menuEsci.

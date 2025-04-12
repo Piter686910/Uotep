@@ -12,7 +12,7 @@ namespace Uotep
 {
     public partial class SiteMaster : MasterPage
     {
-        DataTable profilo= new DataTable();
+        DataTable profilo = new DataTable();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -26,7 +26,7 @@ namespace Uotep
                     {
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
-                            case "coordinamento atti":
+                            case "coordinamentoatti":
                                 // Mostra voci specifiche per coordinamento ag
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = false;
@@ -39,14 +39,16 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
+                                    Statistiche.Visible= true;
+
                                 }
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                
+
                                 break;
-                            case "coordinamento pg":
+                            case "coordinamentopg":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
                                 menuAccertatori.Visible = true;
@@ -74,26 +76,44 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-
+                                PG.Visible = true;
                                 if (Session["profilo"].ToString() == "1")
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
+                                    Statistiche.Visible = false;
                                 }
+
                                 break;
-                            case "segreteria":
+                            case "PG":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = false;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
-                                menuHome.Visible=true;
-                                
+                                menuHome.Visible = true;
+                                StatistichePg.Visible=true;
+                                PG.Visible = true;
+                                break;
+                            case "archivio":
+                                // Mostra voci per utenti standard
+                                menuHome.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                menuCoordinamentoAtti.Visible = false;
+                                menuAccertatori.Visible = false;
+                                menuSegreteria.Visible = false;
+                                menuAmministratore.Visible = false;
+
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
+                                RicercaArchivio.Visible = true;
+                                InserimentoArchivio.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
@@ -102,6 +122,34 @@ namespace Uotep
                                 menuManTabelle.Visible = true;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
+                                RicercaArchivio.Visible = true;
+                                InserimentoArchivio.Visible = true;
+                                StatistichePg.Visible = true;
+                                PG.Visible = true;
+
+
+                                //*
+                                InserimentoAtti.Visible = true;
+                                ModificaAtti.Visible = true;
+                                ModificaRiservata.Visible = true;
+                                RicercaAtti.Visible = true;
+                                Statistiche.Visible = true;
+                                //*
+                                break;
+                            case "superAdmin":
+                                // Mostra voci per utenti standard
+                                menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                menuAccertatori.Visible = true;
+                                menuNuovaScheda.Visible = true;
+                                menuRicercaScheda.Visible = true;
+                                menuSegreteria.Visible = true;
+                                menuAmministratore.Visible = false;
+                                menuManTabelle.Visible = true;
+                                menuEsci.Visible = true;
+                                menuHome.Visible = true;
+                                StatistichePg.Visible = true;
+                                PG.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;
@@ -122,8 +170,10 @@ namespace Uotep
         protected void Esci_Click(object sender, EventArgs e)
         {
             Session.Remove("user");
+            Session.Remove("POP");
             Session.Remove("profilo");
             Session.Remove("ruolo");
+            Session.Remove("ListRicerca");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }
