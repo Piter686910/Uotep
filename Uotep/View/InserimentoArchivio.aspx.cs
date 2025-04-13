@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -55,17 +55,24 @@ namespace Uotep
                     switch (ar[0])
                     {
                         case "Pratica":
-                            arc = mn.getPraticaArchivioUote(ar[1], null, null, null);
+                            arc = mn.getPraticaArchivioUote(ar[1], null, null, null,null, null);
                             break;
                         case "Nominativo":
-                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null);
+                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null,null, null);
                             break;
                         case "Indirizzo":
-                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null);
+                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null,null, null);
                             break;
                         case "Catasto":
-                            arc = mn.getPraticaArchivioUote(null, null, null, ar);
+                            arc = mn.getPraticaArchivioUote(null, null, null, ar,null, null);
                             break;
+                        case "Note":
+                            arc = mn.getPraticaArchivioUote(null, null, null, null,ar[1],null);
+                            break;
+                        case "AnnoMese":
+                            arc = mn.getPraticaArchivioUote(null, null, null, null,null, ar);
+                            break;
+
                     }
                     if (arc.Rows.Count > 0)
                     {
@@ -236,7 +243,7 @@ namespace Uotep
 
                     //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
                     Manager mn = new Manager();
-                    DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null);
+                    DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null,null,null);
                     if (dt.Rows.Count > 0)
                     {
                         //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
@@ -256,20 +263,7 @@ namespace Uotep
                         }
 
 
-                        //        string script = $@"
-                        //function showConfirmPopup() {{
-                        //    if (confirm('stai modificando un pratica già esistente, confermi?')) {{
-                        //        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'true';
-                        //        {Page.ClientScript.GetPostBackEventReference(btSalva, "")}; 
-                        //    }} else {{
-                        //        document.getElementById('{hdnConfermaUtente.ClientID}').value = 'false';
-                        //    }}
-                        //}}
-                        //window.onload = function() {{ showConfirmPopup(); }}; ";
-
-                        //            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
-                        //        }
-                        //        Session["POP"] = "no";
+                       
 
                         //        //se annullo imposto il popup a si
                         if (hdnConfermaUtente.Value == "false")
@@ -462,6 +456,7 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+             Session.Remove("ListRicerca");
 
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
@@ -488,15 +483,8 @@ namespace Uotep
                     gvPopup.DataBind();
 
                 }
-                //else
-                //{
-                //    lblQuartiere.Text = "Quartiere non trovato.";
-                //}
+                
             }
-            //else
-            //{
-            //    lblQuartiere.Text = "Inserisci un indirizzo valido.";
-            //}
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);

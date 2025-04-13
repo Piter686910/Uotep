@@ -35,11 +35,15 @@
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+
+                    </p>
+                    <p>
+                        <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2" />
 
                     </p>
-
                 </div>
 
             </asp:Panel>
@@ -105,6 +109,41 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA Note --%>
+                <div id="DivNote" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label4" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicNota" runat="server" CssClass="form-control" placeholder="Nota" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA Anno Mese --%>
+                <div id="DivAnnoMese" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label5" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" placeholder="Anno" />
+                    <asp:Label ID="Label8" runat="server" Text="Mese" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" placeholder="Numero del Mese" />
+                    <asp:RegularExpressionValidator
+                        ID="RegularExpressionValidator2"
+                        runat="server"
+                        ControlToValidate="txtMese"
+                        ValidationExpression="^([1-9]|1[0-2])$"
+                        ErrorMessage="Inserisci un numero da 1 a 12"
+                        ForeColor="Red"
+                        ValidationGroup="bt"
+                        Display="Static">
+                    </asp:RegularExpressionValidator>
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
 
             </div>
 
@@ -119,27 +158,27 @@
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il primo gruppo ->
+<%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                     </div>
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il secondo gruppo ->
+<%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="Ck1089">1089</label>
                     </div>
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il terzo gruppo ->
+<%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
                     </div>
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il quarto gruppo ->
+<%--                        <!- Spacing per il quarto gruppo ->--%>
                         <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
                     </div>
                     <div>
-                        <!- Nessun margin-right per l'ultimo gruppo ->
+<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
                     </div>
@@ -151,25 +190,25 @@
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il primo gruppo ->
+<%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropPriv">Prop. Privata</label>
                     </div>
 
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il secondo gruppo ->
+<%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropComunale">Prop. Comunale</label>
                     </div>
 
                     <div style="margin-right: 50px;">
-                        <!- Spacing per il terzo gruppo ->
+<%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropBeniCult">Prop. Beni Cult.</label>
                     </div>
 
                     <div>
-                        <!- Nessun margin-right per l'ultimo gruppo ->
+<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropAltri">Prop. Altri Enti</label>
                     </div>

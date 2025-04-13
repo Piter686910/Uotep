@@ -312,12 +312,12 @@
                         <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
                     </div>
 
-            <div class="col-12 ">
-                <div class="form-group mb-3">
-                    <label for="txtNote">Note</label>
-                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"/>
-                </div>
-            </div>
+                    <div class="col-12 ">
+                        <div class="form-group mb-3">
+                            <label for="txtNote">Note</label>
+                            <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
+                        </div>
+                    </div>
 
                 </div>
 
@@ -491,7 +491,7 @@
     </div>
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width:100%">
+        <div class="modal-dialog" style="width: 100%">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
@@ -508,9 +508,10 @@
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
                                 <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
+                                <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
+                                <asp:BoundField DataField="arch_note" HeaderText="Nota" />
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
-
                                 <asp:TemplateField>
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_Archivio") + ";" + Eval("arch_numPratica")   %>' CssClass="btn btn-success btn-sm" />

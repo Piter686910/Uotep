@@ -1,4 +1,4 @@
-﻿using Microsoft.Ajax.Utilities;
+using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using System;
 using System.Collections.Generic;
@@ -76,43 +76,7 @@ namespace Uotep.Classi
                 return resp;
             }
         }
-        //SqlConnection conn = new SqlConnection(ConnString);
-        //conn.Open();
-        //SqlTransaction transaction = conn.BeginTransaction();
-        //SqlCommand cmd = new SqlCommand(Del_ana, conn);
-        //testoSql = "anagrafica";
-        //cmd.ExecuteNonQuery();
-
-
-        //SqlCommand cmd1 = new SqlCommand(Del_acc, conn);
-        //testoSql = "accerdtamenti";
-        //cmd1.ExecuteNonQuery();
-
-        //transaction.Commit();
-        //if (transaction != null)
-        //{
-        //    transaction.Rollback();
-        //}
-        //cmd = new OleDbCommand(Del_ana, conn, Tran);
-
-
-
-
-
-
-
-        //cmd.ExecuteNonQuery();
-
-        //cmd = new OleDbCommand(Del_acc, conn, Tran);
-        //testoSql = "Accertamenti";
-        //cmd.ExecuteNonQuery();
-
-        //Tran.Commit();
-
-        //resp = true;
-        //conn.Close();
-
-        //conn.Dispose();
+        //delete
         public Boolean DeleteRappUote(String numero_pratica)
         {
 
@@ -253,537 +217,7 @@ namespace Uotep.Classi
             }
         }
 
-        //public Boolean UpdAna(Anagrafica ana, Accertamenti acc, String id)
-        //{
-        //    bool resp = true;
-        //    string sql_ana = String.Empty;
-        //    string sql_acc = String.Empty;
-        //    String testoSql = String.Empty;
-        //    try
-        //    {
-        //        sql_ana = "update  anagrafica1 set cognome = '" + @ana.cognome.Replace("'", "''") + "'," + " nome = '"
-        //            + @ana.nome.Replace("'", "''") + "'," +
-        //            " indirizzo = '" + @ana.indirizzo.Replace("'", "''") + "', data_nascita= '" + @ana.data_nascita + "', luogo_nascita = '" + @ana.luogo_nascita
-        //             + "', telefono = '" + @ana.telefono + "', cellulare = '" + ana.cellulare + "' where numero_pratica_accertamenti = '" + id + "'";
-
-
-        //        sql_acc = "update Accertamenti set indirizzo_manufatto = '" + @acc.indirizzo_manufatto.Replace("'", "''") + "'," +
-
-        //            " tipologia_pratica = '" + @acc.tipologia_pratica.Replace("'", "''") + "'," +
-        //            " stato_pratica = '" + @acc.tipologia_pratica.Replace("'", "''") + "'," +
-        //            " data_sopralluogo = '" + @acc.data_sopralluogo + "'," +
-        //            " data_carico = '" + @acc.data_carico + "'," +
-        //            " data_scarico = '" + @acc.data_scarico + "'," +
-        //            " operatore1 = '" + @acc.operatore1.Replace("'", "''") + "'," +
-        //            " operatore2 = '" + @acc.operatore2.Replace("'", "''") + "'," +
-        //            " operatore3 = '" + @acc.operatore3.Replace("'", "''") + "'," +
-        //            " operatore4 = '" + @acc.operatore4.Replace("'", "''") + "'," +
-        //            " grado1  = '" + @acc.grado1 + "'," +
-        //            " grado2  = '" + @acc.grado2 + "'," +
-        //            " grado3  = '" + @acc.grado3 + "'," +
-        //            " grado4  = '" + @acc.grado4 + "'," +
-        //            " quartiere = '" + @acc.quartiere.Replace("'", "''") + "'," +
-        //            " tipo_abuso = '" + @acc.tipo_abuso.Replace("'", "''") + "'," +
-        //            " annotazione = '" + @acc.annotazione.Replace("'", "''") +
-        //            "' where num_pratica_accertamenti = '" + @acc.num_pratica_accertamenti + "'";
-
-        //        //OleDbTransaction Tran;
-        //        //OleDbConnection conn = new OleDbConnection(ConnString);
-        //        //conn.Open();
-        //        //Tran = conn.BeginTransaction();
-        //        //OleDbCommand cmd;
-        //        //cmd = new OleDbCommand(sql_ana, conn, Tran);
-        //        //testoSql = "Anagrafica";
-        //        //cmd.ExecuteNonQuery();
-
-        //        //cmd = new OleDbCommand(sql_acc, conn, Tran);
-        //        //testoSql = "Accertamenti";
-        //        //cmd.ExecuteNonQuery();
-
-        //        //Tran.Commit();
-        //        //resp = true;
-        //        //conn.Close();
-        //        using (SqlConnection conn1 = new SqlConnection(ConnString))
-        //        {
-        //            conn1.Open();
-        //            SqlCommand command = conn1.CreateCommand();
-        //            SqlTransaction tran;
-        //            tran = conn1.BeginTransaction("trans");
-        //            command.Transaction = tran;
-        //            try
-        //            {
-
-        //                command.CommandText = sql_ana;
-        //                testoSql = "Anagrafica";
-        //                int res = command.ExecuteNonQuery();
-
-        //                if (res > 0)
-        //                {
-        //                    command.CommandText = sql_acc;
-        //                    testoSql = "Accertamenti";
-        //                    command.ExecuteNonQuery();
-
-        //                    tran.Commit();
-
-        //                    resp = true;
-        //                }
-
-        //            }
-
-        //            catch (Exception)
-        //            {
-
-        //                tran.Rollback();
-        //                resp = false;
-
-
-        //            }
-        //            conn1.Close();
-        //            return resp;
-        //        }
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        resp = false;
-
-        //        MessageBox.Show("Errore durante salvataggio", "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-        //        if (!File.Exists(LogFile))
-        //        {
-        //            using (StreamWriter sw = File.CreateText(LogFile)) { }
-        //        }
-
-        //        using (StreamWriter sw = File.AppendText(LogFile))
-        //        {
-
-        //            switch (testoSql)
-        //            {
-        //                case "Anagrafica":
-        //                    sw.WriteLine(ex.Message + " " + sql_ana + " " + testoSql);
-        //                    break;
-        //                case "Accertamenti":
-        //                    sw.WriteLine(ex.Message + " " + sql_acc + " " + testoSql);
-        //                    break;
-        //            }
-        //            sw.Close();
-        //        }
-
-        //    }
-        //    return resp;
-
-        //}
-        //public Boolean InsNuovoUtente(Utenti ut)
-        //{
-        //    bool resp = true;
-        //    string sql_ins = String.Empty;
-        //    String testoSql = String.Empty;
-        //    //  OleDbConnection conn = new OleDbConnection(ConnString);
-        //    //conn.Open();
-        //    using (SqlConnection conn1 = new SqlConnection(ConnString))
-        //    {
-        //        conn1.Open();
-        //        SqlCommand command = conn1.CreateCommand();
-        //        //  SqlTransaction tran;
-        //        //  tran = conn1.BeginTransaction("trans");
-        //        // command.Transaction = tran;
-        //        try
-        //        {
-        //            testoSql = "Utenti";
-        //            string sql = "select * from Operatore where matricola = '" + ut.Matricola + "'";
-        //            command.CommandText = sql;
-
-        //            int res = command.ExecuteNonQuery();
-        //            if (res == -1)
-        //            {
-        //                sql_ins = "insert into Operatore (Matricola,Passw,Profilo,Nota)" +
-        //                             " Values('" + ut.Matricola + "','" +
-        //                               @ut.Password.Replace("'", "''") + "','" +
-        //                               @ut.Profilo.Replace("'", "''") + "','" +
-        //                               @ut.Nota.Replace("'", "''") + "')";
-        //            }
-
-        //            command.CommandText = sql_ins;
-        //            command.ExecuteNonQuery();
-        //            //  tran.Commit();
-
-        //            resp = true;
-
-
-        //        }
-
-        //        catch (Exception)
-        //        {
-
-        //            //tran.Rollback();
-        //            resp = false;
-
-
-        //        }
-        //        conn1.Close();
-        //        return resp;
-        //    }
-
-
-
-        //}
-        //public Boolean InsRappUote(Rapp rapp)
-        //{
-        //    bool resp = true;
-        //    string sql_ins = String.Empty;
-
-        //    using (SqlConnection conn1 = new SqlConnection(ConnString))
-        //    {
-        //        conn1.Open();
-        //        SqlCommand command = conn1.CreateCommand();
-
-        //        try
-        //        {
-        //            sql_ins = "insert into RappUote (rapp_numero_pratica, rapp_ora,rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
-        //            "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
-        //            "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
-        //            "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
-        //            "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-        //            "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento)" +
-        //      " Values('" + rapp.pratica + "','" +
-        //        @rapp.ora + "','" +
-        //        @rapp.data + "','" +
-        //        @rapp.nominativo.Replace("'", "''") + "','" +
-        //        @rapp.indirizzo.Replace("'", "''") + "','" +
-        //        @rapp.pattuglia.Replace("'", "''") + "','" +
-        //        @rapp.delegaAG + "','" +
-        //        @rapp.resa + "','" +
-        //        @rapp.segnalazione + "','" +
-        //        @rapp.esposti + "','" +
-        //        @rapp.num_esposti + "','" +
-        //        @rapp.notifica + "','" +
-        //        @rapp.iniziativa + "','" +
-        //        @rapp.cdr + "','" +
-        //        @rapp.coordinatore + "','" +
-        //        @rapp.relazione + "','" +
-        //        @rapp.cnr + "','" +
-        //        @rapp.annotazionePG + "','" +
-        //        @rapp.verbaleSeq + "','" +
-        //        @rapp.esitoDelega + "','" +
-        //        @rapp.contestazioneAmm + "','" +
-        //        @rapp.convalida + "','" +
-        //        @rapp.dissequestroDef + "','" +
-        //        @rapp.dissequestroTemp + "','" +
-        //        @rapp.rimozione + "','" +
-        //        @rapp.riapposizione + "','" +
-        //        @rapp.violazioneSigilli + "','" +
-        //        @rapp.controlliScia + "','" +
-        //        @rapp.accertAvvenutoRip + "','" +
-        //        @rapp.totale + "','" +
-        //        @rapp.parziale + "','" +
-        //        @rapp.vilazioneBeniCult + "','" +
-        //        @rapp.contrCantSuoloPubb + "','" +
-        //        @rapp.contrEdiliDPI + "','" +
-        //        @rapp.contr_cantiereSeq + "','" +
-        //        @rapp.contrDaEsposti + "','" +
-        //        @rapp.contrDaSegn + "','" +
-        //        @rapp.attività_interna + "','" +
-        //        @rapp.nota.Replace("'", "''") + "','" +
-        //        rapp.data_consegna_intervento + "')";
-        //            command.CommandText = sql_ins;
-        //            command.ExecuteNonQuery();
-
-        //            resp = true;
-
-
-        //        }
-
-        //        catch (Exception)
-        //        {
-        //            resp = false;
-
-
-        //        }
-        //        conn1.Close();
-        //        return resp;
-        //    }
-
-
-
-
-        //}
-        //public Boolean SaveAna(Anagrafica ana, Accertamenti acc)
-        //{
-        //    bool resp = true;
-        //    string sql_ana = String.Empty;
-        //    String sql_acc = String.Empty;
-        //    String testoSql = String.Empty;
-
-        //    try
-        //    {
-        //        sql_ana = "insert into anagrafica1 (cognome, nome, indirizzo, data_nascita, luogo_nascita, numero_pratica_accertamenti, telefono, cellulare)" +
-        //           " Values('" + @ana.cognome.Replace("'", "''") + "','" + @ana.nome.Replace("'", "''") + "','" + @ana.indirizzo.Replace("'", "''") + "','" +
-        //           @ana.data_nascita.ToShortDateString() + "','" + @ana.luogo_nascita.Replace("'", "''") + "','" +
-        //           @ana.numero_pratica_accertamenti + "','" + @ana.telefono + "','" + ana.cellulare + "')";
-
-        //        sql_acc = "insert into Accertamenti (num_pratica_accertamenti, indirizzo_manufatto, tipologia_pratica, stato_pratica, data_sopralluogo, data_carico, data_scarico, cartella_doc, operatore1, operatore2, operatore3, operatore4, quartiere, grado1, grado2, grado3, grado4, tipo_abuso, annotazione)" +
-        //           " Values('" + acc.num_pratica_accertamenti + "','" +
-        //             @acc.indirizzo_manufatto.Replace("'", "''") + "','" +
-        //             @acc.tipologia_pratica.Replace("'", "''") + "','" +
-        //             @acc.stato_pratica.Replace("'", "''") + "','" +
-        //             @acc.data_sopralluogo + "','" +
-        //             @acc.data_carico + "','" +
-        //             @acc.data_scarico + "','" +
-        //             @acc.cartella_doc.Replace("'", "''") + "','" +
-        //             @acc.operatore1.Replace("'", "''") + "','" +
-        //             @acc.operatore2.Replace("'", "''") + "','" +
-        //             @acc.operatore3.Replace("'", "''") + "','" +
-        //             @acc.operatore4.Replace("'", "''") + "','" +
-        //             @acc.quartiere.Replace("'", "''") + "','" +
-        //             @acc.grado1 + "','" +
-        //             @acc.grado2 + "','" +
-        //             @acc.grado3 + "','" +
-        //             @acc.grado4 + "','" +
-        //             @acc.tipo_abuso.Replace("'", "''") + "','" +
-        //             @acc.annotazione.Replace("'", "''") + "')";
-        //        //*
-        //        using (SqlConnection conn1 = new SqlConnection(ConnString))
-        //        {
-        //            conn1.Open();
-        //            SqlCommand command = conn1.CreateCommand();
-        //            SqlTransaction tran;
-        //            tran = conn1.BeginTransaction("trans");
-        //            command.Transaction = tran;
-        //            try
-        //            {
-
-        //                command.CommandText = sql_ana;
-        //                testoSql = "Anagrafica";
-        //                int res = command.ExecuteNonQuery();
-
-        //                if (res > 0)
-        //                {
-        //                    command.CommandText = sql_acc;
-        //                    testoSql = "Accertamenti";
-        //                    command.ExecuteNonQuery();
-
-        //                    tran.Commit();
-
-        //                    resp = true;
-        //                }
-
-        //            }
-
-        //            catch (Exception)
-        //            {
-
-        //                tran.Rollback();
-        //                resp = false;
-
-
-        //            }
-        //            conn1.Close();
-        //            return resp;
-        //        }
-
-
-
-        //        ////OleDbTransaction Tran;
-        //        ////OleDbConnection conn = new OleDbConnection(ConnString);
-        //        //conn.Open();
-        //        //Tran = conn.BeginTransaction();
-        //        //OleDbCommand cmd;
-
-        //        //cmd = new OleDbCommand(sql_ana, conn, Tran);
-        //        //testoSql = "Anagrafica";
-        //        //cmd.ExecuteNonQuery();
-        //        //cmd = new OleDbCommand(sql_acc, conn, Tran);
-        //        //testoSql = "Accertamenti";
-        //        //cmd.ExecuteNonQuery();
-
-        //        //Tran.Commit();
-        //        //resp = true;
-        //        //conn.Close();
-        //        //cmd = new OleDbCommand(sql_ana, conn);
-        //        //cmd.ExecuteNonQuery();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        resp = false;
-
-        //        MessageBox.Show("Errore durante salvataggio " + testoSql, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-        //        if (!File.Exists(LogFile))
-        //        {
-        //            using (StreamWriter sw = File.CreateText(LogFile)) { }
-        //        }
-
-        //        using (StreamWriter sw = File.AppendText(LogFile))
-        //        {
-        //            switch (testoSql)
-        //            {
-        //                case "Anagrafica":
-        //                    sw.WriteLine(ex.Message + " " + sql_ana + " " + testoSql);
-        //                    break;
-        //                case "Accertamenti":
-        //                    sw.WriteLine(ex.Message + " " + sql_acc + " " + testoSql);
-        //                    break;
-        //            }
-        //            sw.Close();
-        //        }
-
-        //    }
-        //    return resp;
-
-        //}
-        ///// <summary>
-        ///// conta i records della tebella Anagrafica
-        ///// </summary>
-        ///// <returns></returns>
-        //public Int32 ContaRec()
-        //{
-        //    int cnt = 0;
-        //    String select = "SELECT count(cognome) as CNT FROM anagrafica1";
-
-        //    // OleDbConnection conn = new OleDbConnection(ConnString);
-
-        //    // conn.Open();
-
-        //    // cmd = new OleDbCommand(select, conn);
-        //    //  OleDbDataReader Reader = cmd.ExecuteReader();
-        //    //  if (Reader.HasRows)
-        //    //   {
-        //    //       Reader.Read();
-        //    //       cnt = Reader.GetInt32(0);
-        //    //   }
-
-
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-
-        //    SqlDataAdapter da;
-        //    DataSet ds;
-
-        //    da = new SqlDataAdapter(select, conn);
-        //    ds = new DataSet();
-        //    da.Fill(ds);
-        //    DataTable tb = ds.Tables[0];
-        //    foreach (DataRow row in tb.Rows)
-        //    {
-        //        cnt = cnt + 1;
-        //    }
-        //    return cnt;
-
-        //}
-        ///// <summary>
-        ///// autocomplete giudice
-        ///// </summary>
-        ///// <returns></returns>
-        //public AutoCompleteStringCollection GetAutoCompleteGiudice(Manager mn)
-        //{
-        //    AutoCompleteStringCollection txtBox = new AutoCompleteStringCollection();
-        //    //OleDbCommand cmd = null;
-        //    String select = "SELECT giudice FROM giudice";
-
-        //    //OleDbConnection conn = new OleDbConnection(ConnString);
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-        //    AutoCompleteStringCollection MyComplete = new AutoCompleteStringCollection();
-        //    //cmd = new OleDbCommand(select, conn);
-        //    SqlDataAdapter da;
-        //    DataSet ds;
-
-        //    da = new SqlDataAdapter(select, conn);
-        //    ds = new DataSet();
-        //    da.Fill(ds);
-
-        //    //OleDbDataReader reader = cmd.ExecuteReader();
-        //    //while (reader.Read())
-        //    //{
-
-        //    //    MyComplete.Add(reader.GetString(0));
-        //    //}
-        //    DataTable tb = ds.Tables[0];
-        //    foreach (DataRow row in tb.Rows)
-        //    {
-        //        MyComplete.Add(Convert.ToString(row[0]));
-        //    }
-        //    txtBox = MyComplete;
-        //    //reader.Close();
-        //    conn.Close();
-
-        //    return txtBox;
-
-        //}
-        ///// <summary>
-        ///// genera autocomplete per un textbox
-        ///// </summary>
-        ///// <returns></returns>
-        //public AutoCompleteStringCollection GetAutoComplete()
-        //{
-        //    AutoCompleteStringCollection txtBox = new AutoCompleteStringCollection();
-        //    //OleDbCommand cmd = null;
-        //    String select = "SELECT cognome FROM anagrafica1";
-
-        //    //OleDbConnection conn = new OleDbConnection(ConnString);
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-        //    AutoCompleteStringCollection MyComplete = new AutoCompleteStringCollection();
-        //    //cmd = new OleDbCommand(select, conn);
-        //    SqlDataAdapter da;
-        //    DataSet ds;
-
-        //    da = new SqlDataAdapter(select, conn);
-        //    ds = new DataSet();
-        //    da.Fill(ds);
-
-        //    //OleDbDataReader reader = cmd.ExecuteReader();
-        //    //while (reader.Read())
-        //    //{
-
-        //    //    MyComplete.Add(reader.GetString(0));
-        //    //}
-        //    DataTable tb = ds.Tables[0];
-        //    foreach (DataRow row in tb.Rows)
-        //    {
-        //        MyComplete.Add(Convert.ToString(row[0]));
-        //    }
-        //    txtBox = MyComplete;
-        //    //reader.Close();
-        //    conn.Close();
-
-        //    return txtBox;
-
-        //}
-        //public AutoCompleteStringCollection GetAutoCompleteOperatore()
-        //{
-        //    AutoCompleteStringCollection txtBox = new AutoCompleteStringCollection();
-        //    //OleDbCommand cmd = null;
-        //    String sql = "SELECT operatore1, operatore2, operatore3, operatore4 FROM accertamenti";
-
-        //    //OleDbConnection conn = new OleDbConnection(ConnString);
-        //    //SqlConnection conn = new SqlConnection(ConnString);
-        //    //conn.Open();
-
-        //    AutoCompleteStringCollection MyComplete = new AutoCompleteStringCollection();
-        //    //SqlDataAdapter da;
-        //    //DataSet ds;
-        //    //DataTable dt = new DataTable();
-        //    //da = new SqlDataAdapter(select, conn);
-        //    //ds = new DataSet();
-        //    //da.Fill(ds);
-
-        //    ////cmd = new OleDbCommand(select, conn);
-        //    ////OleDbDataReader reader = cmd.ExecuteReader();
-        //    //dt = ds.Tables[0];
-
-        //    //DataTable tb = ds.Tables[0];
-        //    DataTable tb = FillTable(sql);
-        //    foreach (DataRow row in tb.Rows)
-        //    {
-        //        MyComplete.Add(Convert.ToString(row[0]));
-        //    }
-        //    txtBox = MyComplete;
-        //    //reader.Close();
-        //    //conn.Close();
-
-        //    return txtBox;
-
-        //}
+        //get
         public DataTable getPass(String user)
         {
 
@@ -898,7 +332,6 @@ namespace Uotep.Classi
         public DataTable MaxNPr(string anno)
         {
             DataTable tb = new DataTable();
-
 
             //string sql = " SELECT anno, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO ='" + anno + "'";
             string sql = "SELECT ANNO, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO = '" + anno + "' GROUP BY ANNO";
@@ -1366,7 +799,7 @@ namespace Uotep.Classi
             }
         }
         /// <summary>
-        /// estrazione parziale 
+        /// estrazione parziale, esegue merge del datatable per ogni ck selezionato
         /// 
         /// </summary>
         /// <param name="ckevasa"></param>
@@ -1379,39 +812,94 @@ namespace Uotep.Classi
         /// <param name="ckpbc"></param>
         /// <param name="ckae"></param>
         /// <returns></returns>
-        public DataTable getArchivioUoteParziale( Boolean ckevasa, Boolean ck1089, Boolean cksp, Boolean ckvincoli, Boolean ckdemolita, Boolean ckpp, Boolean ckpc, Boolean ckpbc, Boolean ckae)
+           
+        public DataTable getArchivioUoteParziale(String[] ar)
         {
-            string sql = string.Empty;
+            string sql = string.Empty; ;
             DataTable tb = new DataTable();
-            if (ckevasa)
-                sql = "SELECT * FROM ArchivioUote where arch_evasa = 'True'";
-            if (ck1089)
-                sql = "SELECT * FROM ArchivioUote where arch_1089 = 'True'";
-            if (cksp)
-                sql = "SELECT * FROM ArchivioUote where arch_suoloPub = 'True'";
-            if (ckvincoli)
-                sql = "SELECT * FROM ArchivioUote where arch_vincoli = 'True'";
-            if (ckdemolita)
-                sql = "SELECT * FROM ArchivioUote where arch_demolita = 'True'";
-            if (ckpp)
-                sql = "SELECT * FROM ArchivioUote where arch_propPriv = 'True'";
-
-            if (ckpc)
-                sql = "SELECT * FROM ArchivioUote where arch_propComune = 'True'";
-
-            if (ckpbc)
-                sql = "SELECT * FROM ArchivioUote where arch_propBeniCult ='True'";
-
-            if (ckae)
-                sql = "SELECT * FROM ArchivioUote where arch_propAltriEnti ='True'";
-
-
-
+           //eseguo un merge al  dtatatable per ogni ck selezionato
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
+                SqlDataAdapter da;
+                DataSet ds;
+                if (!string.IsNullOrEmpty(ar[0]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_evasa = 'True'";
 
-                return tb = FillTable(sql, conn);
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb = ds.Tables[0];
+                }
+             
+                if (!string.IsNullOrEmpty(ar[1]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_1089 = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[2]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_suoloPub = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[3]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_vincoli = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[4]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_demolita = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[5]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_propPriv = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[6]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_propComune = 'True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[7]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_propBeniCult ='True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+                if (!string.IsNullOrEmpty(ar[8]))
+                {
+                    sql = "SELECT * FROM ArchivioUote where arch_propAltriEnti ='True'";
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
+                    tb.Merge(ds.Tables[0]);
+                }
+
             }
+
+            return tb;
         }
         /// <summary>
         /// estrazione totale del DB
@@ -1421,9 +909,9 @@ namespace Uotep.Classi
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-           
-             sql = "SELECT * FROM ArchivioUote";
-           
+
+            sql = "SELECT * FROM ArchivioUote";
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1431,20 +919,28 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable getPraticaArchivioUote(string pratica, string nominativo, string indirizzo, string[] catasto)
+        public DataTable getPraticaArchivioUote(string pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
             if (!String.IsNullOrEmpty(pratica))
                 sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica.Replace("'", "''") + "'";
             if (!String.IsNullOrEmpty(nominativo))
-                sql = "SELECT * FROM ArchivioUote where arch_nominativo like '%" + nominativo.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''") + "%'";
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
 
             if (catasto != null)
                 sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
                    "' and arch_sub= '" + catasto[4] + "'";
+            if (!String.IsNullOrEmpty(nota))
+                sql = "SELECT * FROM ArchivioUote where arch_note like '%" + nota.Replace("'", "''") + "%'";
+            if (annomese != null)
+                if (!String.IsNullOrEmpty(annomese[2]))
+                    sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1] + " and MONTH(arch_dataIns) =" + annomese[2];
+                else
+                    sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1];
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1473,279 +969,7 @@ namespace Uotep.Classi
             }
         }
 
-        //public DataTable GetListAccertamenti()
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
 
-        //    sql = "SELECT * FROM accertamenti order by operatore1";
-
-        //    return tb = FillTable(sql);
-
-        //}
-        //public DataTable GetListAccertamentiByOperatore(string operatore)
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-        //    if (String.IsNullOrEmpty(operatore))
-        //    {
-        //        sql = "SELECT * FROM accertamenti order by operatore1";
-        //    }
-        //    else
-        //    {
-        //        sql = "SELECT * FROM accertamenti where operatore1 like '%" + operatore + "%' or operatore2 like '%"
-        //           + operatore + "%' or operatore3 like '%" + operatore + "%' or operatore4 like '%" + operatore + "%'";
-        //    }
-        //    return tb = FillTable(sql);
-        //    //SqlConnection conn = new SqlConnection(ConnString);
-        //    //conn.Open();
-        //    //SqlDataAdapter da;
-        //    //DataSet ds;
-
-        //    //da = new SqlDataAdapter(sql, conn);
-        //    //ds = new DataSet();
-        //    //da.Fill(ds);
-        //    //tb = ds.Tables[0];
-        //    //conn.Close();
-
-        //    //return tb;
-        //}
-        //public DataTable GetListDipendenti()
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-
-        //    sql = "SELECT * FROM Dipendenti order by dip_cognome";
-
-        //    return tb = FillTable(sql);
-
-        //}
-        //public string GetDipendente(string mat)
-        //{
-        //    string sql = string.Empty;
-        //    string dip = string.Empty;
-        //    DataTable tb = new DataTable();
-
-        //    sql = "SELECT dip_cognome FROM Dipendenti where dip_matricola = " + mat;
-        //    tb = FillTable(sql);
-
-        //    return dip = tb.Rows[0].ItemArray[0].ToString();
-
-        //}
-        //public DataTable GetData(string numeroPratica)
-        //{
-        //    DataTable tb = new DataTable();
-
-        //    string sql = "SELECT * FROM accertamenti where num_pratica_accertamenti =" + numeroPratica;
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-        //    return tb = FillTable(sql);
-        //    //SqlDataAdapter da;
-        //    //DataSet ds;
-
-        //    //da = new SqlDataAdapter(sql, conn);
-        //    //ds = new DataSet();
-        //    //da.Fill(ds);
-        //    //tb = ds.Tables[0];
-        //    //conn.Close();
-        //    //return tb;
-        //}
-        //public DataTable GetListAna(string cognome, string numeroPratica)
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-        //    if (!String.IsNullOrEmpty(cognome))
-        //    {
-        //        //sql = "SELECT * FROM anagrafica1 where cognome = '" + cognome + "'" + " order by cognome";
-        //        sql = "SELECT * FROM anagrafica1 where cognome like '%" + cognome + "%'";
-        //    }
-        //    else
-        //    {
-        //        if (!String.IsNullOrEmpty(numeroPratica))
-        //            //tb = FillTable("SELECT * FROM anagrafica1 where numero_pratica_accertamenti like '%" + numeroPratica + "%'");
-        //            //tb = FillTable("SELECT * FROM anagrafica1 order by cognome");
-        //            sql = "SELECT * FROM anagrafica1 where numero_pratica_accertamenti = '" + numeroPratica + "'";
-        //        else
-        //            sql = "SELECT * FROM anagrafica1 order by cognome";
-        //    }
-        //    return tb = FillTable(sql);
-
-        //}
-        //public DataTable GetListAccertamentiByPratica(string pratica)
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-        //    if (!String.IsNullOrEmpty(pratica))
-        //    {
-        //        sql = "SELECT * FROM accertamenti where num_pratica_accertamenti = '" + pratica + "'";
-        //        //tb = FillTable("SELECT * FROM accertamenti where num_pratica_accertamenti = '" + pratica + "'");
-        //    }
-        //    return tb = FillTable(sql);
-        //    //SqlConnection conn = new SqlConnection(ConnString);
-        //    //conn.Open();
-        //    //SqlDataAdapter da;
-        //    //DataSet ds;
-
-        //    //da = new SqlDataAdapter(sql, conn);
-        //    //ds = new DataSet();
-        //    //da.Fill(ds);
-        //    //tb = ds.Tables[0];
-        //    //conn.Close();
-        //    //return tb;
-        //}
-        ///// <summary>
-        ///// statistiche
-        ///// </summary>
-        ///// <returns></returns>
-        //public DataTable GetStatiscticheUote(Boolean suoloPub, Boolean lavEdili, Boolean contrCant, Boolean esposti)
-        //{
-        //    string sql = string.Empty;
-        //    String a1 = String.Empty;
-
-        //    a1 = suoloPub.ToString() + lavEdili.ToString() + contrCant.ToString() + esposti.ToString();
-        //    switch (a1)
-        //    {
-        //        case "TrueTrueTrueTrue": //1111
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 1" +
-        //            " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "TrueFalseFalseFalse": //1000
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "TrueTrueFalseFalse": //1100
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "TrueTrueTrueFalse": //1110
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseFalseTrueTrue": //0011
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "FalseTrueTrueTrue": //0111
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "FalseTrueFalseFalse": //0100
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseFalseTrueFalse": //0010
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseFalseFalseTrue": //0001
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "TrueFalseFalseTrue": //1001
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseTrueTrueFalse": //0110
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "TrueFalseTrueFalse": //1010
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseFalseFalseFalse": //0000
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 0";
-        //            break;
-        //        case "FalseTrueFalseTrue": //0101
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 0 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "TrueTrueFalseTrue": //1101
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 0" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        case "TrueFalseTrueTrue": //1011
-        //            sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 0 and rapp_contr_cantieri_seq = 1" +
-        //                " and rapp_contr_da_esposti = 1";
-        //            break;
-        //        default:
-        //            MessageBox.Show(a1, "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-
-        //            break;
-        //    }
-        //    DataTable tb = new DataTable();
-        //    //if (suoloPub == true && lavEdili == true && contrCant == true && esposti == true )
-        //    //{
-        //    //    sql = "SELECT * FROM RappUote where rapp_contr_cantiere_suolo_pubb = 1 and rapp_contr_lavori_edili = 1 and rapp_contr_cantieri_seq = 1" + 
-        //    //        " and rapp_contr_da_esposti = 1";
-
-        //    //}
-
-
-
-        //    return tb = FillTable(sql);
-        //}
-        ///// <summary>
-        ///// ottiene lista schede intervento
-        ///// </summary>
-        ///// <returns></returns>
-        //public DataTable GetListRappUote()
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-
-        //    sql = "SELECT * FROM RappUote " + " order by rapp_numero_pratica";
-        //    return tb = FillTable(sql);
-
-        //}
-        //public DataTable GetRappUoteByPratica(string pratica)
-        //{
-        //    string sql = string.Empty;
-        //    DataTable tb = new DataTable();
-        //    if (!String.IsNullOrEmpty(pratica))
-        //    {
-        //        sql = "SELECT * FROM RappUote where rapp_numero_pratica = '" + pratica + "'";
-
-        //        //tb = FillTable("SELECT * FROM accertamenti where num_pratica_accertamenti = '" + pratica + "'");
-        //    }
-        //    return tb = FillTable(sql);
-
-        //}
-        //public DataTable GetGroupByNum(int num)
-        //{
-        //    DataTable tb = new DataTable();
-
-        //    tb = FillTable("SELECT * FROM accertamenti order by nominativo where numero = " + num);
-
-        //    //else
-        //    //{
-        //    //    tb = FillTable("SELECT * FROM accertamenti where matricola like '%" + matricola.ToUpper() + "%'");
-        //    //}
-
-        //    return tb;
-        //}
-        //public DataTable getAnagraficaById(String id)
-        //{
-        //    DataTable tb = new DataTable();
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-        //    string sql = "SELECT * FROM anagrafica1 where numero_pratica_accertamenti= '" + id + "'";
-        //    return tb = FillTable(sql);
-
-        //}
-        //public DataTable getAccertamentoById(String id)
-        //{
-        //    DataTable tb = new DataTable();
-
-        //    SqlConnection conn = new SqlConnection(ConnString);
-        //    conn.Open();
-        //    string sql = "SELECT * FROM accertamenti as acc inner join anagrafica1 as ana" +
-        //        " on acc.num_pratica_accertamenti = ana.numero_pratica_accertamenti" +
-        //        " where acc.num_pratica_accertamenti= '" + id + "' and acc.num_pratica_accertamenti = ana.numero_pratica_accertamenti";
-        //    return tb = FillTable(sql);
-
-        //}
         private DataTable FillTable(String sql, SqlConnection conn)
         {
             DataTable table = new DataTable();
@@ -2297,7 +1521,7 @@ namespace Uotep.Classi
                 try
                 {
 
-                    
+
                     if (!exist)
 
 
@@ -2330,30 +1554,30 @@ namespace Uotep.Classi
 
                     resp = true;
                 }
-            
+
 
                 catch (Exception ex)
                 {
 
 
-                if (!File.Exists(LogFile))
-                {
-                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in inserimento statistiche ");
+                        sw.Close();
+                    }
+
+                    resp = false;
+
+
                 }
-
-                using (StreamWriter sw = File.AppendText(LogFile))
-                {
-                    sw.WriteLine(ex.Message + @" - Errore in inserimento statistiche ");
-                    sw.Close();
-                }
-
-                resp = false;
-
-
+                conn.Close();
+                return resp;
             }
-            conn.Close();
-            return resp;
-        }
 
         }
         public Boolean InsRappUote(RappUote rapp, Statistiche stat, string txt)
