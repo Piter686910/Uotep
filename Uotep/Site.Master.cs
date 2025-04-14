@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using System.IO;
 using static Uotep.Classi.Enumerate;
 
 namespace Uotep
@@ -76,7 +77,7 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-
+                                PG.Visible = true;
                                 if (Session["profilo"].ToString() == "1")
                                 {
                                     menuNuovaScheda.Visible = true;
@@ -168,11 +169,25 @@ namespace Uotep
 
         protected void Esci_Click(object sender, EventArgs e)
         {
+            string temp = Session["filetemp"].ToString();
+            try
+            {
+                File.Delete(temp);
+            }
+            catch (Exception )
+            {
+                Session["MessaggioErrore"] = "Il file è aperto, chiudere il file";
+                Session["PaginaChiamante"] = "View/RicercaArchivio.aspx";
+                Response.Redirect("~/Contact.aspx");
+
+            }
+
             Session.Remove("user");
             Session.Remove("POP");
             Session.Remove("profilo");
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");
+            Session.Remove("filetemp");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

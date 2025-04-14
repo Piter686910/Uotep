@@ -1,4 +1,6 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,6 +13,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Uotep.Classi;
+using Page = System.Web.UI.Page;
 
 
 namespace Uotep
@@ -236,14 +239,15 @@ namespace Uotep
             ar[8] = CkPropAltri.Checked ? "altri" : string.Empty; ;
 
             DataTable dt = mn.getArchivioUoteParziale(ar);
-            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
 
             // 2. Esporta la DataTable in Excel
             //string filePath = Path.Combine(Filename, "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = Path.GetTempPath() + @"\" + filePath;
-            
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+
             Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -251,22 +255,51 @@ namespace Uotep
                 //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
                 ws.Column(1).Delete(); // Elimina la prima colonna
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+                                 //
+                Routine al= new Routine();
+                al.ConvertiBooleaniInItaliano(ws);
+                //IXLWorksheet worksheet = ws;
+                ////sostituisce booleani con stringa si o no
+                //int lastRow = worksheet.LastRowUsed().RowNumber();
+                //int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
+                //for (int row = 2; row <= lastRow; row++)
+                //{
+                //    // Itera su tutte le colonne nella riga corrente
+                //    for (int column = 1; column <= lastColumn; column++)
+                //    {
+                //        IXLCell cell = worksheet.Cell(row, column); // Ottieni la cella corrente
+                //        XLDataType tipoDatoD1 = cell.DataType;
+                //        string valore = string.Empty;
+                //        if (tipoDatoD1 is XLDataType.Boolean)
+                //              valore = System.Convert.ToString(((bool)cell.Value));
+                        
+                //            if (valore == "True")
+                //            {
 
+                //                cell.Value = "SI"; // Sostituisci "true" (stringa) con "si"
+                //            }
+                //            else if (valore == "False")
+                //            {
+                //                cell.Value = "NO"; // Sostituisci "false" (stringa) con "no"
+                //            }
+                //    }
+                //}
+                //
                 wb.SaveAs(tempFilePath);  // Salva il file
                 File.Move(tempFilePath, temp);
                 try
                 {
                     Process.Start(temp);
                     File.Delete(tempFilePath);
-                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
                     File.Delete(tempFilePath);
-                   
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Errore nell'apertura del file temporaneo: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-              
+
             }
         }
 
@@ -274,12 +307,12 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = mn.getArchivioUoteTotale();
-            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
-            // 2. Esporta la DataTable in Excel
-           // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
-           string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = Path.GetTempPath() + @"\" + filePath;
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+                                                                                  // 2. Esporta la DataTable in Excel
+                                                                                  // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
             Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -287,14 +320,15 @@ namespace Uotep
                 //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
                 ws.Column(1).Delete(); // Elimina la prima colonna
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
-
+                Routine al = new Routine();
+                al.ConvertiBooleaniInItaliano(ws);
                 wb.SaveAs(tempFilePath);  // Salva il file
                 File.Move(tempFilePath, temp);
                 try
                 {
                     Process.Start(temp);
                     File.Delete(tempFilePath);
-                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
                     File.Delete(tempFilePath);
 
                 }
