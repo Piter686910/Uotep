@@ -55,8 +55,12 @@ namespace Uotep
                     switch (ar[0])
                     {
                         case "Pratica":
-                            arc = mn.getPraticaArchivioUote(ar[1], null, null, null,null, null);
+                            arc = mn.getPraticaArchivioUote(ar, null, null, null,null, null);
                             break;
+                        case "StoricoPratica":
+                            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                            break;
+
                         case "Nominativo":
                             arc = mn.getPraticaArchivioUote(null, ar[1], null, null,null, null);
                             break;
@@ -243,7 +247,13 @@ namespace Uotep
 
                     //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
                     Manager mn = new Manager();
-                    DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null,null,null);
+                    String[] ar = null;
+                    if (Session["ListRicerca"] != null)
+                    {
+                        List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                         ar = ListRicerca.ToArray();
+                    }
+                    DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null,null,null);
                     if (dt.Rows.Count > 0)
                     {
                         //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
