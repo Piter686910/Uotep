@@ -919,12 +919,23 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable getPraticaArchivioUote(string pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
+        public DataTable getPraticaArchivioUote(string[] pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-            if (!String.IsNullOrEmpty(pratica))
-                sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica.Replace("'", "''") + "'";
+
+            switch (pratica[0])
+            {
+                case "Pratica":
+                    if (!String.IsNullOrEmpty(pratica[1]))
+                        sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                    break;
+                case "StoricoPratica":
+                    if (!String.IsNullOrEmpty(pratica[1]))
+                        sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                    break;
+            }
+
             if (!String.IsNullOrEmpty(nominativo))
                 sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''") + "%'";
             if (!String.IsNullOrEmpty(indirizzo))
