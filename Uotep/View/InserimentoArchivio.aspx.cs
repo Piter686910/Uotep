@@ -41,6 +41,7 @@ namespace Uotep
 
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
+            txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
             if (!IsPostBack)
             {
 
@@ -80,7 +81,7 @@ namespace Uotep
                 else
                 {
                     txtPratica.Enabled = true;
-                    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+                   
                 }
                 CaricaDLL();
                 Session["POP"] = "si";
