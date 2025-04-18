@@ -369,6 +369,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classi\ArchivioUote.cs" />
+    <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Enumerate.cs" />
     <Compile Include="Classi\Manager.cs" />
     <Compile Include="Classi\CaricaFile.cs" />
