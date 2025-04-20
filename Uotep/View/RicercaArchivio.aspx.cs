@@ -1,15 +1,21 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using System.Globalization;
 using System.IO;
@@ -17,6 +23,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+using System.Windows.Forms;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 using System.Windows.Forms;
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -28,7 +38,11 @@ namespace Uotep
     public partial class RicercaArchivio : Page
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
        
+=======
+        public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -37,7 +51,11 @@ namespace Uotep
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
            
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -50,7 +68,11 @@ namespace Uotep
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
 <<<<<<< HEAD
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -69,7 +91,10 @@ namespace Uotep
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = String.Empty;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             Ck1089.Checked = false;
             CkDemolita.Checked = false;
             CkEvasa.Checked = false;
@@ -82,6 +107,9 @@ namespace Uotep
             txtRicNota.Text = string.Empty;
             txtAnno.Text = string.Empty;
             txtMese.Text = string.Empty;
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
 
@@ -91,8 +119,11 @@ namespace Uotep
         protected void Ricerca_Click(object sender, EventArgs e)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtRicNota.Text))
             {
                 // Crea una lista 
@@ -102,6 +133,9 @@ namespace Uotep
                 Session["ListRicerca"] = ListRicerca;
 
             }
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtResponsabile.Text))
             {
@@ -132,7 +166,11 @@ namespace Uotep
             {
                 // Crea una lista 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text  };
+=======
+                List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text };
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                 List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text };
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -142,7 +180,10 @@ namespace Uotep
 
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtAnno.Text))
             {
                 // Crea una lista 
@@ -153,6 +194,9 @@ namespace Uotep
 
             }
 
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             // Reindirizza alla pagina di destinazione
             Response.Redirect("InserimentoArchivio.aspx");
@@ -181,11 +225,17 @@ namespace Uotep
             DivDatiCatastali.Visible = true;
             DivPratica.Visible = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
@@ -196,22 +246,31 @@ namespace Uotep
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             DivNominativo.Visible = true;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
@@ -221,6 +280,9 @@ namespace Uotep
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
             DivNominativo.Visible = true;
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
@@ -230,10 +292,13 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
             DivPratica.Visible = true;
         }
 
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
@@ -359,6 +424,9 @@ namespace Uotep
 
             }
         }
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
     }

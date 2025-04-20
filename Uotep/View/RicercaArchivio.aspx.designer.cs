@@ -12,6 +12,7 @@ namespace Uotep
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
     public partial class RicercaArchivio
 ========
@@ -28,17 +29,28 @@ namespace Uotep
 
         /// <summary>
         /// Controllo divTesta.
+=======
+    public partial class RicercaArchivio
+    {
+
+        /// <summary>
+        /// Controllo ProtocolloLiteral.
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Literal ProtocolloLiteral;
 
         /// <summary>
         /// Controllo pnlButton.
+<<<<<<< HEAD
 ========
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTesta;
 
@@ -55,17 +67,23 @@ namespace Uotep
         /// Controllo pnlButton.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Panel pnlButton;
 
         /// <summary>
         /// Controllo btNominativo.
+<<<<<<< HEAD
 ========
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -84,17 +102,23 @@ namespace Uotep
         /// Controllo btNominativo.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Button btNominativo;
 
         /// <summary>
         /// Controllo btIndirizzo.
+<<<<<<< HEAD
 ========
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -113,17 +137,23 @@ namespace Uotep
         /// Controllo btIndirizzo.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Button btIndirizzo;
 
         /// <summary>
         /// Controllo btDatiCatastali.
+<<<<<<< HEAD
 ========
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -142,17 +172,23 @@ namespace Uotep
         /// Controllo btDatiCatastali.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Button btDatiCatastali;
 
         /// <summary>
         /// Controllo btNpratica.
+<<<<<<< HEAD
 ========
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -171,11 +207,14 @@ namespace Uotep
         /// Controllo btNpratica.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.WebControls.Button btNpratica;
@@ -194,17 +233,23 @@ namespace Uotep
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/EstraiStatistiche.aspx.designer.cs
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Button btNpratica;
 
         /// <summary>
         /// Controllo btNota.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivRicerca;
@@ -221,6 +266,8 @@ namespace Uotep
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox TxtPonteggi;
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Button btNota;
 
         /// <summary>
@@ -249,16 +296,23 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btEstraiTotale;
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 
         /// <summary>
         /// Controllo txtDPI.
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+
+        /// <summary>
+        /// Controllo DivRicerca.
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivPratica;
@@ -281,11 +335,18 @@ namespace Uotep
         /// Controllo DivPratica.
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivRicerca;
+
+        /// <summary>
+        /// Controllo DivPratica.
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.WebControls.Label Label6;
@@ -304,17 +365,23 @@ namespace Uotep
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/EstraiStatistiche.aspx.designer.cs
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivPratica;
 
         /// <summary>
         /// Controllo Label6.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox txtPratica;
@@ -333,17 +400,23 @@ namespace Uotep
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/EstraiStatistiche.aspx.designer.cs
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label6;
 
         /// <summary>
         /// Controllo txtPratica.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivIndirizzo;
@@ -362,17 +435,23 @@ namespace Uotep
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/EstraiStatistiche.aspx.designer.cs
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtPratica;
 
         /// <summary>
         /// Controllo DivIndirizzo.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
         protected global::System.Web.UI.WebControls.Label Label11;
@@ -387,17 +466,23 @@ namespace Uotep
 <<<<<<< HEAD
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivIndirizzo;
 
         /// <summary>
         /// Controllo Label11.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -409,17 +494,23 @@ namespace Uotep
 <<<<<<< HEAD
 =======
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label11;
 
         /// <summary>
         /// Controllo txtIndirizzo.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -502,10 +593,13 @@ namespace Uotep
 =======
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtIndirizzo;
 
         /// <summary>
         /// Controllo DivNominativo.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtControlliCant;
@@ -516,11 +610,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -531,10 +628,13 @@ namespace Uotep
         /// Controllo txtViolazioneSigilli.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivNominativo;
 
         /// <summary>
         /// Controllo Label9.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtNotifiche;
@@ -545,11 +645,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -560,10 +663,13 @@ namespace Uotep
         /// Controllo txtDissequestriTemp.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label9;
 
         /// <summary>
         /// Controllo txtResponsabile.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtSequestri;
@@ -574,11 +680,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -589,10 +698,13 @@ namespace Uotep
         /// Controllo txtRimozioneSigilli.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtResponsabile;
 
         /// <summary>
         /// Controllo DivDatiCatastali.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtRiapposizioneSigilli;
@@ -603,11 +715,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -618,10 +733,13 @@ namespace Uotep
         /// Controllo txtEspostiEvasi.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivDatiCatastali;
 
         /// <summary>
         /// Controllo Label7.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtDelegheRicevute;
@@ -632,11 +750,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -647,10 +768,13 @@ namespace Uotep
         /// Controllo txtRipristino.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label7;
 
         /// <summary>
         /// Controllo txtSez.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtDenunceUff;
@@ -661,11 +785,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -676,10 +803,13 @@ namespace Uotep
         /// Controllo txtControlliScia.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtSez;
 
         /// <summary>
         /// Controllo Label1.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtDemolizioni;
@@ -690,11 +820,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -705,10 +838,13 @@ namespace Uotep
         /// Controllo txtControlliCant.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
         /// Controllo txtFoglio.
+<<<<<<< HEAD
 <<<<<<< HEAD
 ========
         protected global::System.Web.UI.WebControls.TextBox txtDissequestri;
@@ -719,11 +855,14 @@ namespace Uotep
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/RicercaArchivio.aspx.designer.cs
 =======
@@ -734,19 +873,25 @@ namespace Uotep
         /// Controllo txtNotifiche.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtFoglio;
 
         /// <summary>
         /// Controllo Label2.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -756,19 +901,25 @@ namespace Uotep
         /// Controllo txtSequestri.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label2;
 
         /// <summary>
         /// Controllo txtParticella.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -778,19 +929,25 @@ namespace Uotep
         /// Controllo txtRiapposizioneSigilli.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtParticella;
 
         /// <summary>
         /// Controllo Label3.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
@@ -800,19 +957,25 @@ namespace Uotep
         /// Controllo txtDelegheRicevute.
 ========
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label3;
 
         /// <summary>
         /// Controllo txtSub.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<< HEAD
         protected global::System.Web.UI.WebControls.TextBox txtSub;
 ========
@@ -825,67 +988,93 @@ namespace Uotep
         /// <summary>
         /// Controllo txtDenunceUff.
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtSub;
 
         /// <summary>
         /// Controllo DivNote.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox txtDenunceUff;
 
         /// <summary>
         /// Controllo txtDemolizioni.
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivNote;
 
         /// <summary>
         /// Controllo Label4.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox txtDemolizioni;
 
         /// <summary>
         /// Controllo txtDissequestri.
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.Label Label4;
 
         /// <summary>
         /// Controllo txtRicNota.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox txtDissequestri;
 
         /// <summary>
         /// Controllo txtControlliDLGS.
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.WebControls.TextBox txtRicNota;
 
         /// <summary>
         /// Controllo DivAnnoMese.
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
+<<<<<<< HEAD
 <<<<<<<< HEAD:Uotep/View/EstraiStatistiche.aspx.designer.cs
         protected global::System.Web.UI.WebControls.TextBox txtControlliDLGS;
 ========
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivAnnoMese;
 
         /// <summary>
@@ -1022,7 +1211,10 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CkPropAltri;
+<<<<<<< HEAD
 >>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c:Uotep/View/RicercaArchivio.aspx.designer.cs
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
         /// <summary>

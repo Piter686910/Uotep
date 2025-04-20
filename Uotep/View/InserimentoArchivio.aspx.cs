@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿using System;
+=======
+using System;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 using System;
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -46,7 +50,10 @@ namespace Uotep
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
 <<<<<<< HEAD
+<<<<<<< HEAD
             txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!IsPostBack)
@@ -64,6 +71,7 @@ namespace Uotep
                     {
                         case "Pratica":
 <<<<<<< HEAD
+<<<<<<< HEAD
                             arc = mn.getPraticaArchivioUote(ar[1], null, null, null);
                             break;
                         case "Nominativo":
@@ -76,6 +84,8 @@ namespace Uotep
                             arc = mn.getPraticaArchivioUote(null, null, null, ar);
                             break;
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                             arc = mn.getPraticaArchivioUote(ar, null, null, null,null, null);
                             break;
                         case "StoricoPratica":
@@ -98,6 +108,9 @@ namespace Uotep
                             arc = mn.getPraticaArchivioUote(null, null, null, null,null, ar);
                             break;
 
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     }
                     if (arc.Rows.Count > 0)
@@ -114,7 +127,11 @@ namespace Uotep
                 {
                     txtPratica.Enabled = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
                    
+=======
+                    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                     txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -274,8 +291,11 @@ namespace Uotep
                     //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
                     Manager mn = new Manager();
 <<<<<<< HEAD
+<<<<<<< HEAD
                     DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null);
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     String[] ar = null;
                     if (Session["ListRicerca"] != null)
                     {
@@ -283,6 +303,9 @@ namespace Uotep
                          ar = ListRicerca.ToArray();
                     }
                     DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null,null,null);
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     if (dt.Rows.Count > 0)
                     {
@@ -304,6 +327,7 @@ namespace Uotep
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                         //        string script = $@"
                         //function showConfirmPopup() {{
                         //    if (confirm('stai modificando un pratica già esistente, confermi?')) {{
@@ -318,6 +342,9 @@ namespace Uotep
                         //            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
                         //        }
                         //        Session["POP"] = "no";
+=======
+                       
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                        
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -514,7 +541,11 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
 <<<<<<< HEAD
+<<<<<<< HEAD
             Session.Remove("ListRicerca");
+=======
+             Session.Remove("ListRicerca");
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
              Session.Remove("ListRicerca");
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -524,7 +555,10 @@ namespace Uotep
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 <<<<<<< HEAD
+<<<<<<< HEAD
             
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
@@ -549,6 +583,7 @@ namespace Uotep
 
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 //else
                 //{
                 //    lblQuartiere.Text = "Quartiere non trovato.";
@@ -558,6 +593,10 @@ namespace Uotep
             //{
             //    lblQuartiere.Text = "Inserisci un indirizzo valido.";
             //}
+=======
+                
+            }
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                 
             }

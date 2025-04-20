@@ -277,7 +277,13 @@ namespace Uotep
             {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+=======
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                Response.Redirect("~/Contact.aspx");
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
@@ -505,7 +511,13 @@ namespace Uotep
                     sw.Close();
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+=======
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                Response.Redirect("~/Contact.aspx");
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";

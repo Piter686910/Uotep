@@ -38,8 +38,11 @@
 
                     </p>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     <p>
                         <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2" />
@@ -47,13 +50,20 @@
                         <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2" />
 
                     </p>
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 </div>
 
             </asp:Panel>
         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -118,7 +128,10 @@
                     </div>
                 </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 <%-- DIV RICERCA Note --%>
                 <div id="DivNote" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
@@ -228,13 +241,19 @@
                 <div style="margin-left: 1px!important; margin-top: 30px!important">
                     <asp:Button Text="Estrai" runat="server" OnClick="Estrai_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                 </div>
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             </div>
         </div>
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
     </div>
@@ -242,6 +261,10 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -271,7 +294,10 @@
         </div>
     </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 </asp:Content>

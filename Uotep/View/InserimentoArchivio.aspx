@@ -313,6 +313,7 @@
                     </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             <div class="col-12 ">
                 <div class="form-group mb-3">
                     <label for="txtNote">Note</label>
@@ -320,12 +321,17 @@
                 </div>
             </div>
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     <div class="col-12 ">
                         <div class="form-group mb-3">
                             <label for="txtNote">Note</label>
                             <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
                         </div>
                     </div>
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
                 </div>
@@ -501,7 +507,11 @@
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div class="modal-dialog" style="width:100%">
+=======
+        <div class="modal-dialog" style="width: 100%">
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 =======
         <div class="modal-dialog" style="width: 100%">
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
@@ -522,14 +532,20 @@
                                 <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
                                 <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
 
 =======
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                                 <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_note" HeaderText="Nota" />
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
+<<<<<<< HEAD
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+=======
 >>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                                 <asp:TemplateField>
                                     <ItemTemplate>
