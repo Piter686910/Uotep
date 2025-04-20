@@ -374,6 +374,7 @@
     <Compile Include="Classi\CaricaFile.cs" />
     <Compile Include="Classi\Operatore.cs" />
     <Compile Include="Classi\Principale.cs" />
+    <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Statistiche.cs" />
     <Compile Include="Classi\RappUote.cs" />
     <Compile Include="Contact.aspx.cs">

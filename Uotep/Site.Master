@@ -4,7 +4,7 @@
 
 <html lang="en">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %> - Applicazione ASP.NET</title>
@@ -13,14 +13,14 @@
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 
 </head>
 <body>
     <form runat="server">
-        
+
         <asp:ScriptManager runat="server">
             <Scripts>
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
@@ -41,7 +41,7 @@
             </Scripts>
         </asp:ScriptManager>
 
-            <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #337ab7 !important" >
+        <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #337ab7 !important">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -51,68 +51,60 @@
                     </button>
                     <%--<a class="navbar-brand" runat="server" href="~/">Nome applicazione</a>--%>
                 </div>
-                <div class="navbar-collapse collapse" style="font-weight:bold !important">
-                    <ul class="nav navbar-nav" >
-                        <li><a id="menuHome" runat="server"  visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
-                        <li runat="server"  id="menuAmministratore" visible="false" ><a  runat="server" style="color: #ffffff !important"  href="~/View/Dashboard">Dashboard</a></li>
-                        
+                <div class="navbar-collapse collapse" style="font-weight: bold !important">
+                    <ul class="nav navbar-nav">
+                        <li><a id="menuHome" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
+                        <li runat="server" id="menuAmministratore" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/Dashboard">Dashboard</a></li>
 
-                       <li runat="server" id="menuArchivioUote" visible="false" class="dropdown">
-                         <a runat="server" style="color: #ffffff !important" ref="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
-                             <ul class="dropdown-menu">
-                                  <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
-                                  <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
 
-                             </ul>
+                        <li runat="server" id="menuArchivioUote" visible="false" class="dropdown">
+                            <a runat="server" style="color: #ffffff !important" ref="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
+                                <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
+
+                            </ul>
                         </li>
 
                         <li runat="server" id="menuCoordinamentoAtti" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti <span class="caret"></span></a>
-                               <ul class="dropdown-menu">
-                                         <li><a id="InserimentoAtti" runat="server" visible="false" href="~/View/Inserimento">Inserimento Atti</a></li>
-                                         <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
-                                         <li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>
-                                         <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
+                            <ul class="dropdown-menu">
+                                <li><a id="InserimentoAtti" runat="server" visible="false" href="~/View/Inserimento">Inserimento Atti</a></li>
+                                <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
+                                <li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>
+                                <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
 
-                               </ul>
-                         </li>
+                            </ul>
+                        </li>
 
 
                         <li runat="server" id="menuAccertatori" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/SchedaIntervento" class="dropdown-toggle" data-toggle="dropdown">Scheda Intervento <span class="caret"></span></a>
-                               <ul class="dropdown-menu">
-                                         <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
-                                         <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
-                                         <li><a id="Statistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
+                            <ul class="dropdown-menu">
+                                <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
+                                <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
+                                <li><a id="Statistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
 
-                               </ul>
-                         </li>
-                         <%-- manutenzione tabelle --%>
-                        <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a  runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
-                  
+                            </ul>
+                        </li>
+                        <%-- manutenzione tabelle --%>
+                        <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
+
                         <li runat="server" id="menuSegreteria" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/Segreteria" class="dropdown-toggle" data-toggle="dropdown">Ufficio PG <span class="caret"></span></a>
-                               <ul class="dropdown-menu">
-                                         <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
-                                         <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
-<<<<<<< HEAD
+                            <ul class="dropdown-menu">
+                                <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
+                                <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
 
-                               </ul>
-                         </li>
-
-                        <li runat="server" id="menuEsci" visible="false"> 
-                            <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click"  style="color: #ffffff !important">ESCI</asp:LinkButton>
+                            </ul>
                         </li>
-=======
 
-                               </ul>
-                         </li>
-
-                        <li runat="server" id="menuEsci" visible="false"> <a style="color: #ffffff !important"   <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+                        <li runat="server" id="menuEsci" visible="false">
+                            <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click" Style="color: #ffffff !important">ESCI</asp:LinkButton>
+                        </li>
                     </ul>
                 </div>
-               
+
             </div>
         </div>
         <div class="container body-content">
@@ -120,7 +112,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-               <%-- <p>&copy; <%: DateTime.Now.Year %> - Applicazione ASP.NET</p>--%>
+                <%-- <p>&copy; <%: DateTime.Now.Year %> - Applicazione ASP.NET</p>--%>
             </footer>
         </div>
 

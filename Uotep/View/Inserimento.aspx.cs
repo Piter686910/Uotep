@@ -276,19 +276,17 @@ namespace Uotep
             catch (Exception ex)
             {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
-=======
+
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
+
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+
             }
         }
         private void Pulisci()
@@ -510,19 +508,17 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
                     sw.Close();
                 }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
-=======
+
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
+
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+
             }
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)

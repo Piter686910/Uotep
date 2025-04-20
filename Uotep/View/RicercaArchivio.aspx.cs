@@ -1,64 +1,31 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 using System.Windows.Forms;
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-using System.Windows.Forms;
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using Uotep.Classi;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Page = System.Web.UI.Page;
 
 
 namespace Uotep
 {
     public partial class RicercaArchivio : Page
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-       
-=======
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-        public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected void Page_Load(object sender, EventArgs e)
         {
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-           
-=======
 
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
 
@@ -67,15 +34,7 @@ namespace Uotep
 
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
-<<<<<<< HEAD
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
         }
 
@@ -90,11 +49,6 @@ namespace Uotep
             txtSez.Text = string.Empty;
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = String.Empty;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             Ck1089.Checked = false;
             CkDemolita.Checked = false;
             CkEvasa.Checked = false;
@@ -107,10 +61,6 @@ namespace Uotep
             txtRicNota.Text = string.Empty;
             txtAnno.Text = string.Empty;
             txtMese.Text = string.Empty;
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
 
         }
@@ -118,12 +68,6 @@ namespace Uotep
 
         protected void Ricerca_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtRicNota.Text))
             {
                 // Crea una lista 
@@ -133,10 +77,6 @@ namespace Uotep
                 Session["ListRicerca"] = ListRicerca;
 
             }
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtResponsabile.Text))
             {
                 // Crea una lista 
@@ -165,25 +105,12 @@ namespace Uotep
             if (!string.IsNullOrEmpty(txtSez.Text))
             {
                 // Crea una lista 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text  };
-=======
                 List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text };
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-                List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text };
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = ListRicerca;
 
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtAnno.Text))
             {
                 // Crea una lista 
@@ -194,10 +121,6 @@ namespace Uotep
 
             }
 
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             // Reindirizza alla pagina di destinazione
             Response.Redirect("InserimentoArchivio.aspx");
         }
@@ -224,19 +147,10 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = true;
             DivPratica.Visible = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btIndirizzo_Click(object sender, EventArgs e)
@@ -245,32 +159,14 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            DivNominativo.Visible = true;
-            DivIndirizzo.Visible = false;
-            DivDatiCatastali.Visible = false;
-            DivPratica.Visible = false;
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
@@ -280,10 +176,6 @@ namespace Uotep
             DivAnnoMese.Visible = false;
             DivRicerca.Visible = true;
             DivNominativo.Visible = true;
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
@@ -291,14 +183,6 @@ namespace Uotep
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
-            DivPratica.Visible = true;
-        }
-
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             DivEstraiDb.Visible = false;
             DivNote.Visible = false;
             DivAnnoMese.Visible = false;
@@ -355,14 +239,15 @@ namespace Uotep
             ar[8] = CkPropAltri.Checked ? "altri" : string.Empty; ;
 
             DataTable dt = mn.getArchivioUoteParziale(ar);
-            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
 
             // 2. Esporta la DataTable in Excel
             //string filePath = Path.Combine(Filename, "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = Path.GetTempPath() + @"\" + filePath;
-            
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+
             Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -370,22 +255,51 @@ namespace Uotep
                 //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
                 ws.Column(1).Delete(); // Elimina la prima colonna
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+                                                  //
+                Routine al = new Routine();
+                al.ConvertiBooleaniInItaliano(ws);
+                //IXLWorksheet worksheet = ws;
+                ////sostituisce booleani con stringa si o no
+                //int lastRow = worksheet.LastRowUsed().RowNumber();
+                //int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
+                //for (int row = 2; row <= lastRow; row++)
+                //{
+                //    // Itera su tutte le colonne nella riga corrente
+                //    for (int column = 1; column <= lastColumn; column++)
+                //    {
+                //        IXLCell cell = worksheet.Cell(row, column); // Ottieni la cella corrente
+                //        XLDataType tipoDatoD1 = cell.DataType;
+                //        string valore = string.Empty;
+                //        if (tipoDatoD1 is XLDataType.Boolean)
+                //              valore = System.Convert.ToString(((bool)cell.Value));
 
+                //            if (valore == "True")
+                //            {
+
+                //                cell.Value = "SI"; // Sostituisci "true" (stringa) con "si"
+                //            }
+                //            else if (valore == "False")
+                //            {
+                //                cell.Value = "NO"; // Sostituisci "false" (stringa) con "no"
+                //            }
+                //    }
+                //}
+                //
                 wb.SaveAs(tempFilePath);  // Salva il file
                 File.Move(tempFilePath, temp);
                 try
                 {
                     Process.Start(temp);
                     File.Delete(tempFilePath);
-                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
                     File.Delete(tempFilePath);
-                   
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Errore nell'apertura del file temporaneo: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-              
+
             }
         }
 
@@ -393,12 +307,12 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = mn.getArchivioUoteTotale();
-            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
-            // 2. Esporta la DataTable in Excel
-           // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
-           string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = Path.GetTempPath() + @"\" + filePath;
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+                                                                                  // 2. Esporta la DataTable in Excel
+                                                                                  // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
             Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -406,14 +320,15 @@ namespace Uotep
                 //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
                 ws.Column(1).Delete(); // Elimina la prima colonna
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
-
+                Routine al = new Routine();
+                al.ConvertiBooleaniInItaliano(ws);
                 wb.SaveAs(tempFilePath);  // Salva il file
                 File.Move(tempFilePath, temp);
                 try
                 {
                     Process.Start(temp);
                     File.Delete(tempFilePath);
-                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
                     File.Delete(tempFilePath);
 
                 }
@@ -424,10 +339,6 @@ namespace Uotep
 
             }
         }
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
     }
 }

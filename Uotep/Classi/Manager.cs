@@ -812,12 +812,12 @@ namespace Uotep.Classi
         /// <param name="ckpbc"></param>
         /// <param name="ckae"></param>
         /// <returns></returns>
-           
+
         public DataTable getArchivioUoteParziale(String[] ar)
         {
             string sql = string.Empty; ;
             DataTable tb = new DataTable();
-           //eseguo un merge al  dtatatable per ogni ck selezionato
+            //eseguo un merge al  dtatatable per ogni ck selezionato
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -831,7 +831,7 @@ namespace Uotep.Classi
                     da.Fill(ds);
                     tb = ds.Tables[0];
                 }
-             
+
                 if (!string.IsNullOrEmpty(ar[1]))
                 {
                     sql = "SELECT * FROM ArchivioUote where arch_1089 = 'True'";
@@ -923,18 +923,21 @@ namespace Uotep.Classi
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-
-            switch (pratica[0])
+            if (pratica != null)
             {
-                case "Pratica":
-                    if (!String.IsNullOrEmpty(pratica[1]))
-                        sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
-                    break;
-                case "StoricoPratica":
-                    if (!String.IsNullOrEmpty(pratica[1]))
-                        sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
-                    break;
+                switch (pratica[0])
+                {
+                    case "Pratica":
+                        if (!String.IsNullOrEmpty(pratica[1]))
+                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                        break;
+                    case "StoricoPratica":
+                        if (!String.IsNullOrEmpty(pratica[1]))
+                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                        break;
+                }
             }
+
 
             if (!String.IsNullOrEmpty(nominativo))
                 sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''") + "%'";

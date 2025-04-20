@@ -352,15 +352,7 @@ namespace Uotep
 
                 ret = false;
             }
-<<<<<<< HEAD
-<<<<<<< HEAD
-            if (ckAccertAvvenutoRipr.Checked==true)
-=======
-            if (ckAccertAvvenutoRipr.Checked==false)
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-            if (ckAccertAvvenutoRipr.Checked==false)
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
+            if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false || rdParziale.Checked == false || rdNonAvvenuto.Checked == false)
                 {

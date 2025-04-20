@@ -17,7 +17,7 @@
         function hideModal() {
             $('#myModal').modal('hide');
         }
-       
+
 
     </script>
     <div class="jumbotron">
@@ -37,12 +37,6 @@
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
 
                     </p>
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     <p>
                         <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2" />
@@ -50,23 +44,11 @@
                         <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2" />
 
                     </p>
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 </div>
 
             </asp:Panel>
         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         <%--Sezione di ricerca  --%>
         <div id="DivRicerca" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
             <!-- Righe di input  -->
@@ -127,11 +109,6 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 <%-- DIV RICERCA Note --%>
                 <div id="DivNote" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
@@ -241,33 +218,15 @@
                 <div style="margin-left: 1px!important; margin-top: 30px!important">
                     <asp:Button Text="Estrai" runat="server" OnClick="Estrai_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                 </div>
-<<<<<<< HEAD
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             </div>
         </div>
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
     </div>
 
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
-
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -293,11 +252,4 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
-=======
->>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 </asp:Content>
