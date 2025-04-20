@@ -99,7 +99,9 @@
                                </ul>
                          </li>
 
-                        <li runat="server" id="menuEsci" visible="false"> <a style="color: #ffffff !important"   <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
+                        <li runat="server" id="menuEsci" visible="false"> 
+                            <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click"  style="color: #ffffff !important">ESCI</asp:LinkButton>
+                        </li>
                     </ul>
                 </div>
                
