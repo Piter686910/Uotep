@@ -37,12 +37,26 @@
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
 
                     </p>
+<<<<<<< HEAD
 
+=======
+                    <p>
+                        <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2" />
+
+                    </p>
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 </div>
 
             </asp:Panel>
         </div>
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         <%--Sezione di ricerca  --%>
         <div id="DivRicerca" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
             <!-- Righe di input  -->
@@ -103,15 +117,134 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+<<<<<<< HEAD
+=======
+                <%-- DIV RICERCA Note --%>
+                <div id="DivNote" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label4" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicNota" runat="server" CssClass="form-control" placeholder="Nota" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA Anno Mese --%>
+                <div id="DivAnnoMese" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label5" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" placeholder="Anno" />
+                    <asp:Label ID="Label8" runat="server" Text="Mese" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" placeholder="Numero del Mese" />
+                    <asp:RegularExpressionValidator
+                        ID="RegularExpressionValidator2"
+                        runat="server"
+                        ControlToValidate="txtMese"
+                        ValidationExpression="^([1-9]|1[0-2])$"
+                        ErrorMessage="Inserisci un numero da 1 a 12"
+                        ForeColor="Red"
+                        ValidationGroup="bt"
+                        Display="Static">
+                    </asp:RegularExpressionValidator>
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <%-- DIV Estrai db --%>
+        <div id="DivEstraiDb" runat="server" visible="false" style="margin-left: 250px!important">
+
+            <div class="row justify-content-start">
+                <!-- Aggiunto justify-content-start per sicurezza -->
+                <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
+                    <!-- Stili per allineamento e spacing -->
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il primo gruppo ->--%>
+                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+                    </div>
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il secondo gruppo ->--%>
+                        <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="Ck1089">1089</label>
+                    </div>
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il terzo gruppo ->--%>
+                        <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
+                    </div>
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il quarto gruppo ->--%>
+                        <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
+                    </div>
+                    <div>
+<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
+                        <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-start">
+                <!-- Aggiunto justify-content-start per sicurezza -->
+                <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
+                    <!-- Stili per allineamento e spacing -->
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il primo gruppo ->--%>
+                        <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkPropPriv">Prop. Privata</label>
+                    </div>
+
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il secondo gruppo ->--%>
+                        <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkPropComunale">Prop. Comunale</label>
+                    </div>
+
+                    <div style="margin-right: 50px;">
+<%--                        <!- Spacing per il terzo gruppo ->--%>
+                        <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkPropBeniCult">Prop. Beni Cult.</label>
+                    </div>
+
+                    <div>
+<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
+                        <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkPropAltri">Prop. Altri Enti</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div style="margin-left: 1px!important; margin-top: 30px!important">
+                    <asp:Button Text="Estrai" runat="server" OnClick="Estrai_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                </div>
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             </div>
         </div>
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
     </div>
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -137,5 +270,8 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 </asp:Content>

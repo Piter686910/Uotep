@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using System;
+=======
+using System;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -41,7 +45,10 @@ namespace Uotep
 
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
+<<<<<<< HEAD
             txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!IsPostBack)
             {
 
@@ -56,6 +63,7 @@ namespace Uotep
                     switch (ar[0])
                     {
                         case "Pratica":
+<<<<<<< HEAD
                             arc = mn.getPraticaArchivioUote(ar[1], null, null, null);
                             break;
                         case "Nominativo":
@@ -67,6 +75,30 @@ namespace Uotep
                         case "Catasto":
                             arc = mn.getPraticaArchivioUote(null, null, null, ar);
                             break;
+=======
+                            arc = mn.getPraticaArchivioUote(ar, null, null, null,null, null);
+                            break;
+                        case "StoricoPratica":
+                            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                            break;
+
+                        case "Nominativo":
+                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null,null, null);
+                            break;
+                        case "Indirizzo":
+                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null,null, null);
+                            break;
+                        case "Catasto":
+                            arc = mn.getPraticaArchivioUote(null, null, null, ar,null, null);
+                            break;
+                        case "Note":
+                            arc = mn.getPraticaArchivioUote(null, null, null, null,ar[1],null);
+                            break;
+                        case "AnnoMese":
+                            arc = mn.getPraticaArchivioUote(null, null, null, null,null, ar);
+                            break;
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     }
                     if (arc.Rows.Count > 0)
                     {
@@ -81,7 +113,11 @@ namespace Uotep
                 else
                 {
                     txtPratica.Enabled = true;
+<<<<<<< HEAD
                    
+=======
+                    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                 }
                 CaricaDLL();
                 Session["POP"] = "si";
@@ -237,7 +273,17 @@ namespace Uotep
 
                     //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
                     Manager mn = new Manager();
+<<<<<<< HEAD
                     DataTable dt = mn.getPraticaArchivioUote(txtPratica.Text.Trim(), null, null, null);
+=======
+                    String[] ar = null;
+                    if (Session["ListRicerca"] != null)
+                    {
+                        List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                         ar = ListRicerca.ToArray();
+                    }
+                    DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null,null,null);
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     if (dt.Rows.Count > 0)
                     {
                         //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
@@ -257,6 +303,7 @@ namespace Uotep
                         }
 
 
+<<<<<<< HEAD
                         //        string script = $@"
                         //function showConfirmPopup() {{
                         //    if (confirm('stai modificando un pratica già esistente, confermi?')) {{
@@ -271,6 +318,9 @@ namespace Uotep
                         //            ClientScript.RegisterStartupScript(this.GetType(), "confirmPopupScript", script, true);
                         //        }
                         //        Session["POP"] = "no";
+=======
+                       
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
                         //        //se annullo imposto il popup a si
                         if (hdnConfermaUtente.Value == "false")
@@ -463,13 +513,20 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+<<<<<<< HEAD
             Session.Remove("ListRicerca");
+=======
+             Session.Remove("ListRicerca");
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+<<<<<<< HEAD
             
+=======
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
         }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
@@ -491,6 +548,7 @@ namespace Uotep
                     gvPopup.DataBind();
 
                 }
+<<<<<<< HEAD
                 //else
                 //{
                 //    lblQuartiere.Text = "Quartiere non trovato.";
@@ -500,6 +558,10 @@ namespace Uotep
             //{
             //    lblQuartiere.Text = "Inserisci un indirizzo valido.";
             //}
+=======
+                
+            }
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);

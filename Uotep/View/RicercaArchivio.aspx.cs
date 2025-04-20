@@ -1,12 +1,25 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+=======
+﻿using ClosedXML.Excel;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Diagnostics;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+<<<<<<< HEAD
+=======
+using System.Windows.Forms;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 using Uotep.Classi;
 
 
@@ -14,12 +27,20 @@ namespace Uotep
 {
     public partial class RicercaArchivio : Page
     {
+<<<<<<< HEAD
        
+=======
+        public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         protected void Page_Load(object sender, EventArgs e)
         {
 
 
+<<<<<<< HEAD
            
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
 
@@ -28,7 +49,11 @@ namespace Uotep
 
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
         }
 
@@ -43,6 +68,21 @@ namespace Uotep
             txtSez.Text = string.Empty;
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = String.Empty;
+<<<<<<< HEAD
+=======
+            Ck1089.Checked = false;
+            CkDemolita.Checked = false;
+            CkEvasa.Checked = false;
+            CkPropAltri.Checked = false;
+            CkPropBeniCult.Checked = false;
+            CkPropComunale.Checked = false;
+            CkPropPriv.Checked = false;
+            CkSuoloPubblico.Checked = false;
+            CkVincoli.Checked = false;
+            txtRicNota.Text = string.Empty;
+            txtAnno.Text = string.Empty;
+            txtMese.Text = string.Empty;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
 
         }
@@ -50,7 +90,19 @@ namespace Uotep
 
         protected void Ricerca_Click(object sender, EventArgs e)
         {
+<<<<<<< HEAD
 
+=======
+            if (!string.IsNullOrEmpty(txtRicNota.Text))
+            {
+                // Crea una lista 
+                List<string> ListRicerca = new List<string> { "Note", txtRicNota.Text };
+
+                // Salva la lista nella Sessione
+                Session["ListRicerca"] = ListRicerca;
+
+            }
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             if (!string.IsNullOrEmpty(txtResponsabile.Text))
             {
                 // Crea una lista 
@@ -79,12 +131,29 @@ namespace Uotep
             if (!string.IsNullOrEmpty(txtSez.Text))
             {
                 // Crea una lista 
+<<<<<<< HEAD
                 List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text  };
+=======
+                List<string> ListRicerca = new List<string> { "Catasto", txtSez.Text, txtFoglio.Text, txtParticella.Text, txtSub.Text };
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = ListRicerca;
 
             }
+<<<<<<< HEAD
+=======
+            if (!string.IsNullOrEmpty(txtAnno.Text))
+            {
+                // Crea una lista 
+                List<string> ListRicerca = new List<string> { "AnnoMese", txtAnno.Text, txtMese.Text };
+
+                // Salva la lista nella Sessione
+                Session["ListRicerca"] = ListRicerca;
+
+            }
+
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
             // Reindirizza alla pagina di destinazione
             Response.Redirect("InserimentoArchivio.aspx");
         }
@@ -111,6 +180,13 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = true;
             DivPratica.Visible = false;
+<<<<<<< HEAD
+=======
+            DivEstraiDb.Visible = false;
+            DivNote.Visible = false;
+            DivAnnoMese.Visible = false;
+            DivRicerca.Visible = true;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btIndirizzo_Click(object sender, EventArgs e)
@@ -119,14 +195,33 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
+<<<<<<< HEAD
+=======
+            DivEstraiDb.Visible = false;
+            DivNote.Visible = false;
+            DivAnnoMese.Visible = false;
+            DivRicerca.Visible = true;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             DivNominativo.Visible = true;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
             DivPratica.Visible = false;
+=======
+
+            DivIndirizzo.Visible = false;
+            DivDatiCatastali.Visible = false;
+            DivPratica.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivNote.Visible = false;
+            DivAnnoMese.Visible = false;
+            DivRicerca.Visible = true;
+            DivNominativo.Visible = true;
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
@@ -134,9 +229,137 @@ namespace Uotep
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
+<<<<<<< HEAD
             DivPratica.Visible = true;
         }
 
+=======
+            DivEstraiDb.Visible = false;
+            DivNote.Visible = false;
+            DivAnnoMese.Visible = false;
+            DivPratica.Visible = true;
+            DivRicerca.Visible = true;
+        }
+        protected void btNota_Click(object sender, EventArgs e)
+        {
+            DivNominativo.Visible = false;
+            DivIndirizzo.Visible = false;
+            DivDatiCatastali.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivPratica.Visible = false;
+            DivRicerca.Visible = false;
+            DivAnnoMese.Visible = false;
+            DivRicerca.Visible = true;
+            DivNote.Visible = true;
+        }
+        protected void btAnnoMese_Click(object sender, EventArgs e)
+        {
+            DivNominativo.Visible = false;
+            DivIndirizzo.Visible = false;
+            DivDatiCatastali.Visible = false;
+            DivEstraiDb.Visible = false;
+            DivPratica.Visible = false;
+            DivRicerca.Visible = false;
+            DivRicerca.Visible = true;
+            DivNote.Visible = false;
+            DivAnnoMese.Visible = true;
+        }
+
+        protected void btEstraiParziale_Click(object sender, EventArgs e)
+        {
+            DivEstraiDb.Visible = true;
+            DivRicerca.Visible = false;
+        }
+
+        protected void Estrai_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            string[] ar = new string[9];
+            //Boolean ckevasa, Boolean ck1089, Boolean cksp, Boolean ckvincoli, Boolean ckdemolita, Boolean ckpp, Boolean ckpc, Boolean ckpbc, Boolean ckae)
+
+            ar[0] = CkEvasa.Checked ? "evasa" : string.Empty;
+
+
+            ar[1] = Ck1089.Checked ? "1089" : string.Empty; ;
+            ar[2] = CkSuoloPubblico.Checked ? "sp" : string.Empty; ;
+            ar[3] = CkVincoli.Checked ? "vincoli" : string.Empty; ;
+            ar[4] = CkDemolita.Checked ? "demolita" : string.Empty; ;
+            ar[5] = CkPropPriv.Checked ? "pp" : string.Empty; ;
+            ar[6] = CkPropComunale.Checked ? "pc" : string.Empty; ;
+            ar[7] = CkPropBeniCult.Checked ? "bc" : string.Empty; ;
+            ar[8] = CkPropAltri.Checked ? "altri" : string.Empty; ;
+
+            DataTable dt = mn.getArchivioUoteParziale(ar);
+            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+
+            // 2. Esporta la DataTable in Excel
+            //string filePath = Path.Combine(Filename, "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            string filePath = "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
+            string temp = Path.GetTempPath() + @"\" + filePath;
+            
+            Session["filetemp"] = temp;
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(dt, "Dati");
+                //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
+                ws.Column(1).Delete(); // Elimina la prima colonna
+                ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+
+                wb.SaveAs(tempFilePath);  // Salva il file
+                File.Move(tempFilePath, temp);
+                try
+                {
+                    Process.Start(temp);
+                    File.Delete(tempFilePath);
+                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    File.Delete(tempFilePath);
+                   
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Errore nell'apertura del file temporaneo: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+              
+            }
+        }
+
+        protected void btEstraiTotale_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            DataTable dt = mn.getArchivioUoteTotale();
+            string tempFilePath = Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            // 2. Esporta la DataTable in Excel
+           // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+           string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
+            string temp = Path.GetTempPath() + @"\" + filePath;
+            Session["filetemp"] = temp;
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.Worksheets.Add(dt, "Dati");
+                //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
+                ws.Column(1).Delete(); // Elimina la prima colonna
+                ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+
+                wb.SaveAs(tempFilePath);  // Salva il file
+                File.Move(tempFilePath, temp);
+                try
+                {
+                    Process.Start(temp);
+                    File.Delete(tempFilePath);
+                    tempFilePath = Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    File.Delete(tempFilePath);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Errore nell'apertura del file temporaneo: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+        }
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
 
     }
 }

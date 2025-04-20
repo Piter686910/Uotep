@@ -95,6 +95,7 @@
                                <ul class="dropdown-menu">
                                          <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
                                          <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
+<<<<<<< HEAD
 
                                </ul>
                          </li>
@@ -102,6 +103,13 @@
                         <li runat="server" id="menuEsci" visible="false"> 
                             <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click"  style="color: #ffffff !important">ESCI</asp:LinkButton>
                         </li>
+=======
+
+                               </ul>
+                         </li>
+
+                        <li runat="server" id="menuEsci" visible="false"> <a style="color: #ffffff !important"   <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click">ESCI</asp:LinkButton></a></li>
+>>>>>>> e67470825c387f7629c112d3c3f6f3d6c4eb021c
                     </ul>
                 </div>
                

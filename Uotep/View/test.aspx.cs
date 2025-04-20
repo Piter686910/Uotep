@@ -1,158 +1,102 @@
 ﻿using System;
-using System.Web.UI;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Web.Services;
 using System.Web.UI.WebControls;
+using Uotep.Classi;
 
 namespace Uote
 {
-    public partial class _test : Page
+    public partial class test : System.Web.UI.Page
     {
-        String Vuser = String.Empty;
+        // Lista di suggerimenti (esempio)
+        private static List<string> nomiSuggeriti = new List<string>()
+        {
+            "Alice",
+            "Bob",
+            "Charlie",
+            "David",
+            "Eve",
+            "Federico",
+            "Giorgio",
+            "Luca",
+            "Marco",
+            "Paolo",
+            "Pietro",
+            "Giovanni",
+            "Andrea",
+            "Simone",
+            "Giuseppe"
+        };
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["user"] != null)
+            if (!IsPostBack)
             {
-                Vuser = Session["user"].ToString();
+                Manager mn = new Manager();
+                DataTable RicercaGiudice = mn.getListGiudice();
+                DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
+                DdlGiudice.DataTextField = "Giudice"; // Il campo visibile
+                DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
 
+                DdlGiudice.DataBind();
             }
         }
-        protected void btA_Click(object sender, EventArgs e)
+        
+
+        protected void txtInput_TextChanged(object sender, EventArgs e)
         {
-
-            // Crea un nuovo ListViewDataItem con un valore di esempio
-            ListViewDataItem itemToAdd = new ListViewDataItem(0, 0);
-            itemToAdd.DataItem = DdlPattuglia.SelectedItem.Text;
-
-            // Verifica se l'elemento è già presente nella ListView
-            bool itemExists = false;
-
-            foreach (var item in LPattugliaCompleta.Items)
+            string inputText = txtInput.Text;
+            if (string.IsNullOrEmpty(inputText))
             {
-                if (item.ToString() == itemToAdd.DataItem.ToString())
+                suggestionsList.InnerHtml = ""; // Pulisci la lista se l'input è vuoto
+                suggestionsList.Style.Add("display", "none");
+                return;
+            }
+
+            string testoInputLower = inputText.ToLower();
+
+            List<string> suggerimentiFiltrati = nomiSuggeriti
+                .Where(nome => nome.ToLower().StartsWith(testoInputLower))
+                .ToList();
+
+            if (suggerimentiFiltrati.Count > 0)
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append("<ul>");
+                foreach (var suggerimento in suggerimentiFiltrati)
                 {
-                    itemExists = true;
-                    break;
+                    // Utilizzo di una funzione JavaScript per selezionare il suggerimento al click
+                    sb.Append($"<li onclick=\"selezionaSuggerimento('{suggerimento}')\">{suggerimento}</li>");
                 }
+                sb.Append("</ul>");
+                suggestionsList.InnerHtml = sb.ToString();
+                suggestionsList.Style.Remove("display"); // Mostra la lista se ci sono suggerimenti
             }
-
-            // Aggiungi l'elemento solo se non esiste già
-            if (!itemExists)
+            else
             {
-                LPattugliaCompleta.Items.Add(DdlPattuglia.SelectedItem.Text);
+                suggestionsList.InnerHtml = ""; // Pulisci la lista se non ci sono suggerimenti
+                suggestionsList.Style.Add("display", "none"); // Nascondi la lista se non ci sono suggerimenti
             }
-
         }
-        protected void CkAttivita_CheckedChanged1(object sender, EventArgs e)
-        {
-            //ToggleDivControls(divTesta, CkAttivita.Checked);
-            //ToggleDivControls(divDettagli, CkAttivita.Checked);
 
-        }
-        protected void apripopup_Click(object sender, EventArgs e)
+        [WebMethod]
+        [System.Web.Script.Services.ScriptMethod()]
+        public static List<string> GetSuggestions(string inputText)
         {
-            string script = @"$(document).ready(function(){$('body').append('<div class=\'modal fade\' id=\'myModal\' ...>...</div>'); " +
-           " $('#myModal').modal('show');});";
-
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "$('#myModal').addClass('show').css('display', 'block'); $('body').addClass('modal-open'); $('<div class=\"modal-backdrop fade show\"></div>').appendTo('body');", true);
-
-            //ScriptManager.RegisterStartupScript(this, GetType(), "Showpopup", "$('#myModal').modal('show')",true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$(“#myModal”).show()");
-            //ScriptManager.RegisterStartupScript(this, GetType(), "HideModal", "$('#myModal').modal('hide');", true);
-            //string script = "var myModal = new bootstrap.Modal(document.getElementById('myModal')); myModal.show();";
-            //ClientScript.RegisterStartupScript(this.GetType(), "ShowModalScript", script, true);
-        }
-        protected void chiudipopup_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('PP')); modal.hide();", true);
-
-        }
-        protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
+            if (string.IsNullOrEmpty(inputText))
             {
-                // Ottieni il valore della colonna "ID"
-                string id = DataBinder.Eval(e.Row.DataItem, "ID").ToString();
-
-                // Aggiungi l'attributo per il doppio clic
-                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
-                e.Row.Style["cursor"] = "pointer";
+                return new List<string>();
             }
+
+            string testoInputLower = inputText.ToLower();
+
+            List<string> suggerimentiFiltrati = nomiSuggeriti
+                .Where(nome => nome.ToLower().StartsWith(testoInputLower))
+                .ToList();
+
+            return suggerimentiFiltrati;
         }
-        protected void RicercaQuartiere_Click(object sender, EventArgs e)
-        {
-            string indirizzo = string.Empty;
-
-
-            //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
-            //indirizzo = txtIndirizzo.Text.Trim();
-
-
-            //string specie = txtSpecie.Text.Trim();
-
-            //if (!string.IsNullOrEmpty(indirizzo))
-            //{
-            //    // Simula il recupero del quartiere dal database o da una logica interna.
-            //    Manager mn = new Manager();
-            //    DataTable quartiere = mn.getQuartiere(indirizzo);
-
-            //    if (quartiere.Rows.Count > 0)
-            //    {
-            //        gvPopup.DataSource = quartiere;
-            //        gvPopup.DataBind();
-
-            //        //DdlQuartiere.Text = quartiere.Rows[0].ItemArray[0].ToString();
-            //        //txtIndirizzo.Text = string.Empty;
-            //        //txtSpecie.Text = string.Empty;
-            //        //lblQuartiere.Text = $"Quartiere: {quartiere.Rows[0].ItemArray[0]}";
-            //    }
-            //    else
-            //    {
-            //        //lblQuartiere.Text = "Quartiere non trovato.";
-            //    }
-            //}
-            //else
-            //{
-            //    //lblQuartiere.Text = "Inserisci un indirizzo valido.";
-            //}
-
-            // Mantieni il popup aperto dopo l'interazione lato server.
-            //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "HideModal", "$('#myModal').modal('hide');", true);
-
-            //DataTable Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, TxtPassw.Text);
-            //if (bUser == "admin")
-            //{
-            //    Response.Redirect("pagina_amministratore.aspx?user=" + Vuser + "&numord=" + VNumOrd + "", false);
-            //    return;
-            //}
-
-            //if (Ricerca.Rows.Count > 0)
-            //{
-            //    var Rapportino = new Rapportino();
-
-
-            //    Rapportino.mat = txt_Operatore.Text;
-
-            //    Rapportino.Show();
-            //    this.Close(); ;
-            //}
-
-        }
-        //protected void gvPopup_RowCommand(object sender, GridViewCommandEventArgs e)
-        //{
-        //    if (e.CommandName == "Select")
-        //    {
-        //        // Ottieni il valore dell'ID dalla CommandArgument
-        //        string selectedValue = e.CommandArgument.ToString();
-
-        //        // Imposta il valore nel TextBox
-        //        //txtSelectedValue.Text = selectedValue;
-        //        DdlQuartiere.SelectedItem.Text = selectedValue;
-        //        // Chiudi il popup
-        //        ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
-        //    }
-        //}
     }
 }

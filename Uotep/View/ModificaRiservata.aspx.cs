@@ -243,7 +243,7 @@ namespace Uotep
                 DataTable RicercaQuartiere = mn.getListQuartiere();
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+                                                          // DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
                 DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
@@ -451,5 +451,98 @@ namespace Uotep
         {
             DdlProvenienza.SelectedItem.Text = txtTestoProvenienza.Text;
         }
+        //inizio bottoni ricerca
+        protected void btNProtocollo_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivProtocollo.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btProcPenale_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivProcPenale.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btProtGen_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivProtGen.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btEvaseAg_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivEvasaAg.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btNpratica_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivPratica.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btGiudice_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivGiudice.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btProvenienza_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivRicerca.Visible = true;
+            DivProvenienza.Visible = true;
+        }
+
+        protected void btNominativo_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivNominativo.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btDataCarico_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivDataCarico.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btAccertatori_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivAccertatori.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void btIndirizzo_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivIndirizzo.Visible = true;
+            DivRicerca.Visible = true;
+        }
+
+        protected void NascondiDiv()
+        {
+            DivProtocollo.Visible = false;
+            DivEvasaAg.Visible = false;
+            DivProtGen.Visible = false;
+            DivIndirizzo.Visible = false;
+            DivAccertatori.Visible = false;
+            DivDataCarico.Visible = false;
+            DivNominativo.Visible = false;
+            DivProvenienza.Visible = false;
+            DivGiudice.Visible = false;
+            DivPratica.Visible = false;
+            DivProcPenale.Visible = false;
+        }
+        //fine
     }
 }
