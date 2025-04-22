@@ -258,41 +258,32 @@ namespace Uotep
                                                   //
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                //IXLWorksheet worksheet = ws;
-                ////sostituisce booleani con stringa si o no
-                //int lastRow = worksheet.LastRowUsed().RowNumber();
-                //int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
-                //for (int row = 2; row <= lastRow; row++)
-                //{
-                //    // Itera su tutte le colonne nella riga corrente
-                //    for (int column = 1; column <= lastColumn; column++)
-                //    {
-                //        IXLCell cell = worksheet.Cell(row, column); // Ottieni la cella corrente
-                //        XLDataType tipoDatoD1 = cell.DataType;
-                //        string valore = string.Empty;
-                //        if (tipoDatoD1 is XLDataType.Boolean)
-                //              valore = System.Convert.ToString(((bool)cell.Value));
-
-                //            if (valore == "True")
-                //            {
-
-                //                cell.Value = "SI"; // Sostituisci "true" (stringa) con "si"
-                //            }
-                //            else if (valore == "False")
-                //            {
-                //                cell.Value = "NO"; // Sostituisci "false" (stringa) con "no"
-                //            }
-                //    }
-                //}
-                //
+                
                 wb.SaveAs(tempFilePath);  // Salva il file
-                File.Move(tempFilePath, temp);
+                
+                string contentType = MimeMapping.GetMimeMapping(tempFilePath);
+
+                byte[] fileBytes = File.ReadAllBytes(tempFilePath);
+
+
+               // File.Move(tempFilePath, temp);
                 try
                 {
-                    Process.Start(temp);
-                    File.Delete(tempFilePath);
-                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
-                    File.Delete(tempFilePath);
+                    // *** 5. Prepara la risposta HTTP per il download ***
+                    Response.Clear();
+                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + tempFilePath); // Header Content-Disposition per forzare il download
+                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
+                    Response.Flush();
+                    Response.End();
+
+
+
+
+                   // Process.Start(temp);
+                    //File.Delete(tempFilePath);
+                    //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    //File.Delete(tempFilePath);
 
                 }
                 catch (Exception ex)
