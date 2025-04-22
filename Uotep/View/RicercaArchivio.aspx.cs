@@ -275,12 +275,12 @@ namespace Uotep
                     Response.AddHeader("Content-Disposition", "attachment; filename=" + tempFilePath); // Header Content-Disposition per forzare il download
                     Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
                     Response.Flush();
-                    Response.End();
+                    //Response.End();
+                    HttpContext.Current.ApplicationInstance.CompleteRequest();
 
 
 
-
-                   // Process.Start(temp);
+                    // Process.Start(temp);
                     //File.Delete(tempFilePath);
                     //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
                     //File.Delete(tempFilePath);
