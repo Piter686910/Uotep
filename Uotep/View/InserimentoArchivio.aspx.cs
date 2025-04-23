@@ -247,11 +247,16 @@ namespace Uotep
 
                     //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
                     Manager mn = new Manager();
-                    String[] ar = null;
+                    String[] ar = new String[2];
                     if (Session["ListRicerca"] != null)
                     {
                         List<string> ListRicerca = (List<string>)Session["ListRicerca"];
                          ar = ListRicerca.ToArray();
+                    }
+                    else
+                    {
+                        List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
+                        ar = ListRicerca.ToArray();
                     }
                     DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null,null,null);
                     if (dt.Rows.Count > 0)
