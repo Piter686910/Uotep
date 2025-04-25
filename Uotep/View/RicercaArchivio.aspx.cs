@@ -240,15 +240,15 @@ namespace Uotep
 
             DataTable dt = mn.getArchivioUoteParziale(ar);
 
-            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
 
             // 2. Esporta la DataTable in Excel
             //string filePath = Path.Combine(Filename, "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
 
-            Session["filetemp"] = temp;
+            Session["filetemp"] = filePath;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var ws = wb.Worksheets.Add(dt, "Dati");
@@ -258,41 +258,22 @@ namespace Uotep
                                                   //
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                //IXLWorksheet worksheet = ws;
-                ////sostituisce booleani con stringa si o no
-                //int lastRow = worksheet.LastRowUsed().RowNumber();
-                //int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
-                //for (int row = 2; row <= lastRow; row++)
-                //{
-                //    // Itera su tutte le colonne nella riga corrente
-                //    for (int column = 1; column <= lastColumn; column++)
-                //    {
-                //        IXLCell cell = worksheet.Cell(row, column); // Ottieni la cella corrente
-                //        XLDataType tipoDatoD1 = cell.DataType;
-                //        string valore = string.Empty;
-                //        if (tipoDatoD1 is XLDataType.Boolean)
-                //              valore = System.Convert.ToString(((bool)cell.Value));
 
-                //            if (valore == "True")
-                //            {
+                wb.SaveAs(filePath);  // Salva il file
 
-                //                cell.Value = "SI"; // Sostituisci "true" (stringa) con "si"
-                //            }
-                //            else if (valore == "False")
-                //            {
-                //                cell.Value = "NO"; // Sostituisci "false" (stringa) con "no"
-                //            }
-                //    }
-                //}
-                //
-                wb.SaveAs(tempFilePath);  // Salva il file
-                File.Move(tempFilePath, temp);
+                string contentType = MimeMapping.GetMimeMapping(filePath);
+
+                byte[] fileBytes = File.ReadAllBytes(filePath);
                 try
                 {
-                    Process.Start(temp);
-                    File.Delete(tempFilePath);
-                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
-                    File.Delete(tempFilePath);
+                    // *** 5. Prepara la risposta HTTP per il download ***
+                    Response.Clear();
+                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
+                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
+                    Response.Flush();
+                    //Response.End();
+                    HttpContext.Current.ApplicationInstance.CompleteRequest();
 
                 }
                 catch (Exception ex)
@@ -307,13 +288,13 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = mn.getArchivioUoteTotale();
-            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
                                                                                   // 2. Esporta la DataTable in Excel
                                                                                   // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
-            Session["filetemp"] = temp;
+            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            Session["filetemp"] = filePath;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var ws = wb.Worksheets.Add(dt, "Dati");
@@ -322,15 +303,21 @@ namespace Uotep
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                wb.SaveAs(tempFilePath);  // Salva il file
-                File.Move(tempFilePath, temp);
+                wb.SaveAs(filePath);  // Salva il file
+
+                string contentType = MimeMapping.GetMimeMapping(filePath);
+
+                byte[] fileBytes = File.ReadAllBytes(filePath);
+
                 try
                 {
-                    Process.Start(temp);
-                    File.Delete(tempFilePath);
-                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
-                    File.Delete(tempFilePath);
-
+                    // *** 5. Prepara la risposta HTTP per il download ***
+                    Response.Clear();
+                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
+                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
+                    Response.Flush();
+                    HttpContext.Current.ApplicationInstance.CompleteRequest();
                 }
                 catch (Exception ex)
                 {
