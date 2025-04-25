@@ -171,6 +171,7 @@ namespace Uotep
         {
             Session.Remove("user");
             Session.Remove("POP");
+            Session.Remove("filetemp");
             Session.Remove("profilo");
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");
