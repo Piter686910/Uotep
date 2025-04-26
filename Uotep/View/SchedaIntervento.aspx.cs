@@ -1,4 +1,4 @@
-﻿using Microsoft.Reporting.WinForms;
+﻿﻿using Microsoft.Reporting.WinForms;
 using System;
 using System.Configuration;
 using System.Data;
@@ -352,7 +352,7 @@ namespace Uotep
 
                 ret = false;
             }
-            if (ckAccertAvvenutoRipr.Checked==false)
+            if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false || rdParziale.Checked == false || rdNonAvvenuto.Checked == false)
                 {
@@ -612,4 +612,3 @@ namespace Uotep
     }
 
 }
-

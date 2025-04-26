@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
-using System.IO;
 using static Uotep.Classi.Enumerate;
 
 namespace Uotep
@@ -40,7 +39,7 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
-                                    Statistiche.Visible= true;
+                                    Statistiche.Visible = true;
 
                                 }
                                 InserimentoAtti.Visible = true;
@@ -84,6 +83,7 @@ namespace Uotep
                                     menuRicercaScheda.Visible = true;
                                     Statistiche.Visible = false;
                                 }
+
                                 break;
                             case "PG":
                                 // Mostra voci per utenti standard
@@ -93,7 +93,7 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                StatistichePg.Visible=true;
+                                StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 break;
                             case "archivio":
@@ -169,25 +169,12 @@ namespace Uotep
 
         protected void Esci_Click(object sender, EventArgs e)
         {
-            string temp = Session["filetemp"].ToString();
-            try
-            {
-                File.Delete(temp);
-            }
-            catch (Exception)
-            {
-                Session["MessaggioErrore"] = "Il file è aperto, chiudere il file";
-                Session["PaginaChiamante"] = "View/RicercaArchivio.aspx";
-                Response.Redirect("~/Contact.aspx");
-
-            }
-
             Session.Remove("user");
             Session.Remove("POP");
+            Session.Remove("filetemp");
             Session.Remove("profilo");
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");
-            Session.Remove("filetemp");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }
