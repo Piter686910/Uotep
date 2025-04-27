@@ -60,13 +60,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btDatiCatastali;
 
         /// <summary>
-        /// Controllo btNpratica.
+        /// Controllo btNpraticaStorico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btNpratica;
+        protected global::System.Web.UI.WebControls.Button btNpraticaStorico;
 
         /// <summary>
         /// Controllo btNota.
@@ -103,6 +103,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btEstraiTotale;
+
+        /// <summary>
+        /// Controllo btNpratica.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btNpratica;
 
         /// <summary>
         /// Controllo DivRicerca.
@@ -445,6 +454,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CkPropAltri;
+
+        /// <summary>
+        /// Controllo HfPratica.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfPratica;
 
         /// <summary>
         /// Controllo Button2.

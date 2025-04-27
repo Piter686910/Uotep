@@ -20,6 +20,7 @@ namespace Uotep
 {
     public partial class RicercaArchivio : Page
     {
+        public string argomentoPassato = string.Empty;
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -88,8 +89,22 @@ namespace Uotep
             }
             if (!string.IsNullOrEmpty(txtPratica.Text))
             {
+                List<string> ListRicerca = new List<string>();
                 // Crea una lista 
-                List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
+                switch (HfPratica.Value)
+                {
+                    case "Pratica":
+                        ListRicerca.Add("Pratica");
+                        ListRicerca.Add(txtPratica.Text);
+
+                        break;
+                    case "StoricoPratica":
+                        ListRicerca.Add("StoricoPratica");
+                        ListRicerca.Add(txtPratica.Text);
+                        break;
+
+                }
+                // List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
 
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = ListRicerca;
@@ -180,6 +195,9 @@ namespace Uotep
 
         protected void btNpratica_Click(object sender, EventArgs e)
         {
+            System.Web.UI.WebControls.Button clickedButton = (System.Web.UI.WebControls.Button)sender;
+            argomentoPassato = clickedButton.CommandArgument;
+            HfPratica.Value = argomentoPassato;
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
@@ -258,15 +276,15 @@ namespace Uotep
                                                   //
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                
+
                 wb.SaveAs(tempFilePath);  // Salva il file
-                
+
                 string contentType = MimeMapping.GetMimeMapping(tempFilePath);
 
                 byte[] fileBytes = File.ReadAllBytes(tempFilePath);
 
 
-               // File.Move(tempFilePath, temp);
+                // File.Move(tempFilePath, temp);
                 try
                 {
                     // *** 5. Prepara la risposta HTTP per il download ***

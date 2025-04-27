@@ -52,6 +52,7 @@
     text-align: center !important;
     white-space: normal !important;
     word-break: break-word !important;
+    margin-left: 10px !important;
 }
 
     </style>
@@ -61,49 +62,55 @@
             <p class="text-center lead">RICERCA UNA PRATICA</p>
             <!-- Contenitore per centrare -->
 
-      <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
-    <%--
+            <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
+                <%--
         Il div sottostante con d-flex e justify-content-center sta cercando di centrare
         il contenuto interno usando Flexbox. Può essere utile per il mt-4 (margin top).
         Aggiungendo margin: 0 auto; alla tabella, centriamo la tabella stessa come blocco.
-    --%>
-    <div class="d-flex justify-content-center mt-4">
-        <%-- Inizio Tabella per i Pulsanti --%>
-        <table class="center-table"> <%-- <--- AGGIUNGI class="center-table" QUI --%>
-            <tr>
-                <%-- Prima riga: 4 pulsanti --%>
-                <td>
-                    <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Responsabile" ToolTip="Ricerca Responsabile" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Storico Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-            </tr>
-            <tr>
-                <%-- Seconda riga: altri 4 pulsanti --%>
-                <td>
-                    <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-                <td>
-                    <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
-                </td>
-            </tr>
-        </table>
-        <%-- Fine Tabella Pulsanti --%>
-    </div>
-</asp:Panel>
+                --%>
+                <div class="d-flex justify-content-center mt-4">
+                    <%-- Inizio Tabella per i Pulsanti --%>
+                    <table class="center-table">
+                        <%-- <--- AGGIUNGI class="center-table" QUI --%>
+                        <tr>
+                            <%-- Prima riga: 4 pulsanti --%>
+                            <td>
+                                <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Responsabile" ToolTip="Ricerca Responsabile" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btNpraticaStorico" runat="server" CommandArgument="StoricoPratica" OnClick="btNpratica_Click" Text="Storico Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- Seconda riga: altri 4 pulsanti --%>
+                            <td>
+                                <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                            <td>
+                                <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" CommandArgument="Pratica"  Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
+                        </tr>
+                    </table>
+                    <%-- Fine Tabella Pulsanti --%>
+                </div>
+            </asp:Panel>
         </div>
 
         <%--Sezione di ricerca  --%>
@@ -215,27 +222,27 @@
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il primo gruppo ->--%>
+                        <%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                     </div>
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il secondo gruppo ->--%>
+                        <%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="Ck1089">1089</label>
                     </div>
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il terzo gruppo ->--%>
+                        <%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
                     </div>
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il quarto gruppo ->--%>
+                        <%--                        <!- Spacing per il quarto gruppo ->--%>
                         <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
                     </div>
                     <div>
-<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
+                        <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
                     </div>
@@ -247,25 +254,25 @@
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il primo gruppo ->--%>
+                        <%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropPriv">Prop. Privata</label>
                     </div>
 
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il secondo gruppo ->--%>
+                        <%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropComunale">Prop. Comunale</label>
                     </div>
 
                     <div style="margin-right: 50px;">
-<%--                        <!- Spacing per il terzo gruppo ->--%>
+                        <%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropBeniCult">Prop. Beni Cult.</label>
                     </div>
 
                     <div>
-<%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
+                        <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropAltri">Prop. Altri Enti</label>
                     </div>
@@ -280,7 +287,7 @@
 
 
     </div>
-
+    <asp:HiddenField ID="HfPratica" runat="server" Value="" />
 
 
 

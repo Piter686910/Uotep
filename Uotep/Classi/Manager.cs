@@ -929,11 +929,12 @@ namespace Uotep.Classi
                 {
                     case "Pratica":
                         if (!String.IsNullOrEmpty(pratica[1]))
-                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                            sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+
                         break;
                     case "StoricoPratica":
                         if (!String.IsNullOrEmpty(pratica[1]))
-                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
                         break;
                 }
             }
