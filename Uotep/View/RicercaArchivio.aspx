@@ -20,33 +20,90 @@
        
 
     </script>
+    <style>
+        /* Stile per centrare orizzontalmente un elemento a blocco come una tabella */
+.center-table {
+    margin-left: auto;
+    margin-right: auto;
+    /* In breve: margin: 0 auto; */
+    /* Opzionale: potresti voler collassare i bordi se li usi */
+    /* border-collapse: collapse; */
+    /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
+    /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
+}
+
+/* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
+/* Aggiunge padding a tutte le celle della tabella con classe center-table */
+.center-table td {
+    padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
+    padding-top: 5px;    /* Opzionale: Aggiunge un po' di spazio SOPRA */
+    /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
+    /* padding-left: 5px; */
+    /* padding-right: 5px; */
+}
+
+/* Stile per rendere i bottoni stessa altezza e larghezza */
+.uniform-button {
+    width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
+    height: 45px !important;  /* Esempio: Altezza fissa per i bottoni */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+
+    </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">RICERCA UNA PRATICA</p>
             <!-- Contenitore per centrare -->
 
-            <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
-                <div class="d-flex justify-content-center mt-4">
-
-                    <p>
-                        <!-- Pulsanti -->
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Responsabile" ToolTip="Ricerca Responsabile" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
-
-                    </p>
-                    <p>
-                        <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2" />
-
-                    </p>
-                </div>
-
-            </asp:Panel>
+      <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
+    <%--
+        Il div sottostante con d-flex e justify-content-center sta cercando di centrare
+        il contenuto interno usando Flexbox. Può essere utile per il mt-4 (margin top).
+        Aggiungendo margin: 0 auto; alla tabella, centriamo la tabella stessa come blocco.
+    --%>
+    <div class="d-flex justify-content-center mt-4">
+        <%-- Inizio Tabella per i Pulsanti --%>
+        <table class="center-table"> <%-- <--- AGGIUNGI class="center-table" QUI --%>
+            <tr>
+                <%-- Prima riga: 4 pulsanti --%>
+                <td>
+                    <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Responsabile" ToolTip="Ricerca Responsabile" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Storico Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+            </tr>
+            <tr>
+                <%-- Seconda riga: altri 4 pulsanti --%>
+                <td>
+                    <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Ricerca Nota" ToolTip="Ricerca Nota" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btAnnoMese" runat="server" OnClick="btAnnoMese_Click" Text="Ricerca Anno/Mese" ToolTip="Ricerca Anno/Mese" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+                <td>
+                    <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
+                </td>
+            </tr>
+        </table>
+        <%-- Fine Tabella Pulsanti --%>
+    </div>
+</asp:Panel>
         </div>
 
         <%--Sezione di ricerca  --%>
