@@ -17,7 +17,7 @@
         function hideModal() {
             $('#myModal').modal('hide');
         }
-       
+
 
     </script>
     <style>
