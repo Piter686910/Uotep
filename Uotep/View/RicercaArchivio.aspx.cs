@@ -13,6 +13,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Uotep.Classi;
+using WebGrease.Activities;
 using Page = System.Web.UI.Page;
 
 
@@ -316,13 +317,13 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = mn.getArchivioUoteTotale();
-            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
                                                                                   // 2. Esporta la DataTable in Excel
                                                                                   // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
-            Session["filetemp"] = temp;
+            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            Session["filetemp"] = filePath;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var ws = wb.Worksheets.Add(dt, "Dati");
@@ -331,14 +332,25 @@ namespace Uotep
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                wb.SaveAs(tempFilePath);  // Salva il file
-                File.Move(tempFilePath, temp);
+                wb.SaveAs(filePath);  // Salva il file
+                string contentType = MimeMapping.GetMimeMapping(filePath);
+
+                byte[] fileBytes = File.ReadAllBytes(filePath);
+                //File.Move(tempFilePath, temp);
                 try
                 {
-                    Process.Start(temp);
-                    File.Delete(tempFilePath);
-                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
-                    File.Delete(tempFilePath);
+                    Response.Clear();
+                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
+                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
+                    Response.Flush();
+                    //Response.End();
+                    HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+                    //Process.Start(temp);
+                    //File.Delete(tempFilePath);
+                    //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    //File.Delete(tempFilePath);
 
                 }
                 catch (Exception ex)
