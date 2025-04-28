@@ -277,11 +277,11 @@ namespace Uotep
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
 
-                wb.SaveAs(tempFilePath);  // Salva il file
+                wb.SaveAs(filePath);  // Salva il file
 
-                string contentType = MimeMapping.GetMimeMapping(tempFilePath);
+                string contentType = MimeMapping.GetMimeMapping(filePath);
 
-                byte[] fileBytes = File.ReadAllBytes(tempFilePath);
+                byte[] fileBytes = File.ReadAllBytes(filePath);
 
 
                 // File.Move(tempFilePath, temp);
@@ -290,7 +290,7 @@ namespace Uotep
                     // *** 5. Prepara la risposta HTTP per il download ***
                     Response.Clear();
                     Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + tempFilePath); // Header Content-Disposition per forzare il download
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
                     Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
                     Response.Flush();
                     //Response.End();
