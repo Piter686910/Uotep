@@ -39,7 +39,7 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
-                                    Statistiche.Visible= true;
+                                    Statistiche.Visible = true;
 
                                 }
                                 InserimentoAtti.Visible = true;
@@ -93,7 +93,7 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                StatistichePg.Visible=true;
+                                StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 break;
                             case "archivio":

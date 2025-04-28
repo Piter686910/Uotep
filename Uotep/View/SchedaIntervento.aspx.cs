@@ -1,4 +1,4 @@
-﻿using Microsoft.Reporting.WinForms;
+﻿﻿using Microsoft.Reporting.WinForms;
 using System;
 using System.Configuration;
 using System.Data;
@@ -612,4 +612,3 @@ namespace Uotep
     }
 
 }
-

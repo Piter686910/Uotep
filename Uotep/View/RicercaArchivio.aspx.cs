@@ -1,3 +1,6 @@
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,9 +13,6 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Uotep.Classi;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Page = System.Web.UI.Page;
 
 
@@ -20,6 +20,7 @@ namespace Uotep
 {
     public partial class RicercaArchivio : Page
     {
+        public string argomentoPassato = string.Empty;
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -88,8 +89,22 @@ namespace Uotep
             }
             if (!string.IsNullOrEmpty(txtPratica.Text))
             {
+                List<string> ListRicerca = new List<string>();
                 // Crea una lista 
-                List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
+                switch (HfPratica.Value)
+                {
+                    case "Pratica":
+                        ListRicerca.Add("Pratica");
+                        ListRicerca.Add(txtPratica.Text);
+
+                        break;
+                    case "StoricoPratica":
+                        ListRicerca.Add("StoricoPratica");
+                        ListRicerca.Add(txtPratica.Text);
+                        break;
+
+                }
+                // List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
 
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = ListRicerca;
@@ -180,6 +195,9 @@ namespace Uotep
 
         protected void btNpratica_Click(object sender, EventArgs e)
         {
+            System.Web.UI.WebControls.Button clickedButton = (System.Web.UI.WebControls.Button)sender;
+            argomentoPassato = clickedButton.CommandArgument;
+            HfPratica.Value = argomentoPassato;
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
@@ -240,15 +258,15 @@ namespace Uotep
 
             DataTable dt = mn.getArchivioUoteParziale(ar);
 
-            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
 
             // 2. Esporta la DataTable in Excel
             //string filePath = Path.Combine(Filename, "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione Parziale " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
 
-            Session["filetemp"] = filePath;
+            Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var ws = wb.Worksheets.Add(dt, "Dati");
@@ -259,21 +277,31 @@ namespace Uotep
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
 
-                wb.SaveAs(filePath);  // Salva il file
+                wb.SaveAs(tempFilePath);  // Salva il file
 
-                string contentType = MimeMapping.GetMimeMapping(filePath);
+                string contentType = MimeMapping.GetMimeMapping(tempFilePath);
 
-                byte[] fileBytes = File.ReadAllBytes(filePath);
+                byte[] fileBytes = File.ReadAllBytes(tempFilePath);
+
+
+                // File.Move(tempFilePath, temp);
                 try
                 {
                     // *** 5. Prepara la risposta HTTP per il download ***
                     Response.Clear();
                     Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
+                    Response.AddHeader("Content-Disposition", "attachment; filename=" + tempFilePath); // Header Content-Disposition per forzare il download
                     Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
                     Response.Flush();
                     //Response.End();
                     HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+
+
+                    // Process.Start(temp);
+                    //File.Delete(tempFilePath);
+                    //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    //File.Delete(tempFilePath);
 
                 }
                 catch (Exception ex)
@@ -288,13 +316,13 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = mn.getArchivioUoteTotale();
-            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
-            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
                                                                                   // 2. Esporta la DataTable in Excel
                                                                                   // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
-            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
-            Session["filetemp"] = filePath;
+            string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            Session["filetemp"] = temp;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 var ws = wb.Worksheets.Add(dt, "Dati");
@@ -303,21 +331,15 @@ namespace Uotep
                 ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(ws);
-                wb.SaveAs(filePath);  // Salva il file
-
-                string contentType = MimeMapping.GetMimeMapping(filePath);
-
-                byte[] fileBytes = File.ReadAllBytes(filePath);
-
+                wb.SaveAs(tempFilePath);  // Salva il file
+                File.Move(tempFilePath, temp);
                 try
                 {
-                    // *** 5. Prepara la risposta HTTP per il download ***
-                    Response.Clear();
-                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
-                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
-                    Response.Flush();
-                    HttpContext.Current.ApplicationInstance.CompleteRequest();
+                    Process.Start(temp);
+                    File.Delete(tempFilePath);
+                    tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
+                    File.Delete(tempFilePath);
+
                 }
                 catch (Exception ex)
                 {
