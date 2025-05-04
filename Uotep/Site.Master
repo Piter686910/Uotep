@@ -62,6 +62,7 @@
                             <ul class="dropdown-menu">
                                 <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
                                 <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
+                                <li><a id="GestionePratica" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
 
                             </ul>
                         </li>

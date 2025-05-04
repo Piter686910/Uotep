@@ -109,6 +109,7 @@ namespace Uotep
                                 menuHome.Visible = true;
                                 RicercaArchivio.Visible = true;
                                 InserimentoArchivio.Visible = true;
+                                GestionePratica.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -134,6 +135,7 @@ namespace Uotep
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 Statistiche.Visible = true;
+                                GestionePratica.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -156,6 +158,7 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
+                                GestionePratica.Visible = true;
                                 //*
                                 break;
                             default:

@@ -288,6 +288,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\GestionePratica.aspx" />
     <Content Include="View\StatistichePg.aspx" />
     <Content Include="View\RicercaArchivio.aspx" />
     <Content Include="View\EstraiStatistiche.aspx" />
@@ -347,6 +348,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classi\ArchivioUote.cs" />
+    <Compile Include="Classi\GestionePratiche.cs" />
     <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Enumerate.cs" />
     <Compile Include="Classi\Manager.cs" />
@@ -364,6 +366,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="View\GestionePratica.aspx.cs">
+      <DependentUpon>GestionePratica.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\GestionePratica.aspx.designer.cs">
+      <DependentUpon>GestionePratica.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\StatistichePg.aspx.cs">
       <DependentUpon>StatistichePg.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

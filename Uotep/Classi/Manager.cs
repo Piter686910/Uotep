@@ -901,6 +901,20 @@ namespace Uotep.Classi
 
             return tb;
         }
+        public DataTable getGestionePraticaByFascicolo(string fascicolo)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM gestionePratica where fascicolo = '" + fascicolo +"'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// estrazione totale del DB
         /// </summary>
@@ -1737,6 +1751,68 @@ namespace Uotep.Classi
             }
 
         }
+
+        public Boolean InsGestionePratica(GestionePratiche pr)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+
+                sql_pratica = "insert into gestionepratica (fascicolo, assegnato, data_uscita, data_rientro, data_spostamento, date_riscontro_in_ufficio,note)" +
+                   " Values('" + @pr.fascicolo + "','" + @pr.assegnato.Replace("'", "''") + "','" + @pr.data_uscita + "','" +  @pr.data_rientro + "','" + @pr.data_spostamento 
+                   + "','" +  @pr.data_rientro + "','" +  @pr.note.Replace("'", "''") + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "gestione pratica";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("fascicolo " + pr.fascicolo + ", assegnato:" + pr.assegnato + ", data ins:" + pr.data_uscita + ", " + ex.Message + @" - Errore in inserimento gestione pratica ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
         //FINE INSERIMENTO
         public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita, int id)
         {
@@ -2126,6 +2202,66 @@ namespace Uotep.Classi
             catch (Exception)
             {
                 resp = false;
+            }
+            return resp;
+
+        }
+        public Boolean UpdGestionePratica(GestionePratiche pr)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_pratica = "update gestionepratica set assegnato = '" + @pr.assegnato.Replace("'", "''") + "',note = '" + @pr.note.Replace("'", "''") + "',data_rientro ='" + @pr.data_rientro + "',data_spostamento='" + @pr.data_spostamento +
+                   "',date_riscontro_in_ufficio = '" + @pr.data_riscontro_in_ufficio + "'" +
+                   " where fascicolo = '" + @pr.fascicolo + "'";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "gestione pratica";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("fascicolo " + pr.fascicolo + ", assegnato:" + pr.assegnato + ", data ins:" + pr.data_uscita + ", " + ex.Message + @" - Errore in inserimento gestione pratica ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
             }
             return resp;
 
