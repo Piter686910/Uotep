@@ -164,7 +164,7 @@ namespace Uotep
 
             if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[2].ToString()))
             {
-                switch (arc.Rows[0].ItemArray[2].ToString())
+                switch (arc.Rows[0].ItemArray[2].ToString().ToUpper())
                 {
                     case "BIS":
                         CkBis.Checked = true;

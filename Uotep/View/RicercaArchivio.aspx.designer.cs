@@ -60,13 +60,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btDatiCatastali;
 
         /// <summary>
-        /// Controllo btNpraticaStorico.
+        /// Controllo btNpratica.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btNpraticaStorico;
+        protected global::System.Web.UI.WebControls.Button btNpratica;
 
         /// <summary>
         /// Controllo btNota.
@@ -105,15 +105,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btEstraiTotale;
 
         /// <summary>
-        /// Controllo btNpratica.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btNpratica;
-
-        /// <summary>
         /// Controllo DivRicerca.
         /// </summary>
         /// <remarks>
@@ -148,6 +139,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtPratica;
+
+        /// <summary>
+        /// Controllo ckStorico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ckStorico;
+
+        /// <summary>
+        /// Controllo ckDoppioni.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ckDoppioni;
 
         /// <summary>
         /// Controllo DivIndirizzo.
@@ -454,15 +463,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox CkPropAltri;
-
-        /// <summary>
-        /// Controllo HfPratica.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfPratica;
 
         /// <summary>
         /// Controllo Button2.

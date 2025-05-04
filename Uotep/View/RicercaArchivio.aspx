@@ -22,39 +22,38 @@
     </script>
     <style>
         /* Stile per centrare orizzontalmente un elemento a blocco come una tabella */
-.center-table {
-    margin-left: auto;
-    margin-right: auto;
-    /* In breve: margin: 0 auto; */
-    /* Opzionale: potresti voler collassare i bordi se li usi */
-    /* border-collapse: collapse; */
-    /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
-    /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
-}
+        .center-table {
+            margin-left: auto;
+            margin-right: auto;
+            /* In breve: margin: 0 auto; */
+            /* Opzionale: potresti voler collassare i bordi se li usi */
+            /* border-collapse: collapse; */
+            /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
+            /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
+        }
 
-/* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
-/* Aggiunge padding a tutte le celle della tabella con classe center-table */
-.center-table td {
-    padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
-    padding-top: 5px;    /* Opzionale: Aggiunge un po' di spazio SOPRA */
-    /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
-    /* padding-left: 5px; */
-    /* padding-right: 5px; */
-}
+            /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
+            /* Aggiunge padding a tutte le celle della tabella con classe center-table */
+            .center-table td {
+                padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
+                padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
+                /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
+                /* padding-left: 5px; */
+                /* padding-right: 5px; */
+            }
 
-/* Stile per rendere i bottoni stessa altezza e larghezza */
-.uniform-button {
-    width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
-    height: 45px !important;  /* Esempio: Altezza fissa per i bottoni */
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    margin-left: 10px !important;
-}
-
+        /* Stile per rendere i bottoni stessa altezza e larghezza */
+        .uniform-button {
+            width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
+            height: 45px !important; /* Esempio: Altezza fissa per i bottoni */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            text-align: center !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            margin-left: 10px !important;
+        }
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
@@ -84,7 +83,7 @@
                                 <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                             <td>
-                                <asp:Button ID="btNpraticaStorico" runat="server" CommandArgument="StoricoPratica" OnClick="btNpratica_Click" Text="Storico Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btNpratica" runat="server"  OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                         </tr>
                         <tr>
@@ -102,11 +101,11 @@
                                 <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                         </tr>
-                        <tr>
+<%--                        <tr>
                             <td>
-                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" CommandArgument="Pratica"  Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" CommandArgument="Pratica" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
-                        </tr>
+                        </tr>--%>
                     </table>
                     <%-- Fine Tabella Pulsanti --%>
                 </div>
@@ -124,6 +123,10 @@
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
+                    <asp:CheckBox ID="ckStorico" runat="server" CssClass="form-check-input" />
+                    <label class="form-check-label ms-2" for="ckStorico">Storico</label>
+                    <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" />
+                    <label class="form-check-label ms-2" for="ckDoppioni">Doppioni</label>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -287,9 +290,7 @@
 
 
     </div>
-    <asp:HiddenField ID="HfPratica" runat="server" Value="" />
-
-
+    
 
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">

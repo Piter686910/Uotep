@@ -928,8 +928,14 @@ namespace Uotep.Classi
                 switch (pratica[0])
                 {
                     case "Pratica":
-                        if (!String.IsNullOrEmpty(pratica[1]))
-                            sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                        if (pratica[1] == "Doppione")
+                            sql = "SELECT  * FROM ArchivioUote where arch_numPratica = '" + pratica[2].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(pratica[1]))
+                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+
+                        }
 
                         break;
                     case "StoricoPratica":

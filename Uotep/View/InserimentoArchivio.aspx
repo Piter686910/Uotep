@@ -506,6 +506,7 @@
                             <Columns>
                                 <asp:BoundField DataField="id_Archivio" HeaderText="ID" />
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
+                                <asp:BoundField DataField="arch_doppione" HeaderText="Doppione" />
                                 <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
                                 <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
                                 <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
