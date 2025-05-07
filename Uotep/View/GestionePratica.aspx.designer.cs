@@ -42,13 +42,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
 
         /// <summary>
-        /// Controllo ddlOperatore.
+        /// Controllo txtAssegnato.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlOperatore;
+        protected global::System.Web.UI.WebControls.TextBox txtAssegnato;
+
+        /// <summary>
+        /// Controllo RequiredFieldValidator2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
 
         /// <summary>
         /// Controllo TxtDataUscita.
@@ -166,5 +175,14 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btModifica;
+
+        /// <summary>
+        /// Controllo GVRicecaFascicolo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GVRicecaFascicolo;
     }
 }

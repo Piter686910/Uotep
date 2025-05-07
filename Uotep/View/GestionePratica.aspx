@@ -33,10 +33,10 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label for="ddlOperatore">Assegnato</label>
-                                <div class="input-group">
-                                    <asp:DropDownList ID="ddlOperatore" runat="server" CssClass="form-control" />
-                                </div>
+                                <label for="txtAssegnato">Assegnato</label>
+                                <asp:TextBox ID="txtAssegnato" runat="server" CssClass="form-control" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAssegnato" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
+                                </asp:RequiredFieldValidator>
                             </div>
                         </div>
 
@@ -121,8 +121,8 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group mb-3">
-                            <label for="txtNota" style="margin-left:20px">Note</label>
-                            <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" Height="100px" TextMode="MultiLine" style="margin-left:20px; width: 100%; max-width: 800px;" />
+                            <label for="txtNota" style="margin-left: 20px">Note</label>
+                            <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" Height="100px" TextMode="MultiLine" Style="margin-left: 20px; width: 100%; max-width: 800px;" />
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,41 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <asp:GridView ID="GVRicecaFascicolo" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
+                <Columns>
+                    <asp:BoundField DataField="id_gestionePratica" HeaderText="ID" Visible="false" />
+                    <asp:BoundField DataField="Fascicolo" HeaderText="Numero Fascicolo" />
+                    <asp:BoundField DataField="Assegnato" HeaderText="Assegnato" />
+                    <asp:BoundField DataField="data_uscita" HeaderText="Data Uscita" DataFormatString="{0:dd/MM/yyyy}" />
+                    <asp:TemplateField HeaderText="Data Rientro">
+                        <ItemTemplate>
+                            <%# FormatMyDate(Eval("data_rientro")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Data Spostamento">
+                        <ItemTemplate>
+                            <%# FormatMyDate(Eval("data_spostamento")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Data Riscontro">
+                        <ItemTemplate>
+                            <%# FormatMyDate(Eval("date_riscontro_in_ufficio")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
+                    <asp:BoundField DataField="note" HeaderText="Note" />
+
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_gestionePratica") %>' CssClass="btn btn-success btn-sm" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+
+        </div>
     </div>
 
 
@@ -157,6 +191,5 @@
             width: 110px;
         }
     </style>
-
 
 </asp:Content>

@@ -901,6 +901,21 @@ namespace Uotep.Classi
 
             return tb;
         }
+        public DataTable getGestionePraticaById(string id_fascicolo)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM gestionePratica where id_gestionePratica = '" + id_fascicolo + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+
         public DataTable getGestionePraticaByFascicolo(string fascicolo)
         {
             string sql = string.Empty;
@@ -947,7 +962,7 @@ namespace Uotep.Classi
                         else
                         {
                             if (!String.IsNullOrEmpty(pratica[1]))
-                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
 
                         }
 

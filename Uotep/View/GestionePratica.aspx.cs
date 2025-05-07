@@ -36,7 +36,7 @@ namespace Uotep
             if (!IsPostBack)
             {
                 //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-                CaricaDLL();
+
             }
 
         }
@@ -52,59 +52,28 @@ namespace Uotep
 
         }
 
-        private void CaricaDLL()
-        {
-            try
-            {
-
-                DataTable CaricaOperatori = mn.getListOperatore();
-                ddlOperatore.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
-                ddlOperatore.DataTextField = "Nominativo"; // Il campo visibile
-                //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
-                ddlOperatore.Items.Insert(0, new ListItem("", "0"));
-                ddlOperatore.DataBind();
-                ddlOperatore.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-
-
-
-
-            }
-            catch (Exception ex)
-            {
-                if (!File.Exists(LogFile))
-                {
-                    using (StreamWriter sw = File.CreateText(LogFile)) { }
-                }
-
-                using (StreamWriter sw = File.AppendText(LogFile))
-                {
-                    sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
-                    sw.Close();
-                }
-            }
-        }
         private void ValorizzaPratica()
         {
-            
 
-                
-                pratica.fascicolo = txtFascicolo.Text;
-                pratica.assegnato = ddlOperatore.SelectedValue;
-                pratica.note = txtNota.Text;
-                pratica.data_uscita = System.Convert.ToDateTime(TxtDataUscita.Text);
-                if (!String.IsNullOrEmpty(txtDataRientro.Text))
-                {
-                    pratica.data_rientro = System.Convert.ToDateTime(txtDataRientro.Text);
-                }
-                if (!String.IsNullOrEmpty(txtDataSpostamento.Text))
-                {
-                    pratica.data_spostamento = System.Convert.ToDateTime(txtDataSpostamento.Text);
-                }
-                if (!String.IsNullOrEmpty(txtDataRiscontro.Text))
-                {
-                    pratica.data_riscontro_in_ufficio = System.Convert.ToDateTime(txtDataRiscontro.Text);
-                }
-            
+
+
+            pratica.fascicolo = txtFascicolo.Text;
+            pratica.assegnato = txtAssegnato.Text;
+            pratica.note = txtNota.Text;
+            pratica.data_uscita = System.Convert.ToDateTime(TxtDataUscita.Text);
+            if (!String.IsNullOrEmpty(txtDataRientro.Text))
+            {
+                pratica.data_rientro = System.Convert.ToDateTime(txtDataRientro.Text);
+            }
+            if (!String.IsNullOrEmpty(txtDataSpostamento.Text))
+            {
+                pratica.data_spostamento = System.Convert.ToDateTime(txtDataSpostamento.Text);
+            }
+            if (!String.IsNullOrEmpty(txtDataRiscontro.Text))
+            {
+                pratica.data_riscontro_in_ufficio = System.Convert.ToDateTime(txtDataRiscontro.Text);
+            }
+
         }
 
         protected void btInserisci_Click(object sender, EventArgs e)
@@ -112,7 +81,7 @@ namespace Uotep
 
             Boolean resp = false;
             ValorizzaPratica();
-            
+
             resp = mn.InsGestionePratica(pratica);
 
             if (resp)
@@ -123,6 +92,29 @@ namespace Uotep
 
 
         }
+        /// <summary>
+        /// funzione che inserisce spaces al posto del min data value
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
+        protected string FormatMyDate(object dateValue)
+        {
+            if (dateValue == null || dateValue == DBNull.Value)
+            {
+                return ""; 
+            }
+
+            DateTime date;
+            if (DateTime.TryParse(dateValue.ToString(), out date))
+            {
+                if (date == DateTime.MinValue)
+                {
+                    return ""; // O " " se vuoi uno spazio fisico
+                }
+                return date.ToString("dd/MM/yyyy");
+            }
+            return ""; // Gestione di valori non validi
+        }
         private void Pulisci()
         {
             txtFascicolo.Text = string.Empty;
@@ -131,10 +123,102 @@ namespace Uotep
             txtDataSpostamento.Text = string.Empty;
             txtNota.Text = string.Empty;
             txtDataRiscontro.Text = string.Empty;
-            CaricaDLL();
-            
+            txtAssegnato.Text = string.Empty;
         }
+        protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id_gestionePratica").ToString();
 
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+            }
+        }
+        protected void gvPopup_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                //string selectedValue = e.CommandArgument.ToString();
+
+
+                string[] args = e.CommandArgument.ToString().Split(';');
+
+                string id_Fascicolo = args[0];
+
+                Manager mn = new Manager();
+
+                DataTable scheda = mn.getGestionePraticaById(id_Fascicolo);
+                if (scheda.Rows.Count > 0)
+                {
+                    FillScheda(scheda);
+
+                }
+                // Chiudi il popup
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            }
+        }
+        protected void FillScheda(DataTable fascicolo)
+        {
+            txtFascicolo.Text = fascicolo.Rows[0].ItemArray[1].ToString();
+            txtAssegnato.Text = fascicolo.Rows[0].ItemArray[2].ToString();
+
+            DateTime datauscita = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+            TxtDataUscita.Text = datauscita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+
+            DateTime dataRientro = new DateTime();
+            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[4].ToString()))
+            {
+                dataRientro = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[4].ToString()); // Recupera la data dal DataTable
+                if (dataRientro == DateTime.MinValue)
+                    txtDataRientro.Text = string.Empty;
+                else
+                    txtDataRientro.Text = dataRientro.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            }
+            else
+            {
+                if (dataRientro == DateTime.MinValue)
+                    txtDataRientro.Text = string.Empty;
+            }
+
+
+            DateTime dataSpostamento = new DateTime();
+            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[5].ToString()))
+            {
+                dataSpostamento = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[5].ToString()); // Recupera la data dal DataTable
+                if (dataSpostamento == DateTime.MinValue)
+
+                    txtDataSpostamento.Text = string.Empty;
+                else
+                    txtDataSpostamento.Text = dataSpostamento.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            }
+            else
+            {
+                if (dataSpostamento == DateTime.MinValue)
+
+                    txtDataSpostamento.Text = string.Empty;
+            }
+            DateTime dataRiscontro = new DateTime();
+            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[6].ToString()))
+            {
+                dataRiscontro = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[6].ToString()); // Recupera la data dal DataTable
+                if (dataRiscontro == DateTime.MinValue)
+                    txtDataRiscontro.Text = string.Empty;
+                else
+                    txtDataRiscontro.Text = dataRiscontro.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            }
+            else
+            {
+                    txtDataRiscontro.Text = string.Empty;
+            }
+
+
+            txtNota.Text = fascicolo.Rows[0].ItemArray[7].ToString();
+
+        }
         protected void btRicerca_Click(object sender, EventArgs e)
         {
             string dtS = string.Empty;
@@ -153,29 +237,8 @@ namespace Uotep
                 dt = mn.getGestionePraticaByFascicolo(txtFascicolo.Text.Trim());
                 if (dt.Rows.Count > 0)
                 {
-                    ddlOperatore.SelectedItem.Text = dt.Rows[0].ItemArray[2].ToString();
-                    DateTime appo = System.Convert.ToDateTime(dt.Rows[0].ItemArray[3].ToString());
-                    if (appo == DateTime.MinValue)
-                        TxtDataUscita.Text = string.Empty;
-                    else
-                        TxtDataUscita.Text = appo.ToString("dd/MM/yyyy");
-
-                    appo = System.Convert.ToDateTime(dt.Rows[0].ItemArray[4].ToString());
-                    if (appo == DateTime.MinValue)
-                        txtDataRientro.Text = string.Empty;
-                    else
-                        txtDataRientro.Text = appo.ToString("dd/MM/yyyy");
-                    appo = System.Convert.ToDateTime(dt.Rows[0].ItemArray[5].ToString());
-                    if (appo == DateTime.MinValue)
-                        txtDataSpostamento.Text = string.Empty;
-                    else
-                        txtDataSpostamento.Text = appo.ToString("dd/MM/yyyy");
-                    appo = System.Convert.ToDateTime(dt.Rows[0].ItemArray[6].ToString());
-                    if (appo == DateTime.MinValue)
-                        txtDataRiscontro.Text = string.Empty;
-                    else
-                        txtDataRiscontro.Text = appo.ToString("dd/MM/yyyy");
-                    txtNota.Text = dt.Rows[0].ItemArray[7].ToString();
+                    GVRicecaFascicolo.DataSource = dt;
+                    GVRicecaFascicolo.DataBind();
 
                 }
             }
