@@ -143,10 +143,10 @@
                         </ItemTemplate>
                     </asp:TemplateField>--%>
                     <asp:BoundField DataField="Data_Spostamenti" HeaderText="Data Spostamento" />
-                    <asp:BoundField DataField="NOTA_SPOSTAMENTO" HeaderText="Note" />
+                    <asp:BoundField DataField="NOTA_SPOSTAMENTO" HeaderText="Nota Spostamento" />
 
                     <asp:BoundField DataField="Data_Riscontro" HeaderText="Data Riscontro" />
-                    <asp:BoundField DataField="NOTA_RISCONTRO" HeaderText="Note" />
+                    <asp:BoundField DataField="NOTA_RISCONTRO" HeaderText="Nota Riscontro" />
 
                     <asp:BoundField DataField="note" HeaderText="Note" />
 
