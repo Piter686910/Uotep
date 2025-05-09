@@ -2221,7 +2221,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean UpdGestionePratica(GestionePratiche pr)
+        public Boolean UpdGestionePratica(int idFascicolo, GestionePratiche pr)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -2231,7 +2231,7 @@ namespace Uotep.Classi
             {
                 sql_pratica = "update gestionepratica set assegnato = '" + @pr.assegnato.Replace("'", "''") + "',note = '" + @pr.note.Replace("'", "''") + "',data_rientro ='" + @pr.data_rientro + "',data_spostamento='" + @pr.data_spostamento +
                    "',date_riscontro_in_ufficio = '" + @pr.data_riscontro_in_ufficio + "'" +
-                   " where fascicolo = '" + @pr.fascicolo + "'";
+                   " where id_gestionePratica = " + idFascicolo + "";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))

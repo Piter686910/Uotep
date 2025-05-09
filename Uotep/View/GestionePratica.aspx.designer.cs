@@ -24,6 +24,15 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divStat;
 
         /// <summary>
+        /// Controllo Label6.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label6;
+
+        /// <summary>
         /// Controllo txtFascicolo.
         /// </summary>
         /// <remarks>
@@ -42,6 +51,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
 
         /// <summary>
+        /// Controllo Label5.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label5;
+
+        /// <summary>
         /// Controllo txtAssegnato.
         /// </summary>
         /// <remarks>
@@ -58,6 +76,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+
+        /// <summary>
+        /// Controllo Label4.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label4;
 
         /// <summary>
         /// Controllo TxtDataUscita.
@@ -87,6 +114,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
+        /// Controllo Label3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label3;
+
+        /// <summary>
         /// Controllo txtDataRientro.
         /// </summary>
         /// <remarks>
@@ -103,6 +139,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
+
+        /// <summary>
+        /// Controllo Label2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label2;
 
         /// <summary>
         /// Controllo txtDataSpostamento.
@@ -123,6 +168,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
 
         /// <summary>
+        /// Controllo Label1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+
+        /// <summary>
         /// Controllo txtDataRiscontro.
         /// </summary>
         /// <remarks>
@@ -139,6 +193,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator4;
+
+        /// <summary>
+        /// Controllo lbl.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl;
 
         /// <summary>
         /// Controllo txtNota.
@@ -177,12 +240,30 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btModifica;
 
         /// <summary>
-        /// Controllo GVRicecaFascicolo.
+        /// Controllo GVRicercaFascicolo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GVRicecaFascicolo;
+        protected global::System.Web.UI.WebControls.GridView GVRicercaFascicolo;
+
+        /// <summary>
+        /// Controllo HfIdFascicolo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfIdFascicolo;
+
+        /// <summary>
+        /// Controllo Button2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button2;
     }
 }

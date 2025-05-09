@@ -1,4 +1,6 @@
-﻿using iText.StyledXmlParser.Jsoup.Nodes;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
+using iText.StyledXmlParser.Jsoup.Nodes;
 using System;
 using System.Configuration;
 using System.Data;
@@ -43,7 +45,7 @@ namespace Uotep
 
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
@@ -51,11 +53,29 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
 
         }
-
+        private Boolean VerificaCorrettezzaInserimento(GestionePratiche pratica)
+        {
+            Boolean resp=false;
+            DateTime appo= new DateTime();  
+            Manager mn = new Manager();
+            DataTable dt = new DataTable();
+            dt = mn.getGestionePraticaByFascicolo(pratica.fascicolo);
+            if (dt.Rows.Count > 1)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    appo = System.Convert.ToDateTime(dt.Rows[i].ItemArray[4].ToString());
+                    if (appo == DateTime.MinValue || String.IsNullOrEmpty(dt.Rows[i].ItemArray[4].ToString()))
+                    {
+                        resp = true; 
+                        break;
+                    }
+                }
+            }
+            return resp;
+        }
         private void ValorizzaPratica()
         {
-
-
 
             pratica.fascicolo = txtFascicolo.Text;
             pratica.assegnato = txtAssegnato.Text;
@@ -81,13 +101,21 @@ namespace Uotep
 
             Boolean resp = false;
             ValorizzaPratica();
-
-            resp = mn.InsGestionePratica(pratica);
-
+           resp = VerificaCorrettezzaInserimento(pratica);
+            if (!resp)
+            {
+                resp = mn.InsGestionePratica(pratica);
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile inserire una nuova riga se la data rientro della precedente non è valorizzata." + "'); $('#errorModal').modal('show');", true);
+                resp=false;
+            }
             if (resp)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
                 Pulisci();
+                getPratica(pratica);
             }
 
 
@@ -117,7 +145,7 @@ namespace Uotep
         }
         private void Pulisci()
         {
-            txtFascicolo.Text = string.Empty;
+           // txtFascicolo.Text = string.Empty;
             txtDataRientro.Text = string.Empty;
             TxtDataUscita.Text = string.Empty;
             txtDataSpostamento.Text = string.Empty;
@@ -148,7 +176,7 @@ namespace Uotep
                 string[] args = e.CommandArgument.ToString().Split(';');
 
                 string id_Fascicolo = args[0];
-
+                HfIdFascicolo.Value= id_Fascicolo;
                 Manager mn = new Manager();
 
                 DataTable scheda = mn.getGestionePraticaById(id_Fascicolo);
@@ -233,14 +261,15 @@ namespace Uotep
                 Manager mn = new Manager();
                 GestionePratiche pratica = new GestionePratiche();
                 pratica.fascicolo = txtFascicolo.Text;
-                DataTable dt = new DataTable();
-                dt = mn.getGestionePraticaByFascicolo(txtFascicolo.Text.Trim());
-                if (dt.Rows.Count > 0)
-                {
-                    GVRicecaFascicolo.DataSource = dt;
-                    GVRicecaFascicolo.DataBind();
+                getPratica(pratica);
+                //DataTable dt = new DataTable();
+                //dt = mn.getGestionePraticaByFascicolo(txtFascicolo.Text.Trim());
+                //if (dt.Rows.Count > 0)
+                //{
+                //    GVRicercaFascicolo.DataSource = dt;
+                //    GVRicercaFascicolo.DataBind();
 
-                }
+                //}
             }
         }
 
@@ -248,13 +277,28 @@ namespace Uotep
         {
             Boolean resp = false;
             ValorizzaPratica();
-
-            resp = mn.UpdGestionePratica(pratica);
+            int idfascicolo = System.Convert.ToInt32(HfIdFascicolo.Value);
+            
+            resp = mn.UpdGestionePratica(idfascicolo,pratica);
 
             if (resp)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
-                Pulisci();
+                //Pulisci();
+                getPratica(pratica);
+
+
+            }
+        }
+        private void getPratica(GestionePratiche p)
+        {
+            DataTable dt = new DataTable();
+            dt = mn.getGestionePraticaByFascicolo(p.fascicolo.Trim());
+            if (dt.Rows.Count > 0)
+            {
+                GVRicercaFascicolo.DataSource = dt;
+                GVRicercaFascicolo.DataBind();
+
             }
         }
     }

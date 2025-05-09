@@ -25,7 +25,7 @@
                         <!-- Colonna 1 -->
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <label for="txtFascicolo">Fascicolo</label>
+                                <asp:label id="Label6" runat="server">Fascicolo</asp:label>
                                 <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtFascicolo" ValidationGroup="bt" ErrorMessage="Inserire numero fascicolo" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label for="txtAssegnato">Assegnato</label>
+                                <asp:label id="Label5" runat="server">Assegnato</asp:label>
                                 <asp:TextBox ID="txtAssegnato" runat="server" CssClass="form-control" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAssegnato" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -43,7 +43,7 @@
                         <!-- Colonna 2 -->
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
-                                <label for="TxtDataUscita">Data Uscita</label>
+                                <asp:label id="Label4" runat="server">Data Uscita</asp:label>
                                 <asp:TextBox ID="TxtDataUscita" runat="server" CssClass="form-control" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataUscita" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="form-group mb-3" style="margin-top: -20px!important">
-                                <label for="txtDataRientro">Data Rientro</label>
+                               <asp:label id="Label3" runat="server" >Data Rientro</asp:label>
                                 <asp:TextBox ID="txtDataRientro" runat="server" CssClass="form-control" />
                                 <asp:RegularExpressionValidator
                                     ID="RegularExpressionValidator2"
@@ -83,7 +83,7 @@
 
                             <div class="form-group mb-3">
                                 <div class="form-group mb-3">
-                                    <label for="txtDataSpostamento">Data Spostamento</label>
+                                    <asp:label id="Label2" runat="server">Data Spostamento</asp:label>
                                     <asp:TextBox ID="txtDataSpostamento" runat="server" CssClass="form-control" />
                                     <asp:RegularExpressionValidator
                                         ID="RegularExpressionValidator3"
@@ -100,7 +100,7 @@
 
                             <div class="form-group mb-3">
                                 <div class="form-group mb-3">
-                                    <label for="txtDataRiscontro">Data Riscontro</label>
+                                    <asp:label id="Label1" runat="server">Data Riscontro</asp:label>
                                     <asp:TextBox ID="txtDataRiscontro" runat="server" CssClass="form-control" />
                                     <asp:RegularExpressionValidator
                                         ID="RegularExpressionValidator4"
@@ -121,7 +121,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group mb-3">
-                            <label for="txtNota" style="margin-left: 20px">Note</label>
+                            <asp:label id="lbl" runat="server" style="margin-left: 20px">Note</asp:label>
                             <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" Height="100px" TextMode="MultiLine" Style="margin-left: 20px; width: 100%; max-width: 800px;" />
                         </div>
                     </div>
@@ -139,7 +139,7 @@
             </div>
         </div>
         <div class="form-group">
-            <asp:GridView ID="GVRicecaFascicolo" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+            <asp:GridView ID="GVRicercaFascicolo" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                 OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
                 <Columns>
                     <asp:BoundField DataField="id_gestionePratica" HeaderText="ID" Visible="false" />
@@ -174,7 +174,7 @@
 
         </div>
     </div>
-
+     <asp:HiddenField ID="HfIdFascicolo" runat="server" />
 
 
     <%-- il seguente style serve per i bordi azzurri --%>
@@ -191,5 +191,29 @@
             width: 110px;
         }
     </style>
+     <%-- popup errori --%>
+ <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+     <div class="modal-dialog"
+         role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
+             </div>
+             <div class="modal-body">
+                 <!-- Campi di input per la ricerca -->
+                 <div class="form-group">
+
+                     <p id="errorMessage" style="color: red"></p>
+
+                 </div>
+
+             </div>
+             <div class="modal-footer">
+                 <!-- Bottone per avviare la ricerca -->
+                 <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+             </div>
+         </div>
+     </div>
+ </div>
 </asp:Content>
