@@ -55,19 +55,19 @@ namespace Uotep
         }
         private Boolean VerificaCorrettezzaInserimento(GestionePratiche pratica)
         {
-            Boolean resp=false;
-            DateTime appo= new DateTime();  
+            Boolean resp = false;
+            DateTime appo = new DateTime();
             Manager mn = new Manager();
             DataTable dt = new DataTable();
             dt = mn.getGestionePraticaByFascicolo(pratica.fascicolo);
-            if (dt.Rows.Count > 1)
+            if (dt.Rows.Count > 0)
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     appo = System.Convert.ToDateTime(dt.Rows[i].ItemArray[4].ToString());
                     if (appo == DateTime.MinValue || String.IsNullOrEmpty(dt.Rows[i].ItemArray[4].ToString()))
                     {
-                        resp = true; 
+                        resp = true;
                         break;
                     }
                 }
@@ -81,19 +81,11 @@ namespace Uotep
             pratica.assegnato = txtAssegnato.Text;
             pratica.note = txtNota.Text;
             pratica.data_uscita = System.Convert.ToDateTime(TxtDataUscita.Text);
-            if (!String.IsNullOrEmpty(txtDataRientro.Text))
-            {
-                pratica.data_rientro = System.Convert.ToDateTime(txtDataRientro.Text);
-            }
-            if (!String.IsNullOrEmpty(txtDataSpostamento.Text))
-            {
-                pratica.data_spostamento = System.Convert.ToDateTime(txtDataSpostamento.Text);
-            }
-            if (!String.IsNullOrEmpty(txtDataRiscontro.Text))
-            {
-                pratica.data_riscontro_in_ufficio = System.Convert.ToDateTime(txtDataRiscontro.Text);
-            }
-
+            pratica.data_rientro = txtDataRientro.Text;
+            pratica.data_spostamenti = txtDataSpostamento.Text;
+            pratica.DATA_RISCONTRO = txtDataRiscontro.Text;
+            pratica.notaSpostamento = txtNotaSpostamento.Text;
+            pratica.notariscontro = txtNotaRiscontro.Text;
         }
 
         protected void btInserisci_Click(object sender, EventArgs e)
@@ -101,16 +93,16 @@ namespace Uotep
 
             Boolean resp = false;
             ValorizzaPratica();
-           resp = VerificaCorrettezzaInserimento(pratica);
-            if (!resp)
-            {
-                resp = mn.InsGestionePratica(pratica);
-            }
-            else
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile inserire una nuova riga se la data rientro della precedente non è valorizzata." + "'); $('#errorModal').modal('show');", true);
-                resp=false;
-            }
+            //resp = VerificaCorrettezzaInserimento(pratica);
+            //if (!resp)
+            //{
+            resp = mn.InsGestionePratica(pratica);
+            //}
+            //else
+            //{
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile inserire una nuova riga se la data rientro della precedente non è valorizzata." + "'); $('#errorModal').modal('show');", true);
+            //    resp = false;
+            //}
             if (resp)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
@@ -129,7 +121,7 @@ namespace Uotep
         {
             if (dateValue == null || dateValue == DBNull.Value)
             {
-                return ""; 
+                return "";
             }
 
             DateTime date;
@@ -145,13 +137,15 @@ namespace Uotep
         }
         private void Pulisci()
         {
-           // txtFascicolo.Text = string.Empty;
+            // txtFascicolo.Text = string.Empty;
             txtDataRientro.Text = string.Empty;
             TxtDataUscita.Text = string.Empty;
             txtDataSpostamento.Text = string.Empty;
             txtNota.Text = string.Empty;
             txtDataRiscontro.Text = string.Empty;
             txtAssegnato.Text = string.Empty;
+            txtNotaSpostamento.Text = string.Empty;
+            txtNotaRiscontro.Text = string.Empty;
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -176,7 +170,7 @@ namespace Uotep
                 string[] args = e.CommandArgument.ToString().Split(';');
 
                 string id_Fascicolo = args[0];
-                HfIdFascicolo.Value= id_Fascicolo;
+                HfIdFascicolo.Value = id_Fascicolo;
                 Manager mn = new Manager();
 
                 DataTable scheda = mn.getGestionePraticaById(id_Fascicolo);
@@ -193,58 +187,14 @@ namespace Uotep
         {
             txtFascicolo.Text = fascicolo.Rows[0].ItemArray[1].ToString();
             txtAssegnato.Text = fascicolo.Rows[0].ItemArray[2].ToString();
-
             DateTime datauscita = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
             TxtDataUscita.Text = datauscita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-
-            DateTime dataRientro = new DateTime();
-            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[4].ToString()))
-            {
-                dataRientro = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[4].ToString()); // Recupera la data dal DataTable
-                if (dataRientro == DateTime.MinValue)
-                    txtDataRientro.Text = string.Empty;
-                else
-                    txtDataRientro.Text = dataRientro.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-            }
-            else
-            {
-                if (dataRientro == DateTime.MinValue)
-                    txtDataRientro.Text = string.Empty;
-            }
-
-
-            DateTime dataSpostamento = new DateTime();
-            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[5].ToString()))
-            {
-                dataSpostamento = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[5].ToString()); // Recupera la data dal DataTable
-                if (dataSpostamento == DateTime.MinValue)
-
-                    txtDataSpostamento.Text = string.Empty;
-                else
-                    txtDataSpostamento.Text = dataSpostamento.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-            }
-            else
-            {
-                if (dataSpostamento == DateTime.MinValue)
-
-                    txtDataSpostamento.Text = string.Empty;
-            }
-            DateTime dataRiscontro = new DateTime();
-            if (!String.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[6].ToString()))
-            {
-                dataRiscontro = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[6].ToString()); // Recupera la data dal DataTable
-                if (dataRiscontro == DateTime.MinValue)
-                    txtDataRiscontro.Text = string.Empty;
-                else
-                    txtDataRiscontro.Text = dataRiscontro.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-            }
-            else
-            {
-                    txtDataRiscontro.Text = string.Empty;
-            }
-
-
+            txtDataRientro.Text = fascicolo.Rows[0].ItemArray[4].ToString();
+            txtDataSpostamento.Text = fascicolo.Rows[0].ItemArray[5].ToString();
+            txtDataRiscontro.Text = fascicolo.Rows[0].ItemArray[6].ToString();
             txtNota.Text = fascicolo.Rows[0].ItemArray[7].ToString();
+            txtNotaSpostamento.Text = fascicolo.Rows[0].ItemArray[8].ToString();
+            txtNotaRiscontro.Text = fascicolo.Rows[0].ItemArray[9].ToString();
 
         }
         protected void btRicerca_Click(object sender, EventArgs e)
@@ -262,14 +212,6 @@ namespace Uotep
                 GestionePratiche pratica = new GestionePratiche();
                 pratica.fascicolo = txtFascicolo.Text;
                 getPratica(pratica);
-                //DataTable dt = new DataTable();
-                //dt = mn.getGestionePraticaByFascicolo(txtFascicolo.Text.Trim());
-                //if (dt.Rows.Count > 0)
-                //{
-                //    GVRicercaFascicolo.DataSource = dt;
-                //    GVRicercaFascicolo.DataBind();
-
-                //}
             }
         }
 
@@ -278,8 +220,8 @@ namespace Uotep
             Boolean resp = false;
             ValorizzaPratica();
             int idfascicolo = System.Convert.ToInt32(HfIdFascicolo.Value);
-            
-            resp = mn.UpdGestionePratica(idfascicolo,pratica);
+
+            resp = mn.UpdGestionePratica(idfascicolo, pratica);
 
             if (resp)
             {

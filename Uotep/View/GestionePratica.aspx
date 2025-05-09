@@ -25,7 +25,7 @@
                         <!-- Colonna 1 -->
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <asp:label id="Label6" runat="server">Fascicolo</asp:label>
+                                <asp:Label ID="Label6" runat="server">Fascicolo</asp:Label>
                                 <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtFascicolo" ValidationGroup="bt" ErrorMessage="Inserire numero fascicolo" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <asp:label id="Label5" runat="server">Assegnato</asp:label>
+                                <asp:Label ID="Label5" runat="server">Assegnato</asp:Label>
                                 <asp:TextBox ID="txtAssegnato" runat="server" CssClass="form-control" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAssegnato" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -43,7 +43,7 @@
                         <!-- Colonna 2 -->
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
-                                <asp:label id="Label4" runat="server">Data Uscita</asp:label>
+                                <asp:Label ID="Label4" runat="server">Data Uscita</asp:Label>
                                 <asp:TextBox ID="TxtDataUscita" runat="server" CssClass="form-control" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataUscita" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
@@ -59,19 +59,10 @@
                                 </asp:RegularExpressionValidator>
                             </div>
 
-                            <div class="form-group mb-3" style="margin-top: -20px!important">
-                               <asp:label id="Label3" runat="server" >Data Rientro</asp:label>
+                            <div class="form-group mb-3" style="margin-top: -15px!important">
+                                <asp:Label ID="Label3" runat="server">Data Rientro</asp:Label>
                                 <asp:TextBox ID="txtDataRientro" runat="server" CssClass="form-control" />
-                                <asp:RegularExpressionValidator
-                                    ID="RegularExpressionValidator2"
-                                    runat="server"
-                                    ControlToValidate="txtDataRientro"
-                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                    ErrorMessage="la data deve essere dd/mm/aaaa"
-                                    ForeColor="Red"
-                                    ValidationGroup="bt"
-                                    Display="Static">
-                                </asp:RegularExpressionValidator>
+
                             </div>
 
 
@@ -83,36 +74,35 @@
 
                             <div class="form-group mb-3">
                                 <div class="form-group mb-3">
-                                    <asp:label id="Label2" runat="server">Data Spostamento</asp:label>
+                                    <asp:Label ID="Label2" runat="server">Data Spostamento</asp:Label>
                                     <asp:TextBox ID="txtDataSpostamento" runat="server" CssClass="form-control" />
-                                    <asp:RegularExpressionValidator
-                                        ID="RegularExpressionValidator3"
-                                        runat="server"
-                                        ControlToValidate="txtDataSpostamento"
-                                        ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                        ErrorMessage="la data deve essere dd/mm/aaaa"
-                                        ForeColor="Red"
-                                        ValidationGroup="bt"
-                                        Display="Static">
-                                    </asp:RegularExpressionValidator>
+
                                 </div>
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-3" style="margin-top: 40px!important">
                                 <div class="form-group mb-3">
-                                    <asp:label id="Label1" runat="server">Data Riscontro</asp:label>
+                                    <asp:Label ID="Label1" runat="server">Data Riscontro</asp:Label>
                                     <asp:TextBox ID="txtDataRiscontro" runat="server" CssClass="form-control" />
-                                    <asp:RegularExpressionValidator
-                                        ID="RegularExpressionValidator4"
-                                        runat="server"
-                                        ControlToValidate="txtDataRiscontro"
-                                        ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                        ErrorMessage="la data deve essere dd/mm/aaaa"
-                                        ForeColor="Red"
-                                        ValidationGroup="bt"
-                                        Display="Static">
-                                    </asp:RegularExpressionValidator>
+
                                 </div>
+                            </div>
+
+                        </div>
+                        <%-- colonna4 --%>
+                        <div class="col-md-3">
+
+
+
+                            <div class="form-group mb-3">
+                                <label for="txtNotaSpostamento"></label>
+                                <asp:Label ID="Label7" runat="server">Nota Spostamento</asp:Label>
+                                <asp:TextBox ID="txtNotaSpostamento" runat="server" CssClass="form-control" />
+                            </div>
+
+                            <div class="form-group mb-3" style="margin-top: 40px!important">
+                                <asp:Label ID="Label8" runat="server">Nota Riscontro</asp:Label>
+                                <asp:TextBox ID="txtNotaRiscontro" runat="server" CssClass="form-control" />
                             </div>
 
                         </div>
@@ -121,7 +111,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group mb-3">
-                            <asp:label id="lbl" runat="server" style="margin-left: 20px">Note</asp:label>
+                            <asp:Label ID="lbl" runat="server" Style="margin-left: 20px">Note</asp:Label>
                             <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" Height="100px" TextMode="MultiLine" Style="margin-left: 20px; width: 100%; max-width: 800px;" />
                         </div>
                     </div>
@@ -146,21 +136,17 @@
                     <asp:BoundField DataField="Fascicolo" HeaderText="Numero Fascicolo" />
                     <asp:BoundField DataField="Assegnato" HeaderText="Assegnato" />
                     <asp:BoundField DataField="data_uscita" HeaderText="Data Uscita" DataFormatString="{0:dd/MM/yyyy}" />
-                    <asp:TemplateField HeaderText="Data Rientro">
+                    <asp:BoundField DataField="Data_Rientro" HeaderText="Data Rientro" />
+                    <%--<asp:TemplateField HeaderText="Data Rientro">
                         <ItemTemplate>
                             <%# FormatMyDate(Eval("data_rientro")) %>
                         </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Data Spostamento">
-                        <ItemTemplate>
-                            <%# FormatMyDate(Eval("data_spostamento")) %>
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Data Riscontro">
-                        <ItemTemplate>
-                            <%# FormatMyDate(Eval("date_riscontro_in_ufficio")) %>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+                    </asp:TemplateField>--%>
+                    <asp:BoundField DataField="Data_Spostamenti" HeaderText="Data Spostamento" />
+                    <asp:BoundField DataField="NOTA_SPOSTAMENTO" HeaderText="Note" />
+
+                    <asp:BoundField DataField="Data_Riscontro" HeaderText="Data Riscontro" />
+                    <asp:BoundField DataField="NOTA_RISCONTRO" HeaderText="Note" />
 
                     <asp:BoundField DataField="note" HeaderText="Note" />
 
@@ -174,7 +160,7 @@
 
         </div>
     </div>
-     <asp:HiddenField ID="HfIdFascicolo" runat="server" />
+    <asp:HiddenField ID="HfIdFascicolo" runat="server" />
 
 
     <%-- il seguente style serve per i bordi azzurri --%>
@@ -191,29 +177,29 @@
             width: 110px;
         }
     </style>
-     <%-- popup errori --%>
- <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-     <div class="modal-dialog"
-         role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+    <%-- popup errori --%>
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
-             </div>
-             <div class="modal-body">
-                 <!-- Campi di input per la ricerca -->
-                 <div class="form-group">
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
 
-                     <p id="errorMessage" style="color: red"></p>
+                        <p id="errorMessage" style="color: red"></p>
 
-                 </div>
+                    </div>
 
-             </div>
-             <div class="modal-footer">
-                 <!-- Bottone per avviare la ricerca -->
-                 <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-             </div>
-         </div>
-     </div>
- </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>

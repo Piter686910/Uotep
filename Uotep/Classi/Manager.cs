@@ -906,7 +906,7 @@ namespace Uotep.Classi
             string sql = string.Empty;
             DataTable tb = new DataTable();
 
-            sql = "SELECT * FROM gestionePratica where id_gestionePratica = '" + id_fascicolo + "'";
+            sql = "SELECT * FROM gestionePratiche where id_gestionePratica = '" + id_fascicolo + "'";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -921,7 +921,7 @@ namespace Uotep.Classi
             string sql = string.Empty;
             DataTable tb = new DataTable();
 
-            sql = "SELECT * FROM gestionePratica where fascicolo = '" + fascicolo +"'";
+            sql = "SELECT * FROM gestionePratiche where fascicolo = '" + fascicolo + "'";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1776,9 +1776,9 @@ namespace Uotep.Classi
             try
             {
 
-                sql_pratica = "insert into gestionepratica (fascicolo, assegnato, data_uscita, data_rientro, data_spostamento, date_riscontro_in_ufficio,note)" +
-                   " Values('" + @pr.fascicolo + "','" + @pr.assegnato.Replace("'", "''") + "','" + @pr.data_uscita + "','" +  @pr.data_rientro + "','" + @pr.data_spostamento 
-                   + "','" +  @pr.data_rientro + "','" +  @pr.note.Replace("'", "''") + "')";
+                sql_pratica = "insert into gestionePratiche (fascicolo, assegnato, data_uscita, data_rientro, data_spostamenti, data_riscontro,note,NOTA_SPOSTAMENTO,NOTA_RISCONTRO)" +
+                   " Values('" + @pr.fascicolo + "','" + @pr.assegnato.Replace("'", "''") + "','" + @pr.data_uscita + "','" + @pr.data_rientro.Replace("'", "''") + "','" + @pr.data_spostamenti.Replace("'", "''") + "','" +
+                   @pr.data_rientro.Replace("'", "''") + "','" + @pr.note.Replace("'", "''") + "','" + @pr.notaSpostamento.Replace("'", "''") + "','" + @pr.notariscontro.Replace("'", "''") + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2229,9 +2229,14 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "update gestionepratica set assegnato = '" + @pr.assegnato.Replace("'", "''") + "',note = '" + @pr.note.Replace("'", "''") + "',data_rientro ='" + @pr.data_rientro + "',data_spostamento='" + @pr.data_spostamento +
-                   "',date_riscontro_in_ufficio = '" + @pr.data_riscontro_in_ufficio + "'" +
-                   " where id_gestionePratica = " + idFascicolo + "";
+                sql_pratica = "update gestionepratiche set assegnato = '" + @pr.assegnato.Replace("'", "''") +
+                    "',note = '" + @pr.note.Replace("'", "''") +
+                    "',data_rientro ='" + @pr.data_rientro.Replace("'", "''") +
+                    "',data_spostamenti='" + @pr.data_spostamenti.Replace("'", "''") +
+                    "',DATA_RISCONTRO = '" + @pr.DATA_RISCONTRO.Replace("'", "''") +
+                    "',NOTA_SPOSTAMENTO = '" + @pr.notaSpostamento.Replace("'", "''") +
+                    "',NOTA_RISCONTRO = '" + @pr.notariscontro.Replace("'", "''") + "'" +
+                    " where id_gestionePratica = " + idFascicolo + "";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))

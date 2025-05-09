@@ -10,9 +10,11 @@ namespace Uotep.Classi
         public String fascicolo = string.Empty;
         public String assegnato = string.Empty;
         public DateTime data_uscita;
-        public DateTime data_rientro ;
-        public DateTime data_spostamento;
-        public DateTime data_riscontro_in_ufficio;
+        public String data_rientro ;
+        public String data_spostamenti;
+        public String DATA_RISCONTRO;
         public String note = string.Empty;
+        public String notaSpostamento = string.Empty;
+        public String notariscontro = string.Empty;
     }
 }
