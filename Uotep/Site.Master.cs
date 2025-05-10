@@ -51,6 +51,8 @@ namespace Uotep
                             case "coordinamentopg":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                RicercaArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;

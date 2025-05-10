@@ -43,6 +43,10 @@ namespace Uotep
             ProtocolloLiteral.Text = decodedText;
             if (!IsPostBack)
             {
+                if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper())
+                {
+                    btSalva.Visible=false;
+                }
 
                 //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
                 if (Session["ListRicerca"] != null)
