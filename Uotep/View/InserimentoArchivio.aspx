@@ -267,6 +267,17 @@
                     <div class="form-group mb-3">
                         <label for="txtDataInizioAttivita">Data Inizio Attività</label>
                         <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control" Font-Bold="true" />
+                        <asp:RegularExpressionValidator
+                            ID="RegularExpressionValidator2"
+                            runat="server"
+                            ControlToValidate="txtDataInizioAttivita"
+                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                            ErrorMessage="la data deve essere dd/mm/aaaa"
+                            ForeColor="Red"
+                            ValidationGroup="bt"
+                            Display="Static">
+                        </asp:RegularExpressionValidator>
+
                     </div>
 
                     <!-- Indirizzo e TextBox sulla stessa riga -->
@@ -326,7 +337,18 @@
 
                     <div class="form-group mb-3">
                         <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
-                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" Enabled="false" />
+                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" />
+                        <asp:RegularExpressionValidator
+                            ID="RegularExpressionValidator1"
+                            runat="server"
+                            ControlToValidate="txtDataUltimoIntervento"
+                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                            ErrorMessage="la data deve essere dd/mm/aaaa"
+                            ForeColor="Red"
+                            ValidationGroup="bt"
+                            Display="Static">
+                        </asp:RegularExpressionValidator>
+
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtResponsabile">Responsabile</label>

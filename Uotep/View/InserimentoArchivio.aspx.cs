@@ -55,26 +55,26 @@ namespace Uotep
                     switch (ar[0])
                     {
                         case "Pratica":
-                            arc = mn.getPraticaArchivioUote(ar, null, null, null,null, null);
+                            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
                             break;
                         case "StoricoPratica":
                             arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
                             break;
 
                         case "Nominativo":
-                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null,null, null);
+                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
                             break;
                         case "Indirizzo":
-                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null,null, null);
+                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
                             break;
                         case "Catasto":
-                            arc = mn.getPraticaArchivioUote(null, null, null, ar,null, null);
+                            arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
                             break;
                         case "Note":
-                            arc = mn.getPraticaArchivioUote(null, null, null, null,ar[1],null);
+                            arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
                             break;
                         case "AnnoMese":
-                            arc = mn.getPraticaArchivioUote(null, null, null, null,null, ar);
+                            arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
                             break;
 
                     }
@@ -238,9 +238,9 @@ namespace Uotep
             bool resp = false;
 
             if (!String.IsNullOrEmpty(txtPratica.Text))
-
             {
                 resp = true;
+
                 if (HfStato.Value != "Mod")
                 {
 
@@ -251,14 +251,14 @@ namespace Uotep
                     if (Session["ListRicerca"] != null)
                     {
                         List<string> ListRicerca = (List<string>)Session["ListRicerca"];
-                         ar = ListRicerca.ToArray();
+                        ar = ListRicerca.ToArray();
                     }
                     else
                     {
                         List<string> ListRicerca = new List<string> { "Pratica", txtPratica.Text };
                         ar = ListRicerca.ToArray();
                     }
-                    DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null,null,null);
+                    DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
                     if (dt.Rows.Count > 0)
                     {
                         //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
@@ -278,7 +278,7 @@ namespace Uotep
                         }
 
 
-                       
+
 
                         //        //se annullo imposto il popup a si
                         if (hdnConfermaUtente.Value == "false")
@@ -338,14 +338,15 @@ namespace Uotep
                             }
                             //DateTime giorno = DateTime.Now;
                             arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
-                            if (HfStato.Value == "Mod")
-                            {
-                                arch.arch_datault_intervento = System.Convert.ToDateTime(DateTime.Now.Date.ToShortDateString());
-
-                            }
+                                                                                                      //if (HfStato.Value == "Mod")
+                                                                                                      //{
+                            if (!String.IsNullOrEmpty(txtDataUltimoIntervento.Text))
+                              
+                                arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
+                                                 }
                             if (!String.IsNullOrEmpty(txtDataNascita.Text))
                             {
-                                
+
                                 arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
 
                             }
@@ -440,10 +441,10 @@ namespace Uotep
             CkVincoli.Checked = false;
             CkEvasa.Checked = false;
             CkBis.Checked = false;
-            CkTris.Checked = false; 
-            CkQuater.Checked = false;   
+            CkTris.Checked = false;
+            CkQuater.Checked = false;
             CkPropAltri.Checked = false;
-            CkPropBeniCult.Checked = false;    
+            CkPropBeniCult.Checked = false;
             CkPropComunale.Checked = false;
             CkPropPriv.Checked = false;
             txtSezione.Text = string.Empty;
@@ -471,7 +472,7 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
-             Session.Remove("ListRicerca");
+            Session.Remove("ListRicerca");
 
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
@@ -498,7 +499,7 @@ namespace Uotep
                     gvPopup.DataBind();
 
                 }
-                
+
             }
 
             // Mantieni il popup aperto dopo l'interazione lato server.

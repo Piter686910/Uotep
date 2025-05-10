@@ -388,7 +388,7 @@
                         <asp:GridView ID="GVRicecaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
                             <Columns>
-                                <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" />
+                                <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID"  Visible="false"/>
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
