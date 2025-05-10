@@ -581,7 +581,7 @@
                     <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
 
                 </div>
-                <div id="DivGrid" runat="server" visible="false" class="row">
+                <div id="DivGrid" runat="server" visible="false" class="row" style="padding-left:10px">
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
@@ -594,7 +594,7 @@
                                 <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
                                 <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" />
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Ins." DataFormatString="{0:dd/MM/yyyy}"/>
                                 <asp:TemplateField>
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"

@@ -344,7 +344,7 @@
                             <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
                             <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
                             <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                            <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" />
+                            <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" DataFormatString="{0:dd/MM/yyyy}"/>
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <asp:Button ID="btnSelect" runat="server" Text="Seleziona"

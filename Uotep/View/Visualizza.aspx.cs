@@ -145,16 +145,20 @@ namespace Uotep
                         //// Ora puoi usare questi valori per aggiornare i tuoi controlli
                         //p.nrProtocollo = System.Convert.ToInt32(protocollo);
                         //p.matricola = matricola;
-                        p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLocalTime();
+                        if (!String.IsNullOrEmpty(dataInserimento))
+                        {
+                            p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLocalTime();
+
+                        }
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
                         if (pratica.Rows.Count > 0)
                         {
-                            txtProt.Text = pratica.Rows[0].ItemArray[0].ToString();
-                            txtSigla.Text = pratica.Rows[0].ItemArray[1].ToString();
+                            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
+                            txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                             try
                             {
-                                txtDataArrivo.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[2].ToString()).ToShortDateString();
+                                txtDataArrivo.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
                             }
                             catch (Exception)
                             {
@@ -162,18 +166,18 @@ namespace Uotep
                                 txtDataArrivo.Text = string.Empty;
                             }
 
-                            txtProvenienza.Text = pratica.Rows[0].ItemArray[3].ToString();
-                            txtTipoAtto.Text = pratica.Rows[0].ItemArray[4].ToString();
-                            txtGiudice.Text = pratica.Rows[0].ItemArray[5].ToString();
-                            TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[6].ToString();
-                            txtProdPenNr.Text = pratica.Rows[0].ItemArray[7].ToString();
-                            txtNominativo.Text = pratica.Rows[0].ItemArray[8].ToString();
-                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[9].ToString() + " " + pratica.Rows[0].ItemArray[10].ToString();
+                            txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
+                            txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
+                            txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
+                            TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
+                            txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
+                            txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString() + " " + pratica.Rows[0].ItemArray[11].ToString();
 
-                            CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[11]);
+                            CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
                             try
                             {
-                                txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[12].ToString()).ToShortDateString();
+                                txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
                             }
                             catch (Exception)
                             {
@@ -181,10 +185,10 @@ namespace Uotep
                                 txtDataDataEvasa.Text = string.Empty;
                             }
 
-                            txtinviata.Text = pratica.Rows[0].ItemArray[13].ToString();
+                            txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString();
                             try
                             {
-                                txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[14].ToString()).ToShortDateString();
+                                txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
                             }
                             catch (Exception)
                             {
@@ -192,11 +196,11 @@ namespace Uotep
                                 txtDataInvio.Text = string.Empty;
                             }
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[15].ToString();
-                            txtAccertatori.Text = pratica.Rows[0].ItemArray[16].ToString();
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
+                            txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
                             try
                             {
-                                txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[17].ToString()).ToShortDateString();
+                                txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
                             }
                             catch (Exception)
                             {
@@ -204,12 +208,12 @@ namespace Uotep
                                 txtDataCarico.Text = string.Empty;
                             }
 
-                            txPratica.Text = pratica.Rows[0].ItemArray[18].ToString();
-                            TxtQuartiere.Text = pratica.Rows[0].ItemArray[19].ToString();
-                            txtNote.Text = pratica.Rows[0].ItemArray[20].ToString();
-                            txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[21].ToString();
+                            txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                            TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
+                            txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
+                            txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                             //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                            txtRifProtGen.Text = pratica.Rows[0].ItemArray[23].ToString();
+                            txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
 
                             // Puoi anche chiudere il popup se necessario
                             ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);

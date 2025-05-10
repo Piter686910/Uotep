@@ -288,7 +288,7 @@ namespace Uotep
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
             }
         }
-        
+
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
             string indirizzo = string.Empty;
@@ -352,42 +352,46 @@ namespace Uotep
                     DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
                     if (pratica.Rows.Count > 0)
                     {
-                        txtProt.Text = pratica.Rows[0].ItemArray[0].ToString();
-                        txtSigla.Text = pratica.Rows[0].ItemArray[1].ToString();
-                        txtDataArrivo.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        txtProvenienza.Text = pratica.Rows[0].ItemArray[3].ToString();
-                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[4].ToString();
-                        txtGiudice.Text = pratica.Rows[0].ItemArray[5].ToString();
-                        TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[6].ToString();
-                        txtProdPenNr.Text = pratica.Rows[0].ItemArray[7].ToString();
-                        txtNominativo.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[9].ToString()))
-                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
+                        txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
+                        txtDataArrivo.Text = pratica.Rows[0].ItemArray[3].ToString();
+                        txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
+                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
+                        txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
+                        TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
+                        txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
+                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
+                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString();
                         //txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
-                        CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[11]);
-                        txtDataDataEvasa.Text = pratica.Rows[0].ItemArray[12].ToString();
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
-                            txtInviata.Text = pratica.Rows[0].ItemArray[13].ToString();
-                        txtDataInvio.Text = pratica.Rows[0].ItemArray[14].ToString();
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+                        CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
+                        txtDataDataEvasa.Text = pratica.Rows[0].ItemArray[13].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
+                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[15].ToString();
-                        txtAccertatori.Text = pratica.Rows[0].ItemArray[16].ToString();
-                        txtDataCarico.Text = pratica.Rows[0].ItemArray[17].ToString();
-                        txPratica.Text = pratica.Rows[0].ItemArray[18].ToString();
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[19].ToString()))
-                            txtQuartiere.Text = pratica.Rows[0].ItemArray[19].ToString();
-                        txtNote.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+                            txtDataInvio.Text = pratica.Rows[0].ItemArray[15].ToString();
+
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
+
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
+
+                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
+                        txtDataCarico.Text = pratica.Rows[0].ItemArray[18].ToString();
+                        txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
+                            txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
+                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                        txtRifProtGen.Text = pratica.Rows[0].ItemArray[23].ToString();
+                        txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
 
                         // Puoi anche chiudere il popup se necessario
                         //  ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true); // Puoi anche chiudere il popup se necessario
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                         DivDettagli.Visible = true;
                         DivRicerca.Visible = false;
-                        Pulisci();
+                       // Pulisci();
                     }
                     else
                     {
@@ -433,7 +437,7 @@ namespace Uotep
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
-               txtIndirizzo.Text = selectedValue;
+                txtIndirizzo.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
