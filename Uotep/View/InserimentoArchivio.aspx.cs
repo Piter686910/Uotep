@@ -343,7 +343,15 @@ namespace Uotep
                             if (!String.IsNullOrEmpty(txtDataUltimoIntervento.Text))
                               
                                 arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
-                                                 }
+                            //}
+                            //catch (Exception)
+                            // {
+
+                            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                            // }
+
+                            //                                }
+                            //                          }
                             if (!String.IsNullOrEmpty(txtDataNascita.Text))
                             {
 
