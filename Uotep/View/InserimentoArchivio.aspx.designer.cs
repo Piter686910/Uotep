@@ -429,6 +429,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btSalva;
 
         /// <summary>
+        /// Controllo btCercaQuartiere.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btCercaQuartiere;
+
+        /// <summary>
         /// Controllo txtIndirizzoQuartiere.
         /// </summary>
         /// <remarks>

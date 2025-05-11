@@ -46,6 +46,7 @@ namespace Uotep
                 if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper())
                 {
                     btSalva.Visible=false;
+                    btCercaQuartiere.Visible = false;
                 }
 
                 //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db

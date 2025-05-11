@@ -29,6 +29,8 @@ namespace Uotep
                             case "coordinamentoatti":
                                 // Mostra voci specifiche per coordinamento ag
                                 menuCoordinamentoAtti.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                RicercaArchivio.Visible = true;
                                 menuAccertatori.Visible = false;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;

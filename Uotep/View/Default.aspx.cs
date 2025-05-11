@@ -117,5 +117,23 @@ namespace Uotep
             }
 
         }
+
+        protected void lkreset_Click(object sender, EventArgs e)
+        {
+            //cripto la passowrd
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text + "old", 13);
+            Manager mn = new Manager();
+            Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text);
+            if (upd)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata. La nuuva password temporanea è la tua matricola + old. Esempio: 9999old" + "'); $('#errorModal').modal('show');", true);
+
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password non resettata." + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
     }
 }
