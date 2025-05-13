@@ -87,6 +87,8 @@ namespace Uotep
                                     menuRicercaScheda.Visible = true;
                                     Statistiche.Visible = false;
                                 }
+                                menuArchivioUote.Visible = true;
+                                RicercaArchivio.Visible = true;
 
                                 break;
                             case "PG":
