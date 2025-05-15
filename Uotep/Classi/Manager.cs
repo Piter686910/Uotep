@@ -311,7 +311,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
-            string sql = "SELECT MIN(id_quartiere) AS ID, quartiere FROM Quart GROUP BY quartiere ORDER BY quartiere";
+            string sql = "SELECT MIN(id_quartiere) AS id_quartiere, quartiere FROM Quart GROUP BY quartiere ORDER BY quartiere";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -321,7 +321,7 @@ namespace Uotep.Classi
         public DataTable getQuartiere(string indirizzo)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT  * FROM Quart where toponimo like '%" + indirizzo + "%'";
+            string sql = "SELECT  * FROM Quart where toponimo like '%" + indirizzo.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -352,7 +352,7 @@ namespace Uotep.Classi
         public DataTable getMatricolaOperatore(string nominativo)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT matricola FROM operatore where nominativo = '" + nominativo + "'";
+            string sql = "SELECT matricola FROM operatore where nominativo = '" + nominativo.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -507,7 +507,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where giudice like '" + giudice + "%'";
+            string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -536,7 +536,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM giudice where giudice = '" + giudice + "'";
+            string sql = "SELECT * FROM giudice where giudice = '" + giudice.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -561,7 +561,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM inviati where inviata = '" + inviata + "'";
+            string sql = "SELECT * FROM inviati where inviata = '" + inviata.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -578,14 +578,14 @@ namespace Uotep.Classi
         }
         /// <summary>
         /// ricerca la singola provenienza
-        /// </summary>
+        /// </summary
         /// <param name="provenienza"></param>
         /// <returns></returns>
         public Boolean getProvenienza(string provenienza)
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM provenienza where provenienza = '" + provenienza + "'";
+            string sql = "SELECT * FROM provenienza where provenienza = '" + provenienza.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -609,7 +609,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM tipologia where tipo_nota = '" + tipoatto + "'";
+            string sql = "SELECT * FROM tipologia where tipo_nota = '" + tipoatto.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -633,7 +633,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza + "%'";
+            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -649,7 +649,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo + "%'";
+            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -665,7 +665,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo + "%'";
+            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -700,7 +700,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori + "%'";
+            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 

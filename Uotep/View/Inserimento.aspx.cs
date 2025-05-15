@@ -444,7 +444,7 @@ namespace Uotep
                 DataTable RicercaQuartiere = mn.getListQuartiere();
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
                 // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 

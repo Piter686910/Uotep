@@ -354,7 +354,10 @@ namespace Uotep
                     {
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        txtDataArrivo.Text = pratica.Rows[0].ItemArray[3].ToString();
+                        DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+                        txtDataArrivo.Text = dataappo1.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+
+
                         txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
                         txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
                         txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
@@ -377,7 +380,10 @@ namespace Uotep
                             txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
 
                         txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
-                        txtDataCarico.Text = pratica.Rows[0].ItemArray[18].ToString();
+
+                        DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
+                        txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
