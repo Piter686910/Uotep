@@ -2,8 +2,48 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <script type="text/javascript">
+        // Attendere che il DOM sia completamente caricato
+        document.addEventListener('DOMContentLoaded', function () {
+            var textBox = document.getElementById('TxtSub'); 
+        // Se non usi ClientIDMode="Static", dovresti usare:
+            // var textBox = document.getElementById('<%= TxtSub.ClientID %>');
 
+            if (textBox) {
+                textBox.addEventListener('input', function (event) {
+                    // Salva la posizione attuale del cursore
+                    var cursorPos = this.selectionStart;
+                    var originalLength = this.value.length;
+
+                    // Sostituisci tutti gli spazi con trattini
+                    this.value = this.value.replace(/ /g, '-');
+
+                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                    // riposiziona il cursore.
+                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                    if (this.value.length === originalLength) {
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    } else {
+                        // Se più spazi sono stati sostituiti o incollati,
+                        // il cursore potrebbe andare alla fine.
+                        // Per la semplice digitazione di uno spazio,
+                        // cursorPos dovrebbe essere corretto.
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    }
+                });
+            } else {
+                console.error("Textbox con ID 'txtsub' non trovata.");
+            }
+        });
+    </script>
     <script>
+
+
+
+
+
+
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
@@ -117,7 +157,7 @@
             }
         }
         //tipo atto
-        function filterDropdownTipoAtto() {
+       <%-- function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtTipoAtto");
             filter = input.value.toUpperCase();
@@ -155,7 +195,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
         //Inviata
         function filterDropdownInviata() {
             var input, filter, dropdown, options, i, txtValue;
@@ -305,23 +345,24 @@
                         <asp:DropDownList ID="DdlQuartiereI" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                     <div class="form-group mb-3">
-                        <label for="txtSezione">Dati Catastali</label>
+                        <label for="txtSezione">Dati Catastali N.C.E.U.</label>
                         <div class="form-group mb-3">
-                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 60px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
-                            <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 60px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
+                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 80px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
+                            <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
                             <asp:TextBox ID="TxtParticella" runat="server" MaxLength="5" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part.lla"></asp:TextBox>
-                            <asp:TextBox ID="TxtSub" runat="server" MaxLength="4" Style="width: 70px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub"></asp:TextBox>
+                            <asp:TextBox ID="TxtSub" runat="server" Style="width: 150px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub" ClientIDMode="Static"></asp:TextBox>
 
                         </div>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
+                                        <div class="form-group mb-3">
+                        <label for="txtSezione">Dati Catastali N.C.T.</label>
+                        <div class="form-group mb-3">
+                            <asp:TextBox ID="txtFoglioNct" runat="server" MaxLength="3" Style="width: 100px; display: inline-block !important;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
+                            <asp:TextBox ID="txtParticellaNct" runat="server" MaxLength="4" Style="width: 100px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part."></asp:TextBox>
 
-                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
+                        </div>
                     </div>
+
 
                     <div class="col-12 ">
                         <div class="form-group mb-3">
@@ -371,11 +412,19 @@
 
                     </div>
                     <div class="form-group mb-3">
-                        <label for="txtTipoAtto">Tipologia Atto</label>
-                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        <label for="DdlTipoAttoI">Tipologia Abuso</label>
+                        <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
+                        <%--<div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>--%>
+                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control"  />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="txtGiudice">Giudice</label>
+                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         </div>
-                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" Style="display: none" />
+
+                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
                     </div>
 
                     <div class="form-group mb-3">

@@ -43,7 +43,7 @@ namespace Uotep
             ProtocolloLiteral.Text = decodedText;
             if (!IsPostBack)
             {
-                if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper())
+                if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
                 {
                     btSalva.Visible=false;
                     btCercaQuartiere.Visible = false;
@@ -215,7 +215,8 @@ namespace Uotep
             txtInCarico.Text = arc.Rows[0].ItemArray[9].ToString();
             CkEvasa.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[10]);
             txtNote.Text = arc.Rows[0].ItemArray[11].ToString();
-            txtTipoAtto.Text = arc.Rows[0].ItemArray[12].ToString();
+            //txtTipoAtto.Text = arc.Rows[0].ItemArray[12].ToString();
+            DdlTipoAttoI.SelectedItem.Text= arc.Rows[0].ItemArray[12].ToString();
             txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
             CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
             CkVincoli.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[15]);
@@ -235,6 +236,10 @@ namespace Uotep
             CkPropComunale.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[26]);
             CkPropBeniCult.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[27]);
             CkPropAltri.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[28]);
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[29].ToString()))
+                txtFoglioNct.Text = arc.Rows[0].ItemArray[29].ToString();
+            if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[30].ToString()))
+                txtParticellaNct.Text = arc.Rows[0].ItemArray[30].ToString();
 
 
         }
@@ -369,7 +374,8 @@ namespace Uotep
 
                             }
                             arch.arch_inCarico = txtInCarico.Text;
-                            arch.arch_tipologia = txtTipoAtto.Text;
+                            //arch.arch_tipologia = txtTipoAtto.Text;
+                            arch.arch_tipologia = DdlTipoAttoI.SelectedItem.Text;
                             arch.arch_note = txtNote.Text;
                             arch.arch_quartiere = txtQuartiere.Text;
                             arch.arch_matricola = Session["user"].ToString();
@@ -390,6 +396,9 @@ namespace Uotep
                             arch.arch_propBeniCult = CkPropBeniCult.Checked;
                             arch.arch_propComune = CkPropComunale.Checked;
                             arch.arch_propAltriEnti = CkPropAltri.Checked;
+                            arch.arch_foglioNct = txtFoglioNct.Text;
+                            arch.arch_particellaNct = txtParticellaNct.Text;
+
 
                             Boolean ins = mn.SavePraticaArchivioUote(arch);
                             if (!ins)
@@ -438,7 +447,8 @@ namespace Uotep
             txtGiudice.Text = string.Empty;
             txtQuartiere.Text = string.Empty;
             txtInCarico.Text = string.Empty;
-            txtTipoAtto.Text = string.Empty;
+            //txtTipoAtto.Text = string.Empty;
+            DdlTipoAttoI.SelectedIndex = 0;
             txtIndirizzo.Text = string.Empty;
             txtResponsabile.Text = string.Empty;
             txtDataInserimento.Text = String.Empty;
@@ -464,6 +474,9 @@ namespace Uotep
             TxtFoglio.Text = string.Empty;
             TxtParticella.Text = string.Empty;
             TxtSub.Text = string.Empty;
+            txtFoglioNct.Text = string.Empty;
+            txtParticellaNct.Text = string.Empty;
+
             CaricaDLL();
 
         }
@@ -527,6 +540,7 @@ namespace Uotep
                 DataTable RicercaQuartiere = mn.getListQuartiere();
                 DdlQuartiereI.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiereI.DataTextField = "Quartiere"; // Il campo visibile
+                DdlTipoAttoI.DataValueField = "id_quartiere";
                 DdlQuartiereI.DataBind();
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
@@ -538,7 +552,11 @@ namespace Uotep
                 DdlTipoAttoI.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAttoI.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAttoI.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                DdlTipoAttoI.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAttoI.DataBind();
+                DdlTipoAttoI.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));   
+
+
 
                 DataTable RicercaGiudice = mn.getListGiudice();
                 DdlGiudiceI.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList

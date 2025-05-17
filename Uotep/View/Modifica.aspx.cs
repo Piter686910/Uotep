@@ -41,11 +41,13 @@ namespace Uotep
             if (!IsPostBack)
             {
                 DivRicerca.Visible = false;
+                NascondiDiv();
                 CaricaDLL();
 
             }
             //}
-            //else
+           // else
+               
             //{
             //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "UTENTE NON AUTORIZZATO" + "'); $('#errorModal').modal('show');", true);
             //}
@@ -232,6 +234,7 @@ namespace Uotep
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
+           
             Manager mn = new Manager();
             DataTable pratica = new DataTable();
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
@@ -362,6 +365,7 @@ namespace Uotep
                     DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
                     if (pratica.Rows.Count > 0)
                     {
+                        DivDettagli.Visible = true;
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
@@ -382,12 +386,37 @@ namespace Uotep
                             txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString();
                         //txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
-                        txtDataDataEvasa.Text = pratica.Rows[0].ItemArray[13].ToString();
+
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataDataEvasa.Text = string.Empty;
+                            }
+                            else
+                                txtDataDataEvasa.Text = dataappo.ToString("dd/MM/yyyy");
+                        }
+                        else
+                            txtDataDataEvasa.Text = string.Empty;
+
+
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
+                            
                             txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
-                            txtDataInvio.Text = pratica.Rows[0].ItemArray[15].ToString();
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataInvio.Text = string.Empty;
+                            }
+                            else
+                                txtDataInvio.Text = dataappo.ToString("dd/MM/yyyy");
+                        }
+                        else
+                            txtDataInvio.Text = string.Empty;
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
@@ -397,7 +426,12 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                            txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataCarico.Text = string.Empty;
+                            }
+                            else
+                                txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                         }
                         else
                             txtDataCarico.Text = string.Empty;
@@ -489,6 +523,7 @@ namespace Uotep
             DivGiudice.Visible = false;
             DivPratica.Visible = false;
             DivProcPenale.Visible = false;
+            DivDettagli.Visible = false;
         }
 
         protected void btNProtocollo_Click(object sender, EventArgs e)

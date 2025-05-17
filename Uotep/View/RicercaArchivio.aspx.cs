@@ -45,7 +45,7 @@ namespace Uotep
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
 
-            if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper()|| Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() || Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
+            if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
             {
                 btEstraiParziale.Enabled = false;
                 btEstraiTotale.Enabled = false;

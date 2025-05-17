@@ -36,5 +36,8 @@ namespace Uotep.Classi
         public Boolean arch_propComune = false;
         public Boolean arch_propBeniCult = false;
         public Boolean arch_propAltriEnti = false;
+        public string arch_foglioNct = string.Empty;
+        public string arch_particellaNct = string.Empty;
+
     }
 }
