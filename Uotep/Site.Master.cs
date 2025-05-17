@@ -101,6 +101,9 @@ namespace Uotep
                                 menuHome.Visible = true;
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
+                                menuArchivioUote.Visible = true;
+                                RicercaArchivio.Visible = true;
+
                                 break;
                             case "archivio":
                                 // Mostra voci per utenti standard

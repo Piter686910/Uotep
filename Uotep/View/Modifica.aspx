@@ -75,41 +75,41 @@
             input = document.getElementById("txtInviata");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlInviati.ClientID %>');
-     options = dropdown.getElementsByTagName("option");
-     var suggestionsListDiv = document.getElementById('<%= suggestionsListInviata.ClientID %>');
-     // Pulisci la lista dei suggerimenti precedenti
-     suggestionsListDiv.innerHTML = "";
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListInviata.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
 
-     var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
-     for (i = 0; i < options.length; i++) {
-         txtValue = options[i].textContent || options[i].innerText;
-         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-             suggestionsFound = true; // Trovato almeno un suggerimento
-             var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-             suggestionElement.textContent = txtValue;
-             suggestionElement.style.padding = "5px";
-             suggestionElement.style.cursor = "pointer";
-             suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-             suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
 
-             suggestionElement.addEventListener('click', function () {
-                 input.value = this.textContent;
-                 suggestionsListDiv.style.display = "none";
-                 return false;
-             });
-             suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-         }
-     }
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
 
-     // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-     if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-         suggestionsListDiv.style.display = "block";
-     } else {
-         suggestionsListDiv.style.display = "none";
-     }
- }
-       
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
+
         function filterDropdownIndirizzo() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtIndirizzo");
@@ -201,7 +201,7 @@
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">Modifica Pratica</p>
 
-           
+
             <!-- Contenitore per centrare -->
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
@@ -432,20 +432,20 @@
                         <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfIndirizzo" runat="server" />
                         </div>
-                        <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none"/>
+                        <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
-                   <%-- <div class="col-md-3">
+                    <%-- <div class="col-md-3">
                         <label for="txtVia"></label>
                         <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
                     </div>--%>
 
-                    <div class="col-md-3" style="margin-left:257px!important">
+                    <div class="col-md-3" style="margin-left: 257px!important">
                         <label for="txtQuartiere">Quartiere</label>
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfQuartiere" runat="server" />
                         </div>
-                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none"/>
+                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
 
                 </div>
@@ -468,11 +468,11 @@
                         <label for="txtScaturito">Scaturito</label>
 
                         <div class="form-group mb-3">
-                        <asp:TextBox ID="txtScaturito" runat="server" AutoPostBack="false" onkeyup="filterDropdownScaturito()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListScaturito" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfScaturito" runat="server" />
-                        </div>
-                            <asp:DropDownList ID="DdlScaturito" runat="server" CssClass="form-control" Style="display: none"/>
+                            <asp:TextBox ID="txtScaturito" runat="server" AutoPostBack="false" onkeyup="filterDropdownScaturito()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <div id="suggestionsListScaturito" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                <asp:HiddenField ID="HfScaturito" runat="server" />
+                            </div>
+                            <asp:DropDownList ID="DdlScaturito" runat="server" CssClass="form-control" Style="display: none" />
                         </div>
                     </div>
 
@@ -497,7 +497,7 @@
                             <asp:HiddenField ID="HfInviata" runat="server" />
                         </div>
 
-                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none"/>
+                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                     <div class="col-md-3">
                         <label for="txtDataInvio" class="form-label">Il</label>
@@ -581,12 +581,13 @@
                     <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
 
                 </div>
-                <div id="DivGrid" runat="server" visible="false" class="row" style="padding-left:10px">
+                <div id="DivGrid" runat="server" visible="false" class="row" style="padding-left: 10px">
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand">
                             <Columns>
+                                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
 
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
@@ -594,12 +595,12 @@
                                 <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
                                 <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Ins." DataFormatString="{0:dd/MM/yyyy}"/>
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Ins." DataFormatString="{0:dd/MM/yyyy}" />
                                 <asp:TemplateField>
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"
-                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") %>'
+                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
                                             CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
@@ -611,6 +612,7 @@
                 <%-- campi nascosti --%>
                 <asp:HiddenField ID="Holdmat" runat="server" />
                 <asp:HiddenField ID="HolDate" runat="server" />
+                <asp:HiddenField ID="Hid" runat="server" />
                 <%-- campi nascosti --%>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->

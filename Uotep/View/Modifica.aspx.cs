@@ -173,6 +173,10 @@ namespace Uotep
             DateTime o = System.Convert.ToDateTime(HolDate.Value);
 
             Manager mn = new Manager();
+
+            ///////////ù
+            ///inserire ID
+            //////////
             Boolean ins = mn.UpdPratica(p, Holdmat.Value, o);
             if (!ins)
             {
@@ -334,13 +338,15 @@ namespace Uotep
                 // Separare i valori del CommandArgument usando il delimitatore "|"
                 string[] values = commandArgument.Split('|');
 
-                // Assicurati che ci siano almeno 3 valori
-                if (values.Length == 4)
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 5)
                 {
                     Int32 protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
                     string matricola = values[1];     // Matricola
                     string dataInserimento = values[2]; // DataInserimento
                     string sigla = values[3]; // sigla
+                    Hid.Value = values[4]; // id
+
 
                     //// Ora puoi usare questi valori per aggiornare i tuoi controlli
                     //p.nrProtocollo = System.Convert.ToInt32(protocollo);
@@ -354,9 +360,13 @@ namespace Uotep
                     {
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
-                        txtDataArrivo.Text = dataappo1.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
+                        {
+                            DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+                            txtDataArrivo.Text = dataappo1.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                        }
+                        else
+                            txtDataArrivo.Text = string.Empty;
 
                         txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
                         txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
@@ -380,10 +390,13 @@ namespace Uotep
                             txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
 
                         txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
-
-                        DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                        txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
+                            txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                        }
+                        else
+                            txtDataCarico.Text = string.Empty;
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
@@ -397,7 +410,7 @@ namespace Uotep
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                         DivDettagli.Visible = true;
                         DivRicerca.Visible = false;
-                       // Pulisci();
+                        // Pulisci();
                     }
                     else
                     {
