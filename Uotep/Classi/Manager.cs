@@ -2286,7 +2286,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean UpdPratica(Principale p, string oldMat, DateTime olddate)
+        public Boolean UpdPratica(Principale p, string oldMat, int ID, DateTime olddate)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -2300,7 +2300,7 @@ namespace Uotep.Classi
                     "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "'" +
 
 
-                    " where Nr_protocollo = '" + @p.nrProtocollo + "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "'";
+                    " where Nr_protocollo = '" + @p.nrProtocollo + "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "' and ID = " + ID ;
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))

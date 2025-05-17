@@ -23,10 +23,18 @@ namespace Uotep
     {
         public string argomentoPassato = string.Empty;
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
+        String Vuser = String.Empty;
+        String Ruolo = String.Empty;
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
+            if (Session["user"] != null)
+            {
+                Vuser = Session["user"].ToString();
+                Ruolo = Session["ruolo"].ToString();
 
+            }
 
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
@@ -37,7 +45,11 @@ namespace Uotep
             // Assegna il valore decodificato al Literal
             ProtocolloLiteral.Text = decodedText;
 
-
+            if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper()|| Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() || Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
+            {
+                btEstraiParziale.Enabled = false;
+                btEstraiTotale.Enabled = false;
+            }
         }
 
 

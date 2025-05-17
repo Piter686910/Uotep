@@ -112,7 +112,11 @@ namespace Uotep
             //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
             //p.sigla = DdlSigla.SelectedItem.Text;
             //p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-            p.dataCarico = DateTime.Now.ToShortDateString();
+            if (!string.IsNullOrEmpty(txtDataCarico.Text))
+            {
+                p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
+            }
+
             p.nominativo = txtNominativo.Text;
 
 
@@ -174,10 +178,10 @@ namespace Uotep
 
             Manager mn = new Manager();
 
-            ///////////ù
-            ///inserire ID
-            //////////
-            Boolean ins = mn.UpdPratica(p, Holdmat.Value, o);
+            // id proveniente dalla selezione della pratica
+            int ID = System.Convert.ToInt32(Hid.Value);
+            //
+            Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
             if (!ins)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
