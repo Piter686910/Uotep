@@ -119,6 +119,7 @@ namespace Uotep
                                 RicercaArchivio.Visible = true;
                                 InserimentoArchivio.Visible = true;
                                 GestionePratica.Visible = true;
+                                menuManTabelle.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard

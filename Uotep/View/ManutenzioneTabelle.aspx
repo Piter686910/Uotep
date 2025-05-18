@@ -24,9 +24,11 @@
                 <asp:Button ID="btScaturito" runat="server" OnClick="btScaturito_Click" Text="Tabella Scaturito" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
                 <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text=" Tabella Provenienza" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
                 <asp:Button ID="btTipologia" runat="server" OnClick="btTipologia_Click" Text="Tabella Tipologia" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-
+            </p>
+            <p>
                 <asp:Button ID="btTipologiaNotaAg" runat="server" OnClick="btTipologiaNotaAg_Click" Text="Tabella Tipologia Ag" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
                 <asp:Button ID="btInviati" runat="server" OnClick="btInviati_Click" Text="Tabella Inviata" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
+                <asp:Button ID="btTipoAbuso" runat="server" OnClick="btTipoAbuso_Click" Text="Tabella Tipo Abuso" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
 
             </p>
         </div>
@@ -48,7 +50,7 @@
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button ID="btInserisci" Text="Inserisci" runat="server" OnClick="btInserisci_Click" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
-                   <%-- <div id="DivGrid" runat="server" visible="false" class="row">
+                    <%-- <div id="DivGrid" runat="server" visible="false" class="row">
                         <div class="form-group">
                             <!-- GridView nel popup -->
                             <asp:GridView ID="gvPopupGiudice" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
@@ -103,9 +105,22 @@
                     <asp:TextBox ID="txtTipologia" runat="server" CssClass="form-control" placeholder="Tipologia" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
-                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+
+                <%-- DIV  Tipologia Abuso --%>
+                <div id="DivtipoAbuso" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label1" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtTipoAbuso" runat="server" CssClass="form-control" placeholder="Tipologia Abuso" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+
 
                 <%-- DIV  Inviati --%>
                 <div id="DivInviati" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
@@ -115,7 +130,7 @@
                     <asp:TextBox ID="txtInviati" runat="server" CssClass="form-control" placeholder="Inviata" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
-                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
 
@@ -126,7 +141,7 @@
 
                     <asp:TextBox ID="txtTipologiaNotaAg" runat="server" CssClass="form-control" placeholder="Tipologia Nota Ag" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
-                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                        <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
             </div>

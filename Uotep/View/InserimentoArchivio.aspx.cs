@@ -548,10 +548,10 @@ namespace Uotep
                 DdlIndirizzoI.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlIndirizzoI.DataBind();
 
-                DataTable RicercaTipoAtto = mn.getListTipologia();
+                DataTable RicercaTipoAtto = mn.getListTipologiaAbuso();
                 DdlTipoAttoI.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
-                DdlTipoAttoI.DataTextField = "Tipo_Nota"; // Il campo visibile
-                DdlTipoAttoI.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                DdlTipoAttoI.DataTextField = "Tipologia"; // Il campo visibile
+                DdlTipoAttoI.DataValueField = "id"; // Il valore associato a ogni opzione
                 DdlTipoAttoI.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAttoI.DataBind();
                 DdlTipoAttoI.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));   

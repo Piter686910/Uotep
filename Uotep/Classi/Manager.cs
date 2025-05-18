@@ -289,6 +289,15 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListTipologiaAbuso()
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT  * FROM TipologiaAbuso order by tipologia";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getListTipologia()
         {
             DataTable tb = new DataTable();
@@ -1167,6 +1176,71 @@ namespace Uotep.Classi
 
             }
             return resp;
+
+        }
+        /// <summary>
+        /// inserimento in tabella tipologia abuso
+        /// </summary>
+        /// <param name="Tipologia"></param>
+        /// <returns></returns>
+        public Boolean InserisciTipologiaAbuso(string Tipologia)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_pratica = "insert into TipologiaAbuso (tipologia)" +
+                   " Values('" + Tipologia.Replace("'", "''") + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "Tipologia abuso";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Tipologia Abuso:" + Tipologia + ", " + ex.Message + @" - Errore in inserimento tabella Tipologia Abuso ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
 
         }
         /// <summary>

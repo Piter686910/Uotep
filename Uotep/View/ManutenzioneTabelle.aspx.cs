@@ -9,20 +9,36 @@ namespace Uotep
     public partial class ManutenzioneTabelle : Page
     {
         String Vuser = String.Empty;
+
+        String Ruolo = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
+                Ruolo = Session["Ruolo"].ToString();
 
+            }
+            if (!IsPostBack)
+            {
+                if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
+                {
+                    btTipoAbuso.Enabled = false;
+
+                }
+                if (Ruolo.ToUpper() == Enumerate.Profilo.Archivio.ToString().ToUpper())
+                {
+                    btScaturito.Enabled = false;
+                    btTipologia.Enabled = false;
+                    btTipologiaNotaAg.Enabled = false;
+                    btGiudice.Enabled = false;
+                    btInviati.Enabled = false;
+                    btProvenienza.Enabled = false;
+
+                }
             }
         }
 
-       
-        
-        
-       
-        
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
@@ -134,6 +150,16 @@ namespace Uotep
 
                 }
             }
+
+            if (!String.IsNullOrEmpty(txtTipoAbuso.Text))
+            {
+                Boolean resp = mn.InserisciTipologiaAbuso(txtTipoAbuso.Text.ToUpper());
+                if (resp)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Tipologia Abuso: " + txtTipoAbuso.Text + " inserita." + "'); $('#errorModal').modal('show');", true);
+
+                }
+            }
         }
         protected void NascondiDiv()
         {
@@ -144,6 +170,7 @@ namespace Uotep
             DivProvenienza.Visible = false;
             DivScaturito.Visible = false;
             DivGiudice.Visible = false;
+            DivtipoAbuso.Visible = false;
         }
 
         protected void btProvenienza_Click(object sender, EventArgs e)
@@ -202,6 +229,10 @@ namespace Uotep
             }
         }
 
-
+        protected void btTipoAbuso_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivtipoAbuso.Visible = true;
+        }
     }
 }
