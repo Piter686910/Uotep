@@ -1007,6 +1007,16 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getPraticaId(Int32 protocollo, DateTime data, string sigla, Int32 id)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'" + "' and id = " + id;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getPratica(Int32 protocollo, DateTime data, string sigla)
         {
             DataTable tb = new DataTable();

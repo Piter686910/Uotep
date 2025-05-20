@@ -69,18 +69,19 @@ namespace Uotep
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
-            //Manager mn = new Manager();
-            //DataTable pratica = mn.getListPrototocollo(txtProtoloccolRicerca.Text, txtAnnoRicerca.Text);
-            //if (pratica.Rows.Count > 0)
-            //{
-            //    gvPopupProtocolli.DataSource = pratica;
-            //    gvPopupProtocolli.DataBind();
+            Manager mn = new Manager();
+            DataTable pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+            if (pratica.Rows.Count > 0)
+            {
+                apripopupPratica_Click(sender, e);
+                gvPopupProtocolli.DataSource = pratica;
+                gvPopupProtocolli.DataBind();
 
 
-            //}
+            }
             //DivGrid.Visible = true;
-            //DivDettagli.Visible = true;
-            //DivRicerca.Visible = false;
+            DivDettagli.Visible = true;
+            DivRicerca.Visible = false;
 
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -168,6 +169,17 @@ namespace Uotep
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+
+        }
+        //pratica
+        protected void apripopupPratica_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+        }
+        protected void chiudipopupPratica_Click(object sender, EventArgs e)
+        {
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalPratica')); modal.hide();", true);
 
         }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
@@ -342,7 +354,14 @@ namespace Uotep
             }
         }
 
-
+        protected void NuovaRicerca_Click(object sender, EventArgs e)
+        {
+            DivDettagli.Visible = false;
+            DivRicerca.Visible = true;
+            //DivGrid.Visible = false;
+            txtAnnoRicerca.Text = String.Empty;
+            //txtProtoloccolRicerca.Text = String.Empty;
+        }
         //protocolli
         protected void gvPopupProtocolli_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -355,12 +374,13 @@ namespace Uotep
                 string[] values = commandArgument.Split('|');
 
                 // Assicurati che ci siano almeno 3 valori
-                if (values.Length == 4)
+                if (values.Length == 5)
                 {
                     Int32 protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
                     string matricola = values[1];     // Matricola
                     string dataInserimento = values[2]; // DataInserimento
                     string sigla = values[3]; // sigla
+                    HidPratica.Value = values[4];
                     //// Ora puoi usare questi valori per aggiornare i tuoi controlli
                     //p.nrProtocollo = System.Convert.ToInt32(protocollo);
                     //conservo la matricola precedente
@@ -369,7 +389,7 @@ namespace Uotep
                     HoldProtocollo.Value = protocollo.ToString();
                     //p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLongDateString();
                     Manager mn = new Manager();
-                    DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
+                    DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
 
                     if (pratica.Rows.Count > 0)
                     {
@@ -408,20 +428,13 @@ namespace Uotep
                 }
             }
         }
-        protected void NuovaRicerca_Click(object sender, EventArgs e)
-        {
-            DivDettagli.Visible = false;
-            DivRicerca.Visible = true;
-            DivGrid.Visible = false;
-            txtAnnoRicerca.Text = String.Empty;
-            //txtProtoloccolRicerca.Text = String.Empty;
-        }
+       
         protected void gvPopupProtocolli_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Ottieni il valore della colonna "ID"
-                string id = DataBinder.Eval(e.Row.DataItem, "Nr_Protocollo").ToString();
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
 
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";

@@ -20,7 +20,14 @@
         function hideModal() {
             $('#myModal').modal('hide');
         }
+        function showModal() {
+            $('#ModalPratica').modal('show');
+        }
 
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalPratica').modal('hide');
+        }
     </script>
 
     <div class="jumbotron">
@@ -243,33 +250,7 @@
         <asp:HiddenField ID="HoldProtocollo" runat="server" />
         <%-- campi nascosti --%>
         <div class="container" id="DivDettagli" runat="server">
-            <div id="DivGrid" runat="server" visible="false" class="row">
-                <div class="form-group">
-                    <!-- GridView nel popup -->
-                    <asp:GridView ID="gvPopupProtocolli" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                        OnRowDataBound="gvPopupProtocolli_RowDataBound" OnRowCommand="gvPopupProtocolli_RowCommand">
-                        <Columns>
 
-                            <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
-                            <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
-                            <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" />
-                            <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
-                            <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
-                            <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                            <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" />
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
-                                        CommandName="Select"
-                                        CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") %>'
-                                        CssClass="btn btn-success btn-sm" />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-
-                </div>
-            </div>
 
             <label for="txtProt">Nr Protocollo</label>
             <div class="row">
@@ -422,8 +403,66 @@
             </div>
         </div>
     </div>
-    <!-- Modale Bootstrap quartiere-->
 
+
+
+    <%-- Modale ricerca pratica --%>
+    <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 100%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
+
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <!-- GridView nel popup -->
+                        <%--<div id="DivGrid" runat="server" visible="false" class="row">--%>
+                    
+                                <!-- GridView nel popup -->
+                                <asp:GridView ID="gvPopupProtocolli" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                                    OnRowDataBound="gvPopupProtocolli_RowDataBound" OnRowCommand="gvPopupProtocolli_RowCommand">
+                                    <Columns>
+                                        <asp:BoundField DataField="Id" HeaderText="Id" Visible="false" />
+                                        <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
+                                        <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
+                                        <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" />
+                                        <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
+                                        <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
+                                        <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
+                                        <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" />
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                                    CommandName="Select"
+                                                    CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("Id") %>'
+                                                    CssClass="btn btn-success btn-sm" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+
+                            
+                        <%--</div>--%>
+
+                    </div>
+                </div>
+                <asp:HiddenField ID="HidPratica" runat="server" />
+                <asp:HiddenField ID="HfStato" runat="server" />
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupPratica_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modale Bootstrap quartiere-->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
