@@ -462,7 +462,7 @@ namespace Uotep.Classi
         public DataTable getListProcedimento(string procedimento)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where ProcedimentoPen = " + procedimento;
+            string sql = "SELECT * FROM Principale where ProcedimentoPen = '" + procedimento + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1010,7 +1010,7 @@ namespace Uotep.Classi
         public DataTable getPraticaId(Int32 protocollo, DateTime data, string sigla, Int32 id)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'" + "' and id = " + id;
+            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'" + " and id = " + id;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -2429,7 +2429,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean SavePraticaTrans(Principale p, string oldMat, DateTime olddate, string oldProtocollo)
+        public Boolean SavePraticaTrans(Principale p, string oldMat, DateTime olddate, string oldProtocollo, Int32 idPratica)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -2448,7 +2448,7 @@ namespace Uotep.Classi
 
 
             string del = "delete principale where nr_protocollo = '" + oldProtocollo +
-                        "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "'"; ;
+                        "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "' and id = " + idPratica;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();

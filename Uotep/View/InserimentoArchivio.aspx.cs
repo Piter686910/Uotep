@@ -435,9 +435,23 @@ namespace Uotep
             }
             catch (Exception ex)
             {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore modifica inserimento archivio ");
+                    sw.Close();
+                }
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "View/InserimentoArchivio.aspx";
                 Response.Redirect("~/Contact.aspx");
+
             }
         }
         private void Pulisci()

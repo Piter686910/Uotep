@@ -104,6 +104,10 @@ namespace Uotep
 
         protected void Salva_Click(object sender, EventArgs e)
         {
+            try
+            {
+
+            
             Principale p = new Principale();
             if (Session["user"] != null)
             {
@@ -192,6 +196,27 @@ namespace Uotep
             {
                 DivDettagli.Visible = false;
                 Pulisci();
+            }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.Close();
+                }
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
+
             }
         }
         private void Pulisci()

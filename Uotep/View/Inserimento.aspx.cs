@@ -283,9 +283,9 @@ namespace Uotep
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
 
-                Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Inserimento.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Session["MessaggioErrore"] = ex.Message;
+                //Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                //Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -515,9 +515,9 @@ namespace Uotep
                 Session["PaginaChiamante"] = "View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
 
-                Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Inserimento.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Session["MessaggioErrore"] = ex.Message;
+                //Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                //Response.Redirect("~/Contact.aspx");
 
             }
         }

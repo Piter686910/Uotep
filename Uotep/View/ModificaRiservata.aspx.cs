@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.UI;
@@ -70,85 +71,173 @@ namespace Uotep
         protected void Ricerca_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
-            DataTable pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+            //DataTable pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+
+
+            DataTable pratica = new DataTable();
+            if (!string.IsNullOrEmpty(txtNProtocollo.Text))
+            {
+                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+            }
+            if (!string.IsNullOrEmpty(txtProcPenale.Text))
+            {
+                pratica = mn.getListProcedimento(txtProcPenale.Text);
+            }
+
+            if (!string.IsNullOrEmpty(txtDataDa.Text))
+            {
+                pratica = mn.getListEvasaAg(txtDataDa.Text, txtDataA.Text);
+            }
+            if (!string.IsNullOrEmpty(txtProtGen.Text))
+            {
+                pratica = mn.getListProtGen(txtProtGen.Text);
+            }
+            if (!string.IsNullOrEmpty(txtPratica.Text))
+            {
+                pratica = mn.getListPratica(txtPratica.Text);
+            }
+            if (!string.IsNullOrEmpty(txtRicGiudice.Text))
+            {
+                pratica = mn.getListGiudice(txtRicGiudice.Text);
+            }
+            if (!string.IsNullOrEmpty(txtRicProvenienza.Text))
+            {
+                pratica = mn.getListProvenienza(txtRicProvenienza.Text);
+            }
+            if (!string.IsNullOrEmpty(txtRicNominativo.Text))
+            {
+                pratica = mn.getListNominativo(txtRicNominativo.Text);
+            }
+            if (!string.IsNullOrEmpty(txtRicAccertatori.Text))
+            {
+                pratica = mn.getListAccertatori(txtRicAccertatori.Text);
+            }
+            if (!string.IsNullOrEmpty(txtRicIndirizzo.Text))
+            {
+                pratica = mn.getListIndirizzo(txtRicIndirizzo.Text);
+            }
+            if (!string.IsNullOrEmpty(txtDataDa.Text))
+            {
+                pratica = mn.getListDataCarico(txtDatCaricoDa.Text, txtDatCaricoA.Text);
+            }
+
+
+
             if (pratica.Rows.Count > 0)
             {
                 apripopupPratica_Click(sender, e);
                 gvPopupProtocolli.DataSource = pratica;
                 gvPopupProtocolli.DataBind();
 
-
-            }
-            //DivGrid.Visible = true;
-            DivDettagli.Visible = true;
-            DivRicerca.Visible = false;
-
-        }
-        protected void Salva_Click(object sender, EventArgs e)
-        {
-            Principale p = new Principale();
-            p.anno = annoCorr;
-            p.giorno = DateTime.Now.Day.ToString();
-            p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-            p.sigla = DdlSigla.SelectedItem.Text;
-            p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-            //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-            p.nominativo = txtNominativo.Text;
-
-            p.giudice = DdlGiudice.SelectedItem.Text;
-
-
-            p.provenienza = DdlProvenienza.SelectedItem.Text;
-
-            p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
-
-
-            p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
-
-
-            p.rif_Prot_Gen = txtRifProtGen.Text;
-
-            p.indirizzo = DdlIndirizzo.SelectedItem.Text;
-            p.via = txtVia.Text;
-
-            p.quartiere = DdlQuartiere.SelectedItem.Text;
-
-
-            p.note = txtNote.Text;
-            p.evasa = CkEvasa.Checked;
-            if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-            {
-                p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-            }
-
-            p.accertatori = txtAccertatori.Text;
-
-            p.scaturito = DdlScaturito.SelectedItem.Text;
-
-            p.inviata = DdlInviati.SelectedItem.Text;
-            if (!string.IsNullOrEmpty(txtDataInvio.Text))
-            {
-                p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-            }
-
-            p.procedimentoPen = txtProdPenNr.Text;
-            p.matricola = Vuser;
-            p.data_ins_pratica = DateTime.Now.ToLocalTime();
-            DateTime o = System.Convert.ToDateTime(HolDate.Value);
-
-
-            Manager mn = new Manager();
-            Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value);
-            if (!ins)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "errore durante il salvataggio." + "'); $('#errorModal').modal('show');", true);
+               
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
-                Pulisci();
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
             }
-            Ricerca_Click(this, EventArgs.Empty);
+            //DivGrid.Visible = true;
+            //DivDettagli.Visible = true;
+            //DivRicerca.Visible = false;
+            Pulisci();
+        }
+        protected void Salva_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Principale p = new Principale();
+                CultureInfo culturaItaliana = new CultureInfo("it-IT");
+                p.anno = annoCorr;
+                //  p.giorno = DateTime.Now.DayOfWeek.ToString();
+                DateTime adesso = DateTime.Now;
+                p.giorno = adesso.ToString("dddd", culturaItaliana);
+
+
+                p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
+                p.sigla = DdlSigla.SelectedItem.Text;
+                p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                p.nominativo = txtNominativo.Text;
+
+                p.giudice = DdlGiudice.SelectedItem.Text;
+
+
+                p.provenienza = DdlProvenienza.SelectedItem.Text;
+
+                p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+
+
+                p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
+
+
+                p.rif_Prot_Gen = txtRifProtGen.Text;
+
+                p.indirizzo = DdlIndirizzo.SelectedItem.Text;
+               // p.via = txtVia.Text;
+
+                p.quartiere = DdlQuartiere.SelectedItem.Text;
+
+
+                p.note = txtNote.Text;
+                p.evasa = CkEvasa.Checked;
+                if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
+                {
+                    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
+                }
+
+                p.accertatori = txtAccertatori.Text;
+
+                p.scaturito = DdlScaturito.SelectedItem.Text;
+
+                p.inviata = DdlInviati.SelectedItem.Text;
+                if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                {
+                    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                }
+
+                p.procedimentoPen = txtProdPenNr.Text;
+                p.matricola = Vuser;
+                p.data_ins_pratica = DateTime.Now.ToLocalTime();
+                DateTime o = System.Convert.ToDateTime(HolDate.Value);
+
+
+                Manager mn = new Manager();
+                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value));
+                if (!ins)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "errore durante il salvataggio." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " modificato correttamente ." + "'); $('#errorModal').modal('show');", true);
+                    Pulisci();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore modifica riservata ");
+                    sw.Close();
+                }
+
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/ModificaRiservata.aspx";
+                Response.Redirect("~/Contact.aspx");
+
+                //Session["MessaggioErrore"] = ex.Message;
+                //Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                //Response.Redirect("~/Contact.aspx");
+
+            }
+            //  Ricerca_Click(this, EventArgs.Empty);
         }//popup provenienza
         protected void apripopupProvenienza_Click(object sender, EventArgs e)
         {
@@ -188,7 +277,7 @@ namespace Uotep
 
 
             //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
-            indirizzo = txtIndirizzo.Text.Trim();
+            indirizzo = txtIndirizzoRic.Text.Trim();
 
 
             //string specie = txtSpecie.Text.Trim();
@@ -255,13 +344,14 @@ namespace Uotep
                 DataTable RicercaQuartiere = mn.getListQuartiere();
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                                                          // DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
                 DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
-                DdlIndirizzo.DataTextField = "Toponimo"; // Il campo visibile
+                DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
+                                                               //      DdlIndirizzo.DataValueField = "ID_quartiere";
                 DdlIndirizzo.DataBind();
                 DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
@@ -332,7 +422,7 @@ namespace Uotep
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Ottieni il valore della colonna "ID"
-                string id = DataBinder.Eval(e.Row.DataItem, "ID").ToString();
+                string id = DataBinder.Eval(e.Row.DataItem, "ID_quartiere").ToString();
 
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
@@ -356,11 +446,12 @@ namespace Uotep
 
         protected void NuovaRicerca_Click(object sender, EventArgs e)
         {
+            Pulisci();
             DivDettagli.Visible = false;
             DivRicerca.Visible = true;
-            //DivGrid.Visible = false;
             txtAnnoRicerca.Text = String.Empty;
-            //txtProtoloccolRicerca.Text = String.Empty;
+            txtNProtocollo.Text = String.Empty;
+
         }
         //protocolli
         protected void gvPopupProtocolli_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -376,6 +467,7 @@ namespace Uotep
                 // Assicurati che ci siano almeno 3 valori
                 if (values.Length == 5)
                 {
+
                     Int32 protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
                     string matricola = values[1];     // Matricola
                     string dataInserimento = values[2]; // DataInserimento
@@ -393,31 +485,92 @@ namespace Uotep
 
                     if (pratica.Rows.Count > 0)
                     {
-                        txtProt.Text = pratica.Rows[0].ItemArray[0].ToString();
-                        DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[1].ToString();
-                        txtDataArrivo.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        DdlProvenienza.SelectedItem.Text = pratica.Rows[0].ItemArray[3].ToString();
-                        DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[4].ToString();
-                        DdlGiudice.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString();
-                        DdlTipoProvvAg.SelectedItem.Text = pratica.Rows[0].ItemArray[6].ToString();
-                        txtProdPenNr.Text = pratica.Rows[0].ItemArray[7].ToString();
-                        txtNominativo.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        DdlIndirizzo.SelectedItem.Text = pratica.Rows[0].ItemArray[9].ToString();
-                        txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
-                        CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[11]);
-                        txtDataDataEvasa.Text = pratica.Rows[0].ItemArray[12].ToString();
-                        DdlInviati.SelectedItem.Text = pratica.Rows[0].ItemArray[13].ToString();
-                        txtDataInvio.Text = pratica.Rows[0].ItemArray[14].ToString();
-                        DdlScaturito.SelectedItem.Text = pratica.Rows[0].ItemArray[15].ToString();
-                        txtAccertatori.Text = pratica.Rows[0].ItemArray[16].ToString();
-                        txtDataCarico.Text = pratica.Rows[0].ItemArray[17].ToString();
-                        txPratica.Text = pratica.Rows[0].ItemArray[18].ToString();
-                        DdlQuartiere.SelectedItem.Text = pratica.Rows[0].ItemArray[19].ToString();
-                        txtNote.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[21].ToString();
-                        //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                        txtRifProtGen.Text = pratica.Rows[0].ItemArray[23].ToString();
+                        //CaricaDLL();
+                        txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
+                        DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[2].ToString();
+                        DateTime dataarrivo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+                        txtDataArrivo.Text = dataarrivo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
 
+                        // txtDataArrivo.Text = pratica.Rows[0].ItemArray[3].ToString();
+                        // DdlProvenienza.SelectedItem.Text = pratica.Rows[0].ItemArray[4].ToString();
+
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[4].ToString()))
+                        {
+                            DdlProvenienza.SelectedItem.Text = pratica.Rows[0].ItemArray[4].ToString();
+                        }
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[5].ToString()))
+
+                            DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString();
+
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[6].ToString()))
+
+                            DdlGiudice.SelectedItem.Text = pratica.Rows[0].ItemArray[6].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[7].ToString()))
+
+                            DdlTipoProvvAg.SelectedItem.Text = pratica.Rows[0].ItemArray[7].ToString();
+
+                        txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
+                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
+
+                            DdlIndirizzo.SelectedItem.Text = pratica.Rows[0].ItemArray[10].ToString();
+                        //txtVia.Text = pratica.Rows[0].ItemArray[11].ToString();
+                        CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
+
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataDataEvasa.Text = string.Empty;
+                            }
+                            else
+                                txtDataDataEvasa.Text = dataappo.ToString("dd/MM/yyyy");
+                        }
+                        else
+                            txtDataDataEvasa.Text = string.Empty;
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
+
+                            DdlInviati.SelectedItem.Text = pratica.Rows[0].ItemArray[14].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataInvio.Text = string.Empty;
+                            }
+                            else
+                                txtDataInvio.Text = dataappo.ToString("dd/MM/yyyy");
+                        }
+                        else
+                            txtDataInvio.Text = string.Empty;
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
+
+                            DdlScaturito.SelectedItem.Text = pratica.Rows[0].ItemArray[16].ToString();
+
+                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
+                            if (dataappo == DateTime.MinValue)
+                            {
+                                txtDataCarico.Text = string.Empty;
+                            }
+                            else
+                                txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                        }
+                        else
+                            txtDataCarico.Text = string.Empty;
+                        txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
+
+                            DdlQuartiere.SelectedItem.Text = pratica.Rows[0].ItemArray[20].ToString();
+                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
+                        //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+                        DivDettagli.Visible = true;
+                        DivRicercaButton.Visible = false;
                         // Puoi anche chiudere il popup se necessario
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true);
                     }
@@ -428,7 +581,7 @@ namespace Uotep
                 }
             }
         }
-       
+
         protected void gvPopupProtocolli_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -448,7 +601,7 @@ namespace Uotep
             txPratica.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
-            txtVia.Text = String.Empty;
+           // txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
@@ -457,6 +610,14 @@ namespace Uotep
 
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
+            txtRicProvenienza.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
+            txtPratica.Text = string.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtRicNominativo.Text = string.Empty;
             CaricaDLL();
 
         }
@@ -470,6 +631,7 @@ namespace Uotep
             NascondiDiv();
             DivProtocollo.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btProcPenale_Click(object sender, EventArgs e)
@@ -477,6 +639,7 @@ namespace Uotep
             NascondiDiv();
             DivProcPenale.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btProtGen_Click(object sender, EventArgs e)
@@ -484,6 +647,7 @@ namespace Uotep
             NascondiDiv();
             DivProtGen.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btEvaseAg_Click(object sender, EventArgs e)
@@ -491,6 +655,7 @@ namespace Uotep
             NascondiDiv();
             DivEvasaAg.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
@@ -498,6 +663,7 @@ namespace Uotep
             NascondiDiv();
             DivPratica.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btGiudice_Click(object sender, EventArgs e)
@@ -505,6 +671,7 @@ namespace Uotep
             NascondiDiv();
             DivGiudice.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btProvenienza_Click(object sender, EventArgs e)
@@ -512,6 +679,7 @@ namespace Uotep
             NascondiDiv();
             DivRicerca.Visible = true;
             DivProvenienza.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
@@ -519,6 +687,7 @@ namespace Uotep
             NascondiDiv();
             DivNominativo.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btDataCarico_Click(object sender, EventArgs e)
@@ -526,6 +695,7 @@ namespace Uotep
             NascondiDiv();
             DivDataCarico.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btAccertatori_Click(object sender, EventArgs e)
@@ -533,6 +703,7 @@ namespace Uotep
             NascondiDiv();
             DivAccertatori.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void btIndirizzo_Click(object sender, EventArgs e)
@@ -540,6 +711,7 @@ namespace Uotep
             NascondiDiv();
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
+            DivRicercaButton.Visible = true;
         }
 
         protected void NascondiDiv()
