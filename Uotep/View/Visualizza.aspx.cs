@@ -134,12 +134,13 @@ namespace Uotep
                     string[] values = commandArgument.Split('|');
 
                     // Assicurati che ci siano almeno 3 valori
-                    if (values.Length == 4)
+                    if (values.Length == 5)
                     {
                         protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
                         matricola = values[1];     // Matricola
                         dataInserimento = values[2]; // DataInserimento
                         sigla = values[3];  // sigla
+                        HidPratica.Value = values[4]; // id
 
 
                         //// Ora puoi usare questi valori per aggiornare i tuoi controlli
@@ -151,7 +152,7 @@ namespace Uotep
 
                         }
                         Manager mn = new Manager();
-                        DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
+                        DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         if (pratica.Rows.Count > 0)
                         {
                             txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();

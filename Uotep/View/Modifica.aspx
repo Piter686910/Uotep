@@ -588,15 +588,14 @@
                             OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand">
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
-
-                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
-                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
-                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" />
-                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
-                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
-                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Ins." DataFormatString="{0:dd/MM/yyyy}" />
-                                <asp:TemplateField>
+                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
+                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:TemplateField ItemStyle-Width="10px">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"

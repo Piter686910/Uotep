@@ -387,7 +387,7 @@ namespace Uotep
                     HolDate.Value = dataInserimento;
                     //p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLongDateString();
                     Manager mn = new Manager();
-                    DataTable pratica = mn.getPratica(protocollo, System.Convert.ToDateTime(dataInserimento), sigla);
+                    DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(Hid.Value));
                     if (pratica.Rows.Count > 0)
                     {
                         DivDettagli.Visible = true;

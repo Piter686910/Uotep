@@ -393,54 +393,54 @@
 
             </div>
 
-        
 
-        <div class="row align-items-center mb-3">
-            <div class="col-md-3 d-flex align-items-center">
-                <div class="form-check">
-                    <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                    <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+
+            <div class="row align-items-center mb-3">
+                <div class="col-md-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtDataDataEvasa" class="form-label">In data</label>
+                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtinviata" class="form-label">Inviata</label>
+                        <%--<asp:TextBox ID="txtinviata" runat="server" CssClass="form-control" />--%>
+
+                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" />
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtDataInvio" class="form-label">Il</label>
+                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" />
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="txtDataDataEvasa" class="form-label">In data</label>
-                    <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" />
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group mb-3">
+                        <label for="txtNote">Eventuali Note</label>
+                        <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="txtinviata" class="form-label">Inviata</label>
-                    <%--<asp:TextBox ID="txtinviata" runat="server" CssClass="form-control" />--%>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
+                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" />
+                    <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
-                    <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" />
-
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="txtDataInvio" class="form-label">Il</label>
-                    <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" />
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="form-group mb-3">
-                    <label for="txtNote">Eventuali Note</label>
-                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 text-center">
-                <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
-                <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" />
-                <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-
-            </div>
-        </div>
-    </div>
     </div>
 
 
@@ -463,19 +463,19 @@
                         <asp:GridView ID="gvPopupProtocolli" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopupProtocolli_RowDataBound" OnRowCommand="gvPopupProtocolli_RowCommand">
                             <Columns>
-                                <asp:BoundField DataField="Id" HeaderText="Id" Visible="false" />
-                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
-                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
-                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" />
-                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
-                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
-                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" />
-                                <asp:TemplateField>
+                                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
+                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:TemplateField ItemStyle-Width="10px">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"
-                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("Id") %>'
+                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
                                             CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
                                 </asp:TemplateField>

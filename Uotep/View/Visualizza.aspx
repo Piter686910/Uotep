@@ -323,43 +323,43 @@
             </div>
         </div>
     </div>
-        <%-- Modale ricerca fascicolo --%>
+    <%-- Modale ricerca fascicolo --%>
     <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width:100%">
+        <div class="modal-dialog" style="width: 100%">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
 
                 </div>
-                           <div id="DivGrid" runat="server" visible="false" class="row">
-                <div class="form-group">
-                    <!-- GridView nel popup -->
-                    <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered" 
-                        OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
-                        <Columns>
+                <div id="DivGrid" runat="server" visible="false" class="row">
+                    <div class="form-group">
+                        <!-- GridView nel popup -->
+                        <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
+                            <Columns>
+                                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true"  ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true"  ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true"  ItemStyle-Width="80px"/>
+                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px"/>
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center"/>
+                                <asp:TemplateField ItemStyle-Width="10px">
+                                    <ItemTemplate >
+                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                            CommandName="Select"
+                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
+                                            CssClass="btn btn-success btn-sm" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                        </asp:GridView>
 
-                            <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" />
-                            <asp:BoundField DataField="Sigla" HeaderText="Sigla" />
-                            <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" />
-                            <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" />
-                            <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" />
-                            <asp:BoundField DataField="Matricola" HeaderText="Matricola" />
-                            <asp:BoundField DataField="DataInserimento" HeaderText="DataInserimento" DataFormatString="{0:dd/MM/yyyy}"/>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
-                                        CommandName="Select"
-                                        CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") %>'
-                                        CssClass="btn btn-success btn-sm" />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-
+                    </div>
                 </div>
-            </div>
-               
-                <asp:HiddenField id="HfIdScheda" runat="server"   />
+                <asp:HiddenField ID="HidPratica" runat="server" />
+                <asp:HiddenField ID="HfIdScheda" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
