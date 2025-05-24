@@ -26,31 +26,34 @@ namespace Uotep
                     {
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
-                            case "coordinamentoatti":
-                                // Mostra voci specifiche per coordinamento ag
-                                menuCoordinamentoAtti.Visible = true;
-                                menuArchivioUote.Visible = true;
-                                RicercaArchivio.Visible = true;
-                                menuAccertatori.Visible = false;
-                                menuAmministratore.Visible = false;
-                                menuManTabelle.Visible = true;
-                                menuSegreteria.Visible = false;
-                                menuEsci.Visible = true;
-                                menuHome.Visible = true;
-                                if (Session["profilo"].ToString() != "1")
-                                {
-                                    menuNuovaScheda.Visible = false;
-                                    menuRicercaScheda.Visible = true;
-                                    Statistiche.Visible = true;
+                            //case "coordinamentoatti":
+                            //case "mastag":
+                            //    // Mostra voci specifiche per coordinamento ag
+                            //    menuCoordinamentoAtti.Visible = true;
+                            //    menuArchivioUote.Visible = true;
+                            //    RicercaArchivio.Visible = true;
+                            //    menuAccertatori.Visible = false;
+                            //    menuAmministratore.Visible = false;
+                            //    menuManTabelle.Visible = true;
+                            //    menuSegreteria.Visible = false;
+                            //    menuEsci.Visible = true;
+                            //    menuHome.Visible = true;
+                            //    if (Session["profilo"].ToString() != "1")
+                            //    {
+                            //        menuNuovaScheda.Visible = false;
+                            //        menuRicercaScheda.Visible = true;
+                            //        Statistiche.Visible = true;
 
-                                }
-                                InserimentoAtti.Visible = true;
-                                ModificaAtti.Visible = true;
-                                ModificaRiservata.Visible = true;
-                                RicercaAtti.Visible = true;
+                            //    }
+                            //    InserimentoAtti.Visible = true;
+                            //    ModificaAtti.Visible = true;
+                            //    ModificaRiservata.Visible = true;
+                            //    RicercaAtti.Visible = true;
 
-                                break;
+                            //    break;
                             case "coordinamentopg":
+                            case "MasterAG":
+                            case "coordinamentoatti":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivioUote.Visible = true;

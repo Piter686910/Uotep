@@ -74,8 +74,8 @@
                                     <asp:ListItem Text="admin"> </asp:ListItem>
                                     <asp:ListItem Text="accertatori"> </asp:ListItem>
                                     <asp:ListItem Text="archivio"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamento ag"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamento pg"> </asp:ListItem>
+                                    <asp:ListItem Text="coordinamentoatti"> </asp:ListItem>
+                                    <asp:ListItem Text="coordinamentopg"> </asp:ListItem>
                                     <asp:ListItem Text="MasterAG"> </asp:ListItem>
                                     <asp:ListItem Text="segreteria"> </asp:ListItem>
                                     <asp:ListItem Text="superAdmin"> </asp:ListItem>
