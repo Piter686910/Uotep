@@ -28,46 +28,51 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
 
             }
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
-
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
+           
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
                 if (Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
                 {
                     DdlSigla.SelectedValue = "PG";
                 }
-                //Manager mn = new Manager();
+                int protocollo = 0;
+                Manager mn = new Manager();
                 //DataTable tb = mn.MaxNPr(annoCorr);
+                DataTable tb = mn.MaxNPr(annoCorr);
                 txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                //if (tb.Rows.Count > 0)
-                //{
-                //    txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
+                if (tb.Rows.Count > 0)
+                {
+                    //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
 
-                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                //    }
-                //    else
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();
+                    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
+                    {
+                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
+                    }
+                    else
+                    {
+                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                        txtProt.Text = protocollo.ToString();
 
-                //    }
-                //}
-                //else
-                //{
-                //    txtProt.Text = "1";
+                    }
+                }
+                else
+                {
+                    txtProt.Text = "1";
 
-                //}
+                }
+                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+               
             }
 
         }
@@ -94,7 +99,7 @@ namespace Uotep
         {
             try
             {
-                int protocollo = 0;
+               // int protocollo = 0;
                 Principale p = new Principale();
                 p.anno = annoCorr;
                 DateTime giorno = DateTime.Now;
@@ -103,30 +108,30 @@ namespace Uotep
 
                 //
                 Manager mn = new Manager();
-                DataTable tb = mn.MaxNPr(annoCorr);
-                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                if (tb.Rows.Count > 0)
-                {
-                    txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
+                //DataTable tb = mn.MaxNPr(annoCorr);
+                //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                //if (tb.Rows.Count > 0)
+                //{
+                //    //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
 
-                    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                    {
-                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                    }
-                    else
-                    {
-                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                        txtProt.Text = protocollo.ToString();
+                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
+                //    {
+                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
+                //    }
+                //    else
+                //    {
+                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                //        txtProt.Text = protocollo.ToString();
 
-                    }
-                }
-                else
-                {
-                    txtProt.Text = "1";
+                //    }
+                //}
+                //else
+                //{
+                //    txtProt.Text = "1";
 
-                }
+                //}
                 p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
                 //
 
@@ -292,7 +297,7 @@ namespace Uotep
         private void Pulisci()
         {
             Convalida();
-            //txtProt.Text = String.Empty;
+            txtProt.Text = String.Empty;
 
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
@@ -320,7 +325,7 @@ namespace Uotep
             {
                 txtProvenienza.Text = string.Empty;
             }
-            txPratica.Text = String.Empty;
+            
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;

@@ -633,6 +633,25 @@ namespace Uotep.Classi
                     return false; ;
             }
         }
+        public Boolean getTipoScaturito(string scaturito)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT * FROM scaturito where scaturito = '" + scaturito.Replace("'", "''") + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+                if (ds.Tables[0].Rows.Count > 0)
+                    return true;
+                else
+                    return false; ;
+            }
+        }
         /// <summary>
         /// ricerca lista per provenienza
         /// </summary>
@@ -1188,6 +1207,7 @@ namespace Uotep.Classi
             return resp;
 
         }
+       
         /// <summary>
         /// inserimento in tabella tipologia abuso
         /// </summary>

@@ -18,21 +18,22 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
-
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
-
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
             }
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
+
+
                 CaricaDLL();
                 DivDettagli.Visible = false;
                 DivRicerca.Visible = false;
@@ -44,12 +45,12 @@ namespace Uotep
         {
 
 
-            String Vpassw = "";
-            Vuser = TxtMatricola.Text;
+            //String Vpassw = "";
+           // Vuser = TxtMatricola.Text;
             Hmatricola.Value = TxtMatricola.Text;
-            Vpassw = TxtPassw.Text;
+            //Vpassw = TxtPassw.Text;
             //salvo la matricola
-            Session["user"] = Vuser;
+            //Session["user"] = Vuser;
             Manager mn = new Manager();
             DataTable Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, TxtPassw.Text);
             if (Ricerca.Rows.Count > 0)
@@ -140,12 +141,34 @@ namespace Uotep
             //DivRicerca.Visible = false;
             Pulisci();
         }
+        public void Convalida()
+        {
+
+            if (!String.IsNullOrEmpty(HfGiudice.Value))
+                btSalvaGiudice.Visible = true;
+
+            if (!String.IsNullOrEmpty(HfTipoProv.Value))
+                btSalvaTipoProvv.Visible = true;
+
+            if (!String.IsNullOrEmpty(HfProvenienza.Value))
+                btSalvaProvenienza.Visible = true;
+
+            if (!String.IsNullOrEmpty(HfTipoAtto.Value))
+                btSalvaTipoAtto.Visible = true;
+
+            if (!String.IsNullOrEmpty(HfInviata.Value))
+                btSalvaInviata.Visible = true;
+            if (!String.IsNullOrEmpty(HfScaturito.Value))
+                BtSalvaScaturito.Visible = true;
+
+        }
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
                 Principale p = new Principale();
                 CultureInfo culturaItaliana = new CultureInfo("it-IT");
+                Manager mn = new Manager();
                 p.anno = annoCorr;
                 //  p.giorno = DateTime.Now.DayOfWeek.ToString();
                 DateTime adesso = DateTime.Now;
@@ -158,23 +181,86 @@ namespace Uotep
                 //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 p.nominativo = txtNominativo.Text;
 
-                p.giudice = DdlGiudice.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtGiudice.Text))
+                {
+                    p.giudice = String.Empty;
+                }
+                else
+                {
+
+                    Boolean resp = mn.getGiudice(txtGiudice.Text);
+                    if (!resp)
+                    {
+                        HfGiudice.Value = txtGiudice.Text;
+                    }
+
+                    p.giudice = txtGiudice.Text;
+                }
+
+                if (String.IsNullOrEmpty(txtProvenienza.Text))
+                {
+
+                    p.provenienza = string.Empty;
+                }
+
+                else
+                {
+                    Boolean resp = mn.getProvenienza(txtProvenienza.Text);
+                    if (!resp)
+                    {
+                        HfProvenienza.Value = txtProvenienza.Text;
+                    }
+                    p.provenienza = txtProvenienza.Text;
+                }
 
 
-                p.provenienza = DdlProvenienza.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtTipoAtto.Text))
+                {
 
-                p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                    p.tipologia_atto = String.Empty;
+                }
+                else
+                {
+                    Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                    if (!resp)
+                    {
+                        HfTipoAtto.Value = txtTipoAtto.Text;
+                    }
+                    p.tipologia_atto = txtTipoAtto.Text;
+                }
 
 
-                p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtTipoProv.Text))
+                {
+                    p.tipoProvvedimentoAG = String.Empty;
+                }
+                else
+                {
+
+                    Boolean resp = mn.getTipoProv(txtTipoProv.Text);
+                    if (!resp)
+                    {
+                        HfTipoProv.Value = txtTipoProv.Text;
+                    }
+
+                    p.tipoProvvedimentoAG = txtTipoProv.Text;
+                }
 
 
                 p.rif_Prot_Gen = txtRifProtGen.Text;
 
                 p.indirizzo = DdlIndirizzo.SelectedItem.Text;
-               // p.via = txtVia.Text;
+                // p.via = txtVia.Text;
 
-                p.quartiere = DdlQuartiere.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtQuartiere.Text))
+                {
+                    p.quartiere = String.Empty;
+                }
+                else
+                {
+                    p.quartiere = txtQuartiere.Text;
+                    //p.quartiere = lblQuartiere.Text;
+                }
 
 
                 p.note = txtNote.Text;
@@ -186,21 +272,52 @@ namespace Uotep
 
                 p.accertatori = txtAccertatori.Text;
 
-                p.scaturito = DdlScaturito.SelectedItem.Text;
+                //p.scaturito = DdlScaturito.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtScaturito.Text))
+                {
 
-                p.inviata = DdlInviati.SelectedItem.Text;
+                    p.scaturito = String.Empty;
+                }
+                else
+                {
+                    Boolean resp = mn.getTipoScaturito(txtScaturito.Text);
+                    if (!resp)
+                    {
+                        HfScaturito.Value = txtScaturito.Text;
+                    }
+                    p.scaturito = txtScaturito.Text;
+                }
+
+
+
+
+                if (String.IsNullOrEmpty(txtInviata.Text))
+                {
+                    p.inviata = String.Empty;
+                }
+                else
+                {
+                    Boolean resp = mn.getInviata(txtInviata.Text);
+                    if (!resp)
+                    {
+                        HfInviata.Value = txtInviata.Text;
+                    }
+                    p.inviata = txtInviata.Text;
+
+                }
+
                 if (!string.IsNullOrEmpty(txtDataInvio.Text))
                 {
                     p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 }
 
                 p.procedimentoPen = txtProdPenNr.Text;
-                p.matricola = Vuser;
+                p.matricola = Hmatricola.Value;
                 p.data_ins_pratica = DateTime.Now.ToLocalTime();
                 DateTime o = System.Convert.ToDateTime(HolDate.Value);
 
 
-                Manager mn = new Manager();
+              
                 Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value));
                 if (!ins)
                 {
@@ -333,6 +450,84 @@ namespace Uotep
 
         }
 
+        protected void btSalvaGiudice_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciGiudice(HfGiudice.Value);
+            if (ins)
+            {
+                HfGiudice.Value = string.Empty;
+                txtGiudice.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+        protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
+            if (ins)
+            {
+                HfTipoProv.Value = string.Empty;
+                txtTipoProv.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+
+        protected void btSalvaProvenienza_Click(object sender, EventArgs e)
+        {
+
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
+            if (ins)
+            {
+                HfProvenienza.Value = string.Empty;
+                txtProvenienza.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+
+        protected void btSalvaScaturito_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciScaturito(HfScaturito.Value);
+            if (ins)
+            {
+                HfScaturito.Value = string.Empty;
+                txtScaturito.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+        protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
+            if (ins)
+            {
+                HfTipoAtto.Value = string.Empty;
+                txtTipoAtto.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+
+
+
+        protected void btSalvaInviata_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean ins = mn.InserisciInviata(HfInviata.Value);
+            if (ins)
+            {
+                HfInviata.Value = string.Empty;
+                txtInviata.Text = string.Empty;
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
 
         private void CaricaDLL()
         {
@@ -438,7 +633,7 @@ namespace Uotep
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
-                DdlQuartiere.SelectedItem.Text = selectedValue;
+                txtQuartiere.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
@@ -596,28 +791,52 @@ namespace Uotep
         }
         private void Pulisci()
         {
+            Convalida();
             //txtProt.Text = String.Empty;
-            txtTestoProvenienza.Text = string.Empty;
+           
+            
+            if (String.IsNullOrEmpty(HfGiudice.Value))
+            {
+                txtGiudice.Text = string.Empty;
+
+            }
+            if (String.IsNullOrEmpty(HfTipoProv.Value))
+            {
+                txtTipoProv.Text = string.Empty;
+            }
+
+            txtQuartiere.Text = string.Empty;
+            if (String.IsNullOrEmpty(HfInviata.Value))
+            {
+                txtInviata.Text = string.Empty;
+            }
+            if (String.IsNullOrEmpty(HfProvenienza.Value))
+            {
+                txtTipoAtto.Text = string.Empty;
+            }
+            if (String.IsNullOrEmpty(HfScaturito.Value))
+            {
+                txtScaturito.Text = string.Empty;
+            }
+
+            txtIndirizzo.Text = string.Empty;
+            HfIndirizzo.Value = string.Empty;
+            if (String.IsNullOrEmpty(HfProvenienza.Value))
+            {
+                txtProvenienza.Text = string.Empty;
+            }
             txPratica.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
-           // txtVia.Text = String.Empty;
+            //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
             txtNote.Text = String.Empty;
             txtDataDataEvasa.Text = String.Empty;
-
+            txtAnnoRicerca.Text = string.Empty;
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
-            txtRicProvenienza.Text = string.Empty;
-            txtProtGen.Text = string.Empty;
-            txtProcPenale.Text = string.Empty;
-            txtNProtocollo.Text = string.Empty;
-            txtAnnoRicerca.Text = string.Empty;
-            txtPratica.Text = string.Empty;
-            txtRicGiudice.Text = string.Empty;
-            txtRicNominativo.Text = string.Empty;
             CaricaDLL();
 
         }
@@ -640,6 +859,7 @@ namespace Uotep
             DivProcPenale.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            Pulisci();
         }
 
         protected void btProtGen_Click(object sender, EventArgs e)
@@ -664,6 +884,7 @@ namespace Uotep
             DivPratica.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            Pulisci();
         }
 
         protected void btGiudice_Click(object sender, EventArgs e)

@@ -31,7 +31,71 @@
                 textBox.value += selectedValue;
             }
         }
+        //nel textbox data sostituisce lo spazio con lo / 
+        document.addEventListener('DOMContentLoaded', function () {
+            var textBox = document.getElementById('TxtDataIntervento');
+        // Se non usi ClientIDMode="Static", dovresti usare:
+     // var textBox = document.getElementById('<%= TxtDataIntervento.ClientID %>');
 
+            if (textBox) {
+                textBox.addEventListener('input', function (event) {
+                    // Salva la posizione attuale del cursore
+                    var cursorPos = this.selectionStart;
+                    var originalLength = this.value.length;
+
+                    // Sostituisci tutti gli spazi con trattini
+                    this.value = this.value.replace(/ /g, '/');
+
+                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                    // riposiziona il cursore.
+                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                    if (this.value.length === originalLength) {
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    } else {
+                        // Se più spazi sono stati sostituiti o incollati,
+                        // il cursore potrebbe andare alla fine.
+                        // Per la semplice digitazione di uno spazio,
+                        // cursorPos dovrebbe essere corretto.
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    }
+                });
+            } else {
+                console.error("Textbox con ID 'TxtDataIntervento' non trovata.");
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var textBox = document.getElementById('txtDataConsegna');
+        // Se non usi ClientIDMode="Static", dovresti usare:
+               // var textBox = document.getElementById('<%= txtDataConsegna.ClientID %>');
+
+               if (textBox) {
+                   textBox.addEventListener('input', function (event) {
+                       // Salva la posizione attuale del cursore
+                       var cursorPos = this.selectionStart;
+                       var originalLength = this.value.length;
+
+                       // Sostituisci tutti gli spazi con trattini
+                       this.value = this.value.replace(/ /g, '/');
+
+                       // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                       // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                       // riposiziona il cursore.
+                       // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                       if (this.value.length === originalLength) {
+                           this.setSelectionRange(cursorPos, cursorPos);
+                       } else {
+                           // Se più spazi sono stati sostituiti o incollati,
+                           // il cursore potrebbe andare alla fine.
+                           // Per la semplice digitazione di uno spazio,
+                           // cursorPos dovrebbe essere corretto.
+                           this.setSelectionRange(cursorPos, cursorPos);
+                       }
+                   });
+               } else {
+                   console.error("Textbox con ID 'txtDataConsegna' non trovata.");
+               }
+           });
 
     </script>
 
@@ -109,7 +173,7 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
-                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" ClientIDMode="Static"/>
                                 <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
                                 </asp:RequiredFieldValidator>--%>
                                 <asp:RegularExpressionValidator
@@ -126,7 +190,7 @@
 
                             <div class="form-group mb-3" style="margin-top: -20px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" ClientIDMode="Static"/>
                                 <asp:RegularExpressionValidator
                                     ID="RegularExpressionValidator2"
                                     runat="server"

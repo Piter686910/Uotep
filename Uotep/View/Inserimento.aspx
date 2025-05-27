@@ -297,6 +297,71 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
+        //nel textbox data sostituisce lo spazio con lo / 
+        document.addEventListener('DOMContentLoaded', function () {
+            var textBox = document.getElementById('txtDataInvio');
+        // Se non usi ClientIDMode="Static", dovresti usare:
+              // var textBox = document.getElementById('<%= txtDataInvio.ClientID %>');
+
+            if (textBox) {
+                textBox.addEventListener('input', function (event) {
+                    // Salva la posizione attuale del cursore
+                    var cursorPos = this.selectionStart;
+                    var originalLength = this.value.length;
+
+                    // Sostituisci tutti gli spazi con trattini
+                    this.value = this.value.replace(/ /g, '/');
+
+                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                    // riposiziona il cursore.
+                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                    if (this.value.length === originalLength) {
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    } else {
+                        // Se più spazi sono stati sostituiti o incollati,
+                        // il cursore potrebbe andare alla fine.
+                        // Per la semplice digitazione di uno spazio,
+                        // cursorPos dovrebbe essere corretto.
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    }
+                });
+            } else {
+                console.error("Textbox con ID 'txtDataInvio' non trovata.");
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var textBox = document.getElementById('txtDataDataEvasa');
+        // Se non usi ClientIDMode="Static", dovresti usare:
+            // var textBox = document.getElementById('<%= txtDataDataEvasa.ClientID %>');
+
+            if (textBox) {
+                textBox.addEventListener('input', function (event) {
+                    // Salva la posizione attuale del cursore
+                    var cursorPos = this.selectionStart;
+                    var originalLength = this.value.length;
+
+                    // Sostituisci tutti gli spazi con trattini
+                    this.value = this.value.replace(/ /g, '/');
+
+                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                    // riposiziona il cursore.
+                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                    if (this.value.length === originalLength) {
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    } else {
+                        // Se più spazi sono stati sostituiti o incollati,
+                        // il cursore potrebbe andare alla fine.
+                        // Per la semplice digitazione di uno spazio,
+                        // cursorPos dovrebbe essere corretto.
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    }
+                });
+            } else {
+                console.error("Textbox con ID 'txtDataDataEvasa' non trovata.");
+            }
+        });
 
     </script>
 
@@ -322,6 +387,10 @@
                     <div class="form-group mb-3">
                         <label for="txtDataArrivo">Data Arrivo</label>
                         <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
+
+                        </asp:RequiredFieldValidator>
+
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtGiudice">Giudice</label>
@@ -444,7 +513,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="txtDataDataEvasa" class="form-label">In data</label>
-                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" />
+                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" ClientIDMode="Static" />
                         <asp:RegularExpressionValidator
                             ID="RegularExpressionValidator2"
                             runat="server"
@@ -472,7 +541,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="txtDataInvio" class="form-label">Il</label>
-                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" />
+                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" ClientIDMode="Static" />
                         <asp:RegularExpressionValidator
                             ID="RegularExpressionValidator1"
                             runat="server"
