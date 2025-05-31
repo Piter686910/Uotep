@@ -139,7 +139,7 @@ namespace Uotep
 
                 p.sigla = DdlSigla.SelectedItem.Text;
                 p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-                //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                p.dataCarico = DateTime.MinValue.ToShortDateString(); //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 p.nominativo = txtNominativo.Text;
                 //if (DdlGiudice.SelectedValue == "0")
                 //{

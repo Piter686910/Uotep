@@ -18,14 +18,7 @@ namespace Uotep
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -40,14 +33,22 @@ namespace Uotep
 
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();
 
             }
             //}
-           // else
-               
+            // else
+
             //{
             //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "UTENTE NON AUTORIZZATO" + "'); $('#errorModal').modal('show');", true);
             //}
@@ -107,96 +108,98 @@ namespace Uotep
             try
             {
 
-            
-            Principale p = new Principale();
-            if (Session["user"] != null)
-            {
-                Vuser = Session["user"].ToString();
-            }
-            //p.anno = annoCorr;
-            //p.giorno = DateTime.Now.Day.ToString();
-            //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-            //p.sigla = DdlSigla.SelectedItem.Text;
-            //p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-            if (!string.IsNullOrEmpty(txtDataCarico.Text))
-            {
-                p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
-            }
 
-            p.nominativo = txtNominativo.Text;
+                Principale p = new Principale();
+                if (Session["user"] != null)
+                {
+                    Vuser = Session["user"].ToString();
+                }
+                //p.anno = annoCorr;
+                //p.giorno = DateTime.Now.Day.ToString();
+                //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
+                //p.sigla = DdlSigla.SelectedItem.Text;
+                //p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                if (!string.IsNullOrEmpty(txtDataCarico.Text))
+                {
+                    p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
+                }
+
+                p.nominativo = txtNominativo.Text;
 
 
-            if (String.IsNullOrEmpty(txtIndirizzo.Text))
-            {
-                p.indirizzo = String.Empty;
-            }
-            else
-            {
-                p.indirizzo = txtIndirizzo.Text;
-                p.via = string.Empty;
+                if (String.IsNullOrEmpty(txtIndirizzo.Text))
+                {
+                    p.indirizzo = String.Empty;
+                }
+                else
+                {
+                    p.indirizzo = txtIndirizzo.Text;
+                    p.via = string.Empty;
 
-            }
-            if (String.IsNullOrEmpty(txtQuartiere.Text))
-            {
-                p.quartiere = String.Empty;
-            }
-            else
-            {
-                p.quartiere = txtQuartiere.Text;
-                //p.quartiere = lblQuartiere.Text;
-            }
+                }
+                if (String.IsNullOrEmpty(txtQuartiere.Text))
+                {
+                    p.quartiere = String.Empty;
+                }
+                else
+                {
+                    p.quartiere = txtQuartiere.Text;
+                    //p.quartiere = lblQuartiere.Text;
+                }
 
-            //if (DdlQuartiere.SelectedValue == "0")
-            //{
-            //    p.quartiere = String.Empty;
-            //}
-            //else
-            //{
-            //    p.quartiere = DdlQuartiere.SelectedItem.Text;
+                //if (DdlQuartiere.SelectedValue == "0")
+                //{
+                //    p.quartiere = String.Empty;
+                //}
+                //else
+                //{
+                //    p.quartiere = DdlQuartiere.SelectedItem.Text;
 
-            //}
+                //}
 
-            p.note = txtNote.Text;
-            p.evasa = CkEvasa.Checked;
-            if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-            {
-                p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-            }
+                p.note = txtNote.Text;
+                p.evasa = CkEvasa.Checked;
+                if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
+                {
+                    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
+                }
 
-            p.accertatori = txtAccertatori.Text;
-            if (!string.IsNullOrEmpty(txtScaturito.Text))
-                p.scaturito = txtScaturito.Text;
-            if (!string.IsNullOrEmpty(txtInviata.Text))
-                p.inviata = txtInviata.Text;
-            if (!string.IsNullOrEmpty(txtDataInvio.Text))
-            {
-                p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-            }
+                p.accertatori = txtAccertatori.Text;
+                if (!string.IsNullOrEmpty(txtScaturito.Text))
+                    p.scaturito = txtScaturito.Text;
+                if (!string.IsNullOrEmpty(txtInviata.Text))
+                    p.inviata = txtInviata.Text;
+                if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                {
+                    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                }
 
-            //p.procedimentoPen = txtProdPenNr.Text;
-            //matricola del popup
-            p.matricola = Vuser;
-            //string newMat = ;
+                //p.procedimentoPen = txtProdPenNr.Text;
+                //matricola del popup
+                p.matricola = Vuser;
+                //string newMat = ;
 
-            p.data_ins_pratica = DateTime.Now.ToLocalTime();
-            p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
-            DateTime o = System.Convert.ToDateTime(HolDate.Value);
+                p.data_ins_pratica = DateTime.Now.ToLocalTime();
+                p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
+                DateTime o = System.Convert.ToDateTime(HolDate.Value);
 
-            Manager mn = new Manager();
+                Manager mn = new Manager();
 
-            // id proveniente dalla selezione della pratica
-            int ID = System.Convert.ToInt32(Hid.Value);
-            //
-            Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
-            if (!ins)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
-            }
-            else
-            {
-                DivDettagli.Visible = false;
-                Pulisci();
-            }
+                // id proveniente dalla selezione della pratica
+                int ID = System.Convert.ToInt32(Hid.Value);
+                //
+                Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
+                if (!ins)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+
+                    DivDettagli.Visible = false;
+                    Pulisci();
+                }
             }
             catch (Exception ex)
             {
@@ -259,7 +262,7 @@ namespace Uotep
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
-           
+
             Manager mn = new Manager();
             DataTable pratica = new DataTable();
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
@@ -427,7 +430,7 @@ namespace Uotep
 
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
-                            
+
                             txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))

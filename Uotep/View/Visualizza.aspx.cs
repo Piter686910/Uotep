@@ -150,6 +150,7 @@ namespace Uotep
                         {
                             p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLocalTime();
 
+                        
                         }
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));

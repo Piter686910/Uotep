@@ -537,7 +537,7 @@
                         <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
                             <Columns>
-                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID" />
+                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID"  Visible="false"/>
                                 <asp:BoundField DataField="Toponimo" HeaderText="Toponimo" />
                                 <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                                 <asp:BoundField DataField="Specie" HeaderText="Specie" />
@@ -575,7 +575,7 @@
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP">
                             <Columns>
-                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" />
+                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false"/>
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="arch_doppione" HeaderText="Doppione" />
                                 <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />

@@ -287,7 +287,7 @@
         //tipo atto
         function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtTipoAtto");
+            input = document.getElementById("txtTipoAttoR");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlTipoAtto.ClientID %>');
             options = dropdown.getElementsByTagName("option");
@@ -579,7 +579,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
+                    <asp:TextBox ID="txtPraticaR" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -785,13 +785,13 @@
                     <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
                 </div>
                 <div class="form-group mb-3">
-                    <label for="txPratica">Pratica</label>
-                    <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                    <label for="txtPratica">Pratica</label>
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" />
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="DdlTipoAtto">Tipologia Atto</label>
-                    <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                    <label for="txtTipoAttoR">Tipologia Atto</label>
+                    <asp:TextBox ID="txtTipoAttoR" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                     <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         <asp:HiddenField ID="HfTipoAtto" runat="server" />
                     </div>
@@ -995,7 +995,7 @@
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
-                        <label for="txtIndirizzo">Testo:</label>
+                        <label for="txtTestoProvenienza">Testo:</label>
                         <asp:TextBox ID="txtTestoProvenienza" runat="server" CssClass="form-control" placeholder="Inserisci una provenienza" />
 
                     </div>

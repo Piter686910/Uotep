@@ -46,7 +46,7 @@ namespace Uotep
 
 
             //String Vpassw = "";
-           // Vuser = TxtMatricola.Text;
+            // Vuser = TxtMatricola.Text;
             Hmatricola.Value = TxtMatricola.Text;
             //Vpassw = TxtPassw.Text;
             //salvo la matricola
@@ -93,9 +93,9 @@ namespace Uotep
             {
                 pratica = mn.getListProtGen(txtProtGen.Text);
             }
-            if (!string.IsNullOrEmpty(txtPratica.Text))
+            if (!string.IsNullOrEmpty(txtPraticaR.Text))
             {
-                pratica = mn.getListPratica(txtPratica.Text);
+                pratica = mn.getListPratica(txtPraticaR.Text);
             }
             if (!string.IsNullOrEmpty(txtRicGiudice.Text))
             {
@@ -130,7 +130,7 @@ namespace Uotep
                 gvPopupProtocolli.DataSource = pratica;
                 gvPopupProtocolli.DataBind();
 
-               
+
             }
             else
             {
@@ -173,12 +173,19 @@ namespace Uotep
                 //  p.giorno = DateTime.Now.DayOfWeek.ToString();
                 DateTime adesso = DateTime.Now;
                 p.giorno = adesso.ToString("dddd", culturaItaliana);
-
+                if (!String.IsNullOrEmpty(txtPratica.Text))
+                    p.nr_Pratica = txtPratica.Text;
 
                 p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
                 p.sigla = DdlSigla.SelectedItem.Text;
                 p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-                //p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                if (!string.IsNullOrEmpty(txtDataCarico.Text))
+                {
+                    p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
+                }
+                else
+
+                p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 p.nominativo = txtNominativo.Text;
 
                 if (String.IsNullOrEmpty(txtGiudice.Text))
@@ -208,25 +215,26 @@ namespace Uotep
                     Boolean resp = mn.getProvenienza(txtProvenienza.Text);
                     if (!resp)
                     {
+
                         HfProvenienza.Value = txtProvenienza.Text;
                     }
                     p.provenienza = txtProvenienza.Text;
                 }
 
 
-                if (String.IsNullOrEmpty(txtTipoAtto.Text))
+                if (String.IsNullOrEmpty(txtTipoAttoR.Text))
                 {
 
                     p.tipologia_atto = String.Empty;
                 }
                 else
                 {
-                    Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                    Boolean resp = mn.getTipoAtto(txtTipoAttoR.Text);
                     if (!resp)
                     {
-                        HfTipoAtto.Value = txtTipoAtto.Text;
+                        HfTipoAtto.Value = txtTipoAttoR.Text;
                     }
-                    p.tipologia_atto = txtTipoAtto.Text;
+                    p.tipologia_atto = txtTipoAttoR.Text;
                 }
 
 
@@ -249,7 +257,21 @@ namespace Uotep
 
                 p.rif_Prot_Gen = txtRifProtGen.Text;
 
-                p.indirizzo = DdlIndirizzo.SelectedItem.Text;
+                //p.indirizzo = DdlIndirizzo.SelectedItem.Text;
+                if (String.IsNullOrEmpty(txtIndirizzo.Text))
+                {
+
+                    p.indirizzo = String.Empty;
+                }
+                else
+                {
+                    Boolean resp = mn.getTipoScaturito(txtIndirizzo.Text);
+                    if (!resp)
+                    {
+                        HfIndirizzo.Value = txtIndirizzo.Text;
+                    }
+                    p.indirizzo = txtIndirizzo.Text;
+                }
                 // p.via = txtVia.Text;
 
                 if (String.IsNullOrEmpty(txtQuartiere.Text))
@@ -317,7 +339,7 @@ namespace Uotep
                 DateTime o = System.Convert.ToDateTime(HolDate.Value);
 
 
-              
+
                 Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value));
                 if (!ins)
                 {
@@ -508,7 +530,7 @@ namespace Uotep
             if (ins)
             {
                 HfTipoAtto.Value = string.Empty;
-                txtTipoAtto.Text = string.Empty;
+                txtTipoAttoR.Text = string.Empty;
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
             }
@@ -691,24 +713,23 @@ namespace Uotep
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[4].ToString()))
                         {
-                            DdlProvenienza.SelectedItem.Text = pratica.Rows[0].ItemArray[4].ToString();
+                            txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
                         }
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[5].ToString()))
 
-                            DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString();
+                            txtTipoAttoR.Text = pratica.Rows[0].ItemArray[5].ToString();
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[6].ToString()))
 
-                            DdlGiudice.SelectedItem.Text = pratica.Rows[0].ItemArray[6].ToString();
+                            txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[7].ToString()))
 
-                            DdlTipoProvvAg.SelectedItem.Text = pratica.Rows[0].ItemArray[7].ToString();
+                            txtTipoProv.Text = pratica.Rows[0].ItemArray[7].ToString();
 
                         txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
                         txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
-
-                            DdlIndirizzo.SelectedItem.Text = pratica.Rows[0].ItemArray[10].ToString();
+                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString();
                         //txtVia.Text = pratica.Rows[0].ItemArray[11].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
@@ -725,8 +746,7 @@ namespace Uotep
                         else
                             txtDataDataEvasa.Text = string.Empty;
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
-
-                            DdlInviati.SelectedItem.Text = pratica.Rows[0].ItemArray[14].ToString();
+                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
@@ -741,7 +761,7 @@ namespace Uotep
                             txtDataInvio.Text = string.Empty;
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
-                            DdlScaturito.SelectedItem.Text = pratica.Rows[0].ItemArray[16].ToString();
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
 
                         txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
@@ -756,10 +776,10 @@ namespace Uotep
                         }
                         else
                             txtDataCarico.Text = string.Empty;
-                        txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                        txtPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
 
-                            DdlQuartiere.SelectedItem.Text = pratica.Rows[0].ItemArray[20].ToString();
+                            txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
                         txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
@@ -793,8 +813,8 @@ namespace Uotep
         {
             Convalida();
             //txtProt.Text = String.Empty;
-           
-            
+
+
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
                 txtGiudice.Text = string.Empty;
@@ -812,7 +832,7 @@ namespace Uotep
             }
             if (String.IsNullOrEmpty(HfProvenienza.Value))
             {
-                txtTipoAtto.Text = string.Empty;
+                txtTipoAttoR.Text = string.Empty;
             }
             if (String.IsNullOrEmpty(HfScaturito.Value))
             {
@@ -825,13 +845,13 @@ namespace Uotep
             {
                 txtProvenienza.Text = string.Empty;
             }
-            txPratica.Text = String.Empty;
+            txtPratica.Text = String.Empty;
+            txtPraticaR.Text = String.Empty;
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
-            txPratica.Text = String.Empty;
             txtNote.Text = String.Empty;
             txtDataDataEvasa.Text = String.Empty;
             txtAnnoRicerca.Text = string.Empty;

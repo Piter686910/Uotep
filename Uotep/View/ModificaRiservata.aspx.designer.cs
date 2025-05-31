@@ -384,13 +384,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label Label8;
 
         /// <summary>
-        /// Controllo txtPratica.
+        /// Controllo txtPraticaR.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPratica;
+        protected global::System.Web.UI.WebControls.TextBox txtPraticaR;
 
         /// <summary>
         /// Controllo DivGiudice.
@@ -942,22 +942,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataCarico;
 
         /// <summary>
-        /// Controllo txPratica.
+        /// Controllo txtPratica.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txPratica;
+        protected global::System.Web.UI.WebControls.TextBox txtPratica;
 
         /// <summary>
-        /// Controllo txtTipoAtto.
+        /// Controllo txtTipoAttoR.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
+        protected global::System.Web.UI.WebControls.TextBox txtTipoAttoR;
 
         /// <summary>
         /// Controllo suggestionsListTipoAtto.
