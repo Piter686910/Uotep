@@ -354,7 +354,7 @@ namespace Uotep
             }
             if (ckAccertAvvenutoRipr.Checked == true)
             {
-                if (rdTotale.Checked == false || rdParziale.Checked == false || rdNonAvvenuto.Checked == false)
+                if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale o Non Avvenuto ." + "'); $('#errorModal').modal('show');", true);
 

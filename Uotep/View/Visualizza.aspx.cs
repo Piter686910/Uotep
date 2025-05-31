@@ -150,7 +150,7 @@ namespace Uotep
                         {
                             p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLocalTime();
 
-                        
+
                         }
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
@@ -158,15 +158,11 @@ namespace Uotep
                         {
                             txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                             txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
-                            try
-                            {
-                                txtDataArrivo.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
-                            }
-                            catch (Exception)
-                            {
 
-                                txtDataArrivo.Text = string.Empty;
-                            }
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
+
+                                txtDataArrivo.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
+
 
                             txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
                             txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
@@ -177,40 +173,27 @@ namespace Uotep
                             txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString() + " " + pratica.Rows[0].ItemArray[11].ToString();
 
                             CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
-                            try
-                            {
-                                txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
-                            }
-                            catch (Exception)
-                            {
 
-                                txtDataDataEvasa.Text = string.Empty;
-                            }
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+
+                                txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
+
 
                             txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString();
-                            try
-                            {
-                                txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
-                            }
-                            catch (Exception)
-                            {
 
-                                txtDataInvio.Text = string.Empty;
-                            }
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+
+                                txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
+
 
                             txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
                             txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
-                            try
-                            {
+
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+
                                 txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
-                            }
-                            catch (Exception)
-                            {
 
-                                txtDataCarico.Text = string.Empty;
-                            }
-
-                            txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                            txtPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                             TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
                             txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
                             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
@@ -358,6 +341,7 @@ namespace Uotep
             DivAccertatori.Visible = false;
             DivIndirizzo.Visible = false;
             DivDataCarico.Visible = false;
+            DivDettagli.Visible = false;
         }
 
 
