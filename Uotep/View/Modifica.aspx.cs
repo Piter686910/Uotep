@@ -630,5 +630,12 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
         }
+
+        protected void gvPopupD_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender, e);
+        }
+       
     }
 }

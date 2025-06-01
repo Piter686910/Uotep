@@ -318,7 +318,7 @@
                         <!-- Pulsanti -->
                         <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo." ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Carico" ToolTip="Ricerca Data Carico" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
@@ -683,7 +683,7 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand">
+                            OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupD_PageIndexChanging">
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
@@ -702,6 +702,7 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
+                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
                         </asp:GridView>
 
                     </div>
