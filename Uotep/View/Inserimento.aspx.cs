@@ -21,16 +21,17 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-
+            
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
                 Ruolo = Session["ruolo"].ToString();
 
             }
-           
+
             if (!IsPostBack)
             {
+               
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -44,35 +45,38 @@ namespace Uotep
                 {
                     DdlSigla.SelectedValue = "PG";
                 }
-                int protocollo = 0;
-                Manager mn = new Manager();
+                Routine prot = new Routine();
+                txtProt.Text = prot.GetProtocollo();
+                //int protocollo = 0;
+                //Manager mn = new Manager();
+
                 //DataTable tb = mn.MaxNPr(annoCorr);
-                DataTable tb = mn.MaxNPr(annoCorr);
+
+                //if (tb.Rows.Count > 0)
+                //{
+
+                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
+
+                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
+                //    {
+                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
+                //    }
+                //    else
+                //    {
+                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
+                //        txtProt.Text = protocollo.ToString();
+
+                //    }
+                //}
+                //else
+                //{
+                //    txtProt.Text = "1";
+
+                //}
+
                 txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                if (tb.Rows.Count > 0)
-                {
-                    //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
 
-                    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                    {
-                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                    }
-                    else
-                    {
-                        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                        txtProt.Text = protocollo.ToString();
-
-                    }
-                }
-                else
-                {
-                    txtProt.Text = "1";
-
-                }
-                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-               
             }
 
         }
@@ -99,7 +103,7 @@ namespace Uotep
         {
             try
             {
-               // int protocollo = 0;
+                // int protocollo = 0;
                 Principale p = new Principale();
                 p.anno = annoCorr;
                 DateTime giorno = DateTime.Now;
@@ -269,13 +273,15 @@ namespace Uotep
                 Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
                 if (!ins)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, oppure errore di sistema, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
-                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
 
                     Pulisci();
+                    btNewIns.Visible = true;
+                    btSalva.Visible = false;
                 }
             }
             catch (Exception ex)
@@ -325,7 +331,7 @@ namespace Uotep
             {
                 txtProvenienza.Text = string.Empty;
             }
-            
+
             txtDataArrivo.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
@@ -392,18 +398,13 @@ namespace Uotep
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
         }
-        protected void chiudipopup_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+        //protected void chiudipopup_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
 
-        }
-        protected void chiudipopupErrore_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+        //}
 
-        }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
             string indirizzo = string.Empty;
@@ -624,6 +625,20 @@ namespace Uotep
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
             }
+        }
+
+        protected void NuovoIns_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btNewIns_Click(object sender, EventArgs e)
+        {
+            Routine prot = new Routine();
+            txtProt.Text = prot.GetProtocollo();
+            txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+            btNewIns.Visible = false;
+            btSalva.Visible = true;
         }
     }
 }

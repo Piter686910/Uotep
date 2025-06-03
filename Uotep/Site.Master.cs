@@ -24,8 +24,10 @@ namespace Uotep
                     DataTable Ricerca = mn.getUserRules(Vuser);
                     if (Ricerca.Rows.Count > 0)
                     {
+
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
+
                             //case "coordinamentoatti":
                             //case "mastag":
                             //    // Mostra voci specifiche per coordinamento ag
@@ -175,10 +177,15 @@ namespace Uotep
                                 //*
                                 break;
                             default:
+                                menuHome.Visible = true;
                                 break;
                         }
                     }
+                    else
+                        lblMsg.Text = "Matricola assente";
                 }
+                else
+                    lblMsg.Text = "Utente non loggato";
 
             }
         }

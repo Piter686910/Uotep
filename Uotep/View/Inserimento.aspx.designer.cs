@@ -51,15 +51,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataArrivo;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
-
-        /// <summary>
         /// Controllo txtGiudice.
         /// </summary>
         /// <remarks>
@@ -447,6 +438,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
+        /// Controllo btSalva.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btSalva;
+
+        /// <summary>
+        /// Controllo btNewIns.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btNewIns;
+
+        /// <summary>
         /// Controllo txtIndirizzoQuartiere.
         /// </summary>
         /// <remarks>
@@ -483,12 +492,12 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btnchiudi;
 
         /// <summary>
-        /// Controllo Button2.
+        /// Controllo btClose.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.Button btClose;
     }
 }

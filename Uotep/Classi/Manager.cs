@@ -2067,14 +2067,14 @@ namespace Uotep.Classi
             {
 
                 sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
-                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct)" +
+                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct)" +
                    " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
                    @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
                    @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
                    @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
                    @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
-                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "','" +
+                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
                    @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct + "')";
 
 
@@ -2155,29 +2155,25 @@ namespace Uotep.Classi
 
                     try
                     {
-                        //string sql = "select id from principale where Nr_Protocollo= " + p.nrProtocollo;
+                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and sigla = '" + p.sigla + "' and anno = '" + p.anno + "'";
 
+                        SqlDataAdapter da;
+                        DataSet ds;
 
-                        //SqlDataAdapter da;
-                        //DataSet ds;
+                        da = new SqlDataAdapter(sql, conn);
+                        ds = new DataSet();
+                        da.Fill(ds);
+                        if (ds.Tables[0].Rows.Count > 0)
+                            return false;
+                        else
+                        {
 
-                        //da = new SqlDataAdapter(sql, conn);
-                        //ds = new DataSet();
-                        //da.Fill(ds);
-                        //if (ds.Tables.Count > 0)
-                        //    return false;
-                        //else
-                        //{
+                            
+                            command.CommandText = sql_pratica;
+                            testoSql = "Principale";
+                         int  res = command.ExecuteNonQuery();
 
-                        int res = command.ExecuteNonQuery();
-                        //if (res == 0)
-                        //{
-
-                        command.CommandText = sql_pratica;
-                        testoSql = "Principale";
-                        res = command.ExecuteNonQuery();
-                        //}
-                        //}
+                        }
                     }
 
                     catch (Exception ex)

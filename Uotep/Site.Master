@@ -113,7 +113,8 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <%-- <p>&copy; <%: DateTime.Now.Year %> - Applicazione ASP.NET</p>--%>
+                <asp:Label ID="lblMsg" runat="server" BackColor="Red" ></asp:Label>
+                 <p style="font:bold; font-style:italic">&copy; <%: DateTime.Now.Year %> - Powered by Pietro Antonacci</p>
             </footer>
         </div>
 

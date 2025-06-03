@@ -7,7 +7,10 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+        // Nasconde il popup
+        function HideErrorMessage() {
+            $('#errorModal').modal('hide');
+        }
         // Mostra il popup
         function showModal() {
             $('#myModal').modal('show');
@@ -387,9 +390,9 @@
                     <div class="form-group mb-3">
                         <label for="txtDataArrivo">Data Arrivo</label>
                         <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
+                      <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
 
-                        </asp:RequiredFieldValidator>
+                        </asp:RequiredFieldValidator>--%>
 
                     </div>
                     <div class="form-group mb-3">
@@ -559,8 +562,8 @@
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
-                    <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
+                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
                     <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
                 </div>
@@ -607,7 +610,7 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
-                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()"/>
                 </div>
             </div>
         </div>
@@ -633,7 +636,7 @@
                 </div>
                 <div class="modal-footer">
 
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupErrore_Click" />
+                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
                 </div>
             </div>
         </div>
