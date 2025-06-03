@@ -703,6 +703,7 @@
                                 </asp:TemplateField>
                             </Columns>
                             <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                            <PagerStyle HorizontalAlign="Center" />
                         </asp:GridView>
 
                     </div>

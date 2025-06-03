@@ -266,7 +266,7 @@ namespace Uotep
                 p.data_ins_pratica = DateTime.Now.ToLocalTime();
 
 
-                Boolean ins = mn.SavePratica(p);
+                Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
                 if (!ins)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);

@@ -557,7 +557,7 @@ namespace Uotep.Classi
                 if (ds.Tables[0].Rows.Count > 0)
                     return true;
                 else
-                    return false; ;
+                    return false;
             }
 
         }
@@ -1207,7 +1207,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-       
+
         /// <summary>
         /// inserimento in tabella tipologia abuso
         /// </summary>
@@ -2075,7 +2075,7 @@ namespace Uotep.Classi
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
                    @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
                    @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "','" +
-                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct  + "')";
+                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2130,7 +2130,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public Boolean SavePratica(Principale p)
+        public Boolean SavePratica(Principale p, Int32 id)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -2155,9 +2155,29 @@ namespace Uotep.Classi
 
                     try
                     {
+                        //string sql = "select id from principale where Nr_Protocollo= " + p.nrProtocollo;
+
+
+                        //SqlDataAdapter da;
+                        //DataSet ds;
+
+                        //da = new SqlDataAdapter(sql, conn);
+                        //ds = new DataSet();
+                        //da.Fill(ds);
+                        //if (ds.Tables.Count > 0)
+                        //    return false;
+                        //else
+                        //{
+
+                        int res = command.ExecuteNonQuery();
+                        //if (res == 0)
+                        //{
+
                         command.CommandText = sql_pratica;
                         testoSql = "Principale";
-                        int res = command.ExecuteNonQuery();
+                        res = command.ExecuteNonQuery();
+                        //}
+                        //}
                     }
 
                     catch (Exception ex)
@@ -2399,12 +2419,12 @@ namespace Uotep.Classi
             try
             {
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
-                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
+                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
                     "',Accertatori = '" + @p.accertatori.Replace("'", "''") + "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") +
                     "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "'" +
 
 
-                    " where Nr_protocollo = '" + @p.nrProtocollo + "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "' and ID = " + ID ;
+                    " where  ID = " + ID;
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
