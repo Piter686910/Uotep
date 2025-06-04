@@ -48,56 +48,56 @@ namespace Uotep
                     btSalva.Visible=false;
                     btCercaQuartiere.Visible = false;
                 }
+                RicercaNew();
+                ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+                //if (Session["ListRicerca"] != null)
+                //{
+                //    Manager mn = new Manager();
+                //    List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                //    String[] ar = ListRicerca.ToArray();
+                //    // ArchivioUote arc = new ArchivioUote();
+                //    DataTable arc = new DataTable();
+                //    switch (ar[0])
+                //    {
+                //        case "Pratica":
+                //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                //            break;
+                //        case "StoricoPratica":
+                //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                //            break;
 
-                //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
-                if (Session["ListRicerca"] != null)
-                {
-                    Manager mn = new Manager();
-                    List<string> ListRicerca = (List<string>)Session["ListRicerca"];
-                    String[] ar = ListRicerca.ToArray();
-                    // ArchivioUote arc = new ArchivioUote();
-                    DataTable arc = new DataTable();
-                    switch (ar[0])
-                    {
-                        case "Pratica":
-                            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-                            break;
-                        case "StoricoPratica":
-                            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-                            break;
+                //        case "Nominativo":
+                //            arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
+                //            break;
+                //        case "Indirizzo":
+                //            arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
+                //            break;
+                //        case "Catasto":
+                //            arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
+                //            break;
+                //        case "Note":
+                //            arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
+                //            break;
+                //        case "AnnoMese":
+                //            arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
+                //            break;
 
-                        case "Nominativo":
-                            arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
-                            break;
-                        case "Indirizzo":
-                            arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
-                            break;
-                        case "Catasto":
-                            arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
-                            break;
-                        case "Note":
-                            arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
-                            break;
-                        case "AnnoMese":
-                            arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
-                            break;
-
-                    }
-                    if (arc.Rows.Count > 0)
-                    {
-                        apripopupPratica_Click(sender, e);
-                        GVRicercaPratica.DataSource = arc;
-                        GVRicercaPratica.DataBind();
-                        //segnalo he sono in modifica prartica
-                        HfStato.Value = "Mod";
-                        txtPratica.Enabled = false;
-                    }
-                }
-                else
-                {
-                    txtPratica.Enabled = true;
-                    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-                }
+                //    }
+                //    if (arc.Rows.Count > 0)
+                //    {
+                //        apripopupPratica_Click(sender, e);
+                //        GVRicercaPratica.DataSource = arc;
+                //        GVRicercaPratica.DataBind();
+                //        //segnalo he sono in modifica prartica
+                //        HfStato.Value = "Mod";
+                //        txtPratica.Enabled = false;
+                //    }
+                //}
+                //else
+                //{
+                //    txtPratica.Enabled = true;
+                //    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+                //}
                 CaricaDLL();
                 Session["POP"] = "si";
 
@@ -113,6 +113,59 @@ namespace Uotep
                 }
             }
 
+        }
+        private void RicercaNew()
+        {
+
+            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+            if (Session["ListRicerca"] != null)
+            {
+                Manager mn = new Manager();
+                List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                String[] ar = ListRicerca.ToArray();
+                // ArchivioUote arc = new ArchivioUote();
+                DataTable arc = new DataTable();
+                switch (ar[0])
+                {
+                    case "Pratica":
+                        arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                        break;
+                    case "StoricoPratica":
+                        arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                        break;
+
+                    case "Nominativo":
+                        arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
+                        break;
+                    case "Indirizzo":
+                        arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
+                        break;
+                    case "Catasto":
+                        arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
+                        break;
+                    case "Note":
+                        arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
+                        break;
+                    case "AnnoMese":
+                        arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
+                        break;
+
+                }
+                if (arc.Rows.Count > 0)
+                {
+                    apripopupPratica_Click(sender, e);
+                    GVRicercaPratica.DataSource = arc;
+                    GVRicercaPratica.DataBind();
+                    //segnalo he sono in modifica prartica
+                    HfStato.Value = "Mod";
+                    txtPratica.Enabled = false;
+                }
+            }
+            else
+            {
+                txtPratica.Enabled = true;
+                txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+            }
         }
         private void EseguiAzioneConfermata()
         {
@@ -622,6 +675,13 @@ namespace Uotep
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
+        }
+
+        protected void GVRicercaPratica_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            RicercaNew();
+
         }
     }
 }

@@ -573,7 +573,7 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP">
+                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
                             <Columns>
                                 <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false"/>
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
@@ -590,6 +590,25 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
+                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                            <PagerStyle HorizontalAlign="Center" />
+                            <PagerTemplate>
+                                <div style="padding: 5px;">
+                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                    <span style="margin: 0 10px;">Pagina:
+               
+                                    </span>
+
+                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                </div>
+                            </PagerTemplate>
+
                         </asp:GridView>
 
                     </div>

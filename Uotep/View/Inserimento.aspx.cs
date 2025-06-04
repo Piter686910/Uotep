@@ -273,7 +273,7 @@ namespace Uotep
                 Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
                 if (!ins)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, oppure errore di sistema, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, ricaricare la pagina per ottenere un nuovo numero protocollo oppure errore di sistema, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {

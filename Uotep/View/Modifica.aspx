@@ -560,7 +560,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="txtDataCarico">Data Carico</label>
-                        <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" ClientIDMode="Static"/>
+                        <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
                     </div>
                     <div class="col-md-3">
                         <label for="txtScaturito">Scaturito</label>
@@ -586,7 +586,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="txtDataDataEvasa" class="form-label">In data</label>
-                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" ClientIDMode="Static"/>
+                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
                     </div>
                     <div class="col-md-3">
                         <label for="txtInviata" class="form-label">Inviata</label>
@@ -599,7 +599,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="txtDataInvio" class="form-label">Il</label>
-                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control mb-3" ClientIDMode="Static"/>
+                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
                     </div>
                 </div>
                 <!-- Note -->
@@ -704,6 +704,22 @@
                             </Columns>
                             <PagerSettings Mode="NumericFirstLast" Position="Top" />
                             <PagerStyle HorizontalAlign="Center" />
+                            <PagerTemplate>
+                                <div style="padding: 5px;">
+                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                    <span style="margin: 0 10px;">Pagina:
+               
+                                    </span>
+
+                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                </div>
+                            </PagerTemplate>
                         </asp:GridView>
 
                     </div>
