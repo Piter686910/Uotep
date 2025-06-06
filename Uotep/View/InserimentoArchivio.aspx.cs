@@ -48,7 +48,7 @@ namespace Uotep
                     btSalva.Visible=false;
                     btCercaQuartiere.Visible = false;
                 }
-                RicercaNew();
+                RicercaNew(sender, e);
                 ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
                 //if (Session["ListRicerca"] != null)
                 //{
@@ -114,7 +114,7 @@ namespace Uotep
             }
 
         }
-        private void RicercaNew()
+        private void RicercaNew(object sender, EventArgs e)
         {
 
             ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
@@ -680,7 +680,7 @@ namespace Uotep
         protected void GVRicercaPratica_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            RicercaNew();
+            RicercaNew(sender, e);
 
         }
     }
