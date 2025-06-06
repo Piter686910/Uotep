@@ -1,0 +1,4 @@
+protocollo 10641, matricola:admin, data ins:03/06/2025 13:00:07, Il nome di oggetto 'princilale' non è valido. - Errore in inserimento dati 
+protocollo 10641, matricola:admin, data ins:03/06/2025 13:01:02, Il nome di oggetto 'princilale' non è valido. - Errore in inserimento dati 
+protocollo 10641, matricola:admin, data ins:03/06/2025 13:08:22, Riferimento a un oggetto non impostato su un'istanza di oggetto. - Errore in inserimento dati 
+protocollo 10641, matricola:admin, data ins:03/06/2025 13:09:07, Impossibile trovare la tabella 0. - Errore in inserimento dati 

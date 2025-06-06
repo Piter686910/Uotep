@@ -1,1 +1,0 @@
-pratica 9991, matricola:admin, data ins:12/04/2025 00:00:00, Il numero delle colonne dell'istruzione INSERT è maggiore del numero dei valori specificati nella clausola VALUES. Il numero dei valori della clausola deve corrispondere al numero delle colonne specificate nell'istruzione. - Errore in inserimento dati 
