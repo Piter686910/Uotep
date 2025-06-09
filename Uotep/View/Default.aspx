@@ -7,7 +7,10 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+        // Nasconde il popup
+        function HideErrorMessage() {
+            $('#errorModal').modal('hide');
+        }
     </script>
     <style>
         .centered-panel {
@@ -82,7 +85,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="btChiudiPop" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudiPop_Click"/>
                 </div>
             </div>
         </div>

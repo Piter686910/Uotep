@@ -123,12 +123,12 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.LinkButton lkreset;
 
         /// <summary>
-        /// Controllo Button2.
+        /// Controllo btChiudiPop.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.Button btChiudiPop;
     }
 }

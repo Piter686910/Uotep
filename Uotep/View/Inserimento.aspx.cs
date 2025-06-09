@@ -28,10 +28,15 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
 
             }
+            else
+            {
+
+                Response.Redirect("Default.aspx?user=true");
+            }
 
             if (!IsPostBack)
             {
-               
+
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 

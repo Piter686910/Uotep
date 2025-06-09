@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Data;
+using System.Web;
 using System.Web.UI;
 using Uotep.Classi;
 
@@ -10,6 +12,13 @@ namespace Uotep
         String Vuser = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
+            String categoria = Request.QueryString["user"];
+            if (categoria == "true")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare il login " + "'); $('#errorModal').modal('show');", true);
+                
+               
+            }
             if (Session["user"] != null)
             {
                 Manager mn=new Manager();
@@ -134,6 +143,14 @@ namespace Uotep
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password non resettata." + "'); $('#errorModal').modal('show');", true);
 
             }
+        }
+
+      
+        protected void btChiudiPop_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+
+            Response.Redirect("Default.aspx?user=false");
         }
     }
 }
