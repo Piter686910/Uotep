@@ -261,8 +261,8 @@
                     <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control mb-3" Enabled="false" />
                 </div>
                 <div class="col-md-3">
-                    <label for="txPratica">Pratica</label>
-                    <asp:TextBox ID="txPratica" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                    <label for="txtPraticaOut">Pratica</label>
+                    <asp:TextBox ID="txtPraticaOut" runat="server" CssClass="form-control mb-3" Enabled="false" />
                 </div>
                 <div class="col-md-3">
                     <label for="txtTipoAtto">Tipologia Atto</label>

@@ -49,7 +49,7 @@ namespace Uotep
                     btCercaQuartiere.Visible = false;
                 }
                 RicercaNew(sender, e);
-                ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+                //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
                 //if (Session["ListRicerca"] != null)
                 //{
                 //    Manager mn = new Manager();

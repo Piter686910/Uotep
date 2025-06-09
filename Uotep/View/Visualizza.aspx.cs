@@ -193,7 +193,7 @@ namespace Uotep
 
                                 txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
 
-                            txtPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
+                            txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
                             TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
                             txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
                             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
