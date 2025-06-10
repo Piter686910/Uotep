@@ -19,6 +19,10 @@ namespace Uotep
                 Ruolo = Session["Ruolo"].ToString();
 
             }
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
             if (!IsPostBack)
             {
                 if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())

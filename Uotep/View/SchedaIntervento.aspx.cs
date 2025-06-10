@@ -27,16 +27,21 @@ namespace Uotep
                 Vuser = Session["user"].ToString();
                 Area = Session["area"].ToString();
             }
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
-
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
+           
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
                 TxtDataIntervento.Attributes["placeholder"] = "gg/mm/aaaa";
                 txtDataConsegna.Attributes["placeholder"] = "gg/mm/aaaa";
                 if (Area == "uote")

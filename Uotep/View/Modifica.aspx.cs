@@ -24,6 +24,10 @@ namespace Uotep
                 Vuser = Session["user"].ToString();
 
             }
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
             //Manager mn = new Manager();
             //DataTable ricerca = mn.GetRuolo(Vuser);
             //if (ricerca.Rows.Count > 0)
@@ -636,6 +640,10 @@ namespace Uotep
             gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
         }
-       
+        protected void GVRicecaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender, e);
+        }
     }
 }

@@ -503,7 +503,7 @@
                         <!-- Pulsanti -->
                         <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo." ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Carico" ToolTip="Ricerca Data Carico" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
@@ -897,7 +897,7 @@
 
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopupProtocolli" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopupProtocolli_RowDataBound" OnRowCommand="gvPopupProtocolli_RowCommand">
+                            OnRowDataBound="gvPopupProtocolli_RowDataBound" OnRowCommand="gvPopupProtocolli_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupProtocolli_PageIndexChanging">
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
@@ -916,6 +916,25 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
+                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                            <PagerStyle HorizontalAlign="Center" />
+                            <PagerTemplate>
+                                <div style="padding: 5px;">
+                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                    <span style="margin: 0 10px;">Pagina:
+               
+                                    </span>
+
+                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                </div>
+                            </PagerTemplate>
+
                         </asp:GridView>
 
 

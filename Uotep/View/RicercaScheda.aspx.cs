@@ -47,16 +47,21 @@ namespace Uotep
                 profilo = Session["profilo"].ToString();
                 ruolo = Session["ruolo"].ToString();
             }
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
-
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
+            
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
 
                 SetControlsEnabled(divDettagli, false);
@@ -1597,5 +1602,6 @@ namespace Uotep
             CreaPdf(schede);
 
         }
+
     }
 }

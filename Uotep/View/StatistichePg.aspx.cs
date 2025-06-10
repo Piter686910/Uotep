@@ -31,7 +31,10 @@ namespace Uotep
                 profilo = Session["profilo"].ToString();
                 ruolo = Session["ruolo"].ToString();
             }
-
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
             if (!IsPostBack)
             {
               //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);

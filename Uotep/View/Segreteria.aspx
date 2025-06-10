@@ -86,13 +86,14 @@
                         <div class="form-group mb-3">
                             <div class="form-group text-center mt-4" style="text-align: left !important">
                                 <asp:Label ID="Label6" runat="server" Text="Cancella file già scaricati" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:Button ID="btCancellaScaricati" Text="Cancella" runat="server" OnClick="btCancellaScaricati_Click" ToolTip="Cancella File" CssClass="btn btn-primary px-4"   />
+                                <asp:Button ID="btCancellaScaricati" Text="Cancella" runat="server" OnClick="btCancellaScaricati_Click" ToolTip="Cancella File" CssClass="btn btn-primary px-4" />
                             </div>
                         </div>
                         <div class="form-group">
                             <!-- GridView nel popup -->
                             <asp:GridView ID="GVRicercaFile" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
-                                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
+                                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaFile_PageIndexChanging">
+
                                 <Columns>
                                     <asp:BoundField DataField="id_file" HeaderText="ID" />
                                     <asp:BoundField DataField="fascicolo" HeaderText="Numero Fascicolo" />
@@ -108,6 +109,25 @@
                                     </asp:TemplateField>
 
                                 </Columns>
+                                <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                <PagerStyle HorizontalAlign="Center" />
+                                <PagerTemplate>
+                                    <div style="padding: 5px;">
+                                        <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                        <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                        <span style="margin: 0 10px;">Pagina:
+               
+                                        </span>
+
+                                        <%-- Contenitore per i link numerici delle pagine --%>
+                                        <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                        <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                        <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                    </div>
+                                </PagerTemplate>
+
                             </asp:GridView>
 
                         </div>

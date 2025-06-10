@@ -33,16 +33,22 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
 
             }
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
+            else
+            {
 
-            // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
+                Response.Redirect("Default.aspx?user=true");
+            }
+           
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
+
+                // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
+                string decodedText = HttpUtility.HtmlDecode(protocolloText);
+
+                // Assegna il valore decodificato al Literal
+                ProtocolloLiteral.Text = decodedText;
                 if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
                 {
                     btSalva.Visible=false;

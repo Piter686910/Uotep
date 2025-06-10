@@ -50,6 +50,10 @@ namespace Uotep
                     }
 
                 }
+                else
+                {
+                    Response.Redirect("Default.aspx?user=true");
+                }
             }
         }
 
@@ -395,6 +399,11 @@ namespace Uotep
             }
 
 
+        }
+        protected void GVRicercaFile_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVRicercaFile.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender, e);
         }
     }
 }

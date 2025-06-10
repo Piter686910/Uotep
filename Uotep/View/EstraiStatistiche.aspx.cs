@@ -47,8 +47,11 @@ namespace Uotep
                 profilo = Session["profilo"].ToString();
                 ruolo = Session["ruolo"].ToString();
             }
-            // Legge il valore dal Web.config
-            string protocolloText = ConfigurationManager.AppSettings["Titolo"];
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
+
 
             // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
             //string decodedText = HttpUtility.HtmlDecode(protocolloText);
@@ -57,14 +60,15 @@ namespace Uotep
             //ProtocolloLiteral.Text = decodedText;
             if (!IsPostBack)
             {
+                // Legge il valore dal Web.config
+                string protocolloText = ConfigurationManager.AppSettings["Titolo"];
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
 
-             
-                
+
             }
 
         }
-      
+
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
@@ -76,11 +80,11 @@ namespace Uotep
 
         }
 
-    
+
 
         protected void FillScheda(DataTable stat)
         {
-            txtRelazioni.Text= stat.Rows[0].ItemArray[3].ToString();
+            txtRelazioni.Text = stat.Rows[0].ItemArray[3].ToString();
             TxtPonteggi.Text = stat.Rows[0].ItemArray[4].ToString();
             txtDPI.Text = stat.Rows[0].ItemArray[5].ToString();
             txtEspostiRicevuti.Text = stat.Rows[0].ItemArray[6].ToString();
@@ -94,7 +98,7 @@ namespace Uotep
             txtSequestri.Text = stat.Rows[0].ItemArray[14].ToString();
             txtRiapposizioneSigilli.Text = stat.Rows[0].ItemArray[15].ToString();
             txtDelegheRicevute.Text = stat.Rows[0].ItemArray[16].ToString();
-            txtDelegheEsitate.Text= stat.Rows[0].ItemArray[17].ToString();
+            txtDelegheEsitate.Text = stat.Rows[0].ItemArray[17].ToString();
             txtCnrAnnotazioni.Text = stat.Rows[0].ItemArray[18].ToString();
             txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
@@ -110,16 +114,16 @@ namespace Uotep
         }
 
 
-       
+
 
         protected void btEsegui_Click(object sender, EventArgs e)
         {
-            Manager mn= new Manager();
+            Manager mn = new Manager();
             DataTable dt = new DataTable();
-            int anno= System.Convert.ToInt32(txtAnno.Text.Trim());
+            int anno = System.Convert.ToInt32(txtAnno.Text.Trim());
             dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
             if (dt.Rows.Count > 0)
-            { 
+            {
                 FillScheda(dt);
             }
         }

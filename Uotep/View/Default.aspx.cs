@@ -16,8 +16,8 @@ namespace Uotep
             if (categoria == "true")
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare il login " + "'); $('#errorModal').modal('show');", true);
-                
-               
+                Session.Abandon();
+
             }
             if (Session["user"] != null)
             {
@@ -70,7 +70,7 @@ namespace Uotep
                         {
                             //salvo la matricola
                             Session["user"] = Vuser;
-                            Response.Redirect("Default.aspx", false);
+                            Response.Redirect("Default.aspx");
                         }
                     }
                     else

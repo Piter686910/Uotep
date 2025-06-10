@@ -22,6 +22,10 @@ namespace Uotep
             {
                 Vuser = Session["user"].ToString();
             }
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -968,6 +972,11 @@ namespace Uotep
             DivGiudice.Visible = false;
             DivPratica.Visible = false;
             DivProcPenale.Visible = false;
+        }
+        protected void gvPopupProtocolli_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPopupProtocolli.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender, e);
         }
         //fine
     }

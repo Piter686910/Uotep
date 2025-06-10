@@ -693,7 +693,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
+            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%' order by Indirizzo asc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 

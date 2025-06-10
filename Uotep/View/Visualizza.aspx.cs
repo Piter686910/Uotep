@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep
 {
@@ -17,6 +18,15 @@ namespace Uotep
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["user"] != null)
+            {
+                Vuser = Session["user"].ToString();
+               
+            }
+            else
+            {
+                Response.Redirect("Default.aspx?user=true");
+            }
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -343,7 +353,11 @@ namespace Uotep
             DivDataCarico.Visible = false;
             DivDettagli.Visible = false;
         }
-
+        protected void gvPopup_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPopup.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender, e);
+        }
 
     }
 }

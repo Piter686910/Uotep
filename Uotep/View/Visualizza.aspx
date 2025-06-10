@@ -62,7 +62,7 @@
                         <!-- Pulsanti -->
                         <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo." ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Carico" ToolTip="Ricerca Data Carico" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
@@ -335,18 +335,19 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
+                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging" >
+
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
-                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true"  ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true"  ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true"  ItemStyle-Width="80px"/>
-                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px"/>
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center"/>
+                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
+                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" Visible="false"/>
                                 <asp:TemplateField ItemStyle-Width="10px">
-                                    <ItemTemplate >
+                                    <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"
                                             CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
@@ -354,6 +355,25 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
+                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                            <PagerStyle HorizontalAlign="Center" />
+                            <PagerTemplate>
+                                <div style="padding: 5px;">
+                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                    <span style="margin: 0 10px;">Pagina:
+               
+                                    </span>
+
+                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                </div>
+                            </PagerTemplate>
+
                         </asp:GridView>
 
                     </div>
