@@ -21,7 +21,7 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            
+
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -52,34 +52,7 @@ namespace Uotep
                 }
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
-                //int protocollo = 0;
-                //Manager mn = new Manager();
-
-                //DataTable tb = mn.MaxNPr(annoCorr);
-
-                //if (tb.Rows.Count > 0)
-                //{
-
-                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
-
-                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                //    }
-                //    else
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();
-
-                //    }
-                //}
-                //else
-                //{
-                //    txtProt.Text = "1";
-
-                //}
-
+                
                 txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
 
             }
@@ -102,191 +75,190 @@ namespace Uotep
 
             if (!String.IsNullOrEmpty(HfInviata.Value))
                 btSalvaInviata.Visible = true;
-        }
 
+        }
+        public Boolean ControlloCampiObbligatori()
+        {
+            Boolean ret = true;
+           if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper()==Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            if (String.IsNullOrEmpty(txtTipoProv.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(txtGiudice.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(txtTipoAtto.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoAtti.ToString().ToUpper())
+            {
+                return false;
+            }
+            return ret;
+        }
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
                 // int protocollo = 0;
-                Principale p = new Principale();
-                p.anno = annoCorr;
-                DateTime giorno = DateTime.Now;
-                p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
-
-
-                //
-                Manager mn = new Manager();
-                //DataTable tb = mn.MaxNPr(annoCorr);
-                //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                //if (tb.Rows.Count > 0)
-                //{
-                //    //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                //    int annoMAx = System.Convert.ToInt16(tb.Rows[0].ItemArray[0]);
-
-                //    if (System.Convert.ToInt16(annoCorr) <= annoMAx)
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();//tb.Rows[0].ItemArray[1].ToString();
-                //    }
-                //    else
-                //    {
-                //        protocollo = System.Convert.ToInt16(tb.Rows[0].ItemArray[1]) + 1;
-                //        txtProt.Text = protocollo.ToString();
-
-                //    }
-                //}
-                //else
-                //{
-                //    txtProt.Text = "1";
-
-                //}
-                p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-                //
-
-
-
-                p.sigla = DdlSigla.SelectedItem.Text;
-                p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-                p.dataCarico = DateTime.MinValue.ToShortDateString(); //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-                p.nominativo = txtNominativo.Text;
-                //if (DdlGiudice.SelectedValue == "0")
-                //{
-                //    p.giudice = String.Empty;
-                //}
-                if (String.IsNullOrEmpty(txtGiudice.Text))
+                Boolean obbligo = ControlloCampiObbligatori();
+                if (obbligo)
                 {
-                    p.giudice = String.Empty;
-                }
-                else
-                {
+                    Principale p = new Principale();
+                    p.anno = annoCorr;
+                    DateTime giorno = DateTime.Now;
+                    p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
 
-                    Boolean resp = mn.getGiudice(txtGiudice.Text);
-                    if (!resp)
+                    Manager mn = new Manager();
+
+                    p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
+
+                    p.sigla = DdlSigla.SelectedItem.Text;
+                    p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                    p.dataCarico = DateTime.MinValue.ToShortDateString(); //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    p.nominativo = txtNominativo.Text;
+                    if (String.IsNullOrEmpty(txtGiudice.Text))
                     {
-                        HfGiudice.Value = txtGiudice.Text;
+                        p.giudice = String.Empty;
+                    }
+                    else
+                    {
+
+                        Boolean resp = mn.getGiudice(txtGiudice.Text);
+                        if (!resp)
+                        {
+                            HfGiudice.Value = txtGiudice.Text;
+                        }
+
+                        p.giudice = txtGiudice.Text;
                     }
 
-                    p.giudice = txtGiudice.Text;
-                }
-
-                if (String.IsNullOrEmpty(txtProvenienza.Text))
-                {
-
-                    p.provenienza = string.Empty;
-                }
-
-                else
-                {
-                    Boolean resp = mn.getProvenienza(txtProvenienza.Text);
-                    if (!resp)
+                    if (String.IsNullOrEmpty(txtProvenienza.Text))
                     {
-                        HfProvenienza.Value = txtProvenienza.Text;
-                    }
-                    p.provenienza = txtProvenienza.Text;
-                }
 
-
-                if (String.IsNullOrEmpty(txtTipoAtto.Text))
-                {
-
-                    p.tipologia_atto = String.Empty;
-                }
-                else
-                {
-                    Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
-                    if (!resp)
-                    {
-                        HfTipoAtto.Value = txtTipoAtto.Text;
-                    }
-                    p.tipologia_atto = txtTipoAtto.Text;
-                }
-
-
-                if (String.IsNullOrEmpty(txtTipoProv.Text))
-                {
-                    p.tipoProvvedimentoAG = String.Empty;
-                }
-                else
-                {
-
-                    Boolean resp = mn.getTipoProv(txtTipoProv.Text);
-                    if (!resp)
-                    {
-                        HfTipoProv.Value = txtTipoProv.Text;
+                        p.provenienza = string.Empty;
                     }
 
-                    p.tipoProvvedimentoAG = txtTipoProv.Text;
-                }
-                if (String.IsNullOrEmpty(txtIndirizzo.Text))
-                {
-                    p.indirizzo = String.Empty;
-                }
-                else
-                {
-                    p.indirizzo = txtIndirizzo.Text;
-                    p.via = string.Empty;
-
-                }
-                if (String.IsNullOrEmpty(txtQuartiere.Text))
-                {
-                    p.quartiere = String.Empty;
-                }
-                else
-                {
-                    p.quartiere = txtQuartiere.Text;
-                    //p.quartiere = lblQuartiere.Text;
-                }
-
-                p.rif_Prot_Gen = txtRifProtGen.Text;
-
-
-                p.note = txtNote.Text;
-                p.evasa = CkEvasa.Checked;
-                if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-                {
-                    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-                }
-
-                //p.accertatori = null;
-                //p.scaturito = null;
-                if (String.IsNullOrEmpty(txtInviata.Text))
-                {
-                    p.inviata = String.Empty;
-                }
-                else
-                {
-                    Boolean resp = mn.getInviata(txtInviata.Text);
-                    if (!resp)
+                    else
                     {
-                        HfInviata.Value = txtInviata.Text;
+                        Boolean resp = mn.getProvenienza(txtProvenienza.Text);
+                        if (!resp)
+                        {
+                            HfProvenienza.Value = txtProvenienza.Text;
+                        }
+                        p.provenienza = txtProvenienza.Text;
                     }
-                    p.inviata = txtInviata.Text;
 
+
+                    if (String.IsNullOrEmpty(txtTipoAtto.Text))
+                    {
+
+                        p.tipologia_atto = String.Empty;
+                    }
+                    else
+                    {
+                        Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                        if (!resp)
+                        {
+                            HfTipoAtto.Value = txtTipoAtto.Text;
+                        }
+                        p.tipologia_atto = txtTipoAtto.Text;
+                    }
+
+
+                    if (String.IsNullOrEmpty(txtTipoProv.Text))
+                    {
+                        p.tipoProvvedimentoAG = String.Empty;
+                    }
+                    else
+                    {
+
+                        Boolean resp = mn.getTipoProv(txtTipoProv.Text);
+                        if (!resp)
+                        {
+                            HfTipoProv.Value = txtTipoProv.Text;
+                        }
+
+                        p.tipoProvvedimentoAG = txtTipoProv.Text;
+                    }
+                    if (String.IsNullOrEmpty(txtIndirizzo.Text))
+                    {
+                        p.indirizzo = String.Empty;
+                    }
+                    else
+                    {
+                        p.indirizzo = txtIndirizzo.Text;
+                        p.via = string.Empty;
+
+                    }
+                    if (String.IsNullOrEmpty(txtQuartiere.Text))
+                    {
+                        p.quartiere = String.Empty;
+                    }
+                    else
+                    {
+                        p.quartiere = txtQuartiere.Text;
+                        //p.quartiere = lblQuartiere.Text;
+                    }
+
+                    p.rif_Prot_Gen = txtRifProtGen.Text;
+
+
+                    p.note = txtNote.Text;
+                    p.evasa = CkEvasa.Checked;
+                    if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
+                    {
+                        p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
+                    }
+
+                    //p.accertatori = null;
+                    //p.scaturito = null;
+                    if (String.IsNullOrEmpty(txtInviata.Text))
+                    {
+                        p.inviata = String.Empty;
+                    }
+                    else
+                    {
+                        Boolean resp = mn.getInviata(txtInviata.Text);
+                        if (!resp)
+                        {
+                            HfInviata.Value = txtInviata.Text;
+                        }
+                        p.inviata = txtInviata.Text;
+
+                    }
+                    //p.inviata = DdlInviati.SelectedItem.Text;
+                    if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                    {
+                        p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    }
+
+                    p.procedimentoPen = txtProdPenNr.Text;
+                    p.matricola = Vuser;
+                    p.data_ins_pratica = DateTime.Now.ToLocalTime();
+
+
+                    Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
+                    if (!ins)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, ricaricare la pagina per ottenere un nuovo numero protocollo oppure errore di sistema, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+
+                        Pulisci();
+                        btNewIns.Visible = true;
+                        btSalva.Visible = false;
+                    }
                 }
-                //p.inviata = DdlInviati.SelectedItem.Text;
-                if (!string.IsNullOrEmpty(txtDataInvio.Text))
-                {
-                    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-                }
+                else {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Ci sono campi obbligatori non inseriti, controllare Tipologia Atto o Riferimento Protocollo Generale!" + "'); $('#errorModal').modal('show');", true);
 
-                p.procedimentoPen = txtProdPenNr.Text;
-                p.matricola = Vuser;
-                p.data_ins_pratica = DateTime.Now.ToLocalTime();
-
-
-                Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
-                if (!ins)
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, ricaricare la pagina per ottenere un nuovo numero protocollo oppure errore di sistema, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
-
-                    Pulisci();
-                    btNewIns.Visible = true;
-                    btSalva.Visible = false;
                 }
             }
             catch (Exception ex)

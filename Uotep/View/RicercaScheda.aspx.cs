@@ -1603,5 +1603,11 @@ namespace Uotep
 
         }
 
+        protected void GVRicecaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVRicecaScheda.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            btRicScheda_Click(sender, e);
+
+        }
     }
 }

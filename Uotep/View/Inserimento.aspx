@@ -390,10 +390,9 @@
                     <div class="form-group mb-3">
                         <label for="txtDataArrivo">Data Arrivo</label>
                         <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
-                      <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
+                        <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
 
                         </asp:RequiredFieldValidator>--%>
-
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtGiudice">Giudice</label>
@@ -421,6 +420,10 @@
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         </div>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtQuartiere" ErrorMessage="inserire Quartiere" ValidationGroup="bt" ForeColor="Red">
+
+                        </asp:RequiredFieldValidator>
+
                         <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
                     <div class="form-group mb-3">
@@ -429,6 +432,10 @@
                         <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfProvenienza" runat="server" />
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtProvenienza" ErrorMessage="inserire Provenienza" ValidationGroup="bt" ForeColor="Red">
+
+                            </asp:RequiredFieldValidator>
+
                         </div>
                         <asp:Button ID="btSalvaProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaProvenienza_Click" Visible="false" />
                         <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
@@ -446,6 +453,10 @@
                     <div class="form-group mb-3">
                         <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
                         <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+
+                        </asp:RequiredFieldValidator>
+
                     </div>
 
                     <!-- Indirizzo e TextBox sulla stessa riga -->
@@ -458,6 +469,9 @@
                                 <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     <asp:HiddenField ID="HfIndirizzo" runat="server" />
                                 </div>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtIndirizzo" ErrorMessage="inserire Indirizzo" ValidationGroup="bt" ForeColor="Red">
+
+                                </asp:RequiredFieldValidator>
 
                                 <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
                             </div>
@@ -476,12 +490,20 @@
                     <div class="form-group mb-3">
                         <label for="txtNominativo">Nominativo</label>
                         <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtNominativo" ErrorMessage="inserire Nominativo" ValidationGroup="bt" ForeColor="Red">
+
+                        </asp:RequiredFieldValidator>
+
                     </div>
 
                     <div class="form-group mb-3">
 
                         <label for="txPratica">Pratica</label>
                         <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txPratica" ErrorMessage="inserire numero pratica" ValidationGroup="bt" ForeColor="Red">
+
+                        </asp:RequiredFieldValidator>
+
                     </div>
 
                     <div class="form-group mb-3">
@@ -610,7 +632,7 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
-                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()"/>
+                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
                 </div>
             </div>
         </div>
