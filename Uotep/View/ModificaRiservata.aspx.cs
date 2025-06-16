@@ -567,14 +567,14 @@ namespace Uotep
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
-                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                                                                //      DdlIndirizzo.DataValueField = "ID_quartiere";
                 DdlIndirizzo.DataBind();
-                DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+         //       DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaTipoAtto = mn.getListTipologia();
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
@@ -582,7 +582,7 @@ namespace Uotep
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
                 DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAtto.DataBind();
-                DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+           //     DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaProvenienza = mn.getListProvenienza();
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
@@ -590,7 +590,7 @@ namespace Uotep
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
                 DdlProvenienza.DataBind();
-                DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+             //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaGiudice = mn.getListGiudice();
                 DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
@@ -598,7 +598,7 @@ namespace Uotep
                 DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
 
                 DdlGiudice.DataBind();
-                DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
                 DataTable RicercaProvvAg = mn.getListProvvAg();
@@ -607,7 +607,7 @@ namespace Uotep
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-                DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable Scaturito = mn.getListScaturito();
                 DdlScaturito.DataSource = Scaturito; // Imposta il DataSource della DropDownList
@@ -615,14 +615,14 @@ namespace Uotep
                 DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
 
                 DdlScaturito.DataBind();
-                DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+         //       DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaInviati = mn.getListInviati();
                 DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
                 DdlInviati.DataTextField = "Inviata"; // Il campo visibile
                 DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
                 DdlInviati.DataBind();
-                DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
             {
