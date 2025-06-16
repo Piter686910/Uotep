@@ -228,15 +228,19 @@ namespace Uotep
                 rap.dataInserimento = DateTime.Now;
                 stat.mese = MeseCorrente;
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
-                string txt = "";
+                string txt = string.Empty;
                 VerificaStatistiche(stat, out txt);
-                Boolean resp = mn.InsRappUote(rap, stat, txt);
+                Int32 idN=0;
+                Boolean resp = mn.InsRappUote(rap, stat, txt, out idN);
                 if (!resp)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
+                    HfIdScheda.Value = idN.ToString();
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#MsgStampa').text('" + "Inserimento scheda effettuato. Vuoi stampare?" + "'); $('#PopStampa').modal('show');", true);
+
                     Pulisci();
                 }
             }
@@ -614,6 +618,14 @@ namespace Uotep
             }
         }
 
+        protected void btPopStampa_Click(object sender, EventArgs e)
+        {
+            int id = System.Convert.ToInt32(HfIdScheda.Value);
+            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id);
+
+            Routine stampa = new Routine();
+            stampa.CreaPdf(schede);
+        }
     }
 
 }

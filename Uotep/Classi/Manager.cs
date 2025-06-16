@@ -1734,7 +1734,7 @@ namespace Uotep.Classi
             }
 
         }
-        public Boolean InsRappUote(RappUote rapp, Statistiche stat, string txt)
+        public Boolean InsRappUote(RappUote rapp, Statistiche stat, string txt, out Int32 idN)
         {
             bool resp = true;
             string sql_insRap = String.Empty;
@@ -1749,7 +1749,7 @@ namespace Uotep.Classi
 
                 transaction = conn.BeginTransaction("trans");
                 command.Transaction = transaction;
-
+                idN = -1;
 
                 try
                 {
@@ -1833,14 +1833,15 @@ namespace Uotep.Classi
                  @rapp.attività_interna + "','" +
                  @rapp.nota.Replace("'", "''") + "','" +
                  @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-                 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "')";
+                 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" + rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "'); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
-                    command.ExecuteNonQuery();
+                    object a = command.ExecuteScalar();
 
 
                     command.CommandText = sql_Statistiche;
-                    command.ExecuteNonQuery();
+                   command.ExecuteNonQuery();
                     transaction.Commit();
+                   idN= Convert.ToInt32(a);
                     resp = true;
                 }
 

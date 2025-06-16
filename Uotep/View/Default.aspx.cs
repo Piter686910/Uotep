@@ -135,7 +135,7 @@ namespace Uotep
             Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text);
             if (upd)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata. La nuuva password temporanea è la tua matricola + old. Esempio: 9999old" + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old" + "'); $('#errorModal').modal('show');", true);
 
             }
             else

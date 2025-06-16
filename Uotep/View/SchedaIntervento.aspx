@@ -17,6 +17,15 @@
         function hideModal() {
             $('#myModal').modal('hide');
         }
+        // Mostra il popup
+        function showModal() {
+            $('#PopStampa').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModal() {
+            $('#PopStampa').modal('hide');
+        }
         // Funzione per aggiungere testo a un TextBox
         function appendToTextBox(TextPattugliaCompleta, DdlPattuglia) {
             // Ottieni il TextBox tramite il suo ID
@@ -450,7 +459,7 @@
         </div>
     </div>
 
-
+    <asp:HiddenField id="HfIdScheda" runat="server"/>
 
 
     <!-- Modale Bootstrap quartiere -->
@@ -459,7 +468,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Ricerca Quartiere</h5>
+                    <h5 class="modal-title" id="modalLabel12">Ricerca Quartiere</h5>
 
                 </div>
                 <div class="modal-body">
@@ -523,5 +532,31 @@
             </div>
         </div>
     </div>
+     <%-- popup stampa scheda --%>
+ <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+     <div class="modal-dialog"
+         role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
 
+             </div>
+             <div class="modal-body">
+                 <!-- Campi di input per la ricerca -->
+                 <div class="form-group">
+
+                     <p id="MsgStampa" style="color: red"></p>
+
+                 </div>
+
+             </div>
+             <div class="modal-footer">
+                 <!-- Bottone per avviare la ricerca -->
+                 <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+
+                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+             </div>
+         </div>
+     </div>
+ </div>
 </asp:Content>
