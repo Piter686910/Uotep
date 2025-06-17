@@ -204,15 +204,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btCancellaScaricati;
 
         /// <summary>
-        /// Controllo GVRicercaFile.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GVRicercaFile;
-
-        /// <summary>
         /// Controllo divDestra.
         /// </summary>
         /// <remarks>
@@ -238,6 +229,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btRicerca;
+
+        /// <summary>
+        /// Controllo GVRicercaFile.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GVRicercaFile;
+
+        /// <summary>
+        /// Controllo btChiudi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btChiudi;
 
         /// <summary>
         /// Controllo Button2.

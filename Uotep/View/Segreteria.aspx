@@ -7,7 +7,21 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
+        function CloseErrorMessage(message) {
+            $('#errorModal').modal('hide');
+        }
+        // Nasconde il popup
+        function HideErrorMessage() {
+            $('#errorModal').modal('hide');
+        }
+        function showModal() {
+            $('#ModalRicercaFile').modal('show');
+        }
 
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalRicercaFile').modal('hide');
+        }
     </script>
     <div class="jumbotron">
         <h1>Caricamento file</h1>
@@ -89,31 +103,7 @@
                                 <asp:Button ID="btCancellaScaricati" Text="Cancella" runat="server" OnClick="btCancellaScaricati_Click" ToolTip="Cancella File" CssClass="btn btn-primary px-4" />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <!-- GridView nel popup -->
-                            <asp:GridView ID="GVRicercaFile" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
-                                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
 
-                                <Columns>
-                                    <asp:BoundField DataField="id_file" HeaderText="ID" />
-                                    <asp:BoundField DataField="fascicolo" HeaderText="Numero Fascicolo" />
-                                    <%-- formatta la data DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" --%>
-                                    <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
-                                    <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="100%" />
-                                    <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
-
-                                    <asp:TemplateField>
-                                        <ItemTemplate>
-                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-
-                                </Columns>
-                                
-
-                            </asp:GridView>
-
-                        </div>
 
 
                     </div>
@@ -134,9 +124,73 @@
 
         </div>
     </asp:Panel>
+    <%-- Modale ricerca file --%>
+    <div class="modal fade" id="ModalRicercaFile"  tabindex="-1" aria-labelledby="modalLabel" aria-hidden="false">
+        <div class="modal-dialog" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel10">Ricerca File</h5>
 
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <!-- GridView nel popup -->
+
+                        <div class="form-group">
+                            <!-- GridView nel popup -->
+                            <asp:GridView ID="GVRicercaFile" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
+                                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaFile_PageIndexChanging">
+
+                                <Columns>
+                                    <asp:BoundField DataField="id_file" HeaderText="ID" Visible="false"/>
+                                    <asp:BoundField DataField="fascicolo" HeaderText="Numero Fascicolo" />
+                                    <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
+                                    <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="50%" />
+                                    <asp:BoundField DataField="folder" HeaderText="folder" Visible="false" />
+
+                                    <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona"  CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+                                </Columns>
+                                <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                <PagerStyle HorizontalAlign="Center" />
+                                <PagerTemplate>
+                                    <div style="padding: 5px;">
+                                        <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                        <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                        <span style="margin: 0 10px;">Pagina:
+               
+                                        </span>
+
+                                        <%-- Contenitore per i link numerici delle pagine --%>
+                                        <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                        <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                        <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                    </div>
+                                </PagerTemplate>
+
+
+                            </asp:GridView>
+
+                        </div>
+                       
+                    </div>
+                </div>
+             
+                <div class="modal-footer">
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudi_Click"/>
+                </div>
+            </div>
+        </div>
+    </div>
     <%-- popup errori --%>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="false">
         <div class="modal-dialog"
             role="document">
             <div class="modal-content">
@@ -154,7 +208,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click"/>
                 </div>
             </div>
         </div>

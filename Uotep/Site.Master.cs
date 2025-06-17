@@ -198,6 +198,7 @@ namespace Uotep
             Session.Remove("profilo");
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");
+            Session.Remove("popAperto");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

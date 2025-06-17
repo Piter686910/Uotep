@@ -55,6 +55,13 @@ namespace Uotep
                     Response.Redirect("Default.aspx?user=true");
                 }
             }
+            else
+            {
+                if (Session["popAperto"] != null)
+                {
+                    apripopupFile_Click(sender, e);
+                }
+            }
         }
 
         private void CaricaDLL()
@@ -228,6 +235,7 @@ namespace Uotep
                 System.Data.DataTable dt = mn.GetFileByFascicoloData(fl);
                 if (dt.Rows.Count > 0)
                 {
+                    apripopupFile_Click(sender, e);
                     GVRicercaFile.DataSource = dt;
                     GVRicercaFile.DataBind();
 
@@ -238,6 +246,7 @@ namespace Uotep
                 System.Data.DataTable dtO = mn.GetFileByOperatore(fl.matricola);
                 if (dtO.Rows.Count > 0)
                 {
+                    apripopupFile_Click(sender, e);
                     GVRicercaFile.DataSource = dtO;
                     GVRicercaFile.DataBind();
 
@@ -245,7 +254,11 @@ namespace Uotep
             }
 
         }
-
+        protected void apripopupFile_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaFile').modal('show');", true);
+            Session["popAperto"] = "si";
+        }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -262,18 +275,19 @@ namespace Uotep
         {
             if (e.CommandName == "Select")
             {
-                // Ottieni l'indice della riga cliccata e altri argomenti
                 string[] args = e.CommandArgument.ToString().Split(';');
-                int rowIndex = Convert.ToInt32(args[0]);
+                // Ottieni l'indice della riga cliccata e altri argomenti
+
+                //int rowIndex = Convert.ToInt32(args[0]);
                 string numeroF = args[1]; // Potrebbe non essere usato nel percorso del file
                 string data = args[2];    // Potrebbe non essere usato nel percorso del file
                 string nomefile = args[3];
                 string folder = args[4];   // Potrebbe non essere usato direttamente nel percorso, ma estratto dal codice originale
                 int id_file = Convert.ToInt32(args[5]);
-                GridViewRow row = GVRicercaFile.Rows[rowIndex];
+                //GridViewRow row = GVRicercaFile.Rows[rowIndex];
 
                 // Recupera il nome del file dalla riga (già estratto da CommandArgument come nomefile)
-                string fileName = nomefile;
+                //string fileName = nomefile;
 
                 // **Important Security Note:**
                 // Accessing files directly from C:\FileSegreteria from a web application poses significant security risks.
@@ -286,21 +300,21 @@ namespace Uotep
 
 
                 // Costruisci l'URL del file usando Path.Combine per sicurezza
-                string fileUrl = Path.Combine(baseUrl, fileName);
+                string fileUrl = Path.Combine(baseUrl, nomefile);
 
                 if (File.Exists(fileUrl))
                 {
                     try
                     {
                         // Get the file extension to determine content type
-                        string fileExtension = Path.GetExtension(fileName).ToLower();
+                        string fileExtension = Path.GetExtension(nomefile).ToLower();
                         string contentType = GetContentType(fileExtension);
 
                         // **Option 1: Attempt to display in browser (for supported types) - Visualization**
                         if (contentType != "application/octet-stream") // If it's not a generic binary type (like .exe)
                         {
                             Response.ContentType = contentType;
-                            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName); // "inline" tries to open in browser
+                            Response.AppendHeader("Content-Disposition", "inline; filename=" + nomefile); // "inline" tries to open in browser
                             Response.TransmitFile(fileUrl);
                             Response.Flush(); // Ensure headers and content are sent immediately
                             Response.End(); // Stop further page processing
@@ -308,7 +322,7 @@ namespace Uotep
                         else // **Option 2: Force Download for other types or if visualization is not desired - Download**
                         {
                             Response.ContentType = contentType;
-                            Response.AppendHeader("Content-Disposition", "attachment; filename=" + fileName); // "attachment" forces download
+                            Response.AppendHeader("Content-Disposition", "attachment; filename=" + nomefile); // "attachment" forces download
                             Response.TransmitFile(fileUrl);
                             Response.Flush();
                             Response.End();
@@ -319,15 +333,23 @@ namespace Uotep
                     }
                     catch (Exception ex)
                     {
-                        // Handle exceptions (e.g., file access errors)
-                        Response.Write($"Errore nell'apertura del file: {ex.Message}");
-                        // Log the error for debugging purposes
-                        // Consider redirecting to an error page instead of just writing to the response in production.
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine(ex.Message + @" - Errore in cerca file segreteria ");
+                            sw.Close();
+                        }
                     }
                 }
                 else
                 {
-                    Response.Write($"File non trovato: {fileName} nel percorso {baseUrl}");
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Il File " + nomefile + " non è presente in cartella." + "'); $('#errorModal').modal('show');", true);
+                   
+                   // apripopupFile_Click(sender, e);
                 }
             }
 
@@ -361,15 +383,13 @@ namespace Uotep
             }
         }
 
-        //protected void apripopup_Click(object sender, EventArgs e)
-        //{
-        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
-        //}
+
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
-
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#errorModal').modal('hide');", true);
+            //ModalRicercaFile.Visible = true;
+            
         }
 
         protected void btCancellaScaricati_Click(object sender, EventArgs e)
@@ -404,6 +424,12 @@ namespace Uotep
         {
             GVRicercaFile.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
+        }
+
+        protected void btChiudi_Click(object sender, EventArgs e)
+        {
+            Session.Remove("popAperto");
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicercaFile').modal('hide');", true);
         }
     }
 }
