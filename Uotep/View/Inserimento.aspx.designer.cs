@@ -159,15 +159,6 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListQuartiere;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator5.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
-
-        /// <summary>
         /// Controllo DdlQuartiere.
         /// </summary>
         /// <remarks>
@@ -204,15 +195,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfProvenienza;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator6.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
-
-        /// <summary>
         /// Controllo btSalvaProvenienza.
         /// </summary>
         /// <remarks>
@@ -231,15 +213,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlProvenienza;
 
         /// <summary>
-        /// Controllo rqProvenienza.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rqProvenienza;
-
-        /// <summary>
         /// Controllo txtRifProtGen.
         /// </summary>
         /// <remarks>
@@ -247,15 +220,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRifProtGen;
-
-        /// <summary>
-        /// Controllo RequiredFieldValidator1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
 
         /// <summary>
         /// Controllo txtIndirizzo.
@@ -285,15 +249,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfIndirizzo;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-
-        /// <summary>
         /// Controllo DdlIndirizzo.
         /// </summary>
         /// <remarks>
@@ -321,15 +276,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtNominativo;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator3.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
-
-        /// <summary>
         /// Controllo txPratica.
         /// </summary>
         /// <remarks>
@@ -337,15 +283,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txPratica;
-
-        /// <summary>
-        /// Controllo RequiredFieldValidator4.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
 
         /// <summary>
         /// Controllo txtTipoAtto.

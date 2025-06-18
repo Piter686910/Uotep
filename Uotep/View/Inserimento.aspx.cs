@@ -52,7 +52,7 @@ namespace Uotep
                 }
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
-                
+
                 txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
 
             }
@@ -80,7 +80,7 @@ namespace Uotep
         public Boolean ControlloCampiObbligatori()
         {
             Boolean ret = true;
-           if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper()==Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
@@ -93,11 +93,34 @@ namespace Uotep
             {
                 return false;
             }
-
-            if (String.IsNullOrEmpty(txtTipoAtto.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoAtti.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtQuartiere.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
+            if (String.IsNullOrEmpty(txtProvenienza.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            if (String.IsNullOrEmpty(txtRifProtGen.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            if (String.IsNullOrEmpty(txtIndirizzo.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            if (String.IsNullOrEmpty(txtNominativo.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            if (String.IsNullOrEmpty(txPratica.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            {
+                return false;
+            }
+            //if (String.IsNullOrEmpty(txtTipoAtto.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoAtti.ToString().ToUpper())
+            //{
+            //    return false;
+            //}
             return ret;
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -121,6 +144,14 @@ namespace Uotep
                     p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
                     p.dataCarico = DateTime.MinValue.ToShortDateString(); //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                     p.nominativo = txtNominativo.Text;
+                    if (String.IsNullOrEmpty(txPratica.Text))
+                    {
+                        p.nr_Pratica = String.Empty;
+                    }
+                    else
+                    {
+                        p.nr_Pratica = txPratica.Text;
+                    }
                     if (String.IsNullOrEmpty(txtGiudice.Text))
                     {
                         p.giudice = String.Empty;
@@ -256,7 +287,8 @@ namespace Uotep
                         btSalva.Visible = false;
                     }
                 }
-                else {
+                else
+                {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Ci sono campi obbligatori non inseriti, controllare Tipologia Atto o Riferimento Protocollo Generale!" + "'); $('#errorModal').modal('show');", true);
 
                 }
