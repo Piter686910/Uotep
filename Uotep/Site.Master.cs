@@ -66,7 +66,7 @@ namespace Uotep
                                 menuSegreteria.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                if (Session["profilo"].ToString() != "1")
+                                if (Session["profilo"].ToString() != Enumerate.Ruolo.Accertatore.ToString())
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
@@ -86,7 +86,7 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
                                 PG.Visible = true;
-                                if (Session["profilo"].ToString() == "1")
+                                if (Session["profilo"].ToString() == Enumerate.Ruolo.Accertatore.ToString())
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
@@ -199,6 +199,8 @@ namespace Uotep
             Session.Remove("ruolo");
             Session.Remove("ListRicerca");
             Session.Remove("popAperto");
+            Session.Remove("popApertoRicercaScheda");
+            
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

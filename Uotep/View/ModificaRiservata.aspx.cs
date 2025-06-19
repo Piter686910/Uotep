@@ -59,8 +59,8 @@ namespace Uotep
             DataTable Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, TxtPassw.Text);
             if (Ricerca.Rows.Count > 0)
             {
-                //controllo il profilo
-                if (Ricerca.Rows[0].ItemArray[6].ToString() == Enumerate.Profilo.MasterAG.ToString())
+                //controllo il ruolo
+                if (Ricerca.Rows[0].ItemArray[6].ToString() == Enumerate.Ruolo.MasterAG.ToString())
                 {
                     pnlLogin.Visible = false;
                     DivRicerca.Visible = true;

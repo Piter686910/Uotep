@@ -489,7 +489,7 @@
                                 <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                                 <asp:BoundField DataField="Specie" HeaderText="Specie" />
                                 <asp:BoundField DataField="Nota" HeaderText="Nota" />
-                                <asp:TemplateField>
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>

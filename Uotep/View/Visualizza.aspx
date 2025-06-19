@@ -346,7 +346,7 @@
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
                                 <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" Visible="false"/>
-                                <asp:TemplateField ItemStyle-Width="10px">
+                                <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"

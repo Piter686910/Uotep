@@ -46,7 +46,7 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
-                if (Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+                if (Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                 {
                     DdlSigla.SelectedValue = "PG";
                 }
@@ -80,44 +80,44 @@ namespace Uotep
         public Boolean ControlloCampiObbligatori()
         {
             Boolean ret = true;
-            if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtTipoProv.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtTipoProv.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
 
-            if (String.IsNullOrEmpty(txtGiudice.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtGiudice.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtQuartiere.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtQuartiere.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtProvenienza.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProvenienza.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtRifProtGen.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtRifProtGen.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtIndirizzo.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtIndirizzo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtNominativo.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtNominativo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txPratica.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txPratica.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            //if (String.IsNullOrEmpty(txtTipoAtto.Text) && Ruolo.ToUpper() == Enumerate.Profilo.CoordinamentoAtti.ToString().ToUpper())
+            //if (String.IsNullOrEmpty(txtTipoAtto.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
             //{
             //    return false;
             //}

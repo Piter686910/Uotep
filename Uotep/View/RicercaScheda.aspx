@@ -7,7 +7,9 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+        function CloseErrorMessage(message) {
+            $('#errorModal').modal('hide');
+        }
         // Mostra il popup ricerca
         function showModal() {
             $('#ModalRicerca').modal('show');
@@ -392,7 +394,7 @@
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
-                                <asp:TemplateField>
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("rapp_numero_pratica") + ";" + Eval("rapp_nominativo") + ";" + Eval("rapp_pattuglia") + ";" + Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
@@ -425,7 +427,7 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
                 </div>
             </div>
         </div>
@@ -450,7 +452,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudi_Click"/>
                 </div>
             </div>
         </div>

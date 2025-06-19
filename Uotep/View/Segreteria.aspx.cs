@@ -33,7 +33,7 @@ namespace Uotep
                     Vuser = Session["user"].ToString();
                     profilo = Session["profilo"].ToString();
                     ruolo = Session["ruolo"].ToString();
-                    if (ruolo.ToUpper() == Enumerate.Profilo.PG.ToString().ToUpper())
+                    if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                     {
                         divSegreteria.Visible = true;
                         divCaricaFile.Visible = false;

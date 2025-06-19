@@ -63,7 +63,7 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-
+                Session["popApertoRicercaScheda"] = "si";
                 SetControlsEnabled(divDettagli, false);
                 SetControlsEnabled(divTesta, false);
                 //SetControlsVisible(divDDLPattuglia, false);
@@ -72,6 +72,13 @@ namespace Uotep
                     btModificaScheda.Enabled = true;
                 else
                     btModificaScheda.Enabled = false;
+            }
+            else
+            {
+                if (Session["popApertoRicercaScheda"] != null)
+                {
+                    apripopup_Click(sender, e);
+                }
             }
 
         }
@@ -119,14 +126,10 @@ namespace Uotep
         }
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+            Session["popApertoRicercaScheda"] = "si";
         }
-        protected void chiudipopup_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
-
-        }
+        
 
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -300,6 +303,11 @@ namespace Uotep
                     GVRicecaScheda.DataBind();
 
                 }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
+
+                }
 
             }
             if (!string.IsNullOrEmpty(txtModPattuglia.Text))
@@ -314,7 +322,11 @@ namespace Uotep
                     GVRicecaScheda.DataBind();
 
                 }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
 
+                }
             }
             if (!string.IsNullOrEmpty(txtModDataIntervento.Text))
             {
@@ -1603,7 +1615,11 @@ namespace Uotep
             stampa.CreaPdf(schede);
 
         }
-
+        protected void btChiudi_Click(object sender, EventArgs e)
+        {
+            Session.Remove("popApertoRicercaScheda");
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
+        }
         protected void GVRicecaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVRicecaScheda.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina

@@ -542,7 +542,7 @@
                                 <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                                 <asp:BoundField DataField="Specie" HeaderText="Specie" />
                                 <asp:BoundField DataField="Nota" HeaderText="Nota" />
-                                <asp:TemplateField>
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
@@ -584,7 +584,7 @@
                                 <asp:BoundField DataField="arch_note" HeaderText="Nota" />
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
-                                <asp:TemplateField>
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_Archivio") + ";" + Eval("arch_numPratica")   %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>

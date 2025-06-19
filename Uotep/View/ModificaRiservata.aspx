@@ -907,7 +907,7 @@
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
                                 <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
-                                <asp:TemplateField ItemStyle-Width="10px">
+                                <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"
@@ -984,7 +984,7 @@
                                 <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                                 <asp:BoundField DataField="Specie" HeaderText="Specie" />
                                 <asp:BoundField DataField="Nota" HeaderText="Nota" />
-                                <asp:TemplateField>
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>

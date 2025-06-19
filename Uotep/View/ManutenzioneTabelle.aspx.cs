@@ -25,12 +25,12 @@ namespace Uotep
             }
             if (!IsPostBack)
             {
-                if (Ruolo.ToUpper() != Enumerate.Profilo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Profilo.SuperAdmin.ToString().ToUpper())
+                if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
                 {
                     btTipoAbuso.Enabled = false;
 
                 }
-                if (Ruolo.ToUpper() == Enumerate.Profilo.Archivio.ToString().ToUpper())
+                if (Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.ToString().ToUpper())
                 {
                     btScaturito.Enabled = false;
                     btTipologia.Enabled = false;
