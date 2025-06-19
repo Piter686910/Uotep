@@ -990,7 +990,7 @@ namespace Uotep.Classi
                         else
                         {
                             if (!String.IsNullOrEmpty(pratica[1]))
-                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' order by id_Archivio desc";
 
                         }
 
