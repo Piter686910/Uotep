@@ -446,7 +446,7 @@ namespace Uotep.Classi
         public DataTable getListPrototocollo(string protocollo, string anno)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "'";
+            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -462,7 +462,7 @@ namespace Uotep.Classi
         public DataTable getListProcedimento(string procedimento)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where ProcedimentoPen = '" + procedimento + "'";
+            string sql = "SELECT * FROM Principale where ProcedimentoPen = '" + procedimento + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -482,7 +482,7 @@ namespace Uotep.Classi
             DateTime dtda = System.Convert.ToDateTime(datada);
             DateTime dta = System.Convert.ToDateTime(dataa);
 
-            string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'";
+            string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -500,7 +500,7 @@ namespace Uotep.Classi
 
 
 
-            string sql = "SELECT * FROM Principale where Rif_Prot_Gen = '" + protgen + "'";
+            string sql = "SELECT * FROM Principale where Rif_Prot_Gen = '" + protgen + "'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -516,7 +516,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%'";
+            string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -661,7 +661,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''") + "%'";
+            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -677,7 +677,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''") + "%'";
+            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -711,7 +711,7 @@ namespace Uotep.Classi
             DateTime dtda = System.Convert.ToDateTime(datacaricoDa);
             DateTime dta = System.Convert.ToDateTime(datacaricoA);
 
-            string sql = "SELECT * FROM Principale where DataCarico BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'";
+            string sql = "SELECT * FROM Principale where DataCarico BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -728,7 +728,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''") + "%'";
+            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -747,7 +747,7 @@ namespace Uotep.Classi
 
 
 
-            string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "'";
+            string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1839,9 +1839,9 @@ namespace Uotep.Classi
 
 
                     command.CommandText = sql_Statistiche;
-                   command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                     transaction.Commit();
-                   idN= Convert.ToInt32(a);
+                    idN = Convert.ToInt32(a);
                     resp = true;
                 }
 
@@ -2169,10 +2169,10 @@ namespace Uotep.Classi
                         else
                         {
 
-                            
+
                             command.CommandText = sql_pratica;
                             testoSql = "Principale";
-                         int  res = command.ExecuteNonQuery();
+                            int res = command.ExecuteNonQuery();
 
                         }
                     }
@@ -2470,11 +2470,12 @@ namespace Uotep.Classi
         {
             bool resp = true;
             string sql_pratica = String.Empty;
+            string sql_storico = String.Empty;
             string testoSql = string.Empty;
-
-            //try
-            //{
-            sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
+            int res1 = 0;
+           //try
+           //{
+           sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
                " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
@@ -2482,10 +2483,13 @@ namespace Uotep.Classi
                @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
 
+            sql_storico = "insert into principalestorico select " +
+                "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
+                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, getdate(), 'admin'" +
+                " from principale  where nr_protocollo = '" + oldProtocollo + "' and datainserimento = '" + olddate + "' and id = " + idPratica;
 
 
-            string del = "delete principale where nr_protocollo = '" + oldProtocollo +
-                        "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "' and id = " + idPratica;
+            string del = "delete principale where nr_protocollo = '" + oldProtocollo + "' and datainserimento = '" + olddate + "' and matricola = '" + oldMat + "' and id = " + idPratica;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
@@ -2501,6 +2505,12 @@ namespace Uotep.Classi
                     int res = command.ExecuteNonQuery();
                     if (res > 0)
                     {
+                        command.CommandText = sql_storico;
+
+                         res1 = command.ExecuteNonQuery();
+                    }
+                    if (res1 > 0)
+                    {
                         command.CommandText = del;
 
                         command.ExecuteNonQuery();
@@ -2508,6 +2518,7 @@ namespace Uotep.Classi
                         tran.Commit();
 
                         resp = true;
+                    
                     }
                     else
                     {

@@ -637,11 +637,30 @@ namespace Uotep
 
         protected void gvPopupD_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
+            
+
             gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
+            
         }
         protected void GVRicecaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
             gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
         }

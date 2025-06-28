@@ -855,12 +855,14 @@ namespace Uotep
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
+           
             txtNominativo.Text = String.Empty;
             txtNote.Text = String.Empty;
             txtDataDataEvasa.Text = String.Empty;
-            txtAnnoRicerca.Text = string.Empty;
+           // txtAnnoRicerca.Text = string.Empty;
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
+           
             CaricaDLL();
 
         }
@@ -875,6 +877,20 @@ namespace Uotep
             DivProtocollo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;            
+            txtIndirizzoRic.Text = String.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            
         }
 
         protected void btProcPenale_Click(object sender, EventArgs e)
@@ -884,6 +900,20 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
             Pulisci();
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btProtGen_Click(object sender, EventArgs e)
@@ -892,6 +922,20 @@ namespace Uotep
             DivProtGen.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btEvaseAg_Click(object sender, EventArgs e)
@@ -900,6 +944,19 @@ namespace Uotep
             DivEvasaAg.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
@@ -909,6 +966,20 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
             Pulisci();
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtRicGiudice.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btGiudice_Click(object sender, EventArgs e)
@@ -917,6 +988,20 @@ namespace Uotep
             DivGiudice.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btProvenienza_Click(object sender, EventArgs e)
@@ -925,6 +1010,20 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivProvenienza.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicNominativo.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
@@ -933,6 +1032,20 @@ namespace Uotep
             DivNominativo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btDataCarico_Click(object sender, EventArgs e)
@@ -941,6 +1054,20 @@ namespace Uotep
             DivDataCarico.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtRicNominativo.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
+        
         }
 
         protected void btAccertatori_Click(object sender, EventArgs e)
@@ -949,6 +1076,20 @@ namespace Uotep
             DivAccertatori.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtRicNominativo.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtRicIndirizzo.Text = String.Empty;
+            txtIndirizzoRic.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void btIndirizzo_Click(object sender, EventArgs e)
@@ -957,6 +1098,19 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
+            txtRicNominativo.Text = string.Empty;
+            txtDataA.Text = string.Empty;
+            txtDataDa.Text = string.Empty;
+            txtRicProvenienza.Text = String.Empty;
+            txtRicGiudice.Text = String.Empty;
+            txtDatCaricoA.Text = string.Empty;
+            txtDatCaricoDa.Text = string.Empty;
+            txtRicAccertatori.Text = String.Empty;
+            txtPraticaR.Text = string.Empty;
+            txtProtGen.Text = string.Empty;
+            txtProcPenale.Text = string.Empty;
+            txtNProtocollo.Text = string.Empty;
+            txtAnnoRicerca.Text = string.Empty;
         }
 
         protected void NascondiDiv()
@@ -975,6 +1129,14 @@ namespace Uotep
         }
         protected void gvPopupProtocolli_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
             gvPopupProtocolli.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
         }
