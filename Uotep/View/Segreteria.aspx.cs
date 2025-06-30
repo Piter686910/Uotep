@@ -172,7 +172,7 @@ namespace Uotep
                         ins = mn.InsFile(fl);
                     if (ins)
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File " + fl.nomefile + " inserito correttamente." + "'); $('#myModal').modal('show');", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File " + fl.nomefile + " inserito correttamente." + "'); $('#errorModal').modal('show');", true);
 
                     }
                     else
@@ -187,7 +187,7 @@ namespace Uotep
                             sw.WriteLine("Nomefile:" + newFileName + @" - Errore in carica ddl file Segreteria.cs ");
                             sw.Close();
                         }
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#myModal').modal('show');", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File non inserito." + "'); $('#errorModal').modal('show');", true);
 
                     }
                 }
@@ -408,13 +408,13 @@ namespace Uotep
 
                 upd = mn.DeleteFileScaricati();
                 if (upd)
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File cancellati." + "'); $('#myModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File cancellati." + "'); $('#errorModal').modal('show');", true);
 
 
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non ci sono file da cancellare." + "'); $('#myModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non ci sono file da cancellare." + "'); $('#errorModal').modal('show');", true);
 
             }
 

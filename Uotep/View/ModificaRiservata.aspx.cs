@@ -344,7 +344,7 @@ namespace Uotep
 
 
 
-                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value));
+                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Session["user"].ToString());
                 if (!ins)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "errore durante il salvataggio." + "'); $('#errorModal').modal('show');", true);

@@ -783,8 +783,8 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                conn.Open();
-                SqlCommand command = conn.CreateCommand();
+               // conn.Open();
+              //  SqlCommand command = conn.CreateCommand();
 
                 return tb = FillTable(sql, conn);
 
@@ -2466,7 +2466,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean SavePraticaTrans(Principale p, string oldMat, DateTime olddate, string oldProtocollo, Int32 idPratica)
+        public Boolean SavePraticaTrans(Principale p, string oldMat, DateTime olddate, string oldProtocollo, Int32 idPratica, string operatore)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -2485,7 +2485,7 @@ namespace Uotep.Classi
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, getdate(), 'admin'" +
+                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, getdate(), @MatricolaOperatore" +
                 " from principale  where nr_protocollo = '" + oldProtocollo + "' and datainserimento = '" + olddate + "' and id = " + idPratica;
 
 
@@ -2505,6 +2505,7 @@ namespace Uotep.Classi
                     int res = command.ExecuteNonQuery();
                     if (res > 0)
                     {
+                        command.Parameters.AddWithValue("@MatricolaOperatore", operatore ); // aggiungo la matricola di chi esegue la modifica riservata
                         command.CommandText = sql_storico;
 
                          res1 = command.ExecuteNonQuery();
@@ -2522,6 +2523,7 @@ namespace Uotep.Classi
                     }
                     else
                     {
+                        tran.Rollback();
                         resp = false;
                     }
 
