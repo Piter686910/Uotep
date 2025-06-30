@@ -20,10 +20,10 @@
         }
         public enum Profilo
         {
-            Low = 1, //accertatori
-            Midium = 2,
-            Max = 3, //admin, responsabili, sa
-            
+            accertatore = 1, //accertatori
+            due = 2,
+            tre = 3, //admin, responsabili, sa
+
         }
     }
 }

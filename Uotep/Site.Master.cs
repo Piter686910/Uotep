@@ -66,7 +66,7 @@ namespace Uotep
                                 menuSegreteria.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                if (Session["profilo"].ToString() != Enumerate.Ruolo.Accertatore.ToString())
+                                if (Session["profilo"].ToString() != Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
@@ -86,7 +86,8 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
                                 PG.Visible = true;
-                                if (Session["profilo"].ToString() == Enumerate.Ruolo.Accertatore.ToString())
+
+                                if (Session["profilo"].ToString() == Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
