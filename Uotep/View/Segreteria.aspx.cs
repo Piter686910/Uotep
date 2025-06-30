@@ -408,7 +408,7 @@ namespace Uotep
 
                 upd = mn.DeleteFileScaricati();
                 if (upd)
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "File cancellati." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + dt.Rows.Count + " File cancellati." + "'); $('#errorModal').modal('show');", true);
 
 
             }
