@@ -125,7 +125,7 @@
                     <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
                     <asp:CheckBox ID="ckStorico" runat="server" CssClass="form-check-input" />
                     <label class="form-check-label ms-2" for="ckStorico">Storico</label>
-                    <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" />
+                    <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" Checked="true"/>
                     <label class="form-check-label ms-2" for="ckDoppioni">Doppioni</label>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
