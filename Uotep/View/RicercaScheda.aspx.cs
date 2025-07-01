@@ -179,7 +179,9 @@ namespace Uotep
 
                 }
                 // Chiudi il popup
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
+                //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+
             }
         }
 
