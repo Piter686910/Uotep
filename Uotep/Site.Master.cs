@@ -86,7 +86,7 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
                                 PG.Visible = true;
-
+                                GestionePratica.Visible = true;
                                 if (Session["profilo"].ToString() == Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = true;

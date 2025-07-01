@@ -38,10 +38,14 @@ namespace Uotep
             {
                 Response.Redirect("Default.aspx?user=true");
             }
+            
             if (!IsPostBack)
             {
-                //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-
+                if (ruolo.ToUpper() == Enumerate.Ruolo.Accertatori.ToString().ToUpper())
+                {
+                    btSalva.Enabled = false;
+                    btModifica.Enabled = false;
+                }
             }
 
         }
