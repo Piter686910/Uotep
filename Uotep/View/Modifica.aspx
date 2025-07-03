@@ -627,7 +627,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Ricerca quartiere</h5>
+                    <h5 class="modal-title" id="modalLabel1">Ricerca quartiere</h5>
 
                 </div>
                 <div class="modal-body">
@@ -705,6 +705,14 @@
                             <PagerSettings Mode="NumericFirstLast" Position="Top" />
                             <PagerStyle HorizontalAlign="Center" />
                             <PagerTemplate>
+                                <table width="100%">
+                                    <tr>
+                                        <td style="width: 50%; text-align: left;">
+                                            <asp:Label ID="lblPageInfo" runat="server" />
+                                        </td>
+
+                                    </tr>
+                                </table>
                                 <div style="padding: 5px;">
                                     <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
                                     <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />

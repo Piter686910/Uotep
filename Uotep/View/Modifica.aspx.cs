@@ -501,6 +501,19 @@ namespace Uotep
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
+                if (gvPopupD.TopPagerRow != null )
+                {
+                    // Trova il controllo Label all'interno del PagerTemplate
+                    Label lblPageInfo = (Label)gvPopupD.TopPagerRow.FindControl("lblPageInfo");
+                    if (lblPageInfo != null)
+                    {
+                        // Calcola e imposta il testo
+                        int currentPage = gvPopupD.PageIndex + 1;
+                        int totalPages = gvPopupD.PageCount;
+                        lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                    }
+                }
+
             }
         }
 
@@ -516,6 +529,7 @@ namespace Uotep
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
             }
+
         }
         protected void gvPopup_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -640,16 +654,16 @@ namespace Uotep
             switch (e.NewPageIndex)
             {
                 case -1:
-                e.NewPageIndex = 0;
+                    e.NewPageIndex = 0;
                     break;
                 default:
                     break;
             }
-            
+
 
             gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
-            
+
         }
         protected void GVRicecaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {

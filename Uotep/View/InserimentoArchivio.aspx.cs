@@ -190,6 +190,18 @@ namespace Uotep
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
             }
+            if (GVRicercaPratica.TopPagerRow != null && GVRicercaPratica.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVRicercaPratica.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVRicercaPratica.PageIndex + 1;
+                    int totalPages = GVRicercaPratica.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
         }
         protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
         {
