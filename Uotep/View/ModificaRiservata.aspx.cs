@@ -812,6 +812,19 @@ namespace Uotep
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
             }
+            if (gvPopupProtocolli.TopPagerRow != null && gvPopupProtocolli.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)gvPopupProtocolli.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = gvPopupProtocolli.PageIndex + 1;
+                    int totalPages = gvPopupProtocolli.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+
         }
         private void Pulisci()
         {

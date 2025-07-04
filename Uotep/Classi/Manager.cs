@@ -594,7 +594,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM provenienza where provenienza = '" + provenienza.Replace("'", "''") + "'";
+            string sql = "SELECT * FROM provenienza where provenienza = '" + provenienza.Replace("'", "''").Replace("*", "%") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 SqlDataAdapter da;
@@ -661,7 +661,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''") + "%'  order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -677,7 +677,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''") + "%' order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -693,7 +693,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%' order by Indirizzo asc";
+            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by Indirizzo asc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -728,7 +728,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''") + "%'  order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 

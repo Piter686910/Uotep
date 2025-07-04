@@ -270,6 +270,19 @@ namespace Uotep
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
             }
+            if (gvPopup.TopPagerRow != null )
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)gvPopup.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = gvPopup.PageIndex + 1;
+                    int totalPages = gvPopup.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+
         }
 
         protected void btNProtocollo_Click(object sender, EventArgs e)
