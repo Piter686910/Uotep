@@ -222,8 +222,8 @@ namespace Uotep
             ckConvalida.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[21]);
             ckDisseqDefinitivo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[22]);
             ckDisseqTemp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[23]);
-            rdRimozione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[24]);
-            rdRiapposizione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[25]);
+            ckRimozione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[24]);
+            ckRiapposizione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[25]);
             ckViolazioneSigilli.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[26]);
             ckControlliSCIA.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[27]);
             ckAccertAvvenutoRipr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[28]);
@@ -431,8 +431,8 @@ namespace Uotep
                 rap.convalida = ckConvalida.Checked;
                 rap.dissequestroDef = ckDisseqDefinitivo.Checked;
                 rap.dissequestroTemp = ckDisseqTemp.Checked;
-                rap.rimozione = rdRimozione.Checked;
-                rap.riapposizione = rdRiapposizione.Checked;
+                rap.rimozione = ckRimozione.Checked;
+                rap.riapposizione = ckRiapposizione.Checked;
                 rap.violazioneSigilli = ckViolazioneSigilli.Checked;
                 rap.controlliScia = ckControlliSCIA.Checked;
                 rap.accertAvvenutoRip = ckAccertAvvenutoRipr.Checked;
@@ -555,11 +555,11 @@ namespace Uotep
             txtPratica.Text = string.Empty;
             LPattugliaCompleta.Items.Clear();
             rdParziale.Checked = false;
-            rdRiapposizione.Checked = false;
+            ckRiapposizione.Checked = false;
             rdCon.Checked = false;
             rdSenza.Checked = false;
             rdTotale.Checked = false;
-            rdRimozione.Checked = false;
+            ckRimozione.Checked = false;
             rdUote.Checked = false;
             rdUotp.Checked = false;
             CkAttivita.Checked = false;

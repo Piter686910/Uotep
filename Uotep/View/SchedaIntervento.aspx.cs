@@ -150,16 +150,16 @@ namespace Uotep
                     stat.dissequestri_temp = 1;
                 }
                 rap.dissequestroTemp = ckDisseqTemp.Checked;
-                if (rdRimozione.Checked)
+                if (ckRimozione.Checked)
                 {
                     stat.rimozione_sigilli = 1;
                 }
-                rap.rimozione = rdRimozione.Checked;
-                if (rdRiapposizione.Checked)
+                rap.rimozione = ckRimozione.Checked;
+                if (ckRiapposizione.Checked)
                 {
                     stat.riapp_sigilli = 1;
                 }
-                rap.riapposizione = rdRiapposizione.Checked;
+                rap.riapposizione = ckRiapposizione.Checked;
                 if (ckViolazioneSigilli.Checked)
                 {
                     stat.violazione_sigilli = 1;
@@ -302,10 +302,10 @@ namespace Uotep
             txtPratica.Text = string.Empty;
             LPattugliaCompleta.Items.Clear();
             rdParziale.Checked = false;
-            rdRiapposizione.Checked = false;
+            ckRiapposizione.Checked = false;
             rdTotale.Checked = false;
             rdNonAvvenuto.Checked = false;
-            rdRimozione.Checked = false;
+            ckRimozione.Checked = false;
             rdUote.Checked = false;
             rdUotp.Checked = false;
             rdCon.Checked = false;
@@ -355,12 +355,12 @@ namespace Uotep
 
                 ret = false;
             }
-            if (ckDisseqTemp.Checked && (rdRimozione.Checked == false && rdRiapposizione.Checked == false))
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
+            //if (ckDisseqTemp.Checked && (ckRimozione.Checked == false && ckRiapposizione.Checked == false))
+            //{
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
 
-                ret = false;
-            }
+            //    ret = false;
+            //}
             if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
