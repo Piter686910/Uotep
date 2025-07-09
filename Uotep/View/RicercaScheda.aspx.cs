@@ -179,7 +179,9 @@ namespace Uotep
 
                 }
                 // Chiudi il popup
-                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
+
+//                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
                 //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
 
             }
@@ -286,7 +288,12 @@ namespace Uotep
             }
 
         }
-
+        protected void chiudipopup_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            
+        }
         protected void btRicScheda_Click(object sender, EventArgs e)
         {
 

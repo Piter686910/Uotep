@@ -16,7 +16,7 @@
         }
 
         // Nasconde il popup
-        function hideModal() {
+        function hideModal1() {
             $('#ModalRicerca').modal('hide');
         }
         // Funzione per aggiungere testo a un TextBox
@@ -427,7 +427,7 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click"/>
                 </div>
             </div>
         </div>
