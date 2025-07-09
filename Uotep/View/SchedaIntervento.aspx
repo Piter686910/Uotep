@@ -23,7 +23,7 @@
         }
 
         // Nasconde il popup
-        function hideModal() {
+        function hideModalS() {
             $('#PopStampa').modal('hide');
         }
         // Funzione per aggiungere testo a un TextBox
@@ -554,7 +554,7 @@
                  <!-- Bottone per avviare la ricerca -->
                  <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
 
-                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
              </div>
          </div>
      </div>

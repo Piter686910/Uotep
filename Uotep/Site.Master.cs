@@ -75,6 +75,7 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
+                                StatisticheAtti.Visible=true;
 
                                 break;
                             case "accertatori":
@@ -143,7 +144,7 @@ namespace Uotep
                                 InserimentoArchivio.Visible = true;
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
-
+                                StatisticheAtti.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;

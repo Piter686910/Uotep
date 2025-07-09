@@ -38,5 +38,7 @@ namespace Uotep.Classi
         public Int32 contr_lavori_edili = 0;
         public Int32 contr_cant = 0;
         public Int32 contr_nato_da_esposti = 0;
+        public Int32 viol_amm_reg_com = 0;
+
     }
 }

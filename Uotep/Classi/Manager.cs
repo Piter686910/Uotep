@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Web.Services;
 using System.Windows.Forms;
+using static System.Windows.Forms.AxHost;
 
 namespace Uotep.Classi
 {
@@ -783,8 +784,8 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-               // conn.Open();
-              //  SqlCommand command = conn.CreateCommand();
+                // conn.Open();
+                //  SqlCommand command = conn.CreateCommand();
 
                 return tb = FillTable(sql, conn);
 
@@ -1657,7 +1658,81 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean InsStatatti(Boolean exist, Statistiche stat)
+        {
+            bool resp = true;
 
+            string sql_Statistiche = String.Empty;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+
+                SqlCommand command = conn.CreateCommand();
+
+
+                try
+                {
+
+
+                    if (!exist)
+
+
+
+                        sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
+                            ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
+                            ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti) " +
+                        " Values('" + stat.mese.ToUpper() + "'," + stat.anno + "," + stat.relazioni + "," + stat.ponteggi + "," + stat.dpi + "," +
+                          stat.esposti_ricevuti + "," + stat.esposti_evasi + "," + stat.ripristino_tot_par + "," + stat.controlli_scia + "," + stat.contr_cant_daily + "," + stat.cnr + "," +
+                          stat.annotazioni + "," + stat.notifiche + "," + stat.sequestri + "," + stat.riapp_sigilli + "," + stat.deleghe_ricevute + "," +
+                          stat.deleghe_esitate + "," + stat.cnr_annotazioni + "," + stat.interrogazioni + "," + stat.denunce_uff + "," + stat.convalide + "," +
+                          stat.demolizioni + "," + stat.violazione_sigilli + "," + stat.dissequestri + "," + stat.dissequestri_temp + "," + stat.riapp_sigilli + "," +
+                          stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + ")";
+
+
+                    else
+                    {
+                        sql_Statistiche = "update statistiche set esposti_ricevuti = +" + stat.esposti_ricevuti + ", denunce_uff = +" + stat.denunce_uff +
+
+                        " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
+
+
+                    }
+
+
+
+                    command.CommandText = sql_Statistiche;
+                    command.ExecuteNonQuery();
+
+                    resp = true;
+                }
+
+
+                catch (Exception ex)
+                {
+
+
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in inserimento statistiche ");
+                        sw.Close();
+                    }
+
+                    resp = false;
+
+
+                }
+                conn.Close();
+                return resp;
+            }
+
+        }
         public Boolean InsStatPg(Boolean exist, Statistiche stat)
         {
             bool resp = true;
@@ -1759,29 +1834,28 @@ namespace Uotep.Classi
 
                         sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
                             ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
-                            ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti) " +
+                            ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti,viol_amm_reg_com) " +
                         " Values('" + stat.mese.ToUpper() + "'," + stat.anno + "," + stat.relazioni + "," + stat.ponteggi + "," + stat.dpi + "," +
                           stat.esposti_ricevuti + "," + stat.esposti_evasi + "," + stat.ripristino_tot_par + "," + stat.controlli_scia + "," + stat.contr_cant_daily + "," + stat.cnr + "," +
                           stat.annotazioni + "," + stat.notifiche + "," + stat.sequestri + "," + stat.riapp_sigilli + "," + stat.deleghe_ricevute + "," +
                           stat.deleghe_esitate + "," + stat.cnr_annotazioni + "," + stat.interrogazioni + "," + stat.denunce_uff + "," + stat.convalide + "," +
                           stat.demolizioni + "," + stat.violazione_sigilli + "," + stat.dissequestri + "," + stat.dissequestri_temp + "," + stat.riapp_sigilli + "," +
-                          stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + ")";
+                          stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + stat.viol_amm_reg_com + ")";
 
                     }
                     else
                     {
-                        sql_Statistiche = "update statistiche set relazioni = " + @stat.relazioni + ",ponteggi = " + @stat.ponteggi + ",dpi =" + @stat.dpi + ",esposti_ricevuti=" + @stat.esposti_ricevuti +
-                        ",esposti_evasi =" + @stat.esposti_evasi + ",ripristino_tot_par =" + @stat.ripristino_tot_par + ",controlli_scia = " + @stat.controlli_scia +
-                        ",contr_cant_daily =" + @stat.contr_cant_daily + ",cnr = " +
-                        "" + @stat.cnr + ",annotazioni = " + @stat.annotazioni + ",deleghe_esitate = " + @stat.deleghe_esitate +
-                        ",sequestri =" + @stat.sequestri + ",riapp_sigilli = " + @stat.riapp_sigilli + ",deleghe_ricevute =" + @stat.deleghe_ricevute +
-                        ",cnr_annotazioni =" + @stat.cnr_annotazioni + ",interrogazioni =" + @stat.interrogazioni + ",denunce_uff =" + @stat.denunce_uff + ",convalide =" + @stat.convalide +
-                        ",demolizioni =" + @stat.demolizioni + ",violazione_sigilli =" + @stat.violazione_sigilli + ",dissequestri =" + @stat.dissequestri +
+                        sql_Statistiche = "update statistiche set relazioni =  +  " + @stat.relazioni + ",ponteggi = +" + @stat.ponteggi + ",dpi =+" + @stat.dpi + ",esposti_ricevuti=  +" + @stat.esposti_ricevuti +
+                        ",esposti_evasi =  +" + @stat.esposti_evasi + ",ripristino_tot_par =  +" + @stat.ripristino_tot_par + ",controlli_scia =  + " + @stat.controlli_scia +
+                        ",contr_cant_daily =  +" + @stat.contr_cant_daily + ",cnr =   +" + stat.cnr + ", notifiche = +" + @stat.notifiche +
+                        ",annotazioni = +" + @stat.annotazioni + ",deleghe_esitate =  + " + @stat.deleghe_esitate +
+                        ",sequestri =  +" + @stat.sequestri + ",riapp_sigilli =  + " + @stat.riapp_sigilli + ",deleghe_ricevute =  +" + @stat.deleghe_ricevute +
+                        ",cnr_annotazioni =  +" + @stat.cnr_annotazioni + ",interrogazioni =  +" + @stat.interrogazioni + ",denunce_uff =  +" + @stat.denunce_uff + ",convalide = +" + @stat.convalide +
+                        ",demolizioni =  +" + @stat.demolizioni + ",violazione_sigilli =  +" + @stat.violazione_sigilli + ",dissequestri =  +" + @stat.dissequestri +
                         ",dissequestri_temp =" + @stat.dissequestri_temp + ",rimozione_sigilli =" + @stat.rimozione_sigilli + ",controlli_42_04 =" + @stat.controlli_42_04 +
-                        ",contr_cant_suolo_pubb =" + @stat.contr_cant_suolo_pubb + ",contr_lavori_edili =" + @stat.contr_lavori_edili + ",contr_cant =" + @stat.contr_cant +
-                        ",contr_nato_da_esposti =" + @stat.contr_nato_da_esposti +
-
-
+                        ",contr_cant_suolo_pubb =  +" + @stat.contr_cant_suolo_pubb + ",contr_lavori_edili =  +" + @stat.contr_lavori_edili + ",contr_cant =  +" + @stat.contr_cant +
+                        ",contr_nato_da_esposti =  + " + @stat.contr_nato_da_esposti +
+                        ", viol_amm_reg_com = " + stat.viol_amm_reg_com +
                         " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
 
@@ -2131,12 +2205,13 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public Boolean SavePratica(Principale p, Int32 id)
+        public Boolean SavePratica(Principale p, Int32 id, Statistiche stat, Boolean exist)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
+            string sql_Statistiche = String.Empty;
             string testoSql = string.Empty;
-
+            int res1 = 0;
             try
             {
 
@@ -2147,21 +2222,42 @@ namespace Uotep.Classi
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
                     @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
+                if (exist)
+                {
+                    sql_Statistiche = "update statistiche set deleghe_ricevute += " + stat.deleghe_ricevute + ", deleghe_esitate += " + stat.deleghe_esitate +
+                           " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
+                }
+                else
+                {
+                    sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
+                               ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
+                               ",violazione_sigilli,dissequestri,dissequestri_temp,rimozione_sigilli,controlli_42_04,contr_cant_suolo_pubb,contr_lavori_edili,contr_cant,contr_nato_da_esposti) " +
+                           " Values('" + stat.mese.ToUpper() + "'," + stat.anno + "," + stat.relazioni + "," + stat.ponteggi + "," + stat.dpi + "," +
+                             stat.esposti_ricevuti + "," + stat.esposti_evasi + "," + stat.ripristino_tot_par + "," + stat.controlli_scia + "," + stat.contr_cant_daily + "," + stat.cnr + "," +
+                             stat.annotazioni + "," + stat.notifiche + "," + stat.sequestri + "," + stat.riapp_sigilli + "," + stat.deleghe_ricevute + "," +
+                             stat.deleghe_esitate + "," + stat.cnr_annotazioni + "," + stat.interrogazioni + "," + stat.denunce_uff + "," + stat.convalide + "," +
+                             stat.demolizioni + "," + stat.violazione_sigilli + "," + stat.dissequestri + "," + stat.dissequestri_temp + "," + stat.riapp_sigilli + "," +
+                             stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + ")";
 
+                }
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
                     SqlCommand command = conn.CreateCommand();
+                    SqlTransaction tran;
+                    tran = conn.BeginTransaction("trans");
+                    command.Transaction = tran;
 
                     try
                     {
                         string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and sigla = '" + p.sigla + "' and anno = '" + p.anno + "'";
-
+                        
                         SqlDataAdapter da;
                         DataSet ds;
 
                         da = new SqlDataAdapter(sql, conn);
+                        da.SelectCommand.Transaction = tran;
                         ds = new DataSet();
                         da.Fill(ds);
                         if (ds.Tables[0].Rows.Count > 0)
@@ -2173,7 +2269,24 @@ namespace Uotep.Classi
                             command.CommandText = sql_pratica;
                             testoSql = "Principale";
                             int res = command.ExecuteNonQuery();
+                            if (res > 0)
+                            {
+                                command.CommandText = sql_Statistiche;
 
+                                res1 = command.ExecuteNonQuery();
+                            }
+                            if (res1 > 0)
+                            {
+                                tran.Commit();
+
+                                resp = true;
+                            }
+
+                            else
+                            {
+                                tran.Rollback();
+                                resp = false;
+                            }
                         }
                     }
 
@@ -2189,7 +2302,7 @@ namespace Uotep.Classi
                             sw.WriteLine("protocollo " + p.nrProtocollo + ", matricola:" + p.matricola + ", data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in inserimento dati ");
                             sw.Close();
                         }
-
+                        tran.Rollback();
                         resp = false;
 
 
@@ -2473,15 +2586,15 @@ namespace Uotep.Classi
             string sql_storico = String.Empty;
             string testoSql = string.Empty;
             int res1 = 0;
-           //try
-           //{
-           sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
-               " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
-               "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
-               @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
-               @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
+            //try
+            //{
+            sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
+                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
+                " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
+                "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
+                @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
+                @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
+                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
@@ -2505,10 +2618,10 @@ namespace Uotep.Classi
                     int res = command.ExecuteNonQuery();
                     if (res > 0)
                     {
-                        command.Parameters.AddWithValue("@MatricolaOperatore", operatore ); // aggiungo la matricola di chi esegue la modifica riservata
+                        command.Parameters.AddWithValue("@MatricolaOperatore", operatore); // aggiungo la matricola di chi esegue la modifica riservata
                         command.CommandText = sql_storico;
 
-                         res1 = command.ExecuteNonQuery();
+                        res1 = command.ExecuteNonQuery();
                     }
                     if (res1 > 0)
                     {
@@ -2519,7 +2632,7 @@ namespace Uotep.Classi
                         tran.Commit();
 
                         resp = true;
-                    
+
                     }
                     else
                     {

@@ -91,7 +91,7 @@ namespace Uotep
             txtEspostiEvasi.Text = stat.Rows[0].ItemArray[7].ToString();
             txtRipristino.Text = stat.Rows[0].ItemArray[8].ToString();
             txtControlliScia.Text = stat.Rows[0].ItemArray[9].ToString();
-            txtControlliCant.Text = stat.Rows[0].ItemArray[10].ToString();
+            
             txtCNR.Text = stat.Rows[0].ItemArray[11].ToString();
             txtAnnotazioni.Text = stat.Rows[0].ItemArray[12].ToString();
             txtNotifiche.Text = stat.Rows[0].ItemArray[13].ToString();
@@ -99,7 +99,6 @@ namespace Uotep
             txtRiapposizioneSigilli.Text = stat.Rows[0].ItemArray[15].ToString();
             txtDelegheRicevute.Text = stat.Rows[0].ItemArray[16].ToString();
             txtDelegheEsitate.Text = stat.Rows[0].ItemArray[17].ToString();
-            txtCnrAnnotazioni.Text = stat.Rows[0].ItemArray[18].ToString();
             txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
             txtConvalide.Text = stat.Rows[0].ItemArray[21].ToString();
@@ -109,8 +108,9 @@ namespace Uotep
             txtDissequestriTemp.Text = stat.Rows[0].ItemArray[25].ToString();
             txtRimozioneSigilli.Text = stat.Rows[0].ItemArray[26].ToString();
             txtControlliDLGS.Text = stat.Rows[0].ItemArray[27].ToString();
-            //txtControlliCant.Text = stat.Rows[0].ItemArray[28].ToString();
-            //txt.Text = stat.Rows[0].ItemArray[29].ToString();
+            txtControlliCant.Text = stat.Rows[0].ItemArray[30].ToString();
+            txtViol_amm_reg_com.Text = stat.Rows[0].ItemArray[32].ToString();
+
         }
 
 

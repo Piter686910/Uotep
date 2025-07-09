@@ -132,8 +132,8 @@
                                 <asp:TextBox ID="txtDelegheEsitate" runat="server" CssClass="form-control larghezzaText" />
                             </div>
                             <div class="form-group mb-3">
-                                <label for="txtCnrAnnotazioni">CNR + Annotazioni</label>
-                                <asp:TextBox ID="txtCnrAnnotazioni" runat="server" CssClass="form-control larghezzaText" />
+                                <label for="txtViol_amm_reg_com">Viol. Amm. Reg. Comunali</label>
+                                <asp:TextBox ID="txtViol_amm_reg_com" runat="server" CssClass="form-control larghezzaText" />
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtInterrogatori">Interrogatori</label>
