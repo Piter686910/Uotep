@@ -1,2 +1,0 @@
-ExecuteReader: la proprietà CommandText non è stata inizializzata - Errore modifica inserimento archivio 
-ExecuteReader: la proprietà CommandText non è stata inizializzata - Errore modifica inserimento archivio 
