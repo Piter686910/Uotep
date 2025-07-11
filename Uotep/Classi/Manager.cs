@@ -462,7 +462,7 @@ namespace Uotep.Classi
         public DataTable getListProcedimento(string procedimento)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where ProcedimentoPen = '" + procedimento + "' order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -500,7 +500,7 @@ namespace Uotep.Classi
 
 
 
-            string sql = "SELECT * FROM Principale where Rif_Prot_Gen = '" + protgen + "'  order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
