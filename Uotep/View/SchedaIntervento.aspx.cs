@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.Reporting.WinForms;
+﻿using Microsoft.Reporting.WinForms;
 using System;
 using System.Configuration;
 using System.Data;
@@ -31,7 +31,7 @@ namespace Uotep
             {
                 Response.Redirect("Default.aspx?user=true");
             }
-           
+
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -101,7 +101,7 @@ namespace Uotep
                 rap.segnalazione = ckSegnalazione.Checked;
 
                 rap.esposti = ckEsposto.Checked;
-                if (!ckNotifica.Checked)
+                if (ckNotifica.Checked)
                 {
                     stat.notifiche = 1;
                 }
@@ -113,6 +113,7 @@ namespace Uotep
                 {
                     stat.relazioni = 1;
                 }
+
                 rap.relazione = ckRelazione.Checked;
                 if (ckCnr.Checked)
                 {
@@ -134,6 +135,10 @@ namespace Uotep
                     stat.deleghe_esitate = 1;
                 }
                 rap.esitoDelega = ckEsitoDelega.Checked;
+                if (ckContestazioneAmm.Checked)
+                {
+                    stat.viol_amm_reg_com = 1;
+                }
                 rap.contestazioneAmm = ckContestazioneAmm.Checked;
                 if (ckConvalida.Checked)
                 {
@@ -150,16 +155,16 @@ namespace Uotep
                     stat.dissequestri_temp = 1;
                 }
                 rap.dissequestroTemp = ckDisseqTemp.Checked;
-                if (rdRimozione.Checked)
+                if (ckRimozione.Checked)
                 {
                     stat.rimozione_sigilli = 1;
                 }
-                rap.rimozione = rdRimozione.Checked;
-                if (rdRiapposizione.Checked)
+                rap.rimozione = ckRimozione.Checked;
+                if (ckRiapposizione.Checked)
                 {
                     stat.riapp_sigilli = 1;
                 }
-                rap.riapposizione = rdRiapposizione.Checked;
+                rap.riapposizione = ckRiapposizione.Checked;
                 if (ckViolazioneSigilli.Checked)
                 {
                     stat.violazione_sigilli = 1;
@@ -171,17 +176,14 @@ namespace Uotep
                 }
                 rap.controlliScia = ckControlliSCIA.Checked;
                 rap.accertAvvenutoRip = ckAccertAvvenutoRipr.Checked;
-                if (rdTotale.Checked || rdParziale.Checked)
+                if (ckAccertAvvenutoRipr.Checked)
                 {
                     stat.ripristino_tot_par = 1;
                 }
                 rap.totale = rdTotale.Checked;
                 rap.parziale = rdParziale.Checked;
                 rap.non_avvenuto = rdNonAvvenuto.Checked;
-                if (rdSenza.Checked || rdCon.Checked)
-                {
-                    stat.dpi = 1;
-                }
+
                 rap.conProt = rdCon.Checked;
                 rap.senzaProt = rdSenza.Checked;
                 if (ckViolazioneBeniCult.Checked)
@@ -192,6 +194,8 @@ namespace Uotep
                 if (ckContrSuoloPubblico.Checked)
                 {
                     stat.contr_cant_suolo_pubb = 1;
+                    stat.ponteggi = 1;
+
                 }
                 rap.contrCantSuoloPubb = ckContrSuoloPubblico.Checked;
                 if (ckControlliCant.Checked)
@@ -200,6 +204,10 @@ namespace Uotep
                 }
                 rap.contr_cantiereSeq = ckControlliCant.Checked;
 
+                if (ckControlliLavoriEdiliSenzaProt.Checked)
+                {
+                    stat.dpi = 1;
+                }
                 rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
                 if (ckControlloDaEsposti.Checked || ckControlliDaSegnalazioni.Checked)
                 {
@@ -230,7 +238,7 @@ namespace Uotep
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
                 string txt = string.Empty;
                 VerificaStatistiche(stat, out txt);
-                Int32 idN=0;
+                Int32 idN = 0;
                 Boolean resp = mn.InsRappUote(rap, stat, txt, out idN);
                 if (!resp)
                 {
@@ -262,7 +270,7 @@ namespace Uotep
                 stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
                 stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
                 stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
-                stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);
+                stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);//???
                 stat.cnr += System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);
                 stat.annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);
                 stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
@@ -270,7 +278,7 @@ namespace Uotep
                 stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
                 stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
                 stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
-                stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);
+                stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);//??
                 stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
                 stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
                 stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
@@ -281,9 +289,10 @@ namespace Uotep
                 stat.rimozione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[26]);
                 stat.controlli_42_04 += System.Convert.ToInt32(dt.Rows[0].ItemArray[27]);
                 stat.contr_cant_suolo_pubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);
-                stat.contr_lavori_edili += System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);
+                stat.contr_lavori_edili += System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);//??
                 stat.contr_cant += System.Convert.ToInt32(dt.Rows[0].ItemArray[30]);
                 stat.contr_nato_da_esposti += System.Convert.ToInt32(dt.Rows[0].ItemArray[31]);
+                stat.viol_amm_reg_com += System.Convert.ToInt32(dt.Rows[0].ItemArray[32]);
                 txt = "upd";
             }
             else
@@ -302,10 +311,10 @@ namespace Uotep
             txtPratica.Text = string.Empty;
             LPattugliaCompleta.Items.Clear();
             rdParziale.Checked = false;
-            rdRiapposizione.Checked = false;
+            ckRiapposizione.Checked = false;
             rdTotale.Checked = false;
             rdNonAvvenuto.Checked = false;
-            rdRimozione.Checked = false;
+            ckRimozione.Checked = false;
             rdUote.Checked = false;
             rdUotp.Checked = false;
             rdCon.Checked = false;
@@ -355,12 +364,12 @@ namespace Uotep
 
                 ret = false;
             }
-            if (ckDisseqTemp.Checked && (rdRimozione.Checked == false && rdRiapposizione.Checked == false))
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
+            //if (ckDisseqTemp.Checked && (ckRimozione.Checked == false && ckRiapposizione.Checked == false))
+            //{
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
 
-                ret = false;
-            }
+            //    ret = false;
+            //}
             if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)

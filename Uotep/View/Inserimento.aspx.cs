@@ -214,7 +214,7 @@ namespace Uotep
                             HfTipoProv.Value = txtTipoProv.Text;
                         }
 
-                        p.tipoProvvedimentoAG = txtTipoProv.Text;
+                        p.tipoProvvedimentoAG = txtTipoProv.Text.ToUpper();
                     }
                     if (String.IsNullOrEmpty(txtIndirizzo.Text))
                     {
@@ -271,9 +271,28 @@ namespace Uotep
                     p.procedimentoPen = txtProdPenNr.Text;
                     p.matricola = Vuser;
                     p.data_ins_pratica = DateTime.Now.ToLocalTime();
-
-
-                    Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text));
+                    Statistiche stat = new Statistiche();
+                    DataTable dtStat = new DataTable();
+                    DateTime ora = DateTime.Now;
+                    string mese = ora.ToString("MMMM");
+                    dtStat = mn.getStatisticaByMeseAnno(mese, DateTime.Now.Year);
+                    Boolean exist = false;
+                    if (dtStat.Rows.Count > 0)
+                    {
+                        if (p.tipoProvvedimentoAG == "DELEGHE INDAGINE")
+                        {
+                            stat.deleghe_ricevute += 1;
+                        }
+                        if (CkEvasa.Checked)
+                        {
+                            stat.deleghe_esitate += 1;
+                        }
+                        
+                        exist = true;
+                    }
+                    stat.mese = mese;
+                    stat.anno = DateTime.Now.Year;
+                    Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text), stat, exist);
                     if (!ins)
                     {
                         //ricalcolo il protocollo

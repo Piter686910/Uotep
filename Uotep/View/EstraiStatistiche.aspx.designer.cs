@@ -123,13 +123,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDelegheEsitate;
 
         /// <summary>
-        /// Controllo txtCnrAnnotazioni.
+        /// Controllo txtViol_amm_reg_com.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCnrAnnotazioni;
+        protected global::System.Web.UI.WebControls.TextBox txtViol_amm_reg_com;
 
         /// <summary>
         /// Controllo txtInterrogatori.

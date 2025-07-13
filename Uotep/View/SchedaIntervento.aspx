@@ -23,7 +23,7 @@
         }
 
         // Nasconde il popup
-        function hideModal() {
+        function hideModalS() {
             $('#PopStampa').modal('hide');
         }
         // Funzione per aggiungere testo a un TextBox
@@ -396,8 +396,8 @@
                                 <div class="form-check mb-2">
                                     <asp:CheckBox ID="ckDisseqTemp" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckDisseqTemp">Dissequestro Temporaneo [</label>
-                                    <asp:RadioButton ID="rdRimozione" runat="server" GroupName="DissequestroGroup" Text="Rimozione" />
-                                    <asp:RadioButton ID="rdRiapposizione" runat="server" GroupName="DissequestroGroup" Text="Riapposizione" />
+                                    <asp:CheckBox ID="ckRimozione" runat="server"  Text="Rimozione" />
+                                    <asp:CheckBox ID="ckRiapposizione" runat="server"  Text="Riapposizione" />
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
@@ -554,7 +554,7 @@
                  <!-- Bottone per avviare la ricerca -->
                  <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
 
-                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
              </div>
          </div>
      </div>

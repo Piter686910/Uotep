@@ -384,22 +384,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckDisseqTemp;
 
         /// <summary>
-        /// Controllo rdRimozione.
+        /// Controllo ckRimozione.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdRimozione;
+        protected global::System.Web.UI.WebControls.CheckBox ckRimozione;
 
         /// <summary>
-        /// Controllo rdRiapposizione.
+        /// Controllo ckRiapposizione.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton rdRiapposizione;
+        protected global::System.Web.UI.WebControls.CheckBox ckRiapposizione;
 
         /// <summary>
         /// Controllo ckAccertAvvenutoRipr.
