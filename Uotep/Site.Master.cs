@@ -75,7 +75,8 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-
+                                if (Session["ruolo"].ToString().ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
+                                    StatisticheAtti.Visible = true;
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
