@@ -289,6 +289,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="View\GestionePratica.aspx" />
+    <Content Include="View\StatisticheAtti.aspx" />
     <Content Include="View\StatistichePg.aspx" />
     <Content Include="View\RicercaArchivio.aspx" />
     <Content Include="View\EstraiStatistiche.aspx" />
@@ -371,6 +372,13 @@
     </Compile>
     <Compile Include="View\GestionePratica.aspx.designer.cs">
       <DependentUpon>GestionePratica.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\StatisticheAtti.aspx.cs">
+      <DependentUpon>StatisticheAtti.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\StatisticheAtti.aspx.designer.cs">
+      <DependentUpon>StatisticheAtti.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\StatistichePg.aspx.cs">
       <DependentUpon>StatistichePg.aspx</DependentUpon>

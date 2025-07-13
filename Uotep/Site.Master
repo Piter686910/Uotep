@@ -74,6 +74,7 @@
                                 <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
                                 <li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
+                                <li><a id="StatisticheAtti" runat="server" visible="false" href="~/View/StatisticheAtti">Statistiche</a></li>
 
                             </ul>
                         </li>
