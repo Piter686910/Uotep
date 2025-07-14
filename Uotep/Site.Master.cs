@@ -186,9 +186,9 @@ namespace Uotep
                     else
                         lblMsg.Text = "Matricola assente";
                 }
-                else
-                    lblMsg.Text = "Utente non loggato";
-                  //  Response.Redirect("Default.aspx?a=true");
+                //else
+                //    lblMsg.Text = "Utente non loggato";
+                 
             }
         }
 
