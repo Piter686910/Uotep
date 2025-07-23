@@ -150,13 +150,13 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor menuRicercaScheda;
 
         /// <summary>
-        /// Controllo Statistiche.
+        /// Controllo EstraiStatistiche.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor Statistiche;
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor EstraiStatistiche;
 
         /// <summary>
         /// Controllo menuManTabelle.

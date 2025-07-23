@@ -77,6 +77,9 @@ namespace Uotep
                                 RicercaAtti.Visible = true;
                                 if (Session["ruolo"].ToString().ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
                                     StatisticheAtti.Visible = true;
+                                if (Session["ruolo"].ToString().ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+                                    EstraiStatistiche.Visible = true;
+
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
@@ -92,7 +95,7 @@ namespace Uotep
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
-                                    Statistiche.Visible = false;
+                                    EstraiStatistiche.Visible = false;
                                 }
                                 menuArchivioUote.Visible = true;
                                 RicercaArchivio.Visible = true;
@@ -151,7 +154,7 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                Statistiche.Visible = true;
+                                EstraiStatistiche.Visible = true;
                                 GestionePratica.Visible = true;
                                 //*
                                 break;
