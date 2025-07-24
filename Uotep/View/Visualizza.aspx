@@ -38,6 +38,9 @@
             margin: 5px 0; /* Spazio esterno */
             margin-left: -30px;
         }
+        .uppercase-text {
+    text-transform: uppercase;
+}
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
@@ -335,17 +338,23 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging" >
+                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging">
 
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" />
-                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" />
-                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" ItemStyle-HorizontalAlign="Center" Visible="false"/>
+                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Protocollo" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px"  />
+                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
+                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" />
+
+                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px" > <ItemStyle CssClass="uppercase-text" /> </asp:BoundField>
+                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px" > <ItemStyle CssClass="uppercase-text" /> </asp:BoundField>    
+                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale"  ItemStyle-Width="30px" />
+
+                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px" > <ItemStyle CssClass="uppercase-text" /> </asp:BoundField>
+                                <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale"  ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+
+                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" Visible="false" />
+                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
                                 <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
