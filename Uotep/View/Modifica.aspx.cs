@@ -251,8 +251,8 @@ namespace Uotep
             txtRicAccertatori.Text = String.Empty;
             txtRicIndirizzo.Text = String.Empty;
             txtRicIndirizzo.Text = String.Empty;
-            txtDatCaricoDa.Text = String.Empty;
-            txtDatCaricoDa.Text = String.Empty;
+            txtDatArrivoDa.Text = String.Empty;
+            txtDatArrivoDa.Text = String.Empty;
 
         }
 
@@ -312,7 +312,7 @@ namespace Uotep
             }
             if (!string.IsNullOrEmpty(txtDataDa.Text))
             {
-                pratica = mn.getListDataCarico(txtDatCaricoDa.Text, txtDatCaricoA.Text);
+                pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text);
             }
 
             if (pratica.Rows.Count > 0)
@@ -563,7 +563,7 @@ namespace Uotep
             DivProtGen.Visible = false;
             DivIndirizzo.Visible = false;
             DivAccertatori.Visible = false;
-            DivDataCarico.Visible = false;
+            DivDataArrivo.Visible = false;
             DivNominativo.Visible = false;
             DivProvenienza.Visible = false;
             DivGiudice.Visible = false;
@@ -628,10 +628,10 @@ namespace Uotep
             DivRicerca.Visible = true;
         }
 
-        protected void btDataCarico_Click(object sender, EventArgs e)
+        protected void btDataArrivo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
-            DivDataCarico.Visible = true;
+            DivDataArrivo.Visible = true;
             DivRicerca.Visible = true;
         }
 

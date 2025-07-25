@@ -123,7 +123,7 @@ namespace Uotep
             }
             if (!string.IsNullOrEmpty(txtDataDa.Text))
             {
-                pratica = mn.getListDataCarico(txtDatCaricoDa.Text, txtDatCaricoA.Text);
+                pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text);
             }
 
 
@@ -890,8 +890,8 @@ namespace Uotep
             DivProtocollo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtPraticaR.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -913,8 +913,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
             Pulisci();
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtPraticaR.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -935,8 +935,8 @@ namespace Uotep
             DivProtGen.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtPraticaR.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -957,8 +957,8 @@ namespace Uotep
             DivEvasaAg.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtPraticaR.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -979,8 +979,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
             Pulisci();
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtDataA.Text = string.Empty;
             txtDataDa.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
@@ -1001,8 +1001,8 @@ namespace Uotep
             DivGiudice.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtDataA.Text = string.Empty;
             txtDataDa.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
@@ -1023,8 +1023,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivProvenienza.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtDataA.Text = string.Empty;
             txtDataDa.Text = string.Empty;
             txtRicNominativo.Text = String.Empty;
@@ -1045,8 +1045,8 @@ namespace Uotep
             DivNominativo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtDataA.Text = string.Empty;
             txtDataDa.Text = string.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -1061,10 +1061,10 @@ namespace Uotep
             txtAnnoRicerca.Text = string.Empty;
         }
 
-        protected void btDataCarico_Click(object sender, EventArgs e)
+        protected void btDataArrivo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
-            DivDataCarico.Visible = true;
+            DivDataArrivo.Visible = true;
             DivRicerca.Visible = true;
             DivRicercaButton.Visible = true;
             txtRicNominativo.Text = string.Empty;
@@ -1094,8 +1094,8 @@ namespace Uotep
             txtDataDa.Text = string.Empty;
             txtRicProvenienza.Text = String.Empty;
             txtRicGiudice.Text = String.Empty;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtRicIndirizzo.Text = String.Empty;
             txtIndirizzoRic.Text = String.Empty;
             txtPraticaR.Text = string.Empty;
@@ -1116,8 +1116,8 @@ namespace Uotep
             txtDataDa.Text = string.Empty;
             txtRicProvenienza.Text = String.Empty;
             txtRicGiudice.Text = String.Empty;
-            txtDatCaricoA.Text = string.Empty;
-            txtDatCaricoDa.Text = string.Empty;
+            txtDatArrivoA.Text = string.Empty;
+            txtDatArrivoDa.Text = string.Empty;
             txtRicAccertatori.Text = String.Empty;
             txtPraticaR.Text = string.Empty;
             txtProtGen.Text = string.Empty;
@@ -1133,7 +1133,7 @@ namespace Uotep
             DivProtGen.Visible = false;
             DivIndirizzo.Visible = false;
             DivAccertatori.Visible = false;
-            DivDataCarico.Visible = false;
+            DivDataArrivo.Visible = false;
             DivNominativo.Visible = false;
             DivProvenienza.Visible = false;
             DivGiudice.Visible = false;

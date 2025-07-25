@@ -702,17 +702,17 @@ namespace Uotep.Classi
             }
         }
         /// <summary>
-        /// ricerca per data carico
+        /// ricerca per data arrivo
         /// </summary>
-        /// <param name="datacarico"></param>
+        /// <param name="dataarrivo"></param>
         /// <returns></returns>
-        public DataTable getListDataCarico(string datacaricoDa, string datacaricoA)
+        public DataTable getListDataArrivo(string dataArrivoDa, string dataArrivoA)
         {
             DataTable tb = new DataTable();
-            DateTime dtda = System.Convert.ToDateTime(datacaricoDa);
-            DateTime dta = System.Convert.ToDateTime(datacaricoA);
+            DateTime dtda = System.Convert.ToDateTime(dataArrivoDa);
+            DateTime dta = System.Convert.ToDateTime(dataArrivoA);
 
-            string sql = "SELECT * FROM Principale where DataCarico BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            string sql = "SELECT * FROM Principale where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1061,6 +1061,7 @@ namespace Uotep.Classi
 
         private DataTable FillTable(String sql, SqlConnection conn)
         {
+
             DataTable table = new DataTable();
             //SqlConnection conn = new SqlConnection(ConnString);
             conn.Open();

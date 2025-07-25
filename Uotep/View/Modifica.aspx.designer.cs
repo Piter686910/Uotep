@@ -105,13 +105,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btNominativo;
 
         /// <summary>
-        /// Controllo btDataCarico.
+        /// Controllo btDataArrivo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btDataCarico;
+        protected global::System.Web.UI.WebControls.Button btDataArrivo;
 
         /// <summary>
         /// Controllo btAccertatori.
@@ -465,13 +465,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtRicIndirizzo;
 
         /// <summary>
-        /// Controllo DivDataCarico.
+        /// Controllo DivDataArrivo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivDataCarico;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivDataArrivo;
 
         /// <summary>
         /// Controllo Label12.
@@ -483,13 +483,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label Label12;
 
         /// <summary>
-        /// Controllo txtDatCaricoDa.
+        /// Controllo txtDatArrivoDa.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDatCaricoDa;
+        protected global::System.Web.UI.WebControls.TextBox txtDatArrivoDa;
 
         /// <summary>
         /// Controllo Label13.
@@ -501,13 +501,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label Label13;
 
         /// <summary>
-        /// Controllo txtDatCaricoA.
+        /// Controllo txtDatArrivoA.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDatCaricoA;
+        protected global::System.Web.UI.WebControls.TextBox txtDatArrivoA;
 
         /// <summary>
         /// Controllo lblmessage.

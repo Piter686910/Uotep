@@ -94,9 +94,9 @@ namespace Uotep
             {
                 pratica = mn.getListIndirizzo(txtRicIndirizzo.Text);
             }
-            if (txtDatCaricoDa.Text != string.Empty && txtDatCaricoA.Text != string.Empty)
+            if (txtDatArrivoDa.Text != string.Empty && txtDatArrivoA.Text != string.Empty)
             {
-                pratica = mn.getListDataCarico(txtDatCaricoDa.Text, txtDatCaricoA.Text);
+                pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text);
             }
             if (pratica.Rows.Count > 0)
             {
@@ -254,8 +254,8 @@ namespace Uotep
             txtRicNominativo.Text = String.Empty;
             txtRicAccertatori.Text = String.Empty;
             txtRicIndirizzo.Text = String.Empty;
-            txtDatCaricoA.Text = String.Empty;
-            txtDatCaricoDa.Text = String.Empty;
+            txtDatArrivoA.Text = String.Empty;
+            txtDatArrivoDa.Text = String.Empty;
             txtRicGiudice.Text = String.Empty;
 
         }
@@ -348,7 +348,7 @@ namespace Uotep
         protected void btDataCarico_Click(object sender, EventArgs e)
         {
             NascondiDiv();
-            DivDataCarico.Visible = true;
+            DivDataArrivo.Visible = true;
         }
         public void NascondiDiv()
         {
@@ -363,7 +363,7 @@ namespace Uotep
             DivNominativo.Visible = false;
             DivAccertatori.Visible = false;
             DivIndirizzo.Visible = false;
-            DivDataCarico.Visible = false;
+            DivDataArrivo.Visible = false;
             DivDettagli.Visible = false;
         }
         protected void gvPopup_PageIndexChanging(object sender, GridViewPageEventArgs e)
