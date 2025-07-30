@@ -173,10 +173,11 @@ namespace Uotep
                 Principale p = new Principale();
                 CultureInfo culturaItaliana = new CultureInfo("it-IT");
                 Manager mn = new Manager();
-                p.anno = annoCorr;
-                //  p.giorno = DateTime.Now.DayOfWeek.ToString();
-                DateTime adesso = DateTime.Now;
-                p.giorno = adesso.ToString("dddd", culturaItaliana);
+                p.anno = hfAnno.Value;
+
+                //DateTime adesso = DateTime.Now;
+                //p.giorno = adesso.ToString("dddd", culturaItaliana);
+                p.giorno = Hfgiorno.Value;
                 if (!String.IsNullOrEmpty(txtPratica.Text))
                     p.nr_Pratica = txtPratica.Text;
 
@@ -686,7 +687,7 @@ namespace Uotep
                 string[] values = commandArgument.Split('|');
 
                 // Assicurati che ci siano almeno 3 valori
-                if (values.Length == 5)
+                if (values.Length == 7)
                 {
 
                     Int32 protocollo = System.Convert.ToInt32(values[0]);    // Protocollo
@@ -694,6 +695,8 @@ namespace Uotep
                     string dataInserimento = values[2]; // DataInserimento
                     string sigla = values[3]; // sigla
                     HidPratica.Value = values[4];
+                    hfAnno.Value = values[5];
+                    Hfgiorno.Value = values[6];
                     //// Ora puoi usare questi valori per aggiornare i tuoi controlli
                     //p.nrProtocollo = System.Convert.ToInt32(protocollo);
                     //conservo la matricola precedente

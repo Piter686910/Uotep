@@ -676,6 +676,10 @@
         <asp:HiddenField ID="Holdmat" runat="server" />
         <asp:HiddenField ID="HolDate" runat="server" />
         <asp:HiddenField ID="HoldProtocollo" runat="server" />
+        <asp:HiddenField ID="hfAnno" runat="server" />
+        <asp:HiddenField ID="Hfgiorno" runat="server" />
+
+
         <%-- campi nascosti --%>
         <div class="container" id="DivDettagli" runat="server">
 
@@ -938,11 +942,14 @@
                                 </asp:TemplateField>
                                 <asp:BoundField DataField="Matricola" HeaderText="Matricola" Visible="false" />
                                 <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
+                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" Visible="false" />
+                                <asp:BoundField DataField="Giorno" HeaderText="giorno" ItemStyle-Width="20px" Visible="false" />
+
                                 <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
                                             CommandName="Select"
-                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
+                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID") + "|" + Eval("Anno") + "|" + Eval("Giorno")  %>'
                                             CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
                                 </asp:TemplateField>

@@ -609,6 +609,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HoldProtocollo;
 
         /// <summary>
+        /// Controllo hfAnno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfAnno;
+
+        /// <summary>
+        /// Controllo Hfgiorno.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField Hfgiorno;
+
+        /// <summary>
         /// Controllo DivDettagli.
         /// </summary>
         /// <remarks>

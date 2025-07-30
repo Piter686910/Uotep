@@ -2595,7 +2595,7 @@ namespace Uotep.Classi
                 "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                 @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                 @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
+                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
