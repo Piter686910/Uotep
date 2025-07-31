@@ -266,7 +266,7 @@ namespace Uotep
                 stat.relazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[3]);
                 stat.ponteggi += System.Convert.ToInt32(dt.Rows[0].ItemArray[4]);
                 stat.dpi += System.Convert.ToInt32(dt.Rows[0].ItemArray[5]);
-                stat.esposti_ricevuti += System.Convert.ToInt32(dt.Rows[0].ItemArray[6]);
+              //  stat.esposti_ricevuti += System.Convert.ToInt32(dt.Rows[0].ItemArray[6]);
                 stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
                 stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
                 stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
@@ -276,11 +276,11 @@ namespace Uotep
                 stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
                 stat.sequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);
                 stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
-                stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
-                stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
+                //stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
+                //stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
                 stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);//??
-                stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
-                stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
+                //stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
+               // stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
                 stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
                 //stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
                 stat.violazione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);
