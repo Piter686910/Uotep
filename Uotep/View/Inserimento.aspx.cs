@@ -279,14 +279,14 @@ namespace Uotep
                     Boolean exist = false;
                     if (dtStat.Rows.Count > 0)
                     {
-                        if (p.tipoProvvedimentoAG == "DELEGHE INDAGINE")
+                        if (p.tipoProvvedimentoAG == "DELEGA INDAGINE")
                         {
                             stat.deleghe_ricevute += 1;
                         }
-                        if (CkEvasa.Checked)
-                        {
-                            stat.deleghe_esitate += 1;
-                        }
+                        //if (CkEvasa.Checked)
+                        //{
+                        //    stat.deleghe_esitate += 1;
+                        //}
                         
                         exist = true;
                     }

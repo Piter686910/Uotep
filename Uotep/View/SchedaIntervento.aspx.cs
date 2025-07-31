@@ -92,10 +92,10 @@ namespace Uotep
                 //oraapp = dtOra.Value);
                 //rap.ora = dtOra.Value;
                 rap.pratica = txtPratica.Text;
-                if (ckDelega.Checked)
-                {
-                    stat.deleghe_ricevute = 1;
-                }
+                //if (ckDelega.Checked)
+                //{
+                //    stat.deleghe_ricevute = 1;
+                //}
                 rap.delegaAG = ckDelega.Checked;
                 rap.resa = ckResa.Checked;
                 rap.segnalazione = ckSegnalazione.Checked;
@@ -209,10 +209,10 @@ namespace Uotep
                     stat.dpi = 1;
                 }
                 rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
-                if (ckControlloDaEsposti.Checked || ckControlliDaSegnalazioni.Checked)
-                {
-                    stat.esposti_ricevuti = 1;
-                }
+                //if (ckControlloDaEsposti.Checked || ckControlliDaSegnalazioni.Checked)
+                //{
+                //    stat.esposti_ricevuti = 1;
+                //}
                 rap.contrDaEsposti = ckControlloDaEsposti.Checked;
                 rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
                 rap.uote = rdUote.Checked;
@@ -270,7 +270,7 @@ namespace Uotep
                 stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
                 stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
                 stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
-                stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);//???
+                //stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);//???
                 stat.cnr += System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);
                 stat.annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);
                 stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
@@ -282,7 +282,7 @@ namespace Uotep
                 stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
                 stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
                 stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
-                stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
+                //stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
                 stat.violazione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);
                 stat.dissequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[24]);
                 stat.dissequestri_temp += System.Convert.ToInt32(dt.Rows[0].ItemArray[25]);
