@@ -19,6 +19,15 @@
         function hideModal1() {
             $('#ModalRicerca').modal('hide');
         }
+        // Mostra il popup
+        function showModal() {
+            $('#PopStampa').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModalS() {
+            $('#PopStampa').modal('hide');
+        }
         // Funzione per aggiungere testo a un TextBox
         function appendToTextBox(TextPattugliaCompleta, DdlPattuglia) {
             // Ottieni il TextBox tramite il suo ID
@@ -148,13 +157,14 @@
         </div>
 
         <asp:Button ID="btStampa" runat="server" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
+                    <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />
 
     </div>
 
     <!-- Bottone Salva -->
     <div cssclass="text-center" style="margin-bottom: 15px!important">
         <div class="col-12">
-            <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />
+<%--            <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />--%>
         </div>
     </div>
 
@@ -457,5 +467,32 @@
             </div>
         </div>
     </div>
+        <%-- popup stampa scheda --%>
+<div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog"
+        role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
+
+            </div>
+            <div class="modal-body">
+                <!-- Campi di input per la ricerca -->
+                <div class="form-group">
+
+                    <p id="MsgStampa" style="color: red"></p>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <!-- Bottone per avviare la ricerca -->
+                <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+
+                <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
+            </div>
+        </div>
+    </div>
+</div>
 
 </asp:Content>

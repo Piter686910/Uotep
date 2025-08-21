@@ -64,7 +64,9 @@ namespace Uotep
 
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+             //   ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
+
                 Session["popApertoRicercaScheda"] = "si";
                 SetControlsEnabled(divDettagli, false);
                 SetControlsEnabled(divTesta, false);
@@ -75,13 +77,13 @@ namespace Uotep
                 //else
                 //    btModificaScheda.Enabled = false;
             }
-            else
-            {
+            //else
+           // {
                 //if (Session["popApertoRicercaScheda"] != null)
                 //{
                 //    apripopup_Click(sender, e);
                 //}
-            }
+           // }
 
         }
         /// <summary>
@@ -372,7 +374,9 @@ namespace Uotep
 
             }
             // Mantieni il popup aperto dopo l'interazione lato server.
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+//            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal(ModalRicerca);", true);
+            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
+
         }
 
 
@@ -1106,6 +1110,14 @@ namespace Uotep
                 LPattugliaCompleta.Items.Add(DdlPattuglia.SelectedItem.Text);
             }
 
+        }
+        protected void btPopStampa_Click(object sender, EventArgs e)
+        {
+            int id = System.Convert.ToInt32(HfIdScheda.Value);
+            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id);
+
+            Routine stampa = new Routine();
+            stampa.CreaPdf(schede);
         }
         private void CaricaDLL()
         {
