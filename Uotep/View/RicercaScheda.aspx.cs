@@ -24,6 +24,8 @@ using AjaxControlToolkit;
 using static Uotep.Classi.Enumerate;
 using System.Drawing;
 using static System.Windows.Forms.AxHost;
+using System.Collections.Generic;
+using System.Linq;
 
 
 
@@ -51,7 +53,7 @@ namespace Uotep
             {
                 Response.Redirect("Default.aspx?user=true");
             }
-            
+
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -68,17 +70,17 @@ namespace Uotep
                 SetControlsEnabled(divTesta, false);
                 //SetControlsVisible(divDDLPattuglia, false);
                 //SetControlsVisible(divPattuglia, true);
-                if (ruolo == "admin")
-                    btModificaScheda.Enabled = true;
-                else
-                    btModificaScheda.Enabled = false;
+                //if (ruolo == "admin")
+                //    btModificaScheda.Enabled = true;
+                //else
+                //    btModificaScheda.Enabled = false;
             }
             else
             {
-                if (Session["popApertoRicercaScheda"] != null)
-                {
-                    apripopup_Click(sender, e);
-                }
+                //if (Session["popApertoRicercaScheda"] != null)
+                //{
+                //    apripopup_Click(sender, e);
+                //}
             }
 
         }
@@ -129,7 +131,7 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
             Session["popApertoRicercaScheda"] = "si";
         }
-        
+
 
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -181,7 +183,7 @@ namespace Uotep
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
 
-//                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
+                //                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
                 //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
 
             }
@@ -292,7 +294,7 @@ namespace Uotep
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
-            
+
         }
         protected void btRicScheda_Click(object sender, EventArgs e)
         {
@@ -400,90 +402,679 @@ namespace Uotep
         }
         protected void btSalva_Click(object sender, EventArgs e)
         {
-            Boolean continua = Convalida();
-
-            if (continua)
+            Boolean val = false;
+            Statistiche stat = new Statistiche();
+            DataTable scheda = mn.GetSchedaById(HfIdScheda.Value);
+            string mese = string.Empty;
+            int anno = 0;
+            if (scheda.Rows.Count > 0)
             {
-                RappUote rap = new RappUote();
-                for (int i = 0; i < LPattugliaCompleta.Items.Count; i++)
+                DateTime dataConsegna = System.Convert.ToDateTime(scheda.Rows[0].ItemArray[39].ToString()); // Recupera la data dal DataTable
+                //recupero mese ed anno dalla scheda intervento per poi modificafre le statistiche
+                mese = dataConsegna.ToString("MMMM").ToUpper();
+                anno = System.Convert.ToInt32(dataConsegna.ToString("yyyy"));
+                String meseCorr = DateTime.Now.ToString("MMMM");
+                int annoCorr = System.Convert.ToInt32(DateTime.Now.ToString("yyyy"));
+                List<string> list = new List<string>();
+#if DEBUG
+                mese = "APRILE";
+                anno = 2025;
+                meseCorr = "APRILE";
+#endif
+                //controllo se diverso da anno e mese corrente, in questo caso non si può modificare
+                if (anno == annoCorr)
                 {
-                    rap.pattuglia += LPattugliaCompleta.Items[i].Value + " ";
-                }
-
-                rap.nominativo = txtNominativo.Text.ToUpper();
-                rap.indirizzo = txtIndirizzo.Text;
-                if (!string.IsNullOrEmpty(TxtDataIntervento.Text))
-                {
-                    rap.data = System.Convert.ToDateTime(TxtDataIntervento.Text);
-                }
+                    if (mese == meseCorr)
+                    {
 
 
-                //oraapp = dtOra.Value);
-                //rap.ora = dtOra.Value;
-                rap.pratica = txtPratica.Text;
-                rap.delegaAG = ckDelega.Checked;
-                rap.resa = ckResa.Checked;
-                rap.segnalazione = ckSegnalazione.Checked;
-                rap.esposti = ckEsposto.Checked;
-                rap.notifica = ckNotifica.Checked;
-                rap.iniziativa = ckIniziativa.Checked;
-                rap.cdr = ckCdr.Checked;
-                rap.coordinatore = ckCoordinatore.Checked;
-                rap.relazione = ckRelazione.Checked;
-                rap.cnr = ckCnr.Checked;
-                rap.annotazionePG = ckAnnotazionePG.Checked;
-                rap.verbaleSeq = ckVerbaleSeq.Checked;
-                rap.esitoDelega = ckEsitoDelega.Checked;
-                rap.contestazioneAmm = ckContestazioneAmm.Checked;
-                rap.convalida = ckConvalida.Checked;
-                rap.dissequestroDef = ckDisseqDefinitivo.Checked;
-                rap.dissequestroTemp = ckDisseqTemp.Checked;
-                rap.rimozione = ckRimozione.Checked;
-                rap.riapposizione = ckRiapposizione.Checked;
-                rap.violazioneSigilli = ckViolazioneSigilli.Checked;
-                rap.controlliScia = ckControlliSCIA.Checked;
-                rap.accertAvvenutoRip = ckAccertAvvenutoRipr.Checked;
-                rap.totale = rdTotale.Checked;
-                rap.parziale = rdParziale.Checked;
-                rap.conProt = rdCon.Checked;
-                rap.senzaProt = rdSenza.Checked;
-                rap.violazioneBeniCult = ckViolazioneBeniCult.Checked;
-                rap.contrCantSuoloPubb = ckContrSuoloPubblico.Checked;
-                rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
-                rap.contrDaEsposti = ckControlloDaEsposti.Checked;
-                rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
-                rap.contr_cantiereSeq = ckControlliCant.Checked;
-                rap.matricola = Vuser;
-                rap.non_avvenuto= rdNonAvvenuto.Checked;
-                if (String.IsNullOrEmpty(txt_numEspostiSegn.Text))
-                {
-                    rap.num_esposti = string.Empty;
+                        DataTable dt = new DataTable();
+                        dt = mn.getStatisticaByMeseAnno(mese, anno);
+                        if (dt.Rows.Count > 0)
+                        {
+                            stat.mese = dt.Rows[0].ItemArray[1].ToString().Trim();
+                            stat.anno = System.Convert.ToInt32(dt.Rows[0].ItemArray[2]);
+                            stat.relazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[3]);//-
+                            stat.ponteggi = System.Convert.ToInt32(dt.Rows[0].ItemArray[4]);//-
+                            stat.dpi = System.Convert.ToInt32(dt.Rows[0].ItemArray[5]);//-
+                            stat.esposti_evasi = System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);//-
+                            stat.ripristino_tot_par = System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);//-
+                            stat.controlli_scia = System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);//-
+                            stat.cnr = System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);//-
+                            stat.notifiche = System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);//-
+                            stat.sequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);//-
+                            stat.riapp_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);//-
+                            stat.cnr_annotazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);
+                            stat.convalide = System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);//-
+                            stat.violazione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);//-
+                            stat.dissequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[24]);//-
+                            stat.dissequestri_temp = System.Convert.ToInt32(dt.Rows[0].ItemArray[25]);//-
+                            stat.rimozione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[26]);//-
+                            stat.controlli_42_04 = System.Convert.ToInt32(dt.Rows[0].ItemArray[27]);//-
+                            stat.contr_cant_suolo_pubb = System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);//-
+                            stat.contr_lavori_edili = System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);//??
+                            stat.contr_cant = System.Convert.ToInt32(dt.Rows[0].ItemArray[30]);//-
+                            stat.contr_nato_da_esposti = System.Convert.ToInt32(dt.Rows[0].ItemArray[31]);
+                            stat.viol_amm_reg_com = System.Convert.ToInt32(dt.Rows[0].ItemArray[32]);//-
+                            stat.deleghe_esitate = System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);//-
+                            stat.annotazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);//-
+
+                            //sottraggo i valori nella tabella statistiche
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[15]));//relazioni
+                            if (val)
+                            {
+                                stat.relazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[3]) - 1;
+                                if (stat.relazioni < 0)
+                                {
+                                    stat.relazioni = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.relazione.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[9]));//esposti evasi
+                            if (val)
+                            {
+                                stat.esposti_evasi = System.Convert.ToInt32(dt.Rows[0].ItemArray[7]) - 1;
+                                if (stat.esposti_evasi < 0)
+                                {
+                                    stat.esposti_evasi = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.espoEvasi.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[28]));//ripristino tot par
+                            if (val)
+                            {
+                                stat.ripristino_tot_par = System.Convert.ToInt32(dt.Rows[0].ItemArray[8]) - 1;
+                                if (stat.ripristino_tot_par < 0)
+                                {
+                                    stat.ripristino_tot_par = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.ripTotPar.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[27]));//controlli scia
+                            if (val)
+                            {
+                                stat.controlli_scia = System.Convert.ToInt32(dt.Rows[0].ItemArray[9]) - 1;
+                                if (stat.controlli_scia < 0)
+                                {
+                                    stat.controlli_scia = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.contrScia.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[11]));//notifiche
+                            if (val)
+                            {
+                                stat.notifiche = System.Convert.ToInt32(dt.Rows[0].ItemArray[13]) - 1;
+                                if (stat.notifiche < 0)
+                                {
+                                    stat.notifiche = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.notifiche.ToString());
+
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[16]));//cnr
+                            if (val)
+                            {
+                                stat.cnr = System.Convert.ToInt32(dt.Rows[0].ItemArray[11]) - 1;
+                                if (stat.cnr < 0)
+                                {
+                                    stat.cnr = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.cnr.ToString());
+
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[18]));//sequestri
+                            if (val)
+                            {
+                                stat.sequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[14]) - 1;
+                                if (stat.sequestri < 0)
+                                {
+                                    stat.sequestri = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.sequestri.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[25]));//riapposizione sigilli
+                            if (val)
+                            {
+                                stat.riapp_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[15]) - 1;
+                                if (stat.riapp_sigilli < 0)
+                                {
+                                    stat.riapp_sigilli = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.riappSigilli.ToString());
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[17]));//annotazioni
+                            if (val)
+                            {
+                                stat.annotazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[12]) - 1;
+                                if (stat.annotazioni < 0)
+                                {
+                                    stat.annotazioni = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.annotazioni.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[19]));//deleghe esitate
+                            if (val)
+                            {
+                                stat.deleghe_esitate = System.Convert.ToInt32(dt.Rows[0].ItemArray[17]) - 1;
+                                if (stat.deleghe_esitate < 0)
+                                {
+                                    stat.deleghe_esitate = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.delegheEsitate.ToString());
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[20]));//violazione amm
+                            if (val)
+                            {
+                                stat.viol_amm_reg_com = System.Convert.ToInt32(dt.Rows[0].ItemArray[32]) - 1;
+                                if (stat.viol_amm_reg_com < 0)
+                                {
+                                    stat.viol_amm_reg_com = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.violAmm.ToString());
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[21]));//convalide
+                            if (val)
+                            {
+                                stat.convalide = System.Convert.ToInt32(dt.Rows[0].ItemArray[21]) - 1;
+                                if (stat.convalide < 0)
+                                {
+                                    stat.convalide = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.convalide.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[22]));//dissequestri
+                            if (val)
+                            {
+                                stat.dissequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[24]) - 1;
+                                if (stat.dissequestri < 0)
+                                {
+                                    stat.dissequestri = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.dissequestri.ToString());
+                            }
+
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[23]));//dissequestri temp
+                            if (val)
+                            {
+                                stat.dissequestri_temp = System.Convert.ToInt32(dt.Rows[0].ItemArray[25]) - 1;
+                                if (stat.dissequestri_temp < 0)
+                                {
+                                    stat.dissequestri_temp = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.disseqTemp.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[24]));//rimozione sigilli
+                            if (val)
+                            {
+                                stat.rimozione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[26]) - 1;
+                                if (stat.rimozione_sigilli < 0)
+                                {
+                                    stat.rimozione_sigilli = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.rimozSigilli.ToString());
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[26]));//violazione sigilli
+                            if (val)
+                            {
+                                stat.violazione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[23]) - 1;
+                                if (stat.violazione_sigilli < 0)
+                                {
+                                    stat.violazione_sigilli = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.violSigilli.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[31]));//controlli 42_04 sigilli
+                            if (val)
+                            {
+                                stat.controlli_42_04 = System.Convert.ToInt32(dt.Rows[0].ItemArray[27]) - 1;
+                                if (stat.controlli_42_04 < 0)
+                                {
+                                    stat.controlli_42_04 = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.contr4204.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[32]));//ponteggi / cantieri suolo pubblico
+                            if (val)
+                            {
+                                stat.ponteggi = System.Convert.ToInt32(dt.Rows[0].ItemArray[4]) - 1;
+                                if (stat.ponteggi < 0)
+                                {
+                                    stat.ponteggi = 0;
+                                }
+                                stat.contr_cant_suolo_pubb = System.Convert.ToInt32(dt.Rows[0].ItemArray[28]) - 1;
+                                if (stat.contr_cant_suolo_pubb < 0)
+                                {
+                                    stat.contr_cant_suolo_pubb = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.ponteggi.ToString());
+                            }
+
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[33]));//controllo lavori edili e DPI
+                            if (val)
+                            {
+                                stat.contr_lavori_edili = System.Convert.ToInt32(dt.Rows[0].ItemArray[29]) - 1;
+                                if (stat.contr_lavori_edili < 0)
+                                {
+                                    stat.contr_lavori_edili = 0;
+                                }
+                                stat.dpi = System.Convert.ToInt32(dt.Rows[0].ItemArray[5]) - 1;
+                                if (stat.dpi < 0)
+                                {
+                                    stat.dpi = 0;
+                                }
+
+                                list.Add(Enumerate.CampiXStatistiche.dpi.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[34]));//controllo cantieri 
+                            if (val)
+                            {
+                                stat.contr_cant = System.Convert.ToInt32(dt.Rows[0].ItemArray[30]) - 1;
+                                if (stat.contr_cant < 0)
+                                {
+                                    stat.contr_cant = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.contrCant.ToString());
+                            }
+
+
+                        }
+
+                        Boolean del = mn.DeleteTranSchedaStatistiche(stat, System.Convert.ToInt32(HfIdScheda.Value));
+                        if (del)
+                        {
+                            list.Clear();
+                            Boolean continua = Convalida();
+
+                            if (continua)
+                            {
+                                RappUote rap = new RappUote();
+
+
+                                rap.nominativo = txtNominativo.Text.ToUpper();
+                                rap.indirizzo = txtIndirizzo.Text;
+                                if (DdlPattuglia.SelectedValue != "0")
+                                {
+                                    for (int i = 0; i < LPattugliaCompleta.Items.Count; i++)
+                                    {
+                                        rap.pattuglia += LPattugliaCompleta.Items[i].Value + "/";
+                                    }
+                                }
+                                if (rap.pattuglia.Length > 1)
+                                {
+                                    string ultimoC = rap.pattuglia.Substring(rap.pattuglia.Length - 1);
+                                    if (ultimoC == "/")
+                                    {
+                                        rap.pattuglia = rap.pattuglia.Remove(rap.pattuglia.Length - 1, 1);
+
+                                    }
+                                    string primoC = rap.pattuglia.Substring(0, 1);
+
+                                    if (primoC == "/")
+                                    {
+                                        rap.pattuglia = rap.pattuglia.Remove(0, 1);
+
+                                    }
+                                }
+
+
+                                if (!string.IsNullOrEmpty(TxtDataIntervento.Text))
+                                {
+                                    rap.data = System.Convert.ToDateTime(TxtDataIntervento.Text);
+                                }
+                                if (ddlCapopattuglia.SelectedValue != "0")
+                                {
+                                    if (!string.IsNullOrEmpty(ddlCapopattuglia.SelectedItem.Text))
+                                    {
+                                        rap.capopattuglia = ddlCapopattuglia.SelectedItem.Text;
+                                    }
+                                }
+                                rap.matricola = Vuser;
+                                rap.pratica = txtPratica.Text;
+                                rap.delegaAG = ckDelega.Checked;
+                                rap.resa = ckResa.Checked;
+                                rap.segnalazione = ckSegnalazione.Checked;
+
+                                rap.esposti = ckEsposto.Checked;
+                                if (ckNotifica.Checked)
+                                {
+                                    stat.notifiche = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.notifiche.ToString());
+                                }
+                                rap.notifica = ckNotifica.Checked;
+                                rap.iniziativa = ckIniziativa.Checked;
+                                rap.cdr = ckCdr.Checked;
+                                rap.coordinatore = ckCoordinatore.Checked;
+                                if (ckRelazione.Checked)
+                                {
+                                    stat.relazioni = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.relazione.ToString());
+                                }
+
+                                rap.relazione = ckRelazione.Checked;
+                                if (ckCnr.Checked)
+                                {
+                                    stat.cnr = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.cnr.ToString());
+                                }
+                                rap.cnr = ckCnr.Checked;
+                                if (ckAnnotazionePG.Checked)
+                                {
+                                    stat.annotazioni = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.annotazioni.ToString());
+                                }
+                                rap.annotazionePG = ckAnnotazionePG.Checked;
+                                if (ckVerbaleSeq.Checked)
+                                {
+                                    stat.sequestri = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.sequestri.ToString());
+                                }
+                                rap.verbaleSeq = ckVerbaleSeq.Checked;
+                                if (ckEsitoDelega.Checked)
+                                {
+                                    stat.deleghe_esitate = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.delegheEsitate.ToString());
+                                }
+                                rap.esitoDelega = ckEsitoDelega.Checked;
+                                if (ckContestazioneAmm.Checked)
+                                {
+                                    stat.viol_amm_reg_com = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.violAmm.ToString());
+                                }
+                                rap.contestazioneAmm = ckContestazioneAmm.Checked;
+                                if (ckConvalida.Checked)
+                                {
+                                    stat.convalide = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.convalide.ToString());
+                                }
+                                rap.convalida = ckConvalida.Checked;
+                                if (ckDisseqDefinitivo.Checked)
+                                {
+                                    stat.dissequestri = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.dissequestri.ToString());
+                                }
+                                rap.dissequestroDef = ckDisseqDefinitivo.Checked;
+                                if (ckDisseqTemp.Checked)
+                                {
+                                    stat.dissequestri_temp = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.disseqTemp.ToString());
+                                }
+                                rap.dissequestroTemp = ckDisseqTemp.Checked;
+                                if (ckRimozione.Checked)
+                                {
+                                    stat.rimozione_sigilli = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.rimozSigilli.ToString());
+                                }
+                                rap.rimozione = ckRimozione.Checked;
+                                if (ckRiapposizione.Checked)
+                                {
+                                    stat.riapp_sigilli = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.riappSigilli.ToString());
+                                }
+                                rap.riapposizione = ckRiapposizione.Checked;
+                                if (ckViolazioneSigilli.Checked)
+                                {
+                                    stat.violazione_sigilli = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.violSigilli.ToString());
+                                }
+                                rap.violazioneSigilli = ckViolazioneSigilli.Checked;
+                                if (ckControlliSCIA.Checked)
+                                {
+                                    stat.controlli_scia = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.contrScia.ToString());
+                                }
+                                rap.controlliScia = ckControlliSCIA.Checked;
+                                rap.accertAvvenutoRip = ckAccertAvvenutoRipr.Checked;
+                                if (ckAccertAvvenutoRipr.Checked)
+                                {
+                                    stat.ripristino_tot_par = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.ripTotPar.ToString());
+                                }
+                                rap.totale = rdTotale.Checked;
+                                rap.parziale = rdParziale.Checked;
+                                rap.non_avvenuto = rdNonAvvenuto.Checked;
+
+                                rap.conProt = rdCon.Checked;
+                                rap.senzaProt = rdSenza.Checked;
+                                if (ckViolazioneBeniCult.Checked)
+                                {
+                                    stat.controlli_42_04 = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.contr4204.ToString());
+                                }
+                                rap.violazioneBeniCult = ckViolazioneBeniCult.Checked;
+                                if (ckContrSuoloPubblico.Checked)
+                                {
+                                    stat.contr_cant_suolo_pubb = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.contr_cant_suolo_pubb.ToString());
+                                    stat.ponteggi = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.ponteggi.ToString());
+
+                                }
+                                rap.contrCantSuoloPubb = ckContrSuoloPubblico.Checked;
+                                if (ckControlliCant.Checked) //cantieri a sequestro
+                                {
+                                    stat.contr_cant = 1;
+
+                                    list.Add(Enumerate.CampiXStatistiche.contrCant.ToString());
+                                }
+                                rap.contr_cantiereSeq = ckControlliCant.Checked;
+
+                                if (ckControlliLavoriEdiliSenzaProt.Checked)
+                                {
+                                    stat.dpi = 1;
+                                    list.Add(Enumerate.CampiXStatistiche.dpi.ToString());
+                                }
+                                rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
+                                rap.contrDaEsposti = ckControlloDaEsposti.Checked;
+                                rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
+                                rap.uote = rdUote.Checked;
+                                rap.uotp = rdUotp.Checked;
+                                if (txt_numEspostiSegn.Text == "0")
+                                {
+                                    rap.num_esposti = "0";
+                                }
+                                else
+                                {
+                                    rap.num_esposti = txt_numEspostiSegn.Text;
+                                    stat.esposti_evasi = System.Convert.ToInt32(rap.num_esposti);
+                                    list.Add(Enumerate.CampiXStatistiche.espoEvasi.ToString());
+                                }
+
+                                rap.nota = txtNote.Text;
+                                rap.attività_interna = CkAttivita.Checked;
+                                if (!String.IsNullOrEmpty(txtDataConsegna.Text))
+                                {
+                                    rap.data_consegna_intervento = System.Convert.ToDateTime(txtDataConsegna.Text);
+                                }
+                                rap.dataInserimento = DateTime.Now;
+                                stat.mese = mese;//MeseCorrente;
+                                stat.anno = anno;//System.Convert.ToInt16(AnnoCorrente);
+                                Boolean resp = false;
+                                Int32 idN = 0;
+
+                                VerificaStatistiche(stat, list);
+
+                                resp = mn.InsRappUote(rap, stat, out idN);
+                                if (!resp)
+                                {
+                                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                                }
+                                else
+                                {
+                                    HfIdScheda.Value = idN.ToString();
+                                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#MsgStampa').text('" + "Inserimento scheda effettuato. Vuoi stampare?" + "'); $('#PopStampa').modal('show');", true);
+
+                                    Pulisci();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile modificare la scheda del mese precedente." + "'); $('#errorModal').modal('show');", true);
+
+                    }
                 }
                 else
                 {
-                    rap.num_esposti = txt_numEspostiSegn.Text;
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile modificare la scheda dell'anno precedente." + "'); $('#errorModal').modal('show');", true);
                 }
-
-                rap.nota = txtNote.Text;
-                //rap.attività_interna = CkAttivita.Checked;
-                if (!String.IsNullOrEmpty(txtDataConsegna.Text))
-                {
-                    rap.data_consegna_intervento = System.Convert.ToDateTime(txtDataConsegna.Text);
-                }
-                if (!string.IsNullOrEmpty(ddlCapopattuglia.SelectedItem.Text))
-                {
-                    rap.capopattuglia = ddlCapopattuglia.SelectedItem.Text;
-                }
-                Manager mn = new Manager();
-
-                Boolean resp = mn.UpdScheda(rap);
-                if (!resp)
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della scheda intervento non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                }
-                else
-                    Pulisci();
             }
+        }
+        private Statistiche VerificaStatistiche(Statistiche stat, List<string> list)
+        {
+
+            Manager mn = new Manager();
+            DataTable dt = new DataTable();
+            dt = mn.getStatisticaByMeseAnno(stat.mese, stat.anno);
+            if (dt.Rows.Count > 0)
+            {
+                stat.mese = dt.Rows[0].ItemArray[1].ToString().Trim();
+                stat.anno = System.Convert.ToInt32(dt.Rows[0].ItemArray[2]);
+                var noDupes = list.Distinct().ToList();
+                foreach (string item in noDupes)
+                {
+
+                    if (item == Enumerate.CampiXStatistiche.relazione.ToString())
+                    {
+                        if (stat.relazioni > 0)
+                            stat.relazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[3]) + 1;
+
+                    }
+                    if (item == Enumerate.CampiXStatistiche.ponteggi.ToString())
+                    {
+                        if (stat.ponteggi > 0)
+                            stat.ponteggi = System.Convert.ToInt32(dt.Rows[0].ItemArray[4]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.dpi.ToString())
+                    {
+                        if (stat.dpi > 0)
+                            stat.dpi = System.Convert.ToInt32(dt.Rows[0].ItemArray[5]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.espoEvasi.ToString())
+                    {
+                        if (stat.esposti_evasi > 0)
+                            stat.esposti_evasi = System.Convert.ToInt32(dt.Rows[0].ItemArray[7]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.ripTotPar.ToString())
+                    {
+                        if (stat.ripristino_tot_par > 0)
+                            stat.ripristino_tot_par = System.Convert.ToInt32(dt.Rows[0].ItemArray[8]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.contrScia.ToString())
+                    {
+                        if (stat.controlli_scia > 0)
+                            stat.controlli_scia = System.Convert.ToInt32(dt.Rows[0].ItemArray[9]) + 1;
+                    }
+
+
+                    if (item == Enumerate.CampiXStatistiche.cnr.ToString())
+                    {
+                        if (stat.cnr > 0)
+                            stat.cnr = System.Convert.ToInt32(dt.Rows[0].ItemArray[11]) + 1;
+
+                    }
+                    if (item == Enumerate.CampiXStatistiche.annotazioni.ToString())
+
+                    {
+                        if (stat.annotazioni > 0)
+
+                            stat.annotazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[12]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.notifiche.ToString())
+
+                    {
+                        if (stat.notifiche > 0)
+                            stat.notifiche = System.Convert.ToInt32(dt.Rows[0].ItemArray[13]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.sequestri.ToString())
+                    {
+                        if (stat.sequestri > 0)
+
+                            stat.sequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[14]) + 1;
+
+                    }
+                    if (item == Enumerate.CampiXStatistiche.riappSigilli.ToString())
+                    {
+                        if (stat.riapp_sigilli > 0)
+                            stat.riapp_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[15]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.convalide.ToString())
+                    {
+                        if (stat.convalide > 0)
+                            stat.convalide = System.Convert.ToInt32(dt.Rows[0].ItemArray[21]) + 1;
+
+                    }
+                    if (item == Enumerate.CampiXStatistiche.violSigilli.ToString())
+                    {
+                        if (stat.violazione_sigilli > 0)
+                            stat.violazione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[23]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.dissequestri.ToString())
+                    {
+                        if (stat.dissequestri > 0)
+                            stat.dissequestri = System.Convert.ToInt32(dt.Rows[0].ItemArray[24]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.disseqTemp.ToString())
+                    {
+                        if (stat.dissequestri_temp > 0)
+                            stat.dissequestri_temp = System.Convert.ToInt32(dt.Rows[0].ItemArray[25]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.rimozSigilli.ToString())
+                    {
+                        if (stat.rimozione_sigilli > 0)
+                            stat.rimozione_sigilli = System.Convert.ToInt32(dt.Rows[0].ItemArray[26]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.contr4204.ToString())
+                    {
+                        if (stat.controlli_42_04 > 0)
+                            stat.controlli_42_04 = System.Convert.ToInt32(dt.Rows[0].ItemArray[27]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.contrCant.ToString())
+                    {
+                        if (stat.contr_cant > 0)
+                            stat.contr_cant = System.Convert.ToInt32(dt.Rows[0].ItemArray[30]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.contr_cant_suolo_pubb.ToString())
+                    {
+                        if (stat.contr_cant_suolo_pubb > 0)
+                            stat.contr_cant_suolo_pubb = System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);
+                    }
+
+
+                    if (item == Enumerate.CampiXStatistiche.violAmm.ToString())
+                    {
+                        if (stat.viol_amm_reg_com > 0)
+                            stat.viol_amm_reg_com += System.Convert.ToInt32(dt.Rows[0].ItemArray[32]) + 1;
+                    }
+                }
+            }
+
+
+            return stat;
         }
         protected void btElimina_Click(object sender, EventArgs e)
         {
@@ -524,14 +1115,14 @@ namespace Uotep
                 DataTable CaricaOperatori = mn.getListOperatore();
                 DdlPattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 DdlPattuglia.DataTextField = "Nominativo"; // Il campo visibile
-                //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
+                                                           //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
                 DdlPattuglia.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
                 DdlPattuglia.DataBind();
                 //DdlPattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 ddlCapopattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 ddlCapopattuglia.DataTextField = "Nominativo"; // Il campo visibile
-                //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
+                                                               //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
                 ddlCapopattuglia.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
                 ddlCapopattuglia.DataBind();
 
@@ -598,1023 +1189,7 @@ namespace Uotep
             ckViolazioneSigilli.Checked = false;
 
         }
-        //private void stampaX(float x, float y, Document document, Boolean X)
-        //{
-        //    float boxSize = 10;
-        //    float boxVerticalOffset = 5f;
-        //    // Ottieni il PdfDocument e PdfCanvas
-        //    PdfDocument pdfDocument = document.GetPdfDocument();
-        //    PdfCanvas canvas = new PdfCanvas(pdfDocument.GetFirstPage());
-
-        //    // --- Posizione esatta del riquadro (angolo inferiore sinistro) ---
-        //    float xPosBox = x;
-        //    float yPosBox = y - (boxSize / 2) + boxVerticalOffset;
-
-        //    // --- Disegna il riquadro ---
-        //    canvas.SetStrokeColor(ColorConstants.BLACK);
-        //    canvas.SetLineWidth(0.8f);
-        //    canvas.Rectangle(xPosBox, yPosBox, boxSize, boxSize).Stroke();
-
-        //    // --- Posizione della "X" (centro del riquadro) ---
-        //    float xPosText = xPosBox + (boxSize / 2);
-        //    float yPosText = y;
-        //    if (X == true)
-        //    {
-
-
-        //        // --- Aggiungi la "X" direttamente usando PdfCanvas.BeginText() ... EndText() ---
-        //        canvas.BeginText()
-        //                 .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD), 10) // Font e Dimensione
-        //                 .SetColor(ColorConstants.BLACK, true)
-        //                  .MoveText(xPosText - 2.5f, yPosText + 2.5f)
-        //                 .ShowText("X")
-        //                 .EndText();
-        //    }
-        //}
         
-        ///// <summary>
-        ///// prepara la stampa del pdf
-        ///// </summary>
-        ///// <param name="schede"></param>
-        //public void CreaPdf(DataTable schede)
-        //{
-        //    float boxSize = 10;
-        //    //float boxVerticalOffset = 4f;
-        //    float startX_270 = 270;
-        //    float startX_290 = 290;
-        //    float startX_70 = 70;
-        //    float startX_55 = 55;
-        //    float startX_50 = 50;
-        //    float startX_400 = 400;
-        //    float startX_350 = 350;
-        //    float startX_370 = 370;
-        //    float startX_450 = 450;
-        //    float startX_470 = 470;
-        //    float startY_430 = 430;
-
-        //    float lineHeight = 15f;
-        //    float lineHeight1 = 30f;
-        //    float startY = 630;
-
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        using (PdfWriter writer = new PdfWriter(stream))
-        //        {
-        //            using (PdfDocument pdf = new PdfDocument(writer))
-        //            {
-        //                using (Document document = new Document(pdf))
-        //                {
-        //                    // --- Creazione del Contenuto del Documento ---
-
-        //                    // Titolo
-        //                    DateTime dataIntervento = System.Convert.ToDateTime(schede.Rows[0].ItemArray[2].ToString());
-        //                    string dataFormattata = dataIntervento.ToString("dd/MM/yyyy");
-
-        //                    document.Add(new Paragraph($"Scheda Intervento del: {dataFormattata}")
-        //                        .SetFixedPosition(70, 800, 400)
-        //                        .SetTextAlignment(TextAlignment.CENTER)
-        //                        .SetFontSize(14));
-
-        //                    // Prima riga: Numero Pratica, Nominativo
-        //                    document.Add(new Paragraph($"Numero Pratica: {schede.Rows[0].ItemArray[1]}").SetFixedPosition(70, 780, 200));
-        //                    document.Add(new Paragraph($"Nominativo: {schede.Rows[0].ItemArray[3]}").SetFixedPosition(250, 780, 500));
-
-        //                    // Seconda riga: Indirizzo, Data Consegna
-        //                    document.Add(new Paragraph($"Indirizzo: {schede.Rows[0].ItemArray[4]}").SetFixedPosition(70, 760, 800));
-
-        //                    DateTime dataConsegna = System.Convert.ToDateTime(schede.Rows[0].ItemArray[39].ToString());
-        //                    string dataFormattataConsegna = dataConsegna.ToString("dd/MM/yyyy");
-
-        //                    document.Add(new Paragraph($"Data Consegna: {dataFormattataConsegna}").SetFixedPosition(70, 740, 800));
-
-        //                    // Terza riga: Capo pattuglia, pattuglia
-        //                    document.Add(new Paragraph($"Capo Pattuglia: {schede.Rows[0].ItemArray[40]}").SetFixedPosition(70, 720, 200));
-        //                    document.Add(new Paragraph($"Pattuglia: {schede.Rows[0].ItemArray[5]}").SetFixedPosition(70, 700, 600));
-        //                    // Note
-        //                    document.Add(new Paragraph($"Note: {schede.Rows[0].ItemArray[38]}").SetFixedPosition(70, 680, 450));
-        //                    // FONTE INTERVENTO
-        //                    document.Add(new Paragraph("FONTE INTERVENTO").SetFixedPosition(70, 650, 500).SetTextAlignment(TextAlignment.CENTER));
-        //                    //riga interruzione sezione
-        //                    float x = 65;
-        //                    float y = 645;
-        //                    float width = 490;
-
-        //                    PdfCanvas canvas = new PdfCanvas(pdf.GetFirstPage());
-        //                    canvas.MoveTo(x, y) // Inizia la linea nel punto (x, y)
-        //                          .LineTo(x + width, y) // Traccia la linea orizzontale fino a (x + width, y)
-        //                          .Stroke(); // Applica il tratto per rendere la linea visibile
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Delega AG
-        //                    bool delegaAG = Convert.ToBoolean(schede.Rows[0].ItemArray[6]);
-        //                    string delegaAGString = delegaAG ? "X" : "";
-
-        //                    // --- Posizione di riferimento INIZIALE per la X e il Riquadro (lato SINISTRO) ---
-        //                    // float startX_70_DelegaAG = 70; // Posizione X iniziale SPECIFICA per "Delega AG"
-        //                    float startY_DelegaAG = startY; // Use the dynamic startY
-
-        //                    if (delegaAGString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_DelegaAG, document, true);
-
-        //                    // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                    Paragraph descriptionParagraph = new Paragraph("Delega AG:");
-        //                    descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_DelegaAG - 5, 200);
-        //                    document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_DelegaAG, document, false);
-        //                        // --- Solo la descrizione "Delega AG:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Delega AG:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_DelegaAG, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Resa
-        //                    bool? resaNullable = schede.Rows[0].ItemArray[7] as bool?;
-        //                    string resaString = resaNullable.HasValue && resaNullable.Value ? "X" : "";
-
-        //                    // --- Posizione di riferimento per "Resa" ---
-        //                    // float startX_70_Resa = 70; // Use startX_70 for single column
-        //                    float startY_Resa = startY; // Use the dynamic startY
-
-
-        //                    if (resaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Resa, document,true);
-
-        //                        // --- Paragrafo per la descrizione "Resa:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Resa:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Resa - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Resa, document, false);
-        //                        // --- Solo la descrizione "Resa:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Resa:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Resa, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Segnalazione
-        //                    bool? segnalazioneNullable = schede.Rows[0].ItemArray[8] as bool?;
-        //                    string segnalazioneString = segnalazioneNullable.HasValue && segnalazioneNullable.Value ? "X" : "";
-
-        //                    // --- Posizione di riferimento per "Segnalazione" ---
-        //                    //float startX_70_Segnalazione = 70; // Use startX_70 for single column
-        //                    float startY_Segnalazione = startY; // Use the dynamic startY
-
-
-        //                    if (segnalazioneString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Segnalazione, document,true);
-
-        //                        // --- Paragrafo per la descrizione "Segnalazione:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Segnalazione:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Segnalazione - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Segnalazione, document, false);
-        //                        // --- Solo la descrizione "Segnalazione:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Segnalazione:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Segnalazione, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Esposto
-        //                    bool? espostoNullable = schede.Rows[0].ItemArray[9] as bool?;
-        //                    string espostoString = espostoNullable.HasValue && espostoNullable.Value ? "X" : "";
-        //                    // --- Posizione di riferimento per "Esposto" ---
-
-        //                    float startY_Esposto = startY; // Use the dynamic startY
-
-        //                    if (espostoString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Esposto, document,true);
-
-        //                        // --- Paragrafo per la descrizione "Esposto:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Esposto:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Esposto - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Esposto, document, false);
-        //                        // --- Solo la descrizione "Esposto:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Esposto:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Esposto, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Num. Esposto
-        //                    // --- Posizione di riferimento per "Num. Esposto" ---
-
-        //                    float startY_NumEsposto = startY_430; //
-
-
-        //                    document.Add(new Paragraph($"Num. Esposto: {schede.Rows[0].ItemArray[10]}").SetFixedPosition(startX_270, startY_Esposto, 200));
-
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Notifica
-        //                    bool? notificaNullable = schede.Rows[0].ItemArray[11] as bool?;
-        //                    string notificaString = notificaNullable.HasValue && notificaNullable.Value ? "X" : "";
-
-        //                    // --- Posizione di riferimento per "Notifica" ---
-        //                    float startY_Notifica = startY; // Use the dynamic startY
-
-        //                    if (notificaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Notifica, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Notifica:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Notifica:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Notifica - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Notifica, document, false);
-        //                        // --- Solo la descrizione "Notifica:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Notifica:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Notifica, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-
-        //                    // Iniziativa
-        //                    bool? iniziativaNullable = schede.Rows[0].ItemArray[12] as bool?;
-        //                    string iniziativaString = iniziativaNullable.HasValue && iniziativaNullable.Value ? "X" : "";
-        //                    // --- Posizione di riferimento per "Iniziativa" ---
-
-        //                    float startY_Iniziativa = startY; // Use the dynamic startY
-        //                    if (iniziativaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Iniziativa, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Iniziativa:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Iniziativa:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Iniziativa - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Iniziativa, document, false);
-        //                        // --- Solo la descrizione "Iniziativa:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Iniziativa:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Iniziativa, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // CDR
-        //                    bool? cdrNullable = schede.Rows[0].ItemArray[13] as bool?;
-        //                    string cdrString = cdrNullable.HasValue && cdrNullable.Value ? "X" : "";
-        //                    // --- Posizione di riferimento per "CDR" ---
-
-        //                    float startY_CDR = startY; // Use the dynamic startY
-        //                    if (cdrString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_CDR, document, true);
-
-        //                        // --- Paragrafo per la descrizione "CDR:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("CDR:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_CDR - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_CDR, document, false);
-        //                        // --- Solo la descrizione "CDR:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("CDR:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_CDR, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line 470
-
-        //                    // Coordinatore di turno
-        //                    bool? coordinatorediturnoNullable = schede.Rows[0].ItemArray[14] as bool?;
-        //                    string coordinatorediturnoString = coordinatorediturnoNullable.HasValue && coordinatorediturnoNullable.Value ? "X" : "";
-        //                    // --- Posizione di riferimento per "Coordinatore di turno" ---
-        //                    // float startX_70_Coord = 70; // Use startX_70 for single column
-        //                    float startY_Coord = startY; // Use the dynamic startY 450
-        //                    if (coordinatorediturnoString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Coord, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Coordinatore:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Coord - 5, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Coord, document, false);
-        //                        // --- Solo la descrizione "Coordinatore:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Coord, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    //riga interruzione sezione
-        //                    float x1 = 65;
-        //                    float y1 = startY;
-        //                    float width1 = 490;
-        //                    // float height = 82;  non necessario per una linea orizzontale semplice
-        //                    PdfCanvas canvas1 = new PdfCanvas(pdf.GetFirstPage());
-        //                    canvas.MoveTo(x1, y1) // Inizia la linea nel punto (x, y)
-        //                          .LineTo(x1 + width1, y1) // Traccia la linea orizzontale fino a (x + width, y)
-        //                          .Stroke(); // Applica il tratto per rendere la linea visibile
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // ATTI REDATTI
-        //                    document.Add(new Paragraph("ATTI REDATTI").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
-
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Relazione
-        //                    bool? relazioneNullable = schede.Rows[0].ItemArray[15] as bool?;
-        //                    string relazioneString = relazioneNullable.HasValue && relazioneNullable.Value ? "X" : "";
-        //                    //float startX_70_Relazione = 70; // Use startX_70 for single column
-        //                    float startY_Relazione = startY; // Use the dynamic startY 
-
-
-        //                    if (relazioneString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Relazione, document, true);
-
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Relazione:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Relazione - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Relazione, document, false);
-        //                        // --- Solo la descrizione "relazione:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Relazione:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Relazione, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // CNR
-        //                    bool? cnrNullable = schede.Rows[0].ItemArray[16] as bool?;
-        //                    string cnrString = cnrNullable.HasValue && cnrNullable.Value ? "X" : "";
-        //                    float startY_CNR = startY; // Use the dynamic startY
-        //                    if (cnrString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_CNR, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("CNR:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_CNR - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_CNR, document, false);
-        //                        // --- Solo la descrizione "Delega AG:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("CNR:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_CNR, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Annotazione PG
-        //                    bool? annotazionepgNullable = schede.Rows[0].ItemArray[17] as bool?;
-        //                    string annotazionepgString = annotazionepgNullable.HasValue && annotazionepgNullable.Value ? "X" : "";
-        //                    float startY_AnnotazionePG = startY; // Use the dynamic startY
-        //                    if (annotazionepgString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_AnnotazionePG, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Annotazione PG:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_AnnotazionePG - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_AnnotazionePG, document, false);
-        //                        // --- Solo la descrizione "Delega AG:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Annotazione PG:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_AnnotazionePG, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Verbale Sequestro
-        //                    bool? verbalesequestroNullable = schede.Rows[0].ItemArray[18] as bool?;
-        //                    string verbalesequestroString = verbalesequestroNullable.HasValue && verbalesequestroNullable.Value ? "X" : "";
-        //                    float startY_VerbaleSequestro = startY; // Use the dynamic startY
-        //                    if (verbalesequestroString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_VerbaleSequestro, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Verbale Sequestro:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_VerbaleSequestro - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_VerbaleSequestro, document, false);
-        //                        // --- Solo la descrizione "esito delega:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Verbale Sequestro:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_VerbaleSequestro, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Esito Delega
-        //                    bool? esitodelegaNullable = schede.Rows[0].ItemArray[19] as bool?;
-        //                    string esitodelegaString = esitodelegaNullable.HasValue && esitodelegaNullable.Value ? "X" : "";
-        //                    float startY_EsitoDelega = startY; // Use the dynamic startY
-        //                    if (esitodelegaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_EsitoDelega, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Esito Delega:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_EsitoDelega - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_EsitoDelega, document, false);
-        //                        // --- Solo la descrizione "esito Delega :", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Esito Delega:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_EsitoDelega, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Contestazione Amministrativa
-        //                    bool? contestazioneamministrativaNullable = schede.Rows[0].ItemArray[20] as bool?;
-        //                    string contestazioneamministrativaString = contestazioneamministrativaNullable.HasValue && contestazioneamministrativaNullable.Value ? "X" : "";
-        //                    float startY_ContestazioneAmministrativa = startY; // Use the dynamic startY
-        //                    if (contestazioneamministrativaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_ContestazioneAmministrativa, document, true);
-
-        //                        // --- Paragrafo per la descrizione "Delega AG:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Contestazione Amministrativa:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_DelegaAG + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_ContestazioneAmministrativa - 5, 200); // Usa startX_DelegaAG e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_ContestazioneAmministrativa, document, false);
-        //                        // --- Solo la descrizione "Delega AG:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Contestazione Amministrativa:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_ContestazioneAmministrativa, 200); // Usa startX_DelegaAG and startY_DelegaAG
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    //riga interruzione sezione
-        //                    float x2 = 65;
-        //                    float y2 = startY;
-        //                    float width2 = 490;
-        //                    // float height = 82;  non necessario per una linea orizzontale semplice
-        //                    PdfCanvas canvas2 = new PdfCanvas(pdf.GetFirstPage());
-        //                    canvas.MoveTo(x2, y2) // Inizia la linea nel punto (x, y)
-        //                          .LineTo(x2 + width2, y2) // Traccia la linea orizzontale fino a (x + width, y)
-        //                          .Stroke(); // Applica il tratto per rendere la linea visibile
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE
-        //                    document.Add(new Paragraph("PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Convalida
-        //                    //bool? convalidaNullable = schede.Rows[0].ItemArray[21] as bool?;
-        //                    //string convalidaString = convalidaNullable.HasValue && convalidaNullable.Value ? "X" : "";
-        //                    //document.Add(new Paragraph($"Convalida: {convalidaString}").SetFixedPosition(70, 470, 200));
-        //                    bool? convalidaNullable = schede.Rows[0].ItemArray[21] as bool?;
-        //                    string convalidaString = convalidaNullable.HasValue && convalidaNullable.Value ? "X" : "";
-        //                    float startY_Convalida = startY; // Use the dynamic startY
-        //                    if (convalidaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_Convalida, document, true);
-
-
-        //                        // --- Paragrafo per la descrizione "Convalida:", posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Convalida:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX_Convalida + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Convalida - 5, 200); // Usa startX_Convalida e spazio
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_Convalida, document, false);
-        //                        // --- Solo la descrizione "Convalida:", nella posizione originale ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Convalida:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_Convalida, 200); // Usa startX_Convalida
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Dissequestro Definitivo
-        //                    bool? dissequestrodefinitivoNullable = schede.Rows[0].ItemArray[22] as bool?;
-        //                    string dissequestrodefinitivoString = dissequestrodefinitivoNullable.HasValue && dissequestrodefinitivoNullable.Value ? "X" : "";
-        //                    float startY_DissequestroDefinitivo = startY; // Use the dynamic startY
-        //                    if (dissequestrodefinitivoString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_DissequestroDefinitivo, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Dissequestro Definitivo:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_DissequestroDefinitivo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_DissequestroDefinitivo, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Dissequestro Definitivo:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_DissequestroDefinitivo, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-
-        //                    // Violazione sigilli
-        //                    bool? violazionesigilliNullable = schede.Rows[0].ItemArray[26] as bool?;
-        //                    string violazionesigilliString = violazionesigilliNullable.HasValue && violazionesigilliNullable.Value ? "X" : "";
-        //                    float startY_violazionesigilli = startY; // Use the dynamic startY
-        //                    if (violazionesigilliString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_violazionesigilli, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Violazione sigilli:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_violazionesigilli - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_violazionesigilli, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Violazione sigilli:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_violazionesigilli, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Dissequestro Temporaneo
-        //                    bool? dissequestrotemporaneoNullable = schede.Rows[0].ItemArray[23] as bool?;
-        //                    string dissequestrotemporaneoString = dissequestrotemporaneoNullable.HasValue && dissequestrotemporaneoNullable.Value ? "X" : "";
-        //                    float startY_dissequestrotemporaneo = startY; // Use the dynamic startY
-        //                    if (dissequestrotemporaneoString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_dissequestrotemporaneo, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Dissequestro Temporaneo:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_dissequestrotemporaneo, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Dissequestro Temporaneo:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_dissequestrotemporaneo, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-
-        //                    // Rimozione
-        //                    bool? rimozioneNullable = schede.Rows[0].ItemArray[24] as bool?;
-        //                    string rimozioneString = rimozioneNullable.HasValue && rimozioneNullable.Value ? "X" : "";
-        //                    // float startY_Rimozione = startX_270; // Use the dynamic startY
-        //                    if (rimozioneString == "X")
-        //                    {
-        //                        stampaX(startX_270, startY_dissequestrotemporaneo, document,true);
-                               
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Rimozione:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_290 + boxSize + 5, startY_dissequestrotemporaneo - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_270, startY_dissequestrotemporaneo, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Rimozione:");
-        //                        descriptionParagraph.SetFixedPosition(startX_290, startY_dissequestrotemporaneo, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    // Riapposizione
-        //                    bool? riapposizioneNullable = schede.Rows[0].ItemArray[25] as bool?;
-        //                    string riapposizioneString = riapposizioneNullable.HasValue && riapposizioneNullable.Value ? "X" : "";
-        //                    //document.Add(new Paragraph($"Riapposizione: {riapposizioneString}").SetFixedPosition(400, 430, 80));
-        //                    if (riapposizioneString == "X")
-        //                    {
-        //                        stampaX(startX_400, startY_dissequestrotemporaneo, document,true);
-                               
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_450 + boxSize + 5, startY_dissequestrotemporaneo - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_400, startY_dissequestrotemporaneo, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Riapposizione:");
-        //                        descriptionParagraph.SetFixedPosition(startX_450, startY_dissequestrotemporaneo, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Violaz. Cod. Beni Culturali
-        //                    bool? violazioniCodiciNullable = schede.Rows[0].ItemArray[31] as bool?;
-        //                    string violazioniCodiciString = violazioniCodiciNullable.HasValue && violazioniCodiciNullable.Value ? "X" : "";
-        //                    float startY_violazioniCodici = startY; // Use the dynamic startY
-        //                    if (violazioniCodiciString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_violazioniCodici, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Violaz. Cod. Beni Culturali:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_violazioniCodici - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_violazioniCodici, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Violaz. Cod. Beni Culturali:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_violazioniCodici, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Accertamento avvenuto ripristino
-        //                    bool? accertamentoRipNullable = schede.Rows[0].ItemArray[28] as bool?;
-        //                    string accertamentoRipString = accertamentoRipNullable.HasValue && accertamentoRipNullable.Value ? "X" : "";
-        //                    float startY_accertamentoRip = startY; // Use the dynamic startY
-        //                    if (accertamentoRipString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_accertamentoRip, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Accertamento avvenuto ripristino:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_accertamentoRip - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_accertamentoRip, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Accertamento avvenuto ripristino:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_accertamentoRip, 200);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    // Totale 
-        //                    bool? totaleRipNullable = schede.Rows[0].ItemArray[29] as bool?;
-        //                    string totaleRipString = totaleRipNullable.HasValue && totaleRipNullable.Value ? "X" : "";
-        //                    // document.Add(new Paragraph($"Totale: {totaleRipString}").SetFixedPosition(270, 390, 100));
-        //                    if (totaleRipString == "X")
-        //                    {
-        //                        stampaX(startX_270, startY_accertamentoRip, document,true);
-        //                        //// Ottieni il PdfDocument e PdfCanvas
-                               
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Totale:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(280 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_270, startY_accertamentoRip, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Totale:");
-        //                        descriptionParagraph.SetFixedPosition(280, startY_accertamentoRip, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    // Parziale 
-        //                    bool? parzialeRipNullable = schede.Rows[0].ItemArray[30] as bool?;
-        //                    string parzialeRipString = parzialeRipNullable.HasValue && parzialeRipNullable.Value ? "X" : "";
-        //                    //document.Add(new Paragraph($"Parziale:  {parzialeRipString}").SetFixedPosition(350, 390, 100));
-        //                    if (parzialeRipString == "X")
-        //                    {
-        //                        stampaX(startX_350, startY_accertamentoRip, document,true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Parziale:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_370 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_350, startY_accertamentoRip, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Parziale:");
-        //                        descriptionParagraph.SetFixedPosition(startX_370, startY_accertamentoRip, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    // Non Avvenuto 
-        //                    bool? NonAvvenutoRipNullable = schede.Rows[0].ItemArray[47] as bool?;
-        //                    string NonAvvenutoRipString = NonAvvenutoRipNullable.HasValue && NonAvvenutoRipNullable.Value ? "X" : "";
-                            
-        //                    if (NonAvvenutoRipString == "X")
-        //                    {
-        //                        stampaX(startX_450, startY_accertamentoRip, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Non Avvenuto:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_accertamentoRip - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_450, startY_accertamentoRip, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Non Avvenuto:");
-        //                        descriptionParagraph.SetFixedPosition(startX_470, startY_accertamentoRip, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controlli Scia
-        //                    bool? sciaNullable = schede.Rows[0].ItemArray[27] as bool?;
-        //                    string sciaString = sciaNullable.HasValue && sciaNullable.Value ? "X" : "";
-        //                    float startY_scia = startY; // Use the dynamic startY
-        //                    if (sciaString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_scia, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controlli Scia:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_scia - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_scia, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controlli Scia:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_scia, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    //riga interruzione sezione
-        //                    float x3 = 65;
-        //                    float y3 = startY;
-        //                    float width3 = 490;
-        //                    // float height = 82;  non necessario per una linea orizzontale semplice
-        //                    PdfCanvas canvas3 = new PdfCanvas(pdf.GetFirstPage());
-        //                    canvas.MoveTo(x3, y3) // Inizia la linea nel punto (x, y)
-        //                          .LineTo(x3 + width3, y3) // Traccia la linea orizzontale fino a (x + width, y)
-        //                          .Stroke(); // Applica il tratto per rendere la linea visibile
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // QUALIFICAZIONE INTERVENTO
-        //                    document.Add(new Paragraph("QUALIFICAZIONE INTERVENTO").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controllo aree cantiere su suolo pubblico
-        //                    bool? contrAreeNullable = schede.Rows[0].ItemArray[32] as bool?;
-        //                    string contrAreeString = contrAreeNullable.HasValue && contrAreeNullable.Value ? "X" : "";
-        //                    float startY_contrAree = startY; // Use the dynamic startY
-        //                    if (contrAreeString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_contrAree, document, true);
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico (impalcature):");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrAree - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_contrAree, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo aree cantiere su suolo pubblico (impalcature):");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_contrAree, 800);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controllo Cantiere
-        //                    bool? contrSeqNullable = schede.Rows[0].ItemArray[34] as bool?;
-        //                    string contrSeqString = contrSeqNullable.HasValue && contrSeqNullable.Value ? "X" : "";
-        //                    float startY_contrSeq = startY; // Use the dynamic startY
-        //                    if (contrSeqString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_contrSeq, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrSeq - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_contrSeq, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---rel
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_contrSeq, 800);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controllo nato da esposti
-        //                    bool? contrEspNullable = schede.Rows[0].ItemArray[35] as bool?;
-        //                    string contrEspString = contrEspNullable.HasValue && contrEspNullable.Value ? "X" : "";
-        //                    float startY_contrEsp = startY; // Use the dynamic startY
-        //                    if (contrEspString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_contrEsp, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo nato da esposti:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrEsp - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_contrEsp, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo nato da esposti:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_contrEsp, 800);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controllo nato da segnalazioni
-        //                    bool? contrSegnNullable = schede.Rows[0].ItemArray[36] as bool?;
-        //                    string contrSegnString = contrSegnNullable.HasValue && contrSegnNullable.Value ? "X" : "";
-        //                    float startY_contrSegn = startY; // Use the dynamic startY
-        //                    if (contrSegnString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_contrSegn, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo nato da segnalazioni:");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrSegn - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_50, startY_contrSegn, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controllo nato da segnalazioni:");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_contrSegn, 800);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    // Controlli lavori edili con/senza protezione (d.p.i.)
-        //                    bool? contrEdilNullable = schede.Rows[0].ItemArray[33] as bool?;
-        //                    string contrEdilString = contrEdilNullable.HasValue && contrEdilNullable.Value ? "X" : "";
-        //                    float startY_contrEdil = startY; // Use the dynamic startY
-        //                    if (contrEdilString == "X")
-        //                    {
-        //                        stampaX(startX_50, startY_contrEdil, document, true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Controlli lavori edili con/senza protezione (d.p.i.):");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrEdil - 5, 600); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                        stampaX(startX_50, startY_contrEdil, document, false);
-        //                    {
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Controlli lavori edili con/senza protezione (d.p.i.):");
-        //                        descriptionParagraph.SetFixedPosition(startX_70, startY_contrEdil, 800);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-
-        //                    // Con (d.p.i.)
-        //                    bool? contrConDpiNullable = schede.Rows[0].ItemArray[44] as bool?;
-        //                    string contrConDpiString = contrConDpiNullable.HasValue && contrConDpiNullable.Value ? "X" : "";
-        //                    //document.Add(new Paragraph($"Con  {contrConDpiString}").SetFixedPosition(350, 250, 70));
-        //                    if (contrConDpiString == "X")
-        //                    {
-        //                        stampaX(startX_350, startY_contrEdil, document,true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Con (d.p.i.):");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_350 + boxSize + 5, startY_contrEdil - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_350, startY_contrEdil, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Con (d.p.i.):");
-        //                        descriptionParagraph.SetFixedPosition(startX_370, startY_contrEdil, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    // Senza (d.p.i.)
-        //                    bool? contrSenzaDpiNullable = schede.Rows[0].ItemArray[45] as bool?;
-        //                    string contrSenzaDpiString = contrSenzaDpiNullable.HasValue && contrSenzaDpiNullable.Value ? "X" : "";
-        //                    // document.Add(new Paragraph($"Senza  {contrSenzaDpiString}").SetFixedPosition(450, 250, 70));
-        //                    if (contrSenzaDpiString == "X")
-        //                    {
-        //                        stampaX(startX_450, startY_contrEdil, document,true);
-
-        //                        // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-        //                        Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
-        //                        // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-        //                        descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_contrEdil - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
-        //                        document.Add(descriptionParagraph);
-
-        //                    }
-        //                    else
-        //                    {
-        //                        stampaX(startX_450, startY_contrEdil, document, false);
-        //                        // --- Solo la descrizione, nella posizione originale ---
-        //                        // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-        //                        Paragraph descriptionParagraph = new Paragraph("Senza (d.p.i.):");
-        //                        descriptionParagraph.SetFixedPosition(startX_470, startY_contrEdil, 100);
-        //                        document.Add(descriptionParagraph);
-        //                    }
-        //                    startY -= lineHeight; // Move to the next line
-        //                    //riga interruzione sezione
-        //                    float x4 = 65;
-        //                    float y4 = startY;
-        //                    float width4 = 490;
-        //                    // float height = 82;  non necessario per una linea orizzontale semplice
-        //                    PdfCanvas canvas4 = new PdfCanvas(pdf.GetFirstPage());
-        //                    canvas.MoveTo(x4, y4) // Inizia la linea nel punto (x, y)
-        //                          .LineTo(x4 + width4, y4) // Traccia la linea orizzontale fino a (x + width, y)
-        //                          .Stroke(); // Applica il tratto per rendere la linea visibile
-        //                    startY -= lineHeight1; // Move to the next line
-        //                    // La PG Operante - Sezione firma
-        //                    document.Add(new Paragraph($"La PG Operante").SetFixedPosition(280, startY, 500));
-        //                    startY -= lineHeight1; // Move to the next line
-        //                    document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
-        //                    startY -= lineHeight1; // Move to the next line
-        //                    document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
-
-        //                    document.Close(); // Chiude il documento.
-
-
-        //                }
-        //            }
-        //        }
-
-        //        // Invia l'output PDF direttamente al browser.
-        //        byte[] pdfBytes = stream.ToArray();
-        //        HttpResponse response = HttpContext.Current.Response;
-        //        response.Clear();
-        //        response.ContentType = "application/pdf";
-        //        response.AddHeader("Content-Disposition", "inline; filename=SchedaIntervento.pdf");
-        //        response.BinaryWrite(pdfBytes);
-        //        response.Flush();
-        //        response.End();
-        //    }
-
-        //}
         protected void btStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);

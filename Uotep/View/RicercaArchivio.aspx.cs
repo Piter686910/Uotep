@@ -301,11 +301,11 @@ namespace Uotep
 
             Session["filetemp"] = temp;
             using (var workbook = new XLWorkbook()) // Il 'using' garantisce che il workbook sia gestito correttamente
-            using (var memoryStream = new MemoryStream()) // Il 'using' garantisce che il MemoryStream sia chiuso
+            // Il 'using' garantisce che il MemoryStream sia chiuso
             {
-                var worksheet = workbook.Worksheets.Add("Dati"); // Aggiunge un foglio di lavoro
-                worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
-                worksheet.Column(1).Delete(); // Elimina la prima colonna
+                var worksheet = workbook.Worksheets.Add(dt,"Dati"); // Aggiunge un foglio di lavoro
+               //worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
+                //worksheet.Column(1).Delete(); // Elimina la prima colonna
                 worksheet.Columns().AdjustToContents();  //  Auto-fit delle colonne
                                                   //
                 Routine al = new Routine();
@@ -318,14 +318,14 @@ namespace Uotep
                 // worksheet.Columns().AdjustToContents();
 
                 // Salva il workbook nel MemoryStream
-                workbook.SaveAs(memoryStream);
+               // workbook.SaveAs(memoryStream);
 
                 // *** Prepara la risposta HTTP per il download ***
                 // Importante: posiziona il puntatore del MemoryStream all'inizio prima di leggerlo
-                memoryStream.Seek(0, SeekOrigin.Begin);
+              // memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Ottieni i byte dal MemoryStream
-                byte[] excelBytes = memoryStream.ToArray();
+               // byte[] excelBytes = memoryStream.ToArray();
 
                 // Imposta il nome del file per il download
                 string fileNameForDownload = "EsportazioneDati_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
@@ -333,32 +333,54 @@ namespace Uotep
 
                 try
                 {
-                    Response.Clear(); // Pulisci la risposta corrente
-                    Response.ContentType = contentType; // Imposta il Content-Type corretto
-                    Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileNameForDownload + "\""); // Header per il download (con virgolette per nomi con spazi)
-
+                    //Response.Clear(); // Pulisci la risposta corrente
+                    //Response.ClearHeaders();
+                    //Response.ClearContent();
+                    //Response.Buffer = true;
+                    //Response.Charset = "";
+                    //Response.ContentType = contentType; // Imposta il Content-Type corretto
+                    //Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileNameForDownload + "\""); // Header per il download (con virgolette per nomi con spazi)
+                    //Response.AppendHeader("Content-Encoding", "identity");
                     // *** FONDAMENTALE: Sopprimi il rendering standard della pagina ***
                     // Questo impedisce ad ASP.NET di scrivere contenuto HTML dopo i byte del file
                     //Response.SuppressContent = true;
-                    if (excelBytes == null || excelBytes.Length == 0)
+                    //if (excelBytes == null || excelBytes.Length == 0)
+                    //{
+                    //    Trace.Write("ERROR DOWNLOAD: excelBytes is null or empty after generation.");
+                    //    Response.Write("Errore: File generato vuoto.");
+                    //    HttpContext.Current.ApplicationInstance.CompleteRequest();
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    Trace.Write($"DEBUG DOWNLOAD: excelBytes length BEFORE BinaryWrite: {excelBytes.Length}");
+                    //}
+                    using (var memoryStream = new MemoryStream())
                     {
-                        Trace.Write("ERROR DOWNLOAD: excelBytes is null or empty after generation.");
-                        Response.Write("Errore: File generato vuoto.");
-                        HttpContext.Current.ApplicationInstance.CompleteRequest();
-                        return;
-                    }
-                    else
-                    {
-                        Trace.Write($"DEBUG DOWNLOAD: excelBytes length BEFORE BinaryWrite: {excelBytes.Length}");
-                    }
-                    // *** Scrivi i byte del file nel flusso di output della risposta ***
-                    Response.BinaryWrite(excelBytes);
+                        // *** Scrivi i byte del file nel flusso di output della risposta ***
+                        //Response.BinaryWrite(excelBytes);
 
-                    // *** Completa la richiesta ***
-                    Response.Flush(); // Forza l'invio immediato del buffer al client
-                                      // Response.End(); // NON usare Response.End()
-                    HttpContext.Current.ApplicationInstance.CompleteRequest(); // Termina il ciclo di vita della richiesta in modo pulito
+                        // *** Completa la richiesta ***
+                       // Response.Flush(); // Forza l'invio immediato del buffer al client
+                                          // Response.End(); // NON usare Response.End()
+                        workbook.SaveAs(memoryStream);
+                        byte[] content = memoryStream.ToArray();
+                        Response.Clear(); // Pulisci la risposta corrente
+                        Response.ClearHeaders();
+                        Response.ClearContent();
+                        
+                        Response.ContentType = contentType; // Imposta il Content-Type corretto
+                        Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileNameForDownload + "\""); // Header per il download (con virgolette per nomi con spazi)
+                        Response.BinaryWrite(content);
 
+
+                        // Scrivi i byte dello stream nella risposta
+                       // memoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        //Response.End();
+
+                        HttpContext.Current.ApplicationInstance.CompleteRequest(); // Termina il ciclo di vita della richiesta in modo pulito
+                    }
                 }
                 catch (Exception ex)
                 {

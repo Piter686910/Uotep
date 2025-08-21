@@ -239,7 +239,7 @@ namespace Uotep
                 string txt = string.Empty;
                 VerificaStatistiche(stat, out txt);
                 Int32 idN = 0;
-                Boolean resp = mn.InsRappUote(rap, stat, txt, out idN);
+                Boolean resp = mn.InsRappUoteStatistiche(rap, stat, txt, out idN);
                 if (!resp)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
