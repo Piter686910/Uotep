@@ -19,7 +19,7 @@ namespace Uotep.Classi
         //public String ConnString = ConfigurationManager.AppSettings["ConnString"];
         public String ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-
+        //delete
         public Boolean DeleteTran(String numero_pratica)
         {
 
@@ -448,6 +448,22 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        /// <summary>
+        /// ricerca le diverse decretazioni per la pratica selezionata
+        /// </summary>
+        /// <param name="pratica"></param>
+        /// <param name="idPratica"></param>
+        /// <returns></returns>
+        public DataTable getListDecretazione(string pratica, string idPratica)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM decretazione where decr_pratica = " + pratica + " and decr_idPratica = '" + idPratica + "' order by decr_data desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1574,6 +1590,67 @@ namespace Uotep.Classi
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
                             sw.WriteLine("matricola:" + fl.matricola + ", data: " + fl.data + "nomefile: " + fl.nomefile + " - " + ex.Message + @" - Errore in inserimento dati in tabella carica file");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+        public Boolean InsDecretazione(Decretazione decr)
+        {
+            bool resp = true;
+            string sql_decretazione = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota," +
+                    "decr_dataChiusura, decr_chiuso)" +
+                   " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
+                   "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','"+  null + "','" + decr.chiuso + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_decretazione;
+                        testoSql = "decretazione";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica:" + decr.Npratica  + " - " + ex.Message + @" - Errore in inserimento dati in tabella decretazione");
                             sw.Close();
                         }
 
@@ -3069,6 +3146,60 @@ namespace Uotep.Classi
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
                             sw.WriteLine("matricola:" + matricola + " " + ex.Message + @" - Errore in salva password ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
+        public Boolean UpdDecretazioneChiusura(Decretazione p)
+        {
+            bool resp = true;
+            string sql_upd = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_upd = "update decretazione set decr_dataChiusura = '" + @p.dataChiusura + "',decr_chiuso = '" + @p.chiuso + "'"+ 
+                    " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_upd;
+                        testoSql = "decretazione";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica:" + p.Npratica + " -" + ex.Message + @" - Errore in update dati decretazione ");
                             sw.Close();
                         }
 
