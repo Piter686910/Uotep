@@ -1,3 +1,0 @@
-matricola:598S,data ins:10/07/2025 00:00:00, I dati stringa o binari verranno troncati nella tabella 'DB_ArchivioPratiche.dbo.RappUote', colonna 'rapp_numero_pratica'. Valore troncato: (da istruir).
-L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 
-Stringa non riconosciuta come valore DateTime valido. Rilevata parola sconosciuta con inizio in corrispondenza dell'indice 0. - Errore modifica inserimento archivio 
