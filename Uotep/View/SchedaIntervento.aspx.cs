@@ -277,7 +277,7 @@ namespace Uotep
                 stat.sequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);
                 stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
                 //stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
-                //stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
+                stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
                 stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);//??
                 //stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
                // stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
