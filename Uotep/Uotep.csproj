@@ -349,6 +349,7 @@
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classi\ArchivioUote.cs" />
+    <Compile Include="Classi\Decretazione.cs" />
     <Compile Include="Classi\GestionePratiche.cs" />
     <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Enumerate.cs" />

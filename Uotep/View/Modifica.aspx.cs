@@ -237,7 +237,7 @@ namespace Uotep
             txtIndirizzo.Text = string.Empty;
             HfIndirizzo.Value = string.Empty;
             txtAnnoRicerca.Text = String.Empty;
-            txPratica.Text = String.Empty;
+            //txPratica.Text = String.Empty;
             txtNProtocollo.Text = String.Empty;
             txtProcPenale.Text = String.Empty;
             txtDataDa.Text = String.Empty;
@@ -253,6 +253,10 @@ namespace Uotep
             txtRicIndirizzo.Text = String.Empty;
             txtDatArrivoDa.Text = String.Empty;
             txtDatArrivoDa.Text = String.Empty;
+            txtNotaDecretazione.Text = String.Empty;
+            txtDecretante.Text = String.Empty;
+            txtDecretato.Text = String.Empty;
+            txtDataDecretazione.Text = String.Empty;
 
         }
 
@@ -322,7 +326,8 @@ namespace Uotep
                 //DivDettagli.Visible = true;
                 //DivRicerca.Visible = false;
                 DivGrid.Visible = true;
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
             }
 
 
@@ -501,7 +506,7 @@ namespace Uotep
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
-                if (gvPopupD.TopPagerRow != null )
+                if (gvPopupD.TopPagerRow != null)
                 {
                     // Trova il controllo Label all'interno del PagerTemplate
                     Label lblPageInfo = (Label)gvPopupD.TopPagerRow.FindControl("lblPageInfo");
@@ -516,8 +521,6 @@ namespace Uotep
 
             }
         }
-
-        //gridview per quartiere
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -545,9 +548,54 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
+        //gridview per quartiere
+        protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    // Ottieni il valore della colonna "ID"
+            //    string id = DataBinder.Eval(e.Row.DataItem, "ID_quartiere").ToString();
+
+            //    // Aggiungi l'attributo per il doppio clic
+            //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            //    e.Row.Style["cursor"] = "pointer";
+            //}
+            if (GVDecretazione.TopPagerRow != null && GVDecretazione.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVDecretazione.PageIndex + 1;
+                    int totalPages = GVDecretazione.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+        protected void GVDecretazione_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    string selectedValue = e.CommandArgument.ToString();
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    txtIndirizzo.Text = selectedValue;
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
+        }
+
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+        }
+        protected void apripopupDecretazione_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
@@ -555,6 +603,11 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
+        }
+        protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
+            // Pulisci();
         }
         protected void NascondiDiv()
         {
@@ -648,7 +701,22 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
         }
+        protected void GVDecretazione_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
 
+
+            GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Decretazione_Click(sender, e);
+
+        }
         protected void gvPopupD_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             switch (e.NewPageIndex)
@@ -677,6 +745,127 @@ namespace Uotep
             }
             gvPopupD.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
+        }
+
+        protected void btAggiungiDecretazione_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                Manager mn = new Manager();
+                Decretazione decr = new Decretazione();
+                decr.idPratica = System.Convert.ToInt32(Hid.Value);
+                decr.Npratica = txtPraticaDecr.Text;
+                decr.decretante = txtDecretante.Text;
+                decr.decretato = txtDecretato.Text;
+                decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
+                decr.nota = txtNotaDecretazione.Text;
+
+                Boolean ins = mn.InsDecretazione(decr);
+                if (!ins)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in inserimento decretazione ");
+                    sw.Close();
+                }
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
+
+            }
+        }
+
+        protected void Decretazione_Click(object sender, EventArgs e)
+        {
+            txtPraticaDecr.Text = txPratica.Text;
+            Manager mn = new Manager();
+            DataTable decretazione = new DataTable();
+            if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
+            {
+                decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
+            }
+            if (decretazione.Rows.Count > 0)
+            {
+                GVDecretazione.DataSource = decretazione;
+                GVDecretazione.DataBind();
+                Boolean a =System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
+                if (a==true)
+                {
+                    btAggiungiDecretazione.Enabled = false;
+                    btChiudiDecretazione.Enabled = false;
+                }
+                //else
+                //{
+                //    btAggiungiDecretazione.Enabled = true;
+                //    btChiudiDecretazione.Enabled = true;
+                //}
+                    apripopupDecretazione_Click(sender, e);
+            }
+        }
+
+        protected void btChiudiDecretazione_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Decretazione decr = new Decretazione();
+                decr.idPratica = System.Convert.ToInt32(Hid.Value);
+                decr.Npratica = txtPraticaDecr.Text;
+                decr.chiuso = true;
+                string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
+                decr.dataChiusura = System.Convert.ToDateTime(dataFormattata);
+                Manager mn = new Manager();
+                Boolean upd = mn.UpdDecretazioneChiusura(decr);
+                if (!upd)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in chiusura decretazione ");
+                    sw.Close();
+                }
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
+
+            }
         }
     }
 }
