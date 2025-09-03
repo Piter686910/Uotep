@@ -48,7 +48,7 @@ namespace Uotep
                 CaricaDLL();
                 if (Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                 {
-                    DdlSigla.SelectedValue = "PG";
+                    DdlSigla.SelectedValue = "AG";
                 }
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
@@ -519,7 +519,7 @@ namespace Uotep
                 //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
-                DataTable RicercaProvvAg = mn.getListProvvAg();
+                DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
                 DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
                 DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
@@ -672,5 +672,17 @@ namespace Uotep
             btNewIns.Visible = false;
             btSalva.Visible = true;
         }
+
+        protected void DdlSigla_TextChanged(object sender, EventArgs e)
+        {
+            CaricaDLL();
+        }
+
+        protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CaricaDLL();
+        }
+
+        
     }
 }

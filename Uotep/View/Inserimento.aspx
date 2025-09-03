@@ -381,10 +381,10 @@
                         <label for="txtProt">Nr Protocollo</label>
                         <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
                         <label for="Ddltipo">/</label>
-                        <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1">
+                        <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
                             <asp:ListItem Text="ED"> </asp:ListItem>
                             <asp:ListItem Text="TP"> </asp:ListItem>
-                            <asp:ListItem Text="PG"> </asp:ListItem>
+                            <asp:ListItem Text="AG"> </asp:ListItem>
                         </asp:DropDownList>
                     </div>
                     <div class="form-group mb-3">
@@ -407,13 +407,13 @@
                     <div class="form-group mb-3">
                         <label for="DdlTipoProvvAg">Tipo Provvedimento AG</label>
 
-                        <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control" Visible="false"></asp:TextBox>
                         <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfTipoProv" runat="server" />
 
                         </div>
                         <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" Style="display: none;" />
+                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control"  />
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtQuartiere">Quartiere</label>

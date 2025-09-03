@@ -417,7 +417,7 @@ namespace Uotep
                 //recupero mese ed anno dalla scheda intervento per poi modificafre le statistiche
                 mese = dataConsegna.ToString("MMMM").ToUpper();
                 anno = System.Convert.ToInt32(dataConsegna.ToString("yyyy"));
-                String meseCorr = DateTime.Now.ToString("MMMM");
+                String meseCorr = DateTime.Now.ToString("MMMM").ToUpper();
                 int annoCorr = System.Convert.ToInt32(DateTime.Now.ToString("yyyy"));
                 List<string> list = new List<string>();
 #if DEBUG

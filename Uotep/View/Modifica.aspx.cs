@@ -819,8 +819,9 @@ namespace Uotep
                 //    btAggiungiDecretazione.Enabled = true;
                 //    btChiudiDecretazione.Enabled = true;
                 //}
-                    apripopupDecretazione_Click(sender, e);
+                    
             }
+            apripopupDecretazione_Click(sender, e);
         }
 
         protected void btChiudiDecretazione_Click(object sender, EventArgs e)
