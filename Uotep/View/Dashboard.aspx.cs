@@ -1,20 +1,46 @@
 ﻿using System;
 using System.Data;
+using System.Runtime.Caching;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep
 {
     public partial class _Dashboard : Page
     {
         String Vuser = String.Empty;
+        String ruolo = String.Empty;
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["user"] != null)
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                ruolo = _cache.Get("ruolo") as string;
+            }
 
+            //if (user != null)
+            //{
+            //    Vuser = user;
+            //    ruolo = ruolo1;
+
+            //}
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    ruolo = Session["ruolo"].ToString();
+
+            //}
+            if (!String.IsNullOrEmpty(ruolo))
+            {
+                if (ruolo != "admin")
+                {
+
+                    Response.Redirect("~/View/default.aspx");
+                }
             }
             if (!IsPostBack)
             {

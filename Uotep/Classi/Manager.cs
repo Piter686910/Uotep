@@ -544,7 +544,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno;
+            string sql = "SELECT * FROM statistiche where mese = '" + mese.ToUpper() + "' and anno =" + anno;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn);
@@ -2622,7 +2622,7 @@ namespace Uotep.Classi
                     @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
                 if (exist)
                 {
-                    sql_Statistiche = "update statistiche set deleghe_ricevute += " + stat.deleghe_ricevute + ", deleghe_esitate += " + stat.deleghe_esitate +
+                    sql_Statistiche = "update statistiche set deleghe_ricevute = " + stat.deleghe_ricevute + ", esposti_ricevuti = " + stat.esposti_ricevuti +
                            " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
                 }

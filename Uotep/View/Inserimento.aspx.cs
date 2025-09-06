@@ -3,34 +3,42 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
+
 
 
 namespace Uotep
 {
     public partial class Inserimento : Page
     {
+        MemoryCache _cache = MemoryCache.Default;
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
-        String Ruolo = String.Empty;
+        String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
 
         protected void Page_Load(object sender, EventArgs e)
         {
 
-
-            if (Session["user"] != null)
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-                Ruolo = Session["ruolo"].ToString();
-
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                ruolo = _cache.Get("ruolo") as string;
             }
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    Ruolo = Session["ruolo"].ToString();
+
+            //}
             else
             {
-
                 Response.Redirect("Default.aspx?user=true");
             }
 
@@ -46,7 +54,7 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
-                if (Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+                if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                 {
                     DdlSigla.SelectedValue = "AG";
                 }
@@ -80,40 +88,40 @@ namespace Uotep
         public Boolean ControlloCampiObbligatori()
         {
             Boolean ret = true;
-            if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProdPenNr.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtTipoProv.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtTipoProv.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
 
-            if (String.IsNullOrEmpty(txtGiudice.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtGiudice.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtQuartiere.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtQuartiere.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtProvenienza.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProvenienza.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtRifProtGen.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtRifProtGen.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtIndirizzo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtIndirizzo.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtNominativo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtNominativo.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txPratica.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txPratica.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
@@ -200,21 +208,24 @@ namespace Uotep
                         p.tipologia_atto = txtTipoAtto.Text;
                     }
 
-
-                    if (String.IsNullOrEmpty(txtTipoProv.Text))
+                    //if (String.IsNullOrEmpty(txtTipoProv.Text))
+                    if (DdlTipoProvvAg.Items.Count >0)
                     {
-                        p.tipoProvvedimentoAG = String.Empty;
-                    }
-                    else
-                    {
-
-                        Boolean resp = mn.getTipoProv(txtTipoProv.Text);
-                        if (!resp)
+                        if (String.IsNullOrEmpty(DdlTipoProvvAg.SelectedItem.Text))
                         {
-                            HfTipoProv.Value = txtTipoProv.Text;
+                            p.tipoProvvedimentoAG = String.Empty;
                         }
+                        else
+                        {
 
-                        p.tipoProvvedimentoAG = txtTipoProv.Text.ToUpper();
+                            Boolean resp = mn.getTipoProv(DdlTipoProvvAg.SelectedItem.Text);
+                            if (!resp)
+                            {
+                                HfTipoProv.Value = DdlTipoProvvAg.SelectedItem.Text;
+                            }
+
+                            p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;// txtTipoProv.Text.ToUpper();
+                        }
                     }
                     if (String.IsNullOrEmpty(txtIndirizzo.Text))
                     {
@@ -269,6 +280,7 @@ namespace Uotep
                     }
 
                     p.procedimentoPen = txtProdPenNr.Text;
+                    //p.matricola = Vuser;
                     p.matricola = Vuser;
                     p.data_ins_pratica = DateTime.Now.ToLocalTime();
                     Statistiche stat = new Statistiche();
@@ -281,13 +293,21 @@ namespace Uotep
                     {
                         if (p.tipoProvvedimentoAG == "DELEGA INDAGINE")
                         {
-                            stat.deleghe_ricevute += 1;
+                            stat.deleghe_ricevute = 1 + System.Convert.ToInt32(dtStat.Rows[0].ItemArray[16]);
                         }
+                        else
+                            stat.deleghe_ricevute = System.Convert.ToInt32(dtStat.Rows[0].ItemArray[16]);
+                        if (p.tipologia_atto == "ESPOSTO - SEGNALAZIONE")
+                        {
+                            stat.esposti_ricevuti = 1 + System.Convert.ToInt32(dtStat.Rows[0].ItemArray[6]);
+                        }
+                        else
+                            stat.esposti_ricevuti = System.Convert.ToInt32(dtStat.Rows[0].ItemArray[6]);
                         //if (CkEvasa.Checked)
                         //{
                         //    stat.deleghe_esitate += 1;
                         //}
-                        
+
                         exist = true;
                     }
                     stat.mese = mese;
@@ -320,10 +340,10 @@ namespace Uotep
             {
 
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
 
                 //Session["MessaggioErrore"] = ex.Message;
@@ -550,7 +570,7 @@ namespace Uotep
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Inserimento.aspx";
+                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
                 Response.Redirect("~/Contact.aspx");
 
                 //Session["MessaggioErrore"] = ex.Message;
@@ -683,6 +703,6 @@ namespace Uotep
             CaricaDLL();
         }
 
-        
+
     }
 }

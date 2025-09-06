@@ -3,11 +3,13 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Runtime.Caching;
 using System.Runtime.ConstrainedExecution;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep
 {
@@ -15,17 +17,23 @@ namespace Uotep
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
-        String Area = String.Empty;
+        //String Area = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Manager mn = new Manager();
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
 
-            if (Session["user"] != null)
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    //Area = Session["area"].ToString();
+            //}
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-                Area = Session["area"].ToString();
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
             }
             else
             {
@@ -44,11 +52,11 @@ namespace Uotep
                 ProtocolloLiteral.Text = decodedText;
                 TxtDataIntervento.Attributes["placeholder"] = "gg/mm/aaaa";
                 txtDataConsegna.Attributes["placeholder"] = "gg/mm/aaaa";
-                if (Area == "uote")
+                //if (Area == "uote")
 
-                    rdUote.Checked = true;
-                else
-                    rdUotp.Checked = true;
+                rdUote.Checked = true;
+                //else
+                //  rdUotp.Checked = true;
 
                 CaricaDLL();
             }

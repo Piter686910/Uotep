@@ -3,10 +3,12 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep
 {
@@ -15,12 +17,18 @@ namespace Uotep
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (Session["user"] != null)
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //}
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
             }
             else
             {
@@ -344,8 +352,9 @@ namespace Uotep
                 DateTime o = System.Convert.ToDateTime(HolDate.Value);
 
 
+                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Vuser);
 
-                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Session["user"].ToString());
+                //Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Session["user"].ToString());
                 if (!ins)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "errore durante il salvataggio." + "'); $('#errorModal').modal('show');", true);

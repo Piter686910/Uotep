@@ -5,11 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using static Uotep.Classi.Enumerate;
 
 
 namespace Uotep
@@ -21,26 +23,35 @@ namespace Uotep
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Boolean okPopup = false;
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["PaginaChiamante"] != null)
 
                 Session.Remove("PaginaChiamante");
-
-            if (Session["user"] != null)
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-                Ruolo = Session["ruolo"].ToString();
-
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                Ruolo = _cache.Get("ruolo") as string;
             }
+
+
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    Ruolo = Session["ruolo"].ToString();
+
+            //}
             else
             {
 
                 Response.Redirect("Default.aspx?user=true");
             }
-           
+
             if (!IsPostBack)
             {
+
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
 
@@ -51,59 +62,11 @@ namespace Uotep
                 ProtocolloLiteral.Text = decodedText;
                 if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
                 {
-                    btSalva.Visible=false;
+                    btSalva.Visible = false;
                     btCercaQuartiere.Visible = false;
                 }
                 RicercaNew(sender, e);
-                //verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
-                //if (Session["ListRicerca"] != null)
-                //{
-                //    Manager mn = new Manager();
-                //    List<string> ListRicerca = (List<string>)Session["ListRicerca"];
-                //    String[] ar = ListRicerca.ToArray();
-                //    // ArchivioUote arc = new ArchivioUote();
-                //    DataTable arc = new DataTable();
-                //    switch (ar[0])
-                //    {
-                //        case "Pratica":
-                //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-                //            break;
-                //        case "StoricoPratica":
-                //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-                //            break;
-
-                //        case "Nominativo":
-                //            arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
-                //            break;
-                //        case "Indirizzo":
-                //            arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
-                //            break;
-                //        case "Catasto":
-                //            arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
-                //            break;
-                //        case "Note":
-                //            arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
-                //            break;
-                //        case "AnnoMese":
-                //            arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
-                //            break;
-
-                //    }
-                //    if (arc.Rows.Count > 0)
-                //    {
-                //        apripopupPratica_Click(sender, e);
-                //        GVRicercaPratica.DataSource = arc;
-                //        GVRicercaPratica.DataBind();
-                //        //segnalo he sono in modifica prartica
-                //        HfStato.Value = "Mod";
-                //        txtPratica.Enabled = false;
-                //    }
-                //}
-                //else
-                //{
-                //    txtPratica.Enabled = true;
-                //    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-                //}
+                
                 CaricaDLL();
                 Session["POP"] = "si";
 
@@ -160,6 +123,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     apripopupPratica_Click(sender, e);
+
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -287,7 +251,7 @@ namespace Uotep
             CkEvasa.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[10]);
             txtNote.Text = arc.Rows[0].ItemArray[11].ToString();
             //txtTipoAtto.Text = arc.Rows[0].ItemArray[12].ToString();
-            DdlTipoAttoI.SelectedItem.Text= arc.Rows[0].ItemArray[12].ToString();
+            DdlTipoAttoI.SelectedItem.Text = arc.Rows[0].ItemArray[12].ToString();
             txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
             CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
             CkVincoli.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[15]);
@@ -422,7 +386,7 @@ namespace Uotep
                                                                                                       //if (HfStato.Value == "Mod")
                                                                                                       //{
                             if (!String.IsNullOrEmpty(txtDataUltimoIntervento.Text))
-                              
+
                                 arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
                             //}
                             //catch (Exception)
@@ -449,7 +413,8 @@ namespace Uotep
                             arch.arch_tipologia = DdlTipoAttoI.SelectedItem.Text;
                             arch.arch_note = txtNote.Text;
                             arch.arch_quartiere = txtQuartiere.Text;
-                            arch.arch_matricola = Session["user"].ToString();
+                            //arch.arch_matricola = Session["user"].ToString();
+                            arch.arch_matricola = Vuser;
                             arch.arch_indirizzo = txtIndirizzo.Text;
                             arch.arch_natoA = txtNatoA.Text;
                             arch.arch_responsabile = txtResponsabile.Text;
@@ -520,7 +485,7 @@ namespace Uotep
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/InserimentoArchivio.aspx";
+                Session["PaginaChiamante"] = "~/View/InserimentoArchivio.aspx";
                 Response.Redirect("~/Contact.aspx");
 
             }
@@ -584,6 +549,8 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
             Session.Remove("ListRicerca");
+            HfFiltroNote.Value = string.Empty;
+            HfFiltroIndirizzo.Value = string.Empty;
 
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
@@ -617,6 +584,8 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
         }
+        // (Riusa la funzione GetOriginalData dal mio esempio precedente o la tua logica di recupero dati)
+
         private void CaricaDLL()
         {
             try
@@ -639,7 +608,7 @@ namespace Uotep
                 DdlTipoAttoI.DataValueField = "id"; // Il valore associato a ogni opzione
                 DdlTipoAttoI.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAttoI.DataBind();
-                DdlTipoAttoI.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));   
+                DdlTipoAttoI.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
 
@@ -698,8 +667,187 @@ namespace Uotep
         protected void GVRicercaPratica_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            RicercaNew(sender, e);
+            if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroIndirizzo.Value) && String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            {
+                RicercaNew(sender, e);
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(HfFiltroNote.Value))
+                {
+                    PopulateGridView("arch_note", HfFiltroNote.Value);
+                    apripopupPratica_Click(sender, e);
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+                    {
+                        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
+                        apripopupPratica_Click(sender, e);
+                    }
+                    else
+                    {
+                        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+                        {
+                            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
+                            apripopupPratica_Click(sender, e);
+                        }
+                    }
+                }
+            }
 
+
+        }
+        // esecuzione del filtro ulteriore sulla colonna NOTE
+        protected void txtFilterNote_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroNote.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterNote")
+            {
+                columnName = "arch_note"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroNote.Value); // Esempio di funzione di filtro
+            apripopupPratica_Click(sender, e);
+        }
+        // Funzione di esempio che carica i dati e applica il filtro
+        private void PopulateGridView(string filterColumn = "", string filterValue = "")
+        {
+
+            DataTable dt = new DataTable();
+
+            dt = GetOriginalData(); // ricerco la lista nuovamente
+
+            //applico il filtro
+            if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
+            {
+                string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                DataRow[] filteredRows = dt.Select(filterExpression);
+
+                if (filteredRows.Length > 0)
+                {
+                    DataTable filteredDt = dt.Clone();
+                    foreach (DataRow row in filteredRows)
+                    {
+                        filteredDt.ImportRow(row);
+                    }
+                    GVRicercaPratica.DataSource = filteredDt;
+                }
+                else
+                {
+                    GVRicercaPratica.DataSource = null;
+                }
+            }
+            else
+            {
+                GVRicercaPratica.DataSource = dt; // Nessun filtro
+            }
+            GVRicercaPratica.DataBind();
+
+        }
+
+        private DataTable GetOriginalData()
+        {
+            DataTable arc = new DataTable();
+            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+            if (Session["ListRicerca"] != null)
+            {
+                Manager mn = new Manager();
+                List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                String[] ar = ListRicerca.ToArray();
+                // ArchivioUote arc = new ArchivioUote();
+
+                switch (ar[0])
+                {
+                    case "Pratica":
+                        arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                        break;
+                    case "StoricoPratica":
+                        arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+                        break;
+
+                    case "Nominativo":
+                        arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
+                        break;
+                    case "Indirizzo":
+                        arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
+                        break;
+                    case "Catasto":
+                        arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
+                        break;
+                    case "Note":
+                        arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
+                        break;
+                    case "AnnoMese":
+                        arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
+                        break;
+
+                }
+                if (arc.Rows.Count > 0)
+                {
+                    //   apripopupPratica_Click(sender, e);
+                    GVRicercaPratica.DataSource = arc;
+                    GVRicercaPratica.DataBind();
+                    //segnalo he sono in modifica prartica
+                    HfStato.Value = "Mod";
+                    txtPratica.Enabled = false;
+                }
+            }
+            else
+            {
+                txtPratica.Enabled = true;
+                txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+            }
+            return arc;
+            // return dt;
+        }
+        // esecuzione del filtro ulteriore sulla colonna indirizzo
+        protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroIndirizzo.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterIndirizzo")
+            {
+                columnName = "arch_indirizzo"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+            apripopupPratica_Click(sender, e);
+        }
+
+        protected void txtFilterResponsabile_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroResponsabile.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterResponsabile")
+            {
+                columnName = "arch_responsabile"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroResponsabile.Value); // Esempio di funzione di filtro
+            apripopupPratica_Click(sender, e);
         }
     }
 }

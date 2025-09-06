@@ -8,12 +8,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Uotep.Classi;
 using WebGrease.Activities;
+using static Uotep.Classi.Enumerate;
 using Page = System.Web.UI.Page;
 
 
@@ -25,15 +27,21 @@ namespace Uotep
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
-
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (Session["user"] != null)
-            {
-                Vuser = Session["user"].ToString();
-                Ruolo = Session["ruolo"].ToString();
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    Ruolo = Session["ruolo"].ToString();
 
+            //}
+            if (_cache != null)
+            {
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                Ruolo = _cache.Get("ruolo") as string;
             }
             else
             {

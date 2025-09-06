@@ -1,34 +1,77 @@
-﻿using System;
+﻿using AjaxControlToolkit.Bundling;
+using System;
 using System.Collections.Specialized;
 using System.Data;
+using System.Runtime.Caching;
 using System.Web;
+using System.Web.Caching;
 using System.Web.UI;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
+
 
 namespace Uotep
 {
     public partial class _Default : Page
     {
         String Vuser = String.Empty;
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
             String categoria = Request.QueryString["user"];
+           
+
             if (categoria == "true")
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare il login " + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
 
             }
-            if (Session["user"] != null)
+            
+            if (_cache != null)
+                Vuser = _cache.Get("user") as string;
+            if (Vuser != null)
             {
-                Manager mn=new Manager();
-                Vuser = Session["user"].ToString();
+                Manager mn = new Manager();
+                //Vuser = Session["user"].ToString();
                 DataTable ricerca = mn.GetRuolo(Vuser);
-                Session["profilo"] = ricerca.Rows[0].ItemArray[0];
-                Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
-                Session["area"] = ricerca.Rows[0].ItemArray[2];
+                //Session["profilo"] = ricerca.Rows[0].ItemArray[0];
+                //Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
+                //Session["area"] = ricerca.Rows[0].ItemArray[2];
+
+
+                // 1. Inserire un parametro nella cache
+                string chiaveP = "profilo";
+                string valueP = ricerca.Rows[0].ItemArray[0].ToString();
+                string chiaveR = "ruolo";
+                string valueR = ricerca.Rows[0].ItemArray[1].ToString();
+                string chiaveA = "area";
+                string valueA = ricerca.Rows[0].ItemArray[2].ToString();
+                // Imposta le opzioni della cache
+                CacheItemPolicy policy = new CacheItemPolicy();
+                // policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10); // Scadenza assoluta tra 10 minuti
+                policy.SlidingExpiration = TimeSpan.FromMinutes(60); // Scadenza scorrevole (se non viene usata per 60 minuti, scade)
+
+
+                // Aggiungi il parametro alla cache
+                _cache.Add(chiaveP, valueP, policy);
+                _cache.Add(chiaveR, valueR, policy);
+                _cache.Add(chiaveA, valueA, policy);
+
+
+
                 pnlLogin.Visible = false;
             }
+            //if (Session["user"] != null)
+            //{
+            //    Manager mn=new Manager();
+            //    Vuser = Session["user"].ToString();
+            //    DataTable ricerca = mn.GetRuolo(Vuser);
+            //    Session["profilo"] = ricerca.Rows[0].ItemArray[0];
+            //    Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
+            //    Session["area"] = ricerca.Rows[0].ItemArray[2];
+            //    pnlLogin.Visible = false;
+            //}
         }
 
 
@@ -69,8 +112,21 @@ namespace Uotep
                         else
                         {
                             //salvo la matricola
-                            Session["user"] = Vuser;
-                            Response.Redirect("Default.aspx");
+                        //    Session["user"] = Vuser;
+                            
+                            // 1. Inserire un parametro nella cache
+                            string chiave = "user";
+                            string value = Vuser;
+                            // Imposta le opzioni della cache
+                            CacheItemPolicy policy = new CacheItemPolicy();
+                            // policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10); // Scadenza assoluta tra 10 minuti
+                            policy.SlidingExpiration = TimeSpan.FromMinutes(60); // Scadenza scorrevole (se non viene usata per 60 minuti, scade)
+
+
+                            // Aggiungi il parametro alla cache
+                            _cache.Add(chiave, value, policy);
+
+                            Response.Redirect("~/View/Default.aspx");
                         }
                     }
                     else

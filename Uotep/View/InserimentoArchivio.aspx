@@ -5,7 +5,7 @@
     <script type="text/javascript">
         // Attendere che il DOM sia completamente caricato
         document.addEventListener('DOMContentLoaded', function () {
-            var textBox = document.getElementById('TxtSub'); 
+            var textBox = document.getElementById('TxtSub');
         // Se non usi ClientIDMode="Static", dovresti usare:
             // var textBox = document.getElementById('<%= TxtSub.ClientID %>');
 
@@ -38,8 +38,7 @@
         });
     </script>
     <script>
-
-
+        
 
 
 
@@ -278,6 +277,17 @@
         }
 
     </script>
+        <style>
+        
+
+        .uppercase-text {
+            text-transform: uppercase;
+}
+
+        
+
+    </style>
+
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
@@ -354,7 +364,7 @@
 
                         </div>
                     </div>
-                                        <div class="form-group mb-3">
+                    <div class="form-group mb-3">
                         <label for="txtSezione">Dati Catastali N.C.T.</label>
                         <div class="form-group mb-3">
                             <asp:TextBox ID="txtFoglioNct" runat="server" MaxLength="3" Style="width: 100px; display: inline-block !important;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
@@ -416,7 +426,7 @@
                         <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
                         <%--<div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         </div>--%>
-                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control"  />
+                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" />
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtGiudice">Giudice</label>
@@ -509,7 +519,7 @@
                 <div class="col-12 text-center">
                     <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
                     <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
-                    <asp:Button ID="btCercaQuartiere"  Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
                 </div>
             </div>
@@ -537,7 +547,7 @@
                         <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
                             <Columns>
-                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID"  Visible="false"/>
+                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Toponimo" HeaderText="Toponimo" />
                                 <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                                 <asp:BoundField DataField="Specie" HeaderText="Specie" />
@@ -575,13 +585,53 @@
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
                             <Columns>
-                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false"/>
+                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="arch_doppione" HeaderText="Doppione" />
-                                <asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />
-                                <asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />
+
+                                <asp:TemplateField HeaderText="Responsabile" ItemStyle-CssClass="uppercase-text">
+                                    <HeaderTemplate>
+                                        Responsabile
+                                       <br />
+                                        <asp:TextBox ID="txtFilterResponsabile" runat="server" OnTextChanged="txtFilterResponsabile_TextChanged" AutoPostBack="True"  ></asp:TextBox> Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("arch_responsabile") %>
+                                         
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+                                <%--<asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />--%>
+                                <%--<asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />--%>
+
+
+
+                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text">
+                                    <HeaderTemplate>
+                                        Indirizzo
+                                        <br />
+                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True"></asp:TextBox> Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("arch_indirizzo") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+
+
+
                                 <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
-                                <asp:BoundField DataField="arch_note" HeaderText="Nota" />
+                                <%--<asp:BoundField DataField="arch_note" HeaderText="Nota" />--%>
+                                <asp:TemplateField HeaderText="Note" ItemStyle-CssClass="uppercase-text">
+                                    <HeaderTemplate>
+                                        Note
+                                        <br />
+                                        <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True"></asp:TextBox> Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("arch_note") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
                                 <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
                                 <asp:TemplateField ItemStyle-HorizontalAlign="Center">
@@ -594,13 +644,13 @@
                             <PagerStyle HorizontalAlign="Center" />
                             <PagerTemplate>
                                 <table width="100%">
-            <tr>
-                <td style="width: 50%; text-align: left;">
-                    <asp:Label ID="lblPageInfo" runat="server" />
-                </td>
-                
-            </tr>
-        </table>
+                                    <tr>
+                                        <td style="width: 50%; text-align: left;">
+                                            <asp:Label ID="lblPageInfo" runat="server" />
+                                        </td>
+
+                                    </tr>
+                                </table>
                                 <div style="padding: 5px;">
                                     <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
                                     <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
@@ -622,6 +672,9 @@
                     </div>
                 </div>
                 <asp:HiddenField ID="HfStato" runat="server" />
+                <asp:HiddenField ID="HfFiltroNote" runat="server" />
+                <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
+                <asp:HiddenField ID="HfFiltroResponsabile" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>

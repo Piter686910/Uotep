@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -21,15 +22,22 @@ namespace Uotep
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
-
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (Session["user"] != null)
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    profilo = Session["profilo"].ToString();
+            //    ruolo = Session["ruolo"].ToString();
+            //}
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-                profilo = Session["profilo"].ToString();
-                ruolo = Session["ruolo"].ToString();
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                ruolo = _cache.Get("ruolo") as string;
+                profilo = _cache.Get("profilo") as string;
             }
             else
             {
@@ -84,7 +92,7 @@ namespace Uotep
                 denunceUff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
                 stat.esposti_ricevuti = EspostiRicevuti;
                 stat.denunce_uff = denunceUff;
-                stat.mese = txtMM.Text.Trim();
+                stat.mese = txtMM.Text.Trim().ToUpper();
                 stat.anno = anno;
                 resp = mn.InsStatatti(exist, stat);
             }
@@ -93,7 +101,7 @@ namespace Uotep
                 //non esiste il nuovo mese anno quindi inserisco un nuovo record
                 stat.esposti_ricevuti = EspostiRicevuti;
                 stat.denunce_uff = denunceUff;
-                stat.mese = txtMM.Text.Trim();
+                stat.mese = txtMM.Text.Trim().ToUpper();
                 stat.anno = anno;
                 resp = mn.InsStatatti(exist, stat);
             }

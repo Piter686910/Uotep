@@ -1,31 +1,32 @@
-﻿using System;
+﻿using AjaxControlToolkit;
+using iText.Forms;
+using iText.Forms.Fields;
+using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Canvas.Draw;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Properties;
-using iText.Layout.Element;
-using iText.Forms.Fields;
-using iText.Forms;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf.Canvas.Draw;
-using System.Diagnostics;
-using iText.Kernel.Pdf.Canvas;
-using System.Data.SqlTypes;
-using iText.Kernel.Colors;
-using iText.Kernel.Font;
-using iText.IO.Font.Constants;
-using AjaxControlToolkit;
-using static Uotep.Classi.Enumerate;
-using System.Drawing;
 using static System.Windows.Forms.AxHost;
-using System.Collections.Generic;
-using System.Linq;
+using static Uotep.Classi.Enumerate;
 
 
 
@@ -39,15 +40,22 @@ namespace Uotep
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
-
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (Session["user"] != null)
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
+            //    profilo = Session["profilo"].ToString();
+            //    ruolo = Session["ruolo"].ToString();
+            //}
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-                profilo = Session["profilo"].ToString();
-                ruolo = Session["ruolo"].ToString();
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
+                ruolo = _cache.Get("ruolo") as string;
+                profilo = _cache.Get("profilo") as string;
             }
             else
             {

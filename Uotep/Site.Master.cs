@@ -7,21 +7,30 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
+using System.Runtime.Caching;
 
 namespace Uotep
 {
     public partial class SiteMaster : MasterPage
     {
         DataTable profilo = new DataTable();
+        MemoryCache _cache = MemoryCache.Default;
+        String user = string.Empty;
+        String Profilo = string.Empty;
+        String ruolo = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                if (Session["user"] != null)
+                if (_cache != null)
                 {
-                    string Vuser = Session["user"].ToString();
+                    // 2. Recuperare un parametro dalla cache
+                    user = _cache.Get("user") as string;
+                    Profilo = _cache.Get("profilo") as string;
+                    ruolo = _cache.Get("ruolo") as string;
+                    //  string Vuser = Session["user"].ToString();
                     Manager mn = new Manager();
-                    DataTable Ricerca = mn.getUserRules(Vuser);
+                    DataTable Ricerca = mn.getUserRules(user);
                     if (Ricerca.Rows.Count > 0)
                     {
 
@@ -66,7 +75,7 @@ namespace Uotep
                                 menuSegreteria.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                if (Session["profilo"].ToString() != Enumerate.Profilo.accertatore.GetHashCode().ToString())
+                                if (Profilo != Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
@@ -75,9 +84,9 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                if (Session["ruolo"].ToString().ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
+                                if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
                                     StatisticheAtti.Visible = true;
-                                if (Session["ruolo"].ToString().ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+                                if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                                     EstraiStatistiche.Visible = true;
 
                                 break;
@@ -91,7 +100,7 @@ namespace Uotep
                                 menuHome.Visible = true;
                                 PG.Visible = true;
                                 GestionePratica.Visible = true;
-                                if (Session["profilo"].ToString() == Enumerate.Profilo.accertatore.GetHashCode().ToString())
+                                if (Profilo == Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
@@ -186,26 +195,33 @@ namespace Uotep
                                 break;
                         }
                     }
-                    else
-                        lblMsg.Text = "Matricola assente";
+                    //else
+                    //    lblMsg.Text = "Matricola assente";
                 }
                 //else
                 //    lblMsg.Text = "Utente non loggato";
-                 
+
             }
         }
 
         protected void Esci_Click(object sender, EventArgs e)
         {
-            Session.Remove("user");
+            // Session.Remove("user");
             Session.Remove("POP");
             Session.Remove("filetemp");
-            Session.Remove("profilo");
-            Session.Remove("ruolo");
+            // Session.Remove("profilo");
+            // Session.Remove("ruolo");
             Session.Remove("ListRicerca");
             Session.Remove("popAperto");
             Session.Remove("popApertoRicercaScheda");
-            
+            // Ottieni tutti gli elementi della cache
+            var cacheKeys = _cache.Select(kvp => kvp.Key).ToList();
+
+            // Rimuovi ogni elemento
+            foreach (string cacheKey in cacheKeys)
+            {
+                _cache.Remove(cacheKey);
+            }
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

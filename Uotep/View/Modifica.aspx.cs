@@ -2,10 +2,12 @@
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep
 {
@@ -15,14 +17,19 @@ namespace Uotep
         String Vuser = String.Empty;
         Principale p = new Principale();
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+            //if (Session["user"] != null)
+            //{
+            //    Vuser = Session["user"].ToString();
 
-            if (Session["user"] != null)
+            //}
+            if (_cache != null)
             {
-                Vuser = Session["user"].ToString();
-
+                // 2. Recuperare un parametro dalla cache
+                Vuser = _cache.Get("user") as string;
             }
             else
             {
@@ -114,10 +121,10 @@ namespace Uotep
 
 
                 Principale p = new Principale();
-                if (Session["user"] != null)
-                {
-                    Vuser = Session["user"].ToString();
-                }
+                //if (Session["user"] != null)
+                //{
+                //    Vuser = Session["user"].ToString();
+                //}
                 //p.anno = annoCorr;
                 //p.giorno = DateTime.Now.Day.ToString();
                 //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);

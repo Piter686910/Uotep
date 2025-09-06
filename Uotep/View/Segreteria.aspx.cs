@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Caching;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
@@ -23,16 +24,23 @@ namespace Uotep
 
         String profilo = string.Empty;
         String ruolo = string.Empty;
+        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-
-                if (Session["user"] != null)
+                if (_cache != null)
                 {
-                    Vuser = Session["user"].ToString();
-                    profilo = Session["profilo"].ToString();
-                    ruolo = Session["ruolo"].ToString();
+                    // 2. Recuperare un parametro dalla cache
+                    Vuser = _cache.Get("user") as string;
+                    ruolo = _cache.Get("ruolo") as string;
+                    profilo = _cache.Get("profilo") as string;
+                    //}
+                    //if (Session["user"] != null)
+                    //{
+                    //    Vuser = Session["user"].ToString();
+                    //    profilo = Session["profilo"].ToString();
+                    //    ruolo = Session["ruolo"].ToString();
                     if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                     {
                         divSegreteria.Visible = true;
@@ -102,7 +110,7 @@ namespace Uotep
             CaricaFile fl = new CaricaFile();
             Boolean ins = false;
             string filePath = string.Empty;
-            fl.matricola = Session["user"].ToString();
+            fl.matricola = Vuser; // Session["user"].ToString();
 
             fl.fascicolo = TxtFascicolo.Text;
             fl.folder = CartellaSegreteria;
@@ -348,8 +356,8 @@ namespace Uotep
                 else
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Il File " + nomefile + " non è presente in cartella." + "'); $('#errorModal').modal('show');", true);
-                   
-                   // apripopupFile_Click(sender, e);
+
+                    // apripopupFile_Click(sender, e);
                 }
             }
 
@@ -389,7 +397,7 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#errorModal').modal('hide');", true);
             //ModalRicercaFile.Visible = true;
-            
+
         }
 
         protected void btCancellaScaricati_Click(object sender, EventArgs e)
