@@ -182,12 +182,17 @@ namespace Uotep
 
 
                             txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+                            txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                             txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                            txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
                             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
                             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
+                            TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
                             txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
                             txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
+                            txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
                             txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper() + " " + pratica.Rows[0].ItemArray[11].ToString().ToUpper();
+                            txtIndirizzo.ToolTip = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
 
                             CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
@@ -196,15 +201,16 @@ namespace Uotep
                                 txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
 
 
-                            txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
+                            txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper().ToUpper();
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
 
                                 txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
 
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-                            txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper().ToUpper();
+                            txtScaturito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+                            txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().ToUpper();
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
 
@@ -213,6 +219,7 @@ namespace Uotep
                             txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
                             TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
                             txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                            txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                             //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                             txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();

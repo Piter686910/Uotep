@@ -198,7 +198,7 @@ namespace Uotep
                 }
                 else
 
-                p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    p.dataCarico = null; //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 p.nominativo = txtNominativo.Text;
 
                 if (String.IsNullOrEmpty(txtGiudice.Text))
@@ -379,10 +379,10 @@ namespace Uotep
                 }
 
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/ModificaRiservata.aspx";
+                Session["PaginaChiamante"] = "~/View/ModificaRiservata.aspx";
                 Response.Redirect("~/Contact.aspx");
 
                 //Session["MessaggioErrore"] = ex.Message;
@@ -577,14 +577,14 @@ namespace Uotep
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
-               // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo();
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                                                                //      DdlIndirizzo.DataValueField = "ID_quartiere";
                 DdlIndirizzo.DataBind();
-         //       DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //       DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaTipoAtto = mn.getListTipologia();
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
@@ -592,7 +592,7 @@ namespace Uotep
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
                 DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
                 DdlTipoAtto.DataBind();
-           //     DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //     DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaProvenienza = mn.getListProvenienza();
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
@@ -600,7 +600,7 @@ namespace Uotep
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
                 DdlProvenienza.DataBind();
-             //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaGiudice = mn.getListGiudice();
                 DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
@@ -608,7 +608,7 @@ namespace Uotep
                 DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
 
                 DdlGiudice.DataBind();
-               // DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                // DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
                 DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
@@ -625,7 +625,7 @@ namespace Uotep
                 DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
 
                 DdlScaturito.DataBind();
-         //       DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                //       DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaInviati = mn.getListInviati();
                 DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
@@ -729,23 +729,26 @@ namespace Uotep
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[4].ToString()))
                         {
-                            txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
+                            txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+                            txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                         }
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[5].ToString()))
-
-                            txtTipoAttoR.Text = pratica.Rows[0].ItemArray[5].ToString();
-
+                        {
+                            txtTipoAttoR.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                            txtTipoAttoR.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        }
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[6].ToString()))
 
                             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[7].ToString()))
 
-                            txtTipoProv.Text = pratica.Rows[0].ItemArray[7].ToString();
+                            txtTipoProv.Text = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
 
                         txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
+                        txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
-                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString();
+                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
                         //txtVia.Text = pratica.Rows[0].ItemArray[11].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
@@ -762,7 +765,7 @@ namespace Uotep
                         else
                             txtDataDataEvasa.Text = string.Empty;
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
-                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
+                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
@@ -777,9 +780,10 @@ namespace Uotep
                             txtDataInvio.Text = string.Empty;
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
 
-                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
+                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                        txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
@@ -796,7 +800,8 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
 
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                        txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
@@ -880,14 +885,14 @@ namespace Uotep
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
-           
+
             txtNominativo.Text = String.Empty;
             txtNote.Text = String.Empty;
             txtDataDataEvasa.Text = String.Empty;
-           // txtAnnoRicerca.Text = string.Empty;
+            // txtAnnoRicerca.Text = string.Empty;
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
-           
+
             CaricaDLL();
 
         }
@@ -908,14 +913,14 @@ namespace Uotep
             txtRicNominativo.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
             txtRicAccertatori.Text = String.Empty;
-            txtRicIndirizzo.Text = String.Empty;            
+            txtRicIndirizzo.Text = String.Empty;
             txtIndirizzoRic.Text = String.Empty;
             txtRicGiudice.Text = string.Empty;
             txtDataA.Text = string.Empty;
             txtDataDa.Text = string.Empty;
             txtProtGen.Text = string.Empty;
             txtProcPenale.Text = string.Empty;
-            
+
         }
 
         protected void btProcPenale_Click(object sender, EventArgs e)
@@ -1092,7 +1097,7 @@ namespace Uotep
             txtProcPenale.Text = string.Empty;
             txtNProtocollo.Text = string.Empty;
             txtAnnoRicerca.Text = string.Empty;
-        
+
         }
 
         protected void btAccertatori_Click(object sender, EventArgs e)

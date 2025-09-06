@@ -225,10 +225,10 @@ namespace Uotep
                     sw.Close();
                 }
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
                 Response.Redirect("~/Contact.aspx");
 
             }
@@ -420,14 +420,18 @@ namespace Uotep
                         else
                             txtDataArrivo.Text = string.Empty;
 
-                        txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString();
-                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString();
+                        txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+                        txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
                         txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
-                        TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
+                        TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
+                        TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
                         txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString();
+                        txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
+                        txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
-                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString();
+                            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
                         //txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
@@ -447,7 +451,7 @@ namespace Uotep
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
 
-                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString();
+                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
                         {
@@ -464,9 +468,9 @@ namespace Uotep
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString();
+                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
 
-                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString();
+                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
@@ -482,7 +486,8 @@ namespace Uotep
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString();
+                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                        txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
@@ -796,7 +801,7 @@ namespace Uotep
                 Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
                 Response.Redirect("~/Contact.aspx");
 
             }
@@ -867,10 +872,10 @@ namespace Uotep
                     sw.Close();
                 }
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "View/Modifica.aspx";
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
                 Response.Redirect("~/Contact.aspx");
 
             }
