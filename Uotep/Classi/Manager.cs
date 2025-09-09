@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
 using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
@@ -463,7 +464,7 @@ namespace Uotep.Classi
         public DataTable getListDecretazione(string pratica, string idPratica)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM decretazione where decr_pratica = " + pratica + " and decr_idPratica = '" + idPratica + "' order by decr_data desc";
+            string sql = "SELECT * FROM decretazione where decr_pratica = '" + pratica + "' and decr_idPratica = '" + idPratica + "' order by decr_data desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1626,7 +1627,7 @@ namespace Uotep.Classi
                 sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota," +
                     "decr_dataChiusura, decr_chiuso)" +
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
-                   "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','"+  null + "','" + decr.chiuso + "')";
+                   "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1650,7 +1651,7 @@ namespace Uotep.Classi
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("pratica:" + decr.Npratica  + " - " + ex.Message + @" - Errore in inserimento dati in tabella decretazione");
+                            sw.WriteLine("pratica:" + decr.Npratica + " - " + ex.Message + @" - Errore in inserimento dati in tabella decretazione");
                             sw.Close();
                         }
 
@@ -2252,13 +2253,13 @@ namespace Uotep.Classi
                 //SqlTransaction transaction = null;
                 SqlCommand command = conn.CreateCommand();
 
-               // transaction = conn.BeginTransaction("trans");
+                // transaction = conn.BeginTransaction("trans");
                 //command.Transaction = transaction;
-               idN = -1;
+                idN = -1;
 
                 try
                 {
-                    
+
                     sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
                      "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
                      "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
@@ -2323,16 +2324,16 @@ namespace Uotep.Classi
                     //{
                     //    transaction.Rollback();
 
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
 
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
-                            sw.Close();
-                        }
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
+                        sw.Close();
+                    }
                     //}
                     resp = false;
 
@@ -2723,6 +2724,86 @@ namespace Uotep.Classi
             return resp;
 
         }
+        //UPDATE
+        public Boolean UpdDecretazioneChiusura(Decretazione p)
+        {
+            bool resp = true;
+            string sql_updDecretazione = String.Empty;
+            string sql_updPrincipale = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql_updDecretazione = "update decretazione set decr_dataChiusura = '" + @p.dataChiusura + "',decr_chiuso = '" + @p.chiuso + "'" +
+                    " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
+
+                sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+                    SqlTransaction tran;
+                    tran = conn.BeginTransaction("trans");
+                    command.Transaction = tran;
+                    try
+                    {
+                        command.CommandText = sql_updDecretazione;
+
+                        int res = command.ExecuteNonQuery();
+                        if (res > 0)
+                        {
+                            command.CommandText = sql_updPrincipale;
+
+                            command.ExecuteNonQuery();
+
+                            tran.Commit();
+
+                            resp = true;
+
+                        }
+                        else
+                        {
+                            tran.Rollback();
+                            resp = false;
+                        }
+
+                        command.CommandText = sql_updDecretazione;
+                        testoSql = "decretazione";
+
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica:" + p.Npratica + " -" + ex.Message + @" - Errore in update dati decretazione ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
+
         public Boolean UpdScheda(RappUote rapp)
         {
             bool resp = true;
@@ -3165,60 +3246,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean UpdDecretazioneChiusura(Decretazione p)
-        {
-            bool resp = true;
-            string sql_upd = String.Empty;
-            string testoSql = string.Empty;
-
-            try
-            {
-                sql_upd = "update decretazione set decr_dataChiusura = '" + @p.dataChiusura + "',decr_chiuso = '" + @p.chiuso + "'"+ 
-                    " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    conn.Open();
-                    SqlCommand command = conn.CreateCommand();
-
-                    try
-                    {
-                        command.CommandText = sql_upd;
-                        testoSql = "decretazione";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-
-                        if (!File.Exists(LogFile))
-                        {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
-
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("pratica:" + p.Npratica + " -" + ex.Message + @" - Errore in update dati decretazione ");
-                            sw.Close();
-                        }
-
-                        resp = false;
-
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
-            }
-            catch (Exception)
-            {
-                resp = false;
-            }
-            return resp;
-
-        }
+        
 
 
     }
