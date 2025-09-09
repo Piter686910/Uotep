@@ -197,8 +197,19 @@ namespace Uotep
                             CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
-
-                                txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
+                            {
+                                //converte la data 01-01-1900 in SPACE
+                                DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+                                if (dataappo == new DateTime(1900, 1, 1))
+                                {
+                                    txtDataDataEvasa.Text = ""; // Metti una stringa vuota
+                                }
+                                else
+                                {
+                                    txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                                }
+                            }
+                              //  txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
 
 
                             txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper().ToUpper();
@@ -213,8 +224,19 @@ namespace Uotep
                             txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().ToUpper();
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
-
-                                txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
+                            {
+                                //converte la data 01-01-1900 in SPACE
+                                DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
+                                if (dataappo == new DateTime(1900, 1, 1))
+                                {
+                                    txtDataCarico.Text = ""; // Metti una stringa vuota
+                                }
+                                else
+                                {
+                                    txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                                }
+                            }
+                                //txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
 
                             txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
                             TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();

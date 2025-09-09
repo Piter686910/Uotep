@@ -755,26 +755,37 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
+
+                            //converte la data 01-01-1900 in SPACE
+
+                            if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                             {
-                                txtDataDataEvasa.Text = string.Empty;
+                                txtDataDataEvasa.Text = ""; // Metti una stringa vuota
                             }
                             else
-                                txtDataDataEvasa.Text = dataappo.ToString("dd/MM/yyyy");
+                            {
+                                txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                            }
                         }
                         else
                             txtDataDataEvasa.Text = string.Empty;
+
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
                             txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
+
+                            //converte la data 01-01-1900 in SPACE
+
+                            if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                             {
-                                txtDataInvio.Text = string.Empty;
+                                txtDataInvio.Text = ""; // Metti una stringa vuota
                             }
                             else
-                                txtDataInvio.Text = dataappo.ToString("dd/MM/yyyy");
+                            {
+                                txtDataInvio.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                            }
                         }
                         else
                             txtDataInvio.Text = string.Empty;
@@ -787,12 +798,26 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
+
+                            //converte la data 01-01-1900 in SPACE
+                           
+                            if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                             {
-                                txtDataCarico.Text = string.Empty;
+                                txtDataCarico.Text = ""; // Metti una stringa vuota
                             }
                             else
-                                txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                            {
+                                txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                            }
+
+
+
+                            //if (dataappo == DateTime.MinValue)
+                            //{
+                            //    txtDataCarico.Text = string.Empty;
+                            //}
+                            //else
+                            //    txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                         }
                         else
                             txtDataCarico.Text = string.Empty;
