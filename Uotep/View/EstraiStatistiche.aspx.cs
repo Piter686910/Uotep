@@ -18,7 +18,6 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -32,7 +31,6 @@ namespace Uotep
 {
     public partial class EstraiStatistiche : Page
     {
-        MemoryCache _cache = MemoryCache.Default;
 
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
@@ -43,24 +41,14 @@ namespace Uotep
 
         protected void Page_Load(object sender, EventArgs e)
         {
-          
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    profilo = Session["profilo"].ToString();
-            //    ruolo = Session["ruolo"].ToString();
-            //}
-            if (_cache != null)
+
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                ruolo = _cache.Get("ruolo") as string;
-                profilo = _cache.Get("profilo") as string;
+                Vuser = Session["user"].ToString();
+                profilo = Session["profilo"].ToString();
+                ruolo = Session["ruolo"].ToString();
             }
-            else
-            {
-                Response.Redirect("Default.aspx?user=true");
-            }
+           
 
 
             // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)

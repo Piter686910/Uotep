@@ -29,18 +29,12 @@ namespace Uotep
         {
             if (!IsPostBack)
             {
-                if (_cache != null)
+
+                if (Session["user"] != null)
                 {
-                    // 2. Recuperare un parametro dalla cache
-                    Vuser = _cache.Get("user") as string;
-                    ruolo = _cache.Get("ruolo") as string;
-                    profilo = _cache.Get("profilo") as string;
-                    //}
-                    //if (Session["user"] != null)
-                    //{
-                    //    Vuser = Session["user"].ToString();
-                    //    profilo = Session["profilo"].ToString();
-                    //    ruolo = Session["ruolo"].ToString();
+                    Vuser = Session["user"].ToString();
+                    profilo = Session["profilo"].ToString();
+                    ruolo = Session["ruolo"].ToString();
                     if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                     {
                         divSegreteria.Visible = true;

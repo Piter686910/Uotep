@@ -22,15 +22,11 @@ namespace Uotep
         {
             if (!IsPostBack)
             {
-                if (_cache != null)
+                if (Session["user"] != null)
                 {
-                    // 2. Recuperare un parametro dalla cache
-                    user = _cache.Get("user") as string;
-                    Profilo = _cache.Get("profilo") as string;
-                    ruolo = _cache.Get("ruolo") as string;
-                    //  string Vuser = Session["user"].ToString();
+                    string Vuser = Session["user"].ToString();
                     Manager mn = new Manager();
-                    DataTable Ricerca = mn.getUserRules(user);
+                    DataTable Ricerca = mn.getUserRules(Vuser);
                     if (Ricerca.Rows.Count > 0)
                     {
 

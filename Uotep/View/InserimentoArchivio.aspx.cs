@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -23,26 +22,20 @@ namespace Uotep
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Boolean okPopup = false;
-        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["PaginaChiamante"] != null)
 
                 Session.Remove("PaginaChiamante");
-            if (_cache != null)
+
+
+
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                Ruolo = _cache.Get("ruolo") as string;
+                Vuser = Session["user"].ToString();
+                Ruolo = Session["ruolo"].ToString();
+
             }
-
-
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    Ruolo = Session["ruolo"].ToString();
-
-            //}
             else
             {
 

@@ -3,7 +3,6 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Runtime.Caching;
 using System.Runtime.ConstrainedExecution;
 using System.Web;
 using System.Web.UI;
@@ -20,26 +19,16 @@ namespace Uotep
         //String Area = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Manager mn = new Manager();
-        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
 
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    //Area = Session["area"].ToString();
-            //}
-            if (_cache != null)
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
+                Vuser = Session["user"].ToString();
+                //Area = Session["area"].ToString();
             }
-            else
-            {
-                Response.Redirect("Default.aspx?user=true");
-            }
-
+           
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config

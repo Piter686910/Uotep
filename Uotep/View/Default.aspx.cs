@@ -15,7 +15,6 @@ namespace Uotep
     public partial class _Default : Page
     {
         String Vuser = String.Empty;
-        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
             String categoria = Request.QueryString["user"];
@@ -27,51 +26,17 @@ namespace Uotep
                 Session.Abandon();
 
             }
-            
-            if (_cache != null)
-                Vuser = _cache.Get("user") as string;
-            if (Vuser != null)
+
+            if (Session["user"] != null)
             {
                 Manager mn = new Manager();
-                //Vuser = Session["user"].ToString();
+                Vuser = Session["user"].ToString();
                 DataTable ricerca = mn.GetRuolo(Vuser);
-                //Session["profilo"] = ricerca.Rows[0].ItemArray[0];
-                //Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
-                //Session["area"] = ricerca.Rows[0].ItemArray[2];
-
-
-                // 1. Inserire un parametro nella cache
-                string chiaveP = "profilo";
-                string valueP = ricerca.Rows[0].ItemArray[0].ToString();
-                string chiaveR = "ruolo";
-                string valueR = ricerca.Rows[0].ItemArray[1].ToString();
-                string chiaveA = "area";
-                string valueA = ricerca.Rows[0].ItemArray[2].ToString();
-                // Imposta le opzioni della cache
-                CacheItemPolicy policy = new CacheItemPolicy();
-                // policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10); // Scadenza assoluta tra 10 minuti
-                policy.SlidingExpiration = TimeSpan.FromMinutes(60); // Scadenza scorrevole (se non viene usata per 60 minuti, scade)
-
-
-                // Aggiungi il parametro alla cache
-                _cache.Add(chiaveP, valueP, policy);
-                _cache.Add(chiaveR, valueR, policy);
-                _cache.Add(chiaveA, valueA, policy);
-
-
-
+                Session["profilo"] = ricerca.Rows[0].ItemArray[0];
+                Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
+                Session["area"] = ricerca.Rows[0].ItemArray[2];
                 pnlLogin.Visible = false;
             }
-            //if (Session["user"] != null)
-            //{
-            //    Manager mn=new Manager();
-            //    Vuser = Session["user"].ToString();
-            //    DataTable ricerca = mn.GetRuolo(Vuser);
-            //    Session["profilo"] = ricerca.Rows[0].ItemArray[0];
-            //    Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
-            //    Session["area"] = ricerca.Rows[0].ItemArray[2];
-            //    pnlLogin.Visible = false;
-            //}
         }
 
 
@@ -112,19 +77,8 @@ namespace Uotep
                         else
                         {
                             //salvo la matricola
-                        //    Session["user"] = Vuser;
-                            
-                            // 1. Inserire un parametro nella cache
-                            string chiave = "user";
-                            string value = Vuser;
-                            // Imposta le opzioni della cache
-                            CacheItemPolicy policy = new CacheItemPolicy();
-                            // policy.AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10); // Scadenza assoluta tra 10 minuti
-                            policy.SlidingExpiration = TimeSpan.FromMinutes(60); // Scadenza scorrevole (se non viene usata per 60 minuti, scade)
+                           Session["user"] = Vuser;
 
-
-                            // Aggiungi il parametro alla cache
-                            _cache.Add(chiave, value, policy);
 
                             Response.Redirect("~/View/Default.aspx");
                         }

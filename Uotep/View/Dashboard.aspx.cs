@@ -12,28 +12,16 @@ namespace Uotep
     {
         String Vuser = String.Empty;
         String ruolo = String.Empty;
-        MemoryCache _cache = MemoryCache.Default;
+       
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (_cache != null)
+
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                ruolo = _cache.Get("ruolo") as string;
+                Vuser = Session["user"].ToString();
+                ruolo = Session["ruolo"].ToString();
+
             }
-
-            //if (user != null)
-            //{
-            //    Vuser = user;
-            //    ruolo = ruolo1;
-
-            //}
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    ruolo = Session["ruolo"].ToString();
-
-            //}
             if (!String.IsNullOrEmpty(ruolo))
             {
                 if (ruolo != "admin")

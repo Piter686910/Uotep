@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -16,7 +15,6 @@ namespace Uotep
 {
     public partial class Inserimento : Page
     {
-        MemoryCache _cache = MemoryCache.Default;
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String ruolo = String.Empty;
@@ -25,18 +23,13 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            if (_cache != null)
-            {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                ruolo = _cache.Get("ruolo") as string;
-            }
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    Ruolo = Session["ruolo"].ToString();
 
-            //}
+            if (Session["user"] != null)
+            {
+                Vuser = Session["user"].ToString();
+                ruolo = Session["ruolo"].ToString();
+
+            }
             else
             {
                 Response.Redirect("Default.aspx?user=true");

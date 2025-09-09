@@ -5,7 +5,6 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -25,23 +24,16 @@ namespace Uotep
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
-        MemoryCache _cache = MemoryCache.Default;
         GestionePratiche pratica = new GestionePratiche();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (_cache != null)
+
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                ruolo = _cache.Get("ruolo") as string;
-                profilo = _cache.Get("profilo") as string;
+                Vuser = Session["user"].ToString();
+                profilo = Session["profilo"].ToString();
+                ruolo = Session["ruolo"].ToString();
             }
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    profilo = Session["profilo"].ToString();
-            //    ruolo = Session["ruolo"].ToString();
-            //}
             else
             {
                 Response.Redirect("Default.aspx?user=true");

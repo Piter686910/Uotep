@@ -8,7 +8,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -27,26 +26,16 @@ namespace Uotep
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
-        MemoryCache _cache = MemoryCache.Default;
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    Ruolo = Session["ruolo"].ToString();
+            if (Session["user"] != null)
+            {
+                Vuser = Session["user"].ToString();
+                Ruolo = Session["ruolo"].ToString();
 
-            //}
-            if (_cache != null)
-            {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                Ruolo = _cache.Get("ruolo") as string;
             }
-            else
-            {
-                Response.Redirect("Default.aspx?user=true");
-            }
+
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -124,7 +113,7 @@ namespace Uotep
                 }
                 else
                 {
-                    
+
                     ListRicerca.Add("Pratica");
                     if (ckDoppioni.Checked)
                     {
@@ -238,7 +227,7 @@ namespace Uotep
         {
             System.Web.UI.WebControls.Button clickedButton = (System.Web.UI.WebControls.Button)sender;
             //argomentoPassato = clickedButton.CommandArgument;
-           
+
             DivNominativo.Visible = false;
             DivIndirizzo.Visible = false;
             DivDatiCatastali.Visible = false;
@@ -311,11 +300,11 @@ namespace Uotep
             using (var workbook = new XLWorkbook()) // Il 'using' garantisce che il workbook sia gestito correttamente
             // Il 'using' garantisce che il MemoryStream sia chiuso
             {
-                var worksheet = workbook.Worksheets.Add(dt,"Dati"); // Aggiunge un foglio di lavoro
-               //worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
-                //worksheet.Column(1).Delete(); // Elimina la prima colonna
+                var worksheet = workbook.Worksheets.Add(dt, "Dati"); // Aggiunge un foglio di lavoro
+                                                                     //worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
+                                                                     //worksheet.Column(1).Delete(); // Elimina la prima colonna
                 worksheet.Columns().AdjustToContents();  //  Auto-fit delle colonne
-                                                  //
+                                                         //
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(worksheet);
 
@@ -326,14 +315,14 @@ namespace Uotep
                 // worksheet.Columns().AdjustToContents();
 
                 // Salva il workbook nel MemoryStream
-               // workbook.SaveAs(memoryStream);
+                // workbook.SaveAs(memoryStream);
 
                 // *** Prepara la risposta HTTP per il download ***
                 // Importante: posiziona il puntatore del MemoryStream all'inizio prima di leggerlo
-              // memoryStream.Seek(0, SeekOrigin.Begin);
+                // memoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Ottieni i byte dal MemoryStream
-               // byte[] excelBytes = memoryStream.ToArray();
+                // byte[] excelBytes = memoryStream.ToArray();
 
                 // Imposta il nome del file per il download
                 string fileNameForDownload = "EsportazioneDati_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
@@ -369,21 +358,21 @@ namespace Uotep
                         //Response.BinaryWrite(excelBytes);
 
                         // *** Completa la richiesta ***
-                       // Response.Flush(); // Forza l'invio immediato del buffer al client
-                                          // Response.End(); // NON usare Response.End()
+                        // Response.Flush(); // Forza l'invio immediato del buffer al client
+                        // Response.End(); // NON usare Response.End()
                         workbook.SaveAs(memoryStream);
                         byte[] content = memoryStream.ToArray();
                         Response.Clear(); // Pulisci la risposta corrente
                         Response.ClearHeaders();
                         Response.ClearContent();
-                        
+
                         Response.ContentType = contentType; // Imposta il Content-Type corretto
                         Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileNameForDownload + "\""); // Header per il download (con virgolette per nomi con spazi)
                         Response.BinaryWrite(content);
 
 
                         // Scrivi i byte dello stream nella risposta
-                       // memoryStream.WriteTo(Response.OutputStream);
+                        // memoryStream.WriteTo(Response.OutputStream);
                         Response.Flush();
                         //Response.End();
 
@@ -456,8 +445,8 @@ namespace Uotep
             DataTable dt = mn.getArchivioUoteTotale();
             //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
             //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
-                                                                                  // 2. Esporta la DataTable in Excel
-                                                                                  // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            // 2. Esporta la DataTable in Excel
+            // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
             string filePath = "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
             //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
             Session["filetemp"] = filePath;

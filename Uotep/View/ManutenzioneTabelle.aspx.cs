@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Runtime.Caching;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
@@ -11,27 +10,17 @@ namespace Uotep
     public partial class ManutenzioneTabelle : Page
     {
         String Vuser = String.Empty;
-        MemoryCache _cache = MemoryCache.Default;
         String Ruolo = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    Ruolo = Session["Ruolo"].ToString();
 
-            //}
-            if (_cache != null)
+            if (Session["user"] != null)
             {
-                // 2. Recuperare un parametro dalla cache
-                Vuser = _cache.Get("user") as string;
-                Ruolo = _cache.Get("ruolo") as string;
+                Vuser = Session["user"].ToString();
+                Ruolo = Session["Ruolo"].ToString();
+
             }
-            else
-            {
-                Response.Redirect("Default.aspx?user=true");
-            }
+            
             if (!IsPostBack)
             {
                 if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
