@@ -3,18 +3,19 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
-using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
-using iText.Layout.Properties;
 using iText.Layout.Element;
-
+using iText.Layout.Properties;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Uotep.Classi
 {
@@ -53,6 +54,10 @@ namespace Uotep.Classi
             }
             return txt;
         }
+        /// <summary>
+        /// converte true e false in si e no
+        /// </summary>
+        /// <param name="ws"></param>
         public void ConvertiBooleaniInItaliano(IXLWorksheet ws)
         {
             IXLWorksheet worksheet = ws;
@@ -82,6 +87,42 @@ namespace Uotep.Classi
                 }
             }
         }
+
+        /// <summary>
+        /// Sostituisce la data minima 01/01/1900 con stringa vuota
+        /// </summary>
+        /// <param name="griglia"></param>
+        /// <param name="e"></param>
+        /// <param name="column"></param>
+        public void NonVisualizzaDataMinima(GridView griglia, GridViewRowEventArgs e, string column)
+        {
+            int dataRegistrazioneColumnIndex = -1;
+            for (int i = 0; i < griglia.Columns.Count; i++)
+            {
+                // Cerchiamo il BoundField con il DataField corretto
+                if (griglia.Columns[i] is BoundField bf && bf.DataField == column)
+                {
+                    dataRegistrazioneColumnIndex = i;
+                    break;
+                }
+            }
+
+            // Se la colonna è stata trovata
+            if (dataRegistrazioneColumnIndex != -1)
+            {
+                // Ottieni il valore originale del campo "decr_dataChiusura" dalla riga
+                object rawDateValue = DataBinder.Eval(e.Row.DataItem, column);
+
+                // Controlla se il valore è una data e se è 01/01/1900
+                if (rawDateValue is DateTime actualDate && actualDate == new DateTime(1900, 1, 1))
+                {
+                    // Se la data è 01/01/1900, impostiamo il testo della cella su una stringa vuota
+                    e.Row.Cells[dataRegistrazioneColumnIndex].Text = "";
+                }
+            }
+        }
+
+
         private void stampaX(float x, float y, Document document, Boolean X)
         {
             float boxSize = 10;
