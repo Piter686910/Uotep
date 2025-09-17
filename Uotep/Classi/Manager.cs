@@ -2650,7 +2650,7 @@ namespace Uotep.Classi
 
                     try
                     {
-                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and sigla = '" + p.sigla + "' and anno = '" + p.anno + "'";
+                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and anno = '" + p.anno + "'";
 
                         SqlDataAdapter da;
                         DataSet ds;
