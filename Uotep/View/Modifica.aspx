@@ -4,6 +4,15 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <script>
+        function showModal() {
+            $('#ModalDataEvasa').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalDataEvasa').modal('hide');
+
+        }
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
@@ -79,7 +88,7 @@
             }
         }
         //Inviata
-        function filterDropdownInviata() {
+        <%--function filterDropdownInviata() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtInviata");
             filter = input.value.toUpperCase();
@@ -117,7 +126,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
 
         function filterDropdownIndirizzo() {
             var input, filter, dropdown, options, i, txtValue;
@@ -228,71 +237,91 @@
                 console.error("Textbox con ID 'txtDataCarico' non trovata.");
             }
         });
-        document.addEventListener('DOMContentLoaded', function () {
-            var textBox = document.getElementById('txtDataInvio');
-        // Se non usi ClientIDMode="Static", dovresti usare:
-              // var textBox = document.getElementById('<%= txtDataInvio.ClientID %>');
+        //document.addEventListener('DOMContentLoaded', function () {
+        //    var textBox = document.getElementById('txtDataInvio');
+
+
+        //    if (textBox) {
+        //        textBox.addEventListener('input', function (event) {
+        //            // Salva la posizione attuale del cursore
+        //            var cursorPos = this.selectionStart;
+        //            var originalLength = this.value.length;
+
+        //            // Sostituisci tutti gli spazi con trattini
+        //            this.value = this.value.replace(/ /g, '/');
+
+        //            // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+        //            // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+        //            // riposiziona il cursore.
+        //            // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+        //            if (this.value.length === originalLength) {
+        //                this.setSelectionRange(cursorPos, cursorPos);
+        //            } else {
+        //                // Se più spazi sono stati sostituiti o incollati,
+        //                // il cursore potrebbe andare alla fine.
+        //                // Per la semplice digitazione di uno spazio,
+        //                // cursorPos dovrebbe essere corretto.
+        //                this.setSelectionRange(cursorPos, cursorPos);
+        //            }
+        //        });
+        //    } else {
+        //        console.error("Textbox con ID 'txtDataInvio' non trovata.");
+        //    }
+        //});
+        //document.addEventListener('DOMContentLoaded', function () {
+        //    var textBox = document.getElementById('txtDataDataEvasa');
+
+
+        //    if (textBox) {
+        //        textBox.addEventListener('input', function (event) {
+        //            // Salva la posizione attuale del cursore
+        //            var cursorPos = this.selectionStart;
+        //            var originalLength = this.value.length;
+
+        //            // Sostituisci tutti gli spazi con trattini
+        //            this.value = this.value.replace(/ /g, '/');
+
+        //            // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+        //            // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+        //            // riposiziona il cursore.
+        //            // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+        //            if (this.value.length === originalLength) {
+        //                this.setSelectionRange(cursorPos, cursorPos);
+        //            } else {
+        //                // Se più spazi sono stati sostituiti o incollati,
+        //                // il cursore potrebbe andare alla fine.
+        //                // Per la semplice digitazione di uno spazio,
+        //                // cursorPos dovrebbe essere corretto.
+        //                this.setSelectionRange(cursorPos, cursorPos);
+        //            }
+        //        });
+        //    } else {
+        //        console.error("Textbox con ID 'txtDataDataEvasa' non trovata.");
+        //    }
+        //});
+
+        //rende visibile un textbox su onclientclick
+        function TextBoxVisibility1(buttonReference) {
+        // Otteniamo un riferimento alla TextBox usando il suo ClientID generato da ASP.NET
+            // `<%= div1.ClientID %>` inserisce l'ID reale della TextBox nell'HTML
+            var textBox = document.getElementById('<%= div1.ClientID %>');
 
             if (textBox) {
-                textBox.addEventListener('input', function (event) {
-                    // Salva la posizione attuale del cursore
-                    var cursorPos = this.selectionStart;
-                    var originalLength = this.value.length;
-
-                    // Sostituisci tutti gli spazi con trattini
-                    this.value = this.value.replace(/ /g, '/');
-
-                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
-                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
-                    // riposiziona il cursore.
-                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
-                    if (this.value.length === originalLength) {
-                        this.setSelectionRange(cursorPos, cursorPos);
-                    } else {
-                        // Se più spazi sono stati sostituiti o incollati,
-                        // il cursore potrebbe andare alla fine.
-                        // Per la semplice digitazione di uno spazio,
-                        // cursorPos dovrebbe essere corretto.
-                        this.setSelectionRange(cursorPos, cursorPos);
-                    }
-                });
-            } else {
-                console.error("Textbox con ID 'txtDataInvio' non trovata.");
+                if (textBox.style.visibility === 'hidden') {
+                    // Se la TextBox è nascosta, la rendiamo visibile
+                    textBox.style.visibility = 'visible'; // O 'inline', 'inline-block' a seconda del contesto
+                    //buttonReference.value = 'Nascondi Textbox'; // Cambia il testo del bottone
+                } else {
+                    // Se la TextBox è visibile, la nascondiamo
+                    textBox.style.display = 'none';
+                    //buttonReference.value = 'Mostra Textbox'; // Cambia il testo del bottone
+                }
             }
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-            var textBox = document.getElementById('txtDataDataEvasa');
-        // Se non usi ClientIDMode="Static", dovresti usare:
-            // var textBox = document.getElementById('<%= txtDataDataEvasa.ClientID %>');
 
-            if (textBox) {
-                textBox.addEventListener('input', function (event) {
-                    // Salva la posizione attuale del cursore
-                    var cursorPos = this.selectionStart;
-                    var originalLength = this.value.length;
-
-                    // Sostituisci tutti gli spazi con trattini
-                    this.value = this.value.replace(/ /g, '/');
-
-                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
-                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
-                    // riposiziona il cursore.
-                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
-                    if (this.value.length === originalLength) {
-                        this.setSelectionRange(cursorPos, cursorPos);
-                    } else {
-                        // Se più spazi sono stati sostituiti o incollati,
-                        // il cursore potrebbe andare alla fine.
-                        // Per la semplice digitazione di uno spazio,
-                        // cursorPos dovrebbe essere corretto.
-                        this.setSelectionRange(cursorPos, cursorPos);
-                    }
-                });
-            } else {
-                console.error("Textbox con ID 'txtDataDataEvasa' non trovata.");
-            }
-        });
-
+            // Restituire 'false' impedisce il postback al server.
+            // Se non restituisci 'false', il click attiverà ANCHE l'evento OnClick lato server.
+            return false;
+        }
     </script>
     <style>
         .custom-border {
@@ -501,7 +530,7 @@
         </div>
         <%--  --%>
         <asp:Label ID="lblmessage" runat="server" ForeColor="Red"></asp:Label>
-        <div class="container" id="DivDettagli" runat="server">
+        <div class="container" id="DivDettagli" runat="server" style="margin-left: -80px!important">
 
             <!-- Riga principale con 4 colonne -->
             <div class="container" id="DivDati" runat="server">
@@ -547,13 +576,20 @@
                         <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
                         <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control mb-3" Enabled="false" />
                     </div>
+                    <div class="col-md-3" style="margin-top: 30px!important">
+                        <div class="form-check">
+                            <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
+                            <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="row">
 
                     <div class="col-md-3">
                         <label for="txtIndirizzo">Indirizzo</label>
-                        <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 400px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                             <asp:HiddenField ID="HfIndirizzo" runat="server" />
                         </div>
@@ -564,7 +600,7 @@
                         <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
                     </div>--%>
 
-                    <div class="col-md-3" style="margin-left: 257px!important">
+                    <div class="col-md-3" style="margin-left: 150px!important">
                         <label for="txtQuartiere">Quartiere</label>
                         <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
@@ -572,19 +608,41 @@
                         </div>
                         <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
                     </div>
-
+                    <div class="col-md-3" style="margin-left: 50px!important">
+                        <label for="txtNominativo">Nominativo</label>
+                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control mb-3" />
+                    </div>
                 </div>
 
                 <!-- Altra riga con 4 colonne -->
                 <div class="row mt-4">
+
                     <div class="col-md-3">
-                        <label for="txtNominativo">Nominativo</label>
-                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control mb-3" />
-                    </div>
-                    <div class="col-md-3">
-                        <label for="txtAccertatori">Accertatori</label>
+                        <label for="txtAccertatori">Accertatore 1</label>
                         <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" />
+
                     </div>
+                    <div id="bt1" runat="server" class="col-md-3" style="margin-top: 25px!important; margin-left: -15px!important">
+
+                        <asp:Button ID="Add" Text="+" runat="server" ToolTip="Aggiungi accertatore 2" CssClass="btn btn-primary mt-3" OnClick="Add_Click" />
+                    </div>
+                    <div id="div1" runat="server" class="col-md-3" style="visibility: hidden; margin-left: -200px!important">
+                        <label for="txtAccertatori2">Accertatore 2</label>
+                        <asp:TextBox ID="txtAccertatori2" runat="server" CssClass="form-control mb-3" />
+                    </div>
+                    <div id="bt2" runat="server" class="col-md-3" style="visibility: hidden; margin-top: 25px!important; margin-left: -15px!important">
+
+                        <asp:Button ID="Add2" Text="+" runat="server" ToolTip="Aggiungi accertatore 3" CssClass="btn btn-primary mt-3" OnClick="Add2_Click" />
+                    </div>
+
+                    <div id="div2" runat="server" class="col-md-3" style="visibility: hidden; margin-left: -190px!important">
+                        <label for="txtAccertatori3">Accertatore 3</label>
+                        <asp:TextBox ID="txtAccertatori3" runat="server" CssClass="form-control mb-3" />
+                    </div>
+                </div>
+
+                <!-- Pulsanti finali -->
+                <div class="row mt-4">
                     <div class="col-md-3">
                         <label for="txtDataCarico">Data Carico</label>
                         <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
@@ -601,17 +659,7 @@
                         </div>
                     </div>
 
-                </div>
-
-                <!-- Pulsanti finali -->
-                <div class="row mt-4">
-                    <div class="col-md-3">
-                        <div class="form-check">
-                            <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                            <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
+                    <%--                    <div class="col-md-3">
                         <label for="txtDataDataEvasa" class="form-label">In data</label>
                         <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
                     </div>
@@ -627,22 +675,22 @@
                     <div class="col-md-3">
                         <label for="txtDataInvio" class="form-label">Il</label>
                         <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control mb-3" ClientIDMode="Static" />
-                    </div>
+                    </div>--%>
                 </div>
                 <!-- Note -->
-                <div class="row mt-4">
+                <%-- <div class="row mt-4">
                     <div class="col-md-3">
                         <label for="txtNote">Eventuali Note</label>
                         <asp:TextBox ID="txtNote" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="4" />
                     </div>
 
-                </div>
+                </div>--%>
             </div>
             <div class="row">
                 <div class="col-12 text-center">
                     <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
                     <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
-                    <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary mt-3" />
 
                 </div>
@@ -829,7 +877,7 @@
                 </div>
                 <div id="DivDecretazione" runat="server">
                     <div class="row custom-border" style="margin-left: 0px!important">
-                        <div class="col-md-4 " style="margin-left: 30px!important">
+                        <div class="col-md-3 " style="margin-left: 20px!important">
                             <div class="form-group mb-3">
                                 <label for="txtPraticaDecr">Pratica</label>
                                 <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
@@ -841,21 +889,21 @@
                             <div class="form-group mb-3">
                                 <label for="txtDecretato">Decretato</label>
                                 <asp:TextBox ID="txtDecretato" runat="server" CssClass="form-control mb-3"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="RfDecretato" runat="server" ControlToValidate="txtDecretato" ValidationGroup="btDecretazione" ErrorMessage="Inserire decretato" ForeColor="Red">
+                                </asp:RequiredFieldValidator>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDataDecretazione">Data</label>
                                 <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3"></asp:TextBox>
+
                             </div>
+
                             <div class="form-group mb-3">
-                                <label for="txtNotaDecretazione">Nota</label>
-                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3"></asp:TextBox>
-                            </div>
-                            <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungiDecretazione" runat="server" CssClass="btn btn-primary mt-3" Text="Aggiungi" OnClick="btAggiungiDecretazione_Click" />
+                                <asp:Button ID="btAggiungiDecretazione" runat="server" CssClass="btn btn-primary mt-3" Text="Aggiungi" OnClick="btAggiungiDecretazione_Click" ValidationGroup="btDecretazione" />
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
+                        <div class="col-md-3">
+                            <div class="form-group mb-3" style="margin-left: -100px!important">
                                 <div class="form-group">
                                     <!-- GridView nel popup -->
                                     <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"
@@ -865,18 +913,27 @@
                                             <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
                                             <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
                                             <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+                                                <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
                                             </asp:BoundField>
                                             <asp:BoundField DataField="decr_data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" />
 
                                             <asp:BoundField DataField="decr_decretato" HeaderText="Decretato">
+                                                <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
                                             </asp:BoundField>
                                             <asp:BoundField DataField="decr_nota" HeaderText="Nota">
                                                 <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text colonna-descrizione" />
                                             </asp:BoundField>
-                                           <asp:BoundField DataField="decr_dataChiusura" HeaderText="Data Chiusura"  DataFormatString="{0:dd/MM/yyyy}"/>  
+                                            <%--<asp:BoundField DataField="decr_dataChiusura" HeaderText="Data Chiusura" DataFormatString="{0:dd/MM/yyyy}" />--%>
+
+                                            <asp:TemplateField HeaderText="Data Chiusura">
+                                                <ItemTemplate>
+                                                    <%# FormatMyDate(Eval("decr_dataChiusura")) %>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
                                             <%-- <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                                 <ItemTemplate>
                                                     <asp:Button ID="Button1" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
@@ -911,9 +968,15 @@
                                         </PagerTemplate>
 
                                     </asp:GridView>
-                                        <asp:Button ID="btChiudiDecretazione" runat="server" Text="Chiudi Decretazione" OnClick="btChiudiDecretazione_Click" CommandName="Select" CommandArgument='<%# Eval("decr_pratica") + "|" + Eval("decr_idPratica") %>' CssClass="btn btn-success btn-sm" />
+                                    <asp:Button ID="btChiudiDecretazione" runat="server" Text="Chiudi Decretazione" OnClick="btChiudiDecretazione_Click" CommandName="Select" CommandArgument='<%# Eval("decr_pratica") + "|" + Eval("decr_idPratica") %>' CssClass="btn btn-success btn-sm" />
 
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="margin-left: 400px!important">
+                            <div class="form-group mb-3">
+                                <label for="txtNotaDecretazione">Nota</label>
+                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
                             </div>
                         </div>
                     </div>
@@ -928,12 +991,26 @@
             </div>
         </div>
     </div>
-    <%--<!-- Popup Modale -->
-    <div id="customErrorModal" class="custom-modal">
-        <div class="custom-modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h4>Errore</h4>
-            <p id="errorMessage">viop   .</p>
+    <!-- Popup Modale inseriemnto data evasa -->
+    <div class="modal fade" id="ModalDataEvasa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 20%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel4">Inserisci La Data Evasa</h5>
+
+                </div>
+                <div id="Div3" runat="server"  class="row" style="margin-left:30px!important">
+                    <div class="form-group mb-3">
+                        <label for="txtdataEvasaPopup">Data Evasa</label>
+                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control"  ></asp:TextBox>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <!-- Bottone per avviare chiousura decretazione -->
+                    <asp:Button ID="ModalChiudiDecretazione" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDecretazione_Click" />
+                </div>
+            </div>
         </div>
-    </div>--%>
+    </div>
 </asp:Content>

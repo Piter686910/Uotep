@@ -696,7 +696,7 @@
                         <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1">
                             <asp:ListItem Text="ED"> </asp:ListItem>
                             <asp:ListItem Text="TP"> </asp:ListItem>
-                            <asp:ListItem Text="PG"> </asp:ListItem>
+                            <asp:ListItem Text="AG"> </asp:ListItem>
                         </asp:DropDownList>
                     </div>
                     <div class="form-group mb-3">

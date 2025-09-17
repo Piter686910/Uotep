@@ -190,7 +190,7 @@ namespace Uotep
                             {
                                 //converte la data 01-01-1900 in SPACE
                                 DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
-                                if (dataappo == new DateTime(1900, 1, 1))
+                                if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                                 {
                                     txtDataDataEvasa.Text = ""; // Metti una stringa vuota
                                 }
@@ -217,7 +217,7 @@ namespace Uotep
                             {
                                 //converte la data 01-01-1900 in SPACE
                                 DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                                if (dataappo == new DateTime(1900, 1, 1))
+                                if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                                 {
                                     txtDataCarico.Text = ""; // Metti una stringa vuota
                                 }

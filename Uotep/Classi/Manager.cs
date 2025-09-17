@@ -360,6 +360,26 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        /// <summary>
+        /// ottiene nominativo operatore dalla matricola
+        /// </summary>
+        /// <param name="matricola"></param>
+        /// <returns></returns>
+        public DataTable getNominativoOperatore(string matricola)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT nominativo FROM operatore where matricola = '" + matricola.Replace("'", "''") + "'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        /// <summary>
+        /// ottiene la matricola dal nominativo
+        /// </summary>
+        /// <param name="nominativo"></param>
+        /// <returns></returns>
         public DataTable getMatricolaOperatore(string nominativo)
         {
             DataTable tb = new DataTable();
@@ -1078,7 +1098,15 @@ namespace Uotep.Classi
 
         private DataTable FillTable(String sql, SqlConnection conn)
         {
+            try
+            {
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             DataTable table = new DataTable();
             //SqlConnection conn = new SqlConnection(ConnString);
             conn.Open();
@@ -2650,7 +2678,7 @@ namespace Uotep.Classi
 
                     try
                     {
-                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and sigla = '" + p.sigla + "' and anno = '" + p.anno + "'";
+                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and anno = '" + p.anno + "'";
 
                         SqlDataAdapter da;
                         DataSet ds;

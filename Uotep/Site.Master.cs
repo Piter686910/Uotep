@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
 using System.Runtime.Caching;
+using Microsoft.Ajax.Utilities;
 
 namespace Uotep
 {
@@ -25,6 +26,7 @@ namespace Uotep
                 if (Session["user"] != null)
                 {
                     string Vuser = Session["user"].ToString();
+                    string ruolo = Session["ruolo"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
                     if (Ricerca.Rows.Count > 0)
@@ -71,7 +73,7 @@ namespace Uotep
                                 menuSegreteria.Visible = false;
                                 menuEsci.Visible = true;
                                 menuHome.Visible = true;
-                                if (Profilo != Enumerate.Profilo.accertatore.GetHashCode().ToString())
+                                if (Session["profilo"].ToString() != Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
                                     menuNuovaScheda.Visible = false;
                                     menuRicercaScheda.Visible = true;
@@ -96,7 +98,7 @@ namespace Uotep
                                 menuHome.Visible = true;
                                 PG.Visible = true;
                                 GestionePratica.Visible = true;
-                                if (Profilo == Enumerate.Profilo.accertatore.GetHashCode().ToString())
+                                if (Session["profilo"].ToString().Contains(Enumerate.Profilo.accertatore.GetHashCode().ToStringInvariant()))
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
@@ -104,6 +106,8 @@ namespace Uotep
                                 }
                                 menuArchivioUote.Visible = true;
                                 RicercaArchivio.Visible = true;
+                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                                    Decretazione.Visible = true;
 
                                 break;
                             case "PG":
@@ -202,22 +206,15 @@ namespace Uotep
 
         protected void Esci_Click(object sender, EventArgs e)
         {
-            // Session.Remove("user");
+            Session.Remove("user");
             Session.Remove("POP");
             Session.Remove("filetemp");
-            // Session.Remove("profilo");
-            // Session.Remove("ruolo");
+            Session.Remove("profilo");
+            Session.Remove("ruolo");
             Session.Remove("ListRicerca");
             Session.Remove("popAperto");
             Session.Remove("popApertoRicercaScheda");
-            // Ottieni tutti gli elementi della cache
-            var cacheKeys = _cache.Select(kvp => kvp.Key).ToList();
 
-            // Rimuovi ogni elemento
-            foreach (string cacheKey in cacheKeys)
-            {
-                _cache.Remove(cacheKey);
-            }
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }

@@ -59,7 +59,7 @@ namespace Uotep
                     btCercaQuartiere.Visible = false;
                 }
                 RicercaNew(sender, e);
-                
+
                 CaricaDLL();
                 Session["POP"] = "si";
 
@@ -718,33 +718,43 @@ namespace Uotep
             DataTable dt = new DataTable();
 
             dt = GetOriginalData(); // ricerco la lista nuovamente
-
-            //applico il filtro
-            if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
+            try
             {
-                string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
-                DataRow[] filteredRows = dt.Select(filterExpression);
-
-                if (filteredRows.Length > 0)
+                //applico il filtro
+                if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
                 {
-                    DataTable filteredDt = dt.Clone();
-                    foreach (DataRow row in filteredRows)
+
+
+
+                    string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                    DataRow[] filteredRows = dt.Select(filterExpression);
+
+                    if (filteredRows.Length > 0)
                     {
-                        filteredDt.ImportRow(row);
+                        DataTable filteredDt = dt.Clone();
+                        foreach (DataRow row in filteredRows)
+                        {
+                            filteredDt.ImportRow(row);
+                        }
+                        GVRicercaPratica.DataSource = filteredDt;
                     }
-                    GVRicercaPratica.DataSource = filteredDt;
+                    else
+                    {
+                        GVRicercaPratica.DataSource = null;
+                    }
+
                 }
                 else
                 {
-                    GVRicercaPratica.DataSource = null;
+                    GVRicercaPratica.DataSource = dt; // Nessun filtro
                 }
+                GVRicercaPratica.DataBind();
             }
-            else
+            catch (Exception ex)
             {
-                GVRicercaPratica.DataSource = dt; // Nessun filtro
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
+               // throw;
             }
-            GVRicercaPratica.DataBind();
-
         }
 
         private DataTable GetOriginalData()
@@ -805,6 +815,7 @@ namespace Uotep
         // esecuzione del filtro ulteriore sulla colonna indirizzo
         protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
         {
+           
             TextBox txtFilter = (TextBox)sender;
             string filterValue = txtFilter.Text.Trim();
             HfFiltroIndirizzo.Value = filterValue;

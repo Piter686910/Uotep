@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
@@ -12,20 +14,23 @@ namespace Uotep
 {
     public partial class Modifica : Page
     {
-        String annoCorr = DateTime.Now.Year.ToString();
+        String profilo = string.Empty;
+        string ruolo = string.Empty;
         String Vuser = String.Empty;
         Principale p = new Principale();
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
-
+                profilo = Session["profilo"].ToString();
+                ruolo = Session["ruolo"].ToString();
             }
-            
+            Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+
             //Manager mn = new Manager();
             //DataTable ricerca = mn.GetRuolo(Vuser);
             //if (ricerca.Rows.Count > 0)
@@ -46,6 +51,13 @@ namespace Uotep
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();
+                if (profilo.Contains("1"))
+                {
+                    btSalva.Visible = false;
+                    btCercaQuartiere.Visible = false;
+                    btChiudiDecretazione.Visible = false;
+                }
+
 
             }
             //}
@@ -81,12 +93,12 @@ namespace Uotep
                 DdlScaturito.DataBind();
                 //DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable Inviati = mn.getListInviati();
-                DdlInviati.DataSource = Inviati; // Imposta il DataSource della DropDownList
-                DdlInviati.DataTextField = "Inviata"; // Il campo visibile
-                DdlInviati.DataValueField = "Id_inviata"; // Il valore associato a ogni opzione
+                //DataTable Inviati = mn.getListInviati();
+                //DdlInviati.DataSource = Inviati; // Imposta il DataSource della DropDownList
+                //DdlInviati.DataTextField = "Inviata"; // Il campo visibile
+                //DdlInviati.DataValueField = "Id_inviata"; // Il valore associato a ogni opzione
 
-                DdlInviati.DataBind();
+                //DdlInviati.DataBind();
                 //DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
@@ -159,22 +171,30 @@ namespace Uotep
 
                 //}
 
-                p.note = txtNote.Text;
+                // p.note = txtNote.Text;
                 p.evasa = CkEvasa.Checked;
-                if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-                {
-                    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-                }
+                //if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
+                //{
+                //    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
+                //}
 
                 p.accertatori = txtAccertatori.Text;
+                if (!string.IsNullOrEmpty(txtAccertatori2.Text))
+                {
+                    p.accertatori = p.accertatori + "/" + txtAccertatori2.Text.ToUpper();
+                }
+                if (!string.IsNullOrEmpty(txtAccertatori3.Text))
+                {
+                    p.accertatori = p.accertatori + "/" + txtAccertatori3.Text.ToUpper();
+                }
                 if (!string.IsNullOrEmpty(txtScaturito.Text))
                     p.scaturito = txtScaturito.Text;
-                if (!string.IsNullOrEmpty(txtInviata.Text))
-                    p.inviata = txtInviata.Text;
-                if (!string.IsNullOrEmpty(txtDataInvio.Text))
-                {
-                    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-                }
+                //if (!string.IsNullOrEmpty(txtInviata.Text))
+                //    p.inviata = txtInviata.Text;
+                //if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                //{
+                //    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                //}
 
                 //p.procedimentoPen = txtProdPenNr.Text;
                 //matricola del popup
@@ -230,8 +250,8 @@ namespace Uotep
             HfScaturito.Value = string.Empty;
             txtQuartiere.Text = string.Empty;
             HfQuartiere.Value = string.Empty;
-            txtInviata.Text = string.Empty;
-            HfInviata.Value = string.Empty;
+            // txtInviata.Text = string.Empty;
+            // HfInviata.Value = string.Empty;
             txtIndirizzo.Text = string.Empty;
             HfIndirizzo.Value = string.Empty;
             txtAnnoRicerca.Text = String.Empty;
@@ -426,36 +446,44 @@ namespace Uotep
                         //txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
                         CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
-                        {
-                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
-                            {
-                                txtDataDataEvasa.Text = string.Empty;
-                            }
-                            else
-                                txtDataDataEvasa.Text = dataappo.ToString("dd/MM/yyyy");
-                        }
-                        else
-                            txtDataDataEvasa.Text = string.Empty;
+                        //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+                        //{
+                        //    DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+                        //    //converte la data 01-01-1900 in SPACE
+
+                        //    if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                        //    {
+                        //        txtDataDataEvasa.Text = ""; // Metti una stringa vuota
+                        //    }
+                        //    else
+                        //    {
+                        //        txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                        //    }
+                        //}
+                        //else
+                        //    txtDataDataEvasa.Text = string.Empty;
 
 
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
+                        //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
 
-                            txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
+                        //    txtInviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
 
-                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
-                        {
-                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
-                            {
-                                txtDataInvio.Text = string.Empty;
-                            }
-                            else
-                                txtDataInvio.Text = dataappo.ToString("dd/MM/yyyy");
-                        }
-                        else
-                            txtDataInvio.Text = string.Empty;
+                        //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+                        //{
+                        //    DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()); // Recupera la data dal DataTable
+                        //    //converte la data 01-01-1900 in SPACE
+
+                        //    if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                        //    {
+                        //        txtDataInvio.Text = ""; // Metti una stringa vuota
+                        //    }
+                        //    else
+                        //    {
+                        //        txtDataInvio.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                        //    }
+                        //}
+                        //else
+                        //    txtDataInvio.Text = string.Empty;
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
@@ -465,20 +493,31 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                            if (dataappo == DateTime.MinValue)
+                            //if (dataappo == DateTime.MinValue)
+                            //{
+                            //    txtDataCarico.Text = string.Empty;
+                            //}
+                            //else
+                            //    txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+
+                            //converte la data 01-01-1900 in SPACE
+
+                            if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
                             {
-                                txtDataCarico.Text = string.Empty;
+                                txtDataCarico.Text = ""; // Metti una stringa vuota
                             }
                             else
-                                txtDataCarico.Text = dataappo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                            {
+                                txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                            }
                         }
                         else
                             txtDataCarico.Text = string.Empty;
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
-                        txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                        //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                        //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
@@ -754,15 +793,15 @@ namespace Uotep
         {
             try
             {
-
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
                 Manager mn = new Manager();
                 Decretazione decr = new Decretazione();
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text;
-                decr.decretato = txtDecretato.Text;
+                decr.decretato = txtDecretato.Text.ToUpper();
                 decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
-                decr.nota = txtNotaDecretazione.Text;
+                decr.nota = txtNotaDecretazione.Text.ToUpper();
 
                 Boolean ins = mn.InsDecretazione(decr);
                 if (!ins)
@@ -800,8 +839,17 @@ namespace Uotep
 
         protected void Decretazione_Click(object sender, EventArgs e)
         {
-            txtPraticaDecr.Text = txPratica.Text;
+            txtPraticaDecr.Text = txtProt.Text;
+            txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
             Manager mn = new Manager();
+            DataTable operatore = mn.getNominativoOperatore(Vuser);
+            if (operatore.Rows.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            }
+
             DataTable decretazione = new DataTable();
             if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
             {
@@ -811,23 +859,86 @@ namespace Uotep
             {
                 GVDecretazione.DataSource = decretazione;
                 GVDecretazione.DataBind();
-                Boolean a =System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
-                if (a==true)
+                Boolean a = System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
+                if (a == true)
                 {
                     btAggiungiDecretazione.Enabled = false;
                     btChiudiDecretazione.Enabled = false;
                 }
-                //else
+                else
+                    btChiudiDecretazione.Visible = true;
                 //{
                 //    btAggiungiDecretazione.Enabled = true;
                 //    btChiudiDecretazione.Enabled = true;
                 //}
-                    
+
             }
+            else
+                btChiudiDecretazione.Visible = false;
             apripopupDecretazione_Click(sender, e);
         }
-
+        
         protected void btChiudiDecretazione_Click(object sender, EventArgs e)
+        {
+                
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
+
+        }
+        protected void Add_Click(object sender, EventArgs e)
+        {
+            if (div1.Style["Visibility"] == "hidden")
+            {
+                div1.Style.Add("visibility", "visible");
+                bt2.Style.Add("visibility", "visible");
+            }
+            else
+            {
+                div1.Style.Add("visibility", "hidden");
+                div2.Style.Add("visibility", "hidden");
+                bt2.Style.Add("visibility", "hidden");
+                txtAccertatori2.Text = string.Empty;
+                txtAccertatori3.Text = string.Empty;
+            }
+        }
+
+        protected void Add2_Click(object sender, EventArgs e)
+        {
+            if (div2.Style["Visibility"] == "hidden")
+            {
+                div2.Style.Add("visibility", "visible");
+
+            }
+            else
+            {
+                div2.Style.Add("visibility", "hidden");
+                txtAccertatori3.Text = string.Empty;
+            }
+        }
+        /// <summary>
+        /// funzione che inserisce spaces al posto del min data value
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
+        protected string FormatMyDate(object dateValue)
+        {
+            if (dateValue == null || dateValue == DBNull.Value)
+            {
+                return "";
+            }
+
+            DateTime date;
+            if (DateTime.TryParse(dateValue.ToString(), out date))
+            {
+                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
+                {
+                    return ""; // O " " se vuoi uno spazio fisico
+                }
+                return date.ToString("dd/MM/yyyy");
+            }
+            return ""; // Gestione di valori non validi
+        }
+
+        protected void ModalChiudiDecretazione_Click(object sender, EventArgs e)
         {
             try
             {
@@ -835,8 +946,15 @@ namespace Uotep
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.chiuso = true;
-                string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
-                decr.dataChiusura = System.Convert.ToDateTime(dataFormattata);
+                if (!String.IsNullOrEmpty(txtdataEvasaPopup.Text))
+                {
+                    //string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
+                    decr.dataChiusura = System.Convert.ToDateTime(txtdataEvasaPopup.Text);
+                }
+
+                //string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
+                //decr.dataChiusura = System.Convert.ToDateTime(dataFormattata);
+                
                 Manager mn = new Manager();
                 Boolean upd = mn.UpdDecretazioneChiusura(decr);
                 if (!upd)
@@ -847,8 +965,8 @@ namespace Uotep
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
-                }
-
+                    }
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
             }
             catch (Exception ex)
             {
@@ -870,6 +988,7 @@ namespace Uotep
                 Response.Redirect("~/Contact.aspx");
 
             }
+
         }
     }
 }

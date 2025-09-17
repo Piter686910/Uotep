@@ -83,6 +83,8 @@
                         <li runat="server" id="menuAccertatori" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/SchedaIntervento" class="dropdown-toggle" data-toggle="dropdown">Scheda Intervento <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a id="Decretazione" runat="server" visible="false" href="~/View/Modifica">Decretazione</a></li>
+
                                 <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
                                 <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
                                 <li><a id="EstraiStatistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
@@ -114,8 +116,8 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <asp:Label ID="lblMsg" runat="server" BackColor="Red" ></asp:Label>
-                 <p style="font:bold; font-style:italic">&copy; <%: DateTime.Now.Year %> - Powered by </p>
+                <asp:Label ID="lblMsg" runat="server" BackColor="Red"></asp:Label>
+                <p style="font: bold; font-style: italic">&copy; <%: DateTime.Now.Year %> - Powered by </p>
             </footer>
         </div>
 
