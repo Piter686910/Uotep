@@ -937,7 +937,11 @@ namespace Uotep
             }
             return ""; // Gestione di valori non validi
         }
-
+        /// <summary>
+        /// CHIUSURA DECRETAZIONE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void ModalChiudiDecretazione_Click(object sender, EventArgs e)
         {
             try
@@ -945,6 +949,10 @@ namespace Uotep
                 Decretazione decr = new Decretazione();
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
+                decr.decretante = txtDecretante.Text.ToUpper();
+                decr.nota = txtNotaDecretazione.Text.ToUpper();
+                if (!String.IsNullOrEmpty(txtDataDecretazione.Text))
+                    decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.chiuso = true;
                 if (!String.IsNullOrEmpty(txtdataEvasaPopup.Text))
                 {

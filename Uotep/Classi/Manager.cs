@@ -2756,13 +2756,20 @@ namespace Uotep.Classi
         public Boolean UpdDecretazioneChiusura(Decretazione p)
         {
             bool resp = true;
+            string sql_decretazione = String.Empty;
             string sql_updDecretazione = String.Empty;
             string sql_updPrincipale = String.Empty;
             string testoSql = string.Empty;
-
+            int res1 = 0;
             try
             {
-                sql_updDecretazione = "update decretazione set decr_dataChiusura = '" + @p.dataChiusura + "',decr_chiuso = '" + @p.chiuso + "'" +
+                sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota, decr_dataChiusura, decr_chiuso)" +
+                                    " Values('" + @p.idPratica + "','" + @p.Npratica + "','" + @p.decretante.Replace("'", "''") + "','" + @p.decretato.Replace("'", "''") +
+                                    "','" + @p.data + "','" + @p.nota.Replace("'", "''") + "','" + @p.dataChiusura + "','" + @p.chiuso + "')";
+
+
+
+                sql_updDecretazione = "update decretazione set decr_chiuso = '" + @p.chiuso + "'" +
                     " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
 
                 sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
@@ -2776,10 +2783,15 @@ namespace Uotep.Classi
                     command.Transaction = tran;
                     try
                     {
-                        command.CommandText = sql_updDecretazione;
-
+                        command.CommandText = sql_decretazione;
                         int res = command.ExecuteNonQuery();
                         if (res > 0)
+                        {
+                            command.CommandText = sql_updDecretazione;
+
+                            res1 = command.ExecuteNonQuery();
+                        }
+                        if (res1 > 0)
                         {
                             command.CommandText = sql_updPrincipale;
 
@@ -2796,7 +2808,27 @@ namespace Uotep.Classi
                             resp = false;
                         }
 
-                        command.CommandText = sql_updDecretazione;
+                        //command.CommandText = sql_decretazione;
+
+                        //int res = command.ExecuteNonQuery();
+                        //if (res > 0)
+                        //{
+                        //    command.CommandText = sql_updPrincipale;
+
+                        //    command.ExecuteNonQuery();
+
+                        //    tran.Commit();
+
+                        //    resp = true;
+
+                        //}
+                        //else
+                        //{
+                        //    tran.Rollback();
+                        //    resp = false;
+                        //}
+
+                       // command.CommandText = sql_decretazione;
                         testoSql = "decretazione";
 
                     }
