@@ -312,11 +312,6 @@ namespace Uotep
                 al.ConvertiBooleaniInItaliano(worksheet);
                
 
-                worksheet.Cell("A1").Value = "Nome";
-                worksheet.Cell("B1").Value = "Età";
-                worksheet.Cell("A2").Value = "Mario";
-                worksheet.Cell("B2").Value = 35;
-
                 //workbook.SaveAs("EsportazioneData.xlsx");
                 // Opzionale: Formatta l'intestazione
                 // worksheet.Row(1).Style.Font.Bold = true;
