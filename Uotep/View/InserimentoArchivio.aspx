@@ -510,6 +510,12 @@
                         <label class="form-check-label ms-2" for="CkEvasa">Prop. Altri Enti</label>
                     </div>
                 </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check">
+                        <asp:CheckBox ID="CkBeniConfiscati" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkBeniConfiscati">Beni Confiscati</label>
+                    </div>
+                </div>
 
 
             </div>

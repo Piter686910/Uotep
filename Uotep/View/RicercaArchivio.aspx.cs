@@ -28,7 +28,8 @@ namespace Uotep
         String Ruolo = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Session["PaginaChiamante"] = "~/View/RicercaArchivio.aspx";
+           
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -77,6 +78,7 @@ namespace Uotep
             txtRicNota.Text = string.Empty;
             txtAnno.Text = string.Empty;
             txtMese.Text = string.Empty;
+            CkBeniConfiscati.Checked = false;
 
 
         }
@@ -271,8 +273,8 @@ namespace Uotep
         protected void Estrai_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
-            string[] ar = new string[9];
-            //Boolean ckevasa, Boolean ck1089, Boolean cksp, Boolean ckvincoli, Boolean ckdemolita, Boolean ckpp, Boolean ckpc, Boolean ckpbc, Boolean ckae)
+            string[] ar = new string[10];
+            //Boolean ckevasa, Boolean ck1089, Boolean cksp, Boolean ckvincoli, Boolean ckdemolita, Boolean ckpp, Boolean ckpc, Boolean ckpbc, Boolean ckae, boolean ckbeniconf)
 
             ar[0] = CkEvasa.Checked ? "evasa" : string.Empty;
 
@@ -285,6 +287,7 @@ namespace Uotep
             ar[6] = CkPropComunale.Checked ? "pc" : string.Empty; ;
             ar[7] = CkPropBeniCult.Checked ? "bc" : string.Empty; ;
             ar[8] = CkPropAltri.Checked ? "altri" : string.Empty; ;
+            ar[9] = CkBeniConfiscati.Checked ? "confiscati" : string.Empty; 
 
             DataTable dt = mn.getArchivioUoteParziale(ar);
 
@@ -307,7 +310,14 @@ namespace Uotep
                                                          //
                 Routine al = new Routine();
                 al.ConvertiBooleaniInItaliano(worksheet);
+               
 
+                worksheet.Cell("A1").Value = "Nome";
+                worksheet.Cell("B1").Value = "Età";
+                worksheet.Cell("A2").Value = "Mario";
+                worksheet.Cell("B2").Value = 35;
+
+                //workbook.SaveAs("EsportazioneData.xlsx");
                 // Opzionale: Formatta l'intestazione
                 // worksheet.Row(1).Style.Font.Bold = true;
 
@@ -361,6 +371,7 @@ namespace Uotep
                         // Response.Flush(); // Forza l'invio immediato del buffer al client
                         // Response.End(); // NON usare Response.End()
                         workbook.SaveAs(memoryStream);
+                    
                         byte[] content = memoryStream.ToArray();
                         Response.Clear(); // Pulisci la risposta corrente
                         Response.ClearHeaders();

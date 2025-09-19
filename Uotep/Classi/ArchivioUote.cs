@@ -38,6 +38,8 @@ namespace Uotep.Classi
         public Boolean arch_propAltriEnti = false;
         public string arch_foglioNct = string.Empty;
         public string arch_particellaNct = string.Empty;
+        public Boolean arch_beniConfiscati = false;
+
 
     }
 }

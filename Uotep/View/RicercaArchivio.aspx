@@ -83,7 +83,7 @@
                                 <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                             <td>
-                                <asp:Button ID="btNpratica" runat="server"  OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Storico Della Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +101,7 @@
                                 <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                         </tr>
-<%--                        <tr>
+                        <%--                        <tr>
                             <td>
                                 <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" CommandArgument="Pratica" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
@@ -125,7 +125,7 @@
                     <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
                     <asp:CheckBox ID="ckStorico" runat="server" CssClass="form-check-input" />
                     <label class="form-check-label ms-2" for="ckStorico">Storico</label>
-                    <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" Checked="true"/>
+                    <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" Checked="true" />
                     <label class="form-check-label ms-2" for="ckDoppioni">Doppioni</label>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
@@ -220,31 +220,31 @@
         <%-- DIV Estrai db --%>
         <div id="DivEstraiDb" runat="server" visible="false" style="margin-left: 250px!important">
 
-            <div class="row justify-content-start">
+            <div class="row justify-content-start" style="margin-left: -100px!important">
                 <!-- Aggiunto justify-content-start per sicurezza -->
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 55px;">
                         <%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                     </div>
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 88px;">
                         <%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="Ck1089">1089</label>
                     </div>
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 13px;">
                         <%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
                     </div>
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 60px;">
                         <%--                        <!- Spacing per il quarto gruppo ->--%>
                         <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
                     </div>
-                    <div>
+                    <div style="margin-right: 55px">
                         <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
@@ -252,33 +252,40 @@
                 </div>
             </div>
 
-            <div class="row justify-content-start">
+            <div class="row justify-content-start" style="margin-left: -100px!important">
                 <!-- Aggiunto justify-content-start per sicurezza -->
                 <div class="form-check" style="display: flex; flex-direction: row; align-items: baseline;">
                     <!-- Stili per allineamento e spacing -->
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 10px;">
                         <%--                        <!- Spacing per il primo gruppo ->--%>
                         <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropPriv">Prop. Privata</label>
                     </div>
 
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 10px;">
                         <%--                        <!- Spacing per il secondo gruppo ->--%>
                         <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropComunale">Prop. Comunale</label>
                     </div>
 
-                    <div style="margin-right: 50px;">
+                    <div style="margin-right: 10px;">
                         <%--                        <!- Spacing per il terzo gruppo ->--%>
                         <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropBeniCult">Prop. Beni Cult.</label>
                     </div>
 
-                    <div>
+                    
+                    <div style="margin-right: 10px;">
                         <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
                         <label class="form-check-label ms-2" for="CkPropAltri">Prop. Altri Enti</label>
                     </div>
+                    <div style="margin-right: 10px;">
+                        <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
+                        <asp:CheckBox ID="CkBeniConfiscati" runat="server" CssClass="form-check-input" />
+                        <label class="form-check-label ms-2" for="CkBeniConfiscati">Beni Confiscati</label>
+                    </div>
+
                 </div>
             </div>
             <div class="row">
@@ -290,7 +297,7 @@
 
 
     </div>
-    
+
 
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">

@@ -465,6 +465,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox CkPropAltri;
 
         /// <summary>
+        /// Controllo CkBeniConfiscati.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CkBeniConfiscati;
+
+        /// <summary>
         /// Controllo Button2.
         /// </summary>
         /// <remarks>

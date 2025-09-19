@@ -24,12 +24,12 @@ namespace Uotep
         Boolean okPopup = false;
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["PaginaChiamante"] != null)
+            //if (Session["PaginaChiamante"] != null)
 
-                Session.Remove("PaginaChiamante");
+            //    Session.Remove("PaginaChiamante");
 
 
-
+            Session["PaginaChiamante"] = "~/View/InserimentoArchivio.aspx";
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -122,6 +122,11 @@ namespace Uotep
                     //segnalo he sono in modifica prartica
                     HfStato.Value = "Mod";
                     txtPratica.Enabled = false;
+                }
+                else
+                {
+                 //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                    Response.Redirect("~/View/RicercaArchivio.aspx");
                 }
             }
             else
@@ -264,11 +269,13 @@ namespace Uotep
             CkPropComunale.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[26]);
             CkPropBeniCult.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[27]);
             CkPropAltri.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[28]);
+            
+
             if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[29].ToString()))
                 txtFoglioNct.Text = arc.Rows[0].ItemArray[29].ToString();
             if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[30].ToString()))
                 txtParticellaNct.Text = arc.Rows[0].ItemArray[30].ToString();
-
+            CkBeniConfiscati.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[31]);
 
         }
         public Boolean Convalida()
@@ -425,6 +432,8 @@ namespace Uotep
                             arch.arch_propBeniCult = CkPropBeniCult.Checked;
                             arch.arch_propComune = CkPropComunale.Checked;
                             arch.arch_propAltriEnti = CkPropAltri.Checked;
+                            arch.arch_beniConfiscati = CkBeniConfiscati.Checked;
+
                             arch.arch_foglioNct = txtFoglioNct.Text;
                             arch.arch_particellaNct = txtParticellaNct.Text;
 
@@ -510,6 +519,7 @@ namespace Uotep
             CkTris.Checked = false;
             CkQuater.Checked = false;
             CkPropAltri.Checked = false;
+            CkBeniConfiscati.Checked = false;
             CkPropBeniCult.Checked = false;
             CkPropComunale.Checked = false;
             CkPropPriv.Checked = false;
