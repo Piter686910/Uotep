@@ -516,7 +516,7 @@
                         <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btDataArrivo" runat="server" OnClick="btDataArrivo_Click" Text="Data Arrivo" ToolTip="Ricerca Data Arrivo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btDataArrivo" runat="server" OnClick="btDataArrivo_Click" Text="Data Inserimento" ToolTip="Ricerca Data Inserimento" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                     </p>
@@ -655,11 +655,11 @@
                 <%-- DIV RICERCA data carico --%>
                 <div id="DivDataArrivo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label14" runat="server" Text="Data Arrivo Da" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label14" runat="server" Text="Data Inserimento Da" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtDatArrivoDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
 
-                    <asp:Label ID="Label15" runat="server" Text="Data Arrivo A" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label15" runat="server" Text="Data Inserimento A" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtDatArrivoA" runat="server" CssClass="form-control" placeholder="Data Fine" />
 
@@ -700,8 +700,8 @@
                         </asp:DropDownList>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="txtDataArrivo">Data Arrivo</label>
-                        <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Font-Bold="true" />
+                        <label for="txtDataInsCarico">Data Inserimento</label>
+                        <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control" Font-Bold="true" />
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtGiudice">Giudice</label>

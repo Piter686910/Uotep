@@ -67,7 +67,7 @@
                         <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Arrivo" ToolTip="Ricerca Data Arrivo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Inserimento" ToolTip="Ricerca Data Inserimento" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                     </p>
@@ -207,11 +207,11 @@
                 <%-- DIV RICERCA data carico --%>
                 <div id="DivDataArrivo" runat="server" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label12" runat="server" Text="Data Arrivo Da" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label12" runat="server" Text="Data Inserimento Da" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtDatArrivoDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
 
-                    <asp:Label ID="Label13" runat="server" Text="Data Arrivo A" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label13" runat="server" Text="Data Inserimento A" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtDatArrivoA" runat="server" CssClass="form-control" placeholder="Data Fine" />
 
@@ -232,8 +232,8 @@
                     <label for="txtProt">Nr Protocollo</label>
                     <asp:TextBox ID="txtProt" runat="server" CssClass="form-control mb-3" ForeColor="Red" Enabled="false" Font-Bold="true" />
                     <asp:TextBox ID="txtSigla" runat="server" CssClass="form-control mb-3" placeholder="Sigla" Enabled="false" />
-                    <label for="txtDataArrivo">Data Arrivo</label>
-                    <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                    <label for="txtDataInsCarico">Data Inserimento</label>
+                    <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
                     <%--<asp:Label ID="lblGiorno" runat="server" CssClass="form-control mb-3" > </asp:Label>--%>
                 </div>
 
@@ -345,7 +345,7 @@
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
-                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center"/>
 
                                 <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
@@ -353,7 +353,7 @@
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" />
+                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center"/>
                                 <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
 
                                 <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">

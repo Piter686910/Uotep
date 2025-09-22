@@ -221,7 +221,7 @@
             }
         }
         //Inviata
-        function filterDropdownInviata() {
+        <%--function filterDropdownInviata() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtInviata");
             filter = input.value.toUpperCase();
@@ -259,7 +259,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
         //Indirizzo
         function filterDropdownIndirizzo() {
             var input, filter, dropdown, options, i, txtValue;
@@ -301,7 +301,7 @@
             }
         }
         //nel textbox data sostituisce lo spazio con lo / 
-        document.addEventListener('DOMContentLoaded', function () {
+       <%-- document.addEventListener('DOMContentLoaded', function () {
             var textBox = document.getElementById('txtDataInvio');
         // Se non usi ClientIDMode="Static", dovresti usare:
               // var textBox = document.getElementById('<%= txtDataInvio.ClientID %>');
@@ -332,7 +332,7 @@
             } else {
                 console.error("Textbox con ID 'txtDataInvio' non trovata.");
             }
-        });
+        });--%>
         document.addEventListener('DOMContentLoaded', function () {
             var textBox = document.getElementById('txtDataDataEvasa');
         // Se non usi ClientIDMode="Static", dovresti usare:
@@ -367,230 +367,281 @@
         });
 
     </script>
+    <%-- il seguente style serve per i bordi azzurri --%>
+    <style>
+        .custom-border {
+            border: 2px solid #007bff; /* Cornice blu */
+            border-radius: 8px; /* Angoli arrotondati */
+            padding: 15px; /* Spazio interno */
+            margin: 5px 0; /* Spazio esterno */
+            /*margin-left: -30px;*/
+        }
+    </style>
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">INSERISCI DATI</p>
         </div>
+
         <div class="container">
-            <div class="row">
-                <!-- Colonna Sinistra -->
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label for="txtProt">Nr Protocollo</label>
-                        <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
-                        <label for="Ddltipo">/</label>
-                        <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
-                            <asp:ListItem Text="ED"> </asp:ListItem>
-                            <asp:ListItem Text="TP"> </asp:ListItem>
-                            <asp:ListItem Text="AG"> </asp:ListItem>
-                        </asp:DropDownList>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtDataArrivo">Data Arrivo</label>
-                        <asp:TextBox ID="txtDataArrivo" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
-                        <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDataArrivo" ErrorMessage="inserire una data">
 
-                        </asp:RequiredFieldValidator>--%>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfGiudice" runat="server" />
-                        </div>
-                        <asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />
-
-                        <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="DdlTipoProvvAg">Tipo Provvedimento AG</label>
-
-                        <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control" Visible="false"></asp:TextBox>
-                        <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfTipoProv" runat="server" />
+            <div class="tab-content">
+                <p style="font-weight: bold; font-size: medium">Dati Generali</p>
+                <div class="row custom-border">
+                    <div class="col-md-4 ">
+                        <div class="form-group mb-3" style="margin-left: -25px; margin-top: 30px">
+                            <label for="txtProt">Nr Carico</label>
+                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
+                            <label for="Ddltipo">/</label>
+                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
+                                <asp:ListItem Text="ED"> </asp:ListItem>
+                                <asp:ListItem Text="TP"> </asp:ListItem>
+                                <asp:ListItem Text="AG"> </asp:ListItem>
+                            </asp:DropDownList>
 
                         </div>
-                        <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control"  />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtQuartiere">Quartiere</label>
-                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
-<%--                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtQuartiere" ErrorMessage="inserire Quartiere" ValidationGroup="bt" ForeColor="Red">
-
-                        </asp:RequiredFieldValidator>--%>
-
-                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <%--<asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />--%>
-                        <label for="txtProvenienza">Provenienza</label>
-                        <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfProvenienza" runat="server" />
-<%--                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtProvenienza" ErrorMessage="inserire Provenienza" ValidationGroup="bt" ForeColor="Red">
-
-                            </asp:RequiredFieldValidator>--%>
-
-                        </div>
-                        <asp:Button ID="btSalvaProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaProvenienza_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
-
-  <%--                      <asp:RequiredFieldValidator ID="rqProvenienza" runat="server" ControlToValidate="DdlProvenienza" ErrorMessage="inserire la provenienza">
-
-                        </asp:RequiredFieldValidator>--%>
-
-                    </div>
-                </div>
-
-                <!-- Colonna Destra -->
-                <div class="col-md-6">
-
-                    <div class="form-group mb-3">
-                        <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
-                        <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
-<%--                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
-
-                        </asp:RequiredFieldValidator>--%>
-
-                    </div>
-
-                    <!-- Indirizzo e TextBox sulla stessa riga -->
-                    <div class="form-group mb-3">
-                        <label for="DdlIndirizzo">Indirizzo</label>
-                        <div class="row">
-                            <!-- DropDownList occupa metà spazio -->
-                            <div class="col-md-6">
-                                <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                    <asp:HiddenField ID="HfIndirizzo" runat="server" />
-                                </div>
-<%--                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtIndirizzo" ErrorMessage="inserire Indirizzo" ValidationGroup="bt" ForeColor="Red">
-
-                                </asp:RequiredFieldValidator>--%>
-
-                                <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtTipoAtto">Tipologia Atto</label>
+                            <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                <asp:HiddenField ID="HfTipoAtto" runat="server" />
                             </div>
-                            <!-- TextBox occupa metà spazio -->
-                            <%--<div class="col-md-6">
-                                <asp:TextBox ID="txtVia" runat="server" CssClass="form-control" placeholder="specifica l'indirizzo" />
-                            </div>--%>
+                            <asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group mb-3">
+                            <label for="txtDataInsCarico">Data Inserimento</label>
+                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control" Font-Bold="true" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <%--<asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />--%>
+                            <label for="txtProvenienza">Provenienza</label>
+                            <asp:TextBox ID="txtProvenienza" runat="server" AutoPostBack="false" onkeyup="filterDropdownProvenienza()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <div id="suggestionsListProvenienza" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                <asp:HiddenField ID="HfProvenienza" runat="server" />
+                            </div>
+                            <asp:Button ID="btSalvaProvenienza" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaProvenienza_Click" Visible="false" />
+                            <asp:DropDownList ID="DdlProvenienza" runat="server" CssClass="form-control" Style="display: none" />
+
                         </div>
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label for="txtProdPenNr">Procedimento Penale nr</label>
-                        <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control" />
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="txtNominativo">Nominativo</label>
-                        <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
-<%--                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtNominativo" ErrorMessage="inserire Nominativo" ValidationGroup="bt" ForeColor="Red">
-
-                        </asp:RequiredFieldValidator>--%>
-
-                    </div>
-
-                    <div class="form-group mb-3">
-
-                        <label for="txPratica">Pratica</label>
-                        <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
-<%--                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txPratica" ErrorMessage="inserire numero pratica" ValidationGroup="bt" ForeColor="Red">
-
-                        </asp:RequiredFieldValidator>--%>
-
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="txtTipoAtto">Tipologia Atto</label>
-                        <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtRifProtGen">Protocollo Generale</label>
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
                         </div>
-                        <asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-group mb-3">
-                        <label for="txtNote">Eventuali Note</label>
-                        <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center mb-3">
-                <div class="col-md-3 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="txtDataDataEvasa" class="form-label">In data</label>
-                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" ClientIDMode="Static" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator2"
-                            runat="server"
-                            ControlToValidate="txtDataDataEvasa"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
 
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="txtInviata" class="form-label">Inviata</label>
-                        <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                            <asp:HiddenField ID="HfInviata" runat="server" />
+                <p style="font-weight: bold; font-size: medium">Dati Relativi Alla Pratica</p>
+
+                <div class="row custom-border">
+                    <div class="col-md-4">
+                        <!-- Indirizzo e TextBox sulla stessa riga -->
+                        <div class="form-group mb-3">
+                            <label for="DdlIndirizzo">Indirizzo</label>
+                            <div class="row">
+                                <!-- DropDownList occupa metà spazio -->
+                                <div class="col-md-6">
+                                    <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListIndirizzo" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                        <asp:HiddenField ID="HfIndirizzo" runat="server" />
+                                    </div>
+                                    <asp:DropDownList ID="DdlIndirizzo" runat="server" CssClass="form-control" Style="display: none" />
+                                </div>
+                            </div>
                         </div>
-                        <asp:Button ID="btSalvaInviata" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaInviata_Click" Visible="false" />
-                        <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="txtDataInvio" class="form-label">Il</label>
-                        <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" ClientIDMode="Static" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator1"
-                            runat="server"
-                            ControlToValidate="txtDataInvio"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
 
                     </div>
-                </div>
-            </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtQuartiere">Quartiere</label>
+                            <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                            </div>
+                            <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
+                        </div>
 
-            <div class="row">
-                <div class="col-12 text-center">
-                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
-                    <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
-                    <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtNominativo">Nominativo</label>
+                            <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txPratica">Pratica</label>
+                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtAreaCompetenza">Area Competenza</label>
+                            <asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control"></asp:TextBox>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtDataCarico">Data Carico</label>
+                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control"></asp:TextBox>
+                        </div>
+
+                    </div>
 
                 </div>
+                <div id="divAg" runat="server" visible="false">
+
+                    <p style="font-weight: bold; font-size: medium">Dati AG</p>
+                    <div class="row custom-border">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="txtGiudice">Giudice</label>
+                                <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    <asp:HiddenField ID="HfGiudice" runat="server" />
+                                </div>
+                                <asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />
+
+                                <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="DdlTipoProvvAg">Tipo Provvedimento AG</label>
+
+                                <asp:TextBox ID="txtTipoProv" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control" Visible="false"></asp:TextBox>
+                                <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    <asp:HiddenField ID="HfTipoProv" runat="server" />
+
+                                </div>
+                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
+                                <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" />
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="txtProdPenNr">Procedimento Penale nr</label>
+                                <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
+
+
+
+
+
+
+    <div class="row">
+        <!-- Colonna Sinistra -->
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+            </div>
+
+
+
+        </div>
+
+        <!-- Colonna Destra -->
+        <div class="col-md-6">
+        </div>
+
+    </div>
+
+<%--    <div class="row">
+        <div class="col-12">
+            <div class="form-group mb-3">
+                <label for="txtNote">Eventuali Note</label>
+                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
+            </div>
+        </div>
+    </div>--%>
+
+    <div class="row align-items-center mb-3">
+        <div class="col-md-3 d-flex align-items-center">
+            <div class="form-check">
+                <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
+                <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="txtDataDataEvasa" class="form-label">In data</label>
+                <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                <asp:RegularExpressionValidator
+                    ID="RegularExpressionValidator2"
+                    runat="server"
+                    ControlToValidate="txtDataDataEvasa"
+                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                    ErrorMessage="la data deve essere dd/mm/aaaa"
+                    ForeColor="Red"
+                    ValidationGroup="bt"
+                    Display="Static">
+                </asp:RegularExpressionValidator>
+
+            </div>
+        </div>
+<%--        <div class="col-md-3">
+            <div class="form-group">
+                <label for="txtInviata" class="form-label">Inviata</label>
+                <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                <div id="suggestionsListInviata" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                    <asp:HiddenField ID="HfInviata" runat="server" />
+                </div>
+                <asp:Button ID="btSalvaInviata" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaInviata_Click" Visible="false" />
+                <asp:DropDownList ID="DdlInviati" runat="server" CssClass="form-control" Style="display: none" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="txtDataInvio" class="form-label">Il</label>
+                <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                <asp:RegularExpressionValidator
+                    ID="RegularExpressionValidator1"
+                    runat="server"
+                    ControlToValidate="txtDataInvio"
+                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                    ErrorMessage="la data deve essere dd/mm/aaaa"
+                    ForeColor="Red"
+                    ValidationGroup="bt"
+                    Display="Static">
+                </asp:RegularExpressionValidator>
+
+            </div>
+        </div>--%>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+            <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
+            <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+
+        </div>
+    </div>
+    </div>
     </div>
 
     <!-- Modale Bootstrap quartiere -->

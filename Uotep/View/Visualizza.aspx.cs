@@ -168,7 +168,7 @@ namespace Uotep
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
 
-                                txtDataArrivo.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
+                                txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
 
 
                             txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();

@@ -132,7 +132,7 @@ namespace Uotep
                 //p.giorno = DateTime.Now.Day.ToString();
                 //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
                 //p.sigla = DdlSigla.SelectedItem.Text;
-                //p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                //p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
                 if (!string.IsNullOrEmpty(txtDataCarico.Text))
                 {
                     p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
@@ -426,10 +426,10 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
                         {
                             DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
-                            txtDataArrivo.Text = dataappo1.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                            txtDataInsCarico.Text = dataappo1.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                         }
                         else
-                            txtDataArrivo.Text = string.Empty;
+                            txtDataInsCarico.Text = string.Empty;
 
                         txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                         txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();

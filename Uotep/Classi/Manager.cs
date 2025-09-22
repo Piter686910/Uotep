@@ -739,7 +739,7 @@ namespace Uotep.Classi
             }
         }
         /// <summary>
-        /// ricerca per data arrivo
+        /// ricerca per data inserimento
         /// </summary>
         /// <param name="dataarrivo"></param>
         /// <returns></returns>

@@ -23,7 +23,7 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-
+            Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -49,12 +49,22 @@ namespace Uotep
                 CaricaDLL();
                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                 {
+                    Manager mn = new Manager();
                     DdlSigla.SelectedValue = "AG";
+                    DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
+                    DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
+                    DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
+                    DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
+
+                    DdlTipoProvvAg.DataBind();
+                    divAg.Visible = true;
                 }
+                else
+                    divAg.Visible = false;
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
 
-                txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
 
             }
 
@@ -74,8 +84,8 @@ namespace Uotep
             if (!String.IsNullOrEmpty(HfTipoAtto.Value))
                 btSalvaTipoAtto.Visible = true;
 
-            if (!String.IsNullOrEmpty(HfInviata.Value))
-                btSalvaInviata.Visible = true;
+            //if (!String.IsNullOrEmpty(HfInviata.Value))
+            //    btSalvaInviata.Visible = true;
 
         }
         public Boolean ControlloCampiObbligatori()
@@ -142,8 +152,13 @@ namespace Uotep
                     p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
 
                     p.sigla = DdlSigla.SelectedItem.Text;
-                    p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
-                    p.dataCarico = DateTime.MinValue.ToShortDateString(); //System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
+                    //p.dataCarico = DateTime.MinValue.ToShortDateString(); 
+                    if (!string.IsNullOrEmpty(txtDataCarico.Text))
+                    {
+                        p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
+                    }
+
                     p.nominativo = txtNominativo.Text;
                     if (String.IsNullOrEmpty(txPratica.Text))
                     {
@@ -243,34 +258,33 @@ namespace Uotep
                     p.rif_Prot_Gen = txtRifProtGen.Text;
 
 
-                    p.note = txtNote.Text;
+                   // p.note = txtNote.Text;
                     p.evasa = CkEvasa.Checked;
                     if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
                     {
                         p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
                     }
 
-                    //p.accertatori = null;
+                    p.accertatori = txtAreaCompetenza.Text.ToUpper();
                     //p.scaturito = null;
-                    if (String.IsNullOrEmpty(txtInviata.Text))
-                    {
-                        p.inviata = String.Empty;
-                    }
-                    else
-                    {
-                        Boolean resp = mn.getInviata(txtInviata.Text);
-                        if (!resp)
-                        {
-                            HfInviata.Value = txtInviata.Text;
-                        }
-                        p.inviata = txtInviata.Text;
+                    //if (String.IsNullOrEmpty(txtInviata.Text))
+                    //{
+                    //    p.inviata = String.Empty;
+                    //}
+                    //else
+                    //{
+                    //    Boolean resp = mn.getInviata(txtInviata.Text);
+                    //    if (!resp)
+                    //    {
+                    //        HfInviata.Value = txtInviata.Text;
+                    //    }
+                    //    p.inviata = txtInviata.Text;
 
-                    }
-                    //p.inviata = DdlInviati.SelectedItem.Text;
-                    if (!string.IsNullOrEmpty(txtDataInvio.Text))
-                    {
-                        p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-                    }
+                    //}
+                    //if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                    //{
+                    //    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    //}
 
                     p.procedimentoPen = txtProdPenNr.Text;
                     //p.matricola = Vuser;
@@ -361,10 +375,10 @@ namespace Uotep
             }
 
             txtQuartiere.Text = string.Empty;
-            if (String.IsNullOrEmpty(HfInviata.Value))
-            {
-                txtInviata.Text = string.Empty;
-            }
+            //if (String.IsNullOrEmpty(HfInviata.Value))
+            //{
+            //    txtInviata.Text = string.Empty;
+            //}
             if (String.IsNullOrEmpty(HfProvenienza.Value))
             {
                 txtTipoAtto.Text = string.Empty;
@@ -377,16 +391,16 @@ namespace Uotep
                 txtProvenienza.Text = string.Empty;
             }
 
-            txtDataArrivo.Text = String.Empty;
+            txtDataInsCarico.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
-            txtNote.Text = String.Empty;
+          //  txtNote.Text = String.Empty;
             txtDataDataEvasa.Text = String.Empty;
 
-            txtDataInvio.Text = String.Empty;
+          //  txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
             CaricaDLL();
 
@@ -540,11 +554,11 @@ namespace Uotep
                 DdlTipoProvvAg.DataBind();
                 //   DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaInviati = mn.getListInviati();
-                DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
-                DdlInviati.DataTextField = "Inviata"; // Il campo visibile
-                DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
-                DdlInviati.DataBind();
+                //DataTable RicercaInviati = mn.getListInviati();
+                //DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
+                //DdlInviati.DataTextField = "Inviata"; // Il campo visibile
+                //DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
+                //DdlInviati.DataBind();
                 // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
@@ -659,18 +673,18 @@ namespace Uotep
 
 
 
-        protected void btSalvaInviata_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciInviata(HfInviata.Value);
-            if (ins)
-            {
-                HfInviata.Value = string.Empty;
-                txtInviata.Text = string.Empty;
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+        //protected void btSalvaInviata_Click(object sender, EventArgs e)
+        //{
+        //    Manager mn = new Manager();
+        //    Boolean ins = mn.InserisciInviata(HfInviata.Value);
+        //    if (ins)
+        //    {
+        //        HfInviata.Value = string.Empty;
+        //        txtInviata.Text = string.Empty;
+        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
-            }
-        }
+        //    }
+        //}
 
         protected void NuovoIns_Click(object sender, EventArgs e)
         {
@@ -681,7 +695,7 @@ namespace Uotep
         {
             Routine prot = new Routine();
             txtProt.Text = prot.GetProtocollo();
-            txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+            txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
             btNewIns.Visible = false;
             btSalva.Visible = true;
         }
@@ -694,6 +708,12 @@ namespace Uotep
         protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
         {
             CaricaDLL();
+            //if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            //{
+            //    divAg.Visible = true;
+            //}
+            //else
+            //    divAg.Visible = false;
         }
 
 

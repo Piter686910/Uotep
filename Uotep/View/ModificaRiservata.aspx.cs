@@ -181,7 +181,7 @@ namespace Uotep
 
                 p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
                 p.sigla = DdlSigla.SelectedItem.Text;
-                p.dataArrivo = System.Convert.ToDateTime(txtDataArrivo.Text).ToShortDateString();
+                p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
                 if (!string.IsNullOrEmpty(txtDataCarico.Text))
                 {
                     p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
@@ -712,9 +712,9 @@ namespace Uotep
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[2].ToString();
                         DateTime dataarrivo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
-                        txtDataArrivo.Text = dataarrivo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+                        txtDataInsCarico.Text = dataarrivo.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
 
-                        // txtDataArrivo.Text = pratica.Rows[0].ItemArray[3].ToString();
+                        // txtDataInsCarico.Text = pratica.Rows[0].ItemArray[3].ToString();
                         // DdlProvenienza.SelectedItem.Text = pratica.Rows[0].ItemArray[4].ToString();
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[4].ToString()))
@@ -896,7 +896,7 @@ namespace Uotep
             }
             txtPratica.Text = String.Empty;
             txtPraticaR.Text = String.Empty;
-            txtDataArrivo.Text = String.Empty;
+            txtDataInsCarico.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             //  txtVia.Text = String.Empty;
             txtProdPenNr.Text = String.Empty;

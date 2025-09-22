@@ -42,130 +42,58 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlSigla;
 
         /// <summary>
-        /// Controllo txtDataArrivo.
+        /// Controllo txtTipoAtto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDataArrivo;
+        protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
 
         /// <summary>
-        /// Controllo txtGiudice.
+        /// Controllo suggestionsListTipoAtto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtGiudice;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoAtto;
 
         /// <summary>
-        /// Controllo suggestionsList.
+        /// Controllo HfTipoAtto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsList;
+        protected global::System.Web.UI.WebControls.HiddenField HfTipoAtto;
 
         /// <summary>
-        /// Controllo HfGiudice.
+        /// Controllo btSalvaTipoAtto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfGiudice;
+        protected global::System.Web.UI.WebControls.Button btSalvaTipoAtto;
 
         /// <summary>
-        /// Controllo btSalvaGiudice.
+        /// Controllo DdlTipoAtto.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaGiudice;
+        protected global::System.Web.UI.WebControls.DropDownList DdlTipoAtto;
 
         /// <summary>
-        /// Controllo DdlGiudice.
+        /// Controllo txtDataInsCarico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlGiudice;
-
-        /// <summary>
-        /// Controllo txtTipoProv.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTipoProv;
-
-        /// <summary>
-        /// Controllo suggestionsListTipoProv.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoProv;
-
-        /// <summary>
-        /// Controllo HfTipoProv.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfTipoProv;
-
-        /// <summary>
-        /// Controllo btSalvaTipoProvv.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaTipoProvv;
-
-        /// <summary>
-        /// Controllo DdlTipoProvvAg.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlTipoProvvAg;
-
-        /// <summary>
-        /// Controllo txtQuartiere.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQuartiere;
-
-        /// <summary>
-        /// Controllo suggestionsListQuartiere.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListQuartiere;
-
-        /// <summary>
-        /// Controllo DdlQuartiere.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlQuartiere;
+        protected global::System.Web.UI.WebControls.TextBox txtDataInsCarico;
 
         /// <summary>
         /// Controllo txtProvenienza.
@@ -258,13 +186,31 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlIndirizzo;
 
         /// <summary>
-        /// Controllo txtProdPenNr.
+        /// Controllo txtQuartiere.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtProdPenNr;
+        protected global::System.Web.UI.WebControls.TextBox txtQuartiere;
+
+        /// <summary>
+        /// Controllo suggestionsListQuartiere.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListQuartiere;
+
+        /// <summary>
+        /// Controllo DdlQuartiere.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlQuartiere;
 
         /// <summary>
         /// Controllo txtNominativo.
@@ -285,58 +231,130 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txPratica;
 
         /// <summary>
-        /// Controllo txtTipoAtto.
+        /// Controllo txtAreaCompetenza.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
+        protected global::System.Web.UI.WebControls.TextBox txtAreaCompetenza;
 
         /// <summary>
-        /// Controllo suggestionsListTipoAtto.
+        /// Controllo txtDataCarico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoAtto;
+        protected global::System.Web.UI.WebControls.TextBox txtDataCarico;
 
         /// <summary>
-        /// Controllo HfTipoAtto.
+        /// Controllo divAg.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfTipoAtto;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAg;
 
         /// <summary>
-        /// Controllo btSalvaTipoAtto.
+        /// Controllo txtGiudice.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaTipoAtto;
+        protected global::System.Web.UI.WebControls.TextBox txtGiudice;
 
         /// <summary>
-        /// Controllo DdlTipoAtto.
+        /// Controllo suggestionsList.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlTipoAtto;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsList;
 
         /// <summary>
-        /// Controllo txtNote.
+        /// Controllo HfGiudice.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNote;
+        protected global::System.Web.UI.WebControls.HiddenField HfGiudice;
+
+        /// <summary>
+        /// Controllo btSalvaGiudice.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btSalvaGiudice;
+
+        /// <summary>
+        /// Controllo DdlGiudice.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlGiudice;
+
+        /// <summary>
+        /// Controllo txtTipoProv.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTipoProv;
+
+        /// <summary>
+        /// Controllo suggestionsListTipoProv.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoProv;
+
+        /// <summary>
+        /// Controllo HfTipoProv.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfTipoProv;
+
+        /// <summary>
+        /// Controllo btSalvaTipoProvv.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btSalvaTipoProvv;
+
+        /// <summary>
+        /// Controllo DdlTipoProvvAg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlTipoProvvAg;
+
+        /// <summary>
+        /// Controllo txtProdPenNr.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProdPenNr;
 
         /// <summary>
         /// Controllo CkEvasa.
@@ -364,69 +382,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
-
-        /// <summary>
-        /// Controllo txtInviata.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtInviata;
-
-        /// <summary>
-        /// Controllo suggestionsListInviata.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListInviata;
-
-        /// <summary>
-        /// Controllo HfInviata.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfInviata;
-
-        /// <summary>
-        /// Controllo btSalvaInviata.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaInviata;
-
-        /// <summary>
-        /// Controllo DdlInviati.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DdlInviati;
-
-        /// <summary>
-        /// Controllo txtDataInvio.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDataInvio;
-
-        /// <summary>
-        /// Controllo RegularExpressionValidator1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
         /// Controllo btSalva.
