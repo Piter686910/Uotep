@@ -139,9 +139,9 @@ namespace Uotep
             try
             {
                 // int protocollo = 0;
-                Boolean obbligo = ControlloCampiObbligatori();
-                if (obbligo)
-                {
+                //Boolean obbligo = ControlloCampiObbligatori();
+                //if (obbligo)
+                //{
                     Principale p = new Principale();
                     p.anno = annoCorr;
                     DateTime giorno = DateTime.Now;
@@ -336,12 +336,12 @@ namespace Uotep
                         btNewIns.Visible = true;
                         btSalva.Visible = false;
                     }
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Ci sono campi obbligatori non inseriti, controllare Tipologia Atto o Riferimento Protocollo Generale!" + "'); $('#errorModal').modal('show');", true);
+                //}
+                //else
+                //{
+                //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Ci sono campi obbligatori non inseriti, controllare Tipologia Atto o Riferimento Protocollo Generale!" + "'); $('#errorModal').modal('show');", true);
 
-                }
+                //}
             }
             catch (Exception ex)
             {

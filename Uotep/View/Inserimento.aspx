@@ -435,6 +435,10 @@
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
                             <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+
+                        </asp:RequiredFieldValidator>
+
                         </div>
 
                     </div>
@@ -538,6 +542,7 @@
                             <div class="form-group mb-3">
                                 <label for="txtProdPenNr">Procedimento Penale nr</label>
                                 <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control" />
+
                             </div>
 
                         </div>
