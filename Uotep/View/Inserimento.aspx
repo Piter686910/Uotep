@@ -453,9 +453,9 @@
                     <div class="form-group mb-3">
                         <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
                         <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
-<%--                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
 
-                        </asp:RequiredFieldValidator>--%>
+                        </asp:RequiredFieldValidator>
 
                     </div>
 
