@@ -183,8 +183,8 @@
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
                                 <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" ClientIDMode="Static"/>
-                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
-                                </asp:RequiredFieldValidator>--%>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
+                                </asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator
                                     ID="RegularExpressionValidator1"
                                     runat="server"
@@ -200,6 +200,9 @@
                             <div class="form-group mb-3" style="margin-top: -20px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
                                 <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" ClientIDMode="Static"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
+                                </asp:RequiredFieldValidator>
+
                                 <asp:RegularExpressionValidator
                                     ID="RegularExpressionValidator2"
                                     runat="server"

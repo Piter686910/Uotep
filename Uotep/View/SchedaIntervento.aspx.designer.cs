@@ -105,6 +105,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox TxtDataIntervento;
 
         /// <summary>
+        /// Controllo RequiredFieldValidator3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+
+        /// <summary>
         /// Controllo RegularExpressionValidator1.
         /// </summary>
         /// <remarks>
@@ -121,6 +130,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDataConsegna;
+
+        /// <summary>
+        /// Controllo RequiredFieldValidator2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
 
         /// <summary>
         /// Controllo RegularExpressionValidator2.
