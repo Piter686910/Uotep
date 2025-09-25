@@ -333,7 +333,7 @@
                 console.error("Textbox con ID 'txtDataInvio' non trovata.");
             }
         });--%>
-        document.addEventListener('DOMContentLoaded', function () {
+       <%-- document.addEventListener('DOMContentLoaded', function () {
             var textBox = document.getElementById('txtDataDataEvasa');
         // Se non usi ClientIDMode="Static", dovresti usare:
             // var textBox = document.getElementById('<%= txtDataDataEvasa.ClientID %>');
@@ -364,7 +364,7 @@
             } else {
                 console.error("Textbox con ID 'txtDataDataEvasa' non trovata.");
             }
-        });
+        });--%>
 
     </script>
     <%-- il seguente style serve per i bordi azzurri --%>
@@ -381,7 +381,7 @@
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">INSERISCI DATI</p>
+            <p class="text-center lead">INSERISCI NUOVO CARICO</p>
         </div>
 
         <div class="container">
@@ -435,9 +435,9 @@
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
                             <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
 
-                        </asp:RequiredFieldValidator>
+                            </asp:RequiredFieldValidator>
 
                         </div>
 
@@ -448,7 +448,7 @@
                 <div class="row custom-border">
                     <div class="col-md-4">
                         <!-- Indirizzo e TextBox sulla stessa riga -->
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="DdlIndirizzo">Indirizzo</label>
                             <div class="row">
                                 <!-- DropDownList occupa metà spazio -->
@@ -482,7 +482,7 @@
 
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
                             <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
                         </div>
@@ -510,7 +510,7 @@
                     <p style="font-weight: bold; font-size: medium">Dati AG</p>
                     <div class="row custom-border">
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-3" style="margin-left: -25px">
                                 <label for="txtGiudice">Giudice</label>
                                 <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                                 <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
@@ -549,33 +549,47 @@
                     </div>
                 </div>
 
+ <%--               <div id="div1" runat="server">
 
+                    <p style="font-weight: bold; font-size: medium">Esiti</p>
+                    <div class="row custom-border">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3" style="margin-left: -25px">
+
+                                <div class="form-check">
+                                    <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
+                                    <label class="form-check-label ms-2" for="CkEvasa">Trasmessa</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>--%>
+            </div>
+
+
+
+
+
+
+            <div class="row">
+                <!-- Colonna Sinistra -->
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                    </div>
+
+
+
+                </div>
+
+                <!-- Colonna Destra -->
+                <div class="col-md-6">
+                </div>
 
             </div>
-        </div>
 
-
-
-
-
-
-    <div class="row">
-        <!-- Colonna Sinistra -->
-        <div class="col-md-6">
-            <div class="form-group mb-3">
-            </div>
-
-
-
-        </div>
-
-        <!-- Colonna Destra -->
-        <div class="col-md-6">
-        </div>
-
-    </div>
-
-<%--    <div class="row">
+            <%--    <div class="row">
         <div class="col-12">
             <div class="form-group mb-3">
                 <label for="txtNote">Eventuali Note</label>
@@ -584,31 +598,26 @@
         </div>
     </div>--%>
 
-    <div class="row align-items-center mb-3">
-        <div class="col-md-3 d-flex align-items-center">
-            <div class="form-check">
-                <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="txtDataDataEvasa" class="form-label">In data</label>
-                <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" ClientIDMode="Static" />
-                <asp:RegularExpressionValidator
-                    ID="RegularExpressionValidator2"
-                    runat="server"
-                    ControlToValidate="txtDataDataEvasa"
-                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                    ErrorMessage="la data deve essere dd/mm/aaaa"
-                    ForeColor="Red"
-                    ValidationGroup="bt"
-                    Display="Static">
-                </asp:RegularExpressionValidator>
+            <%--<div class="row align-items-center mb-3">--%>
 
-            </div>
-        </div>
-<%--        <div class="col-md-3">
+                <%--<div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtDataDataEvasa" class="form-label">In data</label>
+                        <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                        <asp:RegularExpressionValidator
+                            ID="RegularExpressionValidator2"
+                            runat="server"
+                            ControlToValidate="txtDataDataEvasa"
+                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                            ErrorMessage="la data deve essere dd/mm/aaaa"
+                            ForeColor="Red"
+                            ValidationGroup="bt"
+                            Display="Static">
+                        </asp:RegularExpressionValidator>
+
+                    </div>
+                </div>--%>
+                <%--        <div class="col-md-3">
             <div class="form-group">
                 <label for="txtInviata" class="form-label">Inviata</label>
                 <asp:TextBox ID="txtInviata" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
@@ -636,17 +645,17 @@
 
             </div>
         </div>--%>
-    </div>
+            <%--</div>--%>
 
-    <div class="row">
-        <div class="col-12 text-center">
-            <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
-            <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
-            <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+            <div class="row">
+                <div class="col-12 text-center">
+                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
+                    <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
     </div>
 
     <!-- Modale Bootstrap quartiere -->

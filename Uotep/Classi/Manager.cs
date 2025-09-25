@@ -1651,10 +1651,17 @@ namespace Uotep.Classi
             return resp;
 
         }
+        /// <summary>
+        /// Inserisce una decretazione e aggiorna la tabella principale con il nuovo accertatore
+        /// </summary>
+        /// <param name="decr"></param>
+        /// <returns></returns>
         public Boolean InsDecretazione(Decretazione decr)
         {
             bool resp = true;
             string sql_decretazione = String.Empty;
+            string sql_update = String.Empty;
+            int res1 = 0;
             string testoSql = string.Empty;
 
             try
@@ -1663,18 +1670,45 @@ namespace Uotep.Classi
                     "decr_dataChiusura, decr_chiuso)" +
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
                    "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
-
+             
+                sql_update= "update principale set accertatori= accertatori +'/" + decr.decretato.Replace("'", "''") + "'";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
-                    SqlCommand command = conn.CreateCommand();
+                    SqlTransaction transaction = null;
 
+                    transaction = conn.BeginTransaction("trans");
+                    
+                    SqlCommand command = conn.CreateCommand();
+                    
+                    command.Transaction = transaction;
                     try
                     {
+
                         command.CommandText = sql_decretazione;
                         testoSql = "decretazione";
                         int res = command.ExecuteNonQuery();
+                        if (res > 0)
+                        {
+                            command.CommandText = sql_update;
+
+                            res1 = command.ExecuteNonQuery();
+                        }
+
+                        if (res1 > 0)
+                        {
+                            transaction.Commit();
+
+                            resp = true;
+                        }
+
+                        else
+                        {
+                            transaction.Rollback();
+                            resp = false;
+                        }
+
                     }
 
                     catch (Exception ex)
@@ -2650,12 +2684,12 @@ namespace Uotep.Classi
             {
 
                 sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
+                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,macro_area)" +
                    " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                    "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
+                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "')";
                 if (exist)
                 {
                     sql_Statistiche = "update statistiche set deleghe_ricevute = " + stat.deleghe_ricevute + ", esposti_ricevuti = " + stat.esposti_ricevuti +
@@ -3076,8 +3110,8 @@ namespace Uotep.Classi
             {
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
-                    "',Accertatori = '" + @p.accertatori.Replace("'", "''") + "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") +
-                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "'" +
+                    "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica +
+                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica  + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "'" +
 
 
                     " where  ID = " + ID;

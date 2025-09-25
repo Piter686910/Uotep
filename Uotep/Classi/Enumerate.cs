@@ -25,6 +25,13 @@
             tre = 3, //admin, responsabili, sa
 
         }
+        public enum Sigla
+        {
+            AG = 1, 
+            ED = 2,
+            TP = 3 
+
+        }
         public enum CampiXStatistiche
         {
             relazione = 0,

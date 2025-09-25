@@ -23,7 +23,7 @@ namespace Uotep
                 Vuser = Session["user"].ToString();
 
             }
-            
+
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -163,9 +163,17 @@ namespace Uotep
                         DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         if (pratica.Rows.Count > 0)
                         {
-                            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
-                            txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
+                            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() + " / " + pratica.Rows[0].ItemArray[2].ToString();
+                            // txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
+                            if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
+                            {
+                                divAg.Visible = true;
+                            }
+                            else
+                            {
+                                divAg.Visible = false;
 
+                            }
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
 
                                 txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
@@ -199,20 +207,24 @@ namespace Uotep
                                     txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
                                 }
                             }
-                              //  txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
+                            //  txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
 
 
-                            txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper().ToUpper();
+                            //     txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
 
-                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
+                            //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
 
-                                txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
+                            //    txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
+
+                            txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+                            txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[17].ToString()))
+                            {
 
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper().ToUpper();
-                            txtScaturito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-                            txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().ToUpper();
-
+                                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                            }
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                             {
                                 //converte la data 01-01-1900 in SPACE
@@ -226,16 +238,20 @@ namespace Uotep
                                     txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
                                 }
                             }
-                                //txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
+                            //txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
 
                             txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
                             TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
-                            txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
-                            txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                            //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+                            //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                             //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                             txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
-
+                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
+                            {
+                                txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                                txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                            }
                             // Puoi anche chiudere il popup se necessario
                             ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                             DivDettagli.Visible = true;
@@ -296,7 +312,7 @@ namespace Uotep
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
             }
-            if (gvPopup.TopPagerRow != null )
+            if (gvPopup.TopPagerRow != null)
             {
                 // Trova il controllo Label all'interno del PagerTemplate
                 Label lblPageInfo = (Label)gvPopup.TopPagerRow.FindControl("lblPageInfo");

@@ -224,93 +224,171 @@
         <asp:Label ID="lblmessage" runat="server" ForeColor="Red"></asp:Label>
         <div class="container" id="DivDettagli" runat="server">
 
+            <div class="tab-content">
+                <p style="font-weight: bold; font-size: medium">Dati Generali</p>
+                <div class="row custom-border">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3" style="margin-left: -25px">
 
-            <!-- Riga principale con 4 colonne -->
-            <div class="row">
-                <!-- Colonna 2 -->
-                <div class="col-md-3">
-                    <label for="txtProt">Nr Protocollo</label>
-                    <asp:TextBox ID="txtProt" runat="server" CssClass="form-control mb-3" ForeColor="Red" Enabled="false" Font-Bold="true" />
-                    <asp:TextBox ID="txtSigla" runat="server" CssClass="form-control mb-3" placeholder="Sigla" Enabled="false" />
-                    <label for="txtDataInsCarico">Data Inserimento</label>
-                    <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                    <%--<asp:Label ID="lblGiorno" runat="server" CssClass="form-control mb-3" > </asp:Label>--%>
+                            <label for="txtProt">Nr Carico</label>
+                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control mb-3" ForeColor="Red" Enabled="false" Font-Bold="true" />
+                            <%--<asp:TextBox ID="txtSigla" runat="server" CssClass="col-md-2" Enabled="false" />--%>
+                        </div>
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtTipoAtto">Tipologia Atto</label>
+                            <asp:TextBox ID="txtTipoAtto" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+
+                    </div>
+
+
+                    <%-- seconda colonna --%>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtDataInsCarico">Data Inserimento</label>
+                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="txtProvenienza">Provenienza</label>
+                            <asp:TextBox ID="txtProvenienza" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                    </div>
+                    <%-- terza colonna --%>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtRifProtGen">Protocollo Generale</label>
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+                    </div>
+
+                </div>
+                <p style="font-weight: bold; font-size: medium">Dati Relativi Alla Pratica</p>
+                <div class="row custom-border">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtIndirizzo">Indirizzo</label>
+                            <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtPraticaOut">Pratica</label>
+                            <asp:TextBox ID="txtPraticaOut" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="TxtQuartiere">Quartiere</label>
+                            <asp:TextBox ID="TxtQuartiere" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtAreaCompetenza">Area Competenza</label>
+                            <asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtNominativo">Nominativo</label>
+                            <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="txtDataCarico">Data Carico</label>
+                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- Colonna 3 -->
-                <div class="col-md-3">
-                    <label for="txtGiudice">Giudice</label>
-                    <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                    <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
-                    <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                    <label for="TxtQuartiere">Quartiere</label>
-                    <asp:TextBox ID="TxtQuartiere" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
+                <div class="row custom-border">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3" style="margin-left: -25px; margin-top: 30px">
+                            <label class="form-check-label ms-2" for="CkEvasa">Trasmesso</label>
+                            <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
+
+                        </div>
+
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtEsito">Esito</label>
+                            <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtAccertatori">Accertatori</label>
+                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" Style="width: 100%; max-width: 600px;" />
+
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="txtDataDataEvasa" class="form-label">Data Esito</label>
+                            <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+
+                    </div>
+                </div>
+                <div id="divAg" runat="server" visible="false">
+
+                    <p style="font-weight: bold; font-size: medium">Dati AG</p>
+                    <div class="row custom-border">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtGiudice">Giudice</label>
+                                <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
+                                <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtProdPenNr">Procedimento Penale nr</label>
+                                <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
-                <!-- Colonna 4 -->
-                <div class="col-md-3">
-                    <label for="txtProvenienza">Provenienza</label>
-                    <asp:TextBox ID="txtProvenienza" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                    <label for="txtIndirizzo">Indirizzo</label>
-                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                    <label for="txtProdPenNr">Procedimento Penale nr</label>
-                    <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
+
             </div>
 
-            <!-- Altra riga con 4 colonne -->
-            <div class="row mt-4">
-                <div class="col-md-3">
-                    <label for="txtNominativo">Nominativo</label>
-                    <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtPraticaOut">Pratica</label>
-                    <asp:TextBox ID="txtPraticaOut" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtTipoAtto">Tipologia Atto</label>
-                    <asp:TextBox ID="txtTipoAtto" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtRifProtGen">Riferimento Prot. Gen.</label>
-                    <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <!-- Note -->
-            <div class="row mt-4">
+            <%--<div class="row mt-4">
                 <div class="col-md-3">
                     <label for="txtNote">Eventuali Note</label>
                     <asp:TextBox ID="txtNote" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="4" Enabled="false" />
                 </div>
-                <div class="col-md-3">
-                    <label for="txtAccertatori">Accertatori</label>
-                    <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtDataCarico">Data Carico</label>
-                    <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtScaturito">Scaturito</label>
-                    <asp:TextBox ID="txtScaturito" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-            </div>
+              
+            </div>--%>
 
-            <!-- Pulsanti finali -->
-            <div class="row mt-4">
-                <div class="col-md-3">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label for="txtDataDataEvasa" class="form-label">In data</label>
-                    <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
+
+
+            <%--<div class="row mt-4">
+               <div class="col-md-3">
                     <label for="txtinviata" class="form-label">Inviata</label>
                     <asp:TextBox ID="txtinviata" runat="server" CssClass="form-control mb-3" Enabled="false" />
                 </div>
@@ -318,7 +396,7 @@
                     <label for="txtDataInvio" class="form-label">Il</label>
                     <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control mb-3" Enabled="false" />
                 </div>
-            </div>
+            </div>--%>
 
             <div class="row">
                 <div class="col-12 text-center">
@@ -345,7 +423,7 @@
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
-                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center"/>
+                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 
                                 <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
@@ -353,7 +431,7 @@
                                 <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
-                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center"/>
+                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
 
                                 <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">

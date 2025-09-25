@@ -33,5 +33,6 @@ namespace Uotep.Classi
         public String rif_Prot_Gen = string.Empty;
         public String matricola = string.Empty;
         public DateTime data_ins_pratica;
+        public String macro_area = string.Empty;
     }
 }

@@ -31,13 +31,6 @@ namespace Uotep
             }
             Session["PaginaChiamante"] = "~/View/Modifica.aspx";
 
-            //Manager mn = new Manager();
-            //DataTable ricerca = mn.GetRuolo(Vuser);
-            //if (ricerca.Rows.Count > 0)
-            //{
-
-            //Session["profilo"] = ricerca.Rows[0].ItemArray[0];
-
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -60,12 +53,7 @@ namespace Uotep
 
 
             }
-            //}
-            // else
 
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "UTENTE NON AUTORIZZATO" + "'); $('#errorModal').modal('show');", true);
-            //}
         }
         private void CaricaDLL()
         {
@@ -84,13 +72,19 @@ namespace Uotep
                 DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlIndirizzo.DataBind();
                 //DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
+                DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
+                DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
+                DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
-                DataTable Scaturito = mn.getListScaturito();
-                DdlScaturito.DataSource = Scaturito; // Imposta il DataSource della DropDownList
-                DdlScaturito.DataTextField = "Scaturito"; // Il campo visibile
-                DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
+                DdlTipoProvvAg.DataBind();
 
-                DdlScaturito.DataBind();
+                DataTable Esito = mn.getListScaturito();
+                DdlEsito.DataSource = Esito; // Imposta il DataSource della DropDownList
+                DdlEsito.DataTextField = "Scaturito"; // Il campo visibile
+                DdlEsito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
+
+                DdlEsito.DataBind();
                 //DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 //DataTable Inviati = mn.getListInviati();
@@ -140,7 +134,10 @@ namespace Uotep
 
                 p.nominativo = txtNominativo.Text;
 
-
+                if (!String.IsNullOrEmpty(txPratica.Text))
+                {
+                    p.nr_Pratica = txPratica.Text.Trim();
+                }
                 if (String.IsNullOrEmpty(txtIndirizzo.Text))
                 {
                     p.indirizzo = String.Empty;
@@ -172,23 +169,23 @@ namespace Uotep
                 //}
 
                 // p.note = txtNote.Text;
-                p.evasa = CkEvasa.Checked;
-                //if (!string.IsNullOrEmpty(txtDataDataEvasa.Text))
-                //{
-                //    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
-                //}
+                //p.evasa = CkEvasa.Checked;
+                if (!string.IsNullOrEmpty(TxtDataEsito.Text))
+                {
+                    p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
+                }
 
-                p.accertatori = txtAccertatori.Text;
-                if (!string.IsNullOrEmpty(txtAccertatori2.Text))
+                if (!String.IsNullOrEmpty(txtAreaCompetenza.Text))
                 {
-                    p.accertatori = p.accertatori + "/" + txtAccertatori2.Text.ToUpper();
+                    p.macro_area = txtAreaCompetenza.Text.ToUpper();
                 }
-                if (!string.IsNullOrEmpty(txtAccertatori3.Text))
-                {
-                    p.accertatori = p.accertatori + "/" + txtAccertatori3.Text.ToUpper();
-                }
-                if (!string.IsNullOrEmpty(txtScaturito.Text))
-                    p.scaturito = txtScaturito.Text;
+                else
+                    p.macro_area = string.Empty;
+
+                // p.accertatori = string.Empty;
+
+                if (!string.IsNullOrEmpty(txtEsito.Text))
+                    p.scaturito = txtEsito.Text;
                 //if (!string.IsNullOrEmpty(txtInviata.Text))
                 //    p.inviata = txtInviata.Text;
                 //if (!string.IsNullOrEmpty(txtDataInvio.Text))
@@ -246,8 +243,8 @@ namespace Uotep
         }
         private void Pulisci()
         {
-            txtScaturito.Text = string.Empty;
-            HfScaturito.Value = string.Empty;
+            txtEsito.Text = string.Empty;
+            HfEsito.Value = string.Empty;
             txtQuartiere.Text = string.Empty;
             HfQuartiere.Value = string.Empty;
             // txtInviata.Text = string.Empty;
@@ -339,6 +336,7 @@ namespace Uotep
 
             if (pratica.Rows.Count > 0)
             {
+                
                 gvPopupD.DataSource = pratica;
                 gvPopupD.DataBind();
                 //DivDettagli.Visible = true;
@@ -363,6 +361,9 @@ namespace Uotep
             //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
             indirizzo = txtIndirizzoQuartiere.Text.Trim();
 
+
+            //string specie = txtSpecie.Text.Trim();
+
             if (!string.IsNullOrEmpty(indirizzo))
             {
                 // Simula il recupero del quartiere dal database o da una logica interna.
@@ -374,18 +375,17 @@ namespace Uotep
                     gvPopup.DataSource = quartiere;
                     gvPopup.DataBind();
 
-
                 }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è stato possibile caricare la tabella quartieri." + "'); $('#errorModal').modal('show');", true);
 
-                }
             }
 
 
             // Mantieni il popup aperto dopo l'interazione lato server.
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
+
+
+
 
 
         }
@@ -422,7 +422,8 @@ namespace Uotep
                     {
                         DivDettagli.Visible = true;
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
-                        txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
+                        //txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
+                        DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[2].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
                         {
                             DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
@@ -442,26 +443,29 @@ namespace Uotep
                         txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
                         txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[10].ToString()))
+                        {
                             txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
+                            txtIndirizzo.ToolTip = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
+                        }
                         //txtVia.Text = pratica.Rows[0].ItemArray[10].ToString();
-                        CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
+                        //CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
 
-                        //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
-                        //{
-                        //    DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
-                        //    //converte la data 01-01-1900 in SPACE
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+                        {
+                            DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+                            //converte la data 01-01-1900 in SPACE
 
-                        //    if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
-                        //    {
-                        //        txtDataDataEvasa.Text = ""; // Metti una stringa vuota
-                        //    }
-                        //    else
-                        //    {
-                        //        txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
-                        //    }
-                        //}
-                        //else
-                        //    txtDataDataEvasa.Text = string.Empty;
+                            if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                            {
+                                TxtDataEsito.Text = ""; // Metti una stringa vuota
+                            }
+                            else
+                            {
+                                TxtDataEsito.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                            }
+                        }
+                        else
+                            TxtDataEsito.Text = string.Empty;
 
 
                         //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[14].ToString()))
@@ -487,9 +491,9 @@ namespace Uotep
 
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[16].ToString()))
 
-                            txtScaturito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+                            txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
 
-                        txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                        txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
@@ -522,8 +526,8 @@ namespace Uotep
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
 
+                       
                         // Puoi anche chiudere il popup se necessario
-                        //  ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#myModal').modal('hide');", true); // Puoi anche chiudere il popup se necessario
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                         DivDettagli.Visible = true;
                         DivRicerca.Visible = false;
@@ -585,7 +589,7 @@ namespace Uotep
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
-                txtIndirizzo.Text = selectedValue;
+                txtQuartiere.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
@@ -632,7 +636,7 @@ namespace Uotep
 
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
         }
         protected void apripopupDecretazione_Click(object sender, EventArgs e)
         {
@@ -877,43 +881,43 @@ namespace Uotep
                 btChiudiDecretazione.Visible = false;
             apripopupDecretazione_Click(sender, e);
         }
-        
+
         protected void btChiudiDecretazione_Click(object sender, EventArgs e)
         {
-                
+
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
 
         }
-        protected void Add_Click(object sender, EventArgs e)
-        {
-            if (div1.Style["Visibility"] == "hidden")
-            {
-                div1.Style.Add("visibility", "visible");
-                bt2.Style.Add("visibility", "visible");
-            }
-            else
-            {
-                div1.Style.Add("visibility", "hidden");
-                div2.Style.Add("visibility", "hidden");
-                bt2.Style.Add("visibility", "hidden");
-                txtAccertatori2.Text = string.Empty;
-                txtAccertatori3.Text = string.Empty;
-            }
-        }
+        //protected void Add_Click(object sender, EventArgs e)
+        //{
+        //    if (div1.Style["Visibility"] == "hidden")
+        //    {
+        //        div1.Style.Add("visibility", "visible");
+        //        bt2.Style.Add("visibility", "visible");
+        //    }
+        //    else
+        //    {
+        //        div1.Style.Add("visibility", "hidden");
+        //        div2.Style.Add("visibility", "hidden");
+        //        bt2.Style.Add("visibility", "hidden");
+        //        txtAccertatori2.Text = string.Empty;
+        //        txtAccertatori3.Text = string.Empty;
+        //    }
+        //}
 
-        protected void Add2_Click(object sender, EventArgs e)
-        {
-            if (div2.Style["Visibility"] == "hidden")
-            {
-                div2.Style.Add("visibility", "visible");
+        //protected void Add2_Click(object sender, EventArgs e)
+        //{
+        //    if (div2.Style["Visibility"] == "hidden")
+        //    {
+        //        div2.Style.Add("visibility", "visible");
 
-            }
-            else
-            {
-                div2.Style.Add("visibility", "hidden");
-                txtAccertatori3.Text = string.Empty;
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        div2.Style.Add("visibility", "hidden");
+        //        txtAccertatori3.Text = string.Empty;
+        //    }
+        //}
         /// <summary>
         /// funzione che inserisce spaces al posto del min data value
         /// </summary>
@@ -962,7 +966,7 @@ namespace Uotep
 
                 //string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
                 //decr.dataChiusura = System.Convert.ToDateTime(dataFormattata);
-                
+
                 Manager mn = new Manager();
                 Boolean upd = mn.UpdDecretazioneChiusura(decr);
                 if (!upd)
@@ -973,7 +977,7 @@ namespace Uotep
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
-                    }
+                }
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
             }
             catch (Exception ex)
@@ -997,6 +1001,21 @@ namespace Uotep
 
             }
 
+        }
+        protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CaricaDLL();
+            if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
+            {
+                divAg.Visible = true;
+            }
+            else
+            {
+                divAg.Visible = false;
+                txtGiudice.Text = string.Empty;
+
+                txtProdPenNr.Text = string.Empty;
+            }
         }
     }
 }
