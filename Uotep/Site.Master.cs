@@ -26,6 +26,7 @@ namespace Uotep
                 {
                     string Vuser = Session["user"].ToString();
                     Profilo = Session["profilo"].ToString();
+                    ruolo = Session["ruolo"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
                     if (Ricerca.Rows.Count > 0)
