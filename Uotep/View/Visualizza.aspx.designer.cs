@@ -627,15 +627,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataCarico;
 
         /// <summary>
-        /// Controllo CkEvasa.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox CkEvasa;
-
-        /// <summary>
         /// Controllo txtEsito.
         /// </summary>
         /// <remarks>
@@ -645,13 +636,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtEsito;
 
         /// <summary>
-        /// Controllo txtAccertatori.
+        /// Controllo CkEvasa.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAccertatori;
+        protected global::System.Web.UI.WebControls.CheckBox CkEvasa;
 
         /// <summary>
         /// Controllo txtDataDataEvasa.
@@ -661,6 +652,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDataDataEvasa;
+
+        /// <summary>
+        /// Controllo txtAccertatori.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAccertatori;
 
         /// <summary>
         /// Controllo divAg.

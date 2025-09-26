@@ -1671,7 +1671,7 @@ namespace Uotep.Classi
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
                    "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
              
-                sql_update= "update principale set accertatori= accertatori +'/" + decr.decretato.Replace("'", "''") + "'";
+                sql_update= "update principale set accertatori= accertatori +'-" + decr.decretato.Replace("'", "''") + "'";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -3110,8 +3110,9 @@ namespace Uotep.Classi
             {
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
-                    "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica +
-                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica  + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "'" +
+                    "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
+                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica  + "',macro_area = '" + @p.macro_area.Replace("'", "''") + 
+                    "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +
 
 
                     " where  ID = " + ID;

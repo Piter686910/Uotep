@@ -126,7 +126,7 @@ namespace Uotep
                 //p.giorno = DateTime.Now.Day.ToString();
                 //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
                 //p.sigla = DdlSigla.SelectedItem.Text;
-                //p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
+                p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
                 if (!string.IsNullOrEmpty(txtDataCarico.Text))
                 {
                     p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
@@ -157,7 +157,13 @@ namespace Uotep
                     p.quartiere = txtQuartiere.Text;
                     //p.quartiere = lblQuartiere.Text;
                 }
+                p.provenienza = txtProvenienza.Text;
+                p.tipologia_atto = txtTipoAtto.Text;
+                p.rif_Prot_Gen = txtRifProtGen.Text;
+                p.giudice = txtGiudice.Text;
+                if (!string.IsNullOrEmpty(DdlTipoProvvAg.SelectedItem.Text))
 
+                    p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
                 //if (DdlQuartiere.SelectedValue == "0")
                 //{
                 //    p.quartiere = String.Empty;
@@ -193,7 +199,7 @@ namespace Uotep
                 //    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
                 //}
 
-                //p.procedimentoPen = txtProdPenNr.Text;
+                p.procedimentoPen = txtProdPenNr.Text;
                 //matricola del popup
                 p.matricola = Vuser;
                 //string newMat = ;
@@ -272,6 +278,16 @@ namespace Uotep
             txtDecretante.Text = String.Empty;
             txtDecretato.Text = String.Empty;
             txtDataDecretazione.Text = String.Empty;
+            TxtDataEsito.Text = String.Empty;
+            txPratica.Text = String.Empty;
+            txtTipoAtto.Text = String.Empty;
+            txtProvenienza.Text = String.Empty;
+            txtRifProtGen.Text = String.Empty;
+            txtNominativo.Text = String.Empty;
+            txtAreaCompetenza.Text = string.Empty;
+            txtDataCarico.Text = String.Empty;
+            txtDataInsCarico.Text = String.Empty;
+            txtProt.Text = String.Empty;
 
         }
 
@@ -336,7 +352,7 @@ namespace Uotep
 
             if (pratica.Rows.Count > 0)
             {
-                
+
                 gvPopupD.DataSource = pratica;
                 gvPopupD.DataBind();
                 //DivDettagli.Visible = true;
@@ -424,6 +440,16 @@ namespace Uotep
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         //txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                         DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[2].ToString();
+                        switch (DdlSigla.SelectedItem.Text)
+                        {
+                            case "AG":
+                                divAg.Visible = true;
+                                CaricaDLL();
+                                break;
+                            default:
+                                divAg.Visible = false;
+                                break;
+                        }
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
                         {
                             DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
@@ -437,6 +463,9 @@ namespace Uotep
                         txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
                         txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
                         txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
+                        DdlTipoProvvAg.Items.Insert(0, new ListItem(pratica.Rows[0].ItemArray[7].ToString().ToUpper()));
+                       // DdlTipoProvvAg.SelectedValue = "1";
+                        DdlTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
                         TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
                         TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
                         txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
@@ -526,7 +555,7 @@ namespace Uotep
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
 
-                       
+
                         // Puoi anche chiudere il popup se necessario
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                         DivDettagli.Visible = true;
@@ -815,8 +844,7 @@ namespace Uotep
                 else
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
-
-
+                    Pulisci();
                 }
             }
             catch (Exception ex)

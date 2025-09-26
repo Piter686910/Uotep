@@ -303,27 +303,29 @@
                 <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
                 <div class="row custom-border">
                     <div class="col-md-4">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtEsito">Esito</label>
+                            <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+
                         <div class="form-group mb-3" style="margin-left: -25px; margin-top: 30px">
                             <label class="form-check-label ms-2" for="CkEvasa">Trasmesso</label>
                             <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
 
                         </div>
 
-                        <div class="form-group mb-3" style="margin-left: -25px">
-                            <label for="txtEsito">Esito</label>
-                            <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control mb-3" Enabled="false" />
-
-                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
-                            <label for="txtAccertatori">Accertatori</label>
-                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" Style="width: 100%; max-width: 600px;" />
-
-                        </div>
-                        <div class="form-group mb-3">
                             <label for="txtDataDataEvasa" class="form-label">Data Esito</label>
                             <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="txtAccertatori">Accertatori</label>
+                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />
 
                         </div>
 
