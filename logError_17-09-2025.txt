@@ -1,0 +1,10 @@
+matricola:3092,data ins:01/04/2025 00:00:00, Non è possibile inserire il valore NULL nella colonna 'id_rapp_scheda' della tabella 'DB_Test.dbo.RappUote'. La colonna non ammette valori Null. INSERT avrà esito negativo.
+L'istruzione è stata interrotta. - Errore in inserimento scheda intervento uote 
+protocollo 12810, matricola:admin, data ins:17/09/2025 13:38:44, Non è possibile inserire il valore NULL nella colonna 'Id' della tabella 'DB_Test.dbo.principale'. La colonna non ammette valori Null. INSERT avrà esito negativo.
+L'istruzione è stata interrotta. - Errore in inserimento dati 
+protocollo 12810, matricola:admin, data ins:17/09/2025 13:39:08, Non è possibile inserire il valore NULL nella colonna 'Id' della tabella 'DB_Test.dbo.principale'. La colonna non ammette valori Null. INSERT avrà esito negativo.
+L'istruzione è stata interrotta. - Errore in inserimento dati 
+protocollo 12810, matricola:admin, data ins:17/09/2025 13:39:42, Non è possibile inserire il valore NULL nella colonna 'Id' della tabella 'DB_Test.dbo.principale'. La colonna non ammette valori Null. INSERT avrà esito negativo.
+L'istruzione è stata interrotta. - Errore in inserimento dati 
+protocollo 12810, matricola:admin, data ins:17/09/2025 13:40:48, Non è possibile inserire il valore NULL nella colonna 'Id' della tabella 'DB_Test.dbo.principale'. La colonna non ammette valori Null. INSERT avrà esito negativo.
+L'istruzione è stata interrotta. - Errore in inserimento dati 

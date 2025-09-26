@@ -1,0 +1,3 @@
+Il timeout di esecuzione è scaduto. Il periodo di timeout è scaduto prima del completamento dell'operazione oppure il server non risponde. - Errore modifica inserimento archivio 
+Il timeout di esecuzione è scaduto. Il periodo di timeout è scaduto prima del completamento dell'operazione oppure il server non risponde. - Errore modifica inserimento archivio 
+pratica 190190, matricola:admin, data ins:18/09/2025 00:00:00, Il nome di colonna 'acrh_beniConfiscati' non è valido. - Errore in inserimento dati 

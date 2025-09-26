@@ -1,0 +1,2 @@
+protocollo 12813, matricola:9897pg, data ins:26/09/2025 14:35:54, Il timeout di esecuzione è scaduto. Il periodo di timeout è scaduto prima del completamento dell'operazione oppure il server non risponde. - Errore in inserimento dati 
+Stringa non riconosciuta come valore DateTime valido. - Errore in modifica 

@@ -1,0 +1,2 @@
+Sintassi non corretta in prossimità della parola chiave 'where'. - Errore in carica ddl file inserimento.cs 
+Sintassi non corretta in prossimità della parola chiave 'where'. - Errore in carica ddl file inserimento.cs 

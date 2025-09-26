@@ -1,0 +1,19 @@
+pratica:11706 - Sintassi non corretta in prossimità di '/MAGLIO'. - Errore in inserimento dati in tabella decretazione
+matricola:3092,data ins:25/09/2025 15:37:18, Sintassi non corretta in prossimità di '3092'.
+Virgoletta di chiusura mancante dopo la stringa di caratteri ' where  ID = 30'. - Errore in update dati 
+matricola:3092,data ins:25/09/2025 15:40:52, Sintassi non corretta in prossimità di '3092'.
+Virgoletta di chiusura mancante dopo la stringa di caratteri ' where  ID = 30'. - Errore in update dati 
+matricola:3092,data ins:25/09/2025 15:41:21, Sintassi non corretta in prossimità di '3092'.
+Virgoletta di chiusura mancante dopo la stringa di caratteri ' where  ID = 30'. - Errore in update dati 
+matricola:3092,data ins:25/09/2025 15:41:33, Sintassi non corretta in prossimità di '3092'.
+Virgoletta di chiusura mancante dopo la stringa di caratteri ' where  ID = 30'. - Errore in update dati 
+dataInserimento:01/01/2025 00:00:00,data ins:01/01/2025 01:00:00, startIndex non può essere maggiore della lunghezza della stringa.
+Nome parametro: startIndex - Errore in update dati 
+dataInserimento:01/01/2025 00:00:00,data ins:01/01/2025 01:00:00, startIndex non può essere maggiore della lunghezza della stringa.
+Nome parametro: startIndex - Errore in update dati 
+dataInserimento:01/01/2025 00:00:00,data ins:01/01/2025 01:00:00, startIndex non può essere maggiore della lunghezza della stringa.
+Nome parametro: startIndex - Errore in update dati 
+dataInserimento:01/01/2025 00:00:00,data ins:01/01/2025 01:00:00, startIndex non può essere maggiore della lunghezza della stringa.
+Nome parametro: startIndex - Errore in update dati 
+protocollo 12810, matricola:admin, data ins:25/09/2025 19:47:31, Il nome di colonna 'macro_area' non è valido. - Errore in inserimento dati 
+protocollo 12810, matricola:admin, data ins:25/09/2025 19:52:03, Il nome di colonna 'macro_area' non è valido. - Errore in inserimento dati 
