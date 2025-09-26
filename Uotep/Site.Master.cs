@@ -80,7 +80,7 @@ namespace Uotep
                                 }
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
-                                ModificaRiservata.Visible = true;
+                               // ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
                                     StatisticheAtti.Visible = true;
@@ -161,7 +161,7 @@ namespace Uotep
                                 //*
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
-                                ModificaRiservata.Visible = true;
+                              //  ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 EstraiStatistiche.Visible = true;
                                 GestionePratica.Visible = true;
@@ -185,7 +185,7 @@ namespace Uotep
                                 //*
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
-                                ModificaRiservata.Visible = true;
+                                //ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 GestionePratica.Visible = true;
                                 //*

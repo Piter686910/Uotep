@@ -96,15 +96,6 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor ModificaAtti;
 
         /// <summary>
-        /// Controllo ModificaRiservata.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor ModificaRiservata;
-
-        /// <summary>
         /// Controllo RicercaAtti.
         /// </summary>
         /// <remarks>

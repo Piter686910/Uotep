@@ -788,10 +788,9 @@
 
 
             </div>
-        </div>
-    </div>
 
-    <div class="row">
+
+<div class="row">
         <div class="col-12 text-center">
             <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
             <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
@@ -800,6 +799,11 @@
 
         </div>
     </div>
+
+        </div>
+    </div>
+
+    
 
     <!-- Modale Bootstrap quartiere -->
 

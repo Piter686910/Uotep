@@ -10,7 +10,7 @@
         public enum Ruolo
         {
             Admin = 0,
-            Accertatori = 1,
+            accertatori = 1,
             MasterAG = 2,
             Archivio = 3,
             CoordinamentoAtti = 4,

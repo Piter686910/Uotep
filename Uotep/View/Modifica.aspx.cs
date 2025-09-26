@@ -44,11 +44,12 @@ namespace Uotep
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();
-                if (profilo.Contains("1"))
+                if ( ruolo== Enumerate.Ruolo.accertatori.ToString())
                 {
                     btSalva.Visible = false;
                     btCercaQuartiere.Visible = false;
                     btChiudiDecretazione.Visible = false;
+                    
                 }
 
 
@@ -898,11 +899,20 @@ namespace Uotep
                     btChiudiDecretazione.Enabled = false;
                 }
                 else
-                    btChiudiDecretazione.Visible = true;
-                //{
-                //    btAggiungiDecretazione.Enabled = true;
-                //    btChiudiDecretazione.Enabled = true;
-                //}
+                    
+                {
+                    if ( ruolo == Enumerate.Ruolo.accertatori.ToString())
+                    {
+                        
+                        btSalva.Visible = false;
+                        btCercaQuartiere.Visible = false;
+                        btChiudiDecretazione.Visible = false;
+                    }
+                    else
+                        btChiudiDecretazione.Visible = true;
+                    //    btAggiungiDecretazione.Enabled = true;
+                    //    btChiudiDecretazione.Enabled = true;
+                }
 
             }
             else
