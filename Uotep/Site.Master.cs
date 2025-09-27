@@ -214,7 +214,7 @@ namespace Uotep
             Session.Remove("ListRicerca");
             Session.Remove("popAperto");
             Session.Remove("popApertoRicercaScheda");
-
+            Session.Remove("ListPratiche");
             Session.Abandon();
             Response.Redirect("Default.aspx", false);
         }
