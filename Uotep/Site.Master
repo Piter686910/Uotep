@@ -53,7 +53,7 @@
                 </div>
                 <div class="navbar-collapse collapse" style="font-weight: bold !important">
                     <ul class="nav navbar-nav">
-                        <li><a id="menuHome" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>
+                        <%--<li><a id="menuHome" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>--%>
                         <li runat="server" id="menuAmministratore" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/Dashboard">Dashboard</a></li>
 
 
