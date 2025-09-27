@@ -361,45 +361,6 @@
 
 
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- Note -->
-            <%--<div class="row mt-4">
-                <div class="col-md-3">
-                    <label for="txtNote">Eventuali Note</label>
-                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="4" Enabled="false" />
-                </div>
-              
-            </div>--%>
-
-
-
-            <%--<div class="row mt-4">
-               <div class="col-md-3">
-                    <label for="txtinviata" class="form-label">Inviata</label>
-                    <asp:TextBox ID="txtinviata" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-                <div class="col-md-3">
-                    <label for="txtDataInvio" class="form-label">Il</label>
-                    <asp:TextBox ID="txtDataInvio" runat="server" CssClass="form-control mb-3" Enabled="false" />
-                </div>
-            </div>--%>
-
             <div class="row">
                 <div class="col-12 text-center">
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
@@ -427,12 +388,38 @@
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
                                 <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 
-                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                <%--                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>
-                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                </asp:BoundField>--%>
+                                <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                    <HeaderTemplate>
+                                        Nominativo
+                                          <br />
+                                        <asp:TextBox ID="txtFilterNominativo" runat="server" OnTextChanged="txtFilterNominativo_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("Nominativo") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+
+
+                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                    <HeaderTemplate>
+                                        Indirizzo
+                                          <br />
+                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("indirizzo") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+<%--                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>
+                                </asp:BoundField>--%>
                                 <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
 
@@ -440,9 +427,22 @@
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
 
-                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                <%--                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>
+                                </asp:BoundField>--%>
+                                <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                    <HeaderTemplate>
+                                        Accertatori
+                                          <br />
+                                        <asp:TextBox ID="txtFilterAccertatori" runat="server" OnTextChanged="txtFilterAccertatori_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("Accertatori") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+
                                 <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
@@ -494,6 +494,10 @@
                 </div>
                 <asp:HiddenField ID="HidPratica" runat="server" />
                 <asp:HiddenField ID="HfIdScheda" runat="server" />
+                <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
+                <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
+                <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
+
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
@@ -97,6 +98,8 @@ namespace Uotep
             }
             if (pratica.Rows.Count > 0)
             {
+                // Salva datatable pratica  nella Sessione
+                Session["ListPratiche"] = pratica;
                 gvPopup.DataSource = pratica;
                 gvPopup.DataBind();
                 //DivDettagli.Visible = true;
@@ -407,12 +410,200 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDataArrivo.Visible = false;
             DivDettagli.Visible = false;
+            Session.Remove("ListPratiche");
         }
         protected void gvPopup_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvPopup.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender, e);
         }
+        protected void txtFilterNominativo_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "Nominativo", txtRicNominativo.Text };
+            // Salva la lista nella Sessione
+            Session["ListRicerca"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroNominativo.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterNominativo")
+            {
+                columnName = "Nominativo"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
 
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroNominativo.Value); // Esempio di funzione di filtro
+                                                                    //            apripopup_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+        }
+
+        protected void txtFilterAccertatori_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "Accertatori", txtRicAccertatori.Text };
+
+            // Salva la lista nella Sessione
+            Session["ListRicerca"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroAccertatori.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterAccertatori")
+            {
+                columnName = "Accertatori"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroAccertatori.Value); // Esempio di funzione di filtro
+                                                                     //            apripopup_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+        }
+        // esecuzione del filtro ulteriore sulla colonna indirizzo
+        protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
+        {
+
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "Indirizzo", txtRicIndirizzo.Text };
+            // Salva la lista nella Sessione
+            Session["ListRicerca"] = ListRicerca;
+
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroIndirizzo.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterIndirizzo")
+            {
+                columnName = "indirizzo"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+                                                                   //            apripopup_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+
+        }
+        // Funzione  che carica i dati e applica il filtro
+        private void PopulateGridView(string filterColumn = "", string filterValue = "")
+        {
+
+            DataTable dt = new DataTable();
+
+            dt = GetOriginalData(); // ricerco la lista nuovamente
+            try
+            {
+                //applico il filtro
+                if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
+                {
+
+
+
+                    string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                    DataRow[] filteredRows = dt.Select(filterExpression);
+
+                    if (filteredRows.Length > 0)
+                    {
+                        DataTable filteredDt = dt.Clone();
+                        foreach (DataRow row in filteredRows)
+                        {
+                            filteredDt.ImportRow(row);
+                        }
+                        gvPopup.DataSource = filteredDt;
+                    }
+                    else
+                    {
+                        gvPopup.DataSource = null;
+                    }
+
+                }
+                else
+                {
+                    gvPopup.DataSource = dt; // Nessun filtro
+                }
+                gvPopup.DataBind();
+            }
+            catch (Exception ex)
+            {
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
+                // throw;
+            }
+        }
+        private DataTable GetOriginalData()
+        {
+            DataTable pratica = new DataTable();
+            DataView dv = new DataView();
+            Manager mn = new Manager();
+            string filtro = string.Empty;
+            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+            if (Session["ListRicerca"] != null)
+            {
+
+
+                List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                String[] ar = ListRicerca.ToArray();
+                // ArchivioUote arc = new ArchivioUote();
+                if (Session["ListPratiche"] != null)
+                {
+                    // Recupera la DataTable originale dalla Sessione
+                    pratica = (DataTable)Session["ListPratiche"];
+                }
+                switch (ar[0])
+                {
+                    case "Nominativo":
+
+
+                        filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
+                        dv = new DataView(pratica);
+
+                        dv.RowFilter = filtro;
+
+                        break;
+                    case "Indirizzo":
+
+                        filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
+                        dv = new DataView(pratica);
+
+                        dv.RowFilter = filtro;
+                        break;
+                    case "Accertatori":
+
+                        filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
+                        dv = new DataView(pratica);
+
+                        dv.RowFilter = filtro;
+
+                        break;
+
+
+                }
+                if (pratica.Rows.Count > 0)
+                {
+                    //   apripopupPratica_Click(sender, e);
+                    gvPopup.DataSource = dv;
+                    gvPopup.DataBind();
+
+                    txtPratica.Enabled = false;
+                }
+            }
+            else
+            {
+                //txtPratica.Enabled = true;
+                //txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+            }
+            return pratica;
+            // return dt;
+        }
     }
 }

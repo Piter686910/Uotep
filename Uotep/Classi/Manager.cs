@@ -722,6 +722,7 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+
         /// <summary>
         /// ricerca per indirizzo  in tabella pricipale
         /// </summary>
@@ -773,7 +774,22 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListPratica(string nominativo, string indirizzo, string accertatori)
+        {
+            DataTable tb = new DataTable();
+            string sql = string.Empty;
+            if (!String.IsNullOrEmpty(nominativo))
+                sql = "SELECT * FROM Principale where nominativo like '%" + nominativo.Replace("'", "''") + "%'";
+            if (!String.IsNullOrEmpty(accertatori))
+                sql = "SELECT * FROM Principale where accertatori like '%" + accertatori.Replace("'", "''") + "%'";
+            if (!String.IsNullOrEmpty(indirizzo))
+                sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
 
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// ricerca per pratica
         /// </summary>

@@ -924,6 +924,42 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField Hid;
 
         /// <summary>
+        /// Controllo HfFiltroNote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroNote;
+
+        /// <summary>
+        /// Controllo HfFiltroIndirizzo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroIndirizzo;
+
+        /// <summary>
+        /// Controllo HfFiltroNominativo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroNominativo;
+
+        /// <summary>
+        /// Controllo HfFiltroAccertatori.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroAccertatori;
+
+        /// <summary>
         /// Controllo btChiudi.
         /// </summary>
         /// <remarks>
