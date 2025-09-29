@@ -452,39 +452,60 @@ namespace Uotep
             Session["filetemp"] = filePath;
             using (XLWorkbook wb = new XLWorkbook())
             {
-                var ws = wb.Worksheets.Add(dt, "Dati");
-                //wb.Worksheets.Add(dt, "Dati");  // Crea un foglio Excel con i dati
-                ws.Column(1).Delete(); // Elimina la prima colonna
-                ws.Columns().AdjustToContents();  //  Auto-fit delle colonne
+                var worksheet = wb.Worksheets.Add("Dati Estratti"); // Aggiunge un foglio di lavoro
+                                                                    //worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
+                var columnRenameMap = new Dictionary<string, string>
+        {
+            { "arch_numPratica", "Numero Pratica" },
+            { "arch_doppione", "Doppione" },
+            { "arch_datains", "Data Inserimento" },
+            { "arch_datault_intervento", "Data Intervento" },
+            { "arch_indirizzo", "Indirizzo" },
+            { "arch_responsabile", "Responsabile" },
+            { "arch_natoa", "Nato A" },
+            { "arch_datanascita", "Data Nascita" },
+            { "arch_incarico", "In Carico" },
+            { "arch_evasa", "Evasa" },
+            { "arch_note", "Note" },
+            { "arch_tipologia", "Tipologia" },
+            { "arch_quartiere", "Quartiere" },
+            { "arch_suolopub", "Suolo Pubblico" },
+            { "arch_vincoli", "vincoli" },
+            { "arch_1089", "1089" },
+            { "arch_demolita", "Demolita" },
+            { "arch_allegati", "Allegati" },
+            { "arch_matricola", "Matricola" },
+            { "arch_sezione", "Sezione" },
+            { "arch_foglio", "Foglio" },
+            { "arch_particella", "Particella" },
+            { "arch_sub", "Sub" },
+            { "arch_datainizioattivita", "Data Inizio Attività" },
+            { "arch_proppriv", "Proprietà Privata" },
+            { "arch_propcomune", "Proprietà Comune" },
+            { "arch_propbenicult", "Beni Culturali" },
+            { "arch_propaltrienti", "Altri Enti" },
+            { "arch_foglionct", "NCT" },
+            { "arch_particellanct", "Particella NCT" },
+            { "arch_beniconfiscati", "Beni Confiscati" }
+
+        };
+
+                foreach (var entry in columnRenameMap)
+                {
+                    if (dt.Columns.Contains(entry.Key))
+                    {
+                        dt.Columns[entry.Key].ColumnName = entry.Value;
+                    }
+                }
+                worksheet.Cell(1, 1).InsertTable(dt);
+                worksheet.Column(1).Delete(); // Elimina la prima colonna
+                worksheet.Columns().AdjustToContents();  //  Auto-fit delle colonne
+                worksheet.Range(1, 1, 1, dt.Columns.Count).Style.Font.Bold = true;
                 Routine al = new Routine();
-                al.ConvertiBooleaniInItaliano(ws);
-                wb.SaveAs(filePath);  // Salva il file
-                string contentType = MimeMapping.GetMimeMapping(filePath);
+                al.ConvertiBooleaniInItaliano(worksheet);
+                string fileNameForDownload = Filename + @"\\Esportazione Totale_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
+                wb.SaveAs(fileNameForDownload);
 
-                byte[] fileBytes = File.ReadAllBytes(filePath);
-                //File.Move(tempFilePath, temp);
-                try
-                {
-                    Response.Clear();
-                    Response.ContentType = contentType; // Imposta il Content-Type corretto (es. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet per .xlsx)
-                    Response.AddHeader("Content-Disposition", "attachment; filename=" + filePath); // Header Content-Disposition per forzare il download
-                                                                                                   // *** PASSO FONDAMENTALE: Sopprimi il rendering standard della pagina ***
-                    Response.SuppressContent = true;
-                    Response.BinaryWrite(fileBytes); // Scrivi i byte del file nel flusso di output
-                    Response.Flush();
-                    //Response.End();
-                    HttpContext.Current.ApplicationInstance.CompleteRequest();
-
-                    //Process.Start(temp);
-                    //File.Delete(tempFilePath);
-                    //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".tmp"); // Cambia l'estensione in .temp
-                    //File.Delete(tempFilePath);
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Errore nell'apertura del file temporaneo: {ex.Message}", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
 
             }
         }
