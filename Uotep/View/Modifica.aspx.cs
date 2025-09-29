@@ -87,15 +87,21 @@ namespace Uotep
                 DdlEsito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
 
                 DdlEsito.DataBind();
-                //DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                //DataTable Inviati = mn.getListInviati();
-                //DdlInviati.DataSource = Inviati; // Imposta il DataSource della DropDownList
-                //DdlInviati.DataTextField = "Inviata"; // Il campo visibile
-                //DdlInviati.DataValueField = "Id_inviata"; // Il valore associato a ogni opzione
 
-                //DdlInviati.DataBind();
-                //DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DataTable RicercaTipoAtto = mn.getListTipologia();
+                DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
+                DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
+                DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                DdlTipoAtto.DataBind();
+
+                DataTable RicercaProvenienza = mn.getListProvenienza();
+                DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
+                DdlProvenienza.DataTextField = "Provenienza"; // Il campo visibile
+                DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
+
+                DdlProvenienza.DataBind();
+
             }
             catch (Exception ex)
             {
@@ -357,6 +363,7 @@ namespace Uotep
             {
                 // Salva datatable pratica  nella Sessione
                 Session["ListPratiche"] = pratica;
+            
                 gvPopupD.DataSource = pratica;
                 gvPopupD.DataBind();
                 //DivDettagli.Visible = true;
@@ -627,7 +634,7 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
-        //gridview per quartiere
+        //gridview per decretazione
         protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             //if (e.Row.RowType == DataControlRowType.DataRow)
@@ -895,6 +902,7 @@ namespace Uotep
             }
             if (decretazione.Rows.Count > 0)
             {
+                
                 GVDecretazione.DataSource = decretazione;
                 GVDecretazione.DataBind();
                 Boolean a = System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);

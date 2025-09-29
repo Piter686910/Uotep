@@ -102,9 +102,20 @@ namespace Uotep
                 Session["ListPratiche"] = pratica;
                 gvPopup.DataSource = pratica;
                 gvPopup.DataBind();
-                //DivDettagli.Visible = true;
-                //DivRicerca.Visible = false;
+
                 DivGrid.Visible = true;
+                string a = pratica.Rows[0].ItemArray[1].ToString();
+                DataTable decretazione = new DataTable();
+
+                decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
+                if (decretazione.Rows.Count > 0)
+                {
+                    GVDecretazione.DataSource = decretazione;
+                    GVDecretazione.DataBind();
+                    divDecretazione.Visible = true;
+                }
+                else
+                    divDecretazione.Visible = false;
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
             }
             else
@@ -166,7 +177,7 @@ namespace Uotep
                         DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         if (pratica.Rows.Count > 0)
                         {
-                            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() + " / " + pratica.Rows[0].ItemArray[2].ToString();
+                            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() + " - " + pratica.Rows[0].ItemArray[2].ToString();
                             // txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                             if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
                             {
@@ -540,6 +551,61 @@ namespace Uotep
                 // throw;
             }
         }
+        //gridview per decretazione
+        protected void GVDecretazione_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
+
+
+            GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            //Decretazione_Click(sender, e);
+
+        }
+        protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    // Ottieni il valore della colonna "ID"
+            //    string id = DataBinder.Eval(e.Row.DataItem, "ID_quartiere").ToString();
+
+            //    // Aggiungi l'attributo per il doppio clic
+            //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            //    e.Row.Style["cursor"] = "pointer";
+            //}
+            if (GVDecretazione.TopPagerRow != null && GVDecretazione.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVDecretazione.PageIndex + 1;
+                    int totalPages = GVDecretazione.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+        protected void GVDecretazione_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    string selectedValue = e.CommandArgument.ToString();
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    txtIndirizzo.Text = selectedValue;
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
+        }
         private DataTable GetOriginalData()
         {
             DataTable pratica = new DataTable();
@@ -604,6 +670,29 @@ namespace Uotep
             }
             return pratica;
             // return dt;
+        }
+        /// <summary>
+        /// funzione che inserisce spaces al posto del min data value
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
+        protected string FormatMyDate(object dateValue)
+        {
+            if (dateValue == null || dateValue == DBNull.Value)
+            {
+                return "";
+            }
+
+            DateTime date;
+            if (DateTime.TryParse(dateValue.ToString(), out date))
+            {
+                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
+                {
+                    return ""; // O " " se vuoi uno spazio fisico
+                }
+                return date.ToString("dd/MM/yyyy");
+            }
+            return ""; // Gestione di valori non validi
         }
     }
 }

@@ -600,6 +600,33 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtProvenienza;
 
         /// <summary>
+        /// Controllo suggestionsListProvenienza.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListProvenienza;
+
+        /// <summary>
+        /// Controllo HfProvenienza.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfProvenienza;
+
+        /// <summary>
+        /// Controllo DdlProvenienza.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlProvenienza;
+
+        /// <summary>
         /// Controllo txtRifProtGen.
         /// </summary>
         /// <remarks>

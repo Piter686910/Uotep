@@ -358,6 +358,80 @@
 
                     </div>
                 </div>
+                <div id="divDecretazione" runat="server" >
+                    <p style="font-weight: bold; font-size: medium">Decretazione</p>
+                    <div class="row custom-border">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                            </div>
+                            <div class="form-group">
+                                <!-- GridView nel popup -->
+                                <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"
+                                    OnRowDataBound="GVDecretazione_RowDataBound" OnRowCommand="GVDecretazione_RowCommand" AllowPaging="true" PageSize="5" OnPageIndexChanging="GVDecretazione_PageIndexChanging">
+                                    <Columns>
+                                        <asp:BoundField DataField="decr_id" HeaderText="ID" Visible="false" />
+                                        <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
+                                        <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
+                                        <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+                                            <HeaderStyle CssClass="colonna-descrizione" />
+                                            <ItemStyle CssClass="uppercase-text" />
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="decr_data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" />
+
+                                        <asp:BoundField DataField="decr_decretato" HeaderText="Decretato">
+                                            <HeaderStyle CssClass="colonna-descrizione" />
+                                            <ItemStyle CssClass="uppercase-text" />
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="decr_nota" HeaderText="Nota">
+                                            <HeaderStyle CssClass="colonna-descrizione" />
+                                            <ItemStyle CssClass="uppercase-text colonna-descrizione" />
+                                        </asp:BoundField>
+
+                                        <asp:TemplateField HeaderText="Data Chiusura">
+                                            <ItemTemplate>
+                                                <%# FormatMyDate(Eval("decr_dataChiusura")) %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+
+                                    </Columns>
+                                    <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                    <PagerStyle HorizontalAlign="Center" />
+                                    <PagerTemplate>
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="width: 50%; text-align: left;">
+                                                    <asp:Label ID="lblPageInfo" runat="server" />
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                        <div style="padding: 5px;">
+                                            <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                            <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                            <span style="margin: 0 10px;">Pagina:
+               
+                                            </span>
+
+                                            <%-- Contenitore per i link numerici delle pagine --%>
+                                            <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                            <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                            <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                        </div>
+                                    </PagerTemplate>
+
+                                </asp:GridView>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
 
 
             </div>
@@ -417,7 +491,7 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
-<%--                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                <%--                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>--%>
                                 <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />

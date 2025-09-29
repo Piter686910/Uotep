@@ -1686,8 +1686,8 @@ namespace Uotep.Classi
                     "decr_dataChiusura, decr_chiuso)" +
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
                    "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
-             
-                sql_update= "update principale set accertatori= accertatori +'-" + decr.decretato.Replace("'", "''") + "'";
+
+                sql_update = "update principale set accertatori= accertatori +'-" + decr.decretato.Replace("'", "''") + "'";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -1695,9 +1695,9 @@ namespace Uotep.Classi
                     SqlTransaction transaction = null;
 
                     transaction = conn.BeginTransaction("trans");
-                    
+
                     SqlCommand command = conn.CreateCommand();
-                    
+
                     command.Transaction = transaction;
                     try
                     {
@@ -2634,7 +2634,7 @@ namespace Uotep.Classi
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
                    @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
                    @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
-                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct + "','" +  @arch.arch_beniConfiscati +"')";
+                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2885,7 +2885,7 @@ namespace Uotep.Classi
                         //    resp = false;
                         //}
 
-                       // command.CommandText = sql_decretazione;
+                        // command.CommandText = sql_decretazione;
                         testoSql = "decretazione";
 
                     }
@@ -3127,7 +3127,7 @@ namespace Uotep.Classi
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
-                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica  + "',macro_area = '" + @p.macro_area.Replace("'", "''") + 
+                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +
 
 
@@ -3364,7 +3364,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        
+
 
 
     }
