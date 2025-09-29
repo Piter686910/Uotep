@@ -45,7 +45,7 @@ namespace Uotep
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();
-                if (ruolo == Enumerate.Ruolo.accertatori.ToString())
+                if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString())
                 {
                     btSalva.Visible = false;
                     btCercaQuartiere.Visible = false;
@@ -914,7 +914,7 @@ namespace Uotep
                 else
 
                 {
-                    if (ruolo == Enumerate.Ruolo.accertatori.ToString())
+                    if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString())
                     {
 
                         btSalva.Visible = false;

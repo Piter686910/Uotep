@@ -41,7 +41,7 @@ namespace Uotep
             
             if (!IsPostBack)
             {
-                if (ruolo == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+                if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
                 {
                     btSalva.Enabled = false;
                     btModifica.Enabled = false;
