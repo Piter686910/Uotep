@@ -787,6 +787,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="txtAccertatori">Accertatori</label>
+                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />
+
+                        </div>
+                    </div>
 
                 </div>
                 <div id="divAg" runat="server" visible="false">

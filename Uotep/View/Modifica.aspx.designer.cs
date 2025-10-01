@@ -789,6 +789,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlEsito;
 
         /// <summary>
+        /// Controllo txtAccertatori.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAccertatori;
+
+        /// <summary>
         /// Controllo divAg.
         /// </summary>
         /// <remarks>

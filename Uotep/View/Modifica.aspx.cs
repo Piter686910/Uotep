@@ -196,7 +196,7 @@ namespace Uotep
                 else
                     p.macro_area = string.Empty;
 
-                // p.accertatori = string.Empty;
+                p.accertatori = txtAccertatori.Text.ToUpper();
 
                 if (!string.IsNullOrEmpty(txtEsito.Text))
                     p.scaturito = txtEsito.Text;
@@ -914,7 +914,7 @@ namespace Uotep
                 else
 
                 {
-                    if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString())
+                    if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
                     {
 
                         btSalva.Visible = false;
