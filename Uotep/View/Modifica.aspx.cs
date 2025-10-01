@@ -363,7 +363,7 @@ namespace Uotep
             {
                 // Salva datatable pratica  nella Sessione
                 Session["ListPratiche"] = pratica;
-            
+
                 gvPopupD.DataSource = pratica;
                 gvPopupD.DataBind();
                 //DivDettagli.Visible = true;
@@ -557,6 +557,22 @@ namespace Uotep
                         }
                         else
                             txtDataCarico.Text = string.Empty;
+                        if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[17].ToString()))
+                        {
+
+                            if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
+                            {
+                                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                            }
+                            else
+                            {
+                                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                            }
+
+                        }
+
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
@@ -902,7 +918,7 @@ namespace Uotep
             }
             if (decretazione.Rows.Count > 0)
             {
-                
+
                 GVDecretazione.DataSource = decretazione;
                 GVDecretazione.DataBind();
                 Boolean a = System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
@@ -939,7 +955,7 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
 
         }
-       
+
 
         // Funzione  che carica i dati e applica il filtro
         private void PopulateGridView(string filterColumn = "", string filterValue = "")
@@ -1008,7 +1024,7 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Nominativo":
-                        
+
 
                         filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
                         dv = new DataView(pratica);
@@ -1017,14 +1033,14 @@ namespace Uotep
 
                         break;
                     case "Indirizzo":
-                      
+
                         filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
                         dv = new DataView(pratica);
 
                         dv.RowFilter = filtro;
                         break;
                     case "Accertatori":
-                       
+
                         filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
                         dv = new DataView(pratica);
 

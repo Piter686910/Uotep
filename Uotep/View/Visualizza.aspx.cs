@@ -232,12 +232,15 @@ namespace Uotep
 
                             txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
                             txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-                            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[17].ToString()))
+                            if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
                             {
-
-
                                 txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
                                 txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                            }
+                            else
+                            {
+                                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
                             }
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                             {

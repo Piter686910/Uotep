@@ -2689,13 +2689,14 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public Boolean SavePratica(Principale p, Int32 id, Statistiche stat, Boolean exist)
+        public Boolean SavePratica(Principale p, Int32 id, Statistiche stat, Boolean exist, out Int32 idN)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
             string sql_Statistiche = String.Empty;
             string testoSql = string.Empty;
             int res1 = 0;
+            object a = null;
             try
             {
 
@@ -2705,7 +2706,7 @@ namespace Uotep.Classi
                    "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "')";
+                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
                 {
                     sql_Statistiche = "update statistiche set deleghe_ricevute = " + stat.deleghe_ricevute + ", esposti_ricevuti = " + stat.esposti_ricevuti +
@@ -2733,6 +2734,9 @@ namespace Uotep.Classi
                     tran = conn.BeginTransaction("trans");
                     command.Transaction = tran;
 
+                    idN = -1;
+
+
                     try
                     {
                         string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and anno = '" + p.anno + "'";
@@ -2745,20 +2749,24 @@ namespace Uotep.Classi
                         ds = new DataSet();
                         da.Fill(ds);
                         if (ds.Tables[0].Rows.Count > 0)
+                        {
+
                             return false;
+                        }
                         else
                         {
 
 
                             command.CommandText = sql_pratica;
                             testoSql = "Principale";
-                            int res = command.ExecuteNonQuery();
-                            if (res > 0)
-                            {
-                                command.CommandText = sql_Statistiche;
+                            //int res = command.ExecuteNonQuery();
+                            a = command.ExecuteScalar();
 
-                                res1 = command.ExecuteNonQuery();
-                            }
+                            command.CommandText = sql_Statistiche;
+
+                            res1 = command.ExecuteNonQuery();
+
+                            idN = Convert.ToInt32(a);
                             if (res1 > 0)
                             {
                                 tran.Commit();
@@ -2806,6 +2814,7 @@ namespace Uotep.Classi
 
 
             }
+            idN = Convert.ToInt32(a);
             return resp;
 
         }
@@ -3125,7 +3134,7 @@ namespace Uotep.Classi
             try
             {
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
-                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
+                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori = + '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +

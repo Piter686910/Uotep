@@ -325,7 +325,9 @@ namespace Uotep
                 }
                 stat.mese = mese;
                 stat.anno = DateTime.Now.Year;
-                Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text), stat, exist);
+                Int32 idN = 0;
+                Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
+                Hid.Value = System.Convert.ToString(idN);
                 if (!ins)
                 {
                     //ricalcolo il protocollo
@@ -336,9 +338,9 @@ namespace Uotep
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente ." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione? ." + "'); $('#ModalRicDecretazione').modal('show');", true);
 
-                    Pulisci();
+                    //Pulisci();
                     btNewIns.Visible = true;
                     btSalva.Visible = false;
                 }
@@ -403,8 +405,8 @@ namespace Uotep
             txtProdPenNr.Text = String.Empty;
             txtNominativo.Text = String.Empty;
             txPratica.Text = String.Empty;
-            //  txtNote.Text = String.Empty;
-            // txtDataDataEvasa.Text = String.Empty;
+            txtTipoAtto.Text = String.Empty;
+            txtProvenienza.Text = String.Empty;
 
             //  txtDataInvio.Text = String.Empty;
             // CkEvasa.Checked = false;
@@ -726,7 +728,214 @@ namespace Uotep
                 txtProdPenNr.Text = string.Empty;
             }
         }
+        protected void Decretazione_Click(object sender, EventArgs e)
+        {
+
+            txtPraticaDecr.Text = txtProt.Text;
+            txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+            Manager mn = new Manager();
+            DataTable operatore = mn.getNominativoOperatore(Vuser);
+            if (operatore.Rows.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            }
+
+            DataTable decretazione = new DataTable();
+            if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
+            {
+                decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
+            }
+            if (decretazione.Rows.Count > 0)
+            {
+
+                GVDecretazione.DataSource = decretazione;
+                GVDecretazione.DataBind();
+                Boolean a = System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
+                if (a == true)
+                {
+                    btAggiungiDecretazione.Enabled = false;
+                    btChiudiDecretazione.Enabled = false;
+                }
+                else
+
+                {
+                    //if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+                    //{
+
+                    //    btSalva.Visible = false;
+                    //    //btCercaQuartiere.Visible = false;
+                    //    btChiudiDecretazione.Visible = false;
+                    //}
+                    //else
+                    //    btChiudiDecretazione.Visible = true;
+                    
+                }
+
+            }
+            else
+                btChiudiDecretazione.Visible = false;
+            apripopupDecretazione_Click(sender, e);
+        }
+        protected void btAggiungiDecretazione_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+                Manager mn = new Manager();
+                Decretazione decr = new Decretazione();
+                decr.idPratica = System.Convert.ToInt32(Hid.Value);
+                decr.Npratica = txtPraticaDecr.Text;
+                decr.decretante = txtDecretante.Text;
+                decr.decretato = txtDecretato.Text.ToUpper();
+                decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
+                decr.nota = txtNotaDecretazione.Text.ToUpper();
+
+                Boolean ins = mn.InsDecretazione(decr);
+                if (!ins)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
+                    Pulisci();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in inserimento decretazione ");
+                    sw.Close();
+                }
+
+                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
+
+            }
+        }
+        protected void apripopupDecretazione_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+
+        }
+        protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
+            // Pulisci();
+        }
+        /// <summary>
+        /// funzione che inserisce spaces al posto del min data value
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
+        protected string FormatMyDate(object dateValue)
+        {
+            if (dateValue == null || dateValue == DBNull.Value)
+            {
+                return "";
+            }
+
+            DateTime date;
+            if (DateTime.TryParse(dateValue.ToString(), out date))
+            {
+                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
+                {
+                    return ""; // O " " se vuoi uno spazio fisico
+                }
+                return date.ToString("dd/MM/yyyy");
+            }
+            return ""; // Gestione di valori non validi
+        }
+        //gridview per decretazione
+        protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    // Ottieni il valore della colonna "ID"
+            //    string id = DataBinder.Eval(e.Row.DataItem, "ID_quartiere").ToString();
+
+            //    // Aggiungi l'attributo per il doppio clic
+            //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            //    e.Row.Style["cursor"] = "pointer";
+            //}
+            if (GVDecretazione.TopPagerRow != null && GVDecretazione.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVDecretazione.PageIndex + 1;
+                    int totalPages = GVDecretazione.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+        protected void GVDecretazione_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    string selectedValue = e.CommandArgument.ToString();
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    txtIndirizzo.Text = selectedValue;
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
+        }
+        protected void GVDecretazione_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
 
 
+            GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Decretazione_Click(sender, e);
+
+        }
+        protected void btChiudiDecretazione_Click(object sender, EventArgs e)
+        {
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
+
+        }
+        protected void chiudipopupModalRicDecretazione_Click(object sender, EventArgs e)
+        {
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicDecretazione')); modal.hide();", true);
+            Pulisci();
+
+        }
+        protected void Decreta_Click(object sender, EventArgs e)
+        {
+            txtPraticaDecr.Text = txtProt.Text;
+            Manager mn = new Manager();
+            DataTable operatore = mn.getNominativoOperatore(Vuser);
+            if (operatore.Rows.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            }
+            apripopupDecretazione_Click(sender, e);
+        }
     }
 }
