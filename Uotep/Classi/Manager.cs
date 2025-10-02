@@ -2025,7 +2025,7 @@ namespace Uotep.Classi
                     resp = true;
                 }
 
-                catch (Exception ex)
+                catch (Exception )
                 {
                     if (transaction != null)
                     {
@@ -2929,7 +2929,106 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean UpdDecretazione(Decretazione p)
+        {
+            bool resp = true;
+            string sql_decretazione = String.Empty;
+            string sql_updDecretazione = String.Empty;
+            string sql_updPrincipale = String.Empty;
+            string testoSql = string.Empty;
+            int res1 = 0;
+            try
+            {
 
+                sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''")  + "'" +
+                    " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
+
+              //  sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
+
+                using ( SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+                    SqlTransaction tran;
+                    tran = conn.BeginTransaction("trans");
+                    command.Transaction = tran;
+                    try
+                    {
+                        
+                            command.CommandText = sql_updDecretazione;
+
+                            res1 = command.ExecuteNonQuery();
+                        
+                        if (res1 > 0)
+                        {
+                            
+
+                            tran.Commit();
+
+                            resp = true;
+
+                        }
+                        else
+                        {
+                            tran.Rollback();
+                            resp = false;
+                        }
+
+                        //command.CommandText = sql_decretazione;
+
+                        //int res = command.ExecuteNonQuery();
+                        //if (res > 0)
+                        //{
+                        //    command.CommandText = sql_updPrincipale;
+
+                        //    command.ExecuteNonQuery();
+
+                        //    tran.Commit();
+
+                        //    resp = true;
+
+                        //}
+                        //else
+                        //{
+                        //    tran.Rollback();
+                        //    resp = false;
+                        //}
+
+                        // command.CommandText = sql_decretazione;
+                        testoSql = "decretazione";
+
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica:" + p.Npratica + " -" + ex.Message + @" - Errore in update dati decretazione ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
         public Boolean UpdScheda(RappUote rapp)
         {
             bool resp = true;
@@ -3134,13 +3233,13 @@ namespace Uotep.Classi
             try
             {
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
-                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori = + '" + @p.accertatori.Replace("'", "''") +
+                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +
-
-
                     " where  ID = " + ID;
+                //accoda senza ripetere quelli esistenti    
+                //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))

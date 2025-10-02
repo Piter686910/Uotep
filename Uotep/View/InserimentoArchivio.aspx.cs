@@ -760,7 +760,7 @@ namespace Uotep
                 }
                 GVRicercaPratica.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
                // throw;

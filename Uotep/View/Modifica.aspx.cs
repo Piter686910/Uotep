@@ -656,7 +656,7 @@ namespace Uotep
             //if (e.Row.RowType == DataControlRowType.DataRow)
             //{
             //    // Ottieni il valore della colonna "ID"
-            //    string id = DataBinder.Eval(e.Row.DataItem, "ID_quartiere").ToString();
+            //    string id = DataBinder.Eval(e.Row.DataItem, "decr_id").ToString();
 
             //    // Aggiungi l'attributo per il doppio clic
             //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
@@ -677,17 +677,69 @@ namespace Uotep
         }
         protected void GVDecretazione_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            //if (e.CommandName == "Select")
-            //{
-            //    // Ottieni il valore dell'ID dalla CommandArgument
-            //    string selectedValue = e.CommandArgument.ToString();
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                string selectedValue = e.CommandArgument.ToString();
 
-            //    // Imposta il valore nel TextBox
-            //    //txtSelectedValue.Text = selectedValue;
-            //    txtIndirizzo.Text = selectedValue;
-            //    // Chiudi il popup
-            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
-            //}
+                // Separare i valori del CommandArgument usando il delimitatore "|"
+                string[] values = selectedValue.Split('|');
+
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 4)
+                {
+                    Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
+                    txtDecretato.Text = values[1];     // Matricola
+                    txtDataDecretazione.Text =  values[2]; // DataInserimento
+                    txtNotaDecretazione.Text = values[3]; // sigla
+
+
+
+
+                    // Imposta il valore nel TextBox
+                    //txtSelectedValue.Text = selectedValue;
+                    // txtDecretato.Text = decretato;
+
+                    // Chiudi il popup
+                    // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+
+                }
+            }
+            if (e.CommandName == "Save")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                string selectedValue = e.CommandArgument.ToString();
+
+                // Separare i valori del CommandArgument usando il delimitatore "|"
+                string[] values = selectedValue.Split('|');
+
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 4)
+                {
+                    Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
+                    //txtDecretato.Text = values[1];     // Matricola
+                    //txtDataDecretazione.Text = values[2]; // DataInserimento
+                    //txtNotaDecretazione.Text = values[3]; // sigla
+
+                    Manager mn = new Manager();
+                    Decretazione decr = new Decretazione();
+                    decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
+                    decr.decretato = txtDecretato.Text;
+                    decr.nota = txtNotaDecretazione.Text;
+                    Boolean resp = mn.UpdDecretazione(decr);
+
+
+                    // Imposta il valore nel TextBox
+                    //txtSelectedValue.Text = selectedValue;
+                    // txtDecretato.Text = decretato;
+
+                    // Chiudi il popup
+                    // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+
+                }
+            }
         }
 
         protected void apripopup_Click(object sender, EventArgs e)
@@ -996,7 +1048,7 @@ namespace Uotep
                 }
                 gvPopupD.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
                 // throw;

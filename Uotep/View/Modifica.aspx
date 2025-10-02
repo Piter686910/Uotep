@@ -467,7 +467,7 @@
         .gridview-autofit .colonna-descrizione {
             min-width: 250px; /* Non sarà mai più stretta di 100px */
             max-width: 500px;
-            */ /* Se il testo è più lungo, andrà a capo */
+            /* Se il testo è più lungo, andrà a capo */
             /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
         }
     </style>
@@ -1103,7 +1103,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group mb-3" style="margin-left: -100px!important">
+                            <div class="form-group mb-3" style="margin-left: -170px!important">
                                 <div class="form-group">
                                     <!-- GridView nel popup -->
                                     <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"
@@ -1134,11 +1134,21 @@
                                                 </ItemTemplate>
                                             </asp:TemplateField>
 
-                                            <%-- <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+
+                                            <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                                 <ItemTemplate>
-                                                    <asp:Button ID="Button1" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
+                                                    <asp:Button ID="Button1" runat="server" Text="Modifica" CommandName="Select" CommandArgument='<%# Eval("decr_id") + "|" + Eval("decr_decretato") + "|" + Eval("decr_data") + "|" + Eval("decr_nota")%>' CssClass="btn btn-success btn-sm" />
+
                                                 </ItemTemplate>
-                                            </asp:TemplateField>--%>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+                                                <ItemTemplate>
+                                                    <asp:Button ID="Button4" runat="server" Text="Salva" CommandName="Save" CommandArgument='<%# Eval("decr_id") + "|" + Eval("decr_decretato") + "|" + Eval("decr_data") + "|" + Eval("decr_nota")%>' CssClass="btn btn-success btn-sm" />
+
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+
                                         </Columns>
                                         <PagerSettings Mode="NumericFirstLast" Position="Top" />
                                         <PagerStyle HorizontalAlign="Center" />
@@ -1173,7 +1183,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3" style="margin-left: 400px!important">
+                        <div class="col-md-3" style="margin-left: 447px!important">
                             <div class="form-group mb-3">
                                 <label for="txtNotaDecretazione">Nota</label>
                                 <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>

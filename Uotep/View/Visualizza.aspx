@@ -459,12 +459,23 @@
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
+                                <%--<asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px"  />--%>
+
+
+                                <asp:TemplateField HeaderText="Sigla" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="20px">
+                                    <HeaderTemplate>
+                                        Sigla
+                                          <br />
+                                        <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" Width="40px"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("Sigla") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>       
+
                                 <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 
-                                <%--                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>--%>
                                 <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <HeaderTemplate>
                                         Nominativo
@@ -504,7 +515,7 @@
                                 <%--                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>--%>
-                                <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="70px">
                                     <HeaderTemplate>
                                         Accertatori
                                           <br />
@@ -571,6 +582,7 @@
                 <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
                 <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
                 <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
+                <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->

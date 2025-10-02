@@ -24,7 +24,7 @@ namespace Uotep
                 Vuser = Session["user"].ToString();
 
             }
-
+            Session["PaginaChiamante"] = "~/View/Visualizza.aspx";
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -429,7 +429,38 @@ namespace Uotep
         protected void gvPopup_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvPopup.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            Ricerca_Click(sender, e);
+            if (String.IsNullOrEmpty(HfFiltroAccertatori.Value) && String.IsNullOrEmpty(HfFiltroSigla.Value) && String.IsNullOrEmpty(HfFiltroNominativo.Value))
+            {
+                Ricerca_Click(sender, e);
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(HfFiltroAccertatori.Value))
+                {
+                    PopulateGridView("accertatori", HfFiltroAccertatori.Value);
+                   // apripopup_Click(sender, e);
+                }
+                else
+                {
+                    if (!String.IsNullOrEmpty(HfFiltroSigla.Value))
+                    {
+                        PopulateGridView("Sigla", HfFiltroSigla.Value);
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+
+                    }
+                    else
+                    {
+                        if (!String.IsNullOrEmpty(HfFiltroNominativo.Value))
+                        {
+                            PopulateGridView("Nominativo", HfFiltroNominativo.Value);
+                         //  apripopup_Click(sender, e);
+                        }
+                    }
+                }
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+
+            }
+            //  Ricerca_Click(sender, e);
         }
         protected void txtFilterNominativo_TextChanged(object sender, EventArgs e)
         {
@@ -548,7 +579,7 @@ namespace Uotep
                 }
                 gvPopup.DataBind();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
                 // throw;
@@ -654,6 +685,14 @@ namespace Uotep
                         dv.RowFilter = filtro;
 
                         break;
+                    case "Sigla":
+
+                        filtro = $"Sigla LIKE '%{HfFiltroSigla.Value}%'";
+                        dv = new DataView(pratica);
+
+                        dv.RowFilter = filtro;
+
+                        break;
 
 
                 }
@@ -696,6 +735,33 @@ namespace Uotep
                 return date.ToString("dd/MM/yyyy");
             }
             return ""; // Gestione di valori non validi
+        }
+
+        protected void txtFilterSigla_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            //// Crea una lista
+            //List<string> ListRicerca = new List<string> { "Sigla", txtRicNominativo.Text };
+            //// Salva la lista nella Sessione
+            //Session["ListRicerca"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim().ToUpper();
+            HfFiltroSigla.Value = filterValue;
+            List<string> ListRicerca = new List<string> { "Sigla", filterValue };
+            Session["ListRicerca"] = ListRicerca;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterSigla")
+            {
+                columnName = "Sigla"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroSigla.Value); // Esempio di funzione di filtro
+                                                                    //            apripopup_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
     }
 }
