@@ -1097,13 +1097,17 @@
                                 <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3"></asp:TextBox>
 
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="txtNotaDecretazione">Nota</label>
+                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
+                            </div>
 
                             <div class="form-group mb-3">
                                 <asp:Button ID="btAggiungiDecretazione" runat="server" CssClass="btn btn-primary mt-3" Text="Aggiungi" OnClick="btAggiungiDecretazione_Click" ValidationGroup="btDecretazione" />
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group mb-3" style="margin-left: -170px!important">
+                            <div class="form-group mb-3" >
                                 <div class="form-group">
                                     <!-- GridView nel popup -->
                                     <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"
@@ -1181,12 +1185,6 @@
                                     <asp:Button ID="btChiudiDecretazione" runat="server" Text="Chiudi Decretazione" OnClick="btChiudiDecretazione_Click" CommandName="Select" CommandArgument='<%# Eval("decr_pratica") + "|" + Eval("decr_idPratica") %>' CssClass="btn btn-success btn-sm" />
 
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3" style="margin-left: 447px!important">
-                            <div class="form-group mb-3">
-                                <label for="txtNotaDecretazione">Nota</label>
-                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
                             </div>
                         </div>
                     </div>

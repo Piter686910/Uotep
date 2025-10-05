@@ -1068,6 +1068,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataDecretazione;
 
         /// <summary>
+        /// Controllo txtNotaDecretazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNotaDecretazione;
+
+        /// <summary>
         /// Controllo btAggiungiDecretazione.
         /// </summary>
         /// <remarks>
@@ -1093,15 +1102,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btChiudiDecretazione;
-
-        /// <summary>
-        /// Controllo txtNotaDecretazione.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNotaDecretazione;
 
         /// <summary>
         /// Controllo Button3.
