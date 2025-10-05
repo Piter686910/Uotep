@@ -271,7 +271,7 @@ namespace Uotep
                 else
                     p.macro_area = string.Empty;
 
-                    p.accertatori = string.Empty;
+                p.accertatori = string.Empty;
                 //p.scaturito = null;
                 //if (String.IsNullOrEmpty(txtInviata.Text))
                 //{
@@ -300,6 +300,7 @@ namespace Uotep
                 DataTable dtStat = new DataTable();
                 DateTime ora = DateTime.Now;
                 string mese = ora.ToString("MMMM");
+                
                 dtStat = mn.getStatisticaByMeseAnno(mese, DateTime.Now.Year);
                 Boolean exist = false;
                 if (dtStat.Rows.Count > 0)
@@ -316,13 +317,23 @@ namespace Uotep
                     }
                     else
                         stat.esposti_ricevuti = System.Convert.ToInt32(dtStat.Rows[0].ItemArray[6]);
-                    //if (CkEvasa.Checked)
-                    //{
-                    //    stat.deleghe_esitate += 1;
-                    //}
 
                     exist = true;
                 }
+                else
+                {
+                    if (p.tipoProvvedimentoAG == "DELEGA INDAGINE")
+                    {
+                        stat.deleghe_ricevute = 1 ;
+                    }
+                    
+                    if (p.tipologia_atto == "ESPOSTO - SEGNALAZIONE")
+                    {
+                        stat.esposti_ricevuti = 1 ;
+                    }
+                    
+                }
+
                 stat.mese = mese;
                 stat.anno = DateTime.Now.Year;
                 Int32 idN = 0;
@@ -770,7 +781,7 @@ namespace Uotep
                     //}
                     //else
                     //    btChiudiDecretazione.Visible = true;
-                    
+
                 }
 
             }
