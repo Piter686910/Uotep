@@ -2709,7 +2709,7 @@ namespace Uotep.Classi
                     @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
                 {
-                    sql_Statistiche = "update statistiche set deleghe_ricevute = " + stat.deleghe_ricevute + ", esposti_ricevuti = " + stat.esposti_ricevuti +
+                    sql_Statistiche = "update statistiche set deleghe_ricevute = +" + stat.deleghe_ricevute + ", esposti_ricevuti = + " + stat.esposti_ricevuti +
                            " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
                 }
