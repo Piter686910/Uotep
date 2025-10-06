@@ -1710,61 +1710,41 @@ namespace Uotep.Classi
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
-                    SqlTransaction transaction = null;
-
-                    transaction = conn.BeginTransaction("trans");
 
                     SqlCommand command = conn.CreateCommand();
 
-                    command.Transaction = transaction;
-                    try
-                    {
 
-                        command.CommandText = sql_decretazione;
-                        testoSql = "decretazione";
-                        int res = command.ExecuteNonQuery();
-                        //if (res > 0)
-                        //{
-                        //    command.CommandText = sql_update;
 
-                        //    res1 = command.ExecuteNonQuery();
-                        //}
-
-                        //if (res1 > 0)
-                        //{
-                           // transaction.Commit();
-
-                            resp = true;
-                        //}
-
-                        //else
-                        //{
-                        //    transaction.Rollback();
-                        //    resp = false;
-                        //}
-
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
+                        try
                         {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                            command.CommandText = sql_decretazione;
+                            testoSql = "DECTRETAZIONE";
+                            int res = command.ExecuteNonQuery();
                         }
 
-                        using (StreamWriter sw = File.AppendText(LogFile))
+                        catch (Exception ex)
                         {
-                            sw.WriteLine("pratica:" + decr.Npratica + " - " + ex.Message + @" - Errore in inserimento dati in tabella decretazione");
-                            sw.Close();
+                            if (!File.Exists(LogFile))
+                            {
+                                using (StreamWriter sw = File.CreateText(LogFile)) { }
+                            }
+
+                            using (StreamWriter sw = File.AppendText(LogFile))
+                            {
+                                sw.WriteLine("Decretazione:" + decr.Npratica + ", " + ex.Message + @" - Errore in inserimento tabella decretazione ");
+                                sw.Close();
+                            }
+
+                            resp = false;
+
+
                         }
+                        conn.Close();
+                        conn.Dispose();
+                        return resp;
 
-                        resp = false;
 
-
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
+       
                 }
 
 
