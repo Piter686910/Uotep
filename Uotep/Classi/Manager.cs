@@ -1004,7 +1004,7 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-
+        
         public DataTable getGestionePraticaByFascicolo(string fascicolo)
         {
             string sql = string.Empty;
@@ -1029,6 +1029,24 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
             sql = "SELECT * FROM ArchivioUote";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        /// <summary>
+        /// Estrae la teballa
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getGestionePraticaTotale()
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM GestionePratiche";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1687,8 +1705,8 @@ namespace Uotep.Classi
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
                    "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
 
-                sql_update = "update principale set accertatori= accertatori +'-" + decr.decretato.Replace("'", "''") + "'";
-
+                //sql_update = "update principale set accertatori= accertatori '" + decr.decretato.Replace("'", "''") + "'";
+                //+ "where  and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
@@ -1705,25 +1723,25 @@ namespace Uotep.Classi
                         command.CommandText = sql_decretazione;
                         testoSql = "decretazione";
                         int res = command.ExecuteNonQuery();
-                        if (res > 0)
-                        {
-                            command.CommandText = sql_update;
+                        //if (res > 0)
+                        //{
+                        //    command.CommandText = sql_update;
 
-                            res1 = command.ExecuteNonQuery();
-                        }
+                        //    res1 = command.ExecuteNonQuery();
+                        //}
 
-                        if (res1 > 0)
-                        {
-                            transaction.Commit();
+                        //if (res1 > 0)
+                        //{
+                           // transaction.Commit();
 
                             resp = true;
-                        }
+                        //}
 
-                        else
-                        {
-                            transaction.Rollback();
-                            resp = false;
-                        }
+                        //else
+                        //{
+                        //    transaction.Rollback();
+                        //    resp = false;
+                        //}
 
                     }
 
@@ -2052,6 +2070,46 @@ namespace Uotep.Classi
 
         }
         /// <summary>
+        /// cancella la gestione pratica
+        /// </summary>
+        /// <param name="id_fascicolo"></param>
+        /// <returns></returns>
+        public Boolean DeleteGestionePraticaById(string id_fascicolo)
+        {
+
+           string sql = "delete  FROM gestionePratiche where id_gestionePratica = '" + id_fascicolo + "'";
+
+            Boolean resp = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+
+                    command.CommandText = sql;
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                    {
+
+                        resp = true;
+                    }
+
+
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn.Close();
+                return resp;
+            }
+        }
+
+        /// <summary>
         /// Inserisce scheda nuova e alimenta la tabella statistiche
         /// </summary>
         /// <param name="rapp"></param>
@@ -2075,7 +2133,7 @@ namespace Uotep.Classi
                 transaction = conn.BeginTransaction("trans");
                 command.Transaction = transaction;
                 idN = -1;
-
+                    
                 try
                 {
                     if (txt == "ins")
@@ -3235,7 +3293,7 @@ namespace Uotep.Classi
                 sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
-                    "',Note ='" + @p.note.Replace("'", "''") + "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
+                    "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    

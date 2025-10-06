@@ -117,12 +117,13 @@
                     </div>
                 </div>
                 <!-- Bottone Salva -->
-                <div class="col-md-4 ">
+                <div class="col-md-12 ">
                     <div class="form-group">
                         <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Inserisci" CssClass="btn btn-primary" OnClick="btInserisci_Click" />
 
                         <asp:Button ID="btRicerca" runat="server" Text="Ricerca" CssClass="btn btn-primary" OnClick="btRicerca_Click" />
                         <asp:Button ID="btModifica" runat="server" Text="Modifica" CssClass="btn btn-primary" OnClick="btModifica_Click" />
+                        <asp:Button ID="BtEstraiTabella" runat="server" Text="Estrazione" CssClass="btn btn-primary" OnClick="BtEstraiTabella_Click" />
 
                     </div>
                 </div>
@@ -130,7 +131,7 @@
         </div>
         <div class="form-group">
             <asp:GridView ID="GVRicercaFascicolo" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
+                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" OnRowDeleting="GVRicercaFascicolo_RowDeleting">
                 <Columns>
                     <asp:BoundField DataField="id_gestionePratica" HeaderText="ID" Visible="false" />
                     <asp:BoundField DataField="Fascicolo" HeaderText="Numero Fascicolo" />
@@ -155,6 +156,12 @@
                             <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_gestionePratica") %>' CssClass="btn btn-success btn-sm" />
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:Button ID="btnDelete" runat="server" Text="Elimina" CommandName="Delete" CommandArgument='<%# Eval("id_gestionePratica") %>' CssClass="btn btn-success btn-sm" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
                 </Columns>
             </asp:GridView>
 

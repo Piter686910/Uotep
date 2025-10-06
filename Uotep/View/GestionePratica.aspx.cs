@@ -1,7 +1,9 @@
-﻿using DocumentFormat.OpenXml;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing;
 using iText.StyledXmlParser.Jsoup.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
@@ -21,6 +23,8 @@ namespace Uotep
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
+
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
@@ -38,7 +42,7 @@ namespace Uotep
             {
                 Response.Redirect("Default.aspx?user=true");
             }
-            
+            Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
             {
                 if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
@@ -186,9 +190,23 @@ namespace Uotep
                     FillScheda(scheda);
 
                 }
-                // Chiudi il popup
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
+            if (e.CommandName == "Delete")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                //string selectedValue = e.CommandArgument.ToString();
+
+                string[] args = e.CommandArgument.ToString().Split(';');
+
+                string id_Fascicolo = args[0];
+                HfIdFascicolo.Value = id_Fascicolo;
+
+
+            }
+            // Chiudi il popup
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+
+
         }
         protected void FillScheda(DataTable fascicolo)
         {
@@ -250,6 +268,73 @@ namespace Uotep
 
             }
         }
-        
+
+        protected void GVRicercaFascicolo_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            //int idFascicolo = Convert.ToInt32(GVRicercaFascicolo.DataKeys[e.RowIndex].Value);
+            //HfIdFascicolo.Value = Convert.ToString(idFascicolo);
+            Manager mn = new Manager();
+
+            Boolean resp = mn.DeleteGestionePraticaById(HfIdFascicolo.Value);
+            if (resp)
+            {
+                GestionePratiche pratica = new GestionePratiche();
+                pratica.fascicolo = txtFascicolo.Text;
+                getPratica(pratica);
+
+            }
+        }
+        /// <summary>
+        /// Estrai la tabella GestionePratica
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void BtEstraiTabella_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            DataTable dt = mn.getGestionePraticaTotale();
+            //string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            //tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            // 2. Esporta la DataTable in Excel
+            // string filePath = Path.Combine(Filename, "Estrazione del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx");
+            string filePath = "Estrazione Gestione Pratica del " + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".xlsx";
+            //string temp = System.IO.Path.GetTempPath() + @"\" + filePath;
+            Session["filetemp"] = filePath;
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                var worksheet = wb.Worksheets.Add("Dati Estratti"); // Aggiunge un foglio di lavoro
+                                                                    //worksheet.Cell(1, 1).InsertTable(dt); // Inserisce il DataTable nel foglio a partire dalla cella A1
+                var columnRenameMap = new Dictionary<string, string>
+        {
+            { "fascicolo", "Fascicolo" },
+            { "assegnato", "Assegnato" },
+            { "DATA_USCITA", "Data Uscita" },
+            { "DATA_rientro", "Data Rientro" },
+            { "DATA_SPOSTAMENTI", "Data Spostamenti" },
+            { "data_riscontro", "Data Riscontro " },
+            { "note", "Note" },
+            { "NOTA_SPOSTAMENTO", "Nota Spostamento" },
+            { "NOTA_riscontro", "NOTA Riscontro" },
+
+        };
+
+                foreach (var entry in columnRenameMap)
+                {
+                    if (dt.Columns.Contains(entry.Key))
+                    {
+                        dt.Columns[entry.Key].ColumnName = entry.Value;
+                    }
+                }
+                worksheet.Cell(1, 1).InsertTable(dt);
+                worksheet.Column(1).Delete(); // Elimina la prima colonna
+                worksheet.Columns().AdjustToContents();  //  Auto-fit delle colonne
+                worksheet.Range(1, 1, 1, dt.Columns.Count).Style.Font.Bold = true;
+                //Routine al = new Routine();
+                //al.ConvertiBooleaniInItaliano(worksheet);
+                string fileNameForDownload = Filename + @"\\Estrazione Gestione Pratica_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
+                wb.SaveAs(fileNameForDownload);
+
+            }
+        }
     }
 }
