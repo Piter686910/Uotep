@@ -101,27 +101,48 @@ namespace Uotep
 
         protected void btInserisci_Click(object sender, EventArgs e)
         {
-
-            Boolean resp = false;
-            ValorizzaPratica();
-            //resp = VerificaCorrettezzaInserimento(pratica);
-            //if (!resp)
-            //{
-            resp = mn.InsGestionePratica(pratica);
-            //}
-            //else
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile inserire una nuova riga se la data rientro della precedente non è valorizzata." + "'); $('#errorModal').modal('show');", true);
-            //    resp = false;
-            //}
-            if (resp)
+            try
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
-                Pulisci();
-                getPratica(pratica);
+
+
+                Boolean resp = false;
+                ValorizzaPratica();
+                //resp = VerificaCorrettezzaInserimento(pratica);
+                //if (!resp)
+                //{
+                resp = mn.InsGestionePratica(pratica);
+                //}
+                //else
+                //{
+                //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile inserire una nuova riga se la data rientro della precedente non è valorizzata." + "'); $('#errorModal').modal('show');", true);
+                //    resp = false;
+                //}
+                if (resp)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    Pulisci();
+                    getPratica(pratica);
+                }
             }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
 
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.Close();
+                }
 
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
+            }
         }
         /// <summary>
         /// funzione che inserisce spaces al posto del min data value
@@ -242,19 +263,43 @@ namespace Uotep
 
         protected void btModifica_Click(object sender, EventArgs e)
         {
-            Boolean resp = false;
-            ValorizzaPratica();
-            int idfascicolo = System.Convert.ToInt32(HfIdFascicolo.Value);
-
-            resp = mn.UpdGestionePratica(idfascicolo, pratica);
-
-            if (resp)
+            try
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
-                //Pulisci();
-                getPratica(pratica);
 
 
+                Boolean resp = false;
+                ValorizzaPratica();
+                int idfascicolo = System.Convert.ToInt32(HfIdFascicolo.Value);
+
+                resp = mn.UpdGestionePratica(idfascicolo, pratica);
+
+                if (resp)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    //Pulisci();
+                    getPratica(pratica);
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.Close();
+                }
+
+                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                Response.Redirect("~/Contact.aspx");
             }
         }
         private void getPratica(GestionePratiche p)
