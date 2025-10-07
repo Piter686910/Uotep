@@ -1,5 +1,7 @@
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
+using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -2634,7 +2636,54 @@ namespace Uotep.Classi
 
 
         }
+        /// <summary>
+        /// preleva il numero di deleghe ricevute dalla procura
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public int GetDelegheRicevute(string mese, int anno)
+        {
+            int number = 0;
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            String meseN = string.Empty;
 
+                        string meseS = @"DECLARE @NomeMese NVARCHAR(20) SET @NomeMese ='" + mese + "' SELECT FORMAT(MONTH(CAST(@NomeMese +' 1, 2000' AS DATETIME)), 'D2') AS NumeroMese";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                  meseN= Convert.ToString(FillTable(meseS, conn).Rows[0][0]) ;
+                //return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+            }
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where provenienza like '%PROCURA%' AND TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
+
+                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+            }
+
+        }
+        public int GetEspostiRicevute(string mese, int anno)
+        {
+            int number = 0;
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            String meseN = string.Empty;
+
+            string meseS = @"DECLARE @NomeMese NVARCHAR(20) SET @NomeMese ='" + mese + "' SELECT FORMAT(MONTH(CAST(@NomeMese +' 1, 2000' AS DATETIME)), 'D2') AS NumeroMese";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
+                //return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+            }
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = 'ESPOSTO - SEGNALAZIONE' AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
+
+                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+            }
+
+        }
         /// <summary>
         /// cercala scheda per id 
         /// </summary>

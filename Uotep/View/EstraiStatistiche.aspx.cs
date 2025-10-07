@@ -82,10 +82,18 @@ namespace Uotep
 
         protected void FillScheda(DataTable stat)
         {
+            Manager mn = new Manager();
+            int anno = System.Convert.ToInt32(txtAnno.Text.Trim());
+            int number = 0;
             txtRelazioni.Text = stat.Rows[0].ItemArray[3].ToString();
             TxtPonteggi.Text = stat.Rows[0].ItemArray[4].ToString();
             txtDPI.Text = stat.Rows[0].ItemArray[5].ToString();
-            txtEspostiRicevuti.Text = stat.Rows[0].ItemArray[6].ToString();
+            //prelevo il numero degli esposti ricevuti
+             number = mn.GetEspostiRicevute(txtMese.Text.Trim(), anno);
+            
+            txtEspostiRicevuti.Text = Convert.ToString(number);
+            number = 0;
+            //
             txtEspostiEvasi.Text = stat.Rows[0].ItemArray[7].ToString();
             txtRipristino.Text = stat.Rows[0].ItemArray[8].ToString();
             txtControlliScia.Text = stat.Rows[0].ItemArray[9].ToString();
@@ -95,7 +103,10 @@ namespace Uotep
             txtNotifiche.Text = stat.Rows[0].ItemArray[13].ToString();
             txtSequestri.Text = stat.Rows[0].ItemArray[14].ToString();
             txtRiapposizioneSigilli.Text = stat.Rows[0].ItemArray[15].ToString();
-            txtDelegheRicevute.Text = stat.Rows[0].ItemArray[16].ToString();
+            //prelevo le deleghe ricevute dalla procura
+            number = mn.GetDelegheRicevute(txtMese.Text.Trim(), anno);
+            txtDelegheRicevute.Text = Convert.ToString(number);
+            //
             txtDelegheEsitate.Text = stat.Rows[0].ItemArray[17].ToString();
             txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
