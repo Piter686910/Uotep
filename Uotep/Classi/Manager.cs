@@ -2657,7 +2657,7 @@ namespace Uotep.Classi
             }
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where provenienza like '%PROCURA%' AND TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }
