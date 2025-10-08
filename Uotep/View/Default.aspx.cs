@@ -43,8 +43,8 @@ namespace Uotep
         protected void trova_Click(object sender, EventArgs e)
         {
             String Vpassw = "";
-            Vuser = TxtMatricola.Text;
-            Hmatricola.Value = TxtMatricola.Text;
+            Vuser = TxtMatricola.Text.ToUpper();
+            Hmatricola.Value = TxtMatricola.Text.ToUpper();
             Vpassw = TxtPassw.Text;
 
             DataTable Ricerca = new DataTable();
@@ -52,13 +52,13 @@ namespace Uotep
             Manager mn = new Manager();
 
             //prendo la password registrata in db per la verifica
-            DataTable RicercaP = mn.getPass(TxtMatricola.Text);
+            DataTable RicercaP = mn.getPass(TxtMatricola.Text.ToUpper());
             if (RicercaP.Rows.Count > 0)
             {
                 //esiste matricola e passw
                 string pwDB = RicercaP.Rows[0].ItemArray[0].ToString();
                 //verifico correttezza passw inserita
-                Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, pwDB);
+                Ricerca = mn.getUserByUserPassw(TxtMatricola.Text.ToUpper(), pwDB);
                 if (Ricerca.Rows.Count > 0)
                 {
                     //verifico la correttezza della password criptata
@@ -120,7 +120,7 @@ namespace Uotep
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(txtNewPassw.Text, 13);
 
             Manager mn = new Manager();
-            Boolean ins = mn.SavePassword(passwordHash, TxtMatricola.Text);
+            Boolean ins = mn.SavePassword(passwordHash, TxtMatricola.Text.ToUpper());
 
             if (ins)
             {
@@ -140,9 +140,9 @@ namespace Uotep
         protected void lkreset_Click(object sender, EventArgs e)
         {
             //cripto la passowrd
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text + "old", 13);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text.ToUpper() + "old", 13);
             Manager mn = new Manager();
-            Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text);
+            Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text.ToUpper());
             if (upd)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old" + "'); $('#errorModal').modal('show');", true);

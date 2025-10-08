@@ -76,8 +76,9 @@
                                     <asp:ListItem Text="archivio"> </asp:ListItem>
                                     <asp:ListItem Text="coordinamentoatti"> </asp:ListItem>
                                     <asp:ListItem Text="coordinamentopg"> </asp:ListItem>
-                                    <asp:ListItem Text="MasterAG"> </asp:ListItem>
-                                    <asp:ListItem Text="segreteria"> </asp:ListItem>
+                                    <asp:ListItem Text="PG"> </asp:ListItem>
+                                    <%--<asp:ListItem Text="MasterAG"> </asp:ListItem>--%>
+                                    <%--<asp:ListItem Text="segreteria"> </asp:ListItem>--%>
                                     <asp:ListItem Text="superAdmin"> </asp:ListItem>
                                 </asp:DropDownList>
                             </div>

@@ -68,9 +68,9 @@ namespace Uotep
         protected void InsOpetratore_Click(object sender, EventArgs e)
         {
             Operatore op = new Operatore();
-            op.matricola = TxtMatricola.Text;
+            op.matricola = TxtMatricola.Text.ToUpper();
             //cripto la passowrd
-            op.passw = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text + "old", 13);
+            op.passw = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text.ToUpper() + "old", 13);
             op.pwstandard = TxtMatricola.Text + "old";
             op.profilo = TxtProfilo.Text;
             op.nota = TxtNota.Text;
