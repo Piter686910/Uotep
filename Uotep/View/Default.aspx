@@ -54,12 +54,15 @@
             </div>
 
             <!-- Pulsanti -->
-            <div class="form-group text-center mt-4">
+            <div class="col-md-6 ">
                 <asp:Button ID="btLogin" Text="Entra" runat="server" OnClick="trova_Click" ToolTip="Login" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-                <asp:Button ID="btsave" Text="Save" runat="server" OnClick="SalvaPassw_Click" ToolTip="Salva password" CssClass="btn btn-primary px-4" Visible="false" />
+
                 <%--<asp:Button ID="btResetPassw" Text="Reset Password" runat="server" OnClick="btResetPassw_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />--%>
-                <asp:LinkButton id="lkreset" OnClick="lkreset_Click" Text="Reset Password" runat="server"> </asp:LinkButton>
+                <asp:Button ID="btsave" Text="Save" runat="server" OnClick="SalvaPassw_Click" ToolTip="Salva password" CssClass="btn btn-primary px-4" Visible="false" />
             </div>
+        <div class="col-md-6 ">
+            <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" Text="Reset Password" runat="server"> </asp:LinkButton>
+        </div>
         </div>
     </asp:Panel>
 
@@ -85,7 +88,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btChiudiPop" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudiPop_Click"/>
+                    <asp:Button ID="btChiudiPop" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiPop_Click" />
                 </div>
             </div>
         </div>
