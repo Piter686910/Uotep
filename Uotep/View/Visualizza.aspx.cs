@@ -105,17 +105,17 @@ namespace Uotep
 
                 DivGrid.Visible = true;
                 string a = pratica.Rows[0].ItemArray[1].ToString();
-                DataTable decretazione = new DataTable();
+                //DataTable decretazione = new DataTable();
 
-                decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
-                if (decretazione.Rows.Count > 0)
-                {
-                    GVDecretazione.DataSource = decretazione;
-                    GVDecretazione.DataBind();
-                    divDecretazione.Visible = true;
-                }
-                else
-                    divDecretazione.Visible = false;
+                //decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
+                //if (decretazione.Rows.Count > 0)
+                //{
+                //    GVDecretazione.DataSource = decretazione;
+                //    GVDecretazione.DataBind();
+                //    divDecretazione.Visible = true;
+                //}
+                //else
+                //    divDecretazione.Visible = false;
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
             }
             else
@@ -273,6 +273,22 @@ namespace Uotep
                             ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                             DivDettagli.Visible = true;
                             DivRicerca.Visible = false;
+
+
+                            DataTable decretazione = new DataTable();
+
+                            decretazione = mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
+                            if (decretazione.Rows.Count > 0)
+                            {
+                                GVDecretazione.DataSource = decretazione;
+                                GVDecretazione.DataBind();
+                                divDecretazione.Visible = true;
+                            }
+                            else
+                                divDecretazione.Visible = false;
+
+
+
                             Pulisci();
                         }
                         else

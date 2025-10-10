@@ -1006,7 +1006,7 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        
+
         public DataTable getGestionePraticaByFascicolo(string fascicolo)
         {
             string sql = string.Empty;
@@ -1717,36 +1717,36 @@ namespace Uotep.Classi
 
 
 
-                        try
+                    try
+                    {
+                        command.CommandText = sql_decretazione;
+                        testoSql = "DECTRETAZIONE";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
                         {
-                            command.CommandText = sql_decretazione;
-                            testoSql = "DECTRETAZIONE";
-                            int res = command.ExecuteNonQuery();
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
                         }
 
-                        catch (Exception ex)
+                        using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            if (!File.Exists(LogFile))
-                            {
-                                using (StreamWriter sw = File.CreateText(LogFile)) { }
-                            }
-
-                            using (StreamWriter sw = File.AppendText(LogFile))
-                            {
-                                sw.WriteLine("Decretazione:" + decr.Npratica + ", " + ex.Message + @" - Errore in inserimento tabella decretazione ");
-                                sw.Close();
-                            }
-
-                            resp = false;
-
-
+                            sw.WriteLine("Decretazione:" + decr.Npratica + ", " + ex.Message + @" - Errore in inserimento tabella decretazione ");
+                            sw.Close();
                         }
-                        conn.Close();
-                        conn.Dispose();
-                        return resp;
+
+                        resp = false;
 
 
-       
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+
+
+
                 }
 
 
@@ -2025,7 +2025,7 @@ namespace Uotep.Classi
                     resp = true;
                 }
 
-                catch (Exception )
+                catch (Exception)
                 {
                     if (transaction != null)
                     {
@@ -2059,7 +2059,7 @@ namespace Uotep.Classi
         public Boolean DeleteGestionePraticaById(string id_fascicolo)
         {
 
-           string sql = "delete  FROM gestionePratiche where id_gestionePratica = '" + id_fascicolo + "'";
+            string sql = "delete  FROM gestionePratiche where id_gestionePratica = '" + id_fascicolo + "'";
 
             Boolean resp = false;
 
@@ -2115,7 +2115,7 @@ namespace Uotep.Classi
                 transaction = conn.BeginTransaction("trans");
                 command.Transaction = transaction;
                 idN = -1;
-                    
+
                 try
                 {
                     if (txt == "ins")
@@ -2648,16 +2648,13 @@ namespace Uotep.Classi
             string sql = string.Empty;
             DataTable tb = new DataTable();
             String meseN = string.Empty;
+            Manager mn = new Manager();
+            //trasforma il mese in numero
+            string meseS = mn.GetNumeroMeseByText(mese);
 
-                        string meseS = @"DECLARE @NomeMese NVARCHAR(20) SET @NomeMese ='" + mese + "' SELECT FORMAT(MONTH(CAST(@NomeMese +' 1, 2000' AS DATETIME)), 'D2') AS NumeroMese";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                  meseN= Convert.ToString(FillTable(meseS, conn).Rows[0][0]) ;
-                //return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
-            }
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }
@@ -2669,19 +2666,40 @@ namespace Uotep.Classi
             string sql = string.Empty;
             DataTable tb = new DataTable();
             String meseN = string.Empty;
+            //trasforma il mese in numero   
 
+            Manager mn = new Manager();
+            string meseS = mn.GetNumeroMeseByText(mese);
+            //using (SqlConnection conn = new SqlConnection(ConnString))
+            //{
+            //    meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
+            //}
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = 'ESPOSTO - SEGNALAZIONE' AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
+
+                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+            }
+
+        }
+        /// <summary>
+        /// trasforma il mese in numero
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <returns></returns>
+        public string GetNumeroMeseByText(string mese)
+        {
+
+            string sql = string.Empty;
+            String meseN = string.Empty;
+            //trasforma il mese in numero   
             string meseS = @"DECLARE @NomeMese NVARCHAR(20) SET @NomeMese ='" + mese + "' SELECT FORMAT(MONTH(CAST(@NomeMese +' 1, 2000' AS DATETIME)), 'D2') AS NumeroMese";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
-                //return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }
             using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = 'ESPOSTO - SEGNALAZIONE' AND DATAARRIVO LIKE '" + anno + "-" + meseN + "%'";
-
-                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
-            }
+                return meseN;
 
         }
         /// <summary>
@@ -2925,7 +2943,7 @@ namespace Uotep.Classi
                 sql_updDecretazione = "update decretazione set decr_chiuso = '" + @p.chiuso + "'" +
                     " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
 
-                sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
+                sql_updPrincipale = "update principale set Evasa = 'True' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -3027,12 +3045,12 @@ namespace Uotep.Classi
             try
             {
 
-                sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''")  + "'" +
+                sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''") + "'" +
                     " where  decr_pratica = '" + p.Npratica + "' and decr_idPratica = " + p.idPratica;
 
-              //  sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
+                //  sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
 
-                using ( SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
                     SqlCommand command = conn.CreateCommand();
@@ -3041,14 +3059,14 @@ namespace Uotep.Classi
                     command.Transaction = tran;
                     try
                     {
-                        
-                            command.CommandText = sql_updDecretazione;
 
-                            res1 = command.ExecuteNonQuery();
-                        
+                        command.CommandText = sql_updDecretazione;
+
+                        res1 = command.ExecuteNonQuery();
+
                         if (res1 > 0)
                         {
-                            
+
 
                             tran.Commit();
 
@@ -3319,7 +3337,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "update principale set Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
+                sql_pratica = "update principale set Sigla= '" + @p.sigla + "', Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +

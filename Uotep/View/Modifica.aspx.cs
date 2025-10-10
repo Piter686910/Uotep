@@ -52,6 +52,7 @@ namespace Uotep
                     btChiudiDecretazione.Visible = false;
 
                 }
+             
 
 
             }
@@ -133,7 +134,7 @@ namespace Uotep
                 //p.anno = annoCorr;
                 //p.giorno = DateTime.Now.Day.ToString();
                 //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-                //p.sigla = DdlSigla.SelectedItem.Text;
+                p.sigla = DdlSigla.SelectedItem.Text;
                 p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
                 if (!string.IsNullOrEmpty(txtDataCarico.Text))
                 {
@@ -572,7 +573,10 @@ namespace Uotep
                             }
 
                         }
-
+                        if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+                        {
+                            txtAccertatori.Enabled = false;
+                        }
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
@@ -996,8 +1000,8 @@ namespace Uotep
                 }
 
             }
-            else
-                btChiudiDecretazione.Visible = false;
+          //  else
+               // btChiudiDecretazione.Visible = false;
             apripopupDecretazione_Click(sender, e);
         }
 

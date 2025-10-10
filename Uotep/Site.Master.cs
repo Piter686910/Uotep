@@ -112,7 +112,7 @@ namespace Uotep
                                 break;
                             case "PG":
                                 // Mostra voci per utenti standard
-                                menuCoordinamentoAtti.Visible = false;
+                                //menuCoordinamentoAtti.Visible = false;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
@@ -122,7 +122,13 @@ namespace Uotep
                                 PG.Visible = true;
                                 menuArchivioUote.Visible = true;
                                 RicercaArchivio.Visible = true;
-
+                                if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
+                                {
+                                    menuCoordinamentoAtti.Visible = true;
+                                    InserimentoAtti.Visible = false;
+                                    ModificaAtti.Visible = false;
+                                    RicercaAtti.Visible = true;
+                                }
                                 break;
                             case "archivio":
                                 // Mostra voci per utenti standard
