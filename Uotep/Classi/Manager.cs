@@ -21,6 +21,7 @@ namespace Uotep.Classi
 
         //public String ConnString = ConfigurationManager.AppSettings["ConnString"];
         public String ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
+        public String ConnStringTp = ConfigurationManager.ConnectionStrings["ConnStringTp"].ToString();
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         //delete
         public Boolean DeleteTran(String numero_pratica)
@@ -881,6 +882,24 @@ namespace Uotep.Classi
 
                 return tb = FillTable(sql, conn);
             }
+        }
+
+
+        public DataTable getPraticaArchivioUOTPById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM ArchivioTp where id = '" + id + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+
+
         }
         /// <summary>
         /// estrazione parziale, esegue merge del datatable per ogni ck selezionato

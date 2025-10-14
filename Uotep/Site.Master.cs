@@ -34,39 +34,13 @@ namespace Uotep
 
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
-
-                            //case "coordinamentoatti":
-                            //case "mastag":
-                            //    // Mostra voci specifiche per coordinamento ag
-                            //    menuCoordinamentoAtti.Visible = true;
-                            //    menuArchivioUote.Visible = true;
-                            //    RicercaArchivio.Visible = true;
-                            //    menuAccertatori.Visible = false;
-                            //    menuAmministratore.Visible = false;
-                            //    menuManTabelle.Visible = true;
-                            //    menuSegreteria.Visible = false;
-                            //    menuEsci.Visible = true;
-                            //    menuHome.Visible = true;
-                            //    if (Session["profilo"].ToString() != "1")
-                            //    {
-                            //        menuNuovaScheda.Visible = false;
-                            //        menuRicercaScheda.Visible = true;
-                            //        Statistiche.Visible = true;
-
-                            //    }
-                            //    InserimentoAtti.Visible = true;
-                            //    ModificaAtti.Visible = true;
-                            //    ModificaRiservata.Visible = true;
-                            //    RicercaAtti.Visible = true;
-
-                            //    break;
                             case "coordinamentopg":
                             case "MasterAG":
                             case "coordinamentoatti":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
-                                menuArchivioUote.Visible = true;
-                                RicercaArchivio.Visible = true;
+                                menuArchivio.Visible = true;
+                                RicercaArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
@@ -80,7 +54,7 @@ namespace Uotep
                                 }
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
-                               // ModificaRiservata.Visible = true;
+                                // ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
                                     StatisticheAtti.Visible = true;
@@ -95,18 +69,18 @@ namespace Uotep
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
-                               // menuHome.Visible = true;
+                                // menuHome.Visible = true;
                                 PG.Visible = true;
-                                GestionePratica.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.accertatore.GetHashCode().ToStringInvariant()))
                                 {
                                     menuNuovaScheda.Visible = true;
                                     menuRicercaScheda.Visible = true;
                                     EstraiStatistiche.Visible = false;
                                 }
-                                menuArchivioUote.Visible = true;
-                                RicercaArchivio.Visible = true;
-                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                                menuArchivio.Visible = true;
+                                RicercaArchivioUote.Visible = true;
+                                if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
                                     Decretazione.Visible = true;
 
                                 break;
@@ -117,11 +91,11 @@ namespace Uotep
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuEsci.Visible = true;
-                               // menuHome.Visible = true;
+                                // menuHome.Visible = true;
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
-                                menuArchivioUote.Visible = true;
-                                RicercaArchivio.Visible = true;
+                                menuArchivio.Visible = true;
+                                RicercaArchivioUote.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                                 {
                                     menuCoordinamentoAtti.Visible = true;
@@ -132,24 +106,24 @@ namespace Uotep
                                 break;
                             case "archivio":
                                 // Mostra voci per utenti standard
-                               // menuHome.Visible = true;
-                                menuArchivioUote.Visible = true;
+                                // menuHome.Visible = true;
+                                menuArchivio.Visible = true;
                                 menuCoordinamentoAtti.Visible = false;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = false;
                                 menuAmministratore.Visible = false;
 
                                 menuEsci.Visible = true;
-                               // menuHome.Visible = true;
-                                RicercaArchivio.Visible = true;
-                                InserimentoArchivio.Visible = true;
-                                GestionePratica.Visible = true;
+                                // menuHome.Visible = true;
+                                RicercaArchivioUote.Visible = true;
+                                InserimentoArchivioUote.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 menuManTabelle.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
-                                menuArchivioUote.Visible = true;
+                                menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
@@ -157,9 +131,9 @@ namespace Uotep
                                 menuAmministratore.Visible = true;
                                 menuManTabelle.Visible = true;
                                 menuEsci.Visible = true;
-                              //  menuHome.Visible = true;
-                                RicercaArchivio.Visible = true;
-                                InserimentoArchivio.Visible = true;
+                                //  menuHome.Visible = true;
+                                RicercaArchivioUote.Visible = true;
+                                InserimentoArchivioUote.Visible = true;
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 StatisticheAtti.Visible = true;
@@ -167,16 +141,16 @@ namespace Uotep
                                 //*
                                 InserimentoAtti.Visible = true;
                                 ModificaAtti.Visible = true;
-                              //  ModificaRiservata.Visible = true;
+                                //  ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 EstraiStatistiche.Visible = true;
-                                GestionePratica.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
-                                menuArchivioUote.Visible = true;
+                                menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuNuovaScheda.Visible = true;
                                 menuRicercaScheda.Visible = true;
@@ -184,7 +158,7 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
                                 menuEsci.Visible = true;
-                               // menuHome.Visible = true;
+                                // menuHome.Visible = true;
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
 
@@ -193,11 +167,11 @@ namespace Uotep
                                 ModificaAtti.Visible = true;
                                 //ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
-                                GestionePratica.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 //*
                                 break;
                             default:
-                               // menuHome.Visible = true;
+                                // menuHome.Visible = true;
                                 break;
                         }
                     }

@@ -11,250 +11,286 @@ namespace Uotep
 {
 
 
-    public partial class SiteMaster
+    public partial class InserimentoArchivioUotp
     {
 
         /// <summary>
-        /// Controllo menuAmministratore.
+        /// Controllo ProtocolloLiteral.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuAmministratore;
+        protected global::System.Web.UI.WebControls.Literal ProtocolloLiteral;
 
         /// <summary>
-        /// Controllo menuArchivio.
+        /// Controllo txtPratN.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuArchivio;
+        protected global::System.Web.UI.WebControls.TextBox txtPratN;
 
         /// <summary>
-        /// Controllo subMenuUOTE.
+        /// Controllo txtSiglaTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl subMenuUOTE;
+        protected global::System.Web.UI.WebControls.TextBox txtSiglaTp;
 
         /// <summary>
-        /// Controllo InserimentoArchivioUote.
+        /// Controllo txtDataInserimentoTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor InserimentoArchivioUote;
+        protected global::System.Web.UI.WebControls.TextBox txtDataInserimentoTp;
 
         /// <summary>
-        /// Controllo RicercaArchivioUote.
+        /// Controllo txtProGenTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivioUote;
+        protected global::System.Web.UI.WebControls.TextBox txtProGenTp;
 
         /// <summary>
-        /// Controllo GestionePraticaUote.
+        /// Controllo txtDataProtGen.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor GestionePraticaUote;
+        protected global::System.Web.UI.WebControls.TextBox txtDataProtGen;
 
         /// <summary>
-        /// Controllo subMenuUOTP.
+        /// Controllo RegularExpressionValidator2.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl subMenuUOTP;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
 
         /// <summary>
-        /// Controllo InserimentoArchivioUotp.
+        /// Controllo txtProProcTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor InserimentoArchivioUotp;
+        protected global::System.Web.UI.WebControls.TextBox txtProProcTp;
 
         /// <summary>
-        /// Controllo RicercaArchivioUotp.
+        /// Controllo txtDataProtProc.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivioUotp;
+        protected global::System.Web.UI.WebControls.TextBox txtDataProtProc;
 
         /// <summary>
-        /// Controllo menuCoordinamentoAtti.
+        /// Controllo RegularExpressionValidator3.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuCoordinamentoAtti;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
 
         /// <summary>
-        /// Controllo InserimentoAtti.
+        /// Controllo txtOggettoTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor InserimentoAtti;
+        protected global::System.Web.UI.WebControls.TextBox txtOggettoTp;
 
         /// <summary>
-        /// Controllo ModificaAtti.
+        /// Controllo txtDestinatarioTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor ModificaAtti;
+        protected global::System.Web.UI.WebControls.TextBox txtDestinatarioTp;
 
         /// <summary>
-        /// Controllo RicercaAtti.
+        /// Controllo txtQuartiereTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaAtti;
+        protected global::System.Web.UI.WebControls.TextBox txtQuartiereTp;
 
         /// <summary>
-        /// Controllo StatisticheAtti.
+        /// Controllo txtNotaTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor StatisticheAtti;
+        protected global::System.Web.UI.WebControls.TextBox txtNotaTp;
 
         /// <summary>
-        /// Controllo menuAccertatori.
+        /// Controllo txtCartellinaTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuAccertatori;
+        protected global::System.Web.UI.WebControls.TextBox txtCartellinaTp;
 
         /// <summary>
-        /// Controllo Decretazione.
+        /// Controllo hdnConfermaUtente.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor Decretazione;
+        protected global::System.Web.UI.WebControls.HiddenField hdnConfermaUtente;
 
         /// <summary>
-        /// Controllo menuNuovaScheda.
+        /// Controllo lblRisultatoAzione.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor menuNuovaScheda;
+        protected global::System.Web.UI.WebControls.Label lblRisultatoAzione;
 
         /// <summary>
-        /// Controllo menuRicercaScheda.
+        /// Controllo btSalva.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor menuRicercaScheda;
+        protected global::System.Web.UI.WebControls.Button btSalva;
 
         /// <summary>
-        /// Controllo EstraiStatistiche.
+        /// Controllo btCercaQuartiere.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor EstraiStatistiche;
+        protected global::System.Web.UI.WebControls.Button btCercaQuartiere;
 
         /// <summary>
-        /// Controllo menuManTabelle.
+        /// Controllo txtIndirizzoQuartiere.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuManTabelle;
+        protected global::System.Web.UI.WebControls.TextBox txtIndirizzoQuartiere;
 
         /// <summary>
-        /// Controllo menuSegreteria.
+        /// Controllo gvPopup.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSegreteria;
+        protected global::System.Web.UI.WebControls.GridView gvPopup;
 
         /// <summary>
-        /// Controllo StatistichePg.
+        /// Controllo btnSearch.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor StatistichePg;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
 
         /// <summary>
-        /// Controllo PG.
+        /// Controllo btnchiudi.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor PG;
+        protected global::System.Web.UI.WebControls.Button btnchiudi;
 
         /// <summary>
-        /// Controllo menuEsci.
+        /// Controllo GVRicercaPratica.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuEsci;
+        protected global::System.Web.UI.WebControls.GridView GVRicercaPratica;
 
         /// <summary>
-        /// Controllo lnkLogout.
+        /// Controllo HfStato.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
+        protected global::System.Web.UI.WebControls.HiddenField HfStato;
 
         /// <summary>
-        /// Controllo MainContent.
+        /// Controllo HfFiltroNote.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroNote;
 
         /// <summary>
-        /// Controllo lblMsg.
+        /// Controllo HfFiltroIndirizzo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMsg;
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroIndirizzo;
+
+        /// <summary>
+        /// Controllo HfFiltroResponsabile.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroResponsabile;
+
+        /// <summary>
+        /// Controllo btChiudi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btChiudi;
+
+        /// <summary>
+        /// Controllo errorMessage.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl errorMessage;
+
+        /// <summary>
+        /// Controllo Button2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button2;
     }
 }
