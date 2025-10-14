@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
+using static Uotep.Classi.Enumerate;
 
 namespace Uotep.Classi
 {
@@ -2651,10 +2652,12 @@ namespace Uotep.Classi
             Manager mn = new Manager();
             //trasforma il mese in numero
             string meseS = mn.GetNumeroMeseByText(mese);
+            Tipologie delIndagine = Tipologie.DelegaIndagine;
+            string DelegaIndagine = delIndagine.GetDescription();
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = 'DELEGA INDAGINE' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = '" + DelegaIndagine + "' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }
@@ -2670,13 +2673,16 @@ namespace Uotep.Classi
 
             Manager mn = new Manager();
             string meseS = mn.GetNumeroMeseByText(mese);
+            Tipologie esp = Tipologie.EspostoSegnalazione;
+            string Esposti = esp.GetDescription();
+
             //using (SqlConnection conn = new SqlConnection(ConnString))
             //{
             //    meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
             //}
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = 'ESPOSTO - SEGNALAZIONE' AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
+                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = '" + Esposti +"' AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }

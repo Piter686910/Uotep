@@ -1005,6 +1005,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btChiudi;
 
         /// <summary>
+        /// Controllo btChiudiAvvertenze.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btChiudiAvvertenze;
+
+        /// <summary>
         /// Controllo Button2.
         /// </summary>
         /// <remarks>

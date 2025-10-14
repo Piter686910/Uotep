@@ -1,6 +1,10 @@
-﻿namespace Uotep.Classi
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
+
+namespace Uotep.Classi
 {
-    public class Enumerate
+    public static class Enumerate
     {
         public enum Area
         {
@@ -25,11 +29,25 @@
             tre = 3, //admin, responsabili, sa
 
         }
+
+        public enum Tipologie
+        {
+            [Description("Altro")]
+            Altro = 1,
+
+            [Description("DELEGA INDAGINE")]
+            DelegaIndagine = 2,
+
+            [Description("ESPOSTO - SEGNALAZIONE")]
+            EspostoSegnalazione = 3                
+                
+
+        }
         public enum Sigla
         {
-            AG = 1, 
+            AG = 1,
             ED = 2,
-            TP = 3 
+            TP = 3
 
         }
         public enum CampiXStatistiche
@@ -45,18 +63,34 @@
             annotazioni = 8,
             delegheEsitate = 9,
             violAmm = 10,
-            convalide= 11,
-            dissequestri= 12,
+            convalide = 11,
+            dissequestri = 12,
             disseqTemp = 13,
-            rimozSigilli= 14,
+            rimozSigilli = 14,
             violSigilli = 15,
-            contr4204= 16,
-            ponteggi= 17,
+            contr4204 = 16,
+            ponteggi = 17,
             dpi = 18,
             contrCant = 19,
-            contr_cant_suolo_pubb= 20
+            contr_cant_suolo_pubb = 20
 
 
+        }
+
+        /// <summary>
+        /// preleva la stringa da Enum
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetDescription(this Enum value)
+        {
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            if (fieldInfo == null) return null;
+
+            var attribute = (DescriptionAttribute)fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute));
+
+            // Ritorna la descrizione se presente, altrimenti il nome del membro stesso.
+            return attribute != null ? attribute.Description : value.ToString();
         }
     }
 }
