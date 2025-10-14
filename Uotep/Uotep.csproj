@@ -334,6 +334,7 @@
     <Content Include="View\ModificaRiservata.aspx" />
     <Content Include="View\InserimentoArchivio.aspx" />
     <Content Include="View\test.aspx" />
+    <Content Include="View\Uotp\InserimentoArchivioUotp.aspx" />
     <Content Include="View\Visualizza.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -504,6 +505,13 @@
     </Compile>
     <Compile Include="View\test.aspx.designer.cs">
       <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Uotp\InserimentoArchivioUotp.aspx.cs">
+      <DependentUpon>InserimentoArchivioUotp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Uotp\InserimentoArchivioUotp.aspx.designer.cs">
+      <DependentUpon>InserimentoArchivioUotp.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\Visualizza.aspx.cs">
       <DependentUpon>Visualizza.aspx</DependentUpon>
