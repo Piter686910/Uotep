@@ -1,9 +1,11 @@
 ﻿using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -52,7 +54,7 @@ namespace Uotep
                     btChiudiDecretazione.Visible = false;
 
                 }
-             
+
 
 
             }
@@ -102,7 +104,20 @@ namespace Uotep
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
                 DdlProvenienza.DataBind();
+                DdlSigla.Items.Clear();
+                foreach (Sigla stato in Enum.GetValues(typeof(Sigla)))
+                {
+                    // Crea un nuovo ListItem
+                    ListItem item = new ListItem();
 
+                    // Il testo visibile all'utente viene preso dalla Description
+                    item.Text = GetEnumDescription(stato);
+
+                    // Il valore interno è il nome del membro dell'enum (es. "InLavorazione")
+                    item.Value = stato.ToString();
+
+                    DdlSigla.Items.Add(item);
+                }
             }
             catch (Exception ex)
             {
@@ -119,120 +134,154 @@ namespace Uotep
             }
 
         }
+        /// <summary>
+        /// Funzione di supporto per ottenere la stringa dall'attributo [Description] di un enum.
+        /// </summary>
+        public static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
 
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
+        }
+        protected Boolean Convalida()
+        {
+            Boolean resp = true;
+            Tipologie espostoSegn = Tipologie.EspostoSegnalazione;
+            string testoE = espostoSegn.GetDescription();
+
+            if (txtTipoAtto.Text == testoE)
+            {
+                if (divAg.Visible == true)
+                {
+                    resp = false;
+                }
+            }
+
+
+            return resp;
+        }
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
-
-
-                Principale p = new Principale();
-                //if (Session["user"] != null)
-                //{
-                //    Vuser = Session["user"].ToString();
-                //}
-                //p.anno = annoCorr;
-                //p.giorno = DateTime.Now.Day.ToString();
-                //p.nrProtocollo = System.Convert.ToInt32(txtProt.Text);
-                p.sigla = DdlSigla.SelectedItem.Text;
-                p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
-                if (!string.IsNullOrEmpty(txtDataCarico.Text))
+                Boolean resp = Convalida();
+                if (!resp)
                 {
-                    p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
-                }
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorAvvertenze').text('" + "Se la sigla è ED non puoi selezionare DELEGA INDAGINE." + "'); $('#ModalAvvertenze').modal('show');", true);
 
-                p.nominativo = txtNominativo.Text;
-
-                if (!String.IsNullOrEmpty(txPratica.Text))
-                {
-                    p.nr_Pratica = txPratica.Text.Trim();
-                }
-                if (String.IsNullOrEmpty(txtIndirizzo.Text))
-                {
-                    p.indirizzo = String.Empty;
                 }
                 else
                 {
-                    p.indirizzo = txtIndirizzo.Text;
-                    p.via = string.Empty;
 
-                }
-                if (String.IsNullOrEmpty(txtQuartiere.Text))
-                {
-                    p.quartiere = String.Empty;
-                }
-                else
-                {
-                    p.quartiere = txtQuartiere.Text;
-                    //p.quartiere = lblQuartiere.Text;
-                }
-                p.provenienza = txtProvenienza.Text;
-                p.tipologia_atto = txtTipoAtto.Text;
-                p.rif_Prot_Gen = txtRifProtGen.Text;
-                p.giudice = txtGiudice.Text;
-                if (!string.IsNullOrEmpty(DdlTipoProvvAg.SelectedItem.Text))
 
-                    p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
-                //if (DdlQuartiere.SelectedValue == "0")
-                //{
-                //    p.quartiere = String.Empty;
-                //}
-                //else
-                //{
-                //    p.quartiere = DdlQuartiere.SelectedItem.Text;
+                    Principale p = new Principale();
 
-                //}
+                    p.sigla = DdlSigla.SelectedItem.Text;
+                    p.dataArrivo = System.Convert.ToDateTime(txtDataInsCarico.Text).ToShortDateString();
+                    if (!string.IsNullOrEmpty(txtDataCarico.Text))
+                    {
+                        p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
+                    }
 
-                // p.note = txtNote.Text;
-                //p.evasa = CkEvasa.Checked;
-                if (!string.IsNullOrEmpty(TxtDataEsito.Text))
-                {
-                    p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
-                }
+                    p.nominativo = txtNominativo.Text;
 
-                if (!String.IsNullOrEmpty(txtAreaCompetenza.Text))
-                {
-                    p.macro_area = txtAreaCompetenza.Text.ToUpper();
-                }
-                else
-                    p.macro_area = string.Empty;
+                    if (!String.IsNullOrEmpty(txPratica.Text))
+                    {
+                        p.nr_Pratica = txPratica.Text.Trim();
+                    }
+                    if (String.IsNullOrEmpty(txtIndirizzo.Text))
+                    {
+                        p.indirizzo = String.Empty;
+                    }
+                    else
+                    {
+                        p.indirizzo = txtIndirizzo.Text;
+                        p.via = string.Empty;
 
-                p.accertatori = txtAccertatori.Text.ToUpper();
+                    }
+                    if (String.IsNullOrEmpty(txtQuartiere.Text))
+                    {
+                        p.quartiere = String.Empty;
+                    }
+                    else
+                    {
+                        p.quartiere = txtQuartiere.Text;
+                        //p.quartiere = lblQuartiere.Text;
+                    }
+                    p.provenienza = txtProvenienza.Text;
+                    p.tipologia_atto = txtTipoAtto.Text;
+                    p.rif_Prot_Gen = txtRifProtGen.Text;
+                    p.giudice = txtGiudice.Text;
+                    if (!string.IsNullOrEmpty(TxtTipoProvvAg.Text))
 
-                if (!string.IsNullOrEmpty(txtEsito.Text))
-                    p.scaturito = txtEsito.Text;
-                //if (!string.IsNullOrEmpty(txtInviata.Text))
-                //    p.inviata = txtInviata.Text;
-                //if (!string.IsNullOrEmpty(txtDataInvio.Text))
-                //{
-                //    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
-                //}
+                        p.tipoProvvedimentoAG = DdlTipoProvvAg.SelectedItem.Text;
 
-                p.procedimentoPen = txtProdPenNr.Text;
-                //matricola del popup
-                p.matricola = Vuser;
-                //string newMat = ;
+                    //if (DdlQuartiere.SelectedValue == "0")
+                    //{
+                    //    p.quartiere = String.Empty;
+                    //}
+                    //else
+                    //{
+                    //    p.quartiere = DdlQuartiere.SelectedItem.Text;
 
-                p.data_ins_pratica = DateTime.Now.ToLocalTime();
-                p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
-                DateTime o = System.Convert.ToDateTime(HolDate.Value);
+                    //}
 
-                Manager mn = new Manager();
+                    // p.note = txtNote.Text;
+                    //p.evasa = CkEvasa.Checked;
+                    if (!string.IsNullOrEmpty(TxtDataEsito.Text))
+                    {
+                        p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
+                    }
 
-                // id proveniente dalla selezione della pratica
-                int ID = System.Convert.ToInt32(Hid.Value);
-                //
-                Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
-                if (!ins)
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+                    if (!String.IsNullOrEmpty(txtAreaCompetenza.Text))
+                    {
+                        p.macro_area = txtAreaCompetenza.Text.ToUpper();
+                    }
+                    else
+                        p.macro_area = string.Empty;
 
-                    DivDettagli.Visible = false;
-                    Pulisci();
+                    p.accertatori = txtAccertatori.Text.ToUpper();
+
+                    if (!string.IsNullOrEmpty(txtEsito.Text))
+                        p.scaturito = txtEsito.Text;
+                    //if (!string.IsNullOrEmpty(txtInviata.Text))
+                    //    p.inviata = txtInviata.Text;
+                    //if (!string.IsNullOrEmpty(txtDataInvio.Text))
+                    //{
+                    //    p.dataInvio = System.Convert.ToDateTime(txtDataInvio.Text).ToShortDateString();
+                    //}
+
+                    p.procedimentoPen = txtProdPenNr.Text;
+                    //matricola del popup
+                    p.matricola = Vuser;
+                    //string newMat = ;
+
+                    p.data_ins_pratica = DateTime.Now.ToLocalTime();
+                    p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
+                    DateTime o = System.Convert.ToDateTime(HolDate.Value);
+
+                    Manager mn = new Manager();
+
+                    // id proveniente dalla selezione della pratica
+                    int ID = System.Convert.ToInt32(Hid.Value);
+                    //
+                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
+                    if (!ins)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+
+                        DivDettagli.Visible = false;
+                        Pulisci();
+                    }
                 }
             }
             catch (Exception ex)
@@ -448,18 +497,20 @@ namespace Uotep
                     DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(Hid.Value));
                     if (pratica.Rows.Count > 0)
                     {
+                        CaricaDLL();
                         DivDettagli.Visible = true;
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         //txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        DdlSigla.SelectedItem.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        switch (DdlSigla.SelectedItem.Text)
+                        DdlSigla.SelectedValue = pratica.Rows[0].ItemArray[2].ToString();
+                        switch (DdlSigla.SelectedValue)
                         {
                             case "AG":
                                 divAg.Visible = true;
-                                CaricaDLL();
+
                                 break;
                             default:
                                 divAg.Visible = false;
+                                //CaricaDLL();
                                 break;
                         }
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
@@ -694,7 +745,7 @@ namespace Uotep
                 {
                     Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
                     txtDecretato.Text = values[1];     // Matricola
-                    txtDataDecretazione.Text =  values[2]; // DataInserimento
+                    txtDataDecretazione.Text = values[2]; // DataInserimento
                     txtNotaDecretazione.Text = values[3]; // sigla
 
 
@@ -758,7 +809,7 @@ namespace Uotep
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
         }
@@ -1000,8 +1051,8 @@ namespace Uotep
                 }
 
             }
-          //  else
-               // btChiudiDecretazione.Visible = false;
+            //  else
+            // btChiudiDecretazione.Visible = false;
             apripopupDecretazione_Click(sender, e);
         }
 
@@ -1209,17 +1260,20 @@ namespace Uotep
         }
         protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CaricaDLL();
+            //  CaricaDLL();
             if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
             {
                 divAg.Visible = true;
+                TxtTipoProvvAg.Text = DdlTipoProvvAg.SelectedItem.Text;
+                CaricaDLL();
             }
             else
             {
                 divAg.Visible = false;
                 txtGiudice.Text = string.Empty;
-
+                TxtTipoProvvAg.Text = string.Empty;
                 txtProdPenNr.Text = string.Empty;
+
             }
         }
         // esecuzione del filtro ulteriore sulla colonna indirizzo
@@ -1299,6 +1353,17 @@ namespace Uotep
             PopulateGridView(columnName, HfFiltroAccertatori.Value); // Esempio di funzione di filtro
                                                                      //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+        }
+
+        protected void DdlTipoProvvAg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TxtTipoProvvAg.Text = DdlTipoProvvAg.SelectedItem.Text;
+        }
+
+        protected void btChiudiAvvertenze_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
+
         }
     }
 }

@@ -4,7 +4,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <script type="text/javascript">
         // Attendere che il DOM sia completamente caricato
-        document.addEventListener('DOMContentLoaded', function () {
+      <%--  document.addEventListener('DOMContentLoaded', function () {
             var textBox = document.getElementById('TxtSub');
         // Se non usi ClientIDMode="Static", dovresti usare:
             // var textBox = document.getElementById('<%= TxtSub.ClientID %>');
@@ -35,7 +35,7 @@
             } else {
                 console.error("Textbox con ID 'txtsub' non trovata.");
             }
-        });
+        });--%>
 
 
 
@@ -76,47 +76,8 @@
             });
         });
 
-
-
-        //giudice
-        function filterDropdownGiudice() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtGiudice");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlGiudiceI.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListG.ClientID %>');
-            suggestionsListDiv.innerHTML = ""; // Pulisci la lista dei suggerimenti precedenti
-
-            var suggestionsFound = false;
-
-            if (filter.length > 0) { // Esegui il filtro solo se c'è testo nell'input
-                for (i = 0; i < options.length; i++) {
-                    txtValue = options[i].textContent || options[i].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        suggestionsFound = true;
-                        var suggestionElement = document.createElement("div");
-                        suggestionElement.textContent = txtValue;
-                        suggestionElement.classList.add("suggestion-item"); // Aggiungi una classe CSS per lo stile
-                        suggestionElement.addEventListener('mouseover', function () { this.classList.add('suggestion-hover'); }); // Effetto hover con classe CSS
-                        suggestionElement.addEventListener('mouseout', function () { this.classList.remove('suggestion-hover'); });
-                        suggestionElement.addEventListener('click', function () {
-                            input.value = this.textContent;
-                            suggestionsListDiv.style.display = "none";
-                        });
-                        suggestionsListDiv.appendChild(suggestionElement);
-                    }
-                }
-            }
-
-            if (suggestionsFound) {
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
         //quartiere
-        function filterDropdownQuartiere() {
+      <%--  function filterDropdownQuartiere() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtQuartiere");
             filter = input.value.toUpperCase();
@@ -154,127 +115,9 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
-        //tipo atto
-       <%-- function filterDropdownTipoAtto() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtTipoAtto");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlTipoAttoI.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListTA.ClientID %>');
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
-
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
-
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    suggestionElement.addEventListener('click', function () {
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
-                    });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
-
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
         }--%>
-        //Inviata
-        function filterDropdownInviata() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtInCarico");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlInviatiI.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListInCarico.ClientID %>');
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
 
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    suggestionElement.addEventListener('click', function () {
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
-                    });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
-
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
-        //Indirizzo
-        function filterDropdownIndirizzo() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtIndirizzo");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById('<%= DdlIndirizzoI.ClientID %>');
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById('<%= suggestionsListI.ClientID %>');
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
-
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
-
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    suggestionElement.addEventListener('click', function () {
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
-                    });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
-
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
 
     </script>
     <style>
@@ -297,11 +140,6 @@
             <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>
         </div>
 
-
-
-
-
-
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="container">
@@ -313,22 +151,18 @@
                             <div class="col-md-6 ">
                                 <div class="form-check mb-2">
                                     <label for="txtPratN">Prot.N.</label>
-                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control1" ForeColor="Red" Font-Bold="true" />
-                                    <label for="txtSiglaTp">Sigla</label>
-                                    <asp:TextBox ID="txtSiglaTp" runat="server" CssClass="form-control1" Font-Bold="true" />
+                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" />
 
-                                </div>
-                                <div class="form-check mb-2">
-                                    <label for="txtDataInserimentoTp">Data Inserimento</label>
-                                    <asp:TextBox ID="txtDataInserimentoTp" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
-                                </div>
-                                <div class="form-check mb-2">
                                     <label for="txtProGenTp">Prot. Gen.</label>
                                     <asp:TextBox ID="txtProGenTp" runat="server" CssClass="form-control"></asp:TextBox>
 
+
                                 </div>
                                 <div class="form-check mb-2">
-                                    <label for="txtDataProtGen">In Data</label>
+
+
+
+                                    <label for="txtDataProtGen">Data Prot. Gen.</label>
                                     <asp:TextBox ID="txtDataProtGen" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                     <asp:RegularExpressionValidator
                                         ID="RegularExpressionValidator2"
@@ -341,14 +175,29 @@
                                         Display="Static">
                                     </asp:RegularExpressionValidator>
 
+
+
                                 </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-check mb-2">
+
+                                    <div class="form-check mb-2">
+                                        <label for="txtDataInserimentoTp">Data Inserimento</label>
+                                        <asp:TextBox ID="txtDataInserimentoTp" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                                        
+
+                                    </div>
+
+                                </div>
+
                                 <div class="form-check mb-2">
                                     <label for="txtProProcTp">Prot. Proc.</label>
                                     <asp:TextBox ID="txtProProcTp" runat="server" CssClass="form-control"></asp:TextBox>
 
                                 </div>
                                 <div class="form-check mb-2">
-                                    <label for="txtDataProtProc">In Data</label>
+                                    <label for="txtDataProtProc">Data Prot. Proc.</label>
                                     <asp:TextBox ID="txtDataProtProc" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                     <asp:RegularExpressionValidator
                                         ID="RegularExpressionValidator3"
@@ -360,9 +209,10 @@
                                         ValidationGroup="bt"
                                         Display="Static">
                                     </asp:RegularExpressionValidator>
-
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                     <div class="tab-content">
@@ -371,11 +221,6 @@
 
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
-                                    <label for="txtOggettoTp">Oggetto</label>
-                                    <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" />
-
-                                </div>
-                                <div class="form-check mb-2">
                                     <label for="txtDestinatarioTp">Destinatario</label>
                                     <asp:TextBox ID="txtDestinatarioTp" runat="server" CssClass="form-control" />
                                 </div>
@@ -383,7 +228,13 @@
                                     <label for="txtQuartiereTp">Quartiere</label>
                                     <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" />
                                 </div>
+                                <div class="form-check mb-2">
+                                    <label for="txtBUTp">BU</label>
+                                    <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" />
+                                </div>
 
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-check mb-2">
                                     <label for="txtNotaTp">Nota</label>
                                     <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" />
@@ -394,8 +245,15 @@
                                 </div>
 
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-check mb-2">
+                                    <label for="txtOggettoTp">Oggetto</label>
+                                    <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" />
+
+                                </div>
+                            </div>
                         </div>
-                        <
+
                     </div>
                 </div>
             </div>

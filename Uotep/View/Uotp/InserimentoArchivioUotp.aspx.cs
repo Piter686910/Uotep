@@ -198,7 +198,7 @@ namespace Uotep
         protected void FillScheda(DataTable arc)
         {
             txtPratN.Text= arc.Rows[0].ItemArray[1].ToString();
-            txtSiglaTp.Text = arc.Rows[0].ItemArray[3].ToString();
+            //txtSiglaTp.Text = arc.Rows[0].ItemArray[3].ToString();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString();
             //if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[3].ToString()))
             //{

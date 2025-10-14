@@ -38,6 +38,16 @@
         function hideModal() {
             $('#ModalRicerca').modal('hide');
         }
+        // Mostra il popup ricerca
+        function showModal() {
+            $('#ModalAvvertenze').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalAvvertenze').modal('hide');
+        }
+
         // Mostra il popup Decretazione
         function showModalDecretazione() {
             $('#ModalDecretazione').modal('show');
@@ -664,11 +674,11 @@
                             <%--<asp:TextBox ID="txtSigla" runat="server" CssClass="form-control mb-3" Enabled="false" />--%>
                             <label for="Ddltipo">/</label>
                             <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
-                                <asp:ListItem Text="ED"> </asp:ListItem>
+                                <%--<asp:ListItem Text="ED"> </asp:ListItem>
                                 <asp:ListItem Text="TP"> </asp:ListItem>
-                                <asp:ListItem Text="AG"> </asp:ListItem>
+                                <asp:ListItem Text="AG"> </asp:ListItem>--%>
                             </asp:DropDownList>
-
+                           
                         </div>
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtTipoAtto">Tipologia Atto</label>
@@ -818,7 +828,7 @@
 
                                 </div>
                                 <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
-                                <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" />
+                                <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
 
                             </div>
                         </div>
@@ -1042,6 +1052,30 @@
         </div>
     </div>
 
+    <%-- popup avvertenze --%>
+<div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog"
+        role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
+
+            </div>
+            <div class="modal-body">
+                <!-- Campi di input per la ricerca -->
+                <div class="form-group">
+
+                    <p id="errorAvvertenze" style="color: red"></p>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Bottone per avviare la ricerca -->
+                <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+            </div>
+        </div>
+    </div>
+</div>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"
@@ -1107,7 +1141,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group mb-3" >
+                            <div class="form-group mb-3">
                                 <div class="form-group">
                                     <!-- GridView nel popup -->
                                     <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"

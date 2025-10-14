@@ -33,24 +33,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtPratN;
 
         /// <summary>
-        /// Controllo txtSiglaTp.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSiglaTp;
-
-        /// <summary>
-        /// Controllo txtDataInserimentoTp.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDataInserimentoTp;
-
-        /// <summary>
         /// Controllo txtProGenTp.
         /// </summary>
         /// <remarks>
@@ -76,6 +58,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
+
+        /// <summary>
+        /// Controllo txtDataInserimentoTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDataInserimentoTp;
 
         /// <summary>
         /// Controllo txtProProcTp.
@@ -105,15 +96,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
 
         /// <summary>
-        /// Controllo txtOggettoTp.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOggettoTp;
-
-        /// <summary>
         /// Controllo txtDestinatarioTp.
         /// </summary>
         /// <remarks>
@@ -132,6 +114,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtQuartiereTp;
 
         /// <summary>
+        /// Controllo txtBUTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBUTp;
+
+        /// <summary>
         /// Controllo txtNotaTp.
         /// </summary>
         /// <remarks>
@@ -148,6 +139,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCartellinaTp;
+
+        /// <summary>
+        /// Controllo txtOggettoTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOggettoTp;
 
         /// <summary>
         /// Controllo hdnConfermaUtente.

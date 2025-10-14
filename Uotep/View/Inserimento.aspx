@@ -20,7 +20,15 @@
         function hideModal() {
             $('#myModal').modal('hide');
         }
+        // Mostra il popup ricerca
+        function showModal() {
+            $('#ModalAvvertenze').modal('show');
+        }
 
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalAvvertenze').modal('hide');
+        }
         //giudice
         function filterDropdownGiudice() {
             var input, filter, dropdown, options, i, txtValue;
@@ -685,6 +693,30 @@
             </div>
         </div>
     </div>
+        <%-- popup avvertenze --%>
+<div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog"
+        role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
+
+            </div>
+            <div class="modal-body">
+                <!-- Campi di input per la ricerca -->
+                <div class="form-group">
+
+                    <p id="errorAvvertenze" style="color: red"></p>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- Bottone per avviare la ricerca -->
+                <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+            </div>
+        </div>
+    </div>
+</div>
     <%-- Modale ModalDecretazione --%>
     <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">

@@ -40,6 +40,9 @@ namespace Uotep
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+
                                 RicercaArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
@@ -79,6 +82,9 @@ namespace Uotep
                                     EstraiStatistiche.Visible = false;
                                 }
                                 menuArchivio.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+
                                 RicercaArchivioUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
                                     Decretazione.Visible = true;
@@ -96,6 +102,9 @@ namespace Uotep
                                 PG.Visible = true;
                                 menuArchivio.Visible = true;
                                 RicercaArchivioUote.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                                 {
                                     menuCoordinamentoAtti.Visible = true;
@@ -119,6 +128,8 @@ namespace Uotep
                                 InserimentoArchivioUote.Visible = true;
                                 GestionePraticaUote.Visible = true;
                                 menuManTabelle.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -145,6 +156,9 @@ namespace Uotep
                                 RicercaAtti.Visible = true;
                                 EstraiStatistiche.Visible = true;
                                 GestionePraticaUote.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+                                InserimentoArchivioUotp.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -168,6 +182,9 @@ namespace Uotep
                                 //ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 GestionePraticaUote.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+
                                 //*
                                 break;
                             default:
