@@ -1042,7 +1042,10 @@ namespace Uotep
 
                         btSalva.Visible = false;
                         btCercaQuartiere.Visible = false;
-                        btChiudiDecretazione.Visible = false;
+                        if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                            btChiudiDecretazione.Visible = true;
+                        else
+                            btChiudiDecretazione.Visible = false;
                     }
                     else
                         btChiudiDecretazione.Visible = true;
