@@ -38,8 +38,10 @@ namespace Uotep
             }
             else
             {
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                Response.Redirect(url);
 
-                Response.Redirect("Default.aspx?user=true");
+                //Response.Redirect("Default.aspx?user=true");
             }
 
             if (!IsPostBack)
@@ -125,8 +127,11 @@ namespace Uotep
                 }
                 else
                 {
-                 //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
-                    Response.Redirect("~/View/RicercaArchivio.aspx");
+                    //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                    string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
+                    Response.Redirect(url, false);
+                    
+                    //Response.Redirect("~/View/RicercaArchivio.aspx");
                 }
             }
             else
@@ -483,12 +488,13 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore modifica inserimento archivio ");
                     sw.Close();
                 }
-
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+               // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/InserimentoArchivio.aspx";
-                Response.Redirect("~/Contact.aspx");
+               // Response.Redirect("~/Contact.aspx");
 
             }
         }

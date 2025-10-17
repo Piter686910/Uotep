@@ -33,7 +33,10 @@ namespace Uotep
             }
             else
             {
-                Response.Redirect("Default.aspx?user=true");
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                Response.Redirect(url);
+
+                //                Response.Redirect("Default.aspx?user=true");
             }
 
             if (!IsPostBack)
@@ -398,15 +401,14 @@ namespace Uotep
             catch (Exception ex)
             {
 
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
 
-                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
-                Response.Redirect("~/Contact.aspx");
-
-                //Session["MessaggioErrore"] = ex.Message;
-                //Session["PaginaChiamante"] = "View/Inserimento.aspx";
+              
                 //Response.Redirect("~/Contact.aspx");
 
             }
@@ -625,12 +627,14 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
                     sw.Close();
                 }
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+               // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
-                Response.Redirect("~/Contact.aspx");
+              //  Response.Redirect("~/Contact.aspx");
 
                 //Session["MessaggioErrore"] = ex.Message;
                 //Session["PaginaChiamante"] = "View/Inserimento.aspx";
@@ -859,12 +863,14 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in inserimento decretazione ");
                     sw.Close();
                 }
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
 
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                //Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+//                Response.Redirect("~/Contact.aspx");
 
             }
         }

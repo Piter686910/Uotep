@@ -170,7 +170,9 @@ namespace Uotep
             }
 
             // Reindirizza alla pagina di destinazione
-            Response.Redirect("InserimentoArchivio.aspx");
+            string url = VirtualPathUtility.ToAbsolute("~/View/InserimentoArchivio.aspx");
+            Response.Redirect(url, false);
+           // Response.Redirect("InserimentoArchivio.aspx");
         }
         protected void apripopup_Click(object sender, EventArgs e)
         {

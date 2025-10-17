@@ -296,12 +296,13 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in modifica ");
                     sw.Close();
                 }
-
-                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -995,12 +996,13 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in inserimento decretazione ");
                     sw.Close();
                 }
-
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+                //Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -1042,7 +1044,10 @@ namespace Uotep
 
                         btSalva.Visible = false;
                         btCercaQuartiere.Visible = false;
-                        btChiudiDecretazione.Visible = false;
+                        if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                            btChiudiDecretazione.Visible = true;
+                        else
+                            btChiudiDecretazione.Visible = false;
                     }
                     else
                         btChiudiDecretazione.Visible = true;
@@ -1248,12 +1253,13 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in chiusura decretazione ");
                     sw.Close();
                 }
-
-                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+               // Response.Redirect("~/Contact.aspx");
 
             }
 

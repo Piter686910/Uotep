@@ -688,7 +688,7 @@ namespace Uotep
                         break;
                     case "Indirizzo":
 
-                        filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
+                        filtro = $"Indirizzo LIKE '%{HfFiltroIndirizzo.Value}%'";
                         dv = new DataView(pratica);
 
                         dv.RowFilter = filtro;

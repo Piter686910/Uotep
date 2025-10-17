@@ -42,7 +42,6 @@ namespace Uotep
                                 menuArchivio.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
-
                                 RicercaArchivioUote.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
@@ -84,6 +83,7 @@ namespace Uotep
                                 menuArchivio.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
 
                                 RicercaArchivioUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
@@ -104,6 +104,7 @@ namespace Uotep
                                 RicercaArchivioUote.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
 
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                                 {
@@ -130,6 +131,9 @@ namespace Uotep
                                 menuManTabelle.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
+                                InserimentoArchivioUotp.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
+
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -159,6 +163,7 @@ namespace Uotep
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
                                 InserimentoArchivioUotp.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -184,6 +189,8 @@ namespace Uotep
                                 GestionePraticaUote.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
+                                InserimentoArchivioUotp.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
 
                                 //*
                                 break;
@@ -213,7 +220,9 @@ namespace Uotep
             Session.Remove("popApertoRicercaScheda");
             Session.Remove("ListPratiche");
             Session.Abandon();
-            Response.Redirect("Default.aspx", false);
+            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+            Response.Redirect(url, false);
+            //Response.Redirect(/Default.aspx"), false);
         }
     }
 }

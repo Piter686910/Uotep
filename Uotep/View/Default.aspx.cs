@@ -79,8 +79,9 @@ namespace Uotep
                             //salvo la matricola
                            Session["user"] = Vuser;
 
-
-                            Response.Redirect("~/View/Default.aspx");
+                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                            Response.Redirect(url, false);
+                            //Response.Redirect("~/View/Default.aspx");
                         }
                     }
                     else
@@ -159,8 +160,9 @@ namespace Uotep
         protected void btChiudiPop_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-
-            Response.Redirect("Default.aspx?user=false");
+            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
+            Response.Redirect(url);
+            //Response.Redirect("Default.aspx?user=false");
         }
     }
 }

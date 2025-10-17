@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
@@ -351,6 +352,30 @@ namespace Uotep.Classi
             //string sql = " SELECT anno, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO ='" + anno + "'";
             string sql = "SELECT ANNO, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO = '" + anno + "' GROUP BY ANNO";
             using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+
+                tb = ds.Tables[0];
+                conn.Close();
+                conn.Dispose();
+                return tb;
+            }
+        }
+        /// <summary>
+        /// max num pratica tp +1
+        /// </summary>
+        /// <returns></returns>
+        public DataTable MaxNPrTp()
+        {
+            DataTable tb = new DataTable();
+
+            //string sql = " SELECT anno, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO ='" + anno + "'";
+            string sql = "SELECT MAX(Num_Prot) FROM ArchivioTp";
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
                 SqlDataAdapter da;
                 DataSet ds;
@@ -887,6 +912,20 @@ namespace Uotep.Classi
 
 
         }
+        public DataTable getPraticaArchivioUotpById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            sql = "SELECT * FROM Archiviotp where id = '" + id + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getPraticaArchivioUoteById(int id)
         {
             string sql = string.Empty;
@@ -1076,6 +1115,30 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getPraticaArchivioUotp(int pratica, string oggetto, string bu, string nota, string destinatario)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            if (pratica > 0)
+                sql = "SELECT  * FROM Archiviotp where Num_Prot = '" + pratica + "' ORDER BY DATA1 desc ";
+
+            if (!String.IsNullOrEmpty(oggetto))
+                sql = "SELECT * FROM Archiviotp where oggetto1 like '%" + oggetto.Replace("'", "''") + "%'";
+            if (!String.IsNullOrEmpty(bu))
+                sql = "SELECT * FROM Archiviotp where codice like '%" + bu.Replace("'", "''") + "%'";
+
+            if (!String.IsNullOrEmpty(nota))
+                sql = "SELECT * FROM Archiviotp where note like '%" + nota.Replace("'", "''") + "%'";
+            if (!String.IsNullOrEmpty(destinatario))
+                sql = "SELECT * FROM Archiviotp  WHERE destinatario like '%" + destinatario.Replace("'", "''") + "%'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getPraticaArchivioUote(string[] pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
         {
             string sql = string.Empty;
@@ -1160,28 +1223,22 @@ namespace Uotep.Classi
 
         private DataTable FillTable(String sql, SqlConnection conn)
         {
-            try
-            {
 
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
             DataTable table = new DataTable();
             //SqlConnection conn = new SqlConnection(ConnString);
             conn.Open();
-            // AutoCompleteStringCollection MyComplete = new AutoCompleteStringCollection();
-            //cmd = new OleDbCommand(select, conn);
-            SqlDataAdapter da;
-            DataSet ds;
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                cmd.CommandTimeout = 120;
+                SqlDataAdapter da;
+                DataSet ds;
 
-            da = new SqlDataAdapter(sql, conn);
-            ds = new DataSet();
-            da.Fill(ds);
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
 
-            table = ds.Tables[0];
+                table = ds.Tables[0];
+            }
             conn.Close();
             conn.Dispose();
             return table;
@@ -2788,6 +2845,73 @@ namespace Uotep.Classi
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
                             sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento dati ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+        /// <summary>
+        /// salva pratica uotp
+        /// </summary>
+        /// <param name="arch"></param>
+        /// <returns></returns>
+        public Boolean SavePraticaArchivioUotp(ArchivioUotp arch)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+
+                sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via)" +
+                   " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
+                   @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
+                   @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + @arch.arch_indirizzo.Replace("'", "''") +  "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnStringTp))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_pratica;
+                        testoSql = "Archiviotp";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("pratica " + arch.arch_Num_Prot + ", data ins:" + arch.arch_dataInserimento + ", " + ex.Message + @" - Errore in inserimento dati in archiviotp");
                             sw.Close();
                         }
 

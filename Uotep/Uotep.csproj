@@ -335,6 +335,7 @@
     <Content Include="View\InserimentoArchivio.aspx" />
     <Content Include="View\test.aspx" />
     <Content Include="View\Uotp\InserimentoArchivioUotp.aspx" />
+    <Content Include="View\Uotp\RicercaArchivioUotp.aspx" />
     <Content Include="View\Visualizza.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -350,6 +351,7 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classi\ArchivioUotp.cs" />
     <Compile Include="Classi\ArchivioUote.cs" />
     <Compile Include="Classi\Decretazione.cs" />
     <Compile Include="Classi\GestionePratiche.cs" />
@@ -512,6 +514,13 @@
     </Compile>
     <Compile Include="View\Uotp\InserimentoArchivioUotp.aspx.designer.cs">
       <DependentUpon>InserimentoArchivioUotp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Uotp\RicercaArchivioUotp.aspx.cs">
+      <DependentUpon>RicercaArchivioUotp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Uotp\RicercaArchivioUotp.aspx.designer.cs">
+      <DependentUpon>RicercaArchivioUotp.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\Visualizza.aspx.cs">
       <DependentUpon>Visualizza.aspx</DependentUpon>

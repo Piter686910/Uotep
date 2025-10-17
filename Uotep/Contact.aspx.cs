@@ -43,7 +43,9 @@ namespace Uotep
             {
                 // Se non c'è una pagina precedente (es. accesso diretto a pagina2),
                 // puoi reindirizzare ad una pagina di default (es. la homepage)
-                Response.Redirect("~/View/Default.aspx"); // o un'altra pagina di fallback appropriata
+                //Response.Redirect("~/View/Default.aspx"); // o un'altra pagina di fallback appropriata
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                Response.Redirect(url, false);
             }
         }
     }

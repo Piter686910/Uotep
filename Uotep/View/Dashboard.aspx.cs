@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Runtime.Caching;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uotep.Classi;
@@ -26,8 +27,9 @@ namespace Uotep
             {
                 if (ruolo != "admin")
                 {
-
-                    Response.Redirect("~/View/default.aspx");
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                    Response.Redirect(url, false);
+                   // Response.Redirect("~/View/default.aspx");
                 }
             }
             if (!IsPostBack)

@@ -40,7 +40,10 @@ namespace Uotep
             }
             else
             {
-                Response.Redirect("Default.aspx?user=true");
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                Response.Redirect(url);
+
+//                Response.Redirect("Default.aspx?user=true");
             }
             Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
@@ -136,12 +139,14 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in modifica ");
                     sw.Close();
                 }
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
 
-                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+            //    Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Response.Redirect("~/Contact.aspx");
             }
         }
         /// <summary>
@@ -294,12 +299,14 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore in modifica ");
                     sw.Close();
                 }
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
 
-                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+//                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //Response.Redirect("~/Contact.aspx");
             }
         }
         private void getPratica(GestionePratiche p)

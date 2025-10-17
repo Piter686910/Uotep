@@ -24,7 +24,7 @@ namespace Uotep.Classi
 
         public string GetProtocollo()
         {
-            string txt= string.Empty;
+            string txt = string.Empty;
             String annoCorr = DateTime.Now.Year.ToString();
             int protocollo = 0;
             Manager mn = new Manager();
@@ -53,6 +53,25 @@ namespace Uotep.Classi
 
             }
             return txt;
+        }
+        /// <summary>
+        /// calcola il max numero nella tabella archiviotp
+        /// </summary>
+        /// <returns></returns>
+        public Int32 GetPraticaTp()
+        {
+            int MAxP =0;
+            Manager mn = new Manager();
+
+            DataTable tb = mn.MaxNPrTp();
+            if (tb.Rows.Count > 0)
+            {
+                //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
+                MAxP = System.Convert.ToInt32(tb.Rows[0].ItemArray[0]) + 1; 
+
+
+            }
+            return MAxP;
         }
         /// <summary>
         /// converte true e false in si e no

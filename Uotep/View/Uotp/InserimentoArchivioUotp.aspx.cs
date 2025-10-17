@@ -44,7 +44,9 @@ namespace Uotep
 
             if (!IsPostBack)
             {
-
+                Routine prot = new Routine();
+                txtPratN.Text = Convert.ToInt32(prot.GetPraticaTp()).ToString();
+                txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
 
@@ -58,7 +60,7 @@ namespace Uotep
                     btSalva.Visible = false;
                     btCercaQuartiere.Visible = false;
                 }
-                RicercaNew(sender, e);
+                //RicercaNew(sender, e);
 
                 CaricaDLL();
                 Session["POP"] = "si";
@@ -76,65 +78,7 @@ namespace Uotep
             }
 
         }
-        private void RicercaNew(object sender, EventArgs e)
-        {
-
-            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
-            //if (Session["ListRicerca"] != null)
-            //{
-            //    Manager mn = new Manager();
-            //    List<string> ListRicerca = (List<string>)Session["ListRicerca"];
-            //    String[] ar = ListRicerca.ToArray();
-            //    // ArchivioUote arc = new ArchivioUote();
-            //    DataTable arc = new DataTable();
-            //    switch (ar[0])
-            //    {
-            //        case "Pratica":
-            //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-            //            break;
-            //        case "StoricoPratica":
-            //            arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-            //            break;
-
-            //        case "Nominativo":
-            //            arc = mn.getPraticaArchivioUote(null, ar[1], null, null, null, null);
-            //            break;
-            //        case "Indirizzo":
-            //            arc = mn.getPraticaArchivioUote(null, null, ar[1], null, null, null);
-            //            break;
-            //        case "Catasto":
-            //            arc = mn.getPraticaArchivioUote(null, null, null, ar, null, null);
-            //            break;
-            //        case "Note":
-            //            arc = mn.getPraticaArchivioUote(null, null, null, null, ar[1], null);
-            //            break;
-            //        case "AnnoMese":
-            //            arc = mn.getPraticaArchivioUote(null, null, null, null, null, ar);
-            //            break;
-
-            //    }
-            //    if (arc.Rows.Count > 0)
-            //    {
-            //        apripopupPratica_Click(sender, e);
-
-            //        GVRicercaPratica.DataSource = arc;
-            //        GVRicercaPratica.DataBind();
-            //        //segnalo he sono in modifica prartica
-            //        HfStato.Value = "Mod";
-            //        txtPratica.Enabled = false;
-            //    }
-            //    else
-            //    {
-            //     //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
-            //        Response.Redirect("~/View/Uotp/RicercaArchivio.aspx");
-            //    }
-            //}
-            //else
-            //{
-            //    txtPratica.Enabled = true;
-            //    txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-            //}
-        }
+       
         private void EseguiAzioneConfermata()
         {
 
@@ -197,7 +141,7 @@ namespace Uotep
         }
         protected void FillScheda(DataTable arc)
         {
-            txtPratN.Text= arc.Rows[0].ItemArray[1].ToString();
+            txtPratN.Text = arc.Rows[0].ItemArray[1].ToString();
             //txtSiglaTp.Text = arc.Rows[0].ItemArray[3].ToString();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString();
             //if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[3].ToString()))
@@ -301,107 +245,52 @@ namespace Uotep
                         okPopup = false;
                         Manager mn = new Manager();
 
-                        ArchivioUote arch = new ArchivioUote();
-                        arch.arch_numPratica = txtPratN.Text;
-                        //if (CkBis.Checked && CkTris.Checked && CkQuater.Checked)
-                        //{
-                        //    errorMessage.InnerText = @"Non è possibile selezionare BIS, TRIS E QUATER CONTEMPORANEAMENTE.";
-                        //    apripopuperrorModal_Click(sender, e);
+                        ArchivioUotp arch = new ArchivioUotp();
+                        arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
+                        arch.arch_cartellina = txtCartellinaTp.Text;
+                        arch.arch_note = txtNotaTp.Text;
+                        arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
+                        arch.arch_codice = txtBUTp.Text.ToUpper();
+                        arch.arch_dataArrivo = txtDataProtGen.Text;
+                        arch.arch_dataInserimento = txtDataInserimentoTp.Text;
+                        arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
+                        arch.arch_destinatario = txtDestinatarioTp.Text.ToUpper();
+                        arch.arch_ProtGen = txtProGenTp.Text;
+                        arch.arch_Protocollo_Procura = txtDataProtProc.Text;
+                        arch.arch_dataProtProcura = txtDataProtProc.Text;
+                        arch.arch_indirizzo = TxtIndirizzoTp.Text;
 
-                        //}
-                        //else
-                        //{
+                        Boolean ins = mn.SavePraticaArchivioUotp(arch);
+                        if (!ins)
+                        {
+                            errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
 
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                        }
+                        else
+                        {
+                            if (HfStato.Value == "Mod")
 
-                        //    //DateTime giorno = DateTime.Now;
-                        //    arch.arch_dataIns = System.Convert.ToDateTime(txtDataInserimento.Text);   // giorno.ToString("dddd", new CultureInfo("it-IT"));
-                        //                                                                              //if (HfStato.Value == "Mod")
-                        //                                                                              //{
-                        //    if (!String.IsNullOrEmpty(txtDataUltimoIntervento.Text))
+                                errorMessage.InnerText = "Pratica " + arch.arch_Num_Prot + " modificata correttamente .";
 
-                        //        arch.arch_datault_intervento = System.Convert.ToDateTime(txtDataUltimoIntervento.Text);
-                        //    //}
-                        //    //catch (Exception)
-                        //    // {
-
-                        //    //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                        //    // }
-
-                        //    //                                }
-                        //    //                          }
-                        //    if (!String.IsNullOrEmpty(txtDataNascita.Text))
-                        //    {
-
-                        //        arch.arch_dataNascita = System.Convert.ToDateTime(txtDataNascita.Text);
-
-                        //    }
-                        //    if (!String.IsNullOrEmpty(txtDataInizioAttivita.Text))
-                        //    {
-                        //        arch.arch_dataInizioAttivita = System.Convert.ToDateTime(txtDataInizioAttivita.Text);
-
-                        //    }
-                        //    arch.arch_inCarico = txtInCarico.Text;
-                        //    //arch.arch_tipologia = txtTipoAtto.Text;
-                        //    arch.arch_tipologia = DdlTipoAttoI.SelectedItem.Text;
-                        //    arch.arch_note = txtNote.Text;
-                        //    arch.arch_quartiere = txtQuartiere.Text;
-                        //    //arch.arch_matricola = Session["user"].ToString();
-                        //    arch.arch_matricola = Vuser;
-                        //    arch.arch_indirizzo = txtIndirizzo.Text;
-                        //    arch.arch_natoA = txtNatoA.Text;
-                        //    arch.arch_responsabile = txtResponsabile.Text;
-                        //    arch.arch_vincoli = CkVincoli.Checked;
-                        //    arch.arch_suoloPub = CkSuoloPubblico.Checked;
-                        //    arch.arch_1089 = Ck1089.Checked;
-                        //    arch.arch_evasa = CkEvasa.Checked;
-                        //    arch.arch_demolita = CkDemolita.Checked;
-                        //    //arch.arch_allegati = txtAllegati.Text;
-                        //    arch.arch_sezione = txtSezione.Text;
-                        //    arch.arch_foglio = TxtFoglio.Text;
-                        //    arch.arch_particella = TxtParticella.Text;
-                        //    arch.arch_sub = TxtSub.Text;
-                        //    arch.arch_propPriv = CkPropPriv.Checked;
-                        //    arch.arch_propBeniCult = CkPropBeniCult.Checked;
-                        //    arch.arch_propComune = CkPropComunale.Checked;
-                        //    arch.arch_propAltriEnti = CkPropAltri.Checked;
-                        //    arch.arch_beniConfiscati = CkBeniConfiscati.Checked;
-
-                        //    arch.arch_foglioNct = txtFoglioNct.Text;
-                        //    arch.arch_particellaNct = txtParticellaNct.Text;
-
-
-                        //    Boolean ins = mn.SavePraticaArchivioUote(arch);
-                        //    if (!ins)
-                        //    {
-                        //        errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
-
-                        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                        //    }
-                        //    else
-                        //    {
-                        //        if (HfStato.Value == "Mod")
-
-                        //            errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " modificata correttamente .";
-
-                        //        else
-                        //            errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
-                        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
-                        //        HfStato.Value = string.Empty;
-                        //        Session["POP"] = "si";
-                        //        Session.Remove("ListRicerca");
-                        //        Pulisci();
-                        //        txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
-                        //    }
-                        //}
-                    }
-                    else
-                    {
-                        // Mostra il modale con uno script
-                        errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
-                        apripopuperrorModal_Click(sender, e);
-                        // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
+                            else
+                                errorMessage.InnerText = "Pratica " + arch.arch_Num_Prot + " inserita correttamente .";
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_Num_Prot + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                            HfStato.Value = string.Empty;
+                            Session["POP"] = "si";
+                            Session.Remove("ListRicerca");
+                            Pulisci();
+                        }
                     }
                 }
+                else
+                {
+                    // Mostra il modale con uno script
+                    errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
+                    apripopuperrorModal_Click(sender, e);
+                    // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
+                }
+
             }
             catch (Exception ex)
             {
@@ -415,12 +304,13 @@ namespace Uotep
                     sw.WriteLine(ex.Message + @" - Errore modifica inserimento archivio ");
                     sw.Close();
                 }
-
-                Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+                //Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Uotp/InserimentoArchivio.aspx";
-                Response.Redirect("~/Contact.aspx");
+                //  Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -428,41 +318,18 @@ namespace Uotep
         {
 
             txtPratN.Text = String.Empty;
-            //txtGiudice.Text = string.Empty;
-            //txtQuartiere.Text = string.Empty;
-            //txtInCarico.Text = string.Empty;
-            ////txtTipoAtto.Text = string.Empty;
-            //DdlTipoAttoI.SelectedIndex = 0;
-            //txtIndirizzo.Text = string.Empty;
-            //txtResponsabile.Text = string.Empty;
-            //txtDataInserimento.Text = String.Empty;
-            //txtDataInizioAttivita.Text = String.Empty;
-            //txtNatoA.Text = String.Empty;
-            ////txtAllegati.Text = String.Empty;
-            //txtDataUltimoIntervento.Text = String.Empty;
-            //txtNote.Text = String.Empty;
-            //txtDataNascita.Text = String.Empty;
-            //Ck1089.Checked = false;
-            //CkSuoloPubblico.Checked = false;
-            //CkDemolita.Checked = false;
-            //CkVincoli.Checked = false;
-            //CkEvasa.Checked = false;
-            //CkBis.Checked = false;
-            //CkTris.Checked = false;
-            //CkQuater.Checked = false;
-            //CkPropAltri.Checked = false;
-            //CkBeniConfiscati.Checked = false;
-            //CkPropBeniCult.Checked = false;
-            //CkPropComunale.Checked = false;
-            //CkPropPriv.Checked = false;
-            //txtSezione.Text = string.Empty;
-            //TxtFoglio.Text = string.Empty;
-            //TxtParticella.Text = string.Empty;
-            //TxtSub.Text = string.Empty;
-            //txtFoglioNct.Text = string.Empty;
-            //txtParticellaNct.Text = string.Empty;
+            txtBUTp.Text = String.Empty;
+            txtCartellinaTp.Text = String.Empty;
+            txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
+            txtDataProtGen.Text = String.Empty;
+            txtDataProtProc.Text = String.Empty;
+            txtDestinatarioTp.Text = String.Empty;
+            txtNotaTp.Text = String.Empty;
+            txtOggettoTp.Text = String.Empty;
+            txtDestinatarioTp.Text = String.Empty;
 
-            //CaricaDLL();
+
+            CaricaDLL();
 
         }
 
@@ -517,7 +384,9 @@ namespace Uotep
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
         }
         // (Riusa la funzione GetOriginalData dal mio esempio precedente o la tua logica di recupero dati)
 
@@ -525,14 +394,14 @@ namespace Uotep
         {
             try
             {
-                //Manager mn = new Manager();
-                //DataTable RicercaQuartiere = mn.getListQuartiere();
-                //DdlQuartiereI.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                //DdlQuartiereI.DataTextField = "Quartiere"; // Il campo visibile
-                //DdlTipoAttoI.DataValueField = "id_quartiere";
-                //DdlQuartiereI.DataBind();
+                Manager mn = new Manager();
+                DataTable RicercaQuartiere = mn.getListQuartiere();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiere.DataValueField = "id_quartiere";
+                DdlQuartiere.DataBind();
 
-               
+
             }
             catch (Exception ex)
             {
@@ -579,7 +448,7 @@ namespace Uotep
             GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroIndirizzo.Value) && String.IsNullOrEmpty(HfFiltroResponsabile.Value))
             {
-                RicercaNew(sender, e);
+                //RicercaNew(sender, e);
             }
             else
             {
@@ -667,10 +536,10 @@ namespace Uotep
                 }
                 GVRicercaPratica.DataBind();
             }
-            catch (Exception )
+            catch (Exception)
             {
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
-               // throw;
+                // throw;
             }
         }
 
@@ -732,7 +601,7 @@ namespace Uotep
         // esecuzione del filtro ulteriore sulla colonna indirizzo
         protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
         {
-           
+
             TextBox txtFilter = (TextBox)sender;
             string filterValue = txtFilter.Text.Trim();
             HfFiltroIndirizzo.Value = filterValue;
