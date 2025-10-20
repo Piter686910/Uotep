@@ -60,7 +60,7 @@ namespace Uotep.Classi
                         command.ExecuteNonQuery();
 
                         tran.Commit();
-
+                        tran.Dispose();
                         resp = true;
                     }
                     else
@@ -873,6 +873,27 @@ namespace Uotep.Classi
 
             }
         }
+
+        public Int32 GetCartellinaByQuartiere(string quartiere)
+        {
+            string sql = string.Empty;
+            int progressivo = 0;
+            DataTable tb = new DataTable();
+            sql = "SELECT progressivo FROM ProgCartelline where quartiere like '%" + quartiere.Replace("'", "''") + "%'";
+
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+
+                tb = FillTable(sql, conn);
+                if (tb.Rows.Count > 0)
+                    progressivo = Convert.ToInt32(tb.Rows[0]["progressivo"].ToString());
+                else
+                    return 0;
+
+                return progressivo + 1;
+            }
+        }
+
         public DataTable GetFileByFascicoloData(CaricaFile fl)
         {
             string sql = string.Empty;
@@ -1115,13 +1136,18 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable getPraticaArchivioUotp(int pratica, string oggetto, string bu, string nota, string destinatario)
+        public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-            if (pratica > 0)
-                sql = "SELECT  * FROM Archiviotp where Num_Prot = '" + pratica + "' ORDER BY DATA1 desc ";
+            if (pratica != null)
+            {
+                if (!String.IsNullOrEmpty(pratica[2].ToString()))
+                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' and cartellina = '" + pratica[2] + "' ORDER BY DATA1 asc ";
 
+                else
+                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' ORDER BY DATA1 asc ";
+            }
             if (!String.IsNullOrEmpty(oggetto))
                 sql = "SELECT * FROM Archiviotp where oggetto1 like '%" + oggetto.Replace("'", "''") + "%'";
             if (!String.IsNullOrEmpty(bu))
@@ -2879,63 +2905,92 @@ namespace Uotep.Classi
         {
             bool resp = true;
             string sql_pratica = String.Empty;
+            string sql_cartellina = String.Empty;
+            string sql_Verificacartellina = String.Empty;
             string testoSql = string.Empty;
+          
+          
 
-            try
-            {
-
-                sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via)" +
+                sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome)" +
                    " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
                    @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
-                   @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + @arch.arch_indirizzo.Replace("'", "''") +  "')";
+                   @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "')";
 
+                sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+                sql_Verificacartellina = "select * from  ProgCartelline where progressivo = " + @arch.arch_cartellina + " and quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
 
+               
+
+                // 1. Il blocco 'using' gestisce già la chiusura e il dispose della connessione.
                 using (SqlConnection conn = new SqlConnection(ConnStringTp))
                 {
                     conn.Open();
-                    SqlCommand command = conn.CreateCommand();
 
-                    try
+                    // 2. Anche la transazione va messa in un 'using' per garantirne il dispose.
+                    using (SqlTransaction tran = conn.BeginTransaction("trans"))
                     {
-                        command.CommandText = sql_pratica;
-                        testoSql = "Archiviotp";
-                        int res = command.ExecuteNonQuery();
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (!File.Exists(LogFile))
+                        // 3. Crea il comando una sola volta e associalo alla connessione e alla transazione.
+                        using (SqlCommand command = conn.CreateCommand())
                         {
-                            using (StreamWriter sw = File.CreateText(LogFile)) { }
-                        }
+                            command.Transaction = tran;
 
-                        using (StreamWriter sw = File.AppendText(LogFile))
-                        {
-                            sw.WriteLine("pratica " + arch.arch_Num_Prot + ", data ins:" + arch.arch_dataInserimento + ", " + ex.Message + @" - Errore in inserimento dati in archiviotp");
-                            sw.Close();
-                        }
+                            try
+                            {
+                                // PRIMA OPERAZIONE: Inserimento in archiviotp
+                                command.CommandText = sql_pratica;
+                                int res = command.ExecuteNonQuery();
 
-                        resp = false;
+                                if (res > 0)
+                                {
+                                    // SECONDA OPERAZIONE: Verifica se la cartellina esiste
+                                    command.CommandText = sql_Verificacartellina; // Cambia solo il testo del comando
 
+                                    // Riempiamo la DataTable usando il comando e la transazione esistenti.
+                                    // Questo evita qualsiasi conflitto sulla connessione.
+                                    DataTable tb = new DataTable();
+                                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                                    {
+                                        adapter.Fill(tb);
+                                    }
 
-                    }
-                    conn.Close();
-                    conn.Dispose();
-                    return resp;
-                }
+                                    // Se non ci sono righe, la cartellina non esiste, quindi la inseriamo.
+                                    if (tb.Rows.Count == 0)
+                                    {
+                                        // TERZA OPERAZIONE: Inserimento della cartellina
+                                        command.CommandText = sql_cartellina;
+                                        command.ExecuteNonQuery();
+                                    }
 
+                                    // Se tutto è andato bene, conferma la transazione
+                                    tran.Commit();
+                                    resp = true;
+                                }
+                                else
+                                {
+                                    // Se il primo inserimento non ha modificato righe, annulla tutto.
+                                    tran.Rollback();
+                                    resp = false;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // Se si verifica QUALSIASI errore, annulla la transazione.
+                                // Il blocco 'using' si occuperà del dispose.
+                                tran.Rollback();
+                                resp = false;
 
+                                // Log dell'errore (il tuo codice di logging va bene)
+                                if (!File.Exists(LogFile))
+                                {
+                                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                                }
+                               
+                            }
+                        } // 'using' fa il Dispose del SqlCommand
+                    } // 'using' fa il Dispose della SqlTransaction
+                } // 'using' fa il Close e il Dispose della SqlConnection
 
-            }
-            catch (Exception)
-            {
-                resp = false;
-
-
-
-            }
-            return resp;
-
+                return resp;
         }
         /// <summary>
         /// Salva il nuovo fascicolo protocollo
@@ -3023,7 +3078,7 @@ namespace Uotep.Classi
                             if (res1 > 0)
                             {
                                 tran.Commit();
-
+                                tran.Dispose();
                                 resp = true;
                             }
 
@@ -3117,7 +3172,7 @@ namespace Uotep.Classi
                             command.ExecuteNonQuery();
 
                             tran.Commit();
-
+                            tran.Dispose();
                             resp = true;
 
                         }
@@ -3217,7 +3272,7 @@ namespace Uotep.Classi
 
 
                             tran.Commit();
-
+                            tran.Dispose();
                             resp = true;
 
                         }
@@ -3588,7 +3643,7 @@ namespace Uotep.Classi
                         command.ExecuteNonQuery();
 
                         tran.Commit();
-
+                        tran.Dispose();
                         resp = true;
 
                     }

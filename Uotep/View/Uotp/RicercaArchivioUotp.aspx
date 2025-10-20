@@ -140,17 +140,17 @@
         </div>
 
         <%--Sezione di ricerca  --%>
-        <div id="DivRicerca" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
+        <div id="DivRicerca" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 250px!important">
             <!-- Righe di input  -->
             <div class="col-md-4 ">
 
                 <%-- DIV RICERCA pratica --%>
                 <div id="DivPratica" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label6" runat="server" Text="Prot.Nr." CssClass="form-label d-block mb-2"></asp:Label>
-
-                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" placeholder="Prot.Nr." />
-
+                    <asp:Label ID="Label2" runat="server" Text="Quartiere" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:TextBox ID="txtQuartiere" runat="server" CssClass="form-control" placeholder="Quartiere" />
+                    <asp:Label ID="Label6" runat="server" Text="Cartellina" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" placeholder="Cartellina" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -191,7 +191,7 @@
                 <%-- DIV RICERCA Destinatario --%>
                 <div id="DivDestinatario" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label1" runat="server" Text="BU" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label1" runat="server" Text="Destinatario" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtDestinatario" runat="server" CssClass="form-control" placeholder="Destinatario" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
@@ -214,7 +214,7 @@
                             <div class="col-md-6 ">
                                 <div class="form-check mb-2">
                                     <label for="txtNumProTp">Prot.Nr.</label>
-                                    <asp:TextBox ID="txtNumProTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true"  Enabled="false"/>
+                                    <asp:TextBox ID="txtNumProTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" />
 
                                     <label for="txtProGenTp">Prot. Gen.</label>
                                     <asp:TextBox ID="txtProGenTp" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtDataProtGen">Data Prot. Gen.</label>
-                                    <asp:TextBox ID="txtDataProtGen" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false"/>
+                                    <asp:TextBox ID="txtDataProtGen" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false" />
 
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtDataProtProc">Data Prot. Proc.</label>
-                                    <asp:TextBox ID="txtDataProtProc" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false"/>
+                                    <asp:TextBox ID="txtDataProtProc" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false" />
 
                                 </div>
                             </div>
@@ -261,38 +261,45 @@
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
                                     <label for="txtDestinatarioTp">Destinatario</label>
-                                    <asp:TextBox ID="txtDestinatarioTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <asp:TextBox ID="txtDestinatarioTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtQuartiereTp">Quartiere</label>
-                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false" />
 
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtBUTp">BU</label>
-                                    <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
 
                             </div>
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
-                                    <label for="txtNotaTp">Nota</label>
-                                    <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <label for="txtCognomeTp">Intestatario</label>
+                                    <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control"   Enabled="false"/>
                                 </div>
+
                                 <div class="form-check mb-2">
                                     <label for="txtCartellinaTp">Cartellina</label>
-                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
-                                    <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
 
                             </div>
                             <div class="col-md-12">
                                 <div class="form-check mb-2">
+                                    <label for="txtNotaTp">Nota</label>
+                                    <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" Enabled="false" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check mb-2">
                                     <label for="txtOggettoTp">Oggetto</label>
-                                    <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" Enabled="false"/>
+                                    <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" Enabled="false" />
 
                                 </div>
                             </div>
@@ -300,6 +307,7 @@
 
                     </div>
                     <asp:Button ID="BtNewRicerca" Text="Nuova Ricerca" runat="server" OnClick="BtNewRicerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
 
                 </div>
             </div>
@@ -322,7 +330,7 @@
                             OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="Num_Prot" HeaderText="Prot. Nr." HeaderStyle-CssClass="wrap-text-40" />
+                                <asp:BoundField DataField="Cartellina" HeaderText="Cartellina" HeaderStyle-CssClass="wrap-text-40" />
 
                                 <asp:TemplateField HeaderText="Oggetto" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
@@ -333,7 +341,6 @@
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("oggetto1") %>
-    
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
@@ -405,6 +412,8 @@
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
                 <asp:HiddenField ID="HfFiltroDestinatario" runat="server" />
                 <asp:HiddenField ID="HfFiltroOggetto" runat="server" />
+
+
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>

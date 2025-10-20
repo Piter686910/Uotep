@@ -123,6 +123,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtQuartiereTp;
 
         /// <summary>
+        /// Controllo RqFile.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RqFile;
+
+        /// <summary>
         /// Controllo suggestionsListQuartiere.
         /// </summary>
         /// <remarks>
@@ -150,13 +159,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtBUTp;
 
         /// <summary>
-        /// Controllo txtNotaTp.
+        /// Controllo txtCognomeTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNotaTp;
+        protected global::System.Web.UI.WebControls.TextBox txtCognomeTp;
 
         /// <summary>
         /// Controllo txtCartellinaTp.
@@ -175,6 +184,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TxtIndirizzoTp;
+
+        /// <summary>
+        /// Controllo txtNotaTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNotaTp;
 
         /// <summary>
         /// Controllo txtOggettoTp.

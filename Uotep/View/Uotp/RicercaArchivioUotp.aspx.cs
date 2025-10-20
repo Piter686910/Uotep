@@ -57,13 +57,12 @@ namespace Uotep
         private void Pulisci()
         {
 
-            txtPratN.Text = String.Empty;
             txtBU.Text = String.Empty;
-            txtDestinatario.Text = String.Empty;
+            txtCartellina.Text = String.Empty;
             txtNota.Text = String.Empty;
             txtOggetto.Text = String.Empty;
             txtDestinatario.Text = String.Empty;
-
+            txtQuartiere.Text = string.Empty;
 
         }
 
@@ -88,10 +87,10 @@ namespace Uotep
                 Session["ListRicercaTp"] = ListRicerca;
 
             }
-            if (!string.IsNullOrEmpty(txtPratN.Text))
+            if (!string.IsNullOrEmpty(txtQuartiere.Text) || !string.IsNullOrEmpty(txtCartellina.Text))
             {
                 // Crea una lista 
-                List<string> ListRicerca = new List<string> { "Pratica", txtPratN.Text };
+                List<string> ListRicerca = new List<string> { "Pratica", txtQuartiere.Text, txtCartellina.Text };
 
 
                 // Salva la lista nella Sessione
@@ -128,19 +127,19 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(Convert.ToInt32(ar[1]), null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null);
                         break;
                     case "Oggetto":
-                        arc = mn.getPraticaArchivioUotp(0, ar[1], null, null, null);
+                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null);
                         break;
                     case "Destinatario":
-                        arc = mn.getPraticaArchivioUotp(0, null, null, null, ar[1]);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1]);
                         break;
                     case "Nota":
-                        arc = mn.getPraticaArchivioUotp(0, null, null, ar[1], null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null);
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(0, null, ar[1], null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null);
                         break;
 
                 }
@@ -157,7 +156,7 @@ namespace Uotep
             }
             else
             {
-                txtPratN.Enabled = true;
+                //txtPratN.Enabled = true;
                 //txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
             }
         }
@@ -318,8 +317,8 @@ namespace Uotep
             txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
-            //txtDataProtGen.Text = arc.Rows[0].ItemArray[116].ToString();
-
+            txtCognomeTp.Text = arc.Rows[0].ItemArray[90].ToString();
+            Session["arc"] = arc;
         }
         protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
         {
@@ -332,11 +331,11 @@ namespace Uotep
                 string[] args = e.CommandArgument.ToString().Split(';');
                 int idP = System.Convert.ToInt32(args[0]);
                 string Npratica = args[1];
-
+                
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
-                txtPratN.Text = Npratica;
+                // txtPratN.Text = Npratica;
 
                 Manager mn = new Manager();
                 //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
@@ -383,7 +382,7 @@ namespace Uotep
             GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroDestinatario.Value) && String.IsNullOrEmpty(HfFiltroOggetto.Value))
             {
-                //RicercaNew(sender, e);
+                Ricerca_Click(this, EventArgs.Empty);
             }
             else
             {
@@ -475,7 +474,7 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(Convert.ToInt32(ar[1]), null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null);
                         break;
                     case "Oggetto":
                         //arc = mn.getPraticaArchivioUotp(0, ar[1], null, null, null);
@@ -496,7 +495,7 @@ namespace Uotep
 
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(0, null, ar[1], null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null);
                         break;
 
                 }
@@ -506,12 +505,12 @@ namespace Uotep
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
-                    txtPratN.Enabled = false;
+                   // txtPratN.Enabled = false;
                 }
             }
             else
             {
-                txtPratN.Enabled = true;
+                //txtPratN.Enabled = true;
             }
             return arc;
             // return dt;
@@ -522,5 +521,12 @@ namespace Uotep
             DivRicerca.Visible = true;
             pnDettagli.Visible = false;
         }
+
+        protected void btModifica_Click(object sender, EventArgs e)
+        {
+
+            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx");
+            Response.Redirect(url, false);
+        }
     }
-}
+    }

@@ -96,6 +96,24 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivPratica;
 
         /// <summary>
+        /// Controllo Label2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label2;
+
+        /// <summary>
+        /// Controllo txtQuartiere.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtQuartiere;
+
+        /// <summary>
         /// Controllo Label6.
         /// </summary>
         /// <remarks>
@@ -105,13 +123,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label Label6;
 
         /// <summary>
-        /// Controllo txtPratN.
+        /// Controllo txtCartellina.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPratN;
+        protected global::System.Web.UI.WebControls.TextBox txtCartellina;
 
         /// <summary>
         /// Controllo DivOggetto.
@@ -312,13 +330,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtBUTp;
 
         /// <summary>
-        /// Controllo txtNotaTp.
+        /// Controllo txtCognomeTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNotaTp;
+        protected global::System.Web.UI.WebControls.TextBox txtCognomeTp;
 
         /// <summary>
         /// Controllo txtCartellinaTp.
@@ -339,6 +357,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox TxtIndirizzoTp;
 
         /// <summary>
+        /// Controllo txtNotaTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNotaTp;
+
+        /// <summary>
         /// Controllo txtOggettoTp.
         /// </summary>
         /// <remarks>
@@ -355,6 +382,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button BtNewRicerca;
+
+        /// <summary>
+        /// Controllo btModifica.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btModifica;
 
         /// <summary>
         /// Controllo GVRicercaPratica.

@@ -42,40 +42,40 @@
             input = document.getElementById("txtQuartiereTp");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
-        options = dropdown.getElementsByTagName("option");
-        var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
-        // Pulisci la lista dei suggerimenti precedenti
-        suggestionsListDiv.innerHTML = "";
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
 
-        var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
-        for (i = 0; i < options.length; i++) {
-            txtValue = options[i].textContent || options[i].innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                suggestionsFound = true; // Trovato almeno un suggerimento
-                var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                suggestionElement.textContent = txtValue;
-                suggestionElement.style.padding = "5px";
-                suggestionElement.style.cursor = "pointer";
-                suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
 
-                suggestionElement.addEventListener('click', function () {
-                    input.value = this.textContent;
-                    suggestionsListDiv.style.display = "none";
-                    return false;
-                });
-                suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
             }
         }
-
-        // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-        if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-            suggestionsListDiv.style.display = "block";
-        } else {
-            suggestionsListDiv.style.display = "none";
-        }
-    }
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
@@ -146,7 +146,7 @@
                                     <label for="txtPratN">Prot.Nr.</label>
                                     <asp:RegularExpressionValidator ID="REx" runat="server" Display="Dynamic" ControlToValidate="txtPratN" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="^\d+$"></asp:RegularExpressionValidator>
 
-                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" />
+                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false"/>
 
                                     <label for="txtProGenTp">Prot. Gen.</label>
                                     <asp:TextBox ID="txtProGenTp" runat="server" CssClass="form-control"></asp:TextBox>
@@ -215,7 +215,8 @@
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtQuartiereTp">Quartiere</label>
-                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control"  ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" />
+                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" OnTextChanged="txtQuartiereTp_TextChanged" AutoPostBack="true"/>
+                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="txtQuartiereTp" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
                                     <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
                                     <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
@@ -229,16 +230,23 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
-                                    <label for="txtNotaTp">Nota</label>
-                                    <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" />
+                                    <label for="txtCognomeTp">Intestatario</label>
+                                    <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control" />
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtCartellinaTp">Cartellina</label>
-                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" />
+                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" ForeColor="Red"/>
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
                                     <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check mb-2">
+                                    <label for="txtNotaTp">Nota</label>
+                                    <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3" Style="margin-left: -10px; width: 100%; max-width: 800px;" />
                                 </div>
 
                             </div>
@@ -326,7 +334,7 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
+                            OnRowDataBound="gvPopup_RowDataBoundP" AllowPaging="true" PageSize="10">
                             <Columns>
                                 <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />

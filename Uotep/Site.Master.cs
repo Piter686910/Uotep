@@ -27,6 +27,7 @@ namespace Uotep
                 {
                     string Vuser = Session["user"].ToString();
                     string ruolo = Session["ruolo"].ToString();
+                    string area = Session["area"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
                     if (Ricerca.Rows.Count > 0)
@@ -43,6 +44,7 @@ namespace Uotep
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
                                 RicercaArchivioUote.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
                                 menuAccertatori.Visible = true;
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
@@ -126,12 +128,21 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 // menuHome.Visible = true;
                                 RicercaArchivioUote.Visible = true;
-                                InserimentoArchivioUote.Visible = true;
-                                GestionePraticaUote.Visible = true;
+                                if (area.ToUpper() == Enumerate.Area.UOTE.ToString().ToUpper())
+                                {
+                                    InserimentoArchivioUote.Visible = true;
+                                    InserimentoArchivioUotp.Visible = true;
+                                }
+                                else
+                                {
+                                    InserimentoArchivioUote.Visible = false;
+                                    InserimentoArchivioUotp.Visible = false;
+                                }
+                                    GestionePraticaUote.Visible = true;
                                 menuManTabelle.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
-                                InserimentoArchivioUotp.Visible = true;
+                                
                                 RicercaArchivioUotp.Visible = true;
 
                                 break;
@@ -219,6 +230,9 @@ namespace Uotep
             Session.Remove("popAperto");
             Session.Remove("popApertoRicercaScheda");
             Session.Remove("ListPratiche");
+            Session.Remove("ListRicercaTp");
+            Session.Remove("arc");
+            Session.Remove("area");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

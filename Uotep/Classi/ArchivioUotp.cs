@@ -25,7 +25,7 @@ namespace Uotep.Classi
         public string arch_quartiere = string.Empty;
         public string arch_destinatario = string.Empty;
         public string arch_indirizzo = string.Empty;
-
+        public string arch_cognome = string.Empty;
 
 
     }
