@@ -42,7 +42,8 @@ namespace Uotep
 
         }
 
-        protected void NuovaRicerca_Click(object sender, EventArgs e)
+        protected void 
+            NuovaRicerca_Click(object sender, EventArgs e)
         {
             NascondiDiv();
 
@@ -70,7 +71,7 @@ namespace Uotep
             }
             if (txtPratica.Text != string.Empty)
             {
-                pratica = mn.getListPratica(txtPratica.Text);
+                pratica = mn.getListPratica(txtPratica.Text.Trim());
             }
             if (txtRicGiudice.Text != string.Empty)
             {
@@ -116,6 +117,7 @@ namespace Uotep
                 //}
                 //else
                 //    divDecretazione.Visible = false;
+               
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
             }
             else
@@ -269,6 +271,8 @@ namespace Uotep
                                 txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                                 txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                             }
+                            // Salva la lista nella Sessione
+                            Session["ListRicerca"] = pratica;
                             // Puoi anche chiudere il popup se necessario
                             ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
                             DivDettagli.Visible = true;
@@ -719,6 +723,8 @@ namespace Uotep
                     gvPopup.DataBind();
 
                     txtPratica.Enabled = false;
+                    // Salva la lista nella Sessione
+                    Session["ListRicerca"] = ListRicerca;
                 }
             }
             else
@@ -778,6 +784,12 @@ namespace Uotep
             PopulateGridView(columnName, HfFiltroSigla.Value); // Esempio di funzione di filtro
                                                                     //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+        }
+
+        protected void btModifica_Click(object sender, EventArgs e)
+        {
+            string url = VirtualPathUtility.ToAbsolute("~/View/Modifica.aspx");
+            Response.Redirect(url, false);
         }
     }
 }

@@ -334,6 +334,17 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListQuartiereTP()
+        {
+            DataTable tb = new DataTable();
+            // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
+            string sql = "SELECT id, quartiere FROM Quartiere ORDER BY quartiere";
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getQuartiere(string indirizzo)
         {
             DataTable tb = new DataTable();
@@ -1136,7 +1147,7 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario)
+        public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario, string indirizzo)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
@@ -1149,15 +1160,16 @@ namespace Uotep.Classi
                     sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' ORDER BY DATA1 asc ";
             }
             if (!String.IsNullOrEmpty(oggetto))
-                sql = "SELECT * FROM Archiviotp where oggetto1 like '%" + oggetto.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM Archiviotp where oggetto1 like '%" + oggetto.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(bu))
                 sql = "SELECT * FROM Archiviotp where codice like '%" + bu.Replace("'", "''") + "%'";
 
             if (!String.IsNullOrEmpty(nota))
-                sql = "SELECT * FROM Archiviotp where note like '%" + nota.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM Archiviotp where note like '%" + nota.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(destinatario))
-                sql = "SELECT * FROM Archiviotp  WHERE destinatario like '%" + destinatario.Replace("'", "''") + "%'";
-
+                sql = "SELECT * FROM Archiviotp  WHERE destinatario like '%" + destinatario.Replace("'", "''").Replace("*", "%") + "%'";
+            if (!String.IsNullOrEmpty(indirizzo))
+                sql = "SELECT * FROM Archiviotp  WHERE via like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%'";
 
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
@@ -1193,15 +1205,15 @@ namespace Uotep.Classi
 
 
             if (!String.IsNullOrEmpty(nominativo))
-                sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(indirizzo))
-                sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%'";
 
             if (catasto != null)
                 sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
                    "' and arch_sub= '" + catasto[4] + "'";
             if (!String.IsNullOrEmpty(nota))
-                sql = "SELECT * FROM ArchivioUote where arch_note like '%" + nota.Replace("'", "''") + "%'";
+                sql = "SELECT * FROM ArchivioUote where arch_note like '%" + nota.Replace("'", "''").Replace("*", "%") + "%'";
             if (annomese != null)
                 if (!String.IsNullOrEmpty(annomese[2]))
                     sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1] + " and MONTH(arch_dataIns) =" + annomese[2];

@@ -358,7 +358,7 @@
 
                     </div>
                 </div>
-                <div id="divDecretazione" runat="server" >
+                <div id="divDecretazione" runat="server">
                     <p style="font-weight: bold; font-size: medium">Decretazione</p>
                     <div class="row custom-border">
                         <div class="col-md-12">
@@ -438,6 +438,8 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
+
                 </div>
             </div>
         </div>
@@ -472,7 +474,7 @@
                                     <ItemTemplate>
                                         <%# Eval("Sigla") %>
                                     </ItemTemplate>
-                                </asp:TemplateField>       
+                                </asp:TemplateField>
 
                                 <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 

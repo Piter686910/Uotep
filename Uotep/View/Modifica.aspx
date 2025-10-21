@@ -672,7 +672,7 @@
                             <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
 
                             <%--<asp:TextBox ID="txtSigla" runat="server" CssClass="form-control mb-3" Enabled="false" />--%>
-                            <label for="Ddltipo">/</label>
+                            <label for="DdlSigla">/</label>
                             <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
                                 <%--<asp:ListItem Text="ED"> </asp:ListItem>
                                 <asp:ListItem Text="TP"> </asp:ListItem>

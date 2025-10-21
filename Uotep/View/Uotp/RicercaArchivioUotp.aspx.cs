@@ -81,7 +81,7 @@ namespace Uotep
             if (!string.IsNullOrEmpty(txtOggetto.Text))
             {
                 // Crea una lista 
-                List<string> ListRicerca = new List<string> { "Oggetto", txtOggetto.Text.Replace("*", "%")};
+                List<string> ListRicerca = new List<string> { "Oggetto", txtOggetto.Text.Replace("*", "%") };
 
                 // Salva la lista nella Sessione
                 Session["ListRicercaTp"] = ListRicerca;
@@ -112,7 +112,15 @@ namespace Uotep
                 // Salva la lista nella Sessione
                 Session["ListRicercaTp"] = ListRicerca;
             }
+            if (!string.IsNullOrEmpty(txtIndirizzo.Text))
+            {
+                // Crea una lista 
+                List<string> ListRicerca = new List<string> { "Indirizzo", txtIndirizzo.Text.Replace("*", "%") };
 
+                // Salva la lista nella Sessione
+                Session["ListRicercaTp"] = ListRicerca;
+
+            }
             // Reindirizza alla pagina di destinazione
             //string url = VirtualPathUtility.ToAbsolute("~/View/InserimentoArchivio.aspx");
             //Response.Redirect(url, false);
@@ -127,21 +135,23 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null, null);
                         break;
                     case "Oggetto":
-                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null);
+                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null, null);
                         break;
                     case "Destinatario":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1]);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1], null);
                         break;
                     case "Nota":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null);
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null);
                         break;
-
+                    case "Indirizzo":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1]);
+                        break;
                 }
                 if (arc.Rows.Count > 0)
                 {
@@ -187,6 +197,7 @@ namespace Uotep
             DivNota.Visible = false;
             DivRicerca.Visible = true;
             DivDestinatario.Visible = true;
+            DivIndirizzo.Visible = false;
             Nascondi();
         }
 
@@ -199,12 +210,13 @@ namespace Uotep
             DivBU.Visible = false;
             DivRicerca.Visible = true;
             DivOggetto.Visible = true;
+            DivIndirizzo.Visible = false;
         }
         protected void Nascondi()
         {
             pnDettagli.Visible = false;
         }
-        protected void btNpratica_Click(object sender, EventArgs e)
+        protected void btNCartellina_Click(object sender, EventArgs e)
         {
             DivDestinatario.Visible = false;
             DivPratica.Visible = true;
@@ -212,6 +224,7 @@ namespace Uotep
             DivBU.Visible = false;
             DivRicerca.Visible = true;
             DivOggetto.Visible = false;
+            DivIndirizzo.Visible = false;
             Nascondi();
         }
         protected void btNota_Click(object sender, EventArgs e)
@@ -222,6 +235,7 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivOggetto.Visible = false;
             DivNota.Visible = true;
+            DivIndirizzo.Visible = false;
             Nascondi();
         }
         protected void btBU_Click(object sender, EventArgs e)
@@ -232,9 +246,20 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivOggetto.Visible = false;
             DivNota.Visible = false;
+            DivIndirizzo.Visible = false;
             Nascondi();
         }
-
+        protected void btIndirizzo_Click(object sender, EventArgs e)
+        {
+            DivDestinatario.Visible = false;
+            DivPratica.Visible = false;
+            DivNota.Visible = false;
+            DivBU.Visible = false;
+            DivRicerca.Visible = true;
+            DivOggetto.Visible = false;
+            DivIndirizzo.Visible = true;
+            Nascondi();
+        }
         protected void txtFilterOggetto_TextChanged(object sender, EventArgs e)
         {
             System.Web.UI.WebControls.TextBox txtFilter = (System.Web.UI.WebControls.TextBox)sender;
@@ -331,7 +356,7 @@ namespace Uotep
                 string[] args = e.CommandArgument.ToString().Split(';');
                 int idP = System.Convert.ToInt32(args[0]);
                 string Npratica = args[1];
-                
+
 
                 // Imposta il valore nel TextBox
                 //txtSelectedValue.Text = selectedValue;
@@ -474,7 +499,7 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null,null);
                         break;
                     case "Oggetto":
                         //arc = mn.getPraticaArchivioUotp(0, ar[1], null, null, null);
@@ -495,7 +520,10 @@ namespace Uotep
 
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null);
+                        break;
+                    case "Indirizzo":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1]);
                         break;
 
                 }
@@ -505,7 +533,7 @@ namespace Uotep
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
-                   // txtPratN.Enabled = false;
+                    // txtPratN.Enabled = false;
                 }
             }
             else
@@ -528,5 +556,7 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx");
             Response.Redirect(url, false);
         }
+
+       
     }
-    }
+}

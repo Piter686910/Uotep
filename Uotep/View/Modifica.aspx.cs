@@ -54,9 +54,101 @@ namespace Uotep
                     btChiudiDecretazione.Visible = false;
 
                 }
+                if (Session["ListRicerca"] != null)
+                {
+                    DataTable pratica = (DataTable)Session["ListRicerca"];
+                    if (pratica.Rows.Count > 0)
+                    {
+                        Hid.Value= pratica.Rows[0].ItemArray[0].ToString();
+                        DivDettagli.Visible = true;
+                        CaricaDLL();
+                        FillScheda(pratica);
+                        Session.Remove("ListRicerca");
+                    }
+                }
 
 
+            }
 
+        }
+        protected void FillScheda(DataTable pratica)
+        {
+            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() ;
+            DdlSigla.SelectedValue = pratica.Rows[0].ItemArray[2].ToString();
+            if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
+            {
+                divAg.Visible = true;
+            }
+            else
+            {
+                divAg.Visible = false;
+
+            }
+            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
+
+                txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
+            txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+            txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
+            txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
+            TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
+            TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
+            txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
+            txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
+            txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
+            txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper() + " " + pratica.Rows[0].ItemArray[11].ToString().ToUpper();
+            txtIndirizzo.ToolTip = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
+
+            //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
+            //{
+            //    //converte la data 01-01-1900 in SPACE
+            //    DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
+            //    if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+            //    {
+            //        txtd.Text = ""; // Metti una stringa vuota
+            //    }
+            //    else
+            //    {
+            //        txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+            //    }
+            //}
+            txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+            txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+            if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
+            {
+                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
+            }
+            else
+            {
+                txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+                txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
+            }
+            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+            {
+                //converte la data 01-01-1900 in SPACE
+                DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
+                if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                {
+                    txtDataCarico.Text = ""; // Metti una stringa vuota
+                }
+                else
+                {
+                    txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                }
+            }
+
+            txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
+            //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+            //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
+            txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
+            //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
+            txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
+            {
+                txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
             }
 
         }
@@ -113,7 +205,7 @@ namespace Uotep
                     // Il testo visibile all'utente viene preso dalla Description
                     item.Text = GetEnumDescription(stato);
 
-                    // Il valore interno è il nome del membro dell'enum (es. "InLavorazione")
+                    // Il valore interno è il nome del membro dell'enum 
                     item.Value = stato.ToString();
 
                     DdlSigla.Items.Add(item);
@@ -263,14 +355,14 @@ namespace Uotep
 
                     p.data_ins_pratica = DateTime.Now.ToLocalTime();
                     p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
-                    DateTime o = System.Convert.ToDateTime(HolDate.Value);
+                    DateTime dat = System.Convert.ToDateTime(txtDataInsCarico.Text);
 
                     Manager mn = new Manager();
 
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
                     //
-                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, o);
+                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat);
                     if (!ins)
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
@@ -834,6 +926,7 @@ namespace Uotep
             DivProcPenale.Visible = false;
             DivDettagli.Visible = false;
             Session.Remove("ListPratiche");
+          // Session.Remove("ListRicerca");
         }
 
         protected void btNProtocollo_Click(object sender, EventArgs e)

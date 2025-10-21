@@ -110,7 +110,7 @@
                                 <asp:Button ID="btDatiCatastali" runat="server" OnClick="btDatiCatastali_Click" Text="Dati Catastali" ToolTip="Dati Catastali" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>--%>
                             <td>
-                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Prot. Nr" ToolTip="Ricerca Per Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btNCartellina" runat="server" OnClick="btNCartellina_Click" Text="Cartellina" ToolTip="Ricerca Per Quartiere e Cartelllina" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                         </tr>
                         <tr>
@@ -127,12 +127,11 @@
                             <td>
                                 <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>--%>
-                        </tr>
-                        <%--                        <tr>
                             <td>
-                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" CommandArgument="Pratica" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Indirizzo" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
-                        </tr>--%>
+                        </tr>
+
                     </table>
                     <%-- Fine Tabella Pulsanti --%>
                 </div>
@@ -198,6 +197,18 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA Indirizzo --%>
+                <div id="DivIndirizzo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label3" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -277,7 +288,7 @@
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
                                     <label for="txtCognomeTp">Intestatario</label>
-                                    <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control"   Enabled="false"/>
+                                    <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
 
                                 <div class="form-check mb-2">

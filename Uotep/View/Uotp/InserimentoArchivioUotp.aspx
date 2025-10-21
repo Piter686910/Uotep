@@ -215,11 +215,11 @@
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtQuartiereTp">Quartiere</label>
-                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" OnTextChanged="txtQuartiereTp_TextChanged" AutoPostBack="true"/>
-                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="txtQuartiereTp" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
+                                    <%--<asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" OnTextChanged="txtQuartiereTp_TextChanged" AutoPostBack="true"/>--%>
+                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere"  InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
                                     <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
-                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" Style="display: none" />
+                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" />
 
                                 </div>
                                 <div class="form-check mb-2">

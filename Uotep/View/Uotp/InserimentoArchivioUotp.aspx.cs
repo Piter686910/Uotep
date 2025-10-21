@@ -158,7 +158,8 @@ namespace Uotep
             txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
-            txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
+            //txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
+            DdlQuartiere.SelectedItem.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
             txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
@@ -246,7 +247,8 @@ namespace Uotep
                 arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
                 arch.arch_cartellina = txtCartellinaTp.Text;
                 arch.arch_note = txtNotaTp.Text.ToUpper();
-                arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
+               // arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
+                arch.arch_quartiere= DdlQuartiere.SelectedItem.Text.ToUpper();
                 arch.arch_codice = txtBUTp.Text.ToUpper();
                 arch.arch_dataArrivo = txtDataProtGen.Text;
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
@@ -395,12 +397,12 @@ namespace Uotep
             try
             {
                 Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiere();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP();
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                DdlQuartiere.DataValueField = "id_quartiere";
+                DdlQuartiere.DataValueField = "id";
                 DdlQuartiere.DataBind();
-
+                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
             }
             catch (Exception ex)
@@ -437,7 +439,8 @@ namespace Uotep
                 string selectedValue = e.CommandArgument.ToString();
 
                 // Imposta il valore nel TextBox
-                txtQuartiereTp.Text = selectedValue;
+                // txtQuartiereTp.Text = selectedValue;
+                DdlQuartiere.SelectedValue = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
@@ -615,8 +618,19 @@ namespace Uotep
         protected void txtQuartiereTp_TextChanged(object sender, EventArgs e)
         {
             Manager mn = new Manager();
-            int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+          //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+         
+          //  txtCartellinaTp.Text = cartellina.ToString();
+        }
+
+        protected void DdlQuartiere_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+            int cartellina = mn.GetCartellinaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
             txtCartellinaTp.Text = cartellina.ToString();
         }
+
+       
     }
 }
