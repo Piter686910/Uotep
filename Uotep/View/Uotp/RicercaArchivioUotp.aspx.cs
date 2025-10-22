@@ -63,6 +63,7 @@ namespace Uotep
             txtOggetto.Text = String.Empty;
             txtDestinatario.Text = String.Empty;
             txtQuartiere.Text = string.Empty;
+            txtIndirizzo.Text = string.Empty;
 
         }
 
@@ -199,6 +200,7 @@ namespace Uotep
             DivDestinatario.Visible = true;
             DivIndirizzo.Visible = false;
             Nascondi();
+            Pulisci();
         }
 
         protected void btOggetto_Click(object sender, EventArgs e)
@@ -211,6 +213,7 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivOggetto.Visible = true;
             DivIndirizzo.Visible = false;
+            Pulisci();
         }
         protected void Nascondi()
         {
@@ -226,6 +229,7 @@ namespace Uotep
             DivOggetto.Visible = false;
             DivIndirizzo.Visible = false;
             Nascondi();
+            Pulisci();
         }
         protected void btNota_Click(object sender, EventArgs e)
         {
@@ -237,6 +241,7 @@ namespace Uotep
             DivNota.Visible = true;
             DivIndirizzo.Visible = false;
             Nascondi();
+            Pulisci();
         }
         protected void btBU_Click(object sender, EventArgs e)
         {
@@ -248,6 +253,7 @@ namespace Uotep
             DivNota.Visible = false;
             DivIndirizzo.Visible = false;
             Nascondi();
+            Pulisci();
         }
         protected void btIndirizzo_Click(object sender, EventArgs e)
         {
@@ -259,6 +265,7 @@ namespace Uotep
             DivOggetto.Visible = false;
             DivIndirizzo.Visible = true;
             Nascondi();
+            Pulisci();
         }
         protected void txtFilterOggetto_TextChanged(object sender, EventArgs e)
         {
@@ -342,7 +349,7 @@ namespace Uotep
             txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
-            txtCognomeTp.Text = arc.Rows[0].ItemArray[90].ToString();
+            txtCognomeTp.Text = arc.Rows[0].ItemArray[45].ToString();
             Session["arc"] = arc;
         }
         protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)

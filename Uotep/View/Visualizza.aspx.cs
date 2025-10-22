@@ -42,8 +42,7 @@ namespace Uotep
 
         }
 
-        protected void 
-            NuovaRicerca_Click(object sender, EventArgs e)
+        protected void NuovaRicerca_Click(object sender, EventArgs e)
         {
             NascondiDiv();
 
@@ -179,6 +178,7 @@ namespace Uotep
                         DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         if (pratica.Rows.Count > 0)
                         {
+                            Pulisci();
                             txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() + " - " + pratica.Rows[0].ItemArray[2].ToString();
                             // txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                             if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
@@ -293,7 +293,7 @@ namespace Uotep
 
 
 
-                            Pulisci();
+                         // Pulisci();
                         }
                         else
                         {
@@ -336,6 +336,20 @@ namespace Uotep
             txtDatArrivoA.Text = String.Empty;
             txtDatArrivoDa.Text = String.Empty;
             txtRicGiudice.Text = String.Empty;
+            txtDataCarico.Text = String.Empty;
+            txtDataDataEvasa.Text = String.Empty;
+            txtDataInsCarico.Text = String.Empty;
+            txtTipoAtto.Text = String.Empty;
+            txtProvenienza.Text = String.Empty;
+            txtIndirizzo.Text = String.Empty;
+            TxtQuartiere.Text = String.Empty;
+            txtNominativo.Text = String.Empty;
+            txtPratica.Text = String.Empty;
+            txtAreaCompetenza.Text = String.Empty;
+            txtEsito.Text = String.Empty;
+            txtAccertatori.Text = String.Empty;
+            CkEvasa.Checked = false;
+
 
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)

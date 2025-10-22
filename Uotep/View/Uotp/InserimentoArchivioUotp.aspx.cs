@@ -46,7 +46,7 @@ namespace Uotep
             if (!IsPostBack)
             {
                 Routine prot = new Routine();
-                txtPratN.Text = Convert.ToInt32(prot.GetPraticaTp()).ToString();
+                //txtPratN.Text = Convert.ToInt32(prot.GetPraticaTp()).ToString();
                 txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
@@ -147,8 +147,8 @@ namespace Uotep
         protected void FillScheda(DataTable arc)
         {
             //            txtNumProTp.Text = arc.Rows[0].ItemArray[1].ToString();
-            txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
-            txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
+          //  txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
+          //  txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
             //txtDataInserimentoTp.Text = arc.Rows[0].ItemArray[6].ToString();
             txtBUTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
@@ -158,9 +158,20 @@ namespace Uotep
             txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
-            //txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
-            DdlQuartiere.SelectedItem.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
-            txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            string val = string.Empty;
+            for (int i = 0; i < DdlQuartiere.Items.Count; i++)
+            {
+                if (DdlQuartiere.Items[i].Text == arc.Rows[0].ItemArray[40].ToString().ToUpper())
+                {
+                    val = DdlQuartiere.Items[i].Value;
+
+
+                }
+            }
+            DdlQuartiere.SelectedValue = val;
+       
+
+            //txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
         }
@@ -244,19 +255,19 @@ namespace Uotep
                 Manager mn = new Manager();
 
                 ArchivioUotp arch = new ArchivioUotp();
-                arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
+               // arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
                 arch.arch_cartellina = txtCartellinaTp.Text;
                 arch.arch_note = txtNotaTp.Text.ToUpper();
                // arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
                 arch.arch_quartiere= DdlQuartiere.SelectedItem.Text.ToUpper();
                 arch.arch_codice = txtBUTp.Text.ToUpper();
-                arch.arch_dataArrivo = txtDataProtGen.Text;
+               // arch.arch_dataArrivo = txtDataProtGen.Text;
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
                 arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
                 arch.arch_destinatario = txtDestinatarioTp.Text.ToUpper();
-                arch.arch_ProtGen = txtProGenTp.Text;
-                arch.arch_Protocollo_Procura = txtDataProtProc.Text;
-                arch.arch_dataProtProcura = txtDataProtProc.Text;
+               // arch.arch_ProtGen = txtProGenTp.Text;
+               // arch.arch_Protocollo_Procura = txtDataProtProc.Text;
+               // arch.arch_dataProtProcura = txtDataProtProc.Text;
                 arch.arch_indirizzo = TxtIndirizzoTp.Text;
                 arch.arch_cognome = txtCognomeTp.Text.ToUpper();
 
@@ -271,11 +282,11 @@ namespace Uotep
                 {
                     if (HfStato.Value == "Mod")
 
-                        errorMessage.InnerText = "Pratica " + arch.arch_Num_Prot + " modificata correttamente .";
+                        errorMessage.InnerText = "Pratica " + arch.arch_cartellina + " modificata correttamente .";
 
                     else
-                        errorMessage.InnerText = "Pratica " + arch.arch_Num_Prot + " inserita correttamente .";
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_Num_Prot + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                        errorMessage.InnerText = "Pratica " + arch.arch_cartellina + " inserita correttamente .";
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + errorMessage.InnerText + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
                     HfStato.Value = string.Empty;
                     Session["POP"] = "si";
                     Session.Remove("ListRicerca");
@@ -318,12 +329,12 @@ namespace Uotep
         private void Pulisci()
         {
 
-            txtPratN.Text = String.Empty;
+          //  txtPratN.Text = String.Empty;
             txtBUTp.Text = String.Empty;
             txtCartellinaTp.Text = String.Empty;
             txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
-            txtDataProtGen.Text = String.Empty;
-            txtDataProtProc.Text = String.Empty;
+          //  txtDataProtGen.Text = String.Empty;
+          //  txtDataProtProc.Text = String.Empty;
             txtDestinatarioTp.Text = String.Empty;
             txtNotaTp.Text = String.Empty;
             txtOggettoTp.Text = String.Empty;
@@ -564,12 +575,12 @@ namespace Uotep
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
                     //           HfStato.Value = "Mod";
-                    txtPratN.Enabled = false;
+                   // txtPratN.Enabled = false;
                 }
             }
             else
             {
-                txtPratN.Enabled = true;
+               // txtPratN.Enabled = true;
             }
             return arc;
         }

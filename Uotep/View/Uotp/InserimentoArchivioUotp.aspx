@@ -142,18 +142,32 @@
 
                         <div class="row custom-border">
                             <div class="col-md-6 ">
-                                <div class="form-check mb-2">
-                                    <label for="txtPratN">Prot.Nr.</label>
-                                    <asp:RegularExpressionValidator ID="REx" runat="server" Display="Dynamic" ControlToValidate="txtPratN" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="^\d+$"></asp:RegularExpressionValidator>
+                                <%--                             <div class="form-check mb-2">
+                                    <label style="visibility: hidden" for="txtPratN">Prot.Nr.</label>
 
-                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false"/>
+                                    <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" Visible="false" />
 
                                     <label for="txtProGenTp">Prot. Gen.</label>
                                     <asp:TextBox ID="txtProGenTp" runat="server" CssClass="form-control"></asp:TextBox>
 
 
+                                </div>--%>
+                                <div class="form-check mb-2">
+                                    <label for="txtQuartiereTp">Quartiere</label>
+                                    <%--<asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" OnTextChanged="txtQuartiereTp_TextChanged" AutoPostBack="true"/>--%>
+                                    <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
+                                    <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" />
+
                                 </div>
                                 <div class="form-check mb-2">
+                                    <label for="txtCartellinaTp">Cartellina</label>
+                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" />
+                                </div>
+
+
+                                <%--                                <div class="form-check mb-2" style="visibility:hidden">
                                     <label for="txtDataProtGen">Data Prot. Gen.</label>
                                     <asp:TextBox ID="txtDataProtGen" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                     <asp:RegularExpressionValidator
@@ -166,7 +180,7 @@
                                         ValidationGroup="bt"
                                         Display="Static">
                                     </asp:RegularExpressionValidator>
-                                </div>
+                                </div>--%>
                             </div>
                             <div class="col-md-6 ">
                                 <div class="form-check mb-2">
@@ -180,12 +194,12 @@
 
                                 </div>
 
-                                <div class="form-check mb-2">
+                                <%--                 <div class="form-check mb-2" style="visibility:hidden">
                                     <label for="txtProProcTp">Prot. Proc.</label>
                                     <asp:TextBox ID="txtProProcTp" runat="server" CssClass="form-control"></asp:TextBox>
 
                                 </div>
-                                <div class="form-check mb-2">
+                                <div class="form-check mb-2" style="visibility:hidden">
                                     <label for="txtDataProtProc">Data Prot. Proc.</label>
                                     <asp:TextBox ID="txtDataProtProc" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                     <asp:RegularExpressionValidator
@@ -198,7 +212,7 @@
                                         ValidationGroup="bt"
                                         Display="Static">
                                     </asp:RegularExpressionValidator>
-                                </div>
+                                </div>--%>
                             </div>
 
 
@@ -213,15 +227,7 @@
                                     <label for="txtDestinatarioTp">Destinatario</label>
                                     <asp:TextBox ID="txtDestinatarioTp" runat="server" CssClass="form-control" />
                                 </div>
-                                <div class="form-check mb-2">
-                                    <label for="txtQuartiereTp">Quartiere</label>
-                                    <%--<asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" ClientIDMode="Static" onkeyup="filterDropdownQuartiere()" OnTextChanged="txtQuartiereTp_TextChanged" AutoPostBack="true"/>--%>
-                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere"  InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
-                                    <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                    </div>
-                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" />
 
-                                </div>
                                 <div class="form-check mb-2">
                                     <label for="txtBUTp">BU</label>
                                     <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" />
@@ -233,10 +239,13 @@
                                     <label for="txtCognomeTp">Intestatario</label>
                                     <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control" />
                                 </div>
-                                <div class="form-check mb-2">
-                                    <label for="txtCartellinaTp">Cartellina</label>
-                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" ForeColor="Red"/>
-                                </div>
+
+
+
+
+
+
+
                                 <div class="form-check mb-2">
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
                                     <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" />
