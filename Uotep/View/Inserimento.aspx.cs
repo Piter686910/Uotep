@@ -51,20 +51,20 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
-                if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
-                {
-                    Manager mn = new Manager();
-                    DdlSigla.SelectedValue = Enumerate.Sigla.AG.ToString().ToUpper();
-                    DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
-                    DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
-                    DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
-                    DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
-                    DdlTipoProvvAg.SelectedIndex = 1;
-                    DdlTipoProvvAg.DataBind();
-                    divAg.Visible = true;
-                }
-                else
-                    divAg.Visible = false;
+                //if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+                //{
+                //    Manager mn = new Manager();
+                //    DdlSigla.SelectedValue = Enumerate.Sigla.AG.ToString().ToUpper();
+                //    DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
+                //    DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
+                //    DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
+                //    DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
+                //    DdlTipoProvvAg.SelectedIndex = 1;
+                //    DdlTipoProvvAg.DataBind();
+                //    divAg.Visible = true;
+                //}
+                //else
+                //    divAg.Visible = false;
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
 
@@ -453,7 +453,8 @@ namespace Uotep
             txPratica.Text = String.Empty;
             txtTipoAtto.Text = String.Empty;
             txtProvenienza.Text = String.Empty;
-
+            txtAreaCompetenza.Text = string.Empty;
+            txtDataCarico.Text = string.Empty;
             //  txtDataInvio.Text = String.Empty;
             // CkEvasa.Checked = false;
             CaricaDLL();
@@ -509,7 +510,7 @@ namespace Uotep
         //popup quartiere
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
         }
         //protected void chiudipopup_Click(object sender, EventArgs e)
         //{
@@ -553,7 +554,8 @@ namespace Uotep
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+          //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal('#myModal');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
         }
         private void CaricaDLL()
         {

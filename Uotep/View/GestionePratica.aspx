@@ -7,7 +7,7 @@
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
-
+       
     </script>
 
     <div class="panel panel-default">
@@ -25,17 +25,22 @@
                         <!-- Colonna 1 -->
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <asp:Label ID="Label6" runat="server">Fascicolo</asp:Label>
+                                <asp:Label ID="Label6" runat="server">Fascicolo/Cartellina</asp:Label>
                                 <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtFascicolo" ValidationGroup="bt" ErrorMessage="Inserire numero fascicolo" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 
                             </div>
-
+                            <div class="form-group mb-3">
+                                <asp:Label ID="Label9" runat="server" >Quartiere</asp:Label>
+                                <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                </div>
+                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control"  />
+                            </div>
                             <div class="form-group mb-3">
                                 <asp:Label ID="Label5" runat="server">Assegnato</asp:Label>
                                 <asp:TextBox ID="txtAssegnato" runat="server" CssClass="form-control" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAssegnato" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAssegnato" ValidationGroup="bt" ErrorMessage="Inserire Assegnazione" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                             </div>
                         </div>
@@ -135,6 +140,7 @@
                 <Columns>
                     <asp:BoundField DataField="id_gestionePratica" HeaderText="ID" Visible="false" />
                     <asp:BoundField DataField="Fascicolo" HeaderText="Numero Fascicolo" />
+                    <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
                     <asp:BoundField DataField="Assegnato" HeaderText="Assegnato" />
                     <asp:BoundField DataField="data_uscita" HeaderText="Data Uscita" DataFormatString="{0:dd/MM/yyyy}" />
                     <asp:BoundField DataField="Data_Rientro" HeaderText="Data Rientro" />

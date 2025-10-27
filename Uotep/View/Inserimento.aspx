@@ -13,12 +13,12 @@
         }
         // Mostra il popup
         function showModal() {
-            $('#myModal').modal('show');
+            $('#ModalQuartiere').modal('show');
         }
 
         // Nasconde il popup
         function hideModal() {
-            $('#myModal').modal('hide');
+            $('#ModalQuartiere').modal('hide');
         }
         // Mostra il popup ricerca
         function showModal() {
@@ -596,8 +596,9 @@
         </div>
     </div>
 
+
     <!-- Modale Bootstrap quartiere -->
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="ModalQuartiere" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

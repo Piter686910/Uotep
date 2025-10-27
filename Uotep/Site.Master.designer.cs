@@ -60,15 +60,6 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivioUote;
 
         /// <summary>
-        /// Controllo GestionePraticaUote.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor GestionePraticaUote;
-
-        /// <summary>
         /// Controllo subMenuUOTP.
         /// </summary>
         /// <remarks>
@@ -94,6 +85,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaArchivioUotp;
+
+        /// <summary>
+        /// Controllo GestionePraticaUote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor GestionePraticaUote;
 
         /// <summary>
         /// Controllo menuCoordinamentoAtti.

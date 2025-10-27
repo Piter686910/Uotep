@@ -102,7 +102,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a id="InserimentoArchivioUote" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
                                         <li><a id="RicercaArchivioUote" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
-                                        <li><a id="GestionePraticaUote" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
+                                        
                                     </ul>
                                 </li>
                                 <!-- ### FINE SOTTOMENU ARCHIVIO UOTE ### -->
@@ -117,6 +117,7 @@
                                         <%--<li><a id="GestionePraticaUotp" runat="server" visible="false" href="~/View/Uotp/GestionePratica">Gestione Pratica TP</a></li>--%>
                                     </ul>
                                 </li>
+                                <li><a id="GestionePraticaUote" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
                                 <!-- ### FINE SOTTOMENU ARCHIVIO UOTP ### -->
 
                             </ul>

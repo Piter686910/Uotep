@@ -16,5 +16,6 @@ namespace Uotep.Classi
         public String note = string.Empty;
         public String notaSpostamento = string.Empty;
         public String notariscontro = string.Empty;
+        public String quartiere = string.Empty;
     }
 }

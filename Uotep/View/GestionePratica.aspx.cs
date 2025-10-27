@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -43,7 +44,7 @@ namespace Uotep
                 string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                 Response.Redirect(url);
 
-//                Response.Redirect("Default.aspx?user=true");
+                //                Response.Redirect("Default.aspx?user=true");
             }
             Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
@@ -53,10 +54,37 @@ namespace Uotep
                     btSalva.Enabled = false;
                     btModifica.Enabled = false;
                 }
+                CaricaDLL();
             }
 
         }
+        private void CaricaDLL()
+        {
+            try
+            {
+                Manager mn = new Manager();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiere.DataValueField = "id";
+                DdlQuartiere.DataBind();
+                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
+                    sw.Close();
+                }
+            }
+        }
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
@@ -100,6 +128,7 @@ namespace Uotep
             pratica.DATA_RISCONTRO = txtDataRiscontro.Text;
             pratica.notaSpostamento = txtNotaSpostamento.Text;
             pratica.notariscontro = txtNotaRiscontro.Text;
+            pratica.quartiere = DdlQuartiere.SelectedItem.Text;
         }
 
         protected void btInserisci_Click(object sender, EventArgs e)
@@ -142,7 +171,7 @@ namespace Uotep
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
 
-            //    Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                //    Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
@@ -183,6 +212,7 @@ namespace Uotep
             txtAssegnato.Text = string.Empty;
             txtNotaSpostamento.Text = string.Empty;
             txtNotaRiscontro.Text = string.Empty;
+            DdlQuartiere.ClearSelection();
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -237,16 +267,31 @@ namespace Uotep
         protected void FillScheda(DataTable fascicolo)
         {
             txtFascicolo.Text = fascicolo.Rows[0].ItemArray[1].ToString();
-            txtAssegnato.Text = fascicolo.Rows[0].ItemArray[2].ToString();
-            DateTime datauscita = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
+            txtAssegnato.Text = fascicolo.Rows[0].ItemArray[3].ToString();
+            DateTime datauscita = System.Convert.ToDateTime(fascicolo.Rows[0].ItemArray[4].ToString()); // Recupera la data dal DataTable
             TxtDataUscita.Text = datauscita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-            txtDataRientro.Text = fascicolo.Rows[0].ItemArray[4].ToString();
-            txtDataSpostamento.Text = fascicolo.Rows[0].ItemArray[5].ToString();
-            txtDataRiscontro.Text = fascicolo.Rows[0].ItemArray[6].ToString();
-            txtNota.Text = fascicolo.Rows[0].ItemArray[7].ToString();
-            txtNotaSpostamento.Text = fascicolo.Rows[0].ItemArray[8].ToString();
-            txtNotaRiscontro.Text = fascicolo.Rows[0].ItemArray[9].ToString();
+            txtDataRientro.Text = fascicolo.Rows[0].ItemArray[5].ToString();
+            txtDataSpostamento.Text = fascicolo.Rows[0].ItemArray[6].ToString();
+            txtDataRiscontro.Text = fascicolo.Rows[0].ItemArray[7].ToString();
+            txtNota.Text = fascicolo.Rows[0].ItemArray[8].ToString();
+            txtNotaSpostamento.Text = fascicolo.Rows[0].ItemArray[9].ToString();
+            txtNotaRiscontro.Text = fascicolo.Rows[0].ItemArray[10].ToString();
+            if (!string.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[2].ToString()))
+            {
 
+            
+            string val = string.Empty;
+            for (int i = 0; i < DdlQuartiere.Items.Count; i++)
+            {
+                if (DdlQuartiere.Items[i].Text == fascicolo.Rows[0].ItemArray[2].ToString().ToUpper())
+                {
+                    val = DdlQuartiere.Items[i].Value;
+
+
+                }
+            }
+            DdlQuartiere.SelectedValue = val;
+            }
         }
         protected void btRicerca_Click(object sender, EventArgs e)
         {
@@ -302,7 +347,7 @@ namespace Uotep
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
 
-//                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                //                Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 //Session["PaginaChiamante"] = "~/View/Modifica.aspx";
@@ -359,6 +404,7 @@ namespace Uotep
                 var columnRenameMap = new Dictionary<string, string>
         {
             { "fascicolo", "Fascicolo" },
+            { "QUARTIERE", "Quartiere" },
             { "assegnato", "Assegnato" },
             { "DATA_USCITA", "Data Uscita" },
             { "DATA_rientro", "Data Rientro" },
@@ -381,12 +427,13 @@ namespace Uotep
                 worksheet.Column(1).Delete(); // Elimina la prima colonna
                 worksheet.Columns().AdjustToContents();  //  Auto-fit delle colonne
                 worksheet.Range(1, 1, 1, dt.Columns.Count).Style.Font.Bold = true;
-                //Routine al = new Routine();
-                //al.ConvertiBooleaniInItaliano(worksheet);
+
                 string fileNameForDownload = Filename + @"\\Estrazione Gestione Pratica_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
                 wb.SaveAs(fileNameForDownload);
 
             }
         }
+
+
     }
 }

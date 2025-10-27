@@ -2624,9 +2624,9 @@ namespace Uotep.Classi
             try
             {
 
-                sql_pratica = "insert into gestionePratiche (fascicolo, assegnato, data_uscita, data_rientro, data_spostamenti, data_riscontro,note,NOTA_SPOSTAMENTO,NOTA_RISCONTRO)" +
+                sql_pratica = "insert into gestionePratiche (fascicolo, assegnato, data_uscita, data_rientro, data_spostamenti, data_riscontro,note,NOTA_SPOSTAMENTO,NOTA_RISCONTRO,QUARTIERE)" +
                    " Values('" + @pr.fascicolo + "','" + @pr.assegnato.Replace("'", "''") + "','" + @pr.data_uscita + "','" + @pr.data_rientro.Replace("'", "''") + "','" + @pr.data_spostamenti.Replace("'", "''") + "','" +
-                   @pr.data_rientro.Replace("'", "''") + "','" + @pr.note.Replace("'", "''") + "','" + @pr.notaSpostamento.Replace("'", "''") + "','" + @pr.notariscontro.Replace("'", "''") + "')";
+                   @pr.data_rientro.Replace("'", "''") + "','" + @pr.note.Replace("'", "''") + "','" + @pr.notaSpostamento.Replace("'", "''") + "','" + @pr.notariscontro.Replace("'", "''") + "','" + @pr.quartiere.Replace("'", "''") + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
