@@ -43,7 +43,46 @@
             }
         }
 
+        //quartiere
+        function filterDropdownQuartiere() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtQuartiereTp");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
 
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
+
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
     </script>
 
     <div class="panel panel-default">
@@ -107,21 +146,21 @@
 
                             </div>
 
-                            <div class="form-group mb-3" style="margin-top: -20px!important">
+                            <div class="form-group mb-3" style="margin-top: -10px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
                                 <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" />
                             </div>
 
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-3" style="margin-top: 80px!important">
                                 <label for="DdlPattuglia">Pattuglia</label>
                                 <div class="input-group">
-                                    <asp:DropDownList ID="DdlPattuglia" runat="server" CssClass="form-control" />
+                                    <asp:DropDownList ID="DdlPattuglia" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
                             </div>
 
                             <!-- Colonna 3 -->
                         </div>
-                        <div class="col-md-1" style="margin-top: 180px!important">
+                        <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
                                 <asp:Button ID="btAggiungi" runat="server" Text=">>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
                                 <asp:Button ID="btElimina" runat="server" Text="<<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
@@ -136,8 +175,12 @@
                                 <label for="txtNominativo">Nominativo</label>
                                 <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                             </div>
+                            <div class="form-check mb-2">
+                                <label for="txtQuartiere">Quartiere</label>
+                                <asp:TextBox ID="txtQuartiere" runat="server" CssClass="form-control" Enabled="false" />
 
-                            <div class="form-group mb-3" style="margin-top: 120px!important">
+                            </div>
+                            <div class="form-group mb-3" style="margin-top: 80px!important">
                                 <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control"></asp:ListBox>
                             </div>
 
@@ -157,14 +200,14 @@
         </div>
 
         <asp:Button ID="btStampa" runat="server" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
-                    <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />
+        <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />
 
     </div>
 
     <!-- Bottone Salva -->
     <div cssclass="text-center" style="margin-bottom: 15px!important">
         <div class="col-12">
-<%--            <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />--%>
+            <%--            <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />--%>
         </div>
     </div>
 
@@ -207,6 +250,10 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckCdr" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCdr">CDR</label>
+                            </div>
+                            <div id="divNotificaTp" runat="server" class="form-check mb-2">
+                                <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
                             </div>
                         </div>
 
@@ -290,6 +337,13 @@
                                     <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
                                 </div>
+                                <div class="form-check mb-2">
+                                    <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
+                                    <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
+                                    <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
+                                    <asp:CheckBox ID="CkSgombImmobili" runat="server" Text="Immobili e/o aree pubbl." />
+                                    <label class="form-check-label">]</label>
+                                </div>
 
                             </div>
                             <div class="col-md-6">
@@ -301,8 +355,8 @@
                                 <div class="form-check mb-2">
                                     <asp:CheckBox ID="ckDisseqTemp" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckDisseqTemp">Dissequestro Temporaneo [</label>
-                                     <asp:CheckBox ID="ckRimozione" runat="server" Text="Rimozione" />
-                                    <asp:CheckBox ID="ckRiapposizione"  runat="server"  Text="Riapposizione" />
+                                    <asp:CheckBox ID="ckRimozione" runat="server" Text="Rimozione" />
+                                    <asp:CheckBox ID="ckRiapposizione" runat="server" Text="Riapposizione" />
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
@@ -352,7 +406,17 @@
                                 <asp:RadioButton ID="rdSenza" runat="server" GroupName="ProtezioniGroup" Text="Senza" />
                                 <label class="form-check-label">]</label>
                             </div>
-
+                            <div class="form-check mb-2">
+                                <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
+                                <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
+                                <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
+                                <label class="form-check-label">]</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
+                            </div>
 
                         </div>
 
@@ -377,10 +441,18 @@
                 <div class="modal-body">
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
-                        <label for="txtModPratica">Nr. Pratica:</label>
+                        <label for="txtModPratica">Nr. Pratica/Cartellina:</label>
                         <asp:TextBox ID="txtModPratica" runat="server" CssClass="form-control" placeholder="Numero Pratica" />
 
                     </div>
+                    <div class="form-group">
+                        <label for="txtQuartiereRic">Quartiere:</label>
+                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;"> 
+                            </div>
+
+                            <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
+
+                        </div>
                     <div class="form-group">
                         <label for="txtModPratica">Pattuglia:</label>
                         <asp:TextBox ID="txtModPattuglia" runat="server" CssClass="form-control" placeholder="Pattuglia" />
@@ -400,10 +472,11 @@
                         <asp:GridView ID="GVRicecaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicecaScheda_PageIndexChanging">
                             <Columns>
-                                <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID"  Visible="false"/>
+                                <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
+                                 <asp:BoundField DataField="rapp_quartiere" HeaderText="Quartiere" />
                                 <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("rapp_numero_pratica") + ";" + Eval("rapp_nominativo") + ";" + Eval("rapp_pattuglia") + ";" + Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />
@@ -437,7 +510,7 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click"/>
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>
@@ -462,37 +535,37 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudi_Click"/>
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudi_Click" />
                 </div>
             </div>
         </div>
     </div>
-        <%-- popup stampa scheda --%>
-<div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog"
-        role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
-
-            </div>
-            <div class="modal-body">
-                <!-- Campi di input per la ricerca -->
-                <div class="form-group">
-
-                    <p id="MsgStampa" style="color: red"></p>
+    <%-- popup stampa scheda --%>
+    <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
 
                 </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
 
-            </div>
-            <div class="modal-footer">
-                <!-- Bottone per avviare la ricerca -->
-                <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+                        <p id="MsgStampa" style="color: red"></p>
 
-                <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+
+                    <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </asp:Content>

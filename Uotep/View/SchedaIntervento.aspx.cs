@@ -16,7 +16,7 @@ namespace Uotep
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
-        //String Area = String.Empty;
+        String Area = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Manager mn = new Manager();
         protected void Page_Load(object sender, EventArgs e)
@@ -26,9 +26,9 @@ namespace Uotep
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
-                //Area = Session["area"].ToString();
+                Area = Session["area"].ToString();
             }
-           
+
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -40,13 +40,18 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 TxtDataIntervento.Attributes["placeholder"] = "gg/mm/aaaa";
-                txtDataConsegna.Attributes["placeholder"] = "gg/mm/aaaa";
-                //if (Area == "uote")
-
-                rdUote.Checked = true;
-                //else
-                //  rdUotp.Checked = true;
-
+                if (Area == "uote")
+                {
+                    rdUote.Checked = true;
+                    divNotificaTp.Visible = false;
+                    divQuartiere.Visible = false;
+                }
+                else
+                {
+                    rdUotp.Checked = true;
+                    divNotificaTp.Visible = true;
+                    divQuartiere.Visible = true;
+                }
                 CaricaDLL();
             }
 
@@ -58,7 +63,7 @@ namespace Uotep
             String MeseCorrente = DateTime.Now.ToString("MMMM");
             String AnnoCorrente = DateTime.Now.ToString("yyyy");
             Manager mn = new Manager();
-
+            continua = Convalida();
             if (continua)
             {
                 RappUote rap = new RappUote();
@@ -230,6 +235,37 @@ namespace Uotep
                 {
                     rap.data_consegna_intervento = System.Convert.ToDateTime(txtDataConsegna.Text);
                 }
+                if (ckCensimentoAllPubb.Checked)
+                {
+                    stat.censimentoAllPubb = 1;
+                }
+                rap.censimento_all_pubb = ckCensimentoAllPubb.Checked;
+                if (ckControlliOccupazioneAbus.Checked)
+                {
+                    if (ckAbitativo.Checked)
+                        stat.Abitativo = 1;
+                    if (ckNonAbitativo.Checked)
+                        stat.NonAbitativo = 1;
+                }
+                rap.contr_occupazione_abus = ckControlliOccupazioneAbus.Checked;
+                rap.contr_occ_abitativo = ckAbitativo.Checked;
+                rap.contr_occ_no_abitativo = ckNonAbitativo.Checked;
+                if (ckSgomberi.Checked)
+                {
+                    if (CkSgombAbusiva.Checked)
+                        stat.Sgomberi_abus = 1;
+                    if (CkSgombImmobili.Checked)
+                        stat.Sgomberi_immobili = 1;
+                }
+                rap.sgomberi = ckSgomberi.Checked;
+                rap.sgomberi_abus = CkSgombAbusiva.Checked;
+                rap.sgomberi_immobili = CkSgombImmobili.Checked;
+                if (ckNotificaTp.Checked)
+                {
+                    stat.NotificaTp = 1;
+                }
+                rap.notifica_no_ag = ckNotificaTp.Checked;
+                rap.quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
                 rap.dataInserimento = DateTime.Now;
                 stat.mese = MeseCorrente;
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
@@ -252,98 +288,153 @@ namespace Uotep
         }
         private Statistiche VerificaStatistiche(Statistiche stat, out string txt)
         {
-
-            Manager mn = new Manager();
-            DataTable dt = new DataTable();
-            dt = mn.getStatisticaByMeseAnno(stat.mese, stat.anno);
-            if (dt.Rows.Count > 0)
+            txt = string.Empty;
+            try
             {
-                stat.mese = dt.Rows[0].ItemArray[1].ToString().Trim();
-                stat.anno = System.Convert.ToInt32(dt.Rows[0].ItemArray[2]);
-                stat.relazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[3]);
-                stat.ponteggi += System.Convert.ToInt32(dt.Rows[0].ItemArray[4]);
-                stat.dpi += System.Convert.ToInt32(dt.Rows[0].ItemArray[5]);
-                stat.esposti_ricevuti += System.Convert.ToInt32(dt.Rows[0].ItemArray[6]);
-                stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
-                stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
-                stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
-                //stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);//???
-                stat.cnr += System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);
-                stat.annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);
-                stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
-                stat.sequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);
-                stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
-                stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
-                stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
-                stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);//??
-                stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
-                stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
-                stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
-                //stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
-                stat.violazione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);
-                stat.dissequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[24]);
-                stat.dissequestri_temp += System.Convert.ToInt32(dt.Rows[0].ItemArray[25]);
-                stat.rimozione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[26]);
-                stat.controlli_42_04 += System.Convert.ToInt32(dt.Rows[0].ItemArray[27]);
-                stat.contr_cant_suolo_pubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);
-                stat.contr_lavori_edili += System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);//??
-                stat.contr_cant += System.Convert.ToInt32(dt.Rows[0].ItemArray[30]);
-                stat.contr_nato_da_esposti += System.Convert.ToInt32(dt.Rows[0].ItemArray[31]);
-                stat.viol_amm_reg_com += System.Convert.ToInt32(dt.Rows[0].ItemArray[32]);
-                txt = "upd";
-            }
-            else
-                txt = "ins";
 
+
+                Manager mn = new Manager();
+                DataTable dt = new DataTable();
+                dt = mn.getStatisticaByMeseAnno(stat.mese, stat.anno);
+                if (dt.Rows.Count > 0)
+                {
+                    stat.mese = dt.Rows[0].ItemArray[1].ToString().Trim();
+                    stat.anno = System.Convert.ToInt32(dt.Rows[0].ItemArray[2]);
+                    stat.relazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[3]);
+                    stat.ponteggi += System.Convert.ToInt32(dt.Rows[0].ItemArray[4]);
+                    stat.dpi += System.Convert.ToInt32(dt.Rows[0].ItemArray[5]);
+                    stat.esposti_ricevuti += System.Convert.ToInt32(dt.Rows[0].ItemArray[6]);
+                    stat.esposti_evasi += System.Convert.ToInt32(dt.Rows[0].ItemArray[7]);
+                    stat.ripristino_tot_par += System.Convert.ToInt32(dt.Rows[0].ItemArray[8]);
+                    stat.controlli_scia += System.Convert.ToInt32(dt.Rows[0].ItemArray[9]);
+                    //stat.contr_cant_daily += System.Convert.ToInt32(dt.Rows[0].ItemArray[10]);//???
+                    stat.cnr += System.Convert.ToInt32(dt.Rows[0].ItemArray[11]);
+                    stat.annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);
+                    stat.notifiche += System.Convert.ToInt32(dt.Rows[0].ItemArray[13]);
+                    stat.sequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[14]);
+                    stat.riapp_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[15]);
+                    stat.deleghe_ricevute += System.Convert.ToInt32(dt.Rows[0].ItemArray[16]);
+                    stat.deleghe_esitate += System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);
+                    stat.cnr_annotazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[18]);//??
+                    stat.interrogazioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
+                    stat.denunce_uff += System.Convert.ToInt32(dt.Rows[0].ItemArray[20]);
+                    stat.convalide += System.Convert.ToInt32(dt.Rows[0].ItemArray[21]);
+                    //stat.demolizioni += System.Convert.ToInt32(dt.Rows[0].ItemArray[22]);
+                    stat.violazione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[23]);
+                    stat.dissequestri += System.Convert.ToInt32(dt.Rows[0].ItemArray[24]);
+                    stat.dissequestri_temp += System.Convert.ToInt32(dt.Rows[0].ItemArray[25]);
+                    stat.rimozione_sigilli += System.Convert.ToInt32(dt.Rows[0].ItemArray[26]);
+                    stat.controlli_42_04 += System.Convert.ToInt32(dt.Rows[0].ItemArray[27]);
+                    stat.contr_cant_suolo_pubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[28]);
+                    stat.contr_lavori_edili += System.Convert.ToInt32(dt.Rows[0].ItemArray[29]);//??
+                    stat.contr_cant += System.Convert.ToInt32(dt.Rows[0].ItemArray[30]);
+                    stat.contr_nato_da_esposti += System.Convert.ToInt32(dt.Rows[0].ItemArray[31]);
+                    stat.viol_amm_reg_com += System.Convert.ToInt32(dt.Rows[0].ItemArray[32]);
+
+                    stat.censimentoAllPubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[33]);
+                    stat.Abitativo += System.Convert.ToInt32(dt.Rows[0].ItemArray[34]);
+                    stat.NonAbitativo += System.Convert.ToInt32(dt.Rows[0].ItemArray[35]);
+                    stat.Sgomberi_abus += System.Convert.ToInt32(dt.Rows[0].ItemArray[36]);
+                    stat.Sgomberi_immobili += System.Convert.ToInt32(dt.Rows[0].ItemArray[37]);
+                    stat.NotificaTp += System.Convert.ToInt32(dt.Rows[0].ItemArray[38]);
+
+                    txt = "upd";
+                }
+                else
+                    txt = "ins";
+            }
+            catch (Exception ex)
+            {
+
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in pulisci() schedaintervento.cs ");
+                    sw.Close();
+                }
+            }
             return stat;
         }
+
+
         private void Pulisci()
         {
-            txtPratica.Text = string.Empty;
-            txtIndirizzo.Text = string.Empty;
-            TxtDataIntervento.Text = string.Empty;
-            txtNominativo.Text = string.Empty;
-            txtNote.Text = string.Empty;
-            txtDataConsegna.Text = string.Empty;
-            txtPratica.Text = string.Empty;
-            LPattugliaCompleta.Items.Clear();
-            rdParziale.Checked = false;
-            ckRiapposizione.Checked = false;
-            rdTotale.Checked = false;
-            rdNonAvvenuto.Checked = false;
-            ckRimozione.Checked = false;
-            rdUote.Checked = false;
-            rdUotp.Checked = false;
-            rdCon.Checked = false;
-            rdSenza.Checked = false;
-            CkAttivita.Checked = false;
-            ckDelega.Checked = false;
-            ckSegnalazione.Checked = false;
-            ckNotifica.Checked = false;
-            ckCdr.Checked = false;
-            ckResa.Checked = false;
-            ckEsposto.Checked = false;
-            ckCoordinatore.Checked = false;
-            ckRelazione.Checked = false;
-            ckAnnotazionePG.Checked = false;
-            ckEsitoDelega.Checked = false;
-            ckVerbaleSeq.Checked = false;
-            ckContestazioneAmm.Checked = false;
-            ckConvalida.Checked = false;
-            ckViolazioneBeniCult.Checked = false;
-            ckDisseqDefinitivo.Checked = false;
-            ckDisseqTemp.Checked = false;
-            ckAccertAvvenutoRipr.Checked = false;
-            ckControlliSCIA.Checked = false;
-            ckContrSuoloPubblico.Checked = false;
-            ckControlliCant.Checked = false;
-            ckControlloDaEsposti.Checked = false;
-            ckControlliDaSegnalazioni.Checked = false;
-            ckControlliLavoriEdiliSenzaProt.Checked = false;
-            ckIniziativa.Checked = false;
-            ckCnr.Checked = false;
-            ckViolazioneSigilli.Checked = false;
+            try
+            {
 
+
+                txtPratica.Text = string.Empty;
+                txtIndirizzo.Text = string.Empty;
+                TxtDataIntervento.Text = string.Empty;
+                txtNominativo.Text = string.Empty;
+                txtNote.Text = string.Empty;
+                txtDataConsegna.Text = string.Empty;
+                txtPratica.Text = string.Empty;
+                LPattugliaCompleta.Items.Clear();
+                rdParziale.Checked = false;
+                ckRiapposizione.Checked = false;
+                rdTotale.Checked = false;
+                rdNonAvvenuto.Checked = false;
+                ckRimozione.Checked = false;
+                rdUote.Checked = false;
+                rdUotp.Checked = false;
+                rdCon.Checked = false;
+                rdSenza.Checked = false;
+                CkAttivita.Checked = false;
+                ckDelega.Checked = false;
+                ckSegnalazione.Checked = false;
+                ckNotifica.Checked = false;
+                ckCdr.Checked = false;
+                ckResa.Checked = false;
+                ckEsposto.Checked = false;
+                ckCoordinatore.Checked = false;
+                ckRelazione.Checked = false;
+                ckAnnotazionePG.Checked = false;
+                ckEsitoDelega.Checked = false;
+                ckVerbaleSeq.Checked = false;
+                ckContestazioneAmm.Checked = false;
+                ckConvalida.Checked = false;
+                ckViolazioneBeniCult.Checked = false;
+                ckDisseqDefinitivo.Checked = false;
+                ckDisseqTemp.Checked = false;
+                ckAccertAvvenutoRipr.Checked = false;
+                ckControlliSCIA.Checked = false;
+                ckContrSuoloPubblico.Checked = false;
+                ckControlliCant.Checked = false;
+                ckControlloDaEsposti.Checked = false;
+                ckControlliDaSegnalazioni.Checked = false;
+                ckControlliLavoriEdiliSenzaProt.Checked = false;
+                ckIniziativa.Checked = false;
+                ckCnr.Checked = false;
+                ckViolazioneSigilli.Checked = false;
+                ckCensimentoAllPubb.Checked = false;
+                ckControlliOccupazioneAbus.Checked = false;
+                ckAbitativo.Checked = false;
+                ckNonAbitativo.Checked = false;
+                ckSgomberi.Checked = false;
+                CkSgombAbusiva.Checked = false;
+                CkSgombImmobili.Checked = false;
+                ckNotificaTp.Checked = false;
+                DdlQuartiere.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in pulisci() schedaintervento.cs ");
+                    sw.Close();
+                }
+            }
         }
         private Boolean Convalida()
         {
@@ -361,12 +452,7 @@ namespace Uotep
 
                 ret = false;
             }
-            //if (ckDisseqTemp.Checked && (ckRimozione.Checked == false && ckRiapposizione.Checked == false))
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Rimozione o Riapposizione." + "'); $('#errorModal').modal('show');", true);
 
-            //    ret = false;
-            //}
             if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
@@ -381,6 +467,24 @@ namespace Uotep
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Con o Senza." + "'); $('#errorModal').modal('show');", true);
 
                 ret = false;
+            }
+            if (ckSgomberi.Checked == true)
+            {
+                if (CkSgombAbusiva.Checked == false && CkSgombAbusiva.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di sgombero." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckControlliOccupazioneAbus.Checked == true)
+            {
+                if (ckAbitativo.Checked == false && ckNonAbitativo.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di occupazione." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
             }
             return ret;
         }
@@ -452,6 +556,13 @@ namespace Uotep
                 ddlCapopattuglia.Items.Insert(0, new ListItem("", "0"));
                 ddlCapopattuglia.DataBind();
                 ddlCapopattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+
+                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiere.DataValueField = "id";
+                DdlQuartiere.DataBind();
+                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
             }
@@ -586,7 +697,7 @@ namespace Uotep
         {
             Manager mn = new Manager();
             //DataTable schede =
-            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0);
+            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0,null);
             if (table.Rows.Count > 0)
             {
                 //GVRicecaScheda.DataSource = table;
@@ -627,7 +738,7 @@ namespace Uotep
         protected void btPopStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
-            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id);
+            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id,null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);

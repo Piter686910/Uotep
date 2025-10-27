@@ -78,34 +78,73 @@
         // Se non usi ClientIDMode="Static", dovresti usare:
                // var textBox = document.getElementById('<%= txtDataConsegna.ClientID %>');
 
-               if (textBox) {
-                   textBox.addEventListener('input', function (event) {
-                       // Salva la posizione attuale del cursore
-                       var cursorPos = this.selectionStart;
-                       var originalLength = this.value.length;
+            if (textBox) {
+                textBox.addEventListener('input', function (event) {
+                    // Salva la posizione attuale del cursore
+                    var cursorPos = this.selectionStart;
+                    var originalLength = this.value.length;
 
-                       // Sostituisci tutti gli spazi con trattini
-                       this.value = this.value.replace(/ /g, '/');
+                    // Sostituisci tutti gli spazi con trattini
+                    this.value = this.value.replace(/ /g, '/');
 
-                       // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
-                       // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
-                       // riposiziona il cursore.
-                       // Questa logica semplice funziona bene per sostituzioni 1 a 1.
-                       if (this.value.length === originalLength) {
-                           this.setSelectionRange(cursorPos, cursorPos);
-                       } else {
-                           // Se più spazi sono stati sostituiti o incollati,
-                           // il cursore potrebbe andare alla fine.
-                           // Per la semplice digitazione di uno spazio,
-                           // cursorPos dovrebbe essere corretto.
-                           this.setSelectionRange(cursorPos, cursorPos);
-                       }
-                   });
-               } else {
-                   console.error("Textbox con ID 'txtDataConsegna' non trovata.");
-               }
-           });
+                    // Se la lunghezza è cambiata (cioè uno spazio è stato sostituito),
+                    // e se l'ultimo carattere digitato era uno spazio (ora un trattino),
+                    // riposiziona il cursore.
+                    // Questa logica semplice funziona bene per sostituzioni 1 a 1.
+                    if (this.value.length === originalLength) {
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    } else {
+                        // Se più spazi sono stati sostituiti o incollati,
+                        // il cursore potrebbe andare alla fine.
+                        // Per la semplice digitazione di uno spazio,
+                        // cursorPos dovrebbe essere corretto.
+                        this.setSelectionRange(cursorPos, cursorPos);
+                    }
+                });
+            } else {
+                console.error("Textbox con ID 'txtDataConsegna' non trovata.");
+            }
+        });
+        //quartiere
+        function filterDropdownQuartiere() {
+            var input, filter, dropdown, options, i, txtValue;
+            input = document.getElementById("txtQuartiereTp");
+            filter = input.value.toUpperCase();
+            dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
+     options = dropdown.getElementsByTagName("option");
+     var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+     // Pulisci la lista dei suggerimenti precedenti
+     suggestionsListDiv.innerHTML = "";
 
+     var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+
+     for (i = 0; i < options.length; i++) {
+         txtValue = options[i].textContent || options[i].innerText;
+         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+             suggestionsFound = true; // Trovato almeno un suggerimento
+             var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+             suggestionElement.textContent = txtValue;
+             suggestionElement.style.padding = "5px";
+             suggestionElement.style.cursor = "pointer";
+             suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+             suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+
+             suggestionElement.addEventListener('click', function () {
+                 input.value = this.textContent;
+                 suggestionsListDiv.style.display = "none";
+                 return false;
+             });
+             suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+         }
+     }
+
+     // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+     if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+         suggestionsListDiv.style.display = "block";
+     } else {
+         suggestionsListDiv.style.display = "none";
+     }
+ }
     </script>
 
     <div class="panel panel-default">
@@ -158,7 +197,7 @@
                         <!-- Colonna 1 -->
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <label for="txtPratica">Nr Pratica</label>
+                                <label for="txtPratica">Nr Pratica/Cartellina</label>
                                 <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
                             </div>
 
@@ -182,7 +221,7 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
-                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" ClientIDMode="Static"/>
+                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator
@@ -197,9 +236,9 @@
                                 </asp:RegularExpressionValidator>
                             </div>
 
-                            <div class="form-group mb-3" style="margin-top: -20px!important">
+                            <div class="form-group mb-3" style="margin-top: -10px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" ClientIDMode="Static"/>
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" ClientIDMode="Static" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 
@@ -224,7 +263,7 @@
 
                             <!-- Colonna 3 -->
                         </div>
-                        <div class="col-md-1" style="margin-top: 180px!important">
+                        <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
                                 <asp:Button ID="btAggiungi" runat="server" Text=">>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
                                 <asp:Button ID="btElimina" runat="server" Text="<<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
@@ -239,8 +278,15 @@
                                 <label for="txtNominativo">Nominativo</label>
                                 <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                             </div>
+                            <div id="divQuartiere" runat="server" class="form-check mb-2">
+                                <label for="txtQuartiereTp">Quartiere</label>
+                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
+                                <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                </div>
+                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control"  />
 
-                            <div class="form-group mb-3" style="margin-top: 120px!important">
+                            </div>
+                            <div class="form-group mb-3" style="margin-top: 80px!important">
                                 <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control"></asp:ListBox>
                             </div>
 
@@ -305,6 +351,11 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckCdr" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCdr">CDR</label>
+                            </div>
+
+                            <div id="divNotificaTp" runat="server" class="form-check mb-2" visible="false">
+                                <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
                             </div>
                         </div>
 
@@ -388,7 +439,13 @@
                                     <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
                                 </div>
-
+                                <div class="form-check mb-2">
+                                    <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
+                                    <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
+                                    <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
+                                    <asp:CheckBox ID="CkSgombImmobili" runat="server" Text="Immobili e/o aree pubbl." />
+                                    <label class="form-check-label">]</label>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
@@ -399,8 +456,8 @@
                                 <div class="form-check mb-2">
                                     <asp:CheckBox ID="ckDisseqTemp" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckDisseqTemp">Dissequestro Temporaneo [</label>
-                                    <asp:CheckBox ID="ckRimozione" runat="server"  Text="Rimozione" />
-                                    <asp:CheckBox ID="ckRiapposizione" runat="server"  Text="Riapposizione" />
+                                    <asp:CheckBox ID="ckRimozione" runat="server" Text="Rimozione" />
+                                    <asp:CheckBox ID="ckRiapposizione" runat="server" Text="Riapposizione" />
                                     <label class="form-check-label">]</label>
                                 </div>
                                 <div class="form-check mb-2">
@@ -451,7 +508,17 @@
                                 <label class="form-check-label">]</label>
                             </div>
 
-
+                            <div class="form-check mb-2">
+                                <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
+                                <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
+                                <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
+                                <label class="form-check-label">]</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
+                            </div>
                         </div>
 
                     </div>
@@ -462,7 +529,7 @@
         </div>
     </div>
 
-    <asp:HiddenField id="HfIdScheda" runat="server"/>
+    <asp:HiddenField ID="HfIdScheda" runat="server" />
 
 
     <!-- Modale Bootstrap quartiere -->
@@ -535,31 +602,31 @@
             </div>
         </div>
     </div>
-     <%-- popup stampa scheda --%>
- <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-     <div class="modal-dialog"
-         role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
+    <%-- popup stampa scheda --%>
+    <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabelS">STAMPA SCHEDA</h5>
 
-             </div>
-             <div class="modal-body">
-                 <!-- Campi di input per la ricerca -->
-                 <div class="form-group">
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
 
-                     <p id="MsgStampa" style="color: red"></p>
+                        <p id="MsgStampa" style="color: red"></p>
 
-                 </div>
+                    </div>
 
-             </div>
-             <div class="modal-footer">
-                 <!-- Bottone per avviare la ricerca -->
-                 <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
 
-                 <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
-             </div>
-         </div>
-     </div>
- </div>
+                    <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>

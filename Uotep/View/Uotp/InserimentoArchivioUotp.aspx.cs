@@ -29,7 +29,7 @@ namespace Uotep
 
             //    Session.Remove("PaginaChiamante");
 
-
+            String status = Request.QueryString["status"];
             Session["PaginaChiamante"] = "~/View/Uotp/InserimentoArchivio.aspx";
             if (Session["user"] != null)
             {
@@ -59,17 +59,22 @@ namespace Uotep
                 if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
                 {
                     btSalva.Visible = false;
-                    btCercaQuartiere.Visible = false;
+                    //btCercaQuartiere.Visible = false;
                 }
                 //RicercaNew(sender, e);
 
                 CaricaDLL();
-                // Session["POP"] = "si";
-                if (Session["arc"] != null)
+
+                if (status == "M")
                 {
-                    DataTable arc = (DataTable)Session["arc"];
-                    FillScheda(arc);
+                    if (Session["arc"] != null)
+                    {
+                        DataTable arc = (DataTable)Session["arc"];
+                        FillScheda(arc);
+                    }
                 }
+                else
+                    Session.Remove("arc");
             }
             else
             {
@@ -147,10 +152,10 @@ namespace Uotep
         protected void FillScheda(DataTable arc)
         {
             //            txtNumProTp.Text = arc.Rows[0].ItemArray[1].ToString();
-          //  txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
-          //  txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
+            //  txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
+            //  txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
             //txtDataInserimentoTp.Text = arc.Rows[0].ItemArray[6].ToString();
-            txtBUTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
+            txtBUAlloggioTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
@@ -158,6 +163,7 @@ namespace Uotep
             txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
+            txtBuEdificioTp.Text = arc.Rows[0].ItemArray[37].ToString().ToUpper();
             string val = string.Empty;
             for (int i = 0; i < DdlQuartiere.Items.Count; i++)
             {
@@ -169,7 +175,7 @@ namespace Uotep
                 }
             }
             DdlQuartiere.SelectedValue = val;
-       
+
 
             //txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
@@ -255,19 +261,21 @@ namespace Uotep
                 Manager mn = new Manager();
 
                 ArchivioUotp arch = new ArchivioUotp();
-               // arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
+                // arch.arch_Num_Prot = Convert.ToInt32(txtPratN.Text);
                 arch.arch_cartellina = txtCartellinaTp.Text;
                 arch.arch_note = txtNotaTp.Text.ToUpper();
-               // arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
-                arch.arch_quartiere= DdlQuartiere.SelectedItem.Text.ToUpper();
-                arch.arch_codice = txtBUTp.Text.ToUpper();
-               // arch.arch_dataArrivo = txtDataProtGen.Text;
+                // arch.arch_quartiere = txtQuartiereTp.Text.ToUpper();
+                arch.arch_quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
+                arch.arch_codice = txtBUAlloggioTp.Text.ToUpper();
+                arch.arch_edificio = txtBuEdificioTp.Text.ToUpper();
+
+                // arch.arch_dataArrivo = txtDataProtGen.Text;
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
                 arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
                 arch.arch_destinatario = txtDestinatarioTp.Text.ToUpper();
-               // arch.arch_ProtGen = txtProGenTp.Text;
-               // arch.arch_Protocollo_Procura = txtDataProtProc.Text;
-               // arch.arch_dataProtProcura = txtDataProtProc.Text;
+                // arch.arch_ProtGen = txtProGenTp.Text;
+                // arch.arch_Protocollo_Procura = txtDataProtProc.Text;
+                // arch.arch_dataProtProcura = txtDataProtProc.Text;
                 arch.arch_indirizzo = TxtIndirizzoTp.Text;
                 arch.arch_cognome = txtCognomeTp.Text.ToUpper();
 
@@ -293,15 +301,7 @@ namespace Uotep
                     Session.Remove("arc");
                     Pulisci();
                 }
-                //}
-                //}
-                //else
-                //{
-                //    // Mostra il modale con uno script
-                //    errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
-                //    apripopuperrorModal_Click(sender, e);
-                //    // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
-                //}
+
 
             }
             catch (Exception ex)
@@ -329,17 +329,19 @@ namespace Uotep
         private void Pulisci()
         {
 
-          //  txtPratN.Text = String.Empty;
-            txtBUTp.Text = String.Empty;
+            //  txtPratN.Text = String.Empty;
+            txtBUAlloggioTp.Text = String.Empty;
             txtCartellinaTp.Text = String.Empty;
             txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
-          //  txtDataProtGen.Text = String.Empty;
-          //  txtDataProtProc.Text = String.Empty;
+            //  txtDataProtGen.Text = String.Empty;
+            //  txtDataProtProc.Text = String.Empty;
             txtDestinatarioTp.Text = String.Empty;
             txtNotaTp.Text = String.Empty;
             txtOggettoTp.Text = String.Empty;
             txtDestinatarioTp.Text = String.Empty;
             txtCognomeTp.Text = String.Empty;
+            txtBuEdificioTp.Text = string.Empty;
+            //            DdlQuartiere.ClearSelection();
 
 
             CaricaDLL();
@@ -373,34 +375,34 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 
         }
-        protected void RicercaQuartiere_Click(object sender, EventArgs e)
-        {
-            string indirizzo = string.Empty;
+        //protected void RicercaQuartiere_Click(object sender, EventArgs e)
+        //{
+        //    string indirizzo = string.Empty;
 
-            indirizzo = txtIndirizzoQuartiere.Text.Trim();
-            //string specie = txtSpecie.Text.Trim();
+        //    indirizzo = txtIndirizzoQuartiere.Text.Trim();
+        //    //string specie = txtSpecie.Text.Trim();
 
-            if (!string.IsNullOrEmpty(indirizzo))
-            {
-                // Simula il recupero del quartiere dal database o da una logica interna.
-                Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo);
+        //    if (!string.IsNullOrEmpty(indirizzo))
+        //    {
+        //        // Simula il recupero del quartiere dal database o da una logica interna.
+        //        Manager mn = new Manager();
+        //        DataTable quartiere = mn.getQuartiere(indirizzo);
 
-                if (quartiere.Rows.Count > 0)
-                {
-                    gvPopup.DataSource = quartiere;
-                    gvPopup.DataBind();
+        //        if (quartiere.Rows.Count > 0)
+        //        {
+        //            gvPopup.DataSource = quartiere;
+        //            gvPopup.DataBind();
 
-                }
+        //        }
 
-            }
+        //    }
 
-            // Mantieni il popup aperto dopo l'interazione lato server.
-            //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
+        //    // Mantieni il popup aperto dopo l'interazione lato server.
+        //    //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
 
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
-        }
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+        //}
         // (Riusa la funzione GetOriginalData dal mio esempio precedente o la tua logica di recupero dati)
 
         private void CaricaDLL()
@@ -575,12 +577,12 @@ namespace Uotep
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
                     //           HfStato.Value = "Mod";
-                   // txtPratN.Enabled = false;
+                    // txtPratN.Enabled = false;
                 }
             }
             else
             {
-               // txtPratN.Enabled = true;
+                // txtPratN.Enabled = true;
             }
             return arc;
         }
@@ -626,13 +628,6 @@ namespace Uotep
             apripopupPratica_Click(sender, e);
         }
 
-        protected void txtQuartiereTp_TextChanged(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-          //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
-         
-          //  txtCartellinaTp.Text = cartellina.ToString();
-        }
 
         protected void DdlQuartiere_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -642,6 +637,6 @@ namespace Uotep
             txtCartellinaTp.Text = cartellina.ToString();
         }
 
-       
+
     }
 }

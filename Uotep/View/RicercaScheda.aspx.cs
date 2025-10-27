@@ -48,7 +48,7 @@ namespace Uotep
                 profilo = Session["profilo"].ToString();
                 ruolo = Session["ruolo"].ToString();
             }
-            
+
 
             if (!IsPostBack)
             {
@@ -60,7 +60,7 @@ namespace Uotep
 
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
-             //   ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+                //   ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
 
                 Session["popApertoRicercaScheda"] = "si";
@@ -68,18 +68,9 @@ namespace Uotep
                 SetControlsEnabled(divTesta, false);
                 //SetControlsVisible(divDDLPattuglia, false);
                 //SetControlsVisible(divPattuglia, true);
-                //if (ruolo == "admin")
-                //    btModificaScheda.Enabled = true;
-                //else
-                //    btModificaScheda.Enabled = false;
+                CaricaDLL();
             }
-            //else
-           // {
-                //if (Session["popApertoRicercaScheda"] != null)
-                //{
-                //    apripopup_Click(sender, e);
-                //}
-           // }
+
 
         }
         /// <summary>
@@ -180,10 +171,6 @@ namespace Uotep
                 }
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#ModalRicerca').modal('hide');", true);
-
-                //                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
-                //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
-
             }
         }
 
@@ -254,12 +241,24 @@ namespace Uotep
             {
                 ddlCapopattuglia.SelectedItem.Text = rap.Rows[0].ItemArray[40].ToString();
             }
-
+            else
+                ddlCapopattuglia.ClearSelection();
             rdUote.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[41]);
             rdUotp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[42]);
             rdCon.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[44]);
             rdSenza.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[45]);
             rdNonAvvenuto.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[47]);
+            ckCensimentoAllPubb.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[48]);
+            ckControlliOccupazioneAbus.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[49]);
+
+            ckAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[50]);
+            ckNonAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[51]);
+
+            ckSgomberi.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[52]);
+            CkSgombAbusiva.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[53]);
+            CkSgombImmobili.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[54]);
+            ckNotificaTp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[55]);
+            txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
         }
 
         protected void btA_Click(object sender, EventArgs e)
@@ -296,15 +295,18 @@ namespace Uotep
         }
         protected void btRicScheda_Click(object sender, EventArgs e)
         {
-
+            String quartiere = string.Empty;
             string numPratica = txtModPratica.Text;
-
+            if (DdlQuartiere.SelectedIndex > 0)
+            {
+                quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
+            }
 
             if (!string.IsNullOrEmpty(numPratica))
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(numPratica, null, null, ckModAttivitòInterna.Checked, 0);
+                DataTable schede = mn.GetSchedeBy(numPratica, null, null, ckModAttivitòInterna.Checked, 0, quartiere);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -323,7 +325,7 @@ namespace Uotep
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0);
+                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -341,7 +343,7 @@ namespace Uotep
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, null, txtModDataIntervento.Text, ckModAttivitòInterna.Checked, 0);
+                DataTable schede = mn.GetSchedeBy(null, null, txtModDataIntervento.Text, ckModAttivitòInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -359,7 +361,7 @@ namespace Uotep
 
                 //}
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0);
+                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -370,7 +372,7 @@ namespace Uotep
 
             }
             // Mantieni il popup aperto dopo l'interazione lato server.
-//            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal(ModalRicerca);", true);
+            //            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal(ModalRicerca);", true);
             ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
 
         }
@@ -458,6 +460,13 @@ namespace Uotep
                             stat.viol_amm_reg_com = System.Convert.ToInt32(dt.Rows[0].ItemArray[32]);//-
                             stat.deleghe_esitate = System.Convert.ToInt32(dt.Rows[0].ItemArray[17]);//-
                             stat.annotazioni = System.Convert.ToInt32(dt.Rows[0].ItemArray[12]);//-
+
+                            stat.censimentoAllPubb = System.Convert.ToInt32(dt.Rows[0].ItemArray[33]);
+                            stat.Abitativo = System.Convert.ToInt32(dt.Rows[0].ItemArray[34]);
+                            stat.NonAbitativo = System.Convert.ToInt32(dt.Rows[0].ItemArray[35]);
+                            stat.Sgomberi_abus = System.Convert.ToInt32(dt.Rows[0].ItemArray[36]);
+                            stat.Sgomberi_immobili = System.Convert.ToInt32(dt.Rows[0].ItemArray[37]);
+                            stat.NotificaTp = System.Convert.ToInt32(dt.Rows[0].ItemArray[38]);
 
                             //sottraggo i valori nella tabella statistiche
                             val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[15]));//relazioni
@@ -699,8 +708,68 @@ namespace Uotep
                                 }
                                 list.Add(Enumerate.CampiXStatistiche.contrCant.ToString());
                             }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[48]));//censimento all pubb
+                            if (val)
+                            {
+                                stat.censimentoAllPubb = System.Convert.ToInt32(dt.Rows[0].ItemArray[33]) - 1;
+                                if (stat.censimentoAllPubb < 0)
+                                {
+                                    stat.censimentoAllPubb = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.censimentoAllPubb.ToString());
+                            }
 
 
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[50]));//occupazione uso abitativo
+                            if (val)
+                            {
+                                stat.Abitativo = System.Convert.ToInt32(dt.Rows[0].ItemArray[34]) - 1;
+                                if (stat.Abitativo < 0)
+                                {
+                                    stat.Abitativo = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.abitativo.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[51]));//occupazione uso non abitativo
+                            if (val)
+                            {
+                                stat.NonAbitativo = System.Convert.ToInt32(dt.Rows[0].ItemArray[35]) - 1;
+                                if (stat.NonAbitativo < 0)
+                                {
+                                    stat.NonAbitativo = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.nonAbitativo.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[53]));//sgomberi abusiva
+                            if (val)
+                            {
+                                stat.Sgomberi_abus = System.Convert.ToInt32(dt.Rows[0].ItemArray[36]) - 1;
+                                if (stat.Sgomberi_abus < 0)
+                                {
+                                    stat.Sgomberi_abus = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.SgomberiAbus.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[54]));//sgomberi immobili
+                            if (val)
+                            {
+                                stat.Sgomberi_immobili = System.Convert.ToInt32(dt.Rows[0].ItemArray[37]) - 1;
+                                if (stat.Sgomberi_immobili < 0)
+                                {
+                                    stat.Sgomberi_immobili = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.SgomberiImmobili.ToString());
+                            }
+                            val = System.Convert.ToBoolean(System.Convert.ToBoolean(scheda.Rows[0].ItemArray[55]));//notifiche non ag
+                            if (val)
+                            {
+                                stat.NotificaTp = System.Convert.ToInt32(dt.Rows[0].ItemArray[38]) - 1;
+                                if (stat.NotificaTp < 0)
+                                {
+                                    stat.NotificaTp = 0;
+                                }
+                                list.Add(Enumerate.CampiXStatistiche.NotificaTp.ToString());
+                            }
                         }
 
                         Boolean del = mn.DeleteTranSchedaStatistiche(stat, System.Convert.ToInt32(HfIdScheda.Value));
@@ -909,6 +978,36 @@ namespace Uotep
                                 {
                                     rap.data_consegna_intervento = System.Convert.ToDateTime(txtDataConsegna.Text);
                                 }
+                                if (ckCensimentoAllPubb.Checked)
+                                {
+                                    stat.censimentoAllPubb = 1;
+                                }
+                                rap.censimento_all_pubb = ckCensimentoAllPubb.Checked;
+                                if (ckControlliOccupazioneAbus.Checked)
+                                {
+                                    if (ckAbitativo.Checked)
+                                        stat.Abitativo = 1;
+                                    if (ckNonAbitativo.Checked)
+                                        stat.NonAbitativo = 1;
+                                }
+                                rap.contr_occupazione_abus = ckControlliOccupazioneAbus.Checked;
+                                rap.contr_occ_abitativo = ckAbitativo.Checked;
+                                rap.contr_occ_no_abitativo = ckNonAbitativo.Checked;
+                                if (ckSgomberi.Checked)
+                                {
+                                    if (CkSgombAbusiva.Checked)
+                                        stat.Sgomberi_abus = 1;
+                                    if (CkSgombImmobili.Checked)
+                                        stat.Sgomberi_immobili = 1;
+                                }
+                                rap.sgomberi = ckSgomberi.Checked;
+                                rap.sgomberi_abus = CkSgombAbusiva.Checked;
+                                rap.sgomberi_immobili = CkSgombImmobili.Checked;
+                                if (ckNotificaTp.Checked)
+                                {
+                                    stat.NotificaTp = 1;
+                                }
+                                rap.notifica_no_ag = ckNotificaTp.Checked;
                                 rap.dataInserimento = DateTime.Now;
                                 stat.mese = mese;//MeseCorrente;
                                 stat.anno = anno;//System.Convert.ToInt16(AnnoCorrente);
@@ -1070,6 +1169,36 @@ namespace Uotep
                         if (stat.viol_amm_reg_com > 0)
                             stat.viol_amm_reg_com += System.Convert.ToInt32(dt.Rows[0].ItemArray[32]) + 1;
                     }
+                    if (item == Enumerate.CampiXStatistiche.censimentoAllPubb.ToString())
+                    {
+                        if (stat.censimentoAllPubb > 0)
+                            stat.censimentoAllPubb += System.Convert.ToInt32(dt.Rows[0].ItemArray[33]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.abitativo.ToString())
+                    {
+                        if (stat.Abitativo > 0)
+                            stat.Abitativo += System.Convert.ToInt32(dt.Rows[0].ItemArray[34]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.nonAbitativo.ToString())
+                    {
+                        if (stat.NonAbitativo > 0)
+                            stat.NonAbitativo += System.Convert.ToInt32(dt.Rows[0].ItemArray[35]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.SgomberiAbus.ToString())
+                    {
+                        if (stat.Sgomberi_abus > 0)
+                            stat.Sgomberi_abus += System.Convert.ToInt32(dt.Rows[0].ItemArray[36]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.SgomberiImmobili.ToString())
+                    {
+                        if (stat.Sgomberi_immobili > 0)
+                            stat.Sgomberi_immobili += System.Convert.ToInt32(dt.Rows[0].ItemArray[37]) + 1;
+                    }
+                    if (item == Enumerate.CampiXStatistiche.NotificaTp.ToString())
+                    {
+                        if (stat.NotificaTp > 0)
+                            stat.NotificaTp += System.Convert.ToInt32(dt.Rows[0].ItemArray[38]) + 1;
+                    }
                 }
             }
 
@@ -1110,7 +1239,7 @@ namespace Uotep
         protected void btPopStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
-            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id);
+            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id, null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);
@@ -1134,6 +1263,12 @@ namespace Uotep
                 ddlCapopattuglia.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
                 ddlCapopattuglia.DataBind();
 
+                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiere.DataValueField = "id";
+                DdlQuartiere.DataBind();
+                DdlQuartiere.Items.Insert(0, new System.Web.UI.WebControls.ListItem("-- Seleziona un'opzione --", "0"));
 
             }
             catch (Exception ex)
@@ -1195,13 +1330,23 @@ namespace Uotep
             ckIniziativa.Checked = false;
             ckCnr.Checked = false;
             ckViolazioneSigilli.Checked = false;
-
+            ckCensimentoAllPubb.Checked = false;
+            ckControlliOccupazioneAbus.Checked = false;
+            ckAbitativo.Checked = false;
+            ckNonAbitativo.Checked = false;
+            ckSgomberi.Checked = false;
+            CkSgombAbusiva.Checked = false;
+            CkSgombImmobili.Checked = false;
+            ckNotificaTp.Checked = false;
+            ddlCapopattuglia.ClearSelection();
+            DdlPattuglia.ClearSelection();
+            txtQuartiere.Text = string.Empty;
         }
-        
+
         protected void btStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
-            DataTable schede = mn.GetSchedeBy(null, null, null, ckModAttivitòInterna.Checked, id);
+            DataTable schede = mn.GetSchedeBy(null, null, null, ckModAttivitòInterna.Checked, id, null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);

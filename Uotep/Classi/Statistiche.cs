@@ -39,6 +39,13 @@ namespace Uotep.Classi
         public Int32 contr_cant = 0;
         public Int32 contr_nato_da_esposti = 0;
         public Int32 viol_amm_reg_com = 0;
+        public Int32 censimentoAllPubb = 0;
+        //public Int32 controlliOccupazioneAbus = 0;
+        public Int32 Abitativo = 0;
+        public Int32 NonAbitativo = 0;
+        public Int32 Sgomberi_abus = 0;
+        public Int32 Sgomberi_immobili = 0;
+        public Int32 NotificaTp = 0;
 
     }
 }

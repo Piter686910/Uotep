@@ -461,7 +461,7 @@
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                <%--<asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px"  />--%>
+                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px"  />
 
 
                                 <asp:TemplateField HeaderText="Sigla" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="20px">

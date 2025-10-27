@@ -678,7 +678,7 @@
                                 <asp:ListItem Text="TP"> </asp:ListItem>
                                 <asp:ListItem Text="AG"> </asp:ListItem>--%>
                             </asp:DropDownList>
-                           
+
                         </div>
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtTipoAtto">Tipologia Atto</label>
@@ -933,6 +933,7 @@
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" />
                                 <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
                                 <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 
@@ -1041,6 +1042,7 @@
                 <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
                 <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
                 <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
+                <asp:HiddenField ID="Hfdecretazione" runat="server" />
 
                 <%-- campi nascosti --%>
                 <div class="modal-footer">
@@ -1053,29 +1055,29 @@
     </div>
 
     <%-- popup avvertenze --%>
-<div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog"
-        role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
-
-            </div>
-            <div class="modal-body">
-                <!-- Campi di input per la ricerca -->
-                <div class="form-group">
-
-                    <p id="errorAvvertenze" style="color: red"></p>
+    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
 
                 </div>
-            </div>
-            <div class="modal-footer">
-                <!-- Bottone per avviare la ricerca -->
-                <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
+
+                        <p id="errorAvvertenze" style="color: red"></p>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+                </div>
             </div>
         </div>
     </div>
-</div>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"

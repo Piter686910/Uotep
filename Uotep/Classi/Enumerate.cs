@@ -27,6 +27,7 @@ namespace Uotep.Classi
             accertatore = 1, //accertatori
             due = 2,
             tre = 3, //admin, responsabili, sa
+            V= 4 // solo visualizzazine
 
         }
 
@@ -72,7 +73,14 @@ namespace Uotep.Classi
             ponteggi = 17,
             dpi = 18,
             contrCant = 19,
-            contr_cant_suolo_pubb = 20
+            contr_cant_suolo_pubb = 20,
+            censimentoAllPubb = 21,
+            controlliOccupazioneAbus=22,
+            abitativo=23,
+            nonAbitativo=24,
+            SgomberiAbus=25,
+            SgomberiImmobili=26,
+            NotificaTp = 27
 
 
         }

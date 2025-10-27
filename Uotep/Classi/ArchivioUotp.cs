@@ -16,8 +16,10 @@ namespace Uotep.Classi
         public string arch_Protocollo_Procura = string.Empty;
         //data protocollo procura= del
         public string arch_dataProtProcura;
-        //codice = bu 
+        //codice = bu  alloggio
         public string arch_codice = string.Empty;
+        //codice = bu  edificio
+        public string arch_edificio = string.Empty;
         //
         public string arch_cartellina = string.Empty;
         public string arch_note = string.Empty;

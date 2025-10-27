@@ -142,7 +142,7 @@
 
                         <div class="row custom-border">
                             <div class="col-md-6 ">
-                                <%--                             <div class="form-check mb-2">
+                                <%--<div class="form-check mb-2">
                                     <label style="visibility: hidden" for="txtPratN">Prot.Nr.</label>
 
                                     <asp:TextBox ID="txtPratN" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" Visible="false" />
@@ -229,8 +229,12 @@
                                 </div>
 
                                 <div class="form-check mb-2">
-                                    <label for="txtBUTp">BU</label>
-                                    <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" />
+                                    <label for="txtBUAlloggioTp">BU Alloggio</label>
+                                    <asp:TextBox ID="txtBUAlloggioTp" runat="server" CssClass="form-control" />
+                                </div>
+                                <div class="form-check mb-2">
+                                    <label for="txtBUAlloggioTp">BU Edificio</label>
+                                    <asp:TextBox ID="txtBuEdificioTp" runat="server" CssClass="form-control" />
                                 </div>
 
                             </div>
@@ -239,9 +243,6 @@
                                     <label for="txtCognomeTp">Intestatario</label>
                                     <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control" />
                                 </div>
-
-
-
 
 
 
@@ -280,56 +281,13 @@
             <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
             <div class="col-12 text-center">
                 <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
-                <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                <%--<asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />--%>
 
             </div>
         </div>
     </div>
 
-    <!-- Modale Bootstrap quartiere -->
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel2">Ricerca Quartiere</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-                        <label for="txtIndirizzoQuartiere">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
-
-                    </div>
-
-                    <div class="form-group">
-                        <!-- GridView nel popup -->
-                        <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
-                            <Columns>
-                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="Toponimo" HeaderText="Toponimo" />
-                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
-                                <asp:BoundField DataField="Specie" HeaderText="Specie" />
-                                <asp:BoundField DataField="Nota" HeaderText="Nota" />
-                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
-                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+   
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">

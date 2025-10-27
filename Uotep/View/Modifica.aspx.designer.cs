@@ -996,6 +996,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroAccertatori;
 
         /// <summary>
+        /// Controllo Hfdecretazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField Hfdecretazione;
+
+        /// <summary>
         /// Controllo btChiudi.
         /// </summary>
         /// <remarks>

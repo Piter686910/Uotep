@@ -60,14 +60,14 @@ namespace Uotep.Classi
         /// <returns></returns>
         public Int32 GetPraticaTp()
         {
-            int MAxP =0;
+            int MAxP = 0;
             Manager mn = new Manager();
 
             DataTable tb = mn.MaxNPrTp();
             if (tb.Rows.Count > 0)
             {
                 //txtDataArrivo.Text = DateTime.Now.Date.ToShortDateString();
-                MAxP = System.Convert.ToInt32(tb.Rows[0].ItemArray[0]) + 1; 
+                MAxP = System.Convert.ToInt32(tb.Rows[0].ItemArray[0]) + 1;
 
 
             }
@@ -214,9 +214,9 @@ namespace Uotep.Classi
                             DateTime dataIntervento = System.Convert.ToDateTime(schede.Rows[0].ItemArray[2].ToString());
                             string dataFormattata = dataIntervento.ToString("dd/MM/yyyy");
 
-                            document.Add(new Paragraph($"Scheda Intervento del: {dataFormattata}")
+                            document.Add(new Paragraph($"Scheda Intervento del: {dataFormattata} , Quartiere:" + schede.Rows[0].ItemArray[56].ToString())
                                 .SetFixedPosition(70, 800, 400)
-                                .SetTextAlignment(TextAlignment.CENTER)
+                                .SetTextAlignment(TextAlignment.LEFT)
                                 .SetFontSize(14));
 
                             // Prima riga: Numero Pratica, Nominativo
@@ -440,6 +440,31 @@ namespace Uotep.Classi
                                 // --- Solo la descrizione "CDR:", nella posizione originale ---
                                 Paragraph descriptionParagraph = new Paragraph("CDR:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_CDR, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            startY -= lineHeight; // Move to the next line
+
+                            // notifica non ag
+                            bool? notifnoAgNullable = schede.Rows[0].ItemArray[55] as bool?;
+                            string notifnoAgString = notifnoAgNullable.HasValue && notifnoAgNullable.Value ? "X" : "";
+                            // --- Posizione di riferimento per "notifica no Ag" ---
+
+                            float startY_notifnoAg = startY; // Use the dynamic startY
+                            if (notifnoAgString == "X")
+                            {
+                                stampaX(startX_50, startY_notifnoAg, document, true);
+
+                                // --- Paragrafo per la descrizione "startY_notif no Ag:", posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Notifica No AG:");
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_notifnoAg - 5, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            else
+                            {
+                                stampaX(startX_50, startY_notifnoAg, document, false);
+                                // --- Solo la descrizione "startY_notif no Ag:", nella posizione originale ---
+                                Paragraph descriptionParagraph = new Paragraph("Notifica No AG:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_notifnoAg, 200);
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line 470
@@ -814,6 +839,7 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_violazioniCodici, 200);
                                 document.Add(descriptionParagraph);
                             }
+                            //***
                             startY -= lineHeight; // Move to the next line
                             // Accertamento avvenuto ripristino
                             bool? accertamentoRipNullable = schede.Rows[0].ItemArray[28] as bool?;
@@ -912,6 +938,82 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_470, startY_accertamentoRip, 100);
                                 document.Add(descriptionParagraph);
                             }
+                            //***
+                            startY -= lineHeight; // Move to the next line
+                            // Sgomberi
+                            bool? SgomberiNullable = schede.Rows[0].ItemArray[52] as bool?;
+                            string SgomberiString = SgomberiNullable.HasValue && SgomberiNullable.Value ? "X" : "";
+                            float startY_Sgomberi = startY; // Use the dynamic startY
+                            if (SgomberiString == "X")
+                            {
+                                stampaX(startX_50, startY_Sgomberi, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Sgomberi:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Sgomberi - 5, 200); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_50, startY_Sgomberi, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Sgomberi:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_Sgomberi, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            // Sgomberi abusi 
+                            bool? SgomberiAbusiNullable = schede.Rows[0].ItemArray[53] as bool?;
+                            string SgomberiAbusiString = SgomberiAbusiNullable.HasValue && SgomberiAbusiNullable.Value ? "X" : "";
+                            // document.Add(new Paragraph($"Totale: {totaleRipString}").SetFixedPosition(270, 390, 100));
+                            if (SgomberiAbusiString == "X")
+                            {
+                                stampaX(startX_270, startY_Sgomberi, document, true);
+                                //// Ottieni il PdfDocument e PdfCanvas
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Occ. Abusiva:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(280 + boxSize + 5, startY_Sgomberi - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_270, startY_Sgomberi, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Occ. Abusiva:");
+                                descriptionParagraph.SetFixedPosition(280, startY_Sgomberi, 100);
+                                document.Add(descriptionParagraph);
+                            }
+                            // Sgmoberi immobili  
+                            bool? SgmoberiImmobiliNullable = schede.Rows[0].ItemArray[54] as bool?;
+                            string SgmoberiImmobiliString = SgmoberiImmobiliNullable.HasValue && SgmoberiImmobiliNullable.Value ? "X" : "";
+                            //document.Add(new Paragraph($"Parziale:  {parzialeRipString}").SetFixedPosition(350, 390, 100));
+                            if (SgmoberiImmobiliString == "X")
+                            {
+                                stampaX(300, startY_Sgomberi, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Immobili e/o Area pubb:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(300 + boxSize + 5, startY_Sgomberi - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(400, startY_Sgomberi, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Imm./Area pubb:");
+                                descriptionParagraph.SetFixedPosition(420, startY_Sgomberi, 100);
+                                document.Add(descriptionParagraph);
+                            }
+                            
                             startY -= lineHeight; // Move to the next line
                             // Controlli Scia
                             bool? sciaNullable = schede.Rows[0].ItemArray[27] as bool?;
@@ -1065,8 +1167,9 @@ namespace Uotep.Classi
 
                             }
                             else
-                                stampaX(startX_50, startY_contrEdil, document, false);
                             {
+                                stampaX(startX_50, startY_contrEdil, document, false);
+
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
                                 Paragraph descriptionParagraph = new Paragraph("Controlli lavori edili con/senza protezione (d.p.i.):");
@@ -1122,6 +1225,109 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_470, startY_contrEdil, 100);
                                 document.Add(descriptionParagraph);
                             }
+
+                            //****
+                            // Controlli occupazione abusiva imm. propr. comunale (abitativo - non abitativo)
+                            startY -= lineHeight; // Move to the next line
+                            bool? contrOccupazioneNullable = schede.Rows[0].ItemArray[49] as bool?;
+                            string contrOccupazioneString = contrOccupazioneNullable.HasValue && contrOccupazioneNullable.Value ? "X" : "";
+                            float startY_contrOccupazione = startY; // Use the dynamic startY
+                            if (contrOccupazioneString == "X")
+                            {
+                                stampaX(startX_50, startY_contrOccupazione, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Controlli occupazione abusiva imm. propr. comunale:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrOccupazione - 5, 600); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                                {
+                                stampaX(startX_50, startY_contrOccupazione, document, false);
+                            
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Controlli occupazione abusiva imm. propr. comunale:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_contrOccupazione, 800);
+                                document.Add(descriptionParagraph);
+                            }
+
+                            // abitativo
+                            bool? abitativoNullable = schede.Rows[0].ItemArray[50] as bool?;
+                            string abitativoString = abitativoNullable.HasValue && abitativoNullable.Value ? "X" : "";
+                            //document.Add(new Paragraph($"Con  {contrConDpiString}").SetFixedPosition(350, 250, 70));
+                            if (abitativoString == "X")
+                            {
+                                stampaX(startX_350, startY_contrOccupazione, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Abitativo:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_350 + boxSize + 5, startY_contrOccupazione - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_350, startY_contrOccupazione, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Abitativo:");
+                                descriptionParagraph.SetFixedPosition(startX_370, startY_contrOccupazione, 100);
+                                document.Add(descriptionParagraph);
+                            }
+                            // no abitativo
+                            bool? NoabitativoNullable = schede.Rows[0].ItemArray[51] as bool?;
+                            string NoabitativoString = NoabitativoNullable.HasValue && NoabitativoNullable.Value ? "X" : "";
+                            // document.Add(new Paragraph($"Senza  {contrSenzaDpiString}").SetFixedPosition(450, 250, 70));
+                            if (NoabitativoString == "X")
+                            {
+                                stampaX(startX_450, startY_contrOccupazione, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Non Abitativo:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_contrOccupazione - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_450, startY_contrOccupazione, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Non Abitativo:");
+                                descriptionParagraph.SetFixedPosition(startX_470, startY_contrOccupazione, 100);
+                                document.Add(descriptionParagraph);
+                            }
+                            //***
+                            startY -= lineHeight; // Move to the next line
+
+                            // censimento nuclei familiari
+                            bool? cenrimentoNucFamNullable = schede.Rows[0].ItemArray[48] as bool?;
+                            string cenrimentoNucFamString = cenrimentoNucFamNullable.HasValue && cenrimentoNucFamNullable.Value ? "X" : "";
+                            // --- Posizione di riferimento per "notifica no Ag" ---
+
+                            float startY_cenrimentoNucFam = startY; // Use the dynamic startY
+                            if (cenrimentoNucFamString == "X")
+                            {
+                                stampaX(startX_50, startY_cenrimentoNucFam, document, true);
+
+                                // --- Paragrafo per la descrizione "startY_notif no Ag:", posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Censimento nuclei c/o alloggi pubb.:");
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_cenrimentoNucFam - 5, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            else
+                            {
+                                stampaX(startX_50, startY_cenrimentoNucFam, document, false);
+                                // --- Solo la descrizione "startY_notif no Ag:", nella posizione originale ---
+                                Paragraph descriptionParagraph = new Paragraph("Censimento nuclei c/o alloggi pubb.:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_cenrimentoNucFam, 200);
+                                document.Add(descriptionParagraph);
+                            }
                             startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione
                             float x4 = 65;
@@ -1136,9 +1342,9 @@ namespace Uotep.Classi
                             // La PG Operante - Sezione firma
                             document.Add(new Paragraph($"La PG Operante").SetFixedPosition(280, startY, 500));
                             startY -= lineHeight1; // Move to the next line
-                            document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
-                            startY -= lineHeight1; // Move to the next line
-                            document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
+                            document.Add(new Paragraph($"_______________________/_______________________/_______________________").SetFixedPosition(55, startY, 500));
+                            //startY -= lineHeight1; // Move to the next line
+                            //document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
 
                             document.Close(); // Chiude il documento.
 

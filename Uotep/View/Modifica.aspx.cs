@@ -59,7 +59,7 @@ namespace Uotep
                     DataTable pratica = (DataTable)Session["ListRicerca"];
                     if (pratica.Rows.Count > 0)
                     {
-                        Hid.Value= pratica.Rows[0].ItemArray[0].ToString();
+                        Hid.Value = pratica.Rows[0].ItemArray[0].ToString();
                         DivDettagli.Visible = true;
                         CaricaDLL();
                         FillScheda(pratica);
@@ -73,7 +73,7 @@ namespace Uotep
         }
         protected void FillScheda(DataTable pratica)
         {
-            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() ;
+            txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
             DdlSigla.SelectedValue = pratica.Rows[0].ItemArray[2].ToString();
             if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
             {
@@ -390,7 +390,7 @@ namespace Uotep
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
-               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
@@ -439,6 +439,7 @@ namespace Uotep
             txtDataCarico.Text = String.Empty;
             txtDataInsCarico.Text = String.Empty;
             txtProt.Text = String.Empty;
+            txtAccertatori.Text = string.Empty;
 
         }
 
@@ -836,26 +837,37 @@ namespace Uotep
                 // Assicurati che ci siano almeno 5 valori
                 if (values.Length == 4)
                 {
-                    Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
-                    txtDecretato.Text = values[1];     // Matricola
-                    txtDataDecretazione.Text = values[2]; // DataInserimento
-                    txtNotaDecretazione.Text = values[3]; // sigla
+                    if (Hfdecretazione.Value == "True")
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "la Modifica non può essere effettuata pratica chiusa." + "'); $('#errorModal').modal('show');", true);
+
+
+                    }
+                    else
+                    {
+
+
+                        Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
+                        txtDecretato.Text = values[1];     // Matricola
+                        txtDataDecretazione.Text = values[2]; // DataInserimento
+                        txtNotaDecretazione.Text = values[3]; // sigla
 
 
 
 
-                    // Imposta il valore nel TextBox
-                    //txtSelectedValue.Text = selectedValue;
-                    // txtDecretato.Text = decretato;
+                        // Imposta il valore nel TextBox
+                        //txtSelectedValue.Text = selectedValue;
+                        // txtDecretato.Text = decretato;
 
-                    // Chiudi il popup
-                    // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
-                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
-
+                        // Chiudi il popup
+                        // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+                    }
                 }
             }
             if (e.CommandName == "Save")
             {
+
                 // Ottieni il valore dell'ID dalla CommandArgument
                 string selectedValue = e.CommandArgument.ToString();
 
@@ -865,23 +877,17 @@ namespace Uotep
                 // Assicurati che ci siano almeno 5 valori
                 if (values.Length == 4)
                 {
-                    Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
-                    //txtDecretato.Text = values[1];     // Matricola
-                    //txtDataDecretazione.Text = values[2]; // DataInserimento
-                    //txtNotaDecretazione.Text = values[3]; // sigla
+                    Int32 idDecr = System.Convert.ToInt32(values[0]);    // 
+
 
                     Manager mn = new Manager();
                     Decretazione decr = new Decretazione();
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
+                    decr.id = idDecr;
+
                     decr.decretato = txtDecretato.Text;
                     decr.nota = txtNotaDecretazione.Text;
                     Boolean resp = mn.UpdDecretazione(decr);
-
-
-                    // Imposta il valore nel TextBox
-                    //txtSelectedValue.Text = selectedValue;
-                    // txtDecretato.Text = decretato;
-
                     // Chiudi il popup
                     // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
@@ -901,8 +907,7 @@ namespace Uotep
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+            
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
         }
@@ -926,7 +931,7 @@ namespace Uotep
             DivProcPenale.Visible = false;
             DivDettagli.Visible = false;
             Session.Remove("ListPratiche");
-          // Session.Remove("ListRicerca");
+            // Session.Remove("ListRicerca");
         }
 
         protected void btNProtocollo_Click(object sender, EventArgs e)
@@ -1123,8 +1128,8 @@ namespace Uotep
 
                 GVDecretazione.DataSource = decretazione;
                 GVDecretazione.DataBind();
-                Boolean a = System.Convert.ToBoolean(decretazione.Rows[0].ItemArray[8]);
-                if (a == true)
+                Hfdecretazione.Value = decretazione.Rows[0].ItemArray[8].ToString();
+                if (Hfdecretazione.Value == "True")
                 {
                     btAggiungiDecretazione.Enabled = false;
                     btChiudiDecretazione.Enabled = false;
@@ -1348,11 +1353,11 @@ namespace Uotep
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
-               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-               // Response.Redirect("~/Contact.aspx");
+                // Response.Redirect("~/Contact.aspx");
 
             }
 

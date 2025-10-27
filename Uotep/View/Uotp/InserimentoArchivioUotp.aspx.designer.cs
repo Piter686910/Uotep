@@ -78,13 +78,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDestinatarioTp;
 
         /// <summary>
-        /// Controllo txtBUTp.
+        /// Controllo txtBUAlloggioTp.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBUTp;
+        protected global::System.Web.UI.WebControls.TextBox txtBUAlloggioTp;
+
+        /// <summary>
+        /// Controllo txtBuEdificioTp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBuEdificioTp;
 
         /// <summary>
         /// Controllo txtCognomeTp.
@@ -148,51 +157,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btSalva;
-
-        /// <summary>
-        /// Controllo btCercaQuartiere.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btCercaQuartiere;
-
-        /// <summary>
-        /// Controllo txtIndirizzoQuartiere.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtIndirizzoQuartiere;
-
-        /// <summary>
-        /// Controllo gvPopup.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvPopup;
-
-        /// <summary>
-        /// Controllo btnSearch.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
-
-        /// <summary>
-        /// Controllo btnchiudi.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnchiudi;
 
         /// <summary>
         /// Controllo GVRicercaPratica.

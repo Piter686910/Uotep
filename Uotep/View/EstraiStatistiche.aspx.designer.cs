@@ -177,6 +177,33 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtRimozioneSigilli;
 
         /// <summary>
+        /// Controllo txtOccupAbusivaAbit.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOccupAbusivaAbit;
+
+        /// <summary>
+        /// Controllo txtOccupAbusivaNoAbit.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtOccupAbusivaNoAbit;
+
+        /// <summary>
+        /// Controllo txtCensimentoAllPubb.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCensimentoAllPubb;
+
+        /// <summary>
         /// Controllo txtEspostiEvasi.
         /// </summary>
         /// <remarks>
@@ -220,6 +247,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNotifiche;
+
+        /// <summary>
+        /// Controllo txtNotificheNoAg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNotificheNoAg;
 
         /// <summary>
         /// Controllo txtSequestri.
@@ -283,6 +319,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtControlliDLGS;
+
+        /// <summary>
+        /// Controllo txtSgomberiAbus.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSgomberiAbus;
+
+        /// <summary>
+        /// Controllo txtSgomberiImmobili.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSgomberiImmobili;
 
         /// <summary>
         /// Controllo Button2.

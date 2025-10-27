@@ -87,8 +87,9 @@
             margin: 5px 0; /* Spazio esterno */
             margin-left: -10px;
         }
+
         .larghezzaText {
-            width:110px;
+            width: 110px;
         }
     </style>
     <%-- panel dei dettagli --%>
@@ -155,9 +156,18 @@
                                 <label for="txtRimozioneSigilli">Rimozione Sigilli</label>
                                 <asp:TextBox ID="txtRimozioneSigilli" runat="server" CssClass="form-control larghezzaText" />
                             </div>
-
-
-
+                            <div class="form-group mb-3">
+                                <label for="txtOccupAbusivaAbit">Occupazione abusiva abitativa</label>
+                                <asp:TextBox ID="txtOccupAbusivaAbit" runat="server" CssClass="form-control larghezzaText" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="txtOccupAbusivaNoAbit">Occupazione abusiva non abitativa</label>
+                                <asp:TextBox ID="txtOccupAbusivaNoAbit" runat="server" CssClass="form-control larghezzaText" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="txtCensimentoAllPubb">Censimento nuclei familiari alloggi pubb.</label>
+                                <asp:TextBox ID="txtCensimentoAllPubb" runat="server" CssClass="form-control larghezzaText" />
+                            </div>
 
                         </div>
 
@@ -182,6 +192,10 @@
                             <div class="form-group mb-3">
                                 <label for="txtNotifiche">Notifiche</label>
                                 <asp:TextBox ID="txtNotifiche" runat="server" CssClass="form-control larghezzaText" />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="txtNotificheNoAg">Notifiche Non AG</label>
+                                <asp:TextBox ID="txtNotificheNoAg" runat="server" CssClass="form-control larghezzaText" />
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtSequestri">Sequestri</label>
@@ -211,7 +225,14 @@
                                 <label for="txtControlliDLGS">Controlli D.LGS 42/04</label>
                                 <asp:TextBox ID="txtControlliDLGS" runat="server" CssClass="form-control larghezzaText  " />
                             </div>
-
+                            <div class="form-group mb-3">
+                                <label for="txtSgomberiAbus">Sgomberi occup. abusiva</label>
+                                <asp:TextBox ID="txtSgomberiAbus" runat="server" CssClass="form-control larghezzaText  " />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="txtSgomberiImmobili">Sgomberi occup. immobili/aree</label>
+                                <asp:TextBox ID="txtSgomberiImmobili" runat="server" CssClass="form-control larghezzaText  " />
+                            </div>
 
                         </div>
                     </div>

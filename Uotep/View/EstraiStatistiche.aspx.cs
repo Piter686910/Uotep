@@ -119,6 +119,12 @@ namespace Uotep
             txtControlliDLGS.Text = stat.Rows[0].ItemArray[27].ToString();
             txtControlliCant.Text = stat.Rows[0].ItemArray[30].ToString();
             txtViol_amm_reg_com.Text = stat.Rows[0].ItemArray[32].ToString();
+            txtCensimentoAllPubb.Text = stat.Rows[0].ItemArray[33].ToString();
+            txtOccupAbusivaAbit.Text= stat.Rows[0].ItemArray[34].ToString();
+            txtOccupAbusivaNoAbit.Text = stat.Rows[0].ItemArray[35].ToString();
+            txtSgomberiAbus.Text = stat.Rows[0].ItemArray[36].ToString();
+            txtSgomberiImmobili.Text = stat.Rows[0].ItemArray[37].ToString();
+            txtNotificheNoAg.Text = stat.Rows[0].ItemArray[38].ToString();
 
         }
 

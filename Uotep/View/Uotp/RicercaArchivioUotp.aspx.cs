@@ -64,7 +64,9 @@ namespace Uotep
             txtDestinatario.Text = String.Empty;
             txtQuartiere.Text = string.Empty;
             txtIndirizzo.Text = string.Empty;
-
+            txtIntestatario.Text = string.Empty;
+            txtBuEdificio.Text = string.Empty;
+            
         }
 
 
@@ -122,6 +124,24 @@ namespace Uotep
                 Session["ListRicercaTp"] = ListRicerca;
 
             }
+            if (!string.IsNullOrEmpty(txtIntestatario.Text))
+            {
+                // Crea una lista 
+                List<string> ListRicerca = new List<string> { "Intestatario", txtIntestatario.Text.Replace("*", "%") };
+
+                // Salva la lista nella Sessione
+                Session["ListRicercaTp"] = ListRicerca;
+
+            }
+            if (!string.IsNullOrEmpty(txtBuEdificioTp.Text))
+            {
+                // Crea una lista 
+                List<string> ListRicerca = new List<string> { "Edificio", txtBuEdificioTp.Text.Replace("*", "%") };
+
+                // Salva la lista nella Sessione
+                Session["ListRicercaTp"] = ListRicerca;
+
+            }
             // Reindirizza alla pagina di destinazione
             //string url = VirtualPathUtility.ToAbsolute("~/View/InserimentoArchivio.aspx");
             //Response.Redirect(url, false);
@@ -136,22 +156,28 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null, null, null, null);
                         break;
                     case "Oggetto":
-                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null, null);
+                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null, null, null, null);
                         break;
                     case "Destinatario":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1], null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1], null, null, null);
                         break;
                     case "Nota":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null,null, null);
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null,null, null);
                         break;
                     case "Indirizzo":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1]);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1],null, null);
+                        break;
+                    case "Intestatario":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, ar[1], null);
+                        break;
+                    case "Edificio":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, null, ar[1]);
                         break;
                 }
                 if (arc.Rows.Count > 0)
@@ -199,6 +225,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivDestinatario.Visible = true;
             DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             Nascondi();
             Pulisci();
         }
@@ -213,6 +241,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivOggetto.Visible = true;
             DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             Pulisci();
         }
         protected void Nascondi()
@@ -228,6 +258,8 @@ namespace Uotep
             DivRicerca.Visible = true;
             DivOggetto.Visible = false;
             DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             Nascondi();
             Pulisci();
         }
@@ -240,6 +272,8 @@ namespace Uotep
             DivOggetto.Visible = false;
             DivNota.Visible = true;
             DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             Nascondi();
             Pulisci();
         }
@@ -252,6 +286,8 @@ namespace Uotep
             DivOggetto.Visible = false;
             DivNota.Visible = false;
             DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             Nascondi();
             Pulisci();
         }
@@ -263,10 +299,41 @@ namespace Uotep
             DivBU.Visible = false;
             DivRicerca.Visible = true;
             DivOggetto.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = false;
             DivIndirizzo.Visible = true;
             Nascondi();
             Pulisci();
         }
+        protected void btIntestatario_Click(object sender, EventArgs e)
+        {
+            DivDestinatario.Visible = false;
+            DivPratica.Visible = false;
+            DivNota.Visible = false;
+            DivBU.Visible = false;
+            DivRicerca.Visible = true;
+            DivOggetto.Visible = false;
+            DivIndirizzo.Visible = false;
+            DivEdificio.Visible = false;
+            DivIntestatario.Visible = true;
+            Nascondi();
+            Pulisci();
+        }
+        protected void btEdificio_Click(object sender, EventArgs e)
+        {
+            DivDestinatario.Visible = false;
+            DivPratica.Visible = false;
+            DivNota.Visible = false;
+            DivBU.Visible = false;
+            DivRicerca.Visible = true;
+            DivOggetto.Visible = false;
+            DivIndirizzo.Visible = false;
+            DivIntestatario.Visible = false;
+            DivEdificio.Visible = true;
+            Nascondi();
+            Pulisci();
+        }
+ 
         protected void txtFilterOggetto_TextChanged(object sender, EventArgs e)
         {
             System.Web.UI.WebControls.TextBox txtFilter = (System.Web.UI.WebControls.TextBox)sender;
@@ -331,13 +398,35 @@ namespace Uotep
             PopulateGridView(columnName, HfFiltroDestinatario.Value); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
+        protected void txtFilterCognome_TextChanged(object sender, EventArgs e)
+        {
+            System.Web.UI.WebControls.TextBox txtFilter = (System.Web.UI.WebControls.TextBox)sender;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroCognome.Value = filterValue;
+            List<string> ListRicerca = new List<string> { "Intestatario", filterValue };
+            Session["ListRicercaTp"] = ListRicerca;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterCognome")
+            {
+                columnName = "Cognome"; // Assumi che "arch_note" sia il campo del tuo DataSource
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroCognome.Value); // Esempio di funzione di filtro
+            apripopupPratica_Click(sender, e);
+        }
+
         protected void FillScheda(DataTable arc)
         {
-            txtNumProTp.Text = arc.Rows[0].ItemArray[1].ToString();
-            txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
-            txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
+            //txtNumProTp.Text = arc.Rows[0].ItemArray[1].ToString();
+            //txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
+            //txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
             txtDataInserimentoTp.Text = arc.Rows[0].ItemArray[6].ToString();
-            txtBUTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
+            txtBUAlloggioTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
@@ -346,10 +435,11 @@ namespace Uotep
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
-            txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+           // txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             txtCognomeTp.Text = arc.Rows[0].ItemArray[45].ToString();
+            txtBuEdificioTp.Text = arc.Rows[0].ItemArray[37].ToString().ToUpper();
             Session["arc"] = arc;
         }
         protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
@@ -506,7 +596,7 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null,null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null,null, null, null);
                         break;
                     case "Oggetto":
                         //arc = mn.getPraticaArchivioUotp(0, ar[1], null, null, null);
@@ -527,10 +617,16 @@ namespace Uotep
 
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null,null,null);
                         break;
                     case "Indirizzo":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1]);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1], null,null);
+                        break;
+                    case "Intestatario":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, ar[1],null);
+                        break;
+                    case "Edificio":
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null,null,ar[1]);
                         break;
 
                 }
@@ -560,10 +656,10 @@ namespace Uotep
         protected void btModifica_Click(object sender, EventArgs e)
         {
 
-            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx");
+            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx?status=M");
             Response.Redirect(url, false);
         }
 
-       
+
     }
 }

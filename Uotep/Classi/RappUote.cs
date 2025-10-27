@@ -10,6 +10,8 @@ namespace Uotep.Classi
         public string pratica = string.Empty;
         //public DateTime ora;
         public DateTime data;
+        public string quartiere = string.Empty;
+
         public string nominativo = string.Empty;
         public string indirizzo = string.Empty;
         public string pattuglia = string.Empty;
@@ -57,5 +59,14 @@ namespace Uotep.Classi
         public Boolean senzaProt = false;
         public string matricola = string.Empty;
         public Boolean non_avvenuto = false;
+        public Boolean censimento_all_pubb = false;
+        public Boolean contr_occupazione_abus = false;
+        public Boolean contr_occ_abitativo = false;
+        public Boolean contr_occ_no_abitativo = false;
+        public Boolean sgomberi = false;
+        public Boolean sgomberi_abus = false;
+        public Boolean sgomberi_immobili = false;
+        public Boolean notifica_no_ag = false;
+
     }
 }

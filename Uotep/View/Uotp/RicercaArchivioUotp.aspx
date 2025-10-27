@@ -112,6 +112,9 @@
                             <td>
                                 <asp:Button ID="btNCartellina" runat="server" OnClick="btNCartellina_Click" Text="Cartellina" ToolTip="Ricerca Per Quartiere e Cartelllina" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
+                            <td>
+                                <asp:Button ID="btIntestatario" runat="server" OnClick="btIntestatario_Click" Text="Intestatario" ToolTip="Ricerca Intestatario" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
                         </tr>
                         <tr>
                             <%-- Seconda riga: altri 4 pulsanti --%>
@@ -119,17 +122,18 @@
                                 <asp:Button ID="btNota" runat="server" OnClick="btNota_Click" Text="Nota" ToolTip="Ricerca Per Nota" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                             <td>
-                                <asp:Button ID="btBU" runat="server" OnClick="btBU_Click" Text="BU" ToolTip="Ricerca Per BU" CssClass="btn btn-primary mx-2 uniform-button" />
+                                <asp:Button ID="btBU" runat="server" OnClick="btBU_Click" Text="BU Alloggio" ToolTip="BU Alloggio" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
                             <%-- <td>
                                 <asp:Button ID="btEstraiParziale" runat="server" OnClick="btEstraiParziale_Click" Text="Estrazione Parziale" ToolTip="Estrazione Parziale" CssClass="btn btn-primary mx-2 uniform-button" />
-                            </td>
-                            <td>
-                                <asp:Button ID="btEstraiTotale" runat="server" OnClick="btEstraiTotale_Click" Text="Estrai DB" ToolTip="Estrazione Totale" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>--%>
+                            <td>
+                                <asp:Button ID="btEdificio" runat="server" OnClick="btEdificio_Click" Text="Bu Edificio" ToolTip="Bu Edificio" CssClass="btn btn-primary mx-2 uniform-button" />
+                            </td>
                             <td>
                                 <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Indirizzo" CssClass="btn btn-primary mx-2 uniform-button" />
                             </td>
+
                         </tr>
 
                     </table>
@@ -182,7 +186,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="BU" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="codice BU" />
+                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="BU Alloggio" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -208,7 +212,28 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA Intestatario --%>
+                <div id="DivIntestatario" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
+                    <asp:Label ID="Label7" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV RICERCA Edificio --%>
+                <div id="DivEdificio" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label8" runat="server" Text="Edificio" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtBuEdificio" runat="server" CssClass="form-control" placeholder="BU Edificio" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -224,18 +249,14 @@
                         <div class="row custom-border">
                             <div class="col-md-6 ">
                                 <div class="form-check mb-2">
-                                    <label for="txtNumProTp">Prot.Nr.</label>
-                                    <asp:TextBox ID="txtNumProTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" />
-
-                                    <label for="txtProGenTp">Prot. Gen.</label>
-                                    <asp:TextBox ID="txtProGenTp" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
-
+                                    <label for="txtQuartiereTp">Quartiere</label>
+                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false"/>
+                                    
 
                                 </div>
                                 <div class="form-check mb-2">
-                                    <label for="txtDataProtGen">Data Prot. Gen.</label>
-                                    <asp:TextBox ID="txtDataProtGen" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false" />
-
+                                    <label for="txtCartellinaTp">Cartellina</label>
+                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" Enabled="false" ForeColor="Red" Font-Bold="true" />
                                 </div>
                             </div>
                             <div class="col-md-6 ">
@@ -250,7 +271,7 @@
 
                                 </div>
 
-                                <div class="form-check mb-2">
+                                <%--<div class="form-check mb-2">
                                     <label for="txtProProcTp">Prot. Proc.</label>
                                     <asp:TextBox ID="txtProProcTp" runat="server" CssClass="form-control" Enabled="false"></asp:TextBox>
 
@@ -259,7 +280,7 @@
                                     <label for="txtDataProtProc">Data Prot. Proc.</label>
                                     <asp:TextBox ID="txtDataProtProc" runat="server" CssClass="form-control" ClientIDMode="Static" Enabled="false" />
 
-                                </div>
+                                </div>--%>
                             </div>
 
 
@@ -274,14 +295,18 @@
                                     <label for="txtDestinatarioTp">Destinatario</label>
                                     <asp:TextBox ID="txtDestinatarioTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
-                                <div class="form-check mb-2">
+                                <%--<div class="form-check mb-2">
                                     <label for="txtQuartiereTp">Quartiere</label>
                                     <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false" />
 
+                                </div>--%>
+                                <div class="form-check mb-2">
+                                    <label for="txtBUAlloggioTp">BU Alloggio</label>
+                                    <asp:TextBox ID="txtBUAlloggioTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
                                 <div class="form-check mb-2">
-                                    <label for="txtBUTp">BU</label>
-                                    <asp:TextBox ID="txtBUTp" runat="server" CssClass="form-control" Enabled="false" />
+                                    <label for="txtBUAlloggioTp">BU Edificio</label>
+                                    <asp:TextBox ID="txtBuEdificioTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
 
                             </div>
@@ -291,10 +316,10 @@
                                     <asp:TextBox ID="txtCognomeTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
 
-                                <div class="form-check mb-2">
+                                <%--<div class="form-check mb-2">
                                     <label for="txtCartellinaTp">Cartellina</label>
                                     <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" Enabled="false" />
-                                </div>
+                                </div>--%>
                                 <div class="form-check mb-2">
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
                                     <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" Enabled="false" />
@@ -341,8 +366,8 @@
                             OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="Cartellina" HeaderText="Cartellina" HeaderStyle-CssClass="wrap-text-40" />
-
+                                <asp:BoundField DataField="Cartellina" HeaderText="Cart." HeaderStyle-CssClass="wrap-text" />
+                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" />
                                 <asp:TemplateField HeaderText="Oggetto" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Oggetto
@@ -369,7 +394,18 @@
                                         <%# Eval("note") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-
+                                <asp:BoundField DataField="Cognome" HeaderText="Cognome" HeaderStyle-CssClass="wrap-text-40" />
+                                <asp:TemplateField HeaderText="Cognome" ItemStyle-CssClass="uppercase-text wrap-text">
+                                    <HeaderTemplate>
+                                        Cognome
+         <br />
+                                        <asp:TextBox ID="txtFilterCognome" runat="server" OnTextChanged="txtFilterCognome_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("Cognome") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Destinatario" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Destinatario
@@ -385,7 +421,7 @@
 
                                 <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-CssClass="wrap-text-40">
                                     <ItemTemplate>
-                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id") + ";" + Eval("Num_Prot")   %>' CssClass="btn btn-success btn-sm" />
+                                        <asp:Button ID="btnSelect" runat="server" Text="Sel." CommandName="Select" CommandArgument='<%# Eval("id") + ";" + Eval("Num_Prot")   %>' CssClass="btn btn-success btn-sm" />
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
@@ -423,7 +459,7 @@
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
                 <asp:HiddenField ID="HfFiltroDestinatario" runat="server" />
                 <asp:HiddenField ID="HfFiltroOggetto" runat="server" />
-
+                <asp:HiddenField ID="HfFiltroCognome" runat="server" />
 
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->

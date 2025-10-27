@@ -128,21 +128,24 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 // menuHome.Visible = true;
                                 RicercaArchivioUote.Visible = true;
-                                if (area.ToUpper() == Enumerate.Area.UOTE.ToString().ToUpper())
+                                //if (area.ToUpper() == Enumerate.Area.UOTE.ToString().ToUpper())
+                                if (Session["profilo"].ToString().Contains(Enumerate.Profilo.V.ToString()))
+
+                                {
+                                    
+                                    InserimentoArchivioUote.Visible = false;
+                                    InserimentoArchivioUotp.Visible = false;
+                                }
+                                else
                                 {
                                     InserimentoArchivioUote.Visible = true;
                                     InserimentoArchivioUotp.Visible = true;
                                 }
-                                else
-                                {
-                                    InserimentoArchivioUote.Visible = false;
-                                    InserimentoArchivioUotp.Visible = false;
-                                }
-                                    GestionePraticaUote.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 menuManTabelle.Visible = true;
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
-                                
+
                                 RicercaArchivioUotp.Visible = true;
 
                                 break;
