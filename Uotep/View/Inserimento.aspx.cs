@@ -82,11 +82,11 @@ namespace Uotep
             if (!String.IsNullOrEmpty(HfTipoProv.Value))
                 btSalvaTipoProvv.Visible = true;
 
-            if (!String.IsNullOrEmpty(HfProvenienza.Value))
-                btSalvaProvenienza.Visible = true;
+            //if (!String.IsNullOrEmpty(HfProvenienza.Value))
+            //    btSalvaProvenienza.Visible = true;
 
-            if (!String.IsNullOrEmpty(HfTipoAtto.Value))
-                btSalvaTipoAtto.Visible = true;
+            //if (!String.IsNullOrEmpty(HfTipoAtto.Value))
+            //    btSalvaTipoAtto.Visible = true;
 
             //if (!String.IsNullOrEmpty(HfInviata.Value))
             //    btSalvaInviata.Visible = true;

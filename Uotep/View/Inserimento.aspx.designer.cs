@@ -69,15 +69,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfTipoAtto;
 
         /// <summary>
-        /// Controllo btSalvaTipoAtto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaTipoAtto;
-
-        /// <summary>
         /// Controllo DdlTipoAtto.
         /// </summary>
         /// <remarks>
@@ -121,15 +112,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HfProvenienza;
-
-        /// <summary>
-        /// Controllo btSalvaProvenienza.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaProvenienza;
 
         /// <summary>
         /// Controllo DdlProvenienza.
