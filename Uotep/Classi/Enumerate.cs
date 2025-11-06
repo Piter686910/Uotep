@@ -39,7 +39,7 @@ namespace Uotep.Classi
             [Description("DELEGA INDAGINE")]
             DelegaIndagine = 2,
 
-            [Description("ESPOSTO - SEGNALAZIONE")]
+            [Description("ESPOSTO - SEGNALAZIONE - RICHIESTA ACCERTAMENTI")]
             EspostoSegnalazione = 3
 
 

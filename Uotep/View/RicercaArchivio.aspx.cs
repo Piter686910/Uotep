@@ -29,7 +29,6 @@ namespace Uotep
         String Ruolo = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-            Session["PaginaChiamante"] = "~/View/RicercaArchivio.aspx";
 
             if (Session["user"] != null)
             {
@@ -37,6 +36,7 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
 
             }
+            Session["PaginaChiamante"] = "~/View/RicercaArchivio.aspx?user=" + Vuser + "";
 
             if (!IsPostBack)
             {

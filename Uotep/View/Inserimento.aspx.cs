@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
@@ -25,6 +26,7 @@ namespace Uotep
         {
 
             Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -144,7 +146,8 @@ namespace Uotep
             Tipologie espostoSegn = Tipologie.EspostoSegnalazione;
             string testoE = espostoSegn.GetDescription();
 
-            if (txtTipoAtto.Text == testoE)
+            //if (txtTipoAtto.Text == testoE)
+            if (DdlTipoAtto.SelectedItem.Text == testoE)
             {
                 if (divAg.Visible == true)
                 {
@@ -167,6 +170,16 @@ namespace Uotep
                 }
                 else
                 {
+                    if (Session["user"] != null)
+                    {
+                        if (String.IsNullOrEmpty(Session["user"].ToString()))
+                        {
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare login" + "'); $('#errorModal').modal('show');", true);
+
+                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
+                            Response.Redirect(url, false);
+                        }
+                    }
                     // int protocollo = 0;
                     //Boolean obbligo = ControlloCampiObbligatori();
                     //if (obbligo)
@@ -229,21 +242,24 @@ namespace Uotep
                         p.provenienza = txtProvenienza.Text;
                     }
 
-
-                    if (String.IsNullOrEmpty(txtTipoAtto.Text))
+                    if (DdlTipoAtto.SelectedItem.Text == "")
                     {
 
                         p.tipologia_atto = String.Empty;
                     }
                     else
                     {
-                        Boolean resp = mn.getTipoAtto(txtTipoAtto.Text);
+                        Boolean resp = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
                         if (!resp)
                         {
-                            HfTipoAtto.Value = txtTipoAtto.Text;
+                            HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
                         }
-                        p.tipologia_atto = txtTipoAtto.Text;
+                        p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
                     }
+                    if (!String.IsNullOrEmpty(txtTipoAtto.Text))
+                        p.ulterioreTipoAtto = txtTipoAtto.Text;
+                    else
+                        p.ulterioreTipoAtto = string.Empty;
 
                     //if (String.IsNullOrEmpty(txtTipoProv.Text))
                     if (DdlTipoProvvAg.Items.Count > 0)
@@ -404,11 +420,11 @@ namespace Uotep
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
 
-               // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+                // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
-              
+
                 //Response.Redirect("~/Contact.aspx");
 
             }
@@ -435,7 +451,8 @@ namespace Uotep
             //}
             if (String.IsNullOrEmpty(HfProvenienza.Value))
             {
-                txtTipoAtto.Text = string.Empty;
+                //txtTipoAtto.Text = string.Empty;
+                DdlTipoAtto.ClearSelection();
             }
 
             txtIndirizzo.Text = string.Empty;
@@ -542,19 +559,10 @@ namespace Uotep
                     gvPopup.DataBind();
 
                 }
-                else
-                {
-                    //lblQuartiere.Text = "Quartiere non trovato.";
-                }
-            }
-            else
-            {
-                //lblQuartiere.Text = "Inserisci un indirizzo valido.";
             }
 
             // Mantieni il popup aperto dopo l'interazione lato server.
-            //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-          //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal('#myModal');", true);
+
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
         }
         private void CaricaDLL()
@@ -581,7 +589,7 @@ namespace Uotep
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
                 DdlTipoAtto.DataBind();
-                // DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
+                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
 
                 // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
@@ -632,15 +640,11 @@ namespace Uotep
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
 
-               // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
-              //  Response.Redirect("~/Contact.aspx");
-
-                //Session["MessaggioErrore"] = ex.Message;
-                //Session["PaginaChiamante"] = "View/Inserimento.aspx";
-                //Response.Redirect("~/Contact.aspx");
+                //  Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -716,18 +720,19 @@ namespace Uotep
         }
 
 
-        protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
-            if (ins)
-            {
-                HfTipoAtto.Value = string.Empty;
-                txtTipoAtto.Text = string.Empty;
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+        //protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
+        //{
+        //    Manager mn = new Manager();
+        //    Boolean ins = mn.InserisciTipologia(HfTipoAtto.Value);
+        //    if (ins)
+        //    {
+        //        HfTipoAtto.Value = string.Empty;
+        //        //txtTipoAtto.Text = string.Empty;
+        //        DdlTipoAtto.ClearSelection();
+        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
-            }
-        }
+        //    }
+        //}
 
 
 
@@ -744,13 +749,9 @@ namespace Uotep
         //    }
         //}
 
-        protected void NuovoIns_Click(object sender, EventArgs e)
-        {
-
-        }
-
         protected void btNewIns_Click(object sender, EventArgs e)
         {
+            Pulisci();
             Routine prot = new Routine();
             txtProt.Text = prot.GetProtocollo();
             txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
@@ -872,7 +873,7 @@ namespace Uotep
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/Modifica.aspx";
-//                Response.Redirect("~/Contact.aspx");
+                //                Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -993,6 +994,69 @@ namespace Uotep
                     txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
             }
             apripopupDecretazione_Click(sender, e);
+        }
+
+        /// <summary>
+        /// CHIUSURA DECRETAZIONE
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void ModalChiudiDecretazione_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Decretazione decr = new Decretazione();
+                decr.idPratica = System.Convert.ToInt32(Hid.Value);
+                decr.Npratica = txtPraticaDecr.Text;
+                decr.decretante = txtDecretante.Text.ToUpper();
+                decr.nota = txtNotaDecretazione.Text.ToUpper();
+                if (!String.IsNullOrEmpty(txtDataDecretazione.Text))
+                    decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
+                decr.chiuso = true;
+                if (!String.IsNullOrEmpty(txtdataEvasaPopup.Text))
+                {
+                    //string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
+                    decr.dataChiusura = System.Convert.ToDateTime(txtdataEvasaPopup.Text);
+                }
+
+                //string dataFormattata = DateTime.Now.ToString("dd/MM/yyyy");
+                //decr.dataChiusura = System.Convert.ToDateTime(dataFormattata);
+
+                Manager mn = new Manager();
+                Boolean upd = mn.UpdDecretazioneChiusura(decr);
+                if (!upd)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+
+                }
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(ex.Message + @" - Errore in chiusura decretazione ");
+                    sw.Close();
+                }
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + ex.Message);
+                // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
+
+                Session["MessaggioErrore"] = ex.Message;
+                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                // Response.Redirect("~/Contact.aspx");
+
+            }
+
         }
     }
 }

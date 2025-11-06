@@ -367,7 +367,7 @@
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Cartellina" HeaderText="Cart." HeaderStyle-CssClass="wrap-text" />
-                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" />
+                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40"   ItemStyle-CssClass="uppercase-text"/>
                                 <asp:TemplateField HeaderText="Oggetto" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Oggetto
@@ -394,7 +394,7 @@
                                         <%# Eval("note") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="Cognome" HeaderText="Cognome" HeaderStyle-CssClass="wrap-text-40" />
+                                <%--<asp:BoundField DataField="Cognome" HeaderText="Cognome" HeaderStyle-CssClass="wrap-text-40" />--%>
                                 <asp:TemplateField HeaderText="Cognome" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Cognome

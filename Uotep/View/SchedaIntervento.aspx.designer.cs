@@ -438,6 +438,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckViolazioneBeniCult;
 
         /// <summary>
+        /// Controllo divSgombero.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSgombero;
+
+        /// <summary>
         /// Controllo ckSgomberi.
         /// </summary>
         /// <remarks>
@@ -609,6 +618,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RadioButton rdSenza;
 
         /// <summary>
+        /// Controllo divOccupazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOccupazione;
+
+        /// <summary>
         /// Controllo ckControlliOccupazioneAbus.
         /// </summary>
         /// <remarks>
@@ -636,6 +654,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckNonAbitativo;
 
         /// <summary>
+        /// Controllo divCensimento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCensimento;
+
+        /// <summary>
         /// Controllo ckCensimentoAllPubb.
         /// </summary>
         /// <remarks>
@@ -643,6 +670,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox ckCensimentoAllPubb;
+
+        /// <summary>
+        /// Controllo txtNumCensimento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumCensimento;
+
+        /// <summary>
+        /// Controllo RegularExpressionValidator3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
 
         /// <summary>
         /// Controllo HfIdScheda.

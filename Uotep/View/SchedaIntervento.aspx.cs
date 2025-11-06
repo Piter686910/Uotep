@@ -44,12 +44,18 @@ namespace Uotep
                 {
                     rdUote.Checked = true;
                     divNotificaTp.Visible = false;
+                    divSgombero.Visible = false;
+                    divOccupazione.Visible = false;
+                    divCensimento.Visible = false;
                     divQuartiere.Visible = false;
                 }
                 else
                 {
                     rdUotp.Checked = true;
                     divNotificaTp.Visible = true;
+                    divSgombero.Visible = true;
+                    divOccupazione.Visible = true;
+                    divCensimento.Visible = true;
                     divQuartiere.Visible = true;
                 }
                 CaricaDLL();
@@ -237,8 +243,12 @@ namespace Uotep
                 }
                 if (ckCensimentoAllPubb.Checked)
                 {
-                    stat.censimentoAllPubb = 1;
+                    if (!String.IsNullOrEmpty(txtNumCensimento.Text))
+                        rap.num_censimento_all_pubb = System.Convert.ToInt32(txtNumCensimento.Text);
+                    else
+                        rap.num_censimento_all_pubb = 1;
                 }
+
                 rap.censimento_all_pubb = ckCensimentoAllPubb.Checked;
                 if (ckControlliOccupazioneAbus.Checked)
                 {

@@ -34,5 +34,6 @@ namespace Uotep.Classi
         public String matricola = string.Empty;
         public DateTime data_ins_pratica;
         public String macro_area = string.Empty;
+        public String ulterioreTipoAtto = string.Empty;
     }
 }

@@ -237,6 +237,8 @@
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtTipoAtto">Tipologia Atto</label>
                             <asp:TextBox ID="txtTipoAtto" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                            <label for="txtUltTipoAtto">Ulteriore Atto</label>
+                            <asp:TextBox ID="txtUltTipoAtto" runat="server" CssClass="form-control mb-3" Enabled="false" />
                         </div>
 
                     </div>

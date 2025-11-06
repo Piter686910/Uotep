@@ -5,6 +5,7 @@ using System.Data;
 using System.Runtime.Caching;
 using System.Web;
 using System.Web.Caching;
+using System.Web.Security;
 using System.Web.UI;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
@@ -18,24 +19,27 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
             String categoria = Request.QueryString["user"];
-           
 
+           
             if (categoria == "true")
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare il login " + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
 
             }
-
             if (Session["user"] != null)
             {
-                Manager mn = new Manager();
-                Vuser = Session["user"].ToString();
-                DataTable ricerca = mn.GetRuolo(Vuser);
-                Session["profilo"] = ricerca.Rows[0].ItemArray[0];
-                Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
-                Session["area"] = ricerca.Rows[0].ItemArray[2];
-                pnlLogin.Visible = false;
+                if (!String.IsNullOrEmpty(Session["user"].ToString()))
+                {
+                    Manager mn = new Manager();
+                    Vuser = Session["user"].ToString();
+                    DataTable ricerca = mn.GetRuolo(Vuser);
+                    Session["profilo"] = ricerca.Rows[0].ItemArray[0];
+                    Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
+                    Session["area"] = ricerca.Rows[0].ItemArray[2];
+                    pnlLogin.Visible = false;
+
+                }
             }
         }
 
@@ -77,7 +81,7 @@ namespace Uotep
                         else
                         {
                             //salvo la matricola
-                           Session["user"] = Vuser;
+                            Session["user"] = Vuser;
 
                             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
                             Response.Redirect(url, false);
@@ -156,7 +160,7 @@ namespace Uotep
             }
         }
 
-      
+
         protected void btChiudiPop_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);

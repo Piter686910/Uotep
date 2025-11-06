@@ -46,7 +46,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtEspostiEvasi">Esposti Ricevuti</label>
-                                <asp:TextBox ID="txtEspostiRicevuti" runat="server" CssClass="form-control" Width="50px" />
+                                <asp:TextBox ID="txtEspostiRicevuti" runat="server" CssClass="form-control" Width="50px" Enabled="false" />
                                 
                             </div>
                         </div>

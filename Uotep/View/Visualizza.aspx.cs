@@ -199,6 +199,8 @@ namespace Uotep
                             txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                             txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
                             txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                            txtUltTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
+                            txtUltTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
                             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
                             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
                             TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
@@ -291,15 +293,8 @@ namespace Uotep
                             else
                                 divDecretazione.Visible = false;
 
-
-
-                         // Pulisci();
                         }
-                        else
-                        {
-
-                            //lblmessage.Text = "Pratica non trovata";
-                        }
+                        
                     }
                 }
                 catch (Exception ex)

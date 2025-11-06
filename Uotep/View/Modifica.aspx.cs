@@ -89,8 +89,10 @@ namespace Uotep
                 txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
             txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
             txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
-            txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-            txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
+            txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
+            DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            DdlTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
             TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
@@ -189,6 +191,7 @@ namespace Uotep
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
                 DdlTipoAtto.DataBind();
+                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
 
                 DataTable RicercaProvenienza = mn.getListProvenienza();
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
@@ -262,6 +265,7 @@ namespace Uotep
             try
             {
                 Boolean resp = Convalida();
+                Manager mn = new Manager();
                 if (!resp)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorAvvertenze').text('" + "Se la sigla è ED non puoi selezionare DELEGA INDAGINE." + "'); $('#ModalAvvertenze').modal('show');", true);
@@ -269,8 +273,16 @@ namespace Uotep
                 }
                 else
                 {
+                    if (Session["user"] != null)
+                    {
+                        if (String.IsNullOrEmpty(Session["user"].ToString()))
+                        {
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare login" + "'); $('#errorModal').modal('show');", true);
 
-
+                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                            Response.Redirect(url, false);
+                        }
+                    }
                     Principale p = new Principale();
 
                     p.sigla = DdlSigla.SelectedItem.Text;
@@ -306,7 +318,22 @@ namespace Uotep
                         //p.quartiere = lblQuartiere.Text;
                     }
                     p.provenienza = txtProvenienza.Text;
-                    p.tipologia_atto = txtTipoAtto.Text;
+                    if (DdlTipoAtto.SelectedItem.Text == "")
+                    {
+
+                        p.tipologia_atto = String.Empty;
+                    }
+                    else
+                    {
+                        Boolean resp1 = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
+                        if (!resp1)
+                        {
+                            HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
+                        }
+                        p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                    }
+                    if (!String.IsNullOrEmpty(txtTipoAtto.Text))
+                        p.ulterioreTipoAtto = txtTipoAtto.Text;
                     p.rif_Prot_Gen = txtRifProtGen.Text;
                     p.giudice = txtGiudice.Text;
                     if (!string.IsNullOrEmpty(TxtTipoProvvAg.Text))
@@ -357,7 +384,7 @@ namespace Uotep
                     p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
                     DateTime dat = System.Convert.ToDateTime(txtDataInsCarico.Text);
 
-                    Manager mn = new Manager();
+
 
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
@@ -432,6 +459,7 @@ namespace Uotep
             TxtDataEsito.Text = String.Empty;
             txPratica.Text = String.Empty;
             txtTipoAtto.Text = String.Empty;
+            DdlTipoAtto.ClearSelection();
             txtProvenienza.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             txtNominativo.Text = String.Empty;
@@ -617,8 +645,10 @@ namespace Uotep
 
                         txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                         txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
-                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-                        txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        DdlTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        txtTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
+                        txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
                         txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
                         DdlTipoProvvAg.Items.Insert(0, new ListItem(pratica.Rows[0].ItemArray[7].ToString().ToUpper()));
                         // DdlTipoProvvAg.SelectedValue = "1";
@@ -907,7 +937,7 @@ namespace Uotep
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-            
+
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
         }
@@ -1467,6 +1497,14 @@ namespace Uotep
         protected void btChiudiAvvertenze_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
+
+        }
+
+        protected void NuovaModifica_Click(object sender, EventArgs e)
+        {
+            Pulisci();
+            DivRicerca.Visible = true;
+            DivDettagli.Visible = false;
 
         }
     }

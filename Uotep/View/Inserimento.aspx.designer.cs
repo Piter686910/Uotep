@@ -42,15 +42,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlSigla;
 
         /// <summary>
-        /// Controllo txtTipoAtto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
-
-        /// <summary>
         /// Controllo suggestionsListTipoAtto.
         /// </summary>
         /// <remarks>
@@ -76,6 +67,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DdlTipoAtto;
+
+        /// <summary>
+        /// Controllo txtTipoAtto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
 
         /// <summary>
         /// Controllo txtDataInsCarico.
@@ -445,6 +445,33 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btChiudiAvvertenze;
+
+        /// <summary>
+        /// Controllo Div3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div3;
+
+        /// <summary>
+        /// Controllo txtdataEvasaPopup.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtdataEvasaPopup;
+
+        /// <summary>
+        /// Controllo ModalChiudiDecretazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ModalChiudiDecretazione;
 
         /// <summary>
         /// Controllo DivDecretazione.

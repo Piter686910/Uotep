@@ -22,14 +22,14 @@ namespace Uotep
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Boolean okPopup = false;
-
+        String status = String.Empty;   
         protected void Page_Load(object sender, EventArgs e)
         {
             //if (Session["PaginaChiamante"] != null)
 
             //    Session.Remove("PaginaChiamante");
 
-            String status = Request.QueryString["status"];
+            HfStato.Value = Request.QueryString["status"];
             Session["PaginaChiamante"] = "~/View/Uotp/InserimentoArchivio.aspx";
             if (Session["user"] != null)
             {
@@ -65,7 +65,7 @@ namespace Uotep
 
                 CaricaDLL();
 
-                if (status == "M")
+                if (HfStato.Value == "M")
                 {
                     if (Session["arc"] != null)
                     {
@@ -154,7 +154,7 @@ namespace Uotep
             //            txtNumProTp.Text = arc.Rows[0].ItemArray[1].ToString();
             //  txtProGenTp.Text = arc.Rows[0].ItemArray[107].ToString();
             //  txtProProcTp.Text = arc.Rows[0].ItemArray[115].ToString().ToUpper();
-            //txtDataInserimentoTp.Text = arc.Rows[0].ItemArray[6].ToString();
+            txtCognomeTp.Text = arc.Rows[0].ItemArray[45].ToString();
             txtBUAlloggioTp.Text = arc.Rows[0].ItemArray[42].ToString().ToUpper();
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
@@ -181,83 +181,13 @@ namespace Uotep
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
         }
-        public Boolean Convalida()
-        {
-            bool resp = false;
-
-            //if (!String.IsNullOrEmpty(txtPratN.Text))
-            //{
-            //    resp = true;
-
-            //    //if (HfStato.Value != "Mod")
-            //    //{
-
-
-            //        //verifica se la pratica sia presente e propongo un popup di conferma se stoinserendo
-            //        Manager mn = new Manager();
-            //        String[] ar = new String[2];
-            //        if (Session["ListRicerca"] != null)
-            //        {
-            //            List<string> ListRicerca = (List<string>)Session["ListRicerca"];
-            //            ar = ListRicerca.ToArray();
-            //        }
-            //        else
-            //        {
-            //            List<string> ListRicerca = new List<string> { "Pratica", txtPratN.Text };
-            //            ar = ListRicerca.ToArray();
-            //        }
-            //    DataTable dt = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
-            //if (dt.Rows.Count > 0)
-            //{
-            //  messaggioPopup = @"Dati importanti trovati nel database. Sei sicuro di voler procedere con l'azione?";
-            // **2. Registra JavaScript per mostrare il popup (se necessario)**
-            //                if (Session["POP"].ToString() == "si")
-            //                {
-
-            //                    string script = $@"
-            //    function showConfirmModal() {{
-            //        document.getElementById('modalMessaggioBody').innerText = 'stai modificando un pratica già esistente, confermi?'; 
-            //        $('#confermaModal').modal('show'); // Mostra il modale Bootstrap (jQuery required)
-            //    }}
-            //    window.onload = function() {{ showConfirmModal(); }};
-            //";
-
-            //                    ClientScript.RegisterStartupScript(this.GetType(), "showModalScript", script, true);
-            //                }
-
-
-
-
-            //        //se annullo imposto il popup a si
-            //if (hdnConfermaUtente.Value == "false")
-            //{
-            //    Session["POP"] = "si";
-            //}
-            //}
-            //else
-            //    okPopup = true;
-            //}
-            //else
-            //okPopup = true;
-            //}
-
-
-            return resp;
-        }
+      
 
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
-                //Boolean resp = Convalida();
-                //if (resp)
-                //{
-
-                //if (okPopup)
-                ////se ho ricevuto ok dal popup
-                //{
-
-                //    okPopup = false;
+              
                 Manager mn = new Manager();
 
                 ArchivioUotp arch = new ArchivioUotp();
@@ -279,7 +209,18 @@ namespace Uotep
                 arch.arch_indirizzo = TxtIndirizzoTp.Text;
                 arch.arch_cognome = txtCognomeTp.Text.ToUpper();
 
-                Boolean ins = mn.SavePraticaArchivioUotp(arch);
+                Boolean ins = false;
+
+
+                if (HfStato.Value == "M")
+
+                    ins = mn.UpdPraticaArchivioUotp(arch);
+                else
+                    ins = mn.SavePraticaArchivioUotp(arch);
+
+
+
+//                Boolean ins = mn.SavePraticaArchivioUotp(arch);
                 if (!ins)
                 {
                     errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
@@ -288,7 +229,7 @@ namespace Uotep
                 }
                 else
                 {
-                    if (HfStato.Value == "Mod")
+                    if (HfStato.Value == "M")
 
                         errorMessage.InnerText = "Pratica " + arch.arch_cartellina + " modificata correttamente .";
 
@@ -375,36 +316,6 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 
         }
-        //protected void RicercaQuartiere_Click(object sender, EventArgs e)
-        //{
-        //    string indirizzo = string.Empty;
-
-        //    indirizzo = txtIndirizzoQuartiere.Text.Trim();
-        //    //string specie = txtSpecie.Text.Trim();
-
-        //    if (!string.IsNullOrEmpty(indirizzo))
-        //    {
-        //        // Simula il recupero del quartiere dal database o da una logica interna.
-        //        Manager mn = new Manager();
-        //        DataTable quartiere = mn.getQuartiere(indirizzo);
-
-        //        if (quartiere.Rows.Count > 0)
-        //        {
-        //            gvPopup.DataSource = quartiere;
-        //            gvPopup.DataBind();
-
-        //        }
-
-        //    }
-
-        //    // Mantieni il popup aperto dopo l'interazione lato server.
-        //    //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-
-        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
-        //}
-        // (Riusa la funzione GetOriginalData dal mio esempio precedente o la tua logica di recupero dati)
-
         private void CaricaDLL()
         {
             try

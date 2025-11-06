@@ -60,6 +60,7 @@ namespace Uotep.Classi
         public string matricola = string.Empty;
         public Boolean non_avvenuto = false;
         public Boolean censimento_all_pubb = false;
+        public Int32 num_censimento_all_pubb = 0;
         public Boolean contr_occupazione_abus = false;
         public Boolean contr_occ_abitativo = false;
         public Boolean contr_occ_no_abitativo = false;

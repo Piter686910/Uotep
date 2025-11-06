@@ -1153,17 +1153,21 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario, string indirizzo, string intestatario,string edificio)
+        public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario, string indirizzo, string intestatario, string edificio)
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
             if (pratica != null)
             {
-                if (!String.IsNullOrEmpty(pratica[2].ToString()))
-                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' and cartellina = '" + pratica[2] + "' ORDER BY DATA1 asc ";
+                //  if (!String.IsNullOrEmpty(pratica[2].ToString()))
+                if (!String.IsNullOrEmpty(pratica[1].ToString()) && !String.IsNullOrEmpty(pratica[2].ToString())) //+ + 
 
-                else
-                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' ORDER BY DATA1 asc ";
+                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' and cartellina = '" + pratica[2] + "' ORDER BY cartellina asc ";
+                else if (!String.IsNullOrEmpty(pratica[1].ToString()) && String.IsNullOrEmpty(pratica[2].ToString())) //  + -
+                    sql = "SELECT  * FROM Archiviotp where quartiere = '" + pratica[1] + "' ORDER BY cartellina asc ";
+                else if (String.IsNullOrEmpty(pratica[1].ToString()) && !String.IsNullOrEmpty(pratica[2].ToString())) // - +
+                    sql = "SELECT  * FROM Archiviotp where cartellina = '" + pratica[2] + "' ORDER BY quartiere asc ";
+
             }
             if (!String.IsNullOrEmpty(oggetto))
                 sql = "SELECT * FROM Archiviotp where oggetto1 like '%" + oggetto.Replace("'", "''").Replace("*", "%") + "%'";
@@ -2265,18 +2269,18 @@ namespace Uotep.Classi
                     }
                     else
                     {
-                        sql_Statistiche = "update statistiche set relazioni =  +  " + @stat.relazioni + ",ponteggi = +" + @stat.ponteggi + ",dpi =+" + @stat.dpi + ",esposti_ricevuti=  +" + @stat.esposti_ricevuti +
-                        ",esposti_evasi =  +" + @stat.esposti_evasi + ",ripristino_tot_par =  +" + @stat.ripristino_tot_par + ",controlli_scia =  + " + @stat.controlli_scia +
-                        ",contr_cant_daily =  +" + @stat.contr_cant_daily + ",cnr =   +" + stat.cnr + ", notifiche = +" + @stat.notifiche +
-                        ",annotazioni = +" + @stat.annotazioni + ",deleghe_esitate =  + " + @stat.deleghe_esitate +
-                        ",sequestri =  +" + @stat.sequestri + ",riapp_sigilli =  + " + @stat.riapp_sigilli + ",deleghe_ricevute =  +" + @stat.deleghe_ricevute +
+                        sql_Statistiche = "update statistiche set relazioni =  +" + @stat.relazioni + ",ponteggi = +" + @stat.ponteggi + ",dpi =+" + @stat.dpi + ",esposti_ricevuti=  +" + @stat.esposti_ricevuti +
+                        ",esposti_evasi =  +" + @stat.esposti_evasi + ",ripristino_tot_par =  +" + @stat.ripristino_tot_par + ",controlli_scia =  +" + @stat.controlli_scia +
+                        ",contr_cant_daily =  +" + @stat.contr_cant_daily + ",cnr = +" + stat.cnr + ", notifiche = +" + @stat.notifiche +
+                        ",annotazioni = +" + @stat.annotazioni + ",deleghe_esitate = +" + @stat.deleghe_esitate +
+                        ",sequestri =  +" + @stat.sequestri + ",riapp_sigilli = +" + @stat.riapp_sigilli + ",deleghe_ricevute =  +" + @stat.deleghe_ricevute +
                         ",cnr_annotazioni =  +" + @stat.cnr_annotazioni + ",interrogazioni =  +" + @stat.interrogazioni + ",denunce_uff =  +" + @stat.denunce_uff + ",convalide = +" + @stat.convalide +
                         ",demolizioni =  +" + @stat.demolizioni + ",violazione_sigilli =  +" + @stat.violazione_sigilli + ",dissequestri =  +" + @stat.dissequestri +
-                        ",dissequestri_temp =" + @stat.dissequestri_temp + ",rimozione_sigilli =" + @stat.rimozione_sigilli + ",controlli_42_04 =" + @stat.controlli_42_04 +
+                        ",dissequestri_temp =+" + @stat.dissequestri_temp + ",rimozione_sigilli =+" + @stat.rimozione_sigilli + ",controlli_42_04 =+" + @stat.controlli_42_04 +
                         ",contr_cant_suolo_pubb =  +" + @stat.contr_cant_suolo_pubb + ",contr_lavori_edili =  +" + @stat.contr_lavori_edili + ",contr_cant =  +" + @stat.contr_cant +
-                        ",contr_nato_da_esposti =  + " + @stat.contr_nato_da_esposti +
-                        ", viol_amm_reg_com =+ " + stat.viol_amm_reg_com + ",censimentoAllPubb =+ " + stat.censimentoAllPubb + ", Sgomberi_immobili =+ " + stat.Sgomberi_immobili +
-                        ",Abitativo =+ " + stat.Abitativo + ",nonAbitativo =+ " + stat.NonAbitativo + ",Sgomberi_abus =+ " + stat.Sgomberi_abus + ", NotificaTp =+" + stat.NotificaTp +
+                        ",contr_nato_da_esposti =  +" + @stat.contr_nato_da_esposti +
+                        ", viol_amm_reg_com =+ " + stat.viol_amm_reg_com + ",censimentoAllPubb = +" + stat.censimentoAllPubb + ", Sgomberi_immobili = +" + stat.Sgomberi_immobili +
+                        ",Abitativo = +" + stat.Abitativo + ",nonAbitativo = +" + stat.NonAbitativo + ",Sgomberi_abus = +" + stat.Sgomberi_abus + ", NotificaTp =+" + stat.NotificaTp +
                         " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
 
@@ -2787,6 +2791,1180 @@ namespace Uotep.Classi
 
         }
         /// <summary>
+        /// preleva il numero di relazioni redatte
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumRelazione(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32( meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_relazione) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_relazione='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// prteleva il numero di annotazioni fatte
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumAnnotazioni(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_annotazionePG) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_annotazionePG='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di notifiche fatte
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumNotifiche(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_notifica) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_notifica='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// prreleva il numero di deleghe esitate
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumDelegheEsitate(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_esito_delega) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_esito_delega='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// prelevo numero esposti evasi
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetEspostiEvasi(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT SUM(TRY_CAST(rapp_numEsposti AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() +"'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di ponteggi controllati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumPonteggi(string mese, int anno)
+        {
+            string sql = string.Empty;
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+
+            sql = "SELECT count(rapp_contr_cantiere_suolo_pubb) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_cantiere_suolo_pubb='true'";
+
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// prelevo num vilazioni amministrative
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumViolAmm(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_contestaz_amm) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contestaz_amm='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di ripristini effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumRipristino(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_accert_avvenuto) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_accert_avvenuto='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di controlli scia effettuati  
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumcontrolliScia(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_controlliScia) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_controlliScia='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di sequestri effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumSequestri(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_verbale_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_verbale_seq='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di riapposizioni sigilli effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumRiappSigilli(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_disseq_temp_Riapp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Riapp='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di convalide effettuate
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumConvalide(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_convalida) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_convalida='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di violazioni sigilli effettuate
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumViolSigilli(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_violazione_sigilli) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_violazione_sigilli='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di dissequestri temporanei effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumDisseqTemp(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_disseq_temp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di dissequestri definitivi effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumDissequestri(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_disseq_def) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_def='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di rimozioni sigilli effettuati   
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumRimozSigilli(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_disseq_temp_Rim) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Rim='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero di controlli beni culturali effettuati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumControlliDlgs(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_violazioneBeniCult) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_violazioneBeniCult='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumControlliCant(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_contr_cantieri_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_cantieri_seq='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumCensimentoAllPubb(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT Sum(rapp_num_censimento_all_pubb) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumSgomberiAbus(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_sgomberi_abus) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_abus='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumSgomberiImmobili(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_sgomberi_immobili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_immobili='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumNotificheNoAg(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_notifica_no_ag) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_notifica_no_ag='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumOccAbusAbitat(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_contr_occ_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_abitativo='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumOccAbusNoAbitat(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_contr_occ_no_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_no_abitativo='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
+        /// preleva il numero dei dpi controllati
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public string GetNumDpi(string mese, int anno)
+        {
+            string sql = string.Empty;
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_contr_lavori_edili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_lavori_edili='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+
+        public string GetNumCnr(string mese, int anno)
+        {
+            string sql = string.Empty;
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(rapp_cnr) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_cnr='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        /// <summary>
         /// preleva il numero di deleghe ricevute dalla procura
         /// </summary>
         /// <param name="mese"></param>
@@ -2960,7 +4138,7 @@ namespace Uotep.Classi
             sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome,codice_edificio)" +
                " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
                @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
-               @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''")  + "','" + 
+               @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "','" +
                @arch.arch_edificio.Replace("'", "''") + "')";
 
             sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
@@ -3056,12 +4234,12 @@ namespace Uotep.Classi
             {
 
                 sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,macro_area)" +
+                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,macro_area,UlterioreTipoAtto)" +
                    " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                    "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
+                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
                 {
                     sql_Statistiche = "update statistiche set deleghe_ricevute = +" + stat.deleghe_ricevute + ", esposti_ricevuti = + " + stat.esposti_ricevuti +
@@ -3286,6 +4464,54 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean UpdPraticaArchivioUotp(ArchivioUotp arch)
+        {
+            bool resp = true;
+            string sql_pratica = String.Empty;
+            string testoSql = string.Empty;
+
+            sql_pratica = "update Archiviotp set destinatario1 = '" + @arch.arch_destinatario.Replace("'", "''") + "', cognome = '" + @arch.arch_cognome.Replace("'", "''") + "', codice ='" + @arch.arch_codice.Replace("'", "''") +
+                                 "', via = '" + @arch.arch_indirizzo.Replace("'", "''") + "', codice_edificio = '" + @arch.arch_edificio.Replace("'", "''") + "', note = '" + @arch.arch_note.Replace("'", "''") +
+                                 "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") + "'" +
+
+                                 " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";
+            using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql_pratica;
+                    testoSql = "archiviotp";
+                    int res = command.ExecuteNonQuery();
+                }
+
+                catch (Exception ex)
+                {
+
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("Cartellina:" + @arch.arch_cartellina + ", quartiere= " + @arch.arch_quartiere + ": " + ex.Message + @" - Errore in update archiviotp ");
+                        sw.Close();
+                    }
+
+                    resp = false;
+
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return resp;
+            }
+            return resp;
+        }
+
         public Boolean UpdDecretazione(Decretazione p)
         {
             bool resp = true;
@@ -3601,7 +4827,8 @@ namespace Uotep.Classi
                     "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
-                    "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + p.tipoProvvedimentoAG.Replace("'", "''") + "'" +
+                    "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
+                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -3659,16 +4886,16 @@ namespace Uotep.Classi
             //try
             //{
             sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento)" +
+                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,UlterioreTipoAtto)" +
                 " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                 "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                 @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                 @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "')";
+                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.ulterioreTipoAtto + "')";
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, getdate(), @MatricolaOperatore" +
+                "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, getdate(), @MatricolaOperatore, UlterioreTipoAtto" +
                 " from principale  where nr_protocollo = '" + oldProtocollo + "' and datainserimento = '" + olddate + "' and id = " + idPratica;
 
 

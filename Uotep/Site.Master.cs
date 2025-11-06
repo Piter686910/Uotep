@@ -1,14 +1,19 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Forms;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
-using System.Runtime.Caching;
-using Microsoft.Ajax.Utilities;
 
 namespace Uotep
 {
@@ -21,8 +26,10 @@ namespace Uotep
         String ruolo = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (!IsPostBack)
             {
+               
                 if (Session["user"] != null)
                 {
                     string Vuser = Session["user"].ToString();
@@ -30,9 +37,12 @@ namespace Uotep
                     string area = Session["area"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
+                    
                     if (Ricerca.Rows.Count > 0)
                     {
-
+                        lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
+                        userLog.Visible = true;
+                        LiHelp.Visible = true;
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
                             case "coordinamentopg":
@@ -50,6 +60,7 @@ namespace Uotep
                                 menuManTabelle.Visible = true;
                                 menuSegreteria.Visible = false;
                                 menuEsci.Visible = true;
+                                GestionePraticaUote.Visible = true;
                                 //menuHome.Visible = true;
                                 if (Session["profilo"].ToString() != Enumerate.Profilo.accertatore.GetHashCode().ToString())
                                 {
@@ -124,7 +135,7 @@ namespace Uotep
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = false;
                                 menuAmministratore.Visible = false;
-
+                                StatisticheAtti.Visible = true;
                                 menuEsci.Visible = true;
                                 // menuHome.Visible = true;
                                 RicercaArchivioUote.Visible = true;
@@ -132,7 +143,7 @@ namespace Uotep
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.V.ToString()))
 
                                 {
-                                    
+
                                     InserimentoArchivioUote.Visible = false;
                                     InserimentoArchivioUotp.Visible = false;
                                 }
@@ -241,5 +252,9 @@ namespace Uotep
             Response.Redirect(url, false);
             //Response.Redirect(/Default.aspx"), false);
         }
+
+      
     }
+
+
 }

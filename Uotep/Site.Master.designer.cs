@@ -96,6 +96,15 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor GestionePraticaUote;
 
         /// <summary>
+        /// Controllo StatisticheAtti.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor StatisticheAtti;
+
+        /// <summary>
         /// Controllo menuCoordinamentoAtti.
         /// </summary>
         /// <remarks>
@@ -130,15 +139,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor RicercaAtti;
-
-        /// <summary>
-        /// Controllo StatisticheAtti.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor StatisticheAtti;
 
         /// <summary>
         /// Controllo menuAccertatori.
@@ -222,6 +222,24 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor PG;
 
         /// <summary>
+        /// Controllo LiHelp.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiHelp;
+
+        /// <summary>
+        /// Controllo helpLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink helpLink;
+
+        /// <summary>
         /// Controllo menuEsci.
         /// </summary>
         /// <remarks>
@@ -238,6 +256,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkLogout;
+
+        /// <summary>
+        /// Controllo userLog.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl userLog;
+
+        /// <summary>
+        /// Controllo lblUser.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUser;
 
         /// <summary>
         /// Controllo MainContent.

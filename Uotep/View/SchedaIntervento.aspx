@@ -111,40 +111,40 @@
             input = document.getElementById("txtQuartiereTp");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlQuartiere.ClientID %>');
-     options = dropdown.getElementsByTagName("option");
-     var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
-     // Pulisci la lista dei suggerimenti precedenti
-     suggestionsListDiv.innerHTML = "";
+            options = dropdown.getElementsByTagName("option");
+            var suggestionsListDiv = document.getElementById('<%= suggestionsListQuartiere.ClientID %>');
+            // Pulisci la lista dei suggerimenti precedenti
+            suggestionsListDiv.innerHTML = "";
 
-     var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
+            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
 
-     for (i = 0; i < options.length; i++) {
-         txtValue = options[i].textContent || options[i].innerText;
-         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-             suggestionsFound = true; // Trovato almeno un suggerimento
-             var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-             suggestionElement.textContent = txtValue;
-             suggestionElement.style.padding = "5px";
-             suggestionElement.style.cursor = "pointer";
-             suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-             suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
+            for (i = 0; i < options.length; i++) {
+                txtValue = options[i].textContent || options[i].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    suggestionsFound = true; // Trovato almeno un suggerimento
+                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
+                    suggestionElement.textContent = txtValue;
+                    suggestionElement.style.padding = "5px";
+                    suggestionElement.style.cursor = "pointer";
+                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
+                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
 
-             suggestionElement.addEventListener('click', function () {
-                 input.value = this.textContent;
-                 suggestionsListDiv.style.display = "none";
-                 return false;
-             });
-             suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-         }
-     }
+                    suggestionElement.addEventListener('click', function () {
+                        input.value = this.textContent;
+                        suggestionsListDiv.style.display = "none";
+                        return false;
+                    });
+                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
+                }
+            }
 
-     // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-     if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-         suggestionsListDiv.style.display = "block";
-     } else {
-         suggestionsListDiv.style.display = "none";
-     }
- }
+            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
+            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
+                suggestionsListDiv.style.display = "block";
+            } else {
+                suggestionsListDiv.style.display = "none";
+            }
+        }
     </script>
 
     <div class="panel panel-default">
@@ -283,7 +283,7 @@
                                 <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
                                 <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 </div>
-                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control"  />
+                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
 
                             </div>
                             <div class="form-group mb-3" style="margin-top: 80px!important">
@@ -439,7 +439,7 @@
                                     <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
                                 </div>
-                                <div class="form-check mb-2">
+                                <div id="divSgombero" runat="server" class="form-check mb-2">
                                     <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
                                     <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
@@ -508,16 +508,19 @@
                                 <label class="form-check-label">]</label>
                             </div>
 
-                            <div class="form-check mb-2">
+                            <div id="divOccupazione" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
                                 <label class="form-check-label">]</label>
                             </div>
-                            <div class="form-check mb-2">
+                            <div id="divCensimento" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
+                                <asp:TextBox ID="txtNumCensimento" runat="server"  MaxLength="3"  />
+<%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>
                             </div>
                         </div>
 

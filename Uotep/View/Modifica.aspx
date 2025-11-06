@@ -375,7 +375,7 @@
         //tipo atto
         function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtTipoAtto");
+            input = document.getElementById("DdlTipoAtto");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlTipoAtto.ClientID %>');
             options = dropdown.getElementsByTagName("option");
@@ -681,13 +681,15 @@
 
                         </div>
                         <div class="form-group mb-3" style="margin-left: -25px">
-                            <label for="txtTipoAtto">Tipologia Atto</label>
-                            <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <label for="DdlTipoAtto">Tipologia Atto</label>
+                            <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
                             <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 <asp:HiddenField ID="HfTipoAtto" runat="server" />
                             </div>
                             <%--<asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />--%>
-                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />
+                            <label for="txtTipoAtto">Ulteriore Atto</label>
+                            <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" MaxLength="100" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         </div>
                     </div>
                     <%-- seconda colonna --%>
@@ -734,7 +736,7 @@
 
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
-                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control mb-3" />
+                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control mb-3" MaxLength="50" />
 
                         </div>
                     </div>
@@ -800,7 +802,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtAccertatori">Accertatori</label>
-                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />
+                            <asp:TextBox ID="txtAccertatori" runat="server" MaxLength="30" CssClass="form-control mb-3"  />
 
                         </div>
                     </div>
@@ -858,7 +860,7 @@
                     <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary mt-3" />
-
+                    <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary mt-3" />
                 </div>
             </div>
 
@@ -1135,7 +1137,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtNotaDecretazione">Nota</label>
-                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
+                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" MaxLength="255" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
                             </div>
 
                             <div class="form-group mb-3">
@@ -1235,7 +1237,7 @@
             </div>
         </div>
     </div>
-    <!-- Popup Modale inseriemnto data evasa -->
+    <!-- Popup Modale inserimento data evasa -->
     <div class="modal fade" id="ModalDataEvasa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 20%">
             <div class="modal-content">

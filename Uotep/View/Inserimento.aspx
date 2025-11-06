@@ -4,6 +4,15 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <script>
+        function showModal() {
+            $('#ModalDataEvasa').modal('show');
+        }
+
+        // Nasconde il popup
+        function hideModal() {
+            $('#ModalDataEvasa').modal('hide');
+
+        }
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
         }
@@ -191,7 +200,7 @@
         //tipo atto
         function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtTipoAtto");
+            input = document.getElementById("DdlTipoAtto");
             filter = input.value.toUpperCase();
             dropdown = document.getElementById('<%= DdlTipoAtto.ClientID %>');
             options = dropdown.getElementsByTagName("option");
@@ -410,13 +419,15 @@
 
                         </div>
                         <div class="form-group mb-3" style="margin-left: -25px">
-                            <label for="txtTipoAtto">Tipologia Atto</label>
-                            <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <label for="DdlTipoAtto">Tipologia Atto</label>
+                            <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
                             <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 <asp:HiddenField ID="HfTipoAtto" runat="server" />
                             </div>
                             <%--<asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />--%>
-                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" Style="display: none" />
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />
+                            <label for="txtTipoAtto">Ulteriore Atto</label>
+                            <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" MaxLength="100" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         </div>
 
 
@@ -492,7 +503,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
-                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" MaxLength="50" />
                         </div>
 
 
@@ -588,7 +599,7 @@
                     <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     <asp:Button ID="btNewIns" Text="Nuovo Inserimento" runat="server" OnClick="btNewIns_Click" CssClass="btn btn-primary mt-3" Visible="false" />
                     <asp:Button Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                    
+
 
 
                 </div>
@@ -694,30 +705,52 @@
             </div>
         </div>
     </div>
-        <%-- popup avvertenze --%>
-<div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog"
-        role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
-
-            </div>
-            <div class="modal-body">
-                <!-- Campi di input per la ricerca -->
-                <div class="form-group">
-
-                    <p id="errorAvvertenze" style="color: red"></p>
+    <%-- popup avvertenze --%>
+    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
 
                 </div>
-            </div>
-            <div class="modal-footer">
-                <!-- Bottone per avviare la ricerca -->
-                <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
+
+                        <p id="errorAvvertenze" style="color: red"></p>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- Popup Modale inserimento data evasa -->
+    <div class="modal fade" id="ModalDataEvasa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 20%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel4">Inserisci La Data Evasa</h5>
+
+                </div>
+                <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
+                    <div class="form-group mb-3">
+                        <label for="txtdataEvasaPopup">Data Evasa</label>
+                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control"></asp:TextBox>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <!-- Bottone per avviare chiousura decretazione -->
+                    <asp:Button ID="ModalChiudiDecretazione" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDecretazione_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
     <%-- Modale ModalDecretazione --%>
     <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">
@@ -828,13 +861,14 @@
                         <div class="col-md-3" style="margin-left: 400px!important">
                             <div class="form-group mb-3">
                                 <label for="txtNotaDecretazione">Nota</label>
-                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
+                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" MaxLength="255" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
+                <%-- FOOTER --%>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>

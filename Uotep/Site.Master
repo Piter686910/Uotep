@@ -40,9 +40,22 @@
                     float: right;
                     margin-right: -10px;
                 }
+            /* Stile per nascondere il contenitore del viewer all'inizio */
+            #viewerContainer {
+                display: none;
+                margin-top: 20px;
+                border: 1px solid #ccc;
+            }
+
+            #wordViewerFrame {
+                width: 100%;
+                height: 750px;
+                border: none;
+            }
         </style>
         <asp:ScriptManager runat="server">
             <Scripts>
+
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
                 <%--Framework Scripts--%>
                 <asp:ScriptReference Name="MsAjaxBundle" />
@@ -87,10 +100,10 @@
                             </ul>
                         </li>--%>
                         <!-- Elemento principale del menu a tendina "Archivio" -->
-                        <li runat="server" id="menuArchivio" visible="false" class="dropdown" >
+                        <li runat="server" id="menuArchivio" visible="false" class="dropdown">
 
                             <!-- Questo è il link che apre il primo livello del menu -->
-                            <a runat="server" style="color: #ffffff !important"  class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
+                            <a runat="server" style="color: #ffffff !important" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
 
                             <!-- Questo <ul> contiene il primo livello del menu (le due sezioni UOTE e UOTP) -->
                             <ul class="dropdown-menu">
@@ -102,7 +115,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a id="InserimentoArchivioUote" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
                                         <li><a id="RicercaArchivioUote" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
-                                        
+
                                     </ul>
                                 </li>
                                 <!-- ### FINE SOTTOMENU ARCHIVIO UOTE ### -->
@@ -118,19 +131,20 @@
                                     </ul>
                                 </li>
                                 <li><a id="GestionePraticaUote" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
+                                <li><a id="StatisticheAtti" runat="server" visible="false" href="~/View/StatisticheAtti">Statistiche</a></li>
                                 <!-- ### FINE SOTTOMENU ARCHIVIO UOTP ### -->
 
                             </ul>
                         </li>
 
                         <li runat="server" id="menuCoordinamentoAtti" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important"  class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti <span class="caret"></span></a>
+                            <a runat="server" style="color: #ffffff !important" class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="InserimentoAtti" runat="server" visible="false" href="~/View/Inserimento">Inserimento Atti</a></li>
                                 <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
                                 <%--<li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>--%>
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
-                                <li><a id="StatisticheAtti" runat="server" visible="false" href="~/View/StatisticheAtti">Statistiche</a></li>
+                                
 
                             </ul>
                         </li>
@@ -159,14 +173,36 @@
                             </ul>
                         </li>
 
+
+                        <li runat="server" id="LiHelp" visible="false">
+                            <asp:HyperLink
+                                ID="helpLink"
+                                runat="server"
+                                NavigateUrl="~/FileComuni/Manualeutenteuotep.pdf"
+                                Target="_blank"
+                                Style="color: #ffffff !important">
+         Manuale Utente 
+                            </asp:HyperLink>
+
+                        </li>
+
                         <li runat="server" id="menuEsci" visible="false">
                             <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click" Style="color: #ffffff !important">ESCI</asp:LinkButton>
                         </li>
+
+
                     </ul>
+                    <div id="viewerContainer">
+                        <iframe id="wordViewerFrame" src=""></iframe>
+                    </div>
                 </div>
 
             </div>
+            <div runat="server" id="userLog" visible="false" >
+                <asp:Label ID="lblUser" runat="server" Style="color: #ffffff !important" />
+            </div>
         </div>
+
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>

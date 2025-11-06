@@ -49,12 +49,15 @@ namespace Uotep
             Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
             {
-                if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+                if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper() ||
+                    ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                 {
                     btSalva.Enabled = false;
                     btModifica.Enabled = false;
+                    BtEstraiTabella.Visible = false;
                 }
                 CaricaDLL();
+
             }
 
         }
@@ -128,7 +131,12 @@ namespace Uotep
             pratica.DATA_RISCONTRO = txtDataRiscontro.Text;
             pratica.notaSpostamento = txtNotaSpostamento.Text;
             pratica.notariscontro = txtNotaRiscontro.Text;
-            pratica.quartiere = DdlQuartiere.SelectedItem.Text;
+            if (DdlQuartiere.SelectedIndex > 1)
+
+                pratica.quartiere = DdlQuartiere.SelectedItem.Text;
+            else
+                pratica.quartiere = string.Empty;
+
         }
 
         protected void btInserisci_Click(object sender, EventArgs e)
@@ -279,18 +287,22 @@ namespace Uotep
             if (!string.IsNullOrEmpty(fascicolo.Rows[0].ItemArray[2].ToString()))
             {
 
-            
-            string val = string.Empty;
-            for (int i = 0; i < DdlQuartiere.Items.Count; i++)
-            {
-                if (DdlQuartiere.Items[i].Text == fascicolo.Rows[0].ItemArray[2].ToString().ToUpper())
+
+                string val = string.Empty;
+                for (int i = 0; i < DdlQuartiere.Items.Count; i++)
                 {
-                    val = DdlQuartiere.Items[i].Value;
+                    if (DdlQuartiere.Items[i].Text == fascicolo.Rows[0].ItemArray[2].ToString().ToUpper())
+                    {
+                        val = DdlQuartiere.Items[i].Value;
 
 
+                    }
                 }
-            }
-            DdlQuartiere.SelectedValue = val;
+                if (DdlQuartiere.SelectedIndex > 0)
+                {
+                    DdlQuartiere.SelectedValue = val;
+                }
+
             }
         }
         protected void btRicerca_Click(object sender, EventArgs e)
