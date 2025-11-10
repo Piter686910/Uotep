@@ -600,6 +600,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckCensimentoAllPubb;
 
         /// <summary>
+        /// Controllo txtNumCensimento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumCensimento;
+
+        /// <summary>
         /// Controllo txtModPratica.
         /// </summary>
         /// <remarks>

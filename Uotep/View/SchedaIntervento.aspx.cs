@@ -43,20 +43,20 @@ namespace Uotep
                 if (Area == "uote")
                 {
                     rdUote.Checked = true;
-                    divNotificaTp.Visible = false;
-                    divSgombero.Visible = false;
-                    divOccupazione.Visible = false;
-                    divCensimento.Visible = false;
-                    divQuartiere.Visible = false;
+                    //divNotificaTp.Visible = false;
+                   // divSgombero.Visible = false;
+                   // divOccupazione.Visible = false;
+                   // divCensimento.Visible = false;
+//                    divQuartiere.Visible = false;
                 }
                 else
                 {
                     rdUotp.Checked = true;
-                    divNotificaTp.Visible = true;
-                    divSgombero.Visible = true;
-                    divOccupazione.Visible = true;
-                    divCensimento.Visible = true;
-                    divQuartiere.Visible = true;
+                   // divNotificaTp.Visible = true;
+                   // divSgombero.Visible = true;
+                  // divOccupazione.Visible = true;
+                   // divCensimento.Visible = true;
+  //                  divQuartiere.Visible = true;
                 }
                 CaricaDLL();
             }
@@ -480,7 +480,7 @@ namespace Uotep
             }
             if (ckSgomberi.Checked == true)
             {
-                if (CkSgombAbusiva.Checked == false && CkSgombAbusiva.Checked == false)
+                if (CkSgombAbusiva.Checked == false && CkSgombImmobili.Checked == false)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di sgombero." + "'); $('#errorModal').modal('show');", true);
 

@@ -416,6 +416,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
+                                <asp:TextBox ID="txtNumCensimento" runat="server"  />
                             </div>
 
                         </div>

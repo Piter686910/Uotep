@@ -259,6 +259,7 @@ namespace Uotep
             CkSgombImmobili.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[54]);
             ckNotificaTp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[55]);
             txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
+            txtNumCensimento.Text = rap.Rows[0].ItemArray[57].ToString();
         }
 
         protected void btA_Click(object sender, EventArgs e)
@@ -980,7 +981,10 @@ namespace Uotep
                                 }
                                 if (ckCensimentoAllPubb.Checked)
                                 {
-                                    stat.censimentoAllPubb = 1;
+                                    if (!String.IsNullOrEmpty(txtNumCensimento.Text))
+                                        rap.num_censimento_all_pubb = System.Convert.ToInt32(txtNumCensimento.Text);
+                                    else
+                                        rap.num_censimento_all_pubb = 1;
                                 }
                                 rap.censimento_all_pubb = ckCensimentoAllPubb.Checked;
                                 if (ckControlliOccupazioneAbus.Checked)

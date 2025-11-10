@@ -4469,9 +4469,10 @@ namespace Uotep.Classi
             bool resp = true;
             string sql_pratica = String.Empty;
             string testoSql = string.Empty;
-
+            //arch.arch_dataInserimento = System.Convert.ToString(DateTime.Now.ToString("dd/mm/yyyy"));
             sql_pratica = "update Archiviotp set destinatario1 = '" + @arch.arch_destinatario.Replace("'", "''") + "', cognome = '" + @arch.arch_cognome.Replace("'", "''") + "', codice ='" + @arch.arch_codice.Replace("'", "''") +
                                  "', via = '" + @arch.arch_indirizzo.Replace("'", "''") + "', codice_edificio = '" + @arch.arch_edificio.Replace("'", "''") + "', note = '" + @arch.arch_note.Replace("'", "''") +
+                                 "', data1 = '" + @arch.arch_dataInserimento.Replace("'", "''") + 
                                  "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") + "'" +
 
                                  " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";

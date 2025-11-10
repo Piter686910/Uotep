@@ -145,8 +145,9 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
-    </script>
 
+    </script>
+    
     <div class="panel panel-default">
         <div class="form-group mb-3"></div>
         <div class="panel-heading">
@@ -162,8 +163,8 @@
             <!-- Colonna destra -->
             <div class="col-md-3 form-check">
                 <label class="form-check-label ms-3 mt-3 text-left" for="RadioButton1">Area Appartenenza</label>
-                <asp:RadioButton ID="rdUote" runat="server" GroupName="AreaGroup" Text="UOTE" />
-                <asp:RadioButton ID="rdUotp" runat="server" GroupName="AreaGroup" Text="UOTP" />
+                <asp:RadioButton ID="rdUote" runat="server" GroupName="AreaGroup" Text="UOTE" onclick="gestisciVisibilita();" />
+                <asp:RadioButton ID="rdUotp" runat="server" GroupName="AreaGroup" Text="UOTP" onclick="gestisciVisibilita();" />
             </div>
         </div>
 
@@ -278,14 +279,19 @@
                                 <label for="txtNominativo">Nominativo</label>
                                 <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                             </div>
-                            <div id="divQuartiere" runat="server" class="form-check mb-2">
+                            <div id="divQuartiere" runat="server" class="form-check mb-2" style="display: none;">
                                 <label for="txtQuartiereTp">Quartiere</label>
-                                <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
+                                <%--<asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>--%>
                                 <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 </div>
                                 <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
 
                             </div>
+
+
+
+
+
                             <div class="form-group mb-3" style="margin-top: 80px!important">
                                 <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control"></asp:ListBox>
                             </div>
@@ -353,7 +359,7 @@
                                 <label class="form-check-label" for="ckCdr">CDR</label>
                             </div>
 
-                            <div id="divNotificaTp" runat="server" class="form-check mb-2" visible="false">
+                            <div id="divNotificaTp" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
                             </div>
@@ -439,7 +445,7 @@
                                     <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
                                 </div>
-                                <div id="divSgombero" runat="server" class="form-check mb-2">
+                                <div id="divSgombero" runat="server" class="form-check mb-2" style="display: none;">
                                     <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
                                     <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
@@ -508,14 +514,14 @@
                                 <label class="form-check-label">]</label>
                             </div>
 
-                            <div id="divOccupazione" runat="server" class="form-check mb-2">
+                            <div id="divOccupazione" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
                                 <label class="form-check-label">]</label>
                             </div>
-                            <div id="divCensimento" runat="server" class="form-check mb-2">
+                            <div id="divCensimento" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
                                 <asp:TextBox ID="txtNumCensimento" runat="server"  MaxLength="3"  />
@@ -632,4 +638,35 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        // Funzione per gestire la visibilità
+        function gestisciVisibilita() {
+            var divquartiere = document.getElementById('<%= divQuartiere.ClientID %>');
+            var divNotificaTp = document.getElementById('<%= divNotificaTp.ClientID %>');
+            var divSgombero = document.getElementById('<%= divSgombero.ClientID %>');
+            var divOccupazione = document.getElementById('<%= divOccupazione.ClientID %>');
+            var divCensimento = document.getElementById('<%= divCensimento.ClientID %>');
+
+            // Recupera gli altri elementi, verificando sempre
+            var rdUote = document.getElementById('<%= rdUote.ClientID %>');
+
+            // mostrare/nascondere
+            if (rdUote.checked) {
+                               divquartiere.style.display = 'none';
+                divNotificaTp.style.display = 'none';
+                divSgombero.style.display = 'none';
+                divOccupazione.style.display = 'none';
+                divCensimento.style.display = 'none';
+            } else {
+
+                divquartiere.style.display = 'block';
+                divNotificaTp.style.display = 'block';
+                divSgombero.style.display = 'block';
+                divOccupazione.style.display = 'block';
+                divCensimento.style.display = 'block';
+            }
+        }
+        //al caricamento della pagian effettua il primno controllo
+        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+    </script>
 </asp:Content>

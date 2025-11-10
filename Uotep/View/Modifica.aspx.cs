@@ -1343,6 +1343,7 @@ namespace Uotep
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text.ToUpper();
+                decr.decretato = txtDecretato.Text.ToUpper();
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
                 if (!String.IsNullOrEmpty(txtDataDecretazione.Text))
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
