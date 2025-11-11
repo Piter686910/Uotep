@@ -138,7 +138,8 @@ namespace Uotep
                     //filePath = CartellaSegreteria + FLFilein.FileName;
 
                     fl.nomefile = newFileName;
-                    long maxSizeInBytes = 4 * 1024 * 1024; // 4MB in bytes
+                    //long maxSizeInBytes = 4 * 1024 * 1024; // 4MB in bytes
+                    long maxSizeInBytes = (long)(7.5 * 1024 * 1024);
                     //FileInfo fileInfo = new FileInfo(FLFilein.FileBytes);
                     //long fileSizeInBytes = fileInfo.Length;
                     if (FLFilein.FileBytes.Length >= maxSizeInBytes)

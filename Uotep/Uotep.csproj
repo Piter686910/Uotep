@@ -335,6 +335,7 @@
     <Content Include="View\ModificaRiservata.aspx" />
     <Content Include="View\InserimentoArchivio.aspx" />
     <Content Include="View\test.aspx" />
+    <Content Include="View\Attivita.aspx" />
     <Content Include="View\Uotp\InserimentoArchivioUotp.aspx" />
     <Content Include="View\Uotp\RicercaArchivioUotp.aspx" />
     <Content Include="View\Visualizza.aspx" />
@@ -508,6 +509,13 @@
     </Compile>
     <Compile Include="View\test.aspx.designer.cs">
       <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Attivita.aspx.cs">
+      <DependentUpon>Attivita.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Attivita.aspx.designer.cs">
+      <DependentUpon>Attivita.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\Uotp\InserimentoArchivioUotp.aspx.cs">
       <DependentUpon>InserimentoArchivioUotp.aspx</DependentUpon>

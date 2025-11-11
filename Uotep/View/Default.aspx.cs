@@ -37,6 +37,7 @@ namespace Uotep
                     Session["profilo"] = ricerca.Rows[0].ItemArray[0];
                     Session["ruolo"] = ricerca.Rows[0].ItemArray[1];
                     Session["area"] = ricerca.Rows[0].ItemArray[2];
+                    Session["MacroArea"] = ricerca.Rows[0].ItemArray[3];
                     pnlLogin.Visible = false;
 
                 }

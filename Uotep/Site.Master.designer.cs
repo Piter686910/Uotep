@@ -24,6 +24,33 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuAmministratore;
 
         /// <summary>
+        /// Controllo Amministratore.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor Amministratore;
+
+        /// <summary>
+        /// Controllo menuAttivita.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor menuAttivita;
+
+        /// <summary>
+        /// Controllo Attivita.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor Attivita;
+
+        /// <summary>
         /// Controllo menuArchivio.
         /// </summary>
         /// <remarks>

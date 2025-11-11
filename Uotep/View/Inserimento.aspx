@@ -411,7 +411,9 @@
                             <label for="txtProt">Nr Carico</label>
                             <asp:TextBox ID="txtProt" runat="server" CssClass="form-control1" ForeColor="Red" Enabled="false" Font-Bold="true" />
                             <label for="Ddltipo">/</label>
-                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
+                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" onchange="gestisciVisibilita();">
+                                <%-- <asp:DropDownList ID="DropDownList1" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">--%>
+
                                 <asp:ListItem Text="ED"> </asp:ListItem>
                                 <asp:ListItem Text="TP"> </asp:ListItem>
                                 <asp:ListItem Text="AG"> </asp:ListItem>
@@ -500,6 +502,7 @@
 
 
                     </div>
+
                     <div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
@@ -522,9 +525,22 @@
                         </div>
 
                     </div>
+                    <div class="col-md-4" id="divbu" runat="server" style="display: none;">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtBU">BU</label>
+                            <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" />
+                        </div>
 
+                    </div>
+
+                    <div class="col-md-4" id="divcd" runat="server" style="display: none;">
+                        <div class="form-group mb-3">
+                            <label for="txtCodEdificio">Codice Edificio</label>
+                            <asp:TextBox ID="txtCodEdificio" runat="server" CssClass="form-control" />
+                        </div>
+                    </div>
                 </div>
-                <div id="divAg" runat="server" visible="false">
+                <div id="divAg" runat="server" style="display: none;">
 
                     <p style="font-weight: bold; font-size: medium">Dati AG</p>
                     <div class="row custom-border">
@@ -877,5 +893,34 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        // Funzione per gestire la visibilità
+        function gestisciVisibilita() {
+            var divag = document.getElementById('<%= divAg.ClientID %>');
+            var divbu = document.getElementById('<%= divbu.ClientID %>');
+            var divcd = document.getElementById('<%= divcd.ClientID %>');
+            // Recupera gli altri elementi, verificando sempre
+            var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
 
+            // mostrare/nascondere
+            if (ddl.value === 'AG') {
+                divag.style.display = 'block';
+            } else {
+                divag.style.display = 'none';
+            }
+            if (ddl.value === 'TP') {
+                divbu.style.display = 'block';
+                divcd.style.display = 'block';
+            } else {
+                divbu.style.display = 'none';
+                divcd.style.display = 'none';
+            }
+        }
+        //al caricamento della pagian effettua il primno controllo
+        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+        var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
+        if (ddl) {
+            ddl.onchange = gestisciVisibilita;
+        }
+    </script>
 </asp:Content>

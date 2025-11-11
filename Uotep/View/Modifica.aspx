@@ -455,6 +455,16 @@
         }
     </script>
     <style>
+        .GridViewRow {
+            background-color: white;
+        }
+
+        /* Stile per la riga alternata (azzurro chiaro) */
+        .GridViewAlternatingRow {
+            background-color: #E6F3FF; /* Un azzurro molto chiaro */
+            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+        }
+
         .custom-border {
             border: 2px solid #007bff; /* Cornice blu */
             border-radius: 8px; /* Angoli arrotondati */
@@ -673,10 +683,7 @@
 
                             <%--<asp:TextBox ID="txtSigla" runat="server" CssClass="form-control mb-3" Enabled="false" />--%>
                             <label for="DdlSigla">/</label>
-                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged" AutoPostBack="true">
-                                <%--<asp:ListItem Text="ED"> </asp:ListItem>
-                                <asp:ListItem Text="TP"> </asp:ListItem>
-                                <asp:ListItem Text="AG"> </asp:ListItem>--%>
+                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control1" onchange="gestisciVisibilita();">
                             </asp:DropDownList>
 
                         </div>
@@ -739,6 +746,14 @@
                             <asp:TextBox ID="txPratica" runat="server" CssClass="form-control mb-3" MaxLength="50" />
 
                         </div>
+                        <div class="form-group mb-3" id="divbu" runat="server" style="display: none;">
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtBU">BU</label>
+                                <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" />
+                            </div>
+
+
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
@@ -758,6 +773,10 @@
                             <%--<div id="bt1" runat="server" class="col-md-3" style="margin-top: 25px!important; margin-left: -15px!important">--%>
 
                             <%--<asp:Button ID="Add" Text="+" runat="server" ToolTip="Aggiungi accertatore 2" CssClass="btn btn-primary mt-3" OnClick="Add_Click" />--%>
+                        </div>
+                        <div class="form-group mb-3" id="divcd" runat="server" style="display: none;">
+                            <label for="txtCodEdificio">Codice Edificio</label>
+                            <asp:TextBox ID="txtCodEdificio" runat="server" CssClass="form-control" />
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -802,13 +821,14 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtAccertatori">Accertatori</label>
-                            <asp:TextBox ID="txtAccertatori" runat="server" MaxLength="30" CssClass="form-control mb-3"  />
+                            <asp:TextBox ID="txtAccertatori" runat="server" MaxLength="30" CssClass="form-control mb-3" />
 
                         </div>
                     </div>
 
                 </div>
-                <div id="divAg" runat="server" visible="false">
+
+                <div id="divAg" runat="server" style="display: none;">
 
                     <p style="font-weight: bold; font-size: medium">Dati AG</p>
                     <div class="row custom-border">
@@ -931,7 +951,8 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupD_PageIndexChanging">
+                            OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupD_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
@@ -1259,4 +1280,40 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        // Funzione per gestire la visibilità
+        function gestisciVisibilita() {
+            var divag = document.getElementById('<%= divAg.ClientID %>');
+            var divbu = document.getElementById('<%= divbu.ClientID %>');
+            var divcd = document.getElementById('<%= divcd.ClientID %>');
+           <%-- var txtgiudice = document.getElementById('<%= txtGiudice.ClientID %>');
+            var txtprocpen = document.getElementById('<%= txtProdPenNr.ClientID %>');
+            var ddlProvAg = document.getElementById('<%= DdlTipoProvvAg.ClientID %>');--%>
+            // Recupera gli altri elementi, verificando sempre
+            var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
+
+            // mostrare/nascondere
+            if (ddl.value === 'AG') {
+                divag.style.display = 'block';
+            } else {
+                divag.style.display = 'none';
+            }
+            if (ddl.value === 'TP') {
+                //txtgiudice.value = '';
+                //txtprocpen.value = '';
+                //ddlProvAg.selectedIndex = 0;
+                divbu.style.display = 'block';
+                divcd.style.display = 'block';
+            } else {
+                divbu.style.display = 'none';
+                divcd.style.display = 'none';
+            }
+        }
+        //al caricamento della pagian effettua il primno controllo
+        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+        var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
+        if (ddl) {
+            ddl.onchange = gestisciVisibilita;
+        }
+    </script>
 </asp:Content>

@@ -35,5 +35,7 @@ namespace Uotep.Classi
         public DateTime data_ins_pratica;
         public String macro_area = string.Empty;
         public String ulterioreTipoAtto = string.Empty;
+        public String bu = string.Empty;
+        public String codiceEdificio = string.Empty;
     }
 }

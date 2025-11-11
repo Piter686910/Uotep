@@ -384,7 +384,24 @@ namespace Uotep
                         }
 
                     }
+                    if (String.IsNullOrEmpty(txtBU.Text))
+                    {
+                        p.bu = String.Empty;
+                    }
+                    else
+                    {
+                        p.bu = txtBU.Text;
 
+                    }
+                    if (String.IsNullOrEmpty(txtCodEdificio.Text))
+                    {
+                        p.codiceEdificio = String.Empty;
+                    }
+                    else
+                    {
+                        p.codiceEdificio = txtCodEdificio.Text;
+
+                    }
                     stat.mese = mese;
                     stat.anno = DateTime.Now.Year;
                     Int32 idN = 0;
@@ -472,7 +489,8 @@ namespace Uotep
             txtProvenienza.Text = String.Empty;
             txtAreaCompetenza.Text = string.Empty;
             txtDataCarico.Text = string.Empty;
-            //  txtDataInvio.Text = String.Empty;
+            txtBU.Text = String.Empty;
+            txtCodEdificio.Text = String.Empty;
             // CkEvasa.Checked = false;
             CaricaDLL();
 
@@ -764,21 +782,20 @@ namespace Uotep
             CaricaDLL();
         }
 
-        protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CaricaDLL();
-            if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
-            {
-                divAg.Visible = true;
-            }
-            else
-            {
-                divAg.Visible = false;
-                txtGiudice.Text = string.Empty;
-
-                txtProdPenNr.Text = string.Empty;
-            }
-        }
+        //protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    CaricaDLL();
+        //    if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
+        //    {
+        //        divAg.Visible = true;
+        //    }
+        //    else
+        //    {
+        //        divAg.Visible = false;
+        //        txtGiudice.Text = string.Empty;
+        //        txtProdPenNr.Text = string.Empty;
+        //    }
+        //}
         protected void Decretazione_Click(object sender, EventArgs e)
         {
 

@@ -240,6 +240,42 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataCarico;
 
         /// <summary>
+        /// Controllo divbu.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divbu;
+
+        /// <summary>
+        /// Controllo txtBU.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBU;
+
+        /// <summary>
+        /// Controllo divcd.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divcd;
+
+        /// <summary>
+        /// Controllo txtCodEdificio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCodEdificio;
+
+        /// <summary>
         /// Controllo divAg.
         /// </summary>
         /// <remarks>

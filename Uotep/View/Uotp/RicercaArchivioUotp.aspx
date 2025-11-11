@@ -21,6 +21,16 @@
 
     </script>
     <style>
+        .GridViewRow {
+            background-color: white;
+        }
+
+        /* Stile per la riga alternata (azzurro chiaro) */
+        .GridViewAlternatingRow {
+            background-color: #E6F3FF; /* Un azzurro molto chiaro */
+            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+        }
+
         .uppercase-text {
             text-transform: uppercase;
         }
@@ -250,8 +260,8 @@
                             <div class="col-md-6 ">
                                 <div class="form-check mb-2">
                                     <label for="txtQuartiereTp">Quartiere</label>
-                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false"/>
-                                    
+                                    <asp:TextBox ID="txtQuartiereTp" runat="server" CssClass="form-control" Enabled="false" />
+
 
                                 </div>
                                 <div class="form-check mb-2">
@@ -363,11 +373,12 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
+                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Cartellina" HeaderText="Cart." HeaderStyle-CssClass="wrap-text" />
-                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40"   ItemStyle-CssClass="uppercase-text"/>
+                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
                                 <asp:TemplateField HeaderText="Oggetto" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Oggetto

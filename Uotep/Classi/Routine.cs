@@ -1329,6 +1329,12 @@ namespace Uotep.Classi
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
+                          // float startY_NumCensimenti = startY_430; //
+
+
+                            document.Add(new Paragraph($"Num. Censimenti: {schede.Rows[0].ItemArray[57]}").SetFixedPosition(300, startY_cenrimentoNucFam, 200));
+
+                            startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione
                             float x4 = 65;
                             float y4 = startY;

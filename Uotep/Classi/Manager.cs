@@ -1,5 +1,6 @@
 using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using Org.BouncyCastle.Utilities.Zlib;
@@ -11,6 +12,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
@@ -243,7 +245,7 @@ namespace Uotep.Classi
         {
 
             DataTable tb = new DataTable();
-            string sql = "SELECT profilo,ruolo,area FROM Operatore where Matricola= '" + user + "'";
+            string sql = "SELECT profilo,ruolo,area,macroarea FROM Operatore where Matricola= '" + user + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1117,6 +1119,21 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+       
+        public DataTable getAttivita(string area, Boolean val)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            
+            sql= "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// estrazione totale del DB
         /// </summary>
@@ -1271,7 +1288,7 @@ namespace Uotep.Classi
             }
         }
 
-
+        
         private DataTable FillTable(String sql, SqlConnection conn)
         {
 
@@ -4234,12 +4251,15 @@ namespace Uotep.Classi
             {
 
                 sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,macro_area,UlterioreTipoAtto)" +
+                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, " +
+                    "macro_area,UlterioreTipoAtto,bu,codiceEdificio)" +
                    " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                    "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                    @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
+                   @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + 
+                   @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +
+                   "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
                 {
                     sql_Statistiche = "update statistiche set deleghe_ricevute = +" + stat.deleghe_ricevute + ", esposti_ricevuti = + " + stat.esposti_ricevuti +
@@ -4829,7 +4849,8 @@ namespace Uotep.Classi
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
-                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "'" +
+                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + 
+                    "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -4887,12 +4908,13 @@ namespace Uotep.Classi
             //try
             //{
             sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,UlterioreTipoAtto)" +
+                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,UlterioreTipoAtto,bu,codiceEdificio)"  +
                 " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                 "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                 @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                 @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.ulterioreTipoAtto + "')";
+                 @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.ulterioreTipoAtto.Replace("'", "''") +
+                 "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +  "')";
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +

@@ -283,6 +283,15 @@
         .uppercase-text {
             text-transform: uppercase;
 }
+         .GridViewRow {
+     background-color: white;
+ }
+
+ /* Stile per la riga alternata (azzurro chiaro) */
+ .GridViewAlternatingRow {
+     background-color: #E6F3FF; /* Un azzurro molto chiaro */
+     /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+ }
 
         
 
@@ -589,7 +598,8 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging">
+                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                    AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
                                 <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />

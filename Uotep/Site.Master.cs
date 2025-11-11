@@ -26,10 +26,10 @@ namespace Uotep
         String ruolo = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
             if (!IsPostBack)
             {
-               
+
                 if (Session["user"] != null)
                 {
                     string Vuser = Session["user"].ToString();
@@ -37,7 +37,7 @@ namespace Uotep
                     string area = Session["area"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
-                    
+
                     if (Ricerca.Rows.Count > 0)
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
@@ -100,8 +100,10 @@ namespace Uotep
 
                                 RicercaArchivioUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                                {
                                     Decretazione.Visible = true;
-
+                                    Attivita.Visible = true;
+                                }
                                 break;
                             case "PG":
                                 // Mostra voci per utenti standard
@@ -158,7 +160,7 @@ namespace Uotep
                                 subMenuUOTP.Visible = true;
 
                                 RicercaArchivioUotp.Visible = true;
-
+                                
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -189,6 +191,8 @@ namespace Uotep
                                 subMenuUOTP.Visible = true;
                                 InserimentoArchivioUotp.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
+                                menuAttivita.Visible = true;
+                                Amministratore.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -216,7 +220,7 @@ namespace Uotep
                                 subMenuUOTP.Visible = true;
                                 InserimentoArchivioUotp.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
-
+                                menuAttivita.Visible = true;
                                 //*
                                 break;
                             default:
@@ -247,13 +251,14 @@ namespace Uotep
             Session.Remove("ListRicercaTp");
             Session.Remove("arc");
             Session.Remove("area");
+            Session.Remove("MacroArea");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);
             //Response.Redirect(/Default.aspx"), false);
         }
 
-      
+
     }
 
 

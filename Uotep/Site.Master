@@ -86,19 +86,24 @@
                 </div>
                 <div class="navbar-collapse collapse" style="font-weight: bold !important">
                     <ul class="nav navbar-nav">
-                        <%--<li><a id="menuHome" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Default">Home</a></li>--%>
-                        <li runat="server" id="menuAmministratore" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/Dashboard">Dashboard</a></li>
+                        <li><%--<a id="menuAttivita" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Attivita">Attività</a>--%></li>
 
 
-                        <%--<li runat="server" id="menuArchivio" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" ref="~/View/PagComandi" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
+                        <li id="menuAmministratore" runat="server" visible="false" class="dropdown">
+                             <a runat="server" style="color: #ffffff !important"  class="dropdown-toggle" data-toggle="dropdown">Dashboard<span class="caret"></span></a>
+
+                            <!-- Questo <ul> è il menu di secondo livello per UOTE -->
                             <ul class="dropdown-menu">
-                                <li><a id="InserimentoArchivio" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
-                                <li><a id="RicercaArchivio" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
-                                <li><a id="GestionePratica" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
+                                <li><a id="Amministratore" runat="server" visible="false" ref="~/View/Dashboard">Dashboard</a></li>
+                                <li><a id="menuAttivita" runat="server" visible="false" href="~/View/Attivita">Attività</a></li>
 
                             </ul>
-                        </li>--%>
+                        </li>
+
+<%--                        <li runat="server" id="menuAmministratore" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/Dashboard">Dashboard</a></li>--%>
+                        <li><a id="Attivita" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Attivita">Attività</a></li>
+
+                      
                         <!-- Elemento principale del menu a tendina "Archivio" -->
                         <li runat="server" id="menuArchivio" visible="false" class="dropdown">
 
@@ -144,7 +149,7 @@
                                 <li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>
                                 <%--<li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>--%>
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
-                                
+
 
                             </ul>
                         </li>
@@ -174,7 +179,7 @@
                         </li>
 
 
-                        <li runat="server" id="LiHelp" visible="false">
+                        <li runat="server" id="LiHelp">
                             <asp:HyperLink
                                 ID="helpLink"
                                 runat="server"
@@ -198,7 +203,7 @@
                 </div>
 
             </div>
-            <div runat="server" id="userLog" visible="false" >
+            <div runat="server" id="userLog" visible="false">
                 <asp:Label ID="lblUser" runat="server" Style="color: #ffffff !important" />
             </div>
         </div>

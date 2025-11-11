@@ -31,6 +31,16 @@
         }
     </script>
     <style>
+        .GridViewRow {
+            background-color: white;
+        }
+
+        /* Stile per la riga alternata (azzurro chiaro) */
+        .GridViewAlternatingRow {
+            background-color: #E6F3FF; /* Un azzurro molto chiaro */
+            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+        }
+
         .custom-border {
             border: 2px solid #007bff; /* Cornice blu */
             border-radius: 8px; /* Angoli arrotondati */
@@ -458,12 +468,13 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging">
+                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
 
                             <Columns>
                                 <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px"  />
+                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" />
 
 
                                 <asp:TemplateField HeaderText="Sigla" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="20px">
@@ -515,8 +526,10 @@
                                 <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
-
-                                <%--                                <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                    <ItemStyle CssClass="uppercase-text" />
+                                </asp:BoundField>
+                                <%--<asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>--%>
                                 <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="70px">

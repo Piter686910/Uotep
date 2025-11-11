@@ -75,15 +75,15 @@ namespace Uotep
         {
             txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
             DdlSigla.SelectedValue = pratica.Rows[0].ItemArray[2].ToString();
-            if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
-            {
-                divAg.Visible = true;
-            }
-            else
-            {
-                divAg.Visible = false;
+            //if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
+            //{
+            //    divAg.Visible = true;
+            //}
+            //else
+            //{
+            //    divAg.Visible = false;
 
-            }
+            //}
             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
 
                 txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
@@ -152,6 +152,9 @@ namespace Uotep
                 txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                 txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
             }
+            
+            txtBU.Text = pratica.Rows[0].ItemArray[29].ToString().ToUpper();
+            txtCodEdificio.Text = pratica.Rows[0].ItemArray[30].ToString().ToUpper();
 
         }
         private void CaricaDLL()
@@ -177,7 +180,7 @@ namespace Uotep
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-
+                DdlTipoProvvAg.Items.Insert(0, new ListItem("", "0"));
                 DataTable Esito = mn.getListScaturito();
                 DdlEsito.DataSource = Esito; // Imposta il DataSource della DropDownList
                 DdlEsito.DataTextField = "Scaturito"; // Il campo visibile
@@ -251,10 +254,10 @@ namespace Uotep
 
             if (txtTipoAtto.Text == testoE)
             {
-                if (divAg.Visible == true)
-                {
-                    resp = false;
-                }
+                //if (divAg.Visible == true)
+                //{
+                //    resp = false;
+                //}
             }
 
 
@@ -384,8 +387,38 @@ namespace Uotep
                     p.nrProtocollo = System.Convert.ToInt32(txtProt.Text.Trim());
                     DateTime dat = System.Convert.ToDateTime(txtDataInsCarico.Text);
 
+                    if (String.IsNullOrEmpty(txtBU.Text))
+                    {
+                        p.bu = String.Empty;
+                    }
+                    else
+                    {
+                        p.bu = txtBU.Text;
 
+                    }
+                    if (String.IsNullOrEmpty(txtCodEdificio.Text))
+                    {
+                        p.codiceEdificio = String.Empty;
+                    }
+                    else
+                    {
+                        p.codiceEdificio = txtCodEdificio.Text;
 
+                    }
+                    switch (DdlSigla.SelectedValue)
+                    {
+                        case "TP":
+                        case "ED":
+                            p.tipoProvvedimentoAG = string.Empty;
+                            p.giudice = string.Empty;
+                            p.procedimentoPen = string.Empty;
+                            txtProdPenNr.Text = string.Empty;
+                            txtGiudice.Text = string.Empty;
+                            DdlTipoProvvAg.SelectedIndex = 0;
+                            TxtTipoProvvAg.Text = string.Empty;
+                            break;
+
+                    }
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
                     //
@@ -624,17 +657,17 @@ namespace Uotep
                         txtProt.Text = pratica.Rows[0].ItemArray[1].ToString();
                         //txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
                         DdlSigla.SelectedValue = pratica.Rows[0].ItemArray[2].ToString();
-                        switch (DdlSigla.SelectedValue)
-                        {
-                            case "AG":
-                                divAg.Visible = true;
+                        //switch (DdlSigla.SelectedValue)
+                        //{
+                        //    case "AG":
+                        //        divAg.Visible = true;
 
-                                break;
-                            default:
-                                divAg.Visible = false;
-                                //CaricaDLL();
-                                break;
-                        }
+                        //        break;
+                        //    default:
+                        //        divAg.Visible = false;
+                        //        //CaricaDLL();
+                        //        break;
+                        //}
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
                         {
                             DateTime dataappo1 = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()); // Recupera la data dal DataTable
@@ -760,7 +793,8 @@ namespace Uotep
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
                         txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
-
+                        txtBU.Text = pratica.Rows[0].ItemArray[29].ToString();
+                        txtCodEdificio.Text = pratica.Rows[0].ItemArray[30].ToString();
 
                         // Puoi anche chiudere il popup se necessario
                         ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
@@ -881,9 +915,6 @@ namespace Uotep
                         txtDecretato.Text = values[1];     // Matricola
                         txtDataDecretazione.Text = values[2]; // DataInserimento
                         txtNotaDecretazione.Text = values[3]; // sigla
-
-
-
 
                         // Imposta il valore nel TextBox
                         //txtSelectedValue.Text = selectedValue;
@@ -1393,24 +1424,24 @@ namespace Uotep
             }
 
         }
-        protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //  CaricaDLL();
-            if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
-            {
-                divAg.Visible = true;
-                TxtTipoProvvAg.Text = DdlTipoProvvAg.SelectedItem.Text;
-                CaricaDLL();
-            }
-            else
-            {
-                divAg.Visible = false;
-                txtGiudice.Text = string.Empty;
-                TxtTipoProvvAg.Text = string.Empty;
-                txtProdPenNr.Text = string.Empty;
+        //protected void DdlSigla_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    //  CaricaDLL();
+        //    if (DdlSigla.SelectedItem.Text == Enumerate.Sigla.AG.ToString().ToUpper())
+        //    {
+        //       // divAg.Visible = true;
+        //        TxtTipoProvvAg.Text = DdlTipoProvvAg.SelectedItem.Text;
+        //        CaricaDLL();
+        //    }
+        //    else
+        //    {
+        //   //     divAg.Visible = false;
+        //        txtGiudice.Text = string.Empty;
+        //        TxtTipoProvvAg.Text = string.Empty;
+        //        txtProdPenNr.Text = string.Empty;
 
-            }
-        }
+        //    }
+        //}
         // esecuzione del filtro ulteriore sulla colonna indirizzo
         protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
         {
