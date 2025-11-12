@@ -1119,7 +1119,20 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-       
+        public DataTable getAttivitaAdmin(string area, Boolean val)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getAttivita(string area, Boolean val)
         {
             string sql = string.Empty;

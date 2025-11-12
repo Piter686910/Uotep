@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml;
+﻿using AjaxControlToolkit.HtmlEditor.Popups;
+using DocumentFormat.OpenXml;
 using System;
 using System.Data;
 using System.Runtime.Caching;
@@ -14,7 +15,7 @@ namespace Uotep
     {
         String Vuser = String.Empty;
         String area = String.Empty;
-       
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -55,19 +56,268 @@ namespace Uotep
 
         }
 
-        protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
+      
+        protected void GVAttivita_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVAttivita.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            {
+                switch (HfProvenienzaBt.Value)
+                {
+                    case "incarico":
+                        btAttivitaInCarico_Click(sender, e);
+                        break;
+                    case "chiuso":
+                        btAttivitaConcluse_Click(sender, e);
+                        break;
+                }
+
+            }
+            //else
+            //  {
+            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //{
+            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    apripopupPratica_Click(sender, e);
+            //}
+            //else
+            //{
+            //    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+            //    {
+            //        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
+            //        apripopupPratica_Click(sender, e);
+            //    }
+            //    else
+            //    {
+            //        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            //        {
+            //            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
+            //            apripopupPratica_Click(sender, e);
+            //        }
+            //    }
+            //}
+            //   }
+
+
+        }
+        
+
+        protected void btAttivitaInCarico_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            if (area == "A")
+            {
+                PopulateGridView(mn, false);
+
+            }
+            else
+            {
+                DataTable dt = mn.getAttivita(area, false);
+                GVAttivita.DataSource = dt;
+                GVAttivita.DataBind();
+            }
+            HfProvenienzaBt.Value = "incarico";
+        }
+
+
+        protected void btAttivitaConcluse_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            if (area == "A")
+            {
+                PopulateGridView(mn, true);
+
+            }
+            else
+            {
+                DataTable dt = mn.getAttivita(area, true);
+                GVAttivita.DataSource = dt;
+                GVAttivita.DataBind();
+            }
+            HfProvenienzaBt.Value = "chiuso";
+        }
+        protected void GVMC1_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVMC1.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            {
+                switch (HfProvenienzaBt.Value)
+                {
+                    case "incarico":
+                        btAttivitaInCarico_Click(sender, e);
+                        break;
+                    case "chiuso":
+                        btAttivitaConcluse_Click(sender, e);
+                        break;
+                }
+
+            }
+            //else
+            //  {
+            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //{
+            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    apripopupPratica_Click(sender, e);
+            //}
+            //else
+            //{
+            //    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+            //    {
+            //        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
+            //        apripopupPratica_Click(sender, e);
+            //    }
+            //    else
+            //    {
+            //        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            //        {
+            //            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
+            //            apripopupPratica_Click(sender, e);
+            //        }
+            //    }
+            //}
+            //   }
+
+
+        }
+        protected void GVMC2_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVMC2.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            {
+                switch (HfProvenienzaBt.Value)
+                {
+                    case "incarico":
+                        btAttivitaInCarico_Click(sender, e);
+                        break;
+                    case "chiuso":
+                        btAttivitaConcluse_Click(sender, e);
+                        break;
+                }
+
+            }
+            //else
+            //  {
+            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //{
+            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    apripopupPratica_Click(sender, e);
+            //}
+            //else
+            //{
+            //    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+            //    {
+            //        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
+            //        apripopupPratica_Click(sender, e);
+            //    }
+            //    else
+            //    {
+            //        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            //        {
+            //            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
+            //            apripopupPratica_Click(sender, e);
+            //        }
+            //    }
+            //}
+            //   }
+
+
+        }
+        protected void GVMC3_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVMC3.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            {
+                switch (HfProvenienzaBt.Value)
+                {
+                    case "incarico":
+                        btAttivitaInCarico_Click(sender, e);
+                        break;
+                    case "chiuso":
+                        btAttivitaConcluse_Click(sender, e);
+                        break;
+                }
+
+            }
+            //else
+            //  {
+            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //{
+            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    apripopupPratica_Click(sender, e);
+            //}
+            //else
+            //{
+            //    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+            //    {
+            //        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
+            //        apripopupPratica_Click(sender, e);
+            //    }
+            //    else
+            //    {
+            //        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            //        {
+            //            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
+            //            apripopupPratica_Click(sender, e);
+            //        }
+            //    }
+            //}
+            //   }
+
+
+        }
+        private void PopulateGridView(Manager mn, Boolean val)
+        {
+            GVMC1.Visible = true;
+            GVMC2.Visible = true;
+            GVMC3.Visible = true;
+            DataTable dt1 = mn.getAttivitaAdmin("MC1", val);
+            DataTable dt2 = mn.getAttivitaAdmin("MC2", val);
+            DataTable dt3 = mn.getAttivitaAdmin("MC3", val);
+            GVMC1.DataSource = dt1;
+            GVMC1.DataBind();
+            GVMC2.DataSource = dt2;
+            GVMC2.DataBind();
+            GVMC3.DataSource = dt3;
+            GVMC3.DataBind();
+            if (dt1.Rows.Count == 0)
+            {
+                lbl1.Visible = false;
+            }
+            else
+            {
+                lbl1.Visible = true;
+            }
+            if (dt2.Rows.Count == 0)
+            {
+                lbl2.Visible = false;
+            }
+            else
+            {
+                lbl2.Visible = true;
+            }
+            if (dt3.Rows.Count == 0)
+            {
+                lbl3.Visible = false;
+            }
+            else
+            {
+                lbl3.Visible = true;
+            }
+        }
+        //gestione gridview attivita
+        protected void GVAttivita_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Ottieni il valore della colonna "ID"
                 string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
-                
+
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
 
 
-               
+
             }
             if (GVAttivita.TopPagerRow != null && GVAttivita.TopPagerRow.Visible)
             {
@@ -82,86 +332,214 @@ namespace Uotep
                 }
             }
         }
-        protected void GVAttivita_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        protected void GVAttivita_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            //GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            //if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroIndirizzo.Value) && String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            //if (e.CommandName == "Select")
             //{
-            //    RicercaNew(sender, e);
-            //}
-            //else
-            //{
-            //    if (!String.IsNullOrEmpty(HfFiltroNote.Value))
-            //    {
-            //        PopulateGridView("arch_note", HfFiltroNote.Value);
-            //        apripopupPratica_Click(sender, e);
-            //    }
-            //    else
-            //    {
-            //        if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
-            //        {
-            //            PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
-            //            apripopupPratica_Click(sender, e);
-            //        }
-            //        else
-            //        {
-            //            if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
-            //            {
-            //                PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
-            //                apripopupPratica_Click(sender, e);
-            //            }
-            //        }
-            //    }
-            //}
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    //string selectedValue = e.CommandArgument.ToString();
 
 
+            //    string[] args = e.CommandArgument.ToString().Split(';');
+            //    int idP = System.Convert.ToInt32(args[0]);
+            //    string Npratica = args[1];
+
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    // txtPratica.Text = Npratica;
+
+            //    Manager mn = new Manager();
+            //    //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+            //    DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+            //    //if (pratica.Rows.Count > 0)
+            //    //{
+            //    //    FillScheda(pratica);
+
+            //    //}
+            //    //Session.Remove("ListRicerca");
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
         }
-        protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
+        //gestione gridview attività mc1
+        protected void GVMC1_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.CommandName == "Select")
+            if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                // Ottieni il valore dell'ID dalla CommandArgument
-                //string selectedValue = e.CommandArgument.ToString();
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
 
 
-                string[] args = e.CommandArgument.ToString().Split(';');
-                int idP = System.Convert.ToInt32(args[0]);
-                string Npratica = args[1];
+
+            }
+            if (GVMC1.TopPagerRow != null && GVMC1.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVMC1.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVMC1.PageIndex + 1;
+                    int totalPages = GVMC1.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+        protected void GVMC1_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    //string selectedValue = e.CommandArgument.ToString();
 
 
-                // Imposta il valore nel TextBox
-                //txtSelectedValue.Text = selectedValue;
-               // txtPratica.Text = Npratica;
+            //    string[] args = e.CommandArgument.ToString().Split(';');
+            //    int idP = System.Convert.ToInt32(args[0]);
+            //    string Npratica = args[1];
 
-                Manager mn = new Manager();
-                //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
 
-                DataTable pratica = mn.getPraticaArchivioUoteById(idP);
-                //if (pratica.Rows.Count > 0)
-                //{
-                //    FillScheda(pratica);
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    // txtPratica.Text = Npratica;
 
-                //}
-                //Session.Remove("ListRicerca");
-                // Chiudi il popup
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //    Manager mn = new Manager();
+            //    //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+            //    DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+            //    //if (pratica.Rows.Count > 0)
+            //    //{
+            //    //    FillScheda(pratica);
+
+            //    //}
+            //    //Session.Remove("ListRicerca");
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
+        }
+        protected void GVMC2_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    //string selectedValue = e.CommandArgument.ToString();
+
+
+            //    string[] args = e.CommandArgument.ToString().Split(';');
+            //    int idP = System.Convert.ToInt32(args[0]);
+            //    string Npratica = args[1];
+
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    // txtPratica.Text = Npratica;
+
+            //    Manager mn = new Manager();
+            //    //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+            //    DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+            //    //if (pratica.Rows.Count > 0)
+            //    //{
+            //    //    FillScheda(pratica);
+
+            //    //}
+            //    //Session.Remove("ListRicerca");
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
+        }
+        //gestione gridview attività mc2
+        protected void GVMC2_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+
+
+
+            }
+            if (GVMC2.TopPagerRow != null && GVMC2.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVMC2.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVMC2.PageIndex + 1;
+                    int totalPages = GVMC2.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+        //gestione gridview attività mc3
+        protected void GVMC3_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+
+
+
+            }
+            if (GVMC3.TopPagerRow != null && GVMC3.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)GVMC3.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVMC3.PageIndex + 1;
+                    int totalPages = GVMC3.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
             }
         }
 
-        protected void btAttivitaInCarico_Click(object sender, EventArgs e)
+        protected void GVMC3_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            Manager mn = new Manager();
-            DataTable dt = mn.getAttivita(area, false);
-            GVAttivita.DataSource = dt;
-            GVAttivita.DataBind();
-        }
+            //if (e.CommandName == "Select")
+            //{
+            //    // Ottieni il valore dell'ID dalla CommandArgument
+            //    //string selectedValue = e.CommandArgument.ToString();
 
-        protected void btAttivitaConcluse_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            DataTable dt = mn.getAttivita(area,true);
-            GVAttivita.DataSource = dt;
-            GVAttivita.DataBind();
+
+            //    string[] args = e.CommandArgument.ToString().Split(';');
+            //    int idP = System.Convert.ToInt32(args[0]);
+            //    string Npratica = args[1];
+
+
+            //    // Imposta il valore nel TextBox
+            //    //txtSelectedValue.Text = selectedValue;
+            //    // txtPratica.Text = Npratica;
+
+            //    Manager mn = new Manager();
+            //    //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+            //    DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+            //    //if (pratica.Rows.Count > 0)
+            //    //{
+            //    //    FillScheda(pratica);
+
+            //    //}
+            //    //Session.Remove("ListRicerca");
+            //    // Chiudi il popup
+            //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            //}
         }
     }
 }
