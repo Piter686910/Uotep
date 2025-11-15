@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
@@ -1125,7 +1126,53 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
-            sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere";
+            sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere order by a.nr_protocollo";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        /// <summary>
+        /// get auto sigla
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getSiglaAuto()
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM parcoauto order by sigla";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable getListAuto(string mese, int anno)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM GestioneAuto where mese ='" + mese + "' and anno = " + anno ;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable getAutoBySigla(string sigla)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM parcoauto where sigla ='" + sigla + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1138,8 +1185,8 @@ namespace Uotep.Classi
             string sql = string.Empty;
             DataTable tb = new DataTable();
 
-            
-            sql= "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere";
+
+            sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere order by a.nr_protocollo";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1301,7 +1348,7 @@ namespace Uotep.Classi
             }
         }
 
-        
+
         private DataTable FillTable(String sql, SqlConnection conn)
         {
 
@@ -1829,6 +1876,101 @@ namespace Uotep.Classi
                     conn.Close();
                     conn.Dispose();
                     return resp;
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+        /// <summary>
+        /// inserisce una gestione auto e converte string in float
+        /// </summary>
+        /// <param name="auto"></param>
+        /// <returns></returns>
+        public Boolean InsGestioneAuto(GestAuto auto)
+        {
+            bool resp = true;
+            string sql = String.Empty;
+            string testoSql = string.Empty;
+            
+            try
+            {
+                string inputlitri = auto.litri.ToString();
+                string inputEuro = auto.euro.ToString();
+                decimal importoFloat ;
+                decimal litriFloat ;
+                // 1. Definisci la cultura di parsing (italiana: virgola come decimale)
+                CultureInfo culturaItaliana = new CultureInfo("it-IT");
+
+                // 2. Pulizia: Rimuovi il simbolo € e spazi, poi tenta la conversione C#
+                if (decimal.TryParse(
+                        inputEuro.Replace("€", "").Trim(),
+                        NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
+                        culturaItaliana,
+                        out importoFloat) &&
+
+
+                        decimal.TryParse(
+                        inputlitri.Replace("€", "").Trim(),
+                        NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
+                        culturaItaliana,
+                        out litriFloat))
+
+                {
+                    decimal valoreArrotondatoE = Math.Round(importoFloat, 2);
+                    decimal valoreArrotondatoL = Math.Round(litriFloat, 2);
+
+                    sql = "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota)" +
+                          " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante + "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "'," + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "')";
+
+
+                    using (SqlConnection conn = new SqlConnection(ConnString))
+                    {
+                        conn.Open();
+
+                        SqlCommand command = conn.CreateCommand();
+                        command.Parameters.Add("@valore1", SqlDbType.Float).Value = (double)importoFloat;
+                        command.Parameters.Add("@valore", SqlDbType.Float).Value = (double)litriFloat;
+
+                        try
+                        {
+                            command.CommandText = sql;
+                            testoSql = "gestioneauto";
+                            int res = command.ExecuteNonQuery();
+                        }
+
+                        catch (Exception ex)
+                        {
+                            if (!File.Exists(LogFile))
+                            {
+                                using (StreamWriter sw = File.CreateText(LogFile)) { }
+                            }
+
+                            using (StreamWriter sw = File.AppendText(LogFile))
+                            {
+                                sw.WriteLine("Sigla:" + auto.sigla + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
+                                sw.Close();
+                            }
+
+                            resp = false;
+
+
+                        }
+                        conn.Close();
+                        conn.Dispose();
+                        return resp;
+
+                    }
+
                 }
 
 
@@ -2832,7 +2974,7 @@ namespace Uotep.Classi
 
             //  trasformio stringa mese in numero;
             string meseS = GetNumeroMeseByText(mese);
-            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32( meseS), 1);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
             sql = "SELECT count(rapp_relazione) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_relazione='true'";
             string res = null;
@@ -3022,7 +3164,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT SUM(TRY_CAST(rapp_numEsposti AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() +"'";
+            sql = "SELECT SUM(TRY_CAST(rapp_numEsposti AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4270,7 +4412,7 @@ namespace Uotep.Classi
                    "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                    @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                    @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                   @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + 
+                   @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" +
                    @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +
                    "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
@@ -4505,7 +4647,7 @@ namespace Uotep.Classi
             //arch.arch_dataInserimento = System.Convert.ToString(DateTime.Now.ToString("dd/mm/yyyy"));
             sql_pratica = "update Archiviotp set destinatario1 = '" + @arch.arch_destinatario.Replace("'", "''") + "', cognome = '" + @arch.arch_cognome.Replace("'", "''") + "', codice ='" + @arch.arch_codice.Replace("'", "''") +
                                  "', via = '" + @arch.arch_indirizzo.Replace("'", "''") + "', codice_edificio = '" + @arch.arch_edificio.Replace("'", "''") + "', note = '" + @arch.arch_note.Replace("'", "''") +
-                                 "', data1 = '" + @arch.arch_dataInserimento.Replace("'", "''") + 
+                                 "', data1 = '" + @arch.arch_dataInserimento.Replace("'", "''") +
                                  "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") + "'" +
 
                                  " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";
@@ -4543,7 +4685,7 @@ namespace Uotep.Classi
                 conn.Dispose();
                 return resp;
             }
-            return resp;
+
         }
 
         public Boolean UpdDecretazione(Decretazione p)
@@ -4862,7 +5004,7 @@ namespace Uotep.Classi
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
-                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + 
+                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
@@ -4921,13 +5063,13 @@ namespace Uotep.Classi
             //try
             //{
             sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,UlterioreTipoAtto,bu,codiceEdificio)"  +
+                 "Nominativo,Indirizzo,via,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento,UlterioreTipoAtto,bu,codiceEdificio)" +
                 " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
                 "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
                 @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.via.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
                 @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
                  @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno.Replace("'", "''") + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" + @p.ulterioreTipoAtto.Replace("'", "''") +
-                 "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +  "')";
+                 "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") + "')";
 
             sql_storico = "insert into principalestorico select " +
                 "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +

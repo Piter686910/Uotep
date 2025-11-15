@@ -40,7 +40,7 @@ namespace Uotep
 
                 //                Response.Redirect("Default.aspx?user=true");
             }
-
+            CaricaDLL();
             if (!IsPostBack)
             {
 
@@ -143,19 +143,35 @@ namespace Uotep
         protected Boolean Verifica()
         {
             Boolean resp = true;
-            Tipologie espostoSegn = Tipologie.EspostoSegnalazione;
-            string testoE = espostoSegn.GetDescription();
+            //Tipologie espostoSegn = Tipologie.EspostoSegnalazione;
+            //Tipologie Delega = Tipologie.DelegaIndagine;
+            //Tipologie altro = Tipologie.Altro;
+            //string testoEsposto = espostoSegn.GetDescription();
+            //string testoTipoProvv = Delega.GetDescription();
+            //string testoAltro = altro.GetDescription();
+            //if (DdlTipoProvvAg.SelectedIndex >= 0)
+            //{
+            //    if (DdlTipoAtto.SelectedItem.Text == testoEsposto)
+            //    {
+            //        if (DdlTipoProvvAg.SelectedItem.Text == testoTipoProvv)
+            //            resp = false;
+            //        else if (DdlTipoProvvAg.SelectedItem.Text == testoAltro)
+            //        {
+            //            resp = false;
+            //        }
+            //        //    //    if (divAg.Visible == true)
+            //        //    //    {
+            //        //    //        resp = false;
+            //        //    //    }
+            //        //    //}
+            //        //    string displayValue = divAg.Style["display"];
 
-            //if (txtTipoAtto.Text == testoE)
-            if (DdlTipoAtto.SelectedItem.Text == testoE)
-            {
-                if (divAg.Visible == true)
-                {
-                    resp = false;
-                }
-            }
-
-
+            //        //    if (displayValue != null && displayValue.ToLower().Trim() == "block")
+            //        //    {
+            //        //        resp = false;
+            //        //    }
+            //    }
+            //}
             return resp;
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -627,14 +643,14 @@ namespace Uotep
                 DdlGiudice.DataBind();
                 //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-
-                DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
+               DataTable RicercaProvvAg = mn.getListProvvAg(Enumerate.Sigla.AG.ToString());
+               // DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedItem.Text);
                 DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
                 DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-                //   DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+               // DdlTipoProvvAg.Items.Insert(0, new ListItem("", "0"));
 
                 //DataTable RicercaInviati = mn.getListInviati();
                 //DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList

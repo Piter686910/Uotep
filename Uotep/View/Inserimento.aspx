@@ -905,6 +905,7 @@
             // mostrare/nascondere
             if (ddl.value === 'AG') {
                 divag.style.display = 'block';
+                
             } else {
                 divag.style.display = 'none';
             }

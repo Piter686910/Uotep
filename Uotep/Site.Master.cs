@@ -97,6 +97,7 @@ namespace Uotep
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
+                                mnGestioneAuto.Visible = true;  
 
                                 RicercaArchivioUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
@@ -193,6 +194,7 @@ namespace Uotep
                                 RicercaArchivioUotp.Visible = true;
                                 menuAttivita.Visible = true;
                                 Amministratore.Visible = true;
+                                SchedaCarburatne.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -221,6 +223,7 @@ namespace Uotep
                                 InserimentoArchivioUotp.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
                                 menuAttivita.Visible = true;
+                                SchedaCarburatne.Visible = true;
                                 //*
                                 break;
                             default:

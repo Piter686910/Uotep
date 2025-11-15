@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Uotep.Classi
+{
+    public class GestAuto
+    {
+
+        public string sigla = string.Empty;
+        public string targa = string.Empty;
+        public DateTime data;
+        public DateTime ora;
+        public string stan = string.Empty;
+        public float litri = 0;
+        public string tipoCarburante = string.Empty;
+        public float euro = 0;
+        public string indirizzo = string.Empty;
+        public string autista = string.Empty;
+        public string mese = string.Empty;
+        public Int16 anno = 0;
+        public string nota = string.Empty;
+
+    }
+}

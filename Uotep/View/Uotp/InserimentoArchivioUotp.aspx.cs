@@ -21,7 +21,7 @@ namespace Uotep
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-        Boolean okPopup = false;
+        
         String status = String.Empty;   
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -89,12 +89,7 @@ namespace Uotep
 
         }
 
-        private void EseguiAzioneConfermata()
-        {
-
-            okPopup = true;
-
-        }
+       
         protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
