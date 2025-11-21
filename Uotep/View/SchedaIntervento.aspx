@@ -158,7 +158,7 @@
             <div class="col-md-3 form-check">
                 <asp:CheckBox ID="CkAttivita" runat="server" AutoPostBack="true" OnCheckedChanged="CkAttivita_CheckedChanged1" />
                 <label class="form-check-label ms-3" for="CkAttivita">Attività Interna</label>
-                <asp:CheckBox ID="CkGiroControlli" runat="server" AutoPostBack="true" OnCheckedChanged="CkGiroControlli_CheckedChanged" onclick="gestisciVisibilitaGiro();"/>
+                <asp:CheckBox ID="CkGiroControlli" runat="server" AutoPostBack="true" OnCheckedChanged="CkGiroControlli_CheckedChanged" />
                 <label class="form-check-label ms-3" for="CkAttivita">Giro Controlli</label>
             </div>
 

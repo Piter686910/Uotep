@@ -767,17 +767,17 @@ namespace Uotep
 
         protected void CkGiroControlli_CheckedChanged(object sender, EventArgs e)
         {
-            //if (CkGiroControlli.Checked)
-            //{
-            //    divDettagli.Visible = false;
-            //    divGiroControlli.Visible = true;
-            //}
-            //else
-            //{
-            //    divGiroControlli.Visible = false;
+            if (CkGiroControlli.Checked)
+            {
+                divDettagli.Visible = false;
+                divGiroControlli.Visible = true;
+            }
+            else
+            {
+                divGiroControlli.Visible = false;
 
-            //    divDettagli.Visible = true;
-            //}
+                divDettagli.Visible = true;
+            }
         }
     }
 
