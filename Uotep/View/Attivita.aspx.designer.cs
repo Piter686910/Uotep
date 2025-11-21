@@ -24,22 +24,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Panel pnlAttivita;
 
         /// <summary>
-        /// Controllo InCarico.
+        /// Controllo btAttivitaInCarico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button InCarico;
+        protected global::System.Web.UI.WebControls.Button btAttivitaInCarico;
 
         /// <summary>
-        /// Controllo Concluse.
+        /// Controllo btAttivitaConcluse.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Concluse;
+        protected global::System.Web.UI.WebControls.Button btAttivitaConcluse;
 
         /// <summary>
         /// Controllo GVAttivita.
@@ -105,31 +105,31 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.GridView GVMC3;
 
         /// <summary>
-        /// Controllo HfFiltroMC1.
+        /// Controllo HfFiltroMA1.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMC1;
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMA1;
 
         /// <summary>
-        /// Controllo HfFiltroMC2.
+        /// Controllo HfFiltroMA2.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMC2;
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMA2;
 
         /// <summary>
-        /// Controllo HfFiltroMC3.
+        /// Controllo HfFiltroMA3.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMC3;
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroMA3;
 
         /// <summary>
         /// Controllo HfProvenienzaBt.

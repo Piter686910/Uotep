@@ -180,6 +180,7 @@ namespace Uotep
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 StatisticheAtti.Visible = true;
+                                //A1.Visible = true;
 
                                 //*
                                 InserimentoAtti.Visible = true;
@@ -194,7 +195,7 @@ namespace Uotep
                                 RicercaArchivioUotp.Visible = true;
                                 menuAttivita.Visible = true;
                                 Amministratore.Visible = true;
-                                SchedaCarburatne.Visible = true;
+                                SchedaCarburante.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -223,7 +224,7 @@ namespace Uotep
                                 InserimentoArchivioUotp.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
                                 menuAttivita.Visible = true;
-                                SchedaCarburatne.Visible = true;
+                                SchedaCarburante.Visible = true;
                                 //*
                                 break;
                             default:
@@ -255,6 +256,8 @@ namespace Uotep
             Session.Remove("arc");
             Session.Remove("area");
             Session.Remove("MacroArea");
+            Session.Remove("ListRicercaGestioneAuto");
+            Session.Remove("ListAuto");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

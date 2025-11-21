@@ -95,8 +95,9 @@
                             <!-- Questo <ul> è il menu di secondo livello per UOTE -->
                             <ul class="dropdown-menu">
                                 <li><a id="menuAttivita" runat="server" visible="false" href="~/View/Attivita">Attività</a></li>
-                                <li><a id="Amministratore" runat="server" visible="false" ref="~/View/Dashboard">Dashboard</a></li>
-                                <li><a id="SchedaCarburatne" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
+                                <li><%--<a id="Amministratore" runat="server" visible="false" ref="~/View/Dashboard">Dashboard</a>--%></li>
+                                <li><a id="Amministratore" runat="server" visible="false" href="~/View/Dashboard">Dashboard</a></li>
+                                <li><a id="SchedaCarburante" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                             </ul>
                         </li>
 

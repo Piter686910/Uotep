@@ -175,9 +175,12 @@
                                 <label for="txtNominativo">Nominativo</label>
                                 <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                             </div>
-                            <div class="form-check mb-2">
-                                <label for="txtQuartiere">Quartiere</label>
-                                <asp:TextBox ID="txtQuartiere" runat="server" CssClass="form-control" Enabled="false" />
+                            <div id="divQuartiere" runat="server" class="form-check mb-2" style="display: none;">
+                                <label for="txtQuartiereTp">Quartiere</label>
+                                <%--<asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>--%>
+                                <div id="Div1" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                </div>
+                                <asp:DropDownList ID="DdlQuartiereIns" runat="server" CssClass="form-control" />
 
                             </div>
                             <div class="form-group mb-3" style="margin-top: 80px!important">
@@ -221,15 +224,16 @@
             margin: 5px 0; /* Spazio esterno */
             margin-left: -10px;
         }
-          .GridViewRow {
-      background-color: white;
-  }
 
-  /* Stile per la riga alternata (azzurro chiaro) */
-  .GridViewAlternatingRow {
-      background-color: #E6F3FF; /* Un azzurro molto chiaro */
-      /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-  }
+        .GridViewRow {
+            background-color: white;
+        }
+
+        /* Stile per la riga alternata (azzurro chiaro) */
+        .GridViewAlternatingRow {
+            background-color: #E6F3FF; /* Un azzurro molto chiaro */
+            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+        }
     </style>
     <%-- panel dei dettagli --%>
     <div class="panel panel-default">
@@ -346,7 +350,7 @@
                                     <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
                                 </div>
-                                <div class="form-check mb-2">
+                                <div id="divSgombero" runat="server" class="form-check mb-2" style="display: none;">
                                     <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
                                     <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
                                     <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
@@ -415,17 +419,19 @@
                                 <asp:RadioButton ID="rdSenza" runat="server" GroupName="ProtezioniGroup" Text="Senza" />
                                 <label class="form-check-label">]</label>
                             </div>
-                            <div class="form-check mb-2">
+                            <div id="divOccupazione" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
                                 <label class="form-check-label">]</label>
                             </div>
-                            <div class="form-check mb-2">
+                            <div id="divCensimento" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
-                                <asp:TextBox ID="txtNumCensimento" runat="server"  />
+                                <asp:TextBox ID="txtNumCensimento" runat="server"  MaxLength="3"  />
+<%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>
                             </div>
 
                         </div>
@@ -457,12 +463,12 @@
                     </div>
                     <div class="form-group">
                         <label for="txtQuartiereRic">Quartiere:</label>
-                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;"> 
-                            </div>
-
-                            <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
-
+                        <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                         </div>
+
+                        <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
+
+                    </div>
                     <div class="form-group">
                         <label for="txtModPratica">Pattuglia:</label>
                         <asp:TextBox ID="txtModPattuglia" runat="server" CssClass="form-control" placeholder="Pattuglia" />
@@ -481,13 +487,13 @@
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicecaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                             OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicecaScheda_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-                    AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
                                 <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
                                 <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
                                 <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
-                                 <asp:BoundField DataField="rapp_quartiere" HeaderText="Quartiere" />
+                                <asp:BoundField DataField="rapp_quartiere" HeaderText="Quartiere" />
                                 <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("rapp_numero_pratica") + ";" + Eval("rapp_nominativo") + ";" + Eval("rapp_pattuglia") + ";" + Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />
@@ -578,5 +584,35 @@
             </div>
         </div>
     </div>
+     <script type="text/javascript">
+         // Funzione per gestire la visibilità
+         function gestisciVisibilita() {
+             var divquartiere = document.getElementById('<%= divQuartiere.ClientID %>');
+         var divNotificaTp = document.getElementById('<%= divNotificaTp.ClientID %>');
+         var divSgombero = document.getElementById('<%= divSgombero.ClientID %>');
+         var divOccupazione = document.getElementById('<%= divOccupazione.ClientID %>');
+         var divCensimento = document.getElementById('<%= divCensimento.ClientID %>');
 
+         // Recupera gli altri elementi, verificando sempre
+         var rdUote = document.getElementById('<%= rdUote.ClientID %>');
+
+             // mostrare/nascondere
+             if (rdUote.checked) {
+                 divquartiere.style.display = 'none';
+                 divNotificaTp.style.display = 'none';
+                 divSgombero.style.display = 'none';
+                 divOccupazione.style.display = 'none';
+                 divCensimento.style.display = 'none';
+             } else {
+
+                 divquartiere.style.display = 'block';
+                 divNotificaTp.style.display = 'block';
+                 divSgombero.style.display = 'block';
+                 divOccupazione.style.display = 'block';
+                 divCensimento.style.display = 'block';
+             }
+         }
+         //al caricamento della pagian effettua il primno controllo
+         document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+     </script>
 </asp:Content>

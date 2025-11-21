@@ -159,13 +159,31 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtNominativo;
 
         /// <summary>
-        /// Controllo txtQuartiere.
+        /// Controllo divQuartiere.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtQuartiere;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divQuartiere;
+
+        /// <summary>
+        /// Controllo Div1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Div1;
+
+        /// <summary>
+        /// Controllo DdlQuartiereIns.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DdlQuartiereIns;
 
         /// <summary>
         /// Controllo LPattugliaCompleta.
@@ -393,6 +411,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckViolazioneBeniCult;
 
         /// <summary>
+        /// Controllo divSgombero.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSgombero;
+
+        /// <summary>
         /// Controllo ckSgomberi.
         /// </summary>
         /// <remarks>
@@ -564,6 +591,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.RadioButton rdSenza;
 
         /// <summary>
+        /// Controllo divOccupazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divOccupazione;
+
+        /// <summary>
         /// Controllo ckControlliOccupazioneAbus.
         /// </summary>
         /// <remarks>
@@ -591,6 +627,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckNonAbitativo;
 
         /// <summary>
+        /// Controllo divCensimento.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divCensimento;
+
+        /// <summary>
         /// Controllo ckCensimentoAllPubb.
         /// </summary>
         /// <remarks>
@@ -607,6 +652,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtNumCensimento;
+
+        /// <summary>
+        /// Controllo RegularExpressionValidator3.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
 
         /// <summary>
         /// Controllo txtModPratica.

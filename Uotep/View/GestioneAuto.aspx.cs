@@ -1,17 +1,18 @@
 ﻿using AjaxControlToolkit.HtmlEditor.Popups;
 using Microsoft.Ajax.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Uote;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
-using System.Reflection;
 
 
 
@@ -116,10 +117,18 @@ namespace Uotep
                 auto.autista = txtAutista.Text.ToUpper();
                 auto.mese = txtMese.Text;
                 auto.anno = System.Convert.ToInt16(txtAnno.Text);
+                auto.verificato = false;
+                if (!string.IsNullOrEmpty(Vuser))
+                {
+                    auto.matricola = Vuser;
+                }
+                else
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta effettuare login" + "'); $('#errorModal').modal('show');", true);
 
-
-
-
+                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                            Response.Redirect(url, false);
+                }
 
                 Manager mn = new Manager();
                 Boolean ins = mn.InsGestioneAuto(auto);
@@ -313,14 +322,15 @@ namespace Uotep
 
         protected void btCerca_Click(object sender, EventArgs e)
         {
+            Session.Remove("ListRicercaGestioneAuto");
             Manager mn = new Manager();
-            DataTable Sigla = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
+            DataTable listaAuto = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
 
 
-            if (Sigla.Rows.Count > 0)
+            if (listaAuto.Rows.Count > 0)
             {
-
-                gvDett.DataSource = Sigla;
+                Session["ListRicercaGestioneAuto"] = listaAuto;
+                gvDett.DataSource = listaAuto;
                 gvDett.DataBind();
 
                 DivGrid.Visible = true;
@@ -329,24 +339,230 @@ namespace Uotep
 
         protected void gvDett_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
 
+
+            gvDett.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            btCerca_Click(sender, e);
         }
         protected void gvDett_RowDataBound(object sender, GridViewRowEventArgs e)
         {
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    // Ottieni il valore della colonna "ID"
+            //    string id = DataBinder.Eval(e.Row.DataItem, "ID").ToString();
+
+            //    // Aggiungi l'attributo per il doppio clic
+            //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            //    e.Row.Style["cursor"] = "pointer";
+            //}
+
+
+
+
+
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Ottieni il valore della colonna "ID"
-                string id = DataBinder.Eval(e.Row.DataItem, "ID").ToString();
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
 
                 // Aggiungi l'attributo per il doppio clic
                 e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
                 e.Row.Style["cursor"] = "pointer";
+                if (gvDett.TopPagerRow != null)
+                {
+                    // Trova il controllo Label all'interno del PagerTemplate
+                    Label lblPageInfo = (Label)gvDett.TopPagerRow.FindControl("lblPageInfo");
+                    if (lblPageInfo != null)
+                    {
+                        // Calcola e imposta il testo
+                        int currentPage = gvDett.PageIndex + 1;
+                        int totalPages = gvDett.PageCount;
+                        lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                    }
+                }
+
             }
 
         }
         protected void gvDett_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore del CommandArgument
+                string commandArgument = e.CommandArgument.ToString();
 
+                // Separare i valori del CommandArgument usando il delimitatore "|"
+                string[] values = commandArgument.Split('|');
+
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 4)
+                {
+                    GestAuto obj = new GestAuto();
+                    obj.id = System.Convert.ToInt32(values[0]);    // id riga
+                    obj.targa= values[1];     // targa
+                    obj.data = Convert.ToDateTime( values[2]); // DataInserimento
+                    obj.autista= values[3]; // autista
+                    //Hid.Value = values[4]; // id
+
+                    
+                    obj.dataVerifica = DateTime.Now.Date;
+                    Manager mn = new Manager();
+                    Boolean upd = mn.UpdGestioneAutoById(obj);
+                    if (upd)
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Rifornimento per : " + obj.targa + " verificato." + "'); $('#errorModal').modal('show');", true);
+                        btCerca_Click(sender,e);
+
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Errore in modifica tabella gestione auto." + "'); $('#errorModal').modal('show');", true);
+
+                    }
+                }
+            }
+        }
+
+        protected void txtFilterData_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "data", TxtData.Text };
+            // Salva la lista nella Sessione
+            Session["ListAuto"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroData.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterData")
+            {
+                columnName = "data"; 
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroData.Value); // Esempio di funzione di filtro
+                                                                    //            apripopup_Click(sender, e);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+        }
+        private void PopulateGridView(string filterColumn = "", string filterValue = "")
+        {
+
+            DataTable dt = new DataTable();
+
+            dt = GetOriginalData(); // ricerco la lista nuovamente
+            try
+            {
+                //applico il filtro
+                if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
+                {
+
+
+
+                    string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                    DataRow[] filteredRows = dt.Select(filterExpression);
+
+                    if (filteredRows.Length > 0)
+                    {
+                        DataTable filteredDt = dt.Clone();
+                        foreach (DataRow row in filteredRows)
+                        {
+                            filteredDt.ImportRow(row);
+                        }
+                        gvDett.DataSource = filteredDt;
+                    }
+                    else
+                    {
+                        gvDett.DataSource = null;
+                    }
+
+                }
+                else
+                {
+                    gvDett.DataSource = dt; // Nessun filtro
+                }
+                gvDett.DataBind();
+            }
+            catch (Exception)
+            {
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
+                // throw;
+            }
+        }
+        private DataTable GetOriginalData()
+        {
+            DataTable auto = new DataTable();
+            DataView dv = new DataView();
+            Manager mn = new Manager();
+            string filtro = string.Empty;
+            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+            if (Session["ListRicercaGestioneAuto"] != null)
+            {
+
+
+                List<string> ListRicerca = (List<string>)Session["ListAuto"];
+                String[] ar = ListRicerca.ToArray();
+                // ArchivioUote arc = new ArchivioUote();
+                if (Session["ListRicercaGestioneAuto"] != null)
+                {
+                    // Recupera la DataTable originale dalla Sessione
+                    auto = (DataTable)Session["ListRicercaGestioneAuto"];
+                }
+                switch (ar[0])
+                {
+                    case "data":
+
+
+                        filtro = $"data in ('{HfFiltroData.Value}')";
+                        dv = new DataView(auto);
+
+                        dv.RowFilter = filtro;
+
+                        break;
+                    //case "Indirizzo":
+
+                    //    filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
+                    //    dv = new DataView(pratica);
+
+                    //    dv.RowFilter = filtro;
+                    //    break;
+                    //case "Accertatori":
+
+                    //    filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
+                    //    dv = new DataView(pratica);
+
+                    //    dv.RowFilter = filtro;
+
+                    //    break;
+
+
+                }
+                if (auto.Rows.Count > 0)
+                {
+                    //   apripopupPratica_Click(sender, e);
+                    gvDett.DataSource = dv;
+                    gvDett.DataBind();
+
+                    //txtPratica.Enabled = false;
+                }
+            }
+            else
+            {
+                //txtPratica.Enabled = true;
+                //txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
+            }
+            return auto;
+            // return dt;
         }
     }
 }

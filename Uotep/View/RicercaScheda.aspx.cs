@@ -258,7 +258,8 @@ namespace Uotep
             CkSgombAbusiva.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[53]);
             CkSgombImmobili.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[54]);
             ckNotificaTp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[55]);
-            txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
+            //txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
+            DdlQuartiereIns.SelectedItem.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
             txtNumCensimento.Text = rap.Rows[0].ItemArray[57].ToString();
         }
 
@@ -419,11 +420,11 @@ namespace Uotep
                 String meseCorr = DateTime.Now.ToString("MMMM").ToUpper();
                 int annoCorr = System.Convert.ToInt32(DateTime.Now.ToString("yyyy"));
                 List<string> list = new List<string>();
-#if DEBUG
-                mese = "APRILE";
-                anno = 2025;
-                meseCorr = "APRILE";
-#endif
+//#if DEBUG
+//                mese = "APRILE";
+//                anno = 2025;
+//                meseCorr = "APRILE";
+//#endif
                 //controllo se diverso da anno e mese corrente, in questo caso non si può modificare
                 if (anno == annoCorr)
                 {
@@ -1015,6 +1016,7 @@ namespace Uotep
                                 rap.dataInserimento = DateTime.Now;
                                 stat.mese = mese;//MeseCorrente;
                                 stat.anno = anno;//System.Convert.ToInt16(AnnoCorrente);
+                                rap.quartiere = DdlQuartiereIns.SelectedItem.Text.ToUpper();
                                 Boolean resp = false;
                                 Int32 idN = 0;
 
@@ -1274,6 +1276,13 @@ namespace Uotep
                 DdlQuartiere.DataBind();
                 DdlQuartiere.Items.Insert(0, new System.Web.UI.WebControls.ListItem("-- Seleziona un'opzione --", "0"));
 
+                //
+                DdlQuartiereIns.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiereIns.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiereIns.DataValueField = "id";
+                DdlQuartiereIns.DataBind();
+                DdlQuartiereIns.Items.Insert(0, new System.Web.UI.WebControls.ListItem("-- Seleziona un'opzione --", "0"));
+
             }
             catch (Exception ex)
             {
@@ -1344,7 +1353,8 @@ namespace Uotep
             ckNotificaTp.Checked = false;
             ddlCapopattuglia.ClearSelection();
             DdlPattuglia.ClearSelection();
-            txtQuartiere.Text = string.Empty;
+            //txtQuartiere.Text = string.Empty;
+            DdlQuartiereIns.ClearSelection();
         }
 
         protected void btStampa_Click(object sender, EventArgs e)

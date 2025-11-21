@@ -766,9 +766,19 @@
 
                         </div>
                         <div class="form-group mb-3">
-                            <label for="txtAreaCompetenza">Area Competenza</label>
-                            <asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />
-
+                            <label for="DdlMacroArea">Area Competenza</label>
+                            <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
+                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
+                                <asp:ListItem Text=""> </asp:ListItem>
+                                <asp:ListItem Text="ATTI"> </asp:ListItem>
+                                <asp:ListItem Text="CDR"> </asp:ListItem>
+                                <asp:ListItem Text="MA1"> </asp:ListItem>
+                                <asp:ListItem Text="MA2"> </asp:ListItem>
+                                <asp:ListItem Text="MA3"> </asp:ListItem>
+                                <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
+                                <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
+                                <asp:ListItem Text="URP"> </asp:ListItem>
+                            </asp:DropDownList>
 
                             <%--<div id="bt1" runat="server" class="col-md-3" style="margin-top: 25px!important; margin-left: -15px!important">--%>
 
@@ -995,6 +1005,7 @@
                                 <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
+                                 <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <HeaderTemplate>
                                         Accertatori

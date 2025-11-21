@@ -40,7 +40,7 @@ namespace Uotep
 
                 //                Response.Redirect("Default.aspx?user=true");
             }
-            CaricaDLL();
+  //          CaricaDLL();
             if (!IsPostBack)
             {
 
@@ -258,7 +258,7 @@ namespace Uotep
                         p.provenienza = txtProvenienza.Text;
                     }
 
-                    if (DdlTipoAtto.SelectedItem.Text == "")
+                    if (String.IsNullOrEmpty(DdlTipoAtto.SelectedItem.Text))
                     {
 
                         p.tipologia_atto = String.Empty;
@@ -325,9 +325,9 @@ namespace Uotep
                     //{
                     //    p.evasaData = System.Convert.ToDateTime(txtDataDataEvasa.Text).ToShortDateString();
                     //}
-                    if (!String.IsNullOrEmpty(txtAreaCompetenza.Text))
+                    if (!String.IsNullOrEmpty(DdlMacroArea.SelectedItem.Text))
                     {
-                        p.macro_area = txtAreaCompetenza.Text.ToUpper();
+                        p.macro_area = DdlMacroArea.SelectedItem.Text.ToUpper();
                     }
                     else
                         p.macro_area = string.Empty;
@@ -503,7 +503,8 @@ namespace Uotep
             txPratica.Text = String.Empty;
             txtTipoAtto.Text = String.Empty;
             txtProvenienza.Text = String.Empty;
-            txtAreaCompetenza.Text = string.Empty;
+            //txtAreaCompetenza.Text = string.Empty;
+            DdlMacroArea.ClearSelection();
             txtDataCarico.Text = string.Empty;
             txtBU.Text = String.Empty;
             txtCodEdificio.Text = String.Empty;
@@ -622,8 +623,9 @@ namespace Uotep
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+                
                 DdlTipoAtto.DataBind();
-                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
+               DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
 
                 // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
@@ -650,7 +652,7 @@ namespace Uotep
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
                 DdlTipoProvvAg.DataBind();
-               // DdlTipoProvvAg.Items.Insert(0, new ListItem("", "0"));
+                DdlTipoProvvAg.Items.Insert(0, new ListItem("", "0"));
 
                 //DataTable RicercaInviati = mn.getListInviati();
                 //DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
@@ -1091,5 +1093,7 @@ namespace Uotep
             }
 
         }
+
+        
     }
 }

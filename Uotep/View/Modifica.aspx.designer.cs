@@ -735,13 +735,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlQuartiere;
 
         /// <summary>
-        /// Controllo txtAreaCompetenza.
+        /// Controllo DdlMacroArea.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAreaCompetenza;
+        protected global::System.Web.UI.WebControls.DropDownList DdlMacroArea;
 
         /// <summary>
         /// Controllo divcd.

@@ -1507,7 +1507,7 @@ namespace Uotep.Classi
                                     {
                                         
                                         table.AddCell(new Cell().Add(new Paragraph(contatoreRiga.ToString())).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER));
-                                        for (int i = 1; i < riga.ItemArray.Length - 3; i++)
+                                        for (int i = 1; i < riga.ItemArray.Length - 6; i++)
                                         {
                                             object item = riga.ItemArray[i];
                                             string cellText;

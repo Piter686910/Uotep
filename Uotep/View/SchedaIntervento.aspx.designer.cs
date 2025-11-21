@@ -24,6 +24,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox CkAttivita;
 
         /// <summary>
+        /// Controllo CkGiroControlli.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CkGiroControlli;
+
+        /// <summary>
         /// Controllo rdUote.
         /// </summary>
         /// <remarks>
@@ -679,6 +688,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
+
+        /// <summary>
+        /// Controllo divGiroControlli.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divGiroControlli;
+
+        /// <summary>
+        /// Controllo txtNumCantControllati.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumCantControllati;
 
         /// <summary>
         /// Controllo HfIdScheda.

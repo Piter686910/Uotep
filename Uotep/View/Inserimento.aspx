@@ -513,8 +513,19 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
-                            <label for="txtAreaCompetenza">Area Competenza</label>
-                            <asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control"></asp:TextBox>
+                            <label for="DdlMacroArea">Area Competenza</label>
+                            <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
+                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
+                                <asp:ListItem Text=""> </asp:ListItem>
+                                <asp:ListItem Text="ATTI"> </asp:ListItem>
+                                <asp:ListItem Text="CDR"> </asp:ListItem>
+                                <asp:ListItem Text="MA1"> </asp:ListItem>
+                                <asp:ListItem Text="MA2"> </asp:ListItem>
+                                <asp:ListItem Text="MA3"> </asp:ListItem>
+                                <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
+                                <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
+                                <asp:ListItem Text="URP"> </asp:ListItem>
+                            </asp:DropDownList>
                         </div>
 
                     </div>

@@ -18,14 +18,15 @@
     <%-- il seguente style serve per i bordi azzurri --%>
     <style>
         .GridViewRow {
-    background-color: white;
-}
+            background-color: white;
+        }
 
-/* Stile per la riga alternata (azzurro chiaro) */
-.GridViewAlternatingRow {
-    background-color: #E6F3FF; /* Un azzurro molto chiaro */
-    /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-}
+        /* Stile per la riga alternata (azzurro chiaro) */
+        .GridViewAlternatingRow {
+            background-color: #E6F3FF; /* Un azzurro molto chiaro */
+            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+        }
+
         .custom-border {
             border: 2px solid #007bff; /* Cornice blu */
             border-radius: 8px; /* Angoli arrotondati */
@@ -33,6 +34,18 @@
             margin: 5px 0; /* Spazio esterno */
             /*margin-left: -30px;*/
         }
+          .table-layout-fixed {
+      table-layout: fixed;
+      width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
+  }
+
+      /* Opzionale: assicura che il testo troppo lungo non rompa il layout */
+      .table-layout-fixed td,
+      .table-layout-fixed th {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
     </style>
 
     <div class="jumbotron">
@@ -181,29 +194,52 @@
                     </div>
 
                 </div>
-
-
-
-
+<!-- GridView  -->
                 <div id="DivGrid" runat="server" class="row" style="padding-left: 10px">
                     <div class="form-group">
-                        <!-- GridView nel popup -->
-                        <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                        
+                        <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False"  CssClass="table table-bordered table-layout-fixed"
                             OnRowDataBound="gvDett_RowDataBound" OnRowCommand="gvDett_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvDett_PageIndexChanging" RowStyle-CssClass="GridViewRow"
                             AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
-                                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="sigla" HeaderText="SIGLA" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
                                 <asp:BoundField DataField="targa" HeaderText="Targa" ItemStyle-Width="20px" />
                                 <asp:BoundField DataField="stan" HeaderText="STAN" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
-                                <asp:BoundField DataField="data" HeaderText="DATA" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:dd/MM/yyyy}" />
-                                <asp:BoundField DataField="ora" HeaderText="ORA" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center"  />
+
+                                <asp:TemplateField HeaderText="data" ItemStyle-Width="50px">
+                                    <HeaderTemplate>
+                                        data
+                                          <br />
+                                        <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                        Filtro
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("data", "{0:dd/MM/yyyy}") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+
+                                <%--<asp:BoundField DataField="data" HeaderText="DATA" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:dd/MM/yyyy}" />--%>
+                                <asp:BoundField DataField="ora" HeaderText="ORA" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="litri" HeaderText="LITRI" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="tipocarburante" HeaderText="CARBURANTE" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="euro" HeaderText="EURO" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="indirizzo" HeaderText="INDIRIZZO" ItemStyle-Width="80%" />
                                 <asp:BoundField DataField="autista" HeaderText="AUTISTA" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-
+                                <asp:TemplateField HeaderText="VERIFICATO" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <%# Eval("verificato").ToString() == "True" ? "Si" : "No" %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <asp:Button ID="btnSelect" runat="server" Text="Verificato"
+                                            CommandName="Select"
+                                            CommandArgument='<%# Eval("id")  + "|" + Eval("targa") + "|" + Eval("data")+ "|" + Eval("autista")%>'
+                                            CssClass="btn btn-success btn-sm" />
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                             </Columns>
                             <PagerSettings Mode="NumericFirstLast" Position="Top" />
                             <PagerStyle HorizontalAlign="Center" />
@@ -242,6 +278,7 @@
             </div>
 
             <asp:HiddenField ID="Hfuser" runat="server" />
+            <asp:HiddenField ID="HfFiltroData" runat="server" />
 
             <div class="row">
                 <div class="col-12 text-center">

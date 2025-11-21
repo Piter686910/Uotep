@@ -339,6 +339,42 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtSgomberiImmobili;
 
         /// <summary>
+        /// Controllo DivAnnuale.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivAnnuale;
+
+        /// <summary>
+        /// Controllo GvStatAnnuale.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GvStatAnnuale;
+
+        /// <summary>
+        /// Controllo DivObiettivi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivObiettivi;
+
+        /// <summary>
+        /// Controllo GvObiettivi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GvObiettivi;
+
+        /// <summary>
         /// Controllo Button2.
         /// </summary>
         /// <remarks>

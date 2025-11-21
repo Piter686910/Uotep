@@ -147,7 +147,7 @@
         }
 
     </script>
-    
+
     <div class="panel panel-default">
         <div class="form-group mb-3"></div>
         <div class="panel-heading">
@@ -158,6 +158,8 @@
             <div class="col-md-3 form-check">
                 <asp:CheckBox ID="CkAttivita" runat="server" AutoPostBack="true" OnCheckedChanged="CkAttivita_CheckedChanged1" />
                 <label class="form-check-label ms-3" for="CkAttivita">Attività Interna</label>
+                <asp:CheckBox ID="CkGiroControlli" runat="server" AutoPostBack="true" OnCheckedChanged="CkGiroControlli_CheckedChanged" onclick="gestisciVisibilitaGiro();"/>
+                <label class="form-check-label ms-3" for="CkAttivita">Giro Controlli</label>
             </div>
 
             <!-- Colonna destra -->
@@ -299,6 +301,7 @@
                         </div>
                     </div>
 
+
                 </div>
 
                 <!-- Bottone Salva -->
@@ -330,11 +333,11 @@
         }
     </style>
     <%-- panel dei dettagli --%>
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="divDettagli" runat="server">
         <div class="panel-heading">
             <h3 class="panel-title" style="font-weight: bold;">Dettagli Aggiuntivi</h3>
         </div>
-        <div class="panel-body" id="divDettagli" runat="server">
+        <div class="panel-body">
             <div class="container">
 
                 <div class="tab-content">
@@ -524,8 +527,8 @@
                             <div id="divCensimento" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
-                                <asp:TextBox ID="txtNumCensimento" runat="server"  MaxLength="3"  />
-<%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
+                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" />
+                                <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>
                             </div>
                         </div>
@@ -538,6 +541,31 @@
         </div>
     </div>
 
+
+
+
+    <%-- div giro controlli --%>
+    <div id="divGiroControlli" runat="server" class="row" visible="false">
+
+        <div class="panel-heading">
+            <h3 class="panel-title" style="font-weight: bold;">Dettagli Giro Controlli</h3>
+        </div>
+        <div class="panel-body">
+            <div class="container">
+                <div class="row custom-border">
+                    <div class="col-md-6 ">
+                        
+                        <label  for="txtNumCantControllati">Nr Controlli Cantieri</label>
+                        <asp:TextBox ID="txtNumCantControllati" runat="server" MaxLength="3" />
+                        <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
+                        <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ControlToValidate="txtNumCantControllati" ValidationGroup="bt" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>--%>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <asp:HiddenField ID="HfIdScheda" runat="server" />
 
 
@@ -652,7 +680,7 @@
 
             // mostrare/nascondere
             if (rdUote.checked) {
-                               divquartiere.style.display = 'none';
+                divquartiere.style.display = 'none';
                 divNotificaTp.style.display = 'none';
                 divSgombero.style.display = 'none';
                 divOccupazione.style.display = 'none';
@@ -664,6 +692,32 @@
                 divSgombero.style.display = 'block';
                 divOccupazione.style.display = 'block';
                 divCensimento.style.display = 'block';
+            }
+        }
+        //al caricamento della pagian effettua il primno controllo
+        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+
+
+
+
+        function gestisciVisibilitaGiro() {
+            var divGiroControlli = document.getElementById('<%= divGiroControlli.ClientID %>');
+            var divNotificaTp = document.getElementById('<%= divNotificaTp.ClientID %>');
+           
+
+    // Recupera gli altri elementi, verificando sempre
+            var ckgiro = document.getElementById('<%= CkGiroControlli.ClientID %>');
+
+            // mostrare/nascondere
+            if (ckgiro.checked) {
+                divGiroControlli.style.display = 'none';
+                divDettagli.style.display = 'none';
+
+            } else {
+
+                divGiroControlli.style.display = 'block';
+                divDettagli.style.display = 'block';
+                
             }
         }
         //al caricamento della pagian effettua il primno controllo

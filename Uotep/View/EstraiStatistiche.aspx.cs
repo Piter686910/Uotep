@@ -17,6 +17,7 @@ using System.Data;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.UI;
@@ -31,7 +32,13 @@ namespace Uotep
 {
     public partial class EstraiStatistiche : Page
     {
-
+        int totalImpalcature = 0;
+        int totalCensimento = 0;
+        int totalDPI = 0;
+        int totalOccAbitativo = 0;
+        int totalOccNoAbitativo = 0;
+        int totalCantSeq = 0;
+        int totalEsposti = 0;
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
@@ -147,19 +154,19 @@ namespace Uotep
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
 
             txtConvalide.Text = mn.GetNumConvalide(txtMese.Text.Trim(), anno);
-           
+
             txtDemolizioni.Text = stat.Rows[0].ItemArray[22].ToString();
             txtViolazioneSigilli.Text = mn.GetNumViolSigilli(txtMese.Text.Trim(), anno);
-           
+
             txtDissequestri.Text = mn.GetNumDissequestri(txtMese.Text.Trim(), anno);
-           
+
             txtDissequestriTemp.Text = mn.GetNumDisseqTemp(txtMese.Text.Trim(), anno);
-           
+
             txtRimozioneSigilli.Text = mn.GetNumRimozSigilli(txtMese.Text.Trim(), anno);
-            
+
             //beni culturali
             txtControlliDLGS.Text = mn.GetNumControlliDlgs(txtMese.Text.Trim(), anno);
-            
+
             txtControlliCant.Text = mn.GetNumControlliCant(txtMese.Text.Trim(), anno);
             txtViol_amm_reg_com.Text = mn.GetNumViolAmm(txtMese.Text.Trim(), anno);
             txtCensimentoAllPubb.Text = mn.GetNumCensimentoAllPubb(txtMese.Text.Trim(), anno);
@@ -180,12 +187,116 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable dt = new DataTable();
+            DataTable ob = new DataTable();
             int anno = System.Convert.ToInt32(txtAnno.Text.Trim());
-            dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
-            if (dt.Rows.Count > 0)
+            if (String.IsNullOrEmpty(txtMese.Text.Trim()))
             {
-                FillScheda(dt);
+                dt = mn.GetStatisticheAnnuali(anno);
+                if (dt.Rows.Count > 0)
+                {
+                    GvStatAnnuale.DataSource = dt;
+                    GvStatAnnuale.DataBind();
+                    divDettagli.Visible = false;
+                    DivAnnuale.Visible = true;
+                    ob = mn.getObiettivi(anno);
+                    if (ob.Rows.Count > 0)
+                    {
+                        GvObiettivi.DataSource = ob;
+                        GvObiettivi.DataBind();
+                        DivObiettivi.Visible = true;
+                    }
+                }
             }
+            else
+            {
+                dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
+
+                dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
+                if (dt.Rows.Count > 0)
+                {
+                    divDettagli.Visible = true;
+                    DivAnnuale.Visible = false;
+                    DivObiettivi.Visible = false;
+                    FillScheda(dt);
+                }
+            }
+
+        }
+
+        protected void GvStatAnnuale_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // 1. Logica del Nome del Mese (vedi risposta precedente)
+                // La tua colonna "Mese" è Cells[0]
+                if (int.TryParse(e.Row.Cells[0].Text, out int month))
+                {
+                    // Usa il DataItem per leggere il valore originale se hai cambiato il testo prima!
+                    // Altrimenti, se usi DATENAME in SQL, e.Row.Cells[0].Text è già il nome del mese.
+                }
+
+                // 2. Accumulo dei Totali
+                // Ipotizzando che le colonne siano in questo ordine: 
+                // 0=Mese, 1=Impalcature, 2=DPI, 3=OccAbitativo, 4=OccNoAbitativo
+
+                // Per sicurezza, usa il DataItem per prendere i valori originali (che sono numeri interi)
+                DataRowView drv = (DataRowView)e.Row.DataItem;
+                totalImpalcature += Convert.ToInt32(drv["rapp_contr_cantiere_suolo_pubb"]);
+                totalDPI += Convert.ToInt32(drv["rapp_contr_lavori_edili"]);
+                totalCantSeq += Convert.ToInt32(drv["rapp_contr_cantieri_seq"]);
+                totalEsposti += Convert.ToInt32(drv["rapp_numEsposti"]);
+                totalCensimento += Convert.ToInt32(drv["rapp_censimento_all_pubb"]);
+
+                totalOccAbitativo += Convert.ToInt32(drv["rapp_contr_occ_abitativo"]);
+                totalOccNoAbitativo += Convert.ToInt32(drv["rapp_contr_occ_no_abitativo"]);
+            }
+            else if (e.Row.RowType == DataControlRowType.Footer)
+            {
+                // 3. Visualizzazione dei Totali nel Footer
+
+                // Colonna Mese (0) - Intestazione
+                e.Row.Cells[0].Text = "TOTALE:";
+                e.Row.Cells[0].Font.Bold = true;
+                // Colonna Impalcature (1)
+                e.Row.Cells[1].Text = totalImpalcature.ToString();
+                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Right; // Opzionale: allinea a destra
+                e.Row.Cells[1].Font.Bold = true;
+                // Colonna DPI (2)
+                e.Row.Cells[2].Text = totalDPI.ToString();
+                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[2].Font.Bold = true;
+                // Colonna contr. cant sequestrati (3)
+                e.Row.Cells[3].Text = totalCantSeq.ToString();
+                e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[3].Font.Bold = true;
+                // Colonna esposti (4)
+                e.Row.Cells[4].Text = totalEsposti.ToString();
+                e.Row.Cells[4].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[4].Font.Bold = true;
+
+                // Colonna Censimento (5)
+                e.Row.Cells[5].Text = totalCensimento.ToString();
+                e.Row.Cells[5].HorizontalAlign = HorizontalAlign.Right; // Opzionale: allinea a destra
+                e.Row.Cells[5].Font.Bold = true;
+
+
+
+
+                // Colonna Occ. Abitat. (6)
+                e.Row.Cells[6].Text = totalOccAbitativo.ToString();
+                e.Row.Cells[6].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[6].Font.Bold = true;
+
+                // Colonna Occ. No Abitat. (7)
+                e.Row.Cells[7].Text = totalOccNoAbitativo.ToString();
+                e.Row.Cells[7].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[7].Font.Bold = true;
+            }
+        }
+
+        protected void GvStatAnnuale_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
         }
     }
 }

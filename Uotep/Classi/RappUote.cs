@@ -68,6 +68,8 @@ namespace Uotep.Classi
         public Boolean sgomberi_abus = false;
         public Boolean sgomberi_immobili = false;
         public Boolean notifica_no_ag = false;
+        public Int32 numero_controlli_cant_seq = 0;
+        public Boolean giro_controlli = false;
 
     }
 }

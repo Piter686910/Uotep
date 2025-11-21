@@ -34,8 +34,8 @@
             <div class="container">
                 <div class="row">
 
-                    <asp:Button ID="InCarico" Text="Attività In Carico" runat="server" OnClick="btAttivitaInCarico_Click" ToolTip="Attività In Carico" CssClass="btn btn-primary px-4" />
-                    <asp:Button ID="Concluse" Text="Attività Concluse" runat="server" OnClick="btAttivitaConcluse_Click" ToolTip="Attività Concluse" CssClass="btn btn-primary px-4" />
+                    <asp:Button ID="btAttivitaInCarico" Text="Attività In Carico" runat="server" OnClick="btAttivitaInCarico_Click" ToolTip="Attività In Carico" CssClass="btn btn-primary px-4" />
+                    <asp:Button ID="btAttivitaConcluse" Text="Attività Concluse" runat="server" OnClick="btAttivitaConcluse_Click" ToolTip="Attività Concluse" CssClass="btn btn-primary px-4" />
 
 
                 </div>
@@ -255,9 +255,9 @@
 
         </div>
     </asp:Panel>
-    <asp:HiddenField ID="HfFiltroMC1" runat="server" />
-     <asp:HiddenField ID="HfFiltroMC2" runat="server" />
-     <asp:HiddenField ID="HfFiltroMC3" runat="server" />
+    <asp:HiddenField ID="HfFiltroMA1" runat="server" />
+     <asp:HiddenField ID="HfFiltroMA2" runat="server" />
+     <asp:HiddenField ID="HfFiltroMA3" runat="server" />
      <asp:HiddenField ID="HfProvenienzaBt" runat="server" />
 
     <%-- popup errori --%>

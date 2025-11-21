@@ -149,8 +149,8 @@ namespace Uotep
             txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
             {
-                txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
-                txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                //txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
             }
             
             txtBU.Text = pratica.Rows[0].ItemArray[29].ToString().ToUpper();
@@ -259,7 +259,10 @@ namespace Uotep
                 //    resp = false;
                 //}
             }
-
+            if (String.IsNullOrEmpty( txtDataInsCarico.Text))
+            {
+                resp = false;
+            }
 
             return resp;
         }
@@ -271,7 +274,7 @@ namespace Uotep
                 Manager mn = new Manager();
                 if (!resp)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorAvvertenze').text('" + "Se la sigla è ED non puoi selezionare DELEGA INDAGINE." + "'); $('#ModalAvvertenze').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorAvvertenze').text('" + "Per modificare devi prima cercare il numero carico." + "'); $('#ModalAvvertenze').modal('show');", true);
 
                 }
                 else
@@ -360,9 +363,9 @@ namespace Uotep
                         p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
                     }
 
-                    if (!String.IsNullOrEmpty(txtAreaCompetenza.Text))
+                    if (!String.IsNullOrEmpty(DdlMacroArea.SelectedItem.Text))
                     {
-                        p.macro_area = txtAreaCompetenza.Text.ToUpper();
+                        p.macro_area = DdlMacroArea.SelectedItem.Text.ToUpper();
                     }
                     else
                         p.macro_area = string.Empty;
@@ -496,12 +499,12 @@ namespace Uotep
             txtProvenienza.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             txtNominativo.Text = String.Empty;
-            txtAreaCompetenza.Text = string.Empty;
+            DdlMacroArea.ClearSelection();
             txtDataCarico.Text = String.Empty;
             txtDataInsCarico.Text = String.Empty;
-            txtProt.Text = String.Empty;
+            //txtProt.Text = String.Empty;
             txtAccertatori.Text = string.Empty;
-
+          
         }
 
         protected void NuovaRicerca_Click(object sender, EventArgs e)
@@ -742,7 +745,7 @@ namespace Uotep
 
                             txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
 
-                        txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                        DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                         {
                             DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
@@ -1141,6 +1144,7 @@ namespace Uotep
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
                     Pulisci();
+                    CaricaDLL();
                 }
             }
             catch (Exception ex)

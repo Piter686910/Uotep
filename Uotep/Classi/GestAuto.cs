@@ -7,7 +7,7 @@ namespace Uotep.Classi
 {
     public class GestAuto
     {
-
+        public Int32 id = 0;
         public string sigla = string.Empty;
         public string targa = string.Empty;
         public DateTime data;
@@ -21,6 +21,9 @@ namespace Uotep.Classi
         public string mese = string.Empty;
         public Int16 anno = 0;
         public string nota = string.Empty;
+        public string matricola = string.Empty;
+        public DateTime dataVerifica;
+        public Boolean verificato;
 
     }
 }

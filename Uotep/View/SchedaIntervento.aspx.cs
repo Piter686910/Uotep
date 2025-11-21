@@ -44,19 +44,19 @@ namespace Uotep
                 {
                     rdUote.Checked = true;
                     //divNotificaTp.Visible = false;
-                   // divSgombero.Visible = false;
-                   // divOccupazione.Visible = false;
-                   // divCensimento.Visible = false;
-//                    divQuartiere.Visible = false;
+                    // divSgombero.Visible = false;
+                    // divOccupazione.Visible = false;
+                    // divCensimento.Visible = false;
+                    //                    divQuartiere.Visible = false;
                 }
                 else
                 {
                     rdUotp.Checked = true;
-                   // divNotificaTp.Visible = true;
-                   // divSgombero.Visible = true;
-                  // divOccupazione.Visible = true;
-                   // divCensimento.Visible = true;
-  //                  divQuartiere.Visible = true;
+                    // divNotificaTp.Visible = true;
+                    // divSgombero.Visible = true;
+                    // divOccupazione.Visible = true;
+                    // divCensimento.Visible = true;
+                    //                  divQuartiere.Visible = true;
                 }
                 CaricaDLL();
             }
@@ -273,6 +273,17 @@ namespace Uotep
                 if (ckNotificaTp.Checked)
                 {
                     stat.NotificaTp = 1;
+                }
+                if (CkGiroControlli.Checked)
+                {
+
+                    if (!string.IsNullOrEmpty(txtNumCantControllati.Text))
+                    {
+                        rap.numero_controlli_cant_seq = Convert.ToInt32(txtNumCantControllati.Text);
+                        rap.giro_controlli = true;
+                    }
+                    else
+                        rap.numero_controlli_cant_seq = 0;
                 }
                 rap.notifica_no_ag = ckNotificaTp.Checked;
                 rap.quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
@@ -572,7 +583,7 @@ namespace Uotep
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "id";
                 DdlQuartiere.DataBind();
-                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                DdlQuartiere.Items.Insert(0, new ListItem("", "0"));
 
 
             }
@@ -707,7 +718,7 @@ namespace Uotep
         {
             Manager mn = new Manager();
             //DataTable schede =
-            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0,null);
+            DataTable table = mn.GetSchedeBy(nrPratica, null, null, at, 0, null);
             if (table.Rows.Count > 0)
             {
                 //GVRicecaScheda.DataSource = table;
@@ -748,10 +759,25 @@ namespace Uotep
         protected void btPopStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
-            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id,null);
+            DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id, null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);
+        }
+
+        protected void CkGiroControlli_CheckedChanged(object sender, EventArgs e)
+        {
+            //if (CkGiroControlli.Checked)
+            //{
+            //    divDettagli.Visible = false;
+            //    divGiroControlli.Visible = true;
+            //}
+            //else
+            //{
+            //    divGiroControlli.Visible = false;
+
+            //    divDettagli.Visible = true;
+            //}
         }
     }
 

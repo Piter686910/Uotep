@@ -60,7 +60,7 @@ namespace Uotep
         protected void GVAttivita_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVAttivita.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            if (String.IsNullOrEmpty(HfFiltroMA1.Value) && String.IsNullOrEmpty(HfFiltroMA2.Value) && String.IsNullOrEmpty(HfFiltroMA3.Value))
             {
                 switch (HfProvenienzaBt.Value)
                 {
@@ -75,9 +75,9 @@ namespace Uotep
             }
             //else
             //  {
-            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //if (!String.IsNullOrEmpty(HfFiltroMA1.Value))
             //{
-            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    PopulateGridView("arch_note", HfFiltroMA1.Value);
             //    apripopupPratica_Click(sender, e);
             //}
             //else
@@ -139,7 +139,7 @@ namespace Uotep
         protected void GVMC1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVMC1.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            if (String.IsNullOrEmpty(HfFiltroMA1.Value) && String.IsNullOrEmpty(HfFiltroMA2.Value) && String.IsNullOrEmpty(HfFiltroMA3.Value))
             {
                 switch (HfProvenienzaBt.Value)
                 {
@@ -154,9 +154,9 @@ namespace Uotep
             }
             //else
             //  {
-            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //if (!String.IsNullOrEmpty(HfFiltroMA1.Value))
             //{
-            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    PopulateGridView("arch_note", HfFiltroMA1.Value);
             //    apripopupPratica_Click(sender, e);
             //}
             //else
@@ -182,7 +182,7 @@ namespace Uotep
         protected void GVMC2_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVMC2.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            if (String.IsNullOrEmpty(HfFiltroMA1.Value) && String.IsNullOrEmpty(HfFiltroMA2.Value) && String.IsNullOrEmpty(HfFiltroMA3.Value))
             {
                 switch (HfProvenienzaBt.Value)
                 {
@@ -197,9 +197,9 @@ namespace Uotep
             }
             //else
             //  {
-            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //if (!String.IsNullOrEmpty(HfFiltroMA1.Value))
             //{
-            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    PopulateGridView("arch_note", HfFiltroMA1.Value);
             //    apripopupPratica_Click(sender, e);
             //}
             //else
@@ -225,7 +225,7 @@ namespace Uotep
         protected void GVMC3_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVMC3.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            if (String.IsNullOrEmpty(HfFiltroMC1.Value) && String.IsNullOrEmpty(HfFiltroMC2.Value) && String.IsNullOrEmpty(HfFiltroMC3.Value))
+            if (String.IsNullOrEmpty(HfFiltroMA1.Value) && String.IsNullOrEmpty(HfFiltroMA2.Value) && String.IsNullOrEmpty(HfFiltroMA3.Value))
             {
                 switch (HfProvenienzaBt.Value)
                 {
@@ -240,9 +240,9 @@ namespace Uotep
             }
             //else
             //  {
-            //if (!String.IsNullOrEmpty(HfFiltroMC1.Value))
+            //if (!String.IsNullOrEmpty(HfFiltroMA1.Value))
             //{
-            //    PopulateGridView("arch_note", HfFiltroMC1.Value);
+            //    PopulateGridView("arch_note", HfFiltroMA1.Value);
             //    apripopupPratica_Click(sender, e);
             //}
             //else
@@ -270,9 +270,9 @@ namespace Uotep
             GVMC1.Visible = true;
             GVMC2.Visible = true;
             GVMC3.Visible = true;
-            DataTable dt1 = mn.getAttivitaAdmin("MC1", val);
-            DataTable dt2 = mn.getAttivitaAdmin("MC2", val);
-            DataTable dt3 = mn.getAttivitaAdmin("MC3", val);
+            DataTable dt1 = mn.getAttivitaAdmin("MA1", val);
+            DataTable dt2 = mn.getAttivitaAdmin("MA2", val);
+            DataTable dt3 = mn.getAttivitaAdmin("MA3", val);
             GVMC1.DataSource = dt1;
             GVMC1.DataBind();
             GVMC2.DataSource = dt2;

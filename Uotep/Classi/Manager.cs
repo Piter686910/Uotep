@@ -1,4 +1,9 @@
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
 using Microsoft.Ajax.Utilities;
@@ -18,6 +23,7 @@ using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
 using static Uotep.Classi.Enumerate;
+using DataTable = System.Data.DataTable;
 
 namespace Uotep.Classi
 {
@@ -1158,7 +1164,7 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
-            sql = "SELECT * FROM GestioneAuto where mese ='" + mese + "' and anno = " + anno ;
+            sql = "SELECT * FROM GestioneAuto where mese ='" + mese + "' and anno = " + anno + " order by sigla";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1901,13 +1907,13 @@ namespace Uotep.Classi
             bool resp = true;
             string sql = String.Empty;
             string testoSql = string.Empty;
-            
+
             try
             {
                 string inputlitri = auto.litri.ToString();
                 string inputEuro = auto.euro.ToString();
-                decimal importoFloat ;
-                decimal litriFloat ;
+                decimal importoFloat;
+                decimal litriFloat;
                 // 1. Definisci la cultura di parsing (italiana: virgola come decimale)
                 CultureInfo culturaItaliana = new CultureInfo("it-IT");
 
@@ -2464,7 +2470,7 @@ namespace Uotep.Classi
                      "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                      "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
                      "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag,rapp_quartiere)" +
+                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag,rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +
                  @rapp.data + "','" +
@@ -2508,7 +2514,8 @@ namespace Uotep.Classi
                  @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
+                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "','" +
+                 @rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" +"); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -2594,7 +2601,7 @@ namespace Uotep.Classi
                      "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                      "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
                      "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere)" +
+                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +
                  @rapp.data + "','" +
@@ -2638,7 +2645,8 @@ namespace Uotep.Classi
                  @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
+                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
+                 @rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -2707,7 +2715,7 @@ namespace Uotep.Classi
   "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
   "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
   "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-  "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere)" +
+  "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
 " Values('" + rapp.pratica + "','" +
 //@rapp.ora + "','" +
 @rapp.data + "','" +
@@ -2751,7 +2759,8 @@ namespace Uotep.Classi
 @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
 @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
 @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-@rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'); SELECT SCOPE_IDENTITY();";
+@rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
+@rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
 
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
@@ -2943,6 +2952,17 @@ namespace Uotep.Classi
 
 
         }
+        public DataTable getObiettivi(int anno)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            sql = "SELECT impalcature,dpi,contcantseq,contr_esposti,cens_allogg_pubb,occ_prop_com_abit,occ_prop_com_no_abit FROM obiettivi where anno =" + anno;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// preleva le statistiche per mese e anno
         /// </summary>
@@ -2955,6 +2975,45 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
             sql = "SELECT * FROM statistiche where mese = '" + mese + "' and anno =" + anno;
 
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+            }
+
+
+        }
+        /// <summary>
+        /// calcola statistiche annuali
+        /// </summary>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public DataTable GetStatisticheAnnuali(int anno)
+        {
+
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+            sql = "SELECT DATENAME(month, rapp_data_consegna_intervento) AS Mese," +
+                "SUM(CASE WHEN rapp_contr_cantiere_suolo_pubb = 'true' THEN 1 ELSE 0 END) as rapp_contr_cantiere_suolo_pubb, " +
+                "SUM(CASE WHEN rapp_contr_lavori_edili = 'true' THEN 1 ELSE 0 END) as rapp_contr_lavori_edili, " +
+                "SUM((CASE WHEN rapp_contr_cantieri_seq = 'true' THEN 1 ELSE 0 END) + (CASE WHEN rapp_giro_cantieri = 'true' THEN rapp_numero_controlli_cant_seq ELSE 0 END)) as rapp_contr_cantieri_seq, " +
+                "SUM(CASE WHEN ISNUMERIC(rapp_numEsposti) = 1 THEN CAST(rapp_numEsposti AS DECIMAL(18, 0))  ELSE 0 END) as rapp_numEsposti, " +
+                "SUM(CASE WHEN rapp_censimento_all_pubb = 1 THEN rapp_num_censimento_all_pubb ELSE 0 END) as rapp_censimento_all_pubb, " +
+                "SUM(CASE WHEN rapp_contr_occ_abitativo = 'true' THEN 1 ELSE 0 END) as rapp_contr_occ_abitativo, " +
+                "SUM(CASE WHEN rapp_contr_occ_no_abitativo = 'true' THEN 1 ELSE 0 END)  as rapp_contr_occ_no_abitativo " +
+                "FROM rappuote WHERE DATEPART(year, rapp_data_consegna_intervento) =" + anno +
+                " GROUP BY DATENAME(month, rapp_data_consegna_intervento), DATEPART(month, rapp_data_consegna_intervento)  " +
+                " ORDER BY DATEPART(month, rapp_data_consegna_intervento)";
+            //sql = "SELECT DATENAME(month, rapp_data_consegna_intervento) AS Mese," +
+            //     "SUM(CASE WHEN rapp_contr_cantiere_suolo_pubb = 'true' THEN 1 ELSE 0 END) AS Impalcature, " +
+            //     "SUM(CASE WHEN rapp_contr_lavori_edili = 'true' THEN 1 ELSE 0 END) AS DPI, " +
+            //     "Sum(case WHEN rapp_contr_cantieri_seq = 'true' THEN 1 ELSE 0 END ) as Contr_Cant_Squestrati, " +
+            //     "SUM(CASE WHEN ISNUMERIC(rapp_numEsposti) = 1 THEN CAST(rapp_numEsposti AS DECIMAL(18, 0))  ELSE 0 END) AS Controlli_Esposti, " +
+            //     "SUM(CASE WHEN rapp_censimento_all_pubb = 1 THEN rapp_num_censimento_all_pubb ELSE 0 END) AS Cens_Nuclei_Alloggi_Pubb, " +
+            //     "SUM(CASE WHEN rapp_contr_occ_abitativo = 'true' THEN 1 ELSE 0 END) AS Occ_Prop_Com_uso_Abit, " +
+            //     "SUM(CASE WHEN rapp_contr_occ_no_abitativo = 'true' THEN 1 ELSE 0 END) AS Occ_Prop_Com_uso_No_Abit " +
+            //     "FROM rappuote WHERE DATEPART(year, rapp_data_consegna_intervento) =" + anno +
+            //     " GROUP BY DATENAME(month, rapp_data_consegna_intervento), DATEPART(month, rapp_data_consegna_intervento)  " +
+            //     " ORDER BY DATEPART(month, rapp_data_consegna_intervento)";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn);
@@ -3211,7 +3270,7 @@ namespace Uotep.Classi
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
 
-            sql = "SELECT count(rapp_contr_cantiere_suolo_pubb) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_cantiere_suolo_pubb='true'";
+            sql = "SELECT count(rapp_contr_cantiere_suolo_pubb) as n FROM rappuote where rapp_data_consegna_intervento between '" + @dataInizio.ToShortDateString() + "' AND '" + @dataFine.ToShortDateString() + "' and rapp_contr_cantiere_suolo_pubb='true'";
 
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -3811,7 +3870,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT Sum(rapp_num_censimento_all_pubb) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "'";
+            sql = "SELECT Sum(rapp_num_censimento_all_pubb) as n FROM rappuote where rapp_data_consegna_intervento between'" + @dataInizio.ToShortDateString() + "' AND '" + @dataFine.ToShortDateString() + "' and rapp_censimento_all_pubb='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4382,6 +4441,7 @@ namespace Uotep.Classi
                                 using (StreamWriter sw = File.CreateText(LogFile)) { }
                             }
 
+
                         }
                     } // 'using' fa il Dispose del SqlCommand
                 } // 'using' fa il Dispose della SqlTransaction
@@ -4688,6 +4748,66 @@ namespace Uotep.Classi
 
         }
 
+        /// <summary>
+        /// modifica il flag verificato a true nella tabella gestione auto
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public Boolean UpdGestioneAutoById(GestAuto p)
+        {
+            bool resp = true;
+
+            string sql = String.Empty;
+            string testoSql = string.Empty;
+            int res = 0;
+            try
+            {
+
+                sql = "update gestioneauto set verificato= 'true', data_verifica= '" + @p.dataVerifica + "'" +
+                    " where  id = " + @p.id;
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql;
+                        testoSql = "Gestioneauto";
+                        res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("targa:" + p.targa + ",data ins:" + p.dataVerifica + ", id riga= " + p.id + ": " + ex.Message + @" - Errore in update gestione auto ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
         public Boolean UpdDecretazione(Decretazione p)
         {
             bool resp = true;
