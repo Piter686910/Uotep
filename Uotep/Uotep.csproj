@@ -338,6 +338,7 @@
     <Content Include="View\InserimentoArchivio.aspx" />
     <Content Include="View\test.aspx" />
     <Content Include="View\Attivita.aspx" />
+    <Content Include="View\Turnazione.aspx" />
     <Content Include="View\Uotp\InserimentoArchivioUotp.aspx" />
     <Content Include="View\Uotp\RicercaArchivioUotp.aspx" />
     <Content Include="View\Visualizza.aspx" />
@@ -360,6 +361,7 @@
     <Compile Include="Classi\ArchivioUote.cs" />
     <Compile Include="Classi\Decretazione.cs" />
     <Compile Include="Classi\GestionePratiche.cs" />
+    <Compile Include="Classi\GridViewTemplate .cs" />
     <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Enumerate.cs" />
     <Compile Include="Classi\Manager.cs" />
@@ -526,6 +528,13 @@
     </Compile>
     <Compile Include="View\Attivita.aspx.designer.cs">
       <DependentUpon>Attivita.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Turnazione.aspx.cs">
+      <DependentUpon>Turnazione.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Turnazione.aspx.designer.cs">
+      <DependentUpon>Turnazione.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\Uotp\InserimentoArchivioUotp.aspx.cs">
       <DependentUpon>InserimentoArchivioUotp.aspx</DependentUpon>

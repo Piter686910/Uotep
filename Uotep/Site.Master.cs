@@ -180,6 +180,7 @@ namespace Uotep
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 StatisticheAtti.Visible = true;
+                                Turnazione.Visible = true;
                                 //A1.Visible = true;
 
                                 //*

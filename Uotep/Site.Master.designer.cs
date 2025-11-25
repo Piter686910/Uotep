@@ -51,6 +51,15 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor SchedaCarburante;
 
         /// <summary>
+        /// Controllo Turnazione.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor Turnazione;
+
+        /// <summary>
         /// Controllo Attivita.
         /// </summary>
         /// <remarks>

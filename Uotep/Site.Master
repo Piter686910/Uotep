@@ -98,6 +98,7 @@
                                 <li><%--<a id="Amministratore" runat="server" visible="false" ref="~/View/Dashboard">Dashboard</a>--%></li>
                                 <li><a id="Amministratore" runat="server" visible="false" href="~/View/Dashboard">Dashboard</a></li>
                                 <li><a id="SchedaCarburante" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
+                                <li><a id="Turnazione" runat="server" visible="false" href="~/View/Turnazione">Turnazione</a></li>
                             </ul>
                         </li>
 

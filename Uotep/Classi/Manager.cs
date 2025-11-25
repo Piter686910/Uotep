@@ -1,4 +1,5 @@
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
@@ -409,6 +410,16 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        public DataTable getListQuartina(Int32 anno)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT anno as anno,quartina as quartina,gennaio as gennaio,febbraio as febbraio, marzo as marzo, aprile as aprile, maggio as maggio, giugno as giugno, luglio as luglio, agosto as agosto, settembre as settembre, ottobre as ottobre, novembre as novembre,dicembre as dicembre FROM quartina where anno = " + anno ;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// ottiene nominativo operatore dalla matricola
         /// </summary>
@@ -449,6 +460,19 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+
+        public DataTable getListDipendentire()
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,sottogruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
+                         "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+
         public Boolean getTipoProv(string tipo)
         {
             DataTable tb = new DataTable();
@@ -2514,8 +2538,8 @@ namespace Uotep.Classi
                  @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "','" +
-                 @rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" +"); SELECT SCOPE_IDENTITY();";
+                 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
+                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -2646,7 +2670,7 @@ namespace Uotep.Classi
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
                  @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-                 @rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -2760,7 +2784,7 @@ namespace Uotep.Classi
 @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
 @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
 @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-@rapp.num_censimento_all_pubb + "'," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+@rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
 
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
