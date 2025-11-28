@@ -65,6 +65,7 @@ namespace Uotep
 
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
+                txtAnno.Text = System.Convert.ToInt32(DateTime.Now.Year).ToString();
             }
             //if (!IsPostBack)
             //{
@@ -344,231 +345,57 @@ namespace Uotep
             gvCalendario.EditIndex = -1;
             GeneraGriglia();
 
-            //// 1. Esegui la tua query e ottieni il DataTable (già ordinato per ufficio!)
-            ////DataTable dt = CaricaDatiDalDatabase(); // Sostituisci con la tua funzione
-            //Manager mn = new Manager();
-            //DataTable dt = new DataTable();
-            //dt = mn.getListDipendentire();
-            //// Ottieni un riferimento alla tabella interna della GridView
-            //Table gridTable = gvCalendario.Controls.OfType<Table>().FirstOrDefault();
-            //if (gridTable == null)
-            //{
-            //    gridTable = new Table();
-            //    gvCalendario.Controls.Add(gridTable);
-            //}
-            //gridTable.Rows.Clear(); // Pulisci la tabella da esecuzioni precedenti
 
-            //// --- COSTRUZIONE MANUALE DELL'HEADER ---
-            //GridViewRow headerRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Normal);
-            //// Aggiungi qui le celle dell'header una per una, basandoti sulle colonne che crei
-            //// Esempio:
-            //TableHeaderCell thDipendente = new TableHeaderCell { Text = "Dipendente" };
-            //headerRow.Cells.Add(thDipendente);
-
-            //// Aggiungi le celle per i giorni del mese (devi avere questa logica già pronta)
-            //int anno = int.Parse(ddlAnno.SelectedValue);
-            //int mese = int.Parse(ddlMese.SelectedValue);
-            //int giorniNelMese = DateTime.DaysInMonth(anno, mese);
-            //for (int i = 1; i <= giorniNelMese; i++)
-            //{
-            //    TableHeaderCell thGiorno = new TableHeaderCell { Text = i.ToString() };
-            //    // Aggiungi qui la logica per il nome del giorno e lo stile per i festivi
-            //    headerRow.Cells.Add(thGiorno);
-            //}
-
-            //TableHeaderCell thAzioni = new TableHeaderCell { Text = "Azioni" };
-            //headerRow.Cells.Add(thAzioni);
-
-            //gridTable.Rows.Add(headerRow); // Aggiungi la riga di header alla tabella
-
-
-            //// --- COSTRUZIONE MANUALE DELLE RIGHE DI DATI E SEPARATORI ---
-            //string _currentUfficio = null;
-
-            //foreach (DataRow dataRow in dt.Rows)
-            //{
-            //    string ufficio = dataRow["ufficio"].ToString();
-
-            //    // Se l'ufficio cambia, inserisci la riga separatore
-            //    if (ufficio != _currentUfficio)
-            //    {
-            //        GridViewRow separatorRow = new GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Normal);
-            //        TableCell cell = new TableCell();
-            //        cell.ColumnSpan = headerRow.Cells.Count; // Occupa tutta la larghezza
-            //        cell.CssClass = "ufficio-separator-row"; // Il tuo stile
-            //        cell.Text = ufficio;
-            //        separatorRow.Cells.Add(cell);
-            //        gridTable.Rows.Add(separatorRow);
-
-            //        _currentUfficio = ufficio;
-            //    }
-
-            //    // Inserisci la riga del dipendente
-            //    GridViewRow employeeRow = new GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Normal);
-
-            //    // Cella Nominativo
-            //    TableCell cellNominativo = new TableCell { Text = dataRow["nominativo"].ToString() };
-            //    employeeRow.Cells.Add(cellNominativo);
-
-            //    // Aggiungi le celle per i dati dei giorni (es. turni)
-            //    for (int i = 1; i <= giorniNelMese; i++)
-            //    {
-            //        TableCell cellTurno = new TableCell { Text = "" }; // Metti qui il dato del turno
-            //                                                           // Applica lo stile festivo se necessario
-            //        employeeRow.Cells.Add(cellTurno);
-            //    }
-
-            //    // Cella Azioni (con il bottone "Modifica")
-            //    TableCell cellAzioni = new TableCell();
-            //    Button btnModifica = new Button { Text = "Modifica", CommandName = "Edit" };
-            //    cellAzioni.Controls.Add(btnModifica);
-            //    employeeRow.Cells.Add(cellAzioni);
-
-            //    gridTable.Rows.Add(employeeRow);
-            //    //CaricaGriglia();
-            //}
         }
-        //private Dictionary<int, string> CaricaDatiGiorniSpeciali(int anno)
-        //{
-        //    Manager mn = new Manager();
-        //    DataTable quartina = new DataTable();
-        //    quartina = mn.getListQuartina(anno);
 
-        //    // Convertiamo il risultato della query in un Dictionary per un accesso rapido
-        //    Dictionary<int, string> risultato = new Dictionary<int, string>();
-        //    foreach (var item in quartina.Rows)
-        //    {
-        //        String giorno = item["Gennaio"];
-        //        string valore = item["Valore"].ToString();
-
-        //        // Aggiungi la voce al dizionario. Se ci sono più valori per lo stesso giorno,
-        //        // questo codice terrà solo l'ultimo.
-        //        risultato[giorno] = valore;
-        //    }
-
-        //    return risultato;
-        //}
-        /// <summary>
-        /// Processa la DataTable dei gruppi e la trasforma in un dizionario ottimizzato per la ricerca.
-        /// </summary>
-        /// <param name="dtGruppi">La DataTable contenente i dati dei gruppi.</param>
-        /// <param name="mese">Il mese (1-12) da analizzare.</param>
-        /// <returns>Un Dictionary dove la chiave è il giorno e il valore è una lista di numeri di gruppo.</returns>
-        //private Dictionary<int, List<string>> ProcessaDataTableGruppi(DataTable dtGruppi, int mese)
-        //{
-        //    var giorniGruppi = new Dictionary<int, List<string>>();
-        //    if (dtGruppi == null || dtGruppi.Rows.Count == 0)
-        //    {
-        //        return giorniGruppi;
-        //    }
-
-        //    // Ottieni il nome della colonna del mese in italiano
-        //    string nomeColonnaMese = new DateTime(2000, mese, 1).ToString("MMMM", new CultureInfo("it-IT")).ToLower();
-
-        //    // Controlla se la colonna esiste nella DataTable
-        //    if (!dtGruppi.Columns.Contains(nomeColonnaMese))
-        //    {
-        //        return giorniGruppi; // Colonna non trovata, restituisci dizionario vuoto
-        //    }
-
-        //    // Itera su ogni riga della DataTable (ogni riga è un gruppo)
-        //    foreach (DataRow row in dtGruppi.Rows)
-        //    {
-        //        string numeroGruppo = row["quartina"].ToString();
-        //        string giorniStringa = row[nomeColonnaMese]?.ToString();
-
-        //        // Se la cella del mese è vuota o null, passa al gruppo successivo
-        //        if (string.IsNullOrWhiteSpace(giorniStringa))
-        //        {
-        //            continue;
-        //        }
-
-        //        // Dividi la stringa dei giorni (es. "1,10,25") in un array di giorni
-        //        string[] giorniSeparati = giorniStringa.Split(',');
-
-        //        foreach (string giornoStr in giorniSeparati)
-        //        {
-        //            // Tenta di convertire ogni pezzo in un numero.
-        //            // Questo ignora eventuali spazi vuoti o valori non validi (es. "1,,15")
-        //            if (int.TryParse(giornoStr.Trim(), out int giorno))
-        //            {
-        //                // Se non abbiamo ancora una voce per questo giorno, creiamola
-        //                if (!giorniGruppi.ContainsKey(giorno))
-        //                {
-        //                    giorniGruppi[giorno] = new List<string>();
-        //                }
-        //                // Aggiungi il numero del gruppo corrente alla lista di quel giorno
-        //                giorniGruppi[giorno].Add(numeroGruppo);
-        //            }
-        //        }
-        //    }
-        //    return giorniGruppi;
-        //}
-        private Dictionary<int, List<string>> ProcessaDataTableGruppi(DataTable dtGruppi, int mese)
+        private Tuple<Dictionary<int, List<string>>, Dictionary<string, List<int>>> ProcessaDataTableGruppi(DataTable dtGruppi, int mese)
         {
-            var giorniGruppi = new Dictionary<int, List<string>>();
+            // Dizionario 1: Mappa Giorno -> Lista di Gruppi (per la riga speciale "Quartina")
+            var giornoPerGruppo = new Dictionary<int, List<string>>();
+            // Dizionario 2: Mappa Gruppo -> Lista di Giorni (per le righe dei dipendenti, per inserire la "Q")
+            var gruppoPerGiorno = new Dictionary<string, List<int>>();
 
-            // --- INIZIO SEZIONE DI DEBUG ---
-            string debugOutput = "";
             if (dtGruppi == null || dtGruppi.Rows.Count == 0)
             {
-                debugOutput = "DEBUG: La DataTable dei gruppi è vuota o null.";
-                ltlDebug.Text = $"<div class='alert alert-danger'>{debugOutput}</div>";
-                return giorniGruppi;
+                return Tuple.Create(giornoPerGruppo, gruppoPerGiorno);
             }
 
-            string nomeColonnaMeseAtteso = new DateTime(2000, mese, 1).ToString("MMMM", new CultureInfo("it-IT")).ToLower();
-
-            debugOutput += $"<b>Nome Colonna Atteso:</b> '{nomeColonnaMeseAtteso}'<br/>";
-
-            // Ottieni e stampa la lista di tutte le colonne reali nella DataTable
-            string colonneReali = string.Join(", ", dtGruppi.Columns.Cast<DataColumn>().Select(c => $"'{c.ColumnName}'"));
-            debugOutput += $"<b>Lista Colonne Reali:</b> {colonneReali}<br/><hr/>";
-
-            // --- FINE SEZIONE DI DEBUG ---
-
-            // Usiamo una ricerca case-insensitive per trovare la colonna
+            string nomeColonnaMese = new DateTime(2000, mese, 1).ToString("MMMM", new CultureInfo("it-IT"));
             DataColumn colonnaMese = dtGruppi.Columns
                 .Cast<DataColumn>()
-                .FirstOrDefault(c => c.ColumnName.Equals(nomeColonnaMeseAtteso, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(c => c.ColumnName.Equals(nomeColonnaMese, StringComparison.OrdinalIgnoreCase));
 
             if (colonnaMese == null)
             {
-                debugOutput += "<b style='color:red;'>ERRORE: La colonna del mese non è stata trovata nella DataTable!</b>";
-                ltlDebug.Text = $"<div class='alert alert-warning'>{debugOutput}</div>";
-                return giorniGruppi;
+                return Tuple.Create(giornoPerGruppo, gruppoPerGiorno);
             }
 
             foreach (DataRow row in dtGruppi.Rows)
             {
-                string numeroGruppo = row["quartina"].ToString();
+                // ASSICURATI CHE LA COLONNA SI CHIAMI 'quartina' o 'numero gruppo'
+                string numeroGruppo = row["quartina"].ToString(); // O "numero gruppo"
                 string giorniStringa = row[colonnaMese]?.ToString();
 
-                if (string.IsNullOrWhiteSpace(giorniStringa))
-                {
-                    continue;
-                }
-
-                debugOutput += $"Trovati dati per Gruppo '{numeroGruppo}': '{giorniStringa}'<br/>";
+                if (string.IsNullOrWhiteSpace(giorniStringa)) continue;
 
                 string[] giorniSeparati = giorniStringa.Split(',');
-
                 foreach (string giornoStr in giorniSeparati)
                 {
                     if (int.TryParse(giornoStr.Trim(), out int giorno))
                     {
-                        if (!giorniGruppi.ContainsKey(giorno))
-                        {
-                            giorniGruppi[giorno] = new List<string>();
-                        }
-                        giorniGruppi[giorno].Add(numeroGruppo);
+                        // Popola il primo dizionario (Giorno -> Gruppi)
+                        if (!giornoPerGruppo.ContainsKey(giorno))
+                            giornoPerGruppo[giorno] = new List<string>();
+                        giornoPerGruppo[giorno].Add(numeroGruppo);
+
+                        // Popola il secondo dizionario (Gruppo -> Giorni)
+                        if (!gruppoPerGiorno.ContainsKey(numeroGruppo))
+                            gruppoPerGiorno[numeroGruppo] = new List<int>();
+                        gruppoPerGiorno[numeroGruppo].Add(giorno);
                     }
                 }
             }
-
-            // Mostra il risultato del debug
-            ltlDebug.Text = $"<div class='alert alert-info'>{debugOutput}</div>";
-            return giorniGruppi;
+            return Tuple.Create(giornoPerGruppo, gruppoPerGiorno);
         }
         private void GeneraGriglia()
         {
@@ -602,16 +429,17 @@ namespace Uotep
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // PASSO 1: CARICA E PREPARA I DATI DELLA RIGA "QUARTINA"
             DataTable quartina = mn.getListQuartina(anno);
-            Dictionary<int, List<string>> datiGiorniGruppi = ProcessaDataTableGruppi(quartina, mese);
+            var datiProcessati = ProcessaDataTableGruppi(quartina, mese);
+            // Dizionario per la riga speciale
+            Dictionary<int, List<string>> datiGiorniGruppi = datiProcessati.Item1;
+            // Dizionario per le righe dei dipendenti
+            Dictionary<string, List<int>> datiGruppoPerGiorno = datiProcessati.Item2;
 
-            // PASSO 2: COSTRUISCI E AGGIUNGI LA RIGA "QUARTINA"
             GridViewRow specialRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
             specialRow.CssClass = "riga-eventi-speciale";
-
-            // **** MODIFICA RICHIESTA: Aggiungi il testo "quartina" alla prima cella ****
             TableCell quartinaCell = new TableCell();
             quartinaCell.Text = "Quartina";
-            quartinaCell.Font.Bold = true; // Applica lo stile Grassetto (Bold)
+            quartinaCell.Font.Bold = true;
             specialRow.Cells.Add(quartinaCell);
 
             // Popola le altre celle con i dati dei gruppi
@@ -682,6 +510,20 @@ namespace Uotep
                 employeeRow.Cells.Add(new TableCell { Text = dataRow["nominativo"].ToString() });
                 employeeRow.Font.Bold = true;
 
+                //logica Quartina
+                // Recupera la quartina del dipendente dal DataTable
+                string quartinaDelDipendente = dataRow["quartina"]?.ToString();
+
+
+                List<int> giorniDaMarcareConQ = new List<int>();
+                if (!string.IsNullOrEmpty(quartinaDelDipendente) && datiGruppoPerGiorno.ContainsKey(quartinaDelDipendente))
+                {
+                    giorniDaMarcareConQ = datiGruppoPerGiorno[quartinaDelDipendente];
+                }
+                // --- FINE LOGICA "Q" ---
+
+
+
                 for (int i = 1; i <= giorniNelMese; i++)
                 {
                     TableCell cellTurno = new TableCell();
@@ -691,18 +533,50 @@ namespace Uotep
                     {
                         cellTurno.CssClass = "giorno-festivo-cella";
                     }
+                    // Controlla se questo è un giorno da marcare con "Q"
+                    bool isGiornoQuartina = giorniDaMarcareConQ.Contains(i);
+                    string cellText = ""; // Testo di default
 
+                    // Priorità 1: È un giorno "Q"?
+                    if (giorniDaMarcareConQ.Contains(i))
+                    {
+                        cellText = "Q";
+                    }
+                    // Priorità 2: È un giorno "2" (il giorno DOPO un giorno Q)?
+                    else if (giorniDaMarcareConQ.Contains(i - 1))
+                    {
+                        cellText = "2";
+                    }
+                    // Priorità 3: È un giorno "1" (il giorno PRIMA di un giorno Q)?
+                    else if (giorniDaMarcareConQ.Contains(i + 1))
+                    {
+                        cellText = "1";
+                    }
                     if (isEditMode)
                     {
                         TextBox txtTurno = new TextBox();
                         txtTurno.ID = "txtGiorno_" + i;
-                        txtTurno.Text = ""; // Popola con dati turno
                         txtTurno.CssClass = "form-control input-sm";
+                        txtTurno.Text = cellText;
+                        // Aggiungi qui la logica per caricare altri dati del turno se cellText è vuoto
                         cellTurno.Controls.Add(txtTurno);
+
                     }
                     else
                     {
-                        cellTurno.Text = ""; // Popola con dati turno
+                        cellTurno.Text = cellText;
+                        if (cellText == "Q")
+                        {
+                            // Applica lo stile specifico per la Q
+                            cellTurno.CssClass += " text-center";
+                            cellTurno.Font.Bold = true;
+                            cellTurno.BackColor = Color.DarkOrange;
+                        }
+                        else if (cellText == "1" || cellText == "2")
+                        {
+                            // Applica uno stile generico per 1 e 2
+                            cellTurno.CssClass += " text-center";
+                        }
                     }
                     employeeRow.Cells.Add(cellTurno);
                 }
@@ -724,6 +598,7 @@ namespace Uotep
                 visualRowIndex++;
             }
         }
+
 
         protected void gvCalendario_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -886,6 +761,7 @@ namespace Uotep
 
             return false;
         }
+
         // Lista (semplificata) delle festività fisse italiane (mese, giorno)
         private static readonly List<(int mese, int giorno)> FestivitaFisse = new List<(int mese, int giorno)>
 {

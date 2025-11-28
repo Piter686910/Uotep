@@ -96,6 +96,9 @@ namespace Uotep
             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
             TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
+            DdlTipoProvvAg.SelectedItem.Text = pratica.Rows[0].ItemArray[7].ToString();
+            DdlTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString();
+
             txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
             txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
             txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();

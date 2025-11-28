@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-4" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
                             <%--<asp:DropDownList ID="ddlAnno" runat="server" CssClass="form-control" AutoPostBack="True" OnSelectedIndexChanged="ddlAnno_SelectedIndexChanged"></asp:DropDownList>--%>
-                            <asp:TextBox ID="txtAnno" runat="server" OnTextChanged="txtAnno_TextChanged" AutoPostBack="True"></asp:TextBox>
+                            <asp:TextBox ID="txtAnno" runat="server" OnTextChanged="txtAnno_TextChanged" AutoPostBack="True" CssClass="form-control"></asp:TextBox>
 
                         </div>
                         <div class="col-md-4" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
