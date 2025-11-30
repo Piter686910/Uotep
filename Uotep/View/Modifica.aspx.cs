@@ -143,7 +143,8 @@ namespace Uotep
                     txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
                 }
             }
-
+           
+            txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
             //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
             //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
@@ -155,7 +156,7 @@ namespace Uotep
                 DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
                 //txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
             }
-            
+
             txtBU.Text = pratica.Rows[0].ItemArray[29].ToString().ToUpper();
             txtCodEdificio.Text = pratica.Rows[0].ItemArray[30].ToString().ToUpper();
 
@@ -262,7 +263,7 @@ namespace Uotep
                 //    resp = false;
                 //}
             }
-            if (String.IsNullOrEmpty( txtDataInsCarico.Text))
+            if (String.IsNullOrEmpty(txtDataInsCarico.Text))
             {
                 resp = false;
             }
@@ -437,8 +438,8 @@ namespace Uotep
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
-                        DivDettagli.Visible = false;
-                        Pulisci();
+                        //DivDettagli.Visible = false;
+                        //Pulisci();
                     }
                 }
             }
@@ -505,9 +506,12 @@ namespace Uotep
             DdlMacroArea.ClearSelection();
             txtDataCarico.Text = String.Empty;
             txtDataInsCarico.Text = String.Empty;
-            //txtProt.Text = String.Empty;
             txtAccertatori.Text = string.Empty;
-          
+            txtdataEvasaPopup.Text = string.Empty;
+            DdlTipoAtto.SelectedIndex=0;
+            txtProt.Text = string.Empty;
+            txtGiudice.Text = string.Empty;
+            txtProdPenNr.Text = string.Empty;
         }
 
         protected void NuovaRicerca_Click(object sender, EventArgs e)
@@ -976,7 +980,7 @@ namespace Uotep
         {
 
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
-            Pulisci();
+            //Pulisci();
         }
         protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
         {
@@ -1175,6 +1179,7 @@ namespace Uotep
 
         protected void Decretazione_Click(object sender, EventArgs e)
         {
+            Salva_Click(sender,e);
             txtPraticaDecr.Text = txtProt.Text;
             txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
@@ -1399,10 +1404,12 @@ namespace Uotep
                 Boolean upd = mn.UpdDecretazioneChiusura(decr);
                 if (!upd)
                 {
+                   
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
+                    Pulisci();
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
                 }
@@ -1544,7 +1551,8 @@ namespace Uotep
             Pulisci();
             DivRicerca.Visible = true;
             DivDettagli.Visible = false;
-
+            Session.Remove("ListRicerca");
+            Session.Remove("ListPratiche");
         }
     }
 }

@@ -42,6 +42,33 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtAnno;
 
         /// <summary>
+        /// Controllo btSalva.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btSalva;
+
+        /// <summary>
+        /// Controllo btCerca.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btCerca;
+
+        /// <summary>
+        /// Controllo btStampa.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btStampa;
+
+        /// <summary>
         /// Controllo divInserimento.
         /// </summary>
         /// <remarks>
@@ -213,24 +240,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtIndirizzo;
 
         /// <summary>
-        /// Controllo DivGrid.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivGrid;
-
-        /// <summary>
-        /// Controllo gvDett.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvDett;
-
-        /// <summary>
         /// Controllo Hfuser.
         /// </summary>
         /// <remarks>
@@ -249,31 +258,22 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroData;
 
         /// <summary>
-        /// Controllo btSalva.
+        /// Controllo DivGrid.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalva;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivGrid;
 
         /// <summary>
-        /// Controllo btCerca.
+        /// Controllo gvDett.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btCerca;
-
-        /// <summary>
-        /// Controllo btStampa.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btStampa;
+        protected global::System.Web.UI.WebControls.GridView gvDett;
 
         /// <summary>
         /// Controllo btClose.

@@ -140,8 +140,7 @@ namespace Uotep
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Sigla " + auto.sigla + " inserita correttamente" + "'); $('#ModalRicDecretazione').modal('show');", true);
-
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#txtAvvertenze').text('" + "Sigla " + auto.sigla + " inserita correttamente.\\n Inserire sulla ricevuta la Sigla, il cognome e la lettera R.\\n Grazie" + "'); $('#ModalAvvertenze').modal('show');", true);
                     Pulisci();
 
                 }
@@ -177,7 +176,7 @@ namespace Uotep
 
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalAvvertenze').modal('show');", true);
         }
 
         private void CaricaDLL()
@@ -263,18 +262,7 @@ namespace Uotep
 
         }
 
-
-
-        protected void apripopupDecretazione_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
-
-        }
-        protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
-            // Pulisci();
-        }
+   
         /// <summary>
         /// funzione che inserisce spaces al posto del min data value
         /// </summary>
@@ -412,7 +400,7 @@ namespace Uotep
                     obj.autista= values[3]; // autista
                     //Hid.Value = values[4]; // id
 
-                    
+                    obj.matricola = Vuser;
                     obj.dataVerifica = DateTime.Now.Date;
                     Manager mn = new Manager();
                     Boolean upd = mn.UpdGestioneAutoById(obj);

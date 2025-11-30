@@ -1188,7 +1188,7 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
-            sql = "SELECT * FROM GestioneAuto where mese ='" + mese + "' and anno = " + anno + " order by sigla";
+            sql = "SELECT * FROM GestioneAuto where mese ='" + mese + "' and anno = " + anno + " order by sigla, data";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4787,7 +4787,7 @@ namespace Uotep.Classi
             try
             {
 
-                sql = "update gestioneauto set verificato= 'true', data_verifica= '" + @p.dataVerifica + "'" +
+                sql = "update gestioneauto set verificato= 'true', data_verifica= '" + @p.dataVerifica + "',matricola= '" + p.matricola.Trim() +"'" +
                     " where  id = " + @p.id;
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
