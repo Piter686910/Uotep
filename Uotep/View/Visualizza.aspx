@@ -13,12 +13,12 @@
         }
         // Mostra il popup
         function showModal() {
-            $('#myModal').modal('show');
+            $('#Message').modal('show');
         }
 
         // Nasconde il popup
         function hideModal() {
-            $('#myModal').modal('hide');
+            $('#Message').modal('hide');
         }
         // Mostra il popup ricerca
         function showModal() {
@@ -633,4 +633,5 @@
             </div>
         </div>
     </div>
+
 </asp:Content>

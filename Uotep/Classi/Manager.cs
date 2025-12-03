@@ -4239,7 +4239,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = '" + DelegaIndagine + "' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = '" + DelegaIndagine + "' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND datacarico LIKE '" + anno + "-" + meseS + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }
@@ -4264,7 +4264,7 @@ namespace Uotep.Classi
             //}
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = '" + Esposti + "' AND DATAARRIVO LIKE '" + anno + "-" + meseS + "%'";
+                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = '" + Esposti + "' AND datacarico LIKE '" + anno + "-" + meseS + "%'";
 
                 return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
             }

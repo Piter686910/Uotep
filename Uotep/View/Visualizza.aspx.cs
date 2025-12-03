@@ -132,6 +132,7 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
         }
+       
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
@@ -599,6 +600,7 @@ namespace Uotep
                     else
                     {
                         gvPopup.DataSource = null;
+
                     }
 
                 }

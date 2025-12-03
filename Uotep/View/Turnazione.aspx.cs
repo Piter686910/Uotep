@@ -765,7 +765,10 @@ namespace Uotep
             Dictionary<string, List<int>> datiGruppoPerGiorno = datiProcessati.Item2;
             HashSet<int> giorniFestivi = CalcolaGiorniFestiviDelMese(anno, mese);
 
-            // --- 3. COSTRUZIONE RIGA "QUARTINA" E HEADER (Layout Invariato) ---
+            // --- 3. ESECUZIONE DELLA LOGICA DI BUSINESS COMPLESSA ---
+            var turniCalcolati = CalcolaTurniComplessi(dt, datiGruppoPerGiorno, giorniFestivi, anno, mese);
+
+            // --- 4. COSTRUZIONE RIGA "QUARTINA" E HEADER (Layout Invariato) ---
             GridViewRow specialRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
             specialRow.CssClass = "riga-eventi-speciale";
             TableCell quartinaCell = new TableCell { Text = "Quartina", Font = { Bold = true } };
@@ -800,7 +803,7 @@ namespace Uotep
             headerRow.Cells.Add(new TableHeaderCell { Text = "Azioni" });
             gridTable.Rows.Add(headerRow);
 
-            // --- 4. COSTRUZIONE RIGHE DATI CON LOGICA COMPLETA E CORRETTA ---
+            // --- 5. CICLO DI RENDERIZZAZIONE (SOLO VISUALIZZAZIONE) ---
             int visualRowIndex = 0;
             var gruppiUfficio = dt.AsEnumerable().GroupBy(r => r.Field<string>("ufficio").ToUpper());
 
@@ -817,14 +820,10 @@ namespace Uotep
                 separatorRow.ForeColor = Color.Red;
                 gridTable.Rows.Add(separatorRow);
 
-                // --- CALCOLO DI TUTTI I TURNI PER L'UFFICIO CORRENTE ---
-                var scheduleUfficio = CalcolaTurniComplessi(dipendentiDelGruppo, datiGruppoPerGiorno, giorniFestivi, anno, mese);
-
-                // --- CICLO DI RENDERIZZAZIONE PER I DIPENDENTI DELL'UFFICIO ---
                 foreach (DataRow dataRow in dipendentiDelGruppo)
                 {
                     string idDipendente = dataRow["id_dip"].ToString();
-                    var scheduleDelDipendente = scheduleUfficio[idDipendente];
+                    var scheduleDelDipendente = turniCalcolati[idDipendente];
 
                     bool isEditMode = (gvCalendario.EditIndex == visualRowIndex);
                     GridViewRow employeeRow = new GridViewRow(visualRowIndex, visualRowIndex, DataControlRowType.DataRow, DataControlRowState.Normal);
@@ -874,114 +873,144 @@ namespace Uotep
             }
         }
 
-
-      
-
         /// <summary>
-        /// Calcola l'intero mese per un gruppo di dipendenti di un ufficio.
+        /// METODO DI CALCOLO: Contiene tutta la logica di business per calcolare i turni di tutti i dipendenti.
         /// </summary>
-        private Dictionary<string, Dictionary<int, string>> CalcolaTurniComplessi(List<DataRow> dipendentiDelGruppo, Dictionary<string, List<int>> datiGruppoPerGiorno, HashSet<int> giorniFestivi, int anno, int mese)
+        private Dictionary<string, Dictionary<int, string>> CalcolaTurniComplessi(DataTable dtDipendenti, Dictionary<string, List<int>> datiGruppoPerGiorno, HashSet<int> giorniFestivi, int anno, int mese)
         {
-            var scheduleUfficio = new Dictionary<string, Dictionary<int, string>>();
-            int giorniNelMese = DateTime.DaysInMonth(anno, mese);
+            var scheduleCompleto = new Dictionary<string, Dictionary<int, string>>();
             var rnd = new Random();
+            int giorniNelMese = DateTime.DaysInMonth(anno, mese);
 
-            // 1. Inizializzazione: Pre-compila i turni di massima priorità (RF, 1/2 adiacenti a Q, Q)
-            foreach (DataRow dip in dipendentiDelGruppo)
+            var gruppiUfficio = dtDipendenti.AsEnumerable().GroupBy(r => r.Field<string>("ufficio").ToUpper());
+
+            foreach (var gruppo in gruppiUfficio)
             {
-                string idDip = dip["id_dip"].ToString();
-                scheduleUfficio[idDip] = new Dictionary<int, string>();
-                string quartinaDip = dip["quartina"]?.ToString();
-                List<int> giorniDaMarcareConQ = new List<int>();
-                if (!string.IsNullOrEmpty(quartinaDip) && datiGruppoPerGiorno.ContainsKey(quartinaDip))
+                string nomeUfficio = gruppo.Key;
+                List<DataRow> dipendentiDelGruppo = gruppo.ToList();
+
+                // Inizializzazione per l'ufficio
+                foreach (DataRow dip in dipendentiDelGruppo)
                 {
-                    giorniDaMarcareConQ = datiGruppoPerGiorno[quartinaDip];
+                    scheduleCompleto[dip["id_dip"].ToString()] = new Dictionary<int, string>();
                 }
 
-                // Strato RF
-                for (int i = 1; i <= giorniNelMese; i++)
+                if (dipendentiDelGruppo.Count <= 2)
                 {
-                    DateTime d = new DateTime(anno, mese, i);
-                    if (d.DayOfWeek == DayOfWeek.Sunday || giorniFestivi.Contains(i))
-                        scheduleUfficio[idDip][i] = "RF";
-                }
-                // Strato "1/2" adiacenti a Q
-                foreach (int giornoQ in giorniDaMarcareConQ)
-                {
-                    if (giornoQ - 1 > 0)
+                    // LOGICA SEMPLICE per uffici piccoli
+                    for (int giorno = 1; giorno <= giorniNelMese; giorno++)
                     {
-                        DateTime d = new DateTime(anno, mese, giornoQ - 1);
-                        if (d.DayOfWeek != DayOfWeek.Sunday && !giorniFestivi.Contains(giornoQ - 1))
-                            scheduleUfficio[idDip][giornoQ - 1] = "1";
-                    }
-                    if (giornoQ + 1 <= giorniNelMese)
-                    {
-                        DateTime d = new DateTime(anno, mese, giornoQ + 1);
-                        if (d.DayOfWeek != DayOfWeek.Sunday && !giorniFestivi.Contains(giornoQ + 1))
-                            scheduleUfficio[idDip][giornoQ + 1] = "2";
+                        var candidati = dipendentiDelGruppo.OrderBy(x => x["id_dip"]).ToList();
+                        if (candidati.Count > 0) scheduleCompleto[candidati[0]["id_dip"].ToString()][giorno] = "1";
+                        if (candidati.Count > 1) scheduleCompleto[candidati[1]["id_dip"].ToString()][giorno] = "2";
                     }
                 }
-                // Strato Q
-                foreach (int giornoQ in giorniDaMarcareConQ)
+                else // LOGICA COMPLESSA per uffici grandi
                 {
-                    scheduleUfficio[idDip][giornoQ] = "Q";
+                    // Calcolo sequenza Sabati
+                    var turniSabatoUfficio = new Dictionary<int, string>();
+                    var sabatiDelMese = Enumerable.Range(1, giorniNelMese).Where(g => new DateTime(anno, mese, g).DayOfWeek == DayOfWeek.Saturday).ToList();
+                    int? primoSabatoPreQ = dipendentiDelGruppo
+                        .SelectMany(d => datiGruppoPerGiorno.ContainsKey(d["quartina"]?.ToString() ?? "") ? datiGruppoPerGiorno[d["quartina"].ToString()] : new List<int>())
+                        .Where(giornoQ => new DateTime(anno, mese, giornoQ).DayOfWeek == DayOfWeek.Sunday)
+                        .Select(giornoQ => (int?)(giornoQ - 1))
+                        .Where(sabato => sabatiDelMese.Contains(sabato.Value))
+                        .OrderBy(sabato => sabato)
+                        .FirstOrDefault();
+
+                    if (primoSabatoPreQ.HasValue)
+                    {
+                        turniSabatoUfficio[primoSabatoPreQ.Value] = "1";
+                        int anchorIndex = sabatiDelMese.IndexOf(primoSabatoPreQ.Value);
+                        for (int i = anchorIndex - 1; i >= 0; i--) turniSabatoUfficio[sabatiDelMese[i]] = (turniSabatoUfficio[sabatiDelMese[i + 1]] == "1") ? "2" : "1";
+                        for (int i = anchorIndex + 1; i < sabatiDelMese.Count; i++) turniSabatoUfficio[sabatiDelMese[i]] = (turniSabatoUfficio[sabatiDelMese[i - 1]] == "1") ? "2" : "1";
+                    }
+
+                    // Base: alterna verticalmente solo i giorni feriali (non sabato)
+                    for (int giorno = 1; giorno <= giorniNelMese; giorno++)
+                    {
+                        DateTime d = new DateTime(anno, mese, giorno);
+                        if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                        {
+                            var candidati = dipendentiDelGruppo.OrderBy(x => rnd.Next()).ToList();
+                            int num1 = (int)Math.Ceiling(candidati.Count / 2.0);
+                            foreach (var dip in candidati.Take(num1)) scheduleCompleto[dip["id_dip"].ToString()][giorno] = "1";
+                            foreach (var dip in candidati.Skip(num1)) scheduleCompleto[dip["id_dip"].ToString()][giorno] = "2";
+                        }
+                    }
+
+                    // Sovrascrivi con i turni calcolati per i sabati
+                    foreach (var dip in dipendentiDelGruppo)
+                        foreach (var turnoSabato in turniSabatoUfficio)
+                            scheduleCompleto[dip["id_dip"].ToString()][turnoSabato.Key] = turnoSabato.Value;
+
+                    // Correzioni Finali per l'ufficio grande
+                    foreach (var dip in dipendentiDelGruppo)
+                    { // Correzione Orizzontale
+                        for (int i = 3; i <= giorniNelMese; i++)
+                        {
+                            string t1 = scheduleCompleto[dip["id_dip"].ToString()].ContainsKey(i - 2) ? scheduleCompleto[dip["id_dip"].ToString()][i - 2] : "";
+                            string t2 = scheduleCompleto[dip["id_dip"].ToString()].ContainsKey(i - 1) ? scheduleCompleto[dip["id_dip"].ToString()][i - 1] : "";
+                            string t3 = scheduleCompleto[dip["id_dip"].ToString()].ContainsKey(i) ? scheduleCompleto[dip["id_dip"].ToString()][i] : "";
+                            if (t1 == t2 && t2 == t3 && (t1 == "1" || t1 == "2"))
+                                scheduleCompleto[dip["id_dip"].ToString()][i] = (t1 == "1") ? "2" : "1";
+                        }
+                    }
+                    for (int i = 1; i <= giorniNelMese; i++)
+                    { // Correzione Verticale
+                        var turniDelGiorno = dipendentiDelGruppo.Select(d => scheduleCompleto[d["id_dip"].ToString()].ContainsKey(i) ? scheduleCompleto[d["id_dip"].ToString()][i] : "").Where(t => t == "1" || t == "2").ToList();
+                        if (turniDelGiorno.Count > 1 && turniDelGiorno.Distinct().Count() == 1)
+                            scheduleCompleto[dipendentiDelGruppo[0]["id_dip"].ToString()][i] = (turniDelGiorno[0] == "1") ? "2" : "1";
+                    }
                 }
-            }
 
-            // 2. Calcolo Logico: Riempi gli spazi vuoti giorno per giorno
-            for (int giorno = 1; giorno <= giorniNelMese; giorno++)
-            {
-                // Identifica i candidati del giorno (quelli senza turno)
-                var candidati = dipendentiDelGruppo
-                    .Where(d => !scheduleUfficio[d["id_dip"].ToString()].ContainsKey(giorno))
-                    .ToList();
-
-                if (candidati.Count == 0) continue;
-
-                // Determina il bilanciamento verticale desiderato
-                int target1 = (int)Math.Ceiling(candidati.Count / 2.0);
-                int target2 = candidati.Count - target1;
-                int count1 = 0;
-                int count2 = 0;
-
-                // Assegna i turni rispettando i vincoli
-                foreach (var dip in candidati.OrderBy(x => rnd.Next()))
+                // SOVRASCRITTURA FINALE CON PRIORITÀ ALTA (per tutti gli uffici)
+                foreach (DataRow dip in dipendentiDelGruppo)
                 {
                     string idDip = dip["id_dip"].ToString();
-                    string turnoPrecedente = (giorno > 1 && scheduleUfficio[idDip].ContainsKey(giorno - 1)) ? scheduleUfficio[idDip][giorno - 1] : "";
-                    string turnoPrecedente2 = (giorno > 2 && scheduleUfficio[idDip].ContainsKey(giorno - 2)) ? scheduleUfficio[idDip][giorno - 2] : "";
 
-                    bool forzaTurno2 = (turnoPrecedente == "1" && turnoPrecedente2 == "1");
-                    bool forzaTurno1 = (turnoPrecedente == "2" && turnoPrecedente2 == "2");
+                    // Strato RF
+                    for (int i = 1; i <= giorniNelMese; i++)
+                    {
+                        DateTime d = new DateTime(anno, mese, i);
+                        if (d.DayOfWeek == DayOfWeek.Sunday || giorniFestivi.Contains(i))
+                            scheduleCompleto[idDip][i] = "RF";
+                    }
 
-                    if (forzaTurno2 && count2 < target2)
+                    // Strato Fureria (sovrascrive tutto, anche RF)
+                    if (nomeUfficio == "FURERIA")
+                        for (int i = 1; i <= giorniNelMese; i++)
+                            if (new DateTime(anno, mese, i).DayOfWeek == DayOfWeek.Saturday)
+                                scheduleCompleto[idDip][i] = "1";
+
+                    // Strato 1/2 adiacenti a Q
+                    string quartinaDip = dip["quartina"]?.ToString() ?? "";
+                    List<int> giorniDaMarcareConQ = datiGruppoPerGiorno.ContainsKey(quartinaDip) ? datiGruppoPerGiorno[quartinaDip] : new List<int>();
+                    foreach (int giornoQ in giorniDaMarcareConQ)
                     {
-                        scheduleUfficio[idDip][giorno] = "2";
-                        count2++;
+                        if (giornoQ - 1 > 0)
+                        {
+                            DateTime d = new DateTime(anno, mese, giornoQ - 1);
+                            if (d.DayOfWeek != DayOfWeek.Sunday && !giorniFestivi.Contains(giornoQ - 1))
+                                scheduleCompleto[idDip][giornoQ - 1] = "1";
+                        }
+                        if (giornoQ + 1 <= giorniNelMese)
+                        {
+                            DateTime d = new DateTime(anno, mese, giornoQ + 1);
+                            if (d.DayOfWeek != DayOfWeek.Sunday && !giorniFestivi.Contains(giornoQ + 1))
+                                scheduleCompleto[idDip][giornoQ + 1] = "2";
+                        }
                     }
-                    else if (forzaTurno1 && count1 < target1)
+
+                    // Strato Q (massima priorità)
+                    foreach (int giornoQ in giorniDaMarcareConQ)
                     {
-                        scheduleUfficio[idDip][giorno] = "1";
-                        count1++;
-                    }
-                    else if (count1 < target1) // Prova ad assegnare "1" per bilanciare
-                    {
-                        scheduleUfficio[idDip][giorno] = "1";
-                        count1++;
-                    }
-                    else // Assegna "2"
-                    {
-                        scheduleUfficio[idDip][giorno] = "2";
-                        count2++;
+                        scheduleCompleto[idDip][giornoQ] = "Q";
                     }
                 }
             }
-
-            // Al termine, scheduleUfficio contiene il palinsesto completo per l'ufficio.
-            // Il ciclo di renderizzazione successivo lo userà.
-            return scheduleUfficio; // Restituito dal nuovo metodo helper
+            return scheduleCompleto;
         }
-
 
 
 
