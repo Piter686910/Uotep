@@ -68,7 +68,7 @@ namespace Uotep
                                     menuRicercaScheda.Visible = true;
                                 }
                                 InserimentoAtti.Visible = true;
-                                ModificaAtti.Visible = true;
+                                //ModificaAtti.Visible = true;
                                 // ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper())
@@ -126,7 +126,7 @@ namespace Uotep
                                 {
                                     menuCoordinamentoAtti.Visible = true;
                                     InserimentoAtti.Visible = false;
-                                    ModificaAtti.Visible = false;
+                                    //ModificaAtti.Visible = false;
                                     RicercaAtti.Visible = true;
                                 }
                                 break;
@@ -185,7 +185,7 @@ namespace Uotep
 
                                 //*
                                 InserimentoAtti.Visible = true;
-                                ModificaAtti.Visible = true;
+                                //ModificaAtti.Visible = true;
                                 //  ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 EstraiStatistiche.Visible = true;
@@ -216,7 +216,7 @@ namespace Uotep
 
                                 //*
                                 InserimentoAtti.Visible = true;
-                                ModificaAtti.Visible = true;
+                                //ModificaAtti.Visible = true;
                                 //ModificaRiservata.Visible = true;
                                 RicercaAtti.Visible = true;
                                 GestionePraticaUote.Visible = true;
