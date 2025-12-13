@@ -78,13 +78,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btnCarica;
 
         /// <summary>
-        /// Controllo gvCalendario.
+        /// Controllo btnsalva.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvCalendario;
+        protected global::System.Web.UI.WebControls.Button btnsalva;
 
         /// <summary>
         /// Controllo lblErrore.
@@ -96,6 +96,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label lblErrore;
 
         /// <summary>
+        /// Controllo gvCalendario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvCalendario;
+
+        /// <summary>
+        /// Controllo errorMessage.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl errorMessage;
+
+        /// <summary>
         /// Controllo btClose.
         /// </summary>
         /// <remarks>
@@ -103,14 +121,5 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btClose;
-
-        /// <summary>
-        /// Controllo btChiudiAvvertenze.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btChiudiAvvertenze;
     }
 }

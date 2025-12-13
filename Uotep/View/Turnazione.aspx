@@ -64,12 +64,13 @@
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">TURNAZIONE PER IL MESE DI</p>
         </div>
-
+        
         <%-- MODIFICA: Utilizza container-fluid per occupare l'intera larghezza disponibile e rimuovi il margine negativo --%>
         <div class="container-fluid">
             <asp:Literal ID="ltlDebug" runat="server" EnableViewState="false"></asp:Literal>
             <!-- GridView  -->
             <asp:UpdatePanel ID="updPanelGrid" runat="server">
+                 
                 <ContentTemplate>
                     <%-- Aggiunto un div class="row" per un corretto allineamento dei controlli --%>
                     <div class="row">
@@ -79,12 +80,16 @@
                         </div>
                         <div class="col-md-4" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
                             <%--<asp:DropDownList ID="ddlAnno" runat="server" CssClass="form-control" AutoPostBack="True" OnSelectedIndexChanged="ddlAnno_SelectedIndexChanged"></asp:DropDownList>--%>
-                            <asp:TextBox ID="txtAnno" runat="server" OnTextChanged="txtAnno_TextChanged" AutoPostBack="True" CssClass="form-control"></asp:TextBox>
+                            <asp:TextBox ID="txtAnno" runat="server"  CssClass="form-control"></asp:TextBox>
 
                         </div>
                         <div class="col-md-4" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
                             <asp:Button ID="btnCarica" runat="server" Text="Carica Griglia" CssClass="btn btn-primary" OnClick="btnCarica_Click" />
                         </div>
+                        <div class="col-md-4" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
+                            <asp:Button ID="btnsalva" runat="server" Text="Salva Turnazione" CssClass="btn btn-primary" OnClick="btnsalva_Click" Enabled="false"/>
+                        </div>
+                        <asp:Label ID="lblErrore" runat="server" ForeColor="Red"></asp:Label>
                     </div>
                     <asp:GridView ID="gvCalendario" runat="server"
                         AutoGenerateColumns="False"
@@ -119,7 +124,7 @@
                     </Columns>
                     </asp:GridView>--%>
 
-                    <asp:Label ID="lblErrore" runat="server" ForeColor="Red"></asp:Label>
+                   
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
@@ -134,7 +139,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <p id="errorMessage" style="color: red"></p>
+                        <p id="errorMessage" runat="server" style="color: red"></p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -144,24 +149,7 @@
         </div>
     </div>
 
-    <%-- popup avvertenze --%>
-    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <p id="errorAvvertenze" style="color: red"></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+  
     <script type="text/javascript">
         //dice alla masterpage di trasformare il container in container-fluid
         $(document).ready(function () {

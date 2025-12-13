@@ -29,6 +29,7 @@ namespace Uotep
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        bool isEditMode = false;
         // Dizionario per annotare DOVE inserire le intestazioni.
         // La chiave (int) è l'indice della riga, il valore (string) è il nome dell'ufficio.
         private Dictionary<int, string> _headerRowsToInsert = new Dictionary<int, string>();
@@ -56,7 +57,7 @@ namespace Uotep
             {
                 PopolaDropdowns();
                 // Carica la griglia con i valori di default (mese corrente)
-                CaricaGriglia();
+                //CaricaGriglia();
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -66,35 +67,12 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 txtAnno.Text = System.Convert.ToInt32(DateTime.Now.Year).ToString();
+                
             }
-            //if (!IsPostBack)
-            //{
+            else
+                CaricaGriglia();
 
-            //    // Legge il valore dal Web.config
-            //    string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
-            //    // Decodifica il contenuto HTML (per supportare tag HTML come <h2>)
-            //    string decodedText = HttpUtility.HtmlDecode(protocolloText);
-
-            //    // Assegna il valore decodificato al Literal
-            //    ProtocolloLiteral.Text = decodedText;
-            //    CaricaDLL();
-            //    txtMese.Text = DateTime.Now.ToString("MMMM").ToUpper();
-            //    txtAnno.Text = DateTime.Now.ToString("yyyy");
-            //    //TxtData.Text = DateTime.Now.ToShortDateString();// ToString("yyyy");
-            //    if (ruolo == Enumerate.Ruolo.accertatori.ToString())
-            //    {
-            //        btCerca.Visible = false;
-            //        btStampa.Visible = false;
-            //    }
-            //    else
-            //    {
-            //        txtAnno.Enabled = true;
-            //        txtMese.Enabled = true;
-            //      //  divInserimento.Visible = false;
-            //        btSalva.Visible = false;
-            //    }
-            // }
 
         }
         private void PopolaDropdowns()
@@ -114,11 +92,7 @@ namespace Uotep
             //}
             //txtAnno.Text= annoCorrente.ToString();
         }
-        protected void btChiudiAvvertenze_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
 
-        }
         public float ConvertiStringaInFloat(string inputStringa)
         {
             float valoreConvertito = 0f;
@@ -194,49 +168,13 @@ namespace Uotep
                 Session["PaginaChiamante"] = "~/View/GestioneAuto.aspx";
             }
         }
-        private void Pulisci()
-        {
-            //txtTarga.Text = string.Empty;
-            //TxtData.Text = string.Empty;
-            //txtOra.Text = string.Empty;
-            //txtStan.Text = string.Empty;
-            //txtLitri.Text = string.Empty;
-            //DdlCarburante.ClearSelection();
-
-            //txtEuro.Text = string.Empty;
-            //txtIndirizzo.Text = string.Empty;
-            //txtAutista.Text = string.Empty;
-            //DdlSigla.ClearSelection();
-
-
-        }
-
-
-
-        protected void apripopup_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
-        }
-
-
-        protected void btSalvaGiudice_Click(object sender, EventArgs e)
-        {
-            Salva_Click(sender, e); ;
-        }
-
-
-
 
         protected void apripopupDecretazione_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
 
         }
-        protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
-            // Pulisci();
-        }
+
         /// <summary>
         /// funzione che inserisce spaces al posto del min data value
         /// </summary>
@@ -277,74 +215,71 @@ namespace Uotep
 
         private void CaricaGriglia()
         {
-           // try
-         //   {
-            //    int mese = int.Parse(ddlMese.SelectedValue);
-            //    int anno = int.Parse(txtAnno.Text);
-            //    int giorniNelMese = DateTime.DaysInMonth(anno, mese);
+            try
+            {
+                int mese = int.Parse(ddlMese.SelectedValue);
+                int anno = int.Parse(txtAnno.Text);
+                int giorniNelMese = DateTime.DaysInMonth(anno, mese);
 
 
 
-            //    //    // 1. Pulisce le colonne dinamiche esistenti
-            //    while (gvCalendario.Columns.Count > 2)
-            //    {
-            //        gvCalendario.Columns.RemoveAt(1);
-            //    }
+                //    // 1. Pulisce le colonne dinamiche esistenti
+                //while (gvCalendario.Columns.Count > 2)
+                //{
+                //    gvCalendario.Columns.RemoveAt(1);
+                //}
 
-            //    // 2. Aggiunge le colonne dei giorni (D1, D2, ...)
-            //    for (int i = 1; i <= giorniNelMese; i++)
-            //    {
-            //        DateTime dataCorrente = new DateTime(anno, mese, i);
-            //        TemplateField giornoField = new TemplateField();
+                // 2. Aggiunge le colonne dei giorni (D1, D2, ...)
+                for (int i = 1; i <= giorniNelMese; i++)
+                {
+                    DateTime dataCorrente = new DateTime(anno, mese, i);
+                    TemplateField giornoField = new TemplateField();
 
-            //        giornoField.HeaderText = $"{dataCorrente.ToString("ddd", CultureInfo.CurrentCulture)}\n{i}";
-            //        giornoField.HeaderStyle.CssClass = "text-center";
-            //        giornoField.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+                    giornoField.HeaderText = $"{dataCorrente.ToString("ddd", CultureInfo.CurrentCulture)}\n{i}";
+                    giornoField.HeaderStyle.CssClass = "text-center";
+                    giornoField.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
 
-            //        //        // ***  Segnalazione delle festività/weekend ***
-            //        if (IsGiornoFestivo(anno, mese, i))
-            //        {
-            //            // Applica una classe CSS all'Header e alla cella
-            //            giornoField.HeaderStyle.CssClass += " giorno-festivo-header";
-            //            giornoField.ItemStyle.CssClass = "giorno-festivo-cella";
-            //        }
-            //        //        // *******************************************************
+                    //        // ***  Segnalazione delle festività/weekend ***
+                    if (IsGiornoFestivo(anno, mese, i))
+                    {
+                        // Applica una classe CSS all'Header e alla cella
+                        giornoField.HeaderStyle.CssClass += " giorno-festivo-header";
+                        giornoField.ItemStyle.CssClass = "giorno-festivo-cella";
+                    }
+                    //        // *******************************************************
 
-            //        //        // Definizione del campo per la modalità di visualizzazione (ItemTemplate)
-            //        giornoField.ItemTemplate = new GridViewTemplate(ListItemType.Item, $"D{i}", "Label");
+                    //        // Definizione del campo per la modalità di visualizzazione (ItemTemplate)
+                    giornoField.ItemTemplate = new GridViewTemplate(ListItemType.Item, $"D{i}", "Label");
 
-            //        //        // Definizione del campo per la modalità di modifica (EditItemTemplate)
-            //        giornoField.EditItemTemplate = new GridViewTemplate(ListItemType.EditItem, $"D{i}", "TextBox");
+                    //        // Definizione del campo per la modalità di modifica (EditItemTemplate)
+                    giornoField.EditItemTemplate = new GridViewTemplate(ListItemType.EditItem, $"D{i}", "TextBox");
 
-            //        gvCalendario.Columns.Insert(i, giornoField);
-            //    }
+                    gvCalendario.Columns.Insert(i, giornoField);
+                }
+                GeneraGriglia();
+                ////    // 3. Associa la DataTable
+                //DataTable dt = GetDataTable();
+                //gvCalendario.DataSource = dt;
+                //gvCalendario.DataBind();
 
-            //    //    // 3. Associa la DataTable
-            //    DataTable dt = GetDataTable();
-            //    gvCalendario.DataSource = dt;
-            //    gvCalendario.DataBind();
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    lblErrore.Text = $"Errore nel caricamento della griglia: {ex.Message}";
-            //}
+            }
+            catch (Exception ex)
+            {
+                lblErrore.Text = $"Errore nel caricamento della griglia: {ex.Message}";
+            }
         }
         protected void ddlMese_SelectedIndexChanged(object sender, EventArgs e)
         {
             CaricaGriglia();
         }
 
-        protected void ddlAnno_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         protected void btnCarica_Click(object sender, EventArgs e)
         {
             gvCalendario.EditIndex = -1;
             GeneraGriglia();
-
+            btnsalva.Enabled = true;
 
         }
 
@@ -398,346 +333,11 @@ namespace Uotep
             return Tuple.Create(giornoPerGruppo, gruppoPerGiorno);
         }
 
-        //private void GeneraGriglia()
-        //{
-
-
-        //    Manager mn = new Manager();
-
-        //    // Carica la DataTable dei dipendenti una sola volta
-        //    DataTable dt = mn.getListDipendentire();
-
-        //    Table gridTable = gvCalendario.Controls.OfType<Table>().FirstOrDefault();
-        //    if (gridTable == null)
-        //    {
-        //        gridTable = new Table();
-        //        gvCalendario.Controls.Add(gridTable);
-        //    }
-        //    gridTable.Rows.Clear();
-
-        //    // --- Logica Anno e Mese ---
-        //    int anno = System.Convert.ToInt32(DateTime.Now.Year);
-        //    if (!string.IsNullOrEmpty(txtAnno.Text))
-        //    {
-        //        anno = int.Parse(txtAnno.Text);
-        //    }
-        //    else
-        //        txtAnno.Text = anno.ToString();
-
-        //    int mese = int.Parse(ddlMese.SelectedValue);
-        //    int giorniNelMese = DateTime.DaysInMonth(anno, mese);
-        //    //*
-        //    // --- 2. PREPARAZIONE DATI QUARTINA E FESTIVI ---
-        //    DataTable quartina = mn.getListQuartina(anno);
-        //    var datiProcessati = ProcessaDataTableGruppi(quartina, mese);
-        //    Dictionary<int, List<string>> datiGiorniGruppi = datiProcessati.Item1;
-        //    Dictionary<string, List<int>> datiGruppoPerGiorno = datiProcessati.Item2;
-        //    HashSet<int> giorniFestivi = CalcolaGiorniFestiviDelMese(anno, mese);
-
-
-        //    // --- 3. COSTRUZIONE RIGA SPECIALE "QUARTINA" ---
-        //    GridViewRow specialRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //    specialRow.CssClass = "riga-eventi-speciale";
-        //    TableCell quartinaCell = new TableCell { Text = "Quartina", Font = { Bold = true } };
-        //    specialRow.Cells.Add(quartinaCell);
-
-        //    //*
-
-
-        //    for (int i = 1; i <= giorniNelMese; i++)
-        //    {
-        //        TableCell cell = new TableCell();
-        //        if (datiGiorniGruppi.ContainsKey(i))
-        //            cell.Text = string.Join(", ", datiGiorniGruppi[i]);
-        //        specialRow.Cells.Add(cell);
-        //    }
-        //    specialRow.Cells.Add(new TableCell()); // Azioni
-        //    gridTable.Rows.Add(specialRow);
-
-        //    // --- 4. COSTRUZIONE HEADER PRINCIPALE ---
-        //    GridViewRow headerRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Normal);
-        //    headerRow.Cells.Add(new TableHeaderCell { Text = "Dipendente" });
-        //    for (int i = 1; i <= giorniNelMese; i++)
-        //    {
-        //        DateTime currentDate = new DateTime(anno, mese, i);
-        //        TableHeaderCell thGiorno = new TableHeaderCell();
-        //        thGiorno.Text = $"<small>{currentDate:ddd}</small><br/>{i}";
-        //        if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
-        //            thGiorno.CssClass = "giorno-festivo-header text-center";
-        //        else
-        //            thGiorno.CssClass = "text-center";
-        //        headerRow.Cells.Add(thGiorno);
-        //    }
-        //    headerRow.Cells.Add(new TableHeaderCell { Text = "Azioni" });
-        //    gridTable.Rows.Add(headerRow);
-
-        //    // --- 5. COSTRUZIONE RIGHE DATI E SEPARATORI ---
-        //    string _currentUfficio = null;
-        //    int visualRowIndex = 0;
-
-        //    foreach (DataRow dataRow in dt.Rows)
-        //    {
-        //        string ufficio = dataRow["ufficio"].ToString().ToUpper();
-        //        string idDipendente = dataRow["id_dip"].ToString();
-
-        //        // ** GESTIONE SEPARATORI UFFICIO (RIPRISTINATO) **
-        //        if (ufficio != _currentUfficio)
-        //        {
-        //            GridViewRow separatorRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //            TableCell cell = new TableCell { Text = ufficio, ColumnSpan = headerRow.Cells.Count, CssClass = "ufficio-separator-row" };
-        //            separatorRow.Cells.Add(cell);
-        //            separatorRow.Font.Bold = true;
-        //            separatorRow.ForeColor = Color.Red;
-        //            gridTable.Rows.Add(separatorRow);
-        //            _currentUfficio = ufficio;
-        //        }
-
-        //        // --- CALCOLO TURNI CON ALGORITMO A STRATI (PER QUESTO DIPENDENTE) ---
-        //        string quartinaDelDipendente = dataRow["quartina"]?.ToString();
-        //        List<int> giorniDaMarcareConQ = datiGruppoPerGiorno.ContainsKey(quartinaDelDipendente) ? datiGruppoPerGiorno[quartinaDelDipendente] : new List<int>();
-
-        //        var scheduleDelDipendente = new Dictionary<int, string>();
-        //        // 1. Strato Base: RF
-        //        for (int i = 1; i <= giorniNelMese; i++)
-        //        {
-        //            DateTime currentDate = new DateTime(anno, mese, i);
-        //            if ((currentDate.DayOfWeek == DayOfWeek.Sunday) || giorniFestivi.Contains(i))
-        //                scheduleDelDipendente[i] = "RF";
-        //        }
-        //        // 2. Strato Sovrascrittura: Q
-        //        foreach (int giornoQ in giorniDaMarcareConQ)
-        //            scheduleDelDipendente[giornoQ] = "Q";
-        //        // 3. Strato Riempimento: 1 e 2
-        //        foreach (int giornoQ in giorniDaMarcareConQ)
-        //        {
-        //            if (giornoQ - 1 > 0 && !scheduleDelDipendente.ContainsKey(giornoQ - 1)) scheduleDelDipendente[giornoQ - 1] = "1";
-        //            if (giornoQ + 1 <= giorniNelMese && !scheduleDelDipendente.ContainsKey(giornoQ + 1)) scheduleDelDipendente[giornoQ + 1] = "2";
-        //        }
-
-        //        // --- COSTRUZIONE RIGA DIPENDENTE ---
-        //        GridViewRow employeeRow = new GridViewRow(visualRowIndex, visualRowIndex, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //        employeeRow.Cells.Add(new TableCell { Text = dataRow["nominativo"].ToString() });
-        //        employeeRow.Font.Bold = true;
-
-        //        for (int i = 1; i <= giorniNelMese; i++)
-        //        {
-        //            TableCell cellTurno = new TableCell();
-        //            DateTime currentDate = new DateTime(anno, mese, i);
-        //            if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
-        //                cellTurno.CssClass = "giorno-festivo-cella";
-
-        //            string cellText = scheduleDelDipendente.ContainsKey(i) ? scheduleDelDipendente[i] : "";
-
-        //            // Stile e contenuto
-        //            if (gvCalendario.EditIndex == visualRowIndex)
-        //            {
-        //                TextBox txtTurno = new TextBox { ID = $"txtGiorno_{i}", CssClass = "form-control input-sm", Text = cellText };
-        //                cellTurno.Controls.Add(txtTurno);
-        //            }
-        //            else
-        //            {
-        //                cellTurno.Text = cellText;
-        //                if (cellText == "RF") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.ForeColor = Color.Blue; }
-        //                else if (cellText == "Q") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.BackColor = Color.DarkOrange; }
-        //                else if (cellText == "1" || cellText == "2") { cellTurno.CssClass += " text-center"; }
-        //            }
-        //            employeeRow.Cells.Add(cellTurno);
-        //        }
-
-        //        // Cella Azioni
-        //        TableCell cellAzioni = new TableCell();
-        //        if (gvCalendario.EditIndex == visualRowIndex) { /* ... bottoni Aggiorna/Annulla ... */ }
-        //        else { /* ... bottone Modifica ... */ }
-        //        employeeRow.Cells.Add(cellAzioni);
-        //        gridTable.Rows.Add(employeeRow);
-
-        //        visualRowIndex++;
-        //    }
-        //}
-
-
-        //ottimo
-        //private void GeneraGriglia()
-        //{
-        //    // --- 1. SETUP INIZIALE E CARICAMENTO DATI ---
-        //    Manager mn = new Manager();
-        //    DataTable dt = mn.getListDipendentire();
-
-        //    Table gridTable = gvCalendario.Controls.OfType<Table>().FirstOrDefault();
-        //    if (gridTable == null)
-        //    {
-        //        gridTable = new Table();
-        //        gvCalendario.Controls.Add(gridTable);
-        //    }
-        //    gridTable.Rows.Clear();
-
-        //    int anno = System.Convert.ToInt32(DateTime.Now.Year);
-        //    if (!string.IsNullOrEmpty(txtAnno.Text))
-        //    {
-        //        anno = int.Parse(txtAnno.Text);
-        //    }
-        //    else
-        //        txtAnno.Text = anno.ToString();
-
-        //    int mese = int.Parse(ddlMese.SelectedValue);
-        //    int giorniNelMese = DateTime.DaysInMonth(anno, mese);
-
-        //    // --- 2. PREPARAZIONE DATI QUARTINA E FESTIVI ---
-        //    DataTable quartina = mn.getListQuartina(anno);
-        //    var datiProcessati = ProcessaDataTableGruppi(quartina, mese);
-        //    Dictionary<int, List<string>> datiGiorniGruppi = datiProcessati.Item1;
-        //    Dictionary<string, List<int>> datiGruppoPerGiorno = datiProcessati.Item2;
-        //    HashSet<int> giorniFestivi = CalcolaGiorniFestiviDelMese(anno, mese);
-
-        //    // --- 3. COSTRUZIONE RIGA SPECIALE "QUARTINA" ---
-        //    GridViewRow specialRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //    specialRow.CssClass = "riga-eventi-speciale";
-        //    TableCell quartinaCell = new TableCell { Text = "Quartina", Font = { Bold = true } };
-        //    specialRow.Cells.Add(quartinaCell);
-
-        //    for (int i = 1; i <= giorniNelMese; i++)
-        //    {
-        //        TableCell cell = new TableCell();
-        //        if (datiGiorniGruppi.ContainsKey(i))
-        //            cell.Text = string.Join(", ", datiGiorniGruppi[i]);
-        //        specialRow.Cells.Add(cell);
-        //    }
-        //    specialRow.Cells.Add(new TableCell()); // Azioni
-        //    gridTable.Rows.Add(specialRow);
-
-        //    // --- 4. COSTRUZIONE HEADER PRINCIPALE (con logica Sabato modificata) ---
-        //    GridViewRow headerRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Normal);
-        //    headerRow.Cells.Add(new TableHeaderCell { Text = "Dipendente" });
-        //    for (int i = 1; i <= giorniNelMese; i++)
-        //    {
-        //        DateTime currentDate = new DateTime(anno, mese, i);
-        //        TableHeaderCell thGiorno = new TableHeaderCell();
-        //        thGiorno.Text = $"<small>{currentDate:ddd}</small><br/>{i}";
-
-        //        // MODIFICATO: Lo stile festivo si applica solo a Domeniche e festività nazionali
-        //        if (currentDate.DayOfWeek == DayOfWeek.Sunday || giorniFestivi.Contains(i))
-        //            thGiorno.CssClass = "giorno-festivo-header text-center";
-        //        else
-        //            thGiorno.CssClass = "text-center";
-        //        headerRow.Cells.Add(thGiorno);
-        //    }
-        //    headerRow.Cells.Add(new TableHeaderCell { Text = "Azioni" });
-        //    gridTable.Rows.Add(headerRow);
-
-        //    // --- 5. COSTRUZIONE RIGHE DATI E SEPARATORI ---
-        //    string _currentUfficio = null;
-        //    int visualRowIndex = 0;
-
-        //    foreach (DataRow dataRow in dt.Rows)
-        //    {
-        //        string ufficio = dataRow["ufficio"].ToString().ToUpper();
-        //        string idDipendente = dataRow["id_dip"].ToString();
-
-        //        // ** GESTIONE SEPARATORI UFFICIO **
-        //        if (ufficio != _currentUfficio)
-        //        {
-        //            GridViewRow separatorRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //            TableCell cell = new TableCell { Text = ufficio, ColumnSpan = headerRow.Cells.Count, CssClass = "ufficio-separator-row" };
-        //            separatorRow.Cells.Add(cell);
-        //            separatorRow.Font.Bold = true;
-        //            separatorRow.ForeColor = Color.Red;
-        //            gridTable.Rows.Add(separatorRow);
-        //            _currentUfficio = ufficio;
-        //        }
-
-        //        // --- CALCOLO TURNI CON ALGORITMO A STRATI (PER QUESTO DIPENDENTE) ---
-        //        string quartinaDelDipendente = dataRow["quartina"]?.ToString();
-        //        List<int> giorniDaMarcareConQ = datiGruppoPerGiorno.ContainsKey(quartinaDelDipendente) ? datiGruppoPerGiorno[quartinaDelDipendente] : new List<int>();
-        //        var scheduleDelDipendente = new Dictionary<int, string>();
-
-        //        // 1. STRATO BASE: Riempi tutti i giorni con un'alternanza di 1 e 2
-        //        bool assegnaUno = true;
-        //        for (int i = 1; i <= giorniNelMese; i++)
-        //        {
-        //            scheduleDelDipendente[i] = assegnaUno ? "1" : "2";
-        //            assegnaUno = !assegnaUno;
-        //        }
-
-        //        // 2. STRATO SOVRASCRITTURA RF: Piazza RF sopra 1 e 2 (MODIFICATO: Sabato escluso)
-        //        for (int i = 1; i <= giorniNelMese; i++)
-        //        {
-        //            DateTime currentDate = new DateTime(anno, mese, i);
-        //            if (currentDate.DayOfWeek == DayOfWeek.Sunday || giorniFestivi.Contains(i))
-        //            {
-        //                scheduleDelDipendente[i] = "RF";
-        //            }
-        //        }
-
-        //        // 3. STRATO SOVRASCRITTURA FINALE Q (ha la massima priorità)
-        //        foreach (int giornoQ in giorniDaMarcareConQ)
-        //        {
-        //            scheduleDelDipendente[giornoQ] = "Q";
-        //            DateTime dataQ = new DateTime(anno, mese, giornoQ);
-        //            if (dataQ.DayOfWeek == DayOfWeek.Sunday)
-        //            {
-        //                if (giornoQ - 1 > 0) scheduleDelDipendente[giornoQ - 1] = "1";
-        //                if (giornoQ + 1 <= giorniNelMese) scheduleDelDipendente[giornoQ + 1] = "2";
-        //            }
-        //        }
-
-        //        // --- COSTRUZIONE RIGA DIPENDENTE ---
-        //        bool isEditMode = (gvCalendario.EditIndex == visualRowIndex);
-        //        GridViewRow employeeRow = new GridViewRow(visualRowIndex, visualRowIndex, DataControlRowType.DataRow, DataControlRowState.Normal);
-        //        employeeRow.Cells.Add(new TableCell { Text = dataRow["nominativo"].ToString() });
-        //        employeeRow.Font.Bold = true;
-
-        //        for (int i = 1; i <= giorniNelMese; i++)
-        //        {
-        //            TableCell cellTurno = new TableCell();
-        //            DateTime currentDate = new DateTime(anno, mese, i);
-
-        //            // MODIFICATO: Lo sfondo festivo si applica solo a Domeniche e festività nazionali
-        //            if (currentDate.DayOfWeek == DayOfWeek.Sunday || giorniFestivi.Contains(i))
-        //                cellTurno.CssClass = "giorno-festivo-cella";
-
-        //            string cellText = scheduleDelDipendente.ContainsKey(i) ? scheduleDelDipendente[i] : "";
-
-        //            // Stile e contenuto (formattazione conservata)
-        //            if (isEditMode)
-        //            {
-        //                TextBox txtTurno = new TextBox { ID = $"txtGiorno_{i}", CssClass = "form-control input-sm", Text = cellText };
-        //                cellTurno.Controls.Add(txtTurno);
-        //            }
-        //            else
-        //            {
-        //                cellTurno.Text = cellText;
-        //                if (cellText == "RF") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.ForeColor = Color.Blue; }
-        //                else if (cellText == "Q") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.BackColor = Color.DarkOrange; }
-        //                else if (cellText == "1" || cellText == "2") { cellTurno.CssClass += " text-center"; }
-        //            }
-        //            employeeRow.Cells.Add(cellTurno);
-        //        }
-
-        //        // Cella Azioni (logica bottoni completa)
-        //        TableCell cellAzioni = new TableCell();
-        //        if (isEditMode)
-        //        {
-        //            cellAzioni.Controls.Add(new Button { Text = "Aggiorna", CommandName = "Update", CommandArgument = idDipendente, CssClass = "btn btn-success btn-xs" });
-        //            cellAzioni.Controls.Add(new LiteralControl(" "));
-        //            cellAzioni.Controls.Add(new Button { Text = "Annulla", CommandName = "Cancel", CssClass = "btn btn-default btn-xs" });
-        //        }
-        //        else
-        //        {
-        //            cellAzioni.Controls.Add(new Button { Text = "Modifica", CommandName = "Edit", CommandArgument = visualRowIndex.ToString(), CssClass = "btn btn-primary btn-xs" });
-        //        }
-        //        employeeRow.Cells.Add(cellAzioni);
-        //        gridTable.Rows.Add(employeeRow);
-
-        //        visualRowIndex++;
-        //    }
-        //}
-
-
         private void GeneraGriglia()
         {
             // --- 1. SETUP INIZIALE E CARICAMENTO DATI ---
             Manager mn = new Manager();
-            DataTable dt = mn.getListDipendentire();
+            DataTable dt = mn.getListDipendenti();
 
             Table gridTable = gvCalendario.Controls.OfType<Table>().FirstOrDefault();
             if (gridTable == null)
@@ -747,14 +347,7 @@ namespace Uotep
             }
             gridTable.Rows.Clear();
 
-            int anno = System.Convert.ToInt32(DateTime.Now.Year);
-            if (!string.IsNullOrEmpty(txtAnno.Text))
-            {
-                anno = int.Parse(txtAnno.Text);
-            }
-            else
-                txtAnno.Text = anno.ToString();
-
+            int anno = System.Convert.ToInt32(txtAnno.Text);
             int mese = int.Parse(ddlMese.SelectedValue);
             int giorniNelMese = DateTime.DaysInMonth(anno, mese);
 
@@ -767,7 +360,7 @@ namespace Uotep
 
             // --- 3. ESECUZIONE DELLA LOGICA DI BUSINESS COMPLESSA ---
             var turniCalcolati = CalcolaTurniComplessi(dt, datiGruppoPerGiorno, giorniFestivi, anno, mese);
-
+            Session["TurniMensili"] = turniCalcolati;
             // --- 4. COSTRUZIONE RIGA "QUARTINA" E HEADER (Layout Invariato) ---
             GridViewRow specialRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
             specialRow.CssClass = "riga-eventi-speciale";
@@ -803,7 +396,7 @@ namespace Uotep
             headerRow.Cells.Add(new TableHeaderCell { Text = "Azioni" });
             gridTable.Rows.Add(headerRow);
 
-            // --- 5. CICLO DI RENDERIZZAZIONE (SOLO VISUALIZZAZIONE) ---
+            // --- 5. CICLO DI RENDERIZZAZIONE ---
             int visualRowIndex = 0;
             var gruppiUfficio = dt.AsEnumerable().GroupBy(r => r.Field<string>("ufficio").ToUpper());
 
@@ -812,7 +405,7 @@ namespace Uotep
                 string nomeUfficio = gruppo.Key;
                 List<DataRow> dipendentiDelGruppo = gruppo.ToList();
 
-                // ** GESTIONE SEPARATORI UFFICIO (Layout Invariato) **
+                // ** GESTIONE SEPARATORI UFFICIO **
                 GridViewRow separatorRow = new GridViewRow(-1, -1, DataControlRowType.DataRow, DataControlRowState.Normal);
                 TableCell cellUfficio = new TableCell { Text = nomeUfficio, ColumnSpan = headerRow.Cells.Count, CssClass = "ufficio-separator-row" };
                 separatorRow.Cells.Add(cellUfficio);
@@ -825,8 +418,9 @@ namespace Uotep
                     string idDipendente = dataRow["id_dip"].ToString();
                     var scheduleDelDipendente = turniCalcolati[idDipendente];
 
-                    bool isEditMode = (gvCalendario.EditIndex == visualRowIndex);
-                    GridViewRow employeeRow = new GridViewRow(visualRowIndex, visualRowIndex, DataControlRowType.DataRow, DataControlRowState.Normal);
+                     isEditMode = (visualRowIndex == gvCalendario.EditIndex);
+
+                    GridViewRow employeeRow = new GridViewRow(visualRowIndex, visualRowIndex, DataControlRowType.DataRow, isEditMode ? DataControlRowState.Edit : DataControlRowState.Normal);
                     employeeRow.Cells.Add(new TableCell { Text = dataRow["nominativo"].ToString() });
                     employeeRow.Font.Bold = true;
 
@@ -847,9 +441,17 @@ namespace Uotep
                         else
                         {
                             cellTurno.Text = cellText;
-                            if (cellText == "RF") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.ForeColor = Color.Blue; }
-                            else if (cellText == "Q") { cellTurno.CssClass += " text-center"; cellTurno.Font.Bold = true; cellTurno.BackColor = Color.DarkOrange; }
-                            else if (cellText == "1" || cellText == "2") { cellTurno.CssClass += " text-center"; }
+                            if (cellText == "RF") {
+                                cellTurno.CssClass += " text-center";
+                                cellTurno.Font.Bold = true;
+                                cellTurno.BackColor = Color.LightBlue;
+                                cellTurno.ForeColor = Color.White;
+                            } else if (cellText == "Q") {
+                                cellTurno.CssClass += " text-center";
+                                cellTurno.Font.Bold = true;
+                                cellTurno.BackColor = Color.Green;
+                                cellTurno.ForeColor = Color.White;
+                            } else if (cellText == "1" || cellText == "2") { /* Stili... */ }
                         }
                         employeeRow.Cells.Add(cellTurno);
                     }
@@ -1064,12 +666,13 @@ namespace Uotep
 
         ///////
 
-        private Dictionary<string, Dictionary<int, string>> CalcolaTurniComplessi(DataTable dtDipendenti,Dictionary<string, List<int>> datiGruppoPerGiorno, HashSet<int> giorniFestivi, int anno, int mese)
+        private Dictionary<string, Dictionary<int, string>> CalcolaTurniComplessi(DataTable dtDipendenti, Dictionary<string, List<int>> datiGruppoPerGiorno, HashSet<int> giorniFestivi, int anno, int mese)
         {
             var scheduleCompleto = new Dictionary<string, Dictionary<int, string>>();
             int giorniNelMese = DateTime.DaysInMonth(anno, mese);
             var rnd = new Random();
-
+           
+            var UfficiConVincoloAutista = new HashSet<string> { "MACRO1", "MACRO2", "MACRO3" };
             var gruppiUfficio = dtDipendenti.AsEnumerable().GroupBy(r => r.Field<string>("ufficio").ToUpper());
 
             foreach (var gruppo in gruppiUfficio)
@@ -1080,7 +683,7 @@ namespace Uotep
                 foreach (DataRow dip in dipendentiDelGruppo)
                     scheduleCompleto[dip["id_dip"].ToString()] = new Dictionary<int, string>();
 
-                // STRATO BASE: uffici con 2 dipendenti
+                //  uffici con 2 dipendenti
                 if (dipendentiDelGruppo.Count <= 2)
                 {
                     var candidati = dipendentiDelGruppo.OrderBy(x => x["id_dip"]).ToList();
@@ -1142,7 +745,7 @@ namespace Uotep
                     }
                 }
 
-                // APPLICAZIONE STRATI RF, Fureria, Preferenze, Q e adiacenti
+                // APPLICAZIONE STRATI RF, Fureria, Preferenze, Q e cdr e adiacenti
                 foreach (DataRow dip in dipendentiDelGruppo)
                 {
                     string idDip = dip["id_dip"].ToString();
@@ -1165,7 +768,16 @@ namespace Uotep
                                 scheduleCompleto[idDip][i] = "1";
                         }
                     }
-
+                    // cdr
+                    if (nomeUfficio == "CDR")
+                    {
+                        for (int i = 1; i <= giorniNelMese; i++)
+                        {
+                            DateTime d = new DateTime(anno, mese, i);
+                           // if (d.DayOfWeek == DayOfWeek.Saturday)
+                                scheduleCompleto[idDip][i] = "1";
+                        }
+                    }
                     // Preferenze
                     string preferenze = dip["turni_pref"]?.ToString();
                     if (!string.IsNullOrEmpty(preferenze))
@@ -1206,11 +818,49 @@ namespace Uotep
                     // Q
                     foreach (int giornoQ in giorniDaMarcareConQ)
                         scheduleCompleto[idDip][giornoQ] = "Q";
+                    
                 }
 
                 // STRATO FINALE: giorni vuoti per uffici >2 dipendenti (alternanza + 50% per ufficio)
                 if (dipendentiDelGruppo.Count > 2)
                 {
+                    //for (int giorno = 1; giorno <= giorniNelMese; giorno++)
+                    //{
+                    //    var vuoti = dipendentiDelGruppo
+                    //        .Where(d => !scheduleCompleto[d["id_dip"].ToString()].ContainsKey(giorno))
+                    //        .ToList();
+                    //    if (!vuoti.Any()) continue;
+
+                    //    int half = vuoti.Count / 2;
+                    //    List<string> turniDisponibili = new List<string>();
+                    //    turniDisponibili.AddRange(Enumerable.Repeat("1", half));
+                    //    turniDisponibili.AddRange(Enumerable.Repeat("2", vuoti.Count - half));
+
+                    //    // Mescola per non dare sempre lo stesso turno all'ultimo dipendente
+                    //    turniDisponibili = turniDisponibili.OrderBy(x => rnd.Next()).ToList();
+
+                    //    for (int i = 0; i < vuoti.Count; i++)
+                    //    {
+                    //        string id = vuoti[i]["id_dip"].ToString();
+
+                    //        // Controllo sequenza: non più di due consecutivi uguali
+                    //        if (scheduleCompleto[id].ContainsKey(giorno - 1) && scheduleCompleto[id].ContainsKey(giorno - 2))
+                    //        {
+                    //            string t1 = scheduleCompleto[id][giorno - 1];
+                    //            string t2 = scheduleCompleto[id][giorno - 2];
+                    //            if (t1 == t2 && (t1 == turniDisponibili[i]))
+                    //            {
+                    //                turniDisponibili[i] = t1 == "1" ? "2" : "1";
+                    //            }
+                    //        }
+
+                    //        scheduleCompleto[id][giorno] = turniDisponibili[i];
+                    //    }
+                    //}
+
+
+
+
                     for (int giorno = 1; giorno <= giorniNelMese; giorno++)
                     {
                         var vuoti = dipendentiDelGruppo
@@ -1218,30 +868,59 @@ namespace Uotep
                             .ToList();
                         if (!vuoti.Any()) continue;
 
-                        int half = vuoti.Count / 2;
-                        List<string> turniDisponibili = new List<string>();
-                        turniDisponibili.AddRange(Enumerable.Repeat("1", half));
-                        turniDisponibili.AddRange(Enumerable.Repeat("2", vuoti.Count - half));
-
-                        // Mescola per non dare sempre lo stesso turno all'ultimo dipendente
-                        turniDisponibili = turniDisponibili.OrderBy(x => rnd.Next()).ToList();
-
-                        for (int i = 0; i < vuoti.Count; i++)
+                        // Controlla se l'ufficio ha il vincolo
+                        if (UfficiConVincoloAutista.Contains(nomeUfficio))
                         {
-                            string id = vuoti[i]["id_dip"].ToString();
+                            // LOGICA CON VINCOLO AUTISTA
+                            var autistiDisponibili = vuoti.Where(d => d.Field<bool>("autista")).OrderBy(x => rnd.Next()).ToList();
+                            var nonAutistiDisponibili = vuoti.Except(autistiDisponibili).OrderBy(x => rnd.Next()).ToList();
 
-                            // Controllo sequenza: non più di due consecutivi uguali
+                            var assegnazioniGiorno = new Dictionary<string, string>();
+
+                            // Assegna forzatamente autisti a "1" e "2" se possibile
+                            var autistaPer1 = autistiDisponibili.FirstOrDefault();
+                            if (autistaPer1 != null) assegnazioniGiorno[autistaPer1["id_dip"].ToString()] = "1";
+
+                            var autistaPer2 = autistiDisponibili.Skip(1).FirstOrDefault();
+                            if (autistaPer2 != null) assegnazioniGiorno[autistaPer2["id_dip"].ToString()] = "2";
+
+                            // Crea la lista dei rimanenti da assegnare
+                            var rimanenti = nonAutistiDisponibili.Concat(autistiDisponibili.Skip(2)).ToList();
+
+                            // Calcola quanti ne mancano per bilanciare i turni
+                            int target1 = (int)Math.Ceiling(vuoti.Count / 2.0) - (autistaPer1 != null ? 1 : 0);
+                            int target2 = vuoti.Count - (int)Math.Ceiling(vuoti.Count / 2.0) - (autistaPer2 != null ? 1 : 0);
+
+                            // Assegna i rimanenti per raggiungere i target
+                            foreach (var r in rimanenti.Take(target1)) assegnazioniGiorno[r["id_dip"].ToString()] = "1";
+                            foreach (var r in rimanenti.Skip(target1)) assegnazioniGiorno[r["id_dip"].ToString()] = "2";
+
+                            // Applica le assegnazioni del giorno allo schedule principale
+                            foreach (var ass in assegnazioniGiorno)
+                                scheduleCompleto[ass.Key][giorno] = ass.Value;
+                        }
+                        else // LOGICA STANDARD (senza vincolo)
+                        {
+                            int half = (int)Math.Ceiling(vuoti.Count / 2.0);
+                            var assegnatiA1 = vuoti.Take(half).ToList();
+                            var assegnatiA2 = vuoti.Skip(half).ToList();
+                            foreach (var v in assegnatiA1) scheduleCompleto[v["id_dip"].ToString()][giorno] = "1";
+                            foreach (var v in assegnatiA2) scheduleCompleto[v["id_dip"].ToString()][giorno] = "2";
+                        }
+
+                        // Correzione Orizzontale (applica a tutti i dipendenti riempiti in questo giorno)
+                        foreach (var dip in vuoti)
+                        {
+                            string id = dip["id_dip"].ToString();
                             if (scheduleCompleto[id].ContainsKey(giorno - 1) && scheduleCompleto[id].ContainsKey(giorno - 2))
                             {
                                 string t1 = scheduleCompleto[id][giorno - 1];
                                 string t2 = scheduleCompleto[id][giorno - 2];
-                                if (t1 == t2 && (t1 == turniDisponibili[i]))
+                                if (t1 == t2 && (t1 == scheduleCompleto[id][giorno]))
                                 {
-                                    turniDisponibili[i] = t1 == "1" ? "2" : "1";
+                                    scheduleCompleto[id][giorno] = (t1 == "1" ? "2" : "1");
                                 }
                             }
-
-                            scheduleCompleto[id][giorno] = turniDisponibili[i];
                         }
                     }
                 }
@@ -1314,17 +993,23 @@ namespace Uotep
         {
             if (e.CommandName == "Edit")
             {
+                // Imposta l'indice della riga da modificare
                 gvCalendario.EditIndex = Convert.ToInt32(e.CommandArgument);
-                GeneraGriglia(); // Rigenera la griglia per mostrare la riga in modalità edit
+                // Rigenera la griglia per mostrare le TextBox
+                GeneraGriglia();
             }
             else if (e.CommandName == "Cancel")
             {
+                // Resetta l'indice per uscire dalla modalità modifica
                 gvCalendario.EditIndex = -1;
-                GeneraGriglia(); // Rigenera per tornare in modalità visualizzazione
+                // Rigenera la griglia per tornare in modalità visualizzazione
+                GeneraGriglia();
             }
             else if (e.CommandName == "Update")
             {
                 string idDipendente = e.CommandArgument.ToString();
+                Manager mn = new Manager();
+                int idDip = Convert.ToInt32(e.CommandArgument);
 
                 // Trova la riga corretta nella tabella generata manualmente
                 Table gridTable = (Table)gvCalendario.Controls[0];
@@ -1337,25 +1022,79 @@ namespace Uotep
                         break;
                     }
                 }
+                DataTable turniDaSalvare = new DataTable();
+                turniDaSalvare.Columns.Add("DataUltimaModifica", typeof(DateTime));
+                turniDaSalvare.Columns.Add("CodiceTurno", typeof(string));
+                int anno = int.Parse(txtAnno.Text);
+                int mese = int.Parse(ddlMese.SelectedValue);
+                int giorniNelMese = DateTime.DaysInMonth(anno, mese);
 
                 if (rowToUpdate != null)
                 {
-                    int giorniNelMese = DateTime.DaysInMonth(int.Parse(txtAnno.Text), int.Parse(ddlMese.SelectedValue));
                     for (int i = 1; i <= giorniNelMese; i++)
                     {
-                        // Trova la TextBox nella cella
+                        // Cerca la TextBox per ottenere il suo ID renderizzato (es. 'MainContent_gvCalendario_..._txtGiorno_1')
                         TextBox txtTurno = rowToUpdate.Cells[i].Controls.OfType<TextBox>().FirstOrDefault();
                         if (txtTurno != null)
                         {
-                            string nuovoValore = txtTurno.Text;
-                            // QUI VA LA TUA LOGICA PER SALVARE SUL DATABASE
-                            // Esempio: SalvaTurnoSuDB(idDipendente, anno, mese, i, nuovoValore);
+                            // Usa l'ID renderizzato per leggere il valore direttamente dalla richiesta del browser
+                            string valoreNuovo = Request.Form[txtTurno.UniqueID];
+
+                            DateTime dataTurno = new DateTime(anno, mese, i);
+
+                            // Aggiungi la riga con il valore corretto
+                            turniDaSalvare.Rows.Add(dataTurno, valoreNuovo.Trim());
                         }
                     }
-                }
 
+                    if (turniDaSalvare.Rows.Count > 0)
+                    {
+                        mn.UpdTurnoMensile(idDip, turniDaSalvare);
+                        lblErrore.Text = "Salvataggio completato!";
+                        lblErrore.ForeColor = Color.Green;
+                    }
+                }
+                //if (rowToUpdate != null)
+                //{
+                //    // 1. Prepara una DataTable che abbia LA STESSA STRUTTURA del nostro Tipo SQL 'TurnoType'
+                //    DataTable turniDaSalvare = new DataTable();
+                //    turniDaSalvare.Columns.Add("DataUltimaModifica", typeof(DateTime));
+                //    turniDaSalvare.Columns.Add("CodiceTurno", typeof(string));
+
+                //    int anno = int.Parse(txtAnno.Text);
+                //    int mese = int.Parse(ddlMese.SelectedValue);
+                //    int giorniNelMese = DateTime.DaysInMonth(anno, mese);
+
+                //    // 2. Raccogli tutti i dati dalle TextBox e popola la DataTable
+                //    for (int i = 1; i <= giorniNelMese; i++)
+                //    {
+                //        TextBox txtTurno = rowToUpdate.Cells[i].Controls.OfType<TextBox>().FirstOrDefault();
+                //        if (txtTurno != null)
+                //        {
+                //            string valoreTurno = txtTurno.Text.Trim();
+
+                //            // Aggiungi solo i turni che non sono vuoti (opzionale, ma consigliato)
+                //            if (!string.IsNullOrEmpty(valoreTurno))
+                //            {
+                //                DateTime dataTurno = new DateTime(anno, mese, i);
+                //                turniDaSalvare.Rows.Add(dataTurno, valoreTurno);
+                //            }
+                //        }
+                //    }
+
+                //    // 3. Invia la DataTable al database in un colpo solo
+                //    if (turniDaSalvare.Rows.Count > 0)
+                //    {
+                //        Manager mn = new Manager();
+                //        mn.UpdTurnoMensile(idDip, turniDaSalvare);
+                //    }
+                //}
+
+
+                // Dopo aver salvato, esci dalla modalità modifica
                 gvCalendario.EditIndex = -1;
-                GeneraGriglia(); // Ricarica la griglia aggiornata
+                // Rigenera la griglia per mostrare i dati aggiornati
+                GeneraGriglia();
             }
         }
         protected void gvCalendario_RowEditing(object sender, GridViewEditEventArgs e)
@@ -1415,7 +1154,7 @@ namespace Uotep
 
                 Manager mn = new Manager();
                 DataTable dt = new DataTable();
-                dt = mn.getListDipendentire();
+                dt = mn.getListDipendenti();
                 //dt.Columns.Add("IDDipendente", typeof(int));
                 //dt.Columns.Add("NomeDipendente", typeof(string));
 
@@ -1471,8 +1210,103 @@ namespace Uotep
     // Nota: Pasqua e Lunedì dell'Angelo sono mobili e richiederebbero un calcolo separato.
 };
 
-        protected void txtAnno_TextChanged(object sender, EventArgs e)
+
+        protected void btnsalva_Click(object sender, EventArgs e)
         {
+            Manager mn = new Manager();
+            int anno = int.Parse(txtAnno.Text);
+            int mese = int.Parse(ddlMese.SelectedValue);
+            string txtmese = ddlMese.SelectedItem.Text;
+
+            var turniCompleti = Session["TurniMensili"] as Dictionary<string, Dictionary<int, string>>;
+            if (turniCompleti == null)
+            {
+                // Gestisci l'errore della sessione scaduta...
+                return;
+            }
+
+            // --- OTTIMIZZAZIONE: Carica i dati di TUTTI i dipendenti UNA SOLA VOLTA ---
+            DataTable dtTuttiDipendenti = mn.getListDipendenti();
+            // Crea un dizionario per una ricerca veloce dei dati del dipendente
+            var dipendentiMap = dtTuttiDipendenti.AsEnumerable()
+                .ToDictionary(
+                    row => row.Field<int>("id_dip").ToString(), // Chiave = ID Dipendente come stringa
+                    row => new
+                    {
+                        Nominativo = row.Field<string>("nominativo"),
+                        Matricola = row.Field<string>("matricola") // Assumendo che sia un intero
+                    }
+                );
+
+            // Prepara la DataTable per il salvataggio
+            DataTable turniDaSalvare = new DataTable();
+            turniDaSalvare.Columns.Add("matricola", typeof(int));
+            turniDaSalvare.Columns.Add("nominativo", typeof(string));
+            turniDaSalvare.Columns.Add("anno", typeof(int));
+            turniDaSalvare.Columns.Add("mese", typeof(string));
+            turniDaSalvare.Columns.Add("giorno", typeof(string));
+            turniDaSalvare.Columns.Add("CodiceTurno", typeof(string));
+
+            foreach (var dipendenteEntry in turniCompleti)
+            {
+                string idDipendenteStr = dipendenteEntry.Key;
+                var turniDelDipendente = dipendenteEntry.Value;
+
+                // Se non troviamo i dati del dipendente nella nostra mappa, saltiamo
+                if (!dipendentiMap.ContainsKey(idDipendenteStr)) continue;
+
+                var infoDipendente = dipendentiMap[idDipendenteStr];
+
+                foreach (var turnoEntry in turniDelDipendente)
+                {
+                    int giorno = turnoEntry.Key;
+                    string codiceTurno = turnoEntry.Value;
+
+                    if (!string.IsNullOrEmpty(codiceTurno))
+                    {
+                        // Ora recuperiamo i dati dalla mappa in memoria, senza query al DB
+                        turniDaSalvare.Rows.Add(infoDipendente.Matricola, infoDipendente.Nominativo, anno, txtmese, giorno.ToString(), codiceTurno);
+                    }
+                }
+            }
+
+            if (turniDaSalvare.Rows.Count > 0)
+            {
+                try
+                {
+                    //  la logica di ciclo è DENTRO il manager avendo utilizzato un merge
+                    bool resp = mn.SalvaTurnoMensile(turniDaSalvare);
+                    if (resp)
+                    {
+                        errorMessage.InnerText = "Inserimento turnazione mensile completato correttamente";
+                        ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+                        //lblErrore.Text = "Salvataggio completato con successo!";
+                        //lblErrore.ForeColor = Color.Red;
+                        //    lblErrore.Font.Bold = true;
+                        btnsalva.Enabled = false;
+                        Session.Remove("TurniMensili");
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in salva/modifica turnazione mensile");
+                        sw.Close();
+                    }
+                    string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                    Response.Redirect(url + ex.Message);
+
+                    Session["MessaggioErrore"] = ex.Message;
+                }
+            }
 
         }
     }
