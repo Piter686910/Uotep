@@ -259,6 +259,7 @@ namespace Uotep
             Session.Remove("MacroArea");
             Session.Remove("ListRicercaGestioneAuto");
             Session.Remove("ListAuto");
+            Session.Remove("TurniMensili");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

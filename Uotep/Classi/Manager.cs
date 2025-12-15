@@ -23,6 +23,7 @@ using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Text;
 using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
@@ -914,6 +915,71 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable GetTurnoMensile(string mese, int anno)
+        {
+            // Calcola il numero di giorni nel mese
+         //   int mes = int.Parse(mese);
+            
+            int giorniNelMese = DateTime.DaysInMonth(anno, 12);
+            // 1. Costruisci la lista dinamica delle colonne [1], [2], [3], ... [giorniNelMese]
+            StringBuilder colonnePivot = new StringBuilder();
+            for (int i = 1; i <= giorniNelMese; i++)
+            {
+                colonnePivot.Append($"[{i}],");
+            }
+            // Rimuovi l'ultima virgola
+            string colonnePivotList = colonnePivot.ToString().TrimEnd(',');
+            string queryPivot =
+                $@"
+        WITH TurniGrezzi AS (
+            SELECT 
+                t.nominativo,
+                T.codiceturno,
+                CAST(T.giorno AS INT) AS GiornoDelMese 
+            FROM TurniMensile T
+            
+            WHERE t.anno = {anno} AND t.mese = '{mese}'
+        )
+        SELECT 
+            nominativo, 
+            {colonnePivotList} 
+        FROM 
+            TurniGrezzi
+        PIVOT (
+            MAX(codiceturno) 
+            FOR GiornoDelMese IN ({colonnePivotList})
+        ) AS PivotTable
+        ORDER BY nominativo;";
+
+
+            //  string  sql = "SELECT matricola,nominativo,giorno,codiceturno  FROM TurniMensile where mese ='" + mese + "' and anno= " + anno;
+
+
+            String testoSql = String.Empty;
+            DataTable tb = new DataTable();
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                // 3. Aggiungi i parametri
+               
+                 
+                using (SqlCommand cmd = new SqlCommand(queryPivot, conn))
+                {
+                    //cmd.Parameters.AddWithValue("@Anno", anno);
+                    //cmd.Parameters.AddWithValue("@Mese", mese);
+                    conn.Open();
+                    DataTable dtTurni = new DataTable();
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dtTurni);
+                        return dtTurni;
+                    }
+                }
+               
+            }
+        }
+        
+
         /// <summary>
         /// elenca i file cancellabili
         /// </summary>
@@ -1397,7 +1463,7 @@ namespace Uotep.Classi
 
             DataTable table = new DataTable();
             //SqlConnection conn = new SqlConnection(ConnString);
-            conn.Open();
+            //conn.Open();
             using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
                 cmd.CommandTimeout = 120;
@@ -4630,7 +4696,6 @@ namespace Uotep.Classi
             bool resp = true;
 
             // Se la riga esiste già, aggiorna il codice del turno e la data di modifica
-            // string sql_turno =  "UPDATE TurniMensile SET CodiceTurno ='" + codiceturno + "',DataUltimaModifica = GETDATE() where matricola= '" + matricola + "' AND mese= '" + mese + "' AND anno= " + anno + " and nominativo= '" + nominativo + "', and giorno = '"  + giorno + "'" +
             // Se la riga non esiste, inseriscine una nuova
             string query = @" MERGE TurniMensile AS Target USING (SELECT @matricola AS matricola, @anno AS anno, @mese AS mese, @giorno AS giorno) AS Source ON (Target.matricola = Source.matricola AND Target.anno = Source.anno AND Target.mese = Source.mese AND Target.giorno = Source.giorno) WHEN MATCHED THEN UPDATE SET CodiceTurno = @CodiceTurno, nominativo = @nominativo WHEN NOT MATCHED BY TARGET THEN INSERT (matricola, nominativo, anno, mese, giorno, CodiceTurno)  VALUES (@matricola, @nominativo, @anno, @mese, @giorno, @CodiceTurno);";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -4676,35 +4741,80 @@ namespace Uotep.Classi
             bool resp = true;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                using (SqlCommand cmd = new SqlCommand("dbo.TurniMensile", conn))
+                string matricola = string.Empty;
+
+
+                conn.Open();
+
+                // Inizia una transazione per assicurare che entrambi i passi abbiano successo
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    // 1. Aggiungi il parametro standard (ID del dipendente)
-                    cmd.Parameters.AddWithValue("@ID_Dipendente", idDipendente);
-
-                    // 2. Aggiungi il parametro di tipo tabella
-                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@CodiceTurno", dip);
-                    tvpParam.SqlDbType = SqlDbType.Structured; // Specifica che è un Table-Valued Parameter
-                    tvpParam.TypeName = "dbo.TurnoType"; // Il nome del tipo creato in SQL Server
-
-                    try
+                    // =================================================================
+                    // 1. SELECT: Recupera la Matricola dal Dipendente
+                    // =================================================================
+                    string querySelect = "SELECT matricola FROM TurnoDipendenti WHERE id_dip = " + idDipendente;
+                    using (SqlCommand cmdSelect = new SqlCommand(querySelect, conn, transaction))
                     {
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
+                        cmdSelect.Parameters.AddWithValue("@IDDipendente", idDipendente);
+
+                        object result = cmdSelect.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
+                        {
+                            matricola = result.ToString().Trim();
+                        }
+                        else
+                        {
+                            // Nessuna matricola trovata
+                            transaction.Rollback();
+                            return false;
+                        }
                     }
-                    catch (Exception ex)
+
+                    // =================================================================
+                    // 2. UPDATE: Aggiorna i Turni usando la Matricola recuperata
+                    // =================================================================
+                    for (int i = 1; i < dip.Rows.Count; i++)
                     {
-                        // Gestisci l'errore (log, etc.)
-                        throw new Exception("Errore durante il salvataggio dei turni.", ex);
+
+
+                        string queryUpdate = "UPDATE TurniMensile SET CodiceTurno = '" + dip.Rows[0].ItemArray[3].ToString() + "' WHERE matricola ='" + matricola + "' and anno = " + dip.Rows[0].ItemArray[0] + " and mese ='" + dip.Rows[0].ItemArray[1].ToString() + "' " +
+                            " and giorno ='" + dip.Rows[0].ItemArray[2].ToString() + "'";
+                        using (SqlCommand cmdUpdate = new SqlCommand(queryUpdate, conn, transaction))
+                        {
+                            int rowsAffected = cmdUpdate.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit(); // Successo: conferma entrambe le operazioni
+                                conn.Close();
+                                conn.Dispose();
+                                resp = true;
+
+                            }
+                            else
+                            {
+                                // Nessun turno trovato con quella matricola
+                                transaction.Rollback();
+                                conn.Close();
+                                conn.Dispose();
+
+                            }
+                        }
                     }
                 }
-                conn.Close();
-                conn.Dispose();
-                return resp;
+                catch (Exception )
+                {
+                    // Errore: annulla tutte le operazioni
+                    transaction.Rollback();
+                    conn.Close();
+                    conn.Dispose();
+                    // Logga l'errore (ex.Message)
 
+                }
             }
-
+            return resp;
         }
         public Boolean UpdDecretazioneChiusura(Decretazione p)
         {
