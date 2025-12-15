@@ -173,7 +173,7 @@ namespace Uotep
 
                 using (StreamWriter sw = File.AppendText(LogFile))
                 {
-                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.WriteLine(ex.Message + @" - Errore in modifica gestione pratica");
                     sw.Close();
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
@@ -353,7 +353,7 @@ namespace Uotep
 
                 using (StreamWriter sw = File.AppendText(LogFile))
                 {
-                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.WriteLine(ex.Message + @" - Errore in modifica gestione pratica");
                     sw.Close();
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");

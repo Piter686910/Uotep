@@ -1,8 +1,10 @@
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
+using DocumentFormat.OpenXml.Office2010.CustomUI;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -15,6 +17,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
@@ -413,7 +416,7 @@ namespace Uotep.Classi
         public DataTable getListQuartina(Int32 anno)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT anno as anno,quartina as quartina,gennaio as gennaio,febbraio as febbraio, marzo as marzo, aprile as aprile, maggio as maggio, giugno as giugno, luglio as luglio, agosto as agosto, settembre as settembre, ottobre as ottobre, novembre as novembre,dicembre as dicembre FROM quartina where anno = " + anno ;
+            string sql = "SELECT anno as anno,quartina as quartina,gennaio as gennaio,febbraio as febbraio, marzo as marzo, aprile as aprile, maggio as maggio, giugno as giugno, luglio as luglio, agosto as agosto, settembre as settembre, ottobre as ottobre, novembre as novembre,dicembre as dicembre FROM quartina where anno = " + anno;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -461,7 +464,7 @@ namespace Uotep.Classi
             }
         }
 
-        public DataTable getListDipendentire()
+        public DataTable getListDipendenti()
         {
             DataTable tb = new DataTable();
             string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,sottogruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
@@ -472,7 +475,17 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListDipendentiById(int id)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,sottogruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
+                         "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
 
+                return tb = FillTable(sql, conn);
+            }
+        }
         public Boolean getTipoProv(string tipo)
         {
             DataTable tb = new DataTable();
@@ -4612,7 +4625,87 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean SalvaTurnoMensile(DataTable dip)
+        {
+            bool resp = true;
+
+            // Se la riga esiste già, aggiorna il codice del turno e la data di modifica
+            // string sql_turno =  "UPDATE TurniMensile SET CodiceTurno ='" + codiceturno + "',DataUltimaModifica = GETDATE() where matricola= '" + matricola + "' AND mese= '" + mese + "' AND anno= " + anno + " and nominativo= '" + nominativo + "', and giorno = '"  + giorno + "'" +
+            // Se la riga non esiste, inseriscine una nuova
+            string query = @" MERGE TurniMensile AS Target USING (SELECT @matricola AS matricola, @anno AS anno, @mese AS mese, @giorno AS giorno) AS Source ON (Target.matricola = Source.matricola AND Target.anno = Source.anno AND Target.mese = Source.mese AND Target.giorno = Source.giorno) WHEN MATCHED THEN UPDATE SET CodiceTurno = @CodiceTurno, nominativo = @nominativo WHEN NOT MATCHED BY TARGET THEN INSERT (matricola, nominativo, anno, mese, giorno, CodiceTurno)  VALUES (@matricola, @nominativo, @anno, @mese, @giorno, @CodiceTurno);";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+
+                using (SqlCommand command = new SqlCommand(query, conn))
+                {
+
+                    // 1. Aggiungi i parametri al comando UNA SOLA VOLTA, prima del ciclo.
+                    command.Parameters.Add("@matricola", SqlDbType.NVarChar, 10);
+                    command.Parameters.Add("@nominativo", SqlDbType.NVarChar, 100);
+                    command.Parameters.Add("@anno", SqlDbType.Int);
+                    command.Parameters.Add("@mese", SqlDbType.NVarChar, 20);
+                    command.Parameters.Add("@giorno", SqlDbType.VarChar, 2);
+                    command.Parameters.Add("@CodiceTurno", SqlDbType.NVarChar, 10);
+                    conn.Open();
+                    foreach (DataRow row in dip.Rows)
+                    {
+                        // Assegna i valori dei parametri per la riga corrente
+                        command.Parameters["@matricola"].Value = row["matricola"];
+                        command.Parameters["@nominativo"].Value = row["nominativo"];
+                        command.Parameters["@anno"].Value = row["anno"];
+                        command.Parameters["@mese"].Value = row["mese"];
+                        command.Parameters["@giorno"].Value = row["giorno"];
+                        command.Parameters["@CodiceTurno"].Value = row["CodiceTurno"];
+
+                        // Esegui il comando per questa riga
+                        command.ExecuteNonQuery();
+                    }
+
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+
+            }
+        }
+
         //UPDATE
+        public Boolean UpdTurnoMensile(int idDipendente, DataTable dip)
+        {
+            bool resp = true;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand("dbo.TurniMensile", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // 1. Aggiungi il parametro standard (ID del dipendente)
+                    cmd.Parameters.AddWithValue("@ID_Dipendente", idDipendente);
+
+                    // 2. Aggiungi il parametro di tipo tabella
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@CodiceTurno", dip);
+                    tvpParam.SqlDbType = SqlDbType.Structured; // Specifica che è un Table-Valued Parameter
+                    tvpParam.TypeName = "dbo.TurnoType"; // Il nome del tipo creato in SQL Server
+
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Gestisci l'errore (log, etc.)
+                        throw new Exception("Errore durante il salvataggio dei turni.", ex);
+                    }
+                }
+                conn.Close();
+                conn.Dispose();
+                return resp;
+
+            }
+
+        }
         public Boolean UpdDecretazioneChiusura(Decretazione p)
         {
             bool resp = true;
@@ -4787,7 +4880,7 @@ namespace Uotep.Classi
             try
             {
 
-                sql = "update gestioneauto set verificato= 'true', data_verifica= '" + @p.dataVerifica + "',matricola= '" + p.matricola.Trim() +"'" +
+                sql = "update gestioneauto set verificato= 'true', data_verifica= '" + @p.dataVerifica + "',matricola= '" + p.matricola.Trim() + "'" +
                     " where  id = " + @p.id;
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -5143,8 +5236,7 @@ namespace Uotep.Classi
 
             try
             {
-                sql_pratica = "update principale set Sigla= '" + @p.sigla + "', Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Evasa='" + @p.evasa +
-                    "',EvasaData = '" + @p.evasaData + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
+                sql_pratica = "update principale set Sigla= '" + @p.sigla + "', Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +

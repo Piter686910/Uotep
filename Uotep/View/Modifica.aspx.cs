@@ -361,7 +361,7 @@ namespace Uotep
                     //}
 
                     // p.note = txtNote.Text;
-                    //p.evasa = CkEvasa.Checked;
+                  // p.evasa = ck.Checked;
                     if (!string.IsNullOrEmpty(TxtDataEsito.Text))
                     {
                         p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
@@ -452,7 +452,7 @@ namespace Uotep
 
                 using (StreamWriter sw = File.AppendText(LogFile))
                 {
-                    sw.WriteLine(ex.Message + @" - Errore in modifica ");
+                    sw.WriteLine(ex.Message + @" - Errore in modifica pratica");
                     sw.Close();
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
