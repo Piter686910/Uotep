@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web.Services;
@@ -15,6 +16,7 @@ namespace Uote
         
         public class DipendenteTurno
         {
+            public string Matricola { get; set; }
             public string Nominativo { get; set; }
             public string Ufficio { get; set; }
             public bool IsAutista { get; set; }
@@ -172,6 +174,7 @@ namespace Uote
                 var dip = new DipendenteTurno();
                 dip.Nominativo = row["nominativo"].ToString();
                 dip.Ufficio = row["ufficio"].ToString();
+                dip.Matricola = row["matricola"].ToString();
 
                 // LETTURA AUTISTA
                 if (row.Table.Columns.Contains("autista") && row["autista"] != DBNull.Value)
@@ -887,5 +890,42 @@ namespace Uote
 
             return false;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void btnSalva_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int anno = Convert.ToInt32(txtAnno.Text);
+                //int mese = int.Parse(ddlMese.SelectedValue);
+                int mese = System.Convert.ToInt32(ddlMese.SelectedValue);
+                // 1. RICALCOLA I TURNI 
+                // (È necessario perché in WebForms lo stato si perde tra i postback, 
+                // a meno che tu non abbia salvato la "listaDipendenti" in Session)
+                Manager mn = new Manager();
+                DataTable dtDipendenti = mn.getListDipendenti(); // dipendenti
+                DataTable dtQuartine = mn.getListQuartina(anno); // lista quartine
+                var mappaGiorniQuartina = CostruisciMappaQuartine(dtQuartine, mese);
+
+                // Rilanciamo l'algoritmo completo
+                List<DipendenteTurno> listaDaSalvare = ElaboraDati(dtDipendenti, mappaGiorniQuartina, anno, mese);
+
+                // 2. ESEGUE IL SALVATAGGIO
+               Boolean resp= mn.SalvaTurnoMensileN(listaDaSalvare, anno, ddlMese.SelectedItem.Text, dtDipendenti);
+
+                lblError.Text = "✅ Salvataggio completato con successo!";
+                lblError.ForeColor = System.Drawing.Color.Green;
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "❌ Errore durante il salvataggio: " + ex.Message;
+                lblError.ForeColor = System.Drawing.Color.Red;
+            }
+        }
+
+        
     }
 }

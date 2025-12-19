@@ -78,6 +78,15 @@ namespace Uote
         protected global::System.Web.UI.WebControls.Button btnCalcola;
 
         /// <summary>
+        /// Controllo btnSalva.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSalva;
+
+        /// <summary>
         /// Controllo lblError.
         /// </summary>
         /// <remarks>

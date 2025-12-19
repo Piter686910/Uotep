@@ -27,6 +27,7 @@ using System.Text;
 using System.Web.Services;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
+using static Uote.test;
 using static Uotep.Classi.Enumerate;
 using DataTable = System.Data.DataTable;
 
@@ -4690,6 +4691,87 @@ namespace Uotep.Classi
             idN = Convert.ToInt32(a);
             return resp;
 
+        }
+        public Boolean SalvaTurnoMensileN(List<DipendenteTurno> lista, int anno, string mese,DataTable dipendente)
+        {
+            bool resp = true;
+            DateTime dt = DateTime.ParseExact(mese, "MMMM", CultureInfo.CreateSpecificCulture("it-IT"));
+            int meseN = dt.Month;
+            int giorniMese = DateTime.DaysInMonth(anno, meseN);
+            //string query = @" MERGE TurniMensile AS Target USING (SELECT @matricola AS matricola, @anno AS anno, @mese AS mese, @giorno AS giorno) AS Source ON (Target.matricola = Source.matricola AND Target.anno = Source.anno AND Target.mese = Source.mese AND Target.giorno = Source.giorno) WHEN MATCHED THEN UPDATE SET CodiceTurno = @CodiceTurno, nominativo = @nominativo WHEN NOT MATCHED BY TARGET THEN INSERT (matricola, nominativo, anno, mese, giorno, CodiceTurno)  VALUES (@matricola, @nominativo, @anno, @mese, @giorno, @CodiceTurno);";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                // Usiamo una transazione per garantire integrità (o tutto o niente)
+                SqlTransaction trans = conn.BeginTransaction();
+
+                try
+                {
+                    // A. PULIZIA DATI ESISTENTI
+                    // Prima di inserire, cancelliamo eventuali turni già salvati per questo mese/anno
+                    string sqlDelete = "DELETE FROM TurniMensile WHERE mese = @mese AND anno = @anno";
+                    using (SqlCommand cmdDel = new SqlCommand(sqlDelete, conn, trans))
+                    {
+                        cmdDel.Parameters.AddWithValue("@mese", mese);
+                        cmdDel.Parameters.AddWithValue("@anno", anno);
+                        cmdDel.ExecuteNonQuery();
+                    }
+
+                    // B. INSERIMENTO NUOVI DATI
+                    string sqlInsert = @"
+                INSERT INTO TurniMensile 
+                (mese, anno, matricola, nominativo, giorno, CodiceTurno, DataUltimaModifica) 
+                VALUES 
+                (@mese, @anno, @matricola, @nominativo, @giorno, @codice, @dataMod)";
+
+                    using (SqlCommand cmdIns = new SqlCommand(sqlInsert, conn, trans))
+                    {
+                        // Parametri riutilizzabili
+                        cmdIns.Parameters.Add("@mese", SqlDbType.NChar,10).Value = mese;
+                        cmdIns.Parameters.Add("@anno", SqlDbType.Int).Value = anno;
+                        cmdIns.Parameters.Add("@matricola", SqlDbType.NChar, 10); // Adatta lunghezza al DB
+                        cmdIns.Parameters.Add("@nominativo", SqlDbType.VarChar, 50);
+                        cmdIns.Parameters.Add("@giorno", SqlDbType.Int);
+                        cmdIns.Parameters.Add("@codice", SqlDbType.VarChar, 5); // Per "1", "2", "Q", "RF"
+                        cmdIns.Parameters.Add("@dataMod", SqlDbType.DateTime).Value = DateTime.Now;
+
+                        foreach (var dip in lista)
+                        {
+                            // Imposta parametri dipendente (fissi per tutti i giorni)
+                            cmdIns.Parameters["@matricola"].Value = dip.Matricola ?? ""; // Gestione null
+                            cmdIns.Parameters["@nominativo"].Value = dip.Nominativo;
+
+                            // Ciclo sui giorni (1..31)
+                            for (int i = 1; i <= giorniMese; i++)
+                            {
+                                string turno = dip.TurniMensili[i];
+
+                                // Salviamo solo se c'è un turno (se è null, non salviamo niente o salviamo stringa vuota?)
+                                // Di solito si salva solo se c'è attività o RF.
+                                if (!string.IsNullOrEmpty(turno))
+                                {
+                                    cmdIns.Parameters["@giorno"].Value = i;
+                                    cmdIns.Parameters["@codice"].Value = turno;
+
+                                    cmdIns.ExecuteNonQuery();
+                                }
+                            }
+                        }
+                    }
+
+                    // C. CONFERMA TRANSAZIONE
+                    trans.Commit();
+                    return resp;
+                }
+                catch
+                {
+                    // In caso di errore, annulla tutto (anche la cancellazione)
+                    trans.Rollback();
+                    throw; // Rilancia l'errore per mostrarlo nella label
+                    
+                }
+            }
         }
         public Boolean SalvaTurnoMensile(DataTable dip)
         {

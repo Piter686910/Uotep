@@ -179,7 +179,9 @@ td.col-stats {
                     <asp:ListItem Value="12">Dicembre</asp:ListItem>
                 </asp:DropDownList>
                 
-                <asp:Button ID="btnCalcola" runat="server" Text="Visualizza Turni" OnClick="btnCalcola_Click" />
+                <asp:Button ID="btnCalcola" runat="server" Text="Elabora Turni" OnClick="btnCalcola_Click" />
+                <asp:Button ID="btnSalva" runat="server" Text="💾 Salva Turni su DB" 
+            OnClick="btnSalva_Click" CssClass="btn-save" />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" EnableViewState="false"></asp:Label>
             </div>
 
