@@ -3,152 +3,282 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 
-<style>
-    /* Reset e Font base */
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px; color: #333; }
-    
-    /* Contenitore con scroll orizzontale se necessario */
-    .container { 
-        width: 98%; margin: 10px auto; 
-        overflow-x: auto; /* Permette lo scroll se i giorni sono tanti */
-        background: #fff; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-    }
+    <style>
+        /* Reset e Font base */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            color: #333;
+        }
 
-    /* --- TABELLA --- */
-    table.tabella-turni {
-        border-collapse: separate; 
-        border-spacing: 0;
-        border: 1px solid #999;
-        min-width: 100%;
-    }
+        /* Contenitore con scroll orizzontale se necessario */
+        .container {
+            width: 98%;
+            margin: 10px auto;
+            overflow-x: auto; /* Permette lo scroll se i giorni sono tanti */
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    /* Tutte le celle: bordi netti per effetto "Riquadro" */
-    table.tabella-turni th, 
-    table.tabella-turni td {
-        border-right: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-        padding: 4px 2px; /* Padding ridotto per compattare */
-        text-align: center;
-        vertical-align: middle;
-    }
+        /* --- TABELLA --- */
+        table.tabella-turni {
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #999;
+            min-width: 100%;
+        }
 
-    /* --- COLONNA DIPENDENTE (Sticky a sinistra) --- */
-    /* Header Dipendente */
-    table.tabella-turni th.col-dip-header {
-        position: sticky;
-        left: 0;
-        z-index: 20; /* Sopra tutto */
-        background-color: #34495e;
-        color: white;
-        width: 140px;      /* Larghezza fissa ristretta */
-        min-width: 140px;
-        max-width: 140px;
-        border-right: 2px solid #555; /* Separatore marcato */
-    }
+            /* Tutte le celle: bordi netti per effetto "Riquadro" */
+            table.tabella-turni th,
+            table.tabella-turni td {
+                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+                padding: 4px 2px; /* Padding ridotto per compattare */
+                text-align: center;
+                vertical-align: middle;
+            }
 
-    /* Celle Nome Dipendente */
-    table.tabella-turni td.col-dipendente {
-        position: sticky;
-        left: 0;
-        z-index: 10; /* Sopra le celle normali */
-        background-color: #fff; /* Necessario per coprire le celle che scorrono sotto */
-        text-align: left !important;
-        padding-left: 8px !important;
-        
-        /* Gestione testo lungo */
-        width: 140px;
-        min-width: 140px;
-        max-width: 140px;
-        white-space: nowrap;      /* Tutto su una riga */
-        overflow: hidden;         /* Nascondi eccesso */
-        text-overflow: ellipsis;  /* Aggiungi "..." se tagliato */
-        
-        font-weight: 600;
-        font-size: 12px;          /* Font un po' più piccolo */
-        color: #2c3e50;
-        border-right: 2px solid #555; /* Separatore marcato */
-    }
+                /* --- COLONNA DIPENDENTE (Sticky a sinistra) --- */
+                /* Header Dipendente */
+                table.tabella-turni th.col-dip-header {
+                    position: sticky;
+                    left: 0;
+                    z-index: 20; /* Sopra tutto */
+                    background-color: #34495e;
+                    color: white;
+                    width: 140px; /* Larghezza fissa ristretta */
+                    min-width: 140px;
+                    max-width: 140px;
+                    border-right: 2px solid #555; /* Separatore marcato */
+                }
 
-    .badge-q { 
-        font-size: 10px; background: #eee; border: 1px solid #ccc; 
-        color: #333; padding: 0 3px; border-radius: 3px; float: right; margin-right: 2px; 
-    }
+                /* Celle Nome Dipendente */
+                table.tabella-turni td.col-dipendente {
+                    position: sticky;
+                    left: 0;
+                    z-index: 10; /* Sopra le celle normali */
+                    background-color: #fff; /* Necessario per coprire le celle che scorrono sotto */
+                    text-align: left !important;
+                    padding-left: 8px !important;
+                    /* Gestione testo lungo */
+                    width: 140px;
+                    min-width: 140px;
+                    max-width: 140px;
+                    white-space: nowrap; /* Tutto su una riga */
+                    overflow: hidden; /* Nascondi eccesso */
+                    text-overflow: ellipsis; /* Aggiungi "..." se tagliato */
 
-    /* --- GIORNI (Intestazioni) --- */
-    table.tabella-turni th.giorno-header {
-        position: sticky;
-        top: 0;
-        z-index: 5;
-        background-color: #34495e; /* Blu scuro */
-        color: white;
-        height: 40px;
-        width: 28px; /* Larghezza fissa per ogni giorno: quadrato */
-        min-width: 28px;
-    }
-    .weekend-h { background-color: #c0392b !important; } /* Rosso header weekend */
+                    font-weight: 600;
+                    font-size: 12px; /* Font un po' più piccolo */
+                    color: #2c3e50;
+                    border-right: 2px solid #555; /* Separatore marcato */
+                }
 
-    /* --- CELLE TURNI --- */
-    /* Colori Sfondo */
-    .t-1 { background-color: #e3f2fd; color: #0277bd; font-weight: bold; } 
-    .t-2 { background-color: #fff8e1; color: #f57f17; font-weight: bold; } 
-    
-    /* LA Q: Deve risaltare nel giorno specifico */
-    .t-q { 
-        background-color: #ffcdd2; 
-        color: #b71c1c; 
-        font-weight: 900; 
-        border: 2px solid #d32f2f !important; /* Riquadro rosso marcato interno */
-    }
+        .badge-q {
+            font-size: 10px;
+            background: #eee;
+            border: 1px solid #ccc;
+            color: #333;
+            padding: 0 3px;
+            border-radius: 3px;
+            float: right;
+            margin-right: 2px;
+        }
 
-    /* Colonna weekend verticale (grigio chiaro) */
-    .weekend-col { background-color: #f2f2f2; }
+        /* --- GIORNI (Intestazioni) --- */
+        table.tabella-turni th.giorno-header {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            background-color: #34495e; /* Blu scuro */
+            color: white;
+            height: 40px;
+            width: 28px; /* Larghezza fissa per ogni giorno: quadrato */
+            min-width: 28px;
+        }
 
-    /* Riga Ufficio */
-    .tr-ufficio td {
-        background-color: #636e72;
-        color: white;
-        text-align: left;
-        padding: 5px 10px;
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
-    .t-rf { 
-    background-color: #c8e6c9; /* Verde pastello chiaro */
-    color: #2e7d32;            /* Verde foresta scuro */
-    font-weight: bold; 
-    border: 2px solid #a5d6a7 !important; /* Bordo verde */
-}
+        .weekend-h {
+            background-color: #c0392b !important;
+        }
+        /* Rosso header weekend */
 
-/* ... assicurati che le altre classi esistano ancora ... */
-.t-q { background-color: #ffcdd2; color: #b71c1c; font-weight: 900; border: 2px solid #d32f2f !important; }
-.t-1 { background-color: #e3f2fd; color: #0277bd; font-weight: bold; } 
-.t-2 { background-color: #fff8e1; color: #f57f17; font-weight: bold; }
-/* Intestazione della colonna percentuale */
-th.col-stats-header {
-    background-color: #444; /* Un grigio diverso per staccare */
-    color: #fff;
-    width: 50px;
-    min-width: 50px;
-    border-right: 2px solid #777;
-    position: sticky;
-    left: 140px; /* Deve essere uguale alla width della colonna dipendente */
-    z-index: 20;
-}
+        /* --- CELLE TURNI --- */
+        /* Colori Sfondo */
+        .t-1 {
+            background-color: #e3f2fd;
+            color: #0277bd;
+            font-weight: bold;
+        }
 
-/* Cella del valore percentuale */
-td.col-stats {
-    background-color: #f9f9f9;
-    font-weight: bold;
-    color: #333;
-    font-size: 11px;
-    border-right: 2px solid #777;
-    position: sticky;
-    left: 140px; /* Si incolla dopo il nome */
-    z-index: 10;
-}
-</style>
+        .t-2 {
+            background-color: #fff8e1;
+            color: #f57f17;
+            font-weight: bold;
+        }
 
+        /* LA Q: Deve risaltare nel giorno specifico */
+        .t-q {
+            background-color: #ffcdd2;
+            color: #b71c1c;
+            font-weight: 900;
+            border: 2px solid #d32f2f !important; /* Riquadro rosso marcato interno */
+        }
+
+        /* Colonna weekend verticale (grigio chiaro) */
+        .weekend-col {
+            background-color: #f2f2f2;
+        }
+
+        /* Riga Ufficio */
+        .tr-ufficio td {
+            background-color: #636e72;
+            color: white;
+            text-align: left;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .t-rf {
+            background-color: #c8e6c9; /* Verde pastello chiaro */
+            color: #2e7d32; /* Verde foresta scuro */
+            font-weight: bold;
+            border: 2px solid #a5d6a7 !important; /* Bordo verde */
+        }
+
+        /* ... assicurati che le altre classi esistano ancora ... */
+        .t-q {
+            background-color: #ffcdd2;
+            color: #b71c1c;
+            font-weight: 900;
+            border: 2px solid #d32f2f !important;
+        }
+
+        .t-1 {
+            background-color: #e3f2fd;
+            color: #0277bd;
+            font-weight: bold;
+        }
+
+        .t-2 {
+            background-color: #fff8e1;
+            color: #f57f17;
+            font-weight: bold;
+        }
+        /* Intestazione della colonna percentuale */
+        th.col-stats-header {
+            background-color: #444; /* Un grigio diverso per staccare */
+            color: #fff;
+            width: 50px;
+            min-width: 50px;
+            border-right: 2px solid #777;
+            position: sticky;
+            left: 140px; /* Deve essere uguale alla width della colonna dipendente */
+            z-index: 20;
+        }
+
+        /* Cella del valore percentuale */
+        td.col-stats {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            color: #333;
+            font-size: 11px;
+            border-right: 2px solid #777;
+            position: sticky;
+            left: 140px; /* Si incolla dopo il nome */
+            z-index: 10;
+        }
+        /* Stile per gli input modificabili dentro la cella */
+        .shift-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit; /* Prende il colore dalla classe CSS del genitore (es rosso per Q) */
+            text-transform: uppercase; /* Forza maiuscolo */
+            cursor: pointer;
+        }
+
+            /* Evidenzia la cella quando la modifichi */
+            .shift-input:focus {
+                background-color: #ffffcc;
+                outline: 2px solid #007bff;
+            }
+
+        /* La colonna percentuale che aggiorneremo via JS */
+        .col-stats {
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .btn-load {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+            .btn-load:hover {
+                background-color: #138496;
+            }
+    </style>
+    <script type="text/javascript">
+        function ricalcolaRiga(inputElement) {
+            // 1. Trova la riga (TR) a cui appartiene l'input modificato
+            var row = inputElement.closest('tr');
+
+            // 2. Colleziona tutti gli input di quella riga
+            var inputs = row.querySelectorAll('.shift-input');
+
+            var count1 = 0;
+            var count2 = 0;
+
+            // 3. Conta le occorrenze
+            inputs.forEach(function (inp) {
+                var val = inp.value.trim().toUpperCase();
+                if (val === '1') count1++;
+                else if (val === '2') count2++;
+            });
+
+            // 4. Calcolo Matematico
+            var totale = count1 + count2;
+            var cellaPerc = row.querySelector('.col-stats'); // La cella percentuale
+
+            if (totale > 0) {
+                var perc = (count1 / totale) * 100;
+                var percFixed = perc.toFixed(0); // Arrotonda (es 60)
+
+                cellaPerc.innerText = percFixed + '%';
+
+                // 5. Cambio Colore Dinamico
+                if (percFixed < 50 || percFixed > 60) {
+                    cellaPerc.style.color = 'red'; // Avviso fuori range
+                } else {
+                    cellaPerc.style.color = 'green'; // OK
+                }
+            } else {
+                cellaPerc.innerText = 'N/A';
+                cellaPerc.style.color = 'black';
+            }
+
+            // (Opzionale) Cambia colore della cella stessa in base al valore inserito
+            var cella = inputElement.parentElement;
+            cella.className = ''; // Reset classi
+            if (inputElement.value.toUpperCase() === '1') cella.classList.add('t-1');
+            else if (inputElement.value.toUpperCase() === '2') cella.classList.add('t-2');
+            else if (inputElement.value.toUpperCase() === 'Q') cella.classList.add('t-q');
+            else if (inputElement.value.toUpperCase() === 'RF') cella.classList.add('t-rf');
+            // Re-aggiunge eventuale bordo se necessario, ma base colore funziona
+        }
+    </script>
 
     <div>
         <label for="txtInput">Digita un nome:</label>
@@ -156,13 +286,13 @@ td.col-stats {
         <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
             <!-- Stili base per la lista suggerimenti -->
         </div>
-       <div class="container">
+        <div class="container">
             <h2>Gestione Turni Mensili</h2>
-            
+
             <div class="controls">
                 <asp:Label ID="lblAnno" runat="server" Text="Anno: "></asp:Label>
                 <asp:TextBox ID="txtAnno" runat="server" Text="2024" Width="60"></asp:TextBox>
-                
+
                 <asp:Label ID="lblMese" runat="server" Text="Mese: "></asp:Label>
                 <asp:DropDownList ID="ddlMese" runat="server">
                     <asp:ListItem Value="1">Gennaio</asp:ListItem>
@@ -178,10 +308,12 @@ td.col-stats {
                     <asp:ListItem Value="11">Novembre</asp:ListItem>
                     <asp:ListItem Value="12">Dicembre</asp:ListItem>
                 </asp:DropDownList>
-                
+
                 <asp:Button ID="btnCalcola" runat="server" Text="Elabora Turni" OnClick="btnCalcola_Click" />
-                <asp:Button ID="btnSalva" runat="server" Text="💾 Salva Turni su DB" 
-            OnClick="btnSalva_Click" CssClass="btn-save" />
+                <asp:Button ID="btnSalva" runat="server" Text="💾 Salva Turni su DB"
+                    OnClick="btnSalva_Click" CssClass="btn-save" />
+                <asp:Button ID="btnVisualizzaDB" runat="server" Text="📂 Carica da DB"
+                    OnClick="btnVisualizzaDB_Click" CssClass="btn-load" />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" EnableViewState="false"></asp:Label>
             </div>
 

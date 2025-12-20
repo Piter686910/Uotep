@@ -87,6 +87,15 @@ namespace Uote
         protected global::System.Web.UI.WebControls.Button btnSalva;
 
         /// <summary>
+        /// Controllo btnVisualizzaDB.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVisualizzaDB;
+
+        /// <summary>
         /// Controllo lblError.
         /// </summary>
         /// <remarks>

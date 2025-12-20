@@ -362,6 +362,7 @@
     <Compile Include="Classi\Decretazione.cs" />
     <Compile Include="Classi\GestionePratiche.cs" />
     <Compile Include="Classi\GridViewTemplate .cs" />
+    <Compile Include="Classi\DipendenteTurno.cs" />
     <Compile Include="Classi\Routine.cs" />
     <Compile Include="Classi\Enumerate.cs" />
     <Compile Include="Classi\Manager.cs" />

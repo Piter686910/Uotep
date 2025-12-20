@@ -13,18 +13,18 @@ namespace Uote
     public partial class test : System.Web.UI.Page
     {
         // Classe helper per i dati
-        
-        public class DipendenteTurno
-        {
-            public string Matricola { get; set; }
-            public string Nominativo { get; set; }
-            public string Ufficio { get; set; }
-            public bool IsAutista { get; set; }
-            public int QuartinaID { get; set; }
-            public string StringaGiorniQ { get; set; } // Es: "5,12,21"
-            public string[] TurniMensili { get; set; } // Array [32] (indice 1-31)
-            public string StatisticaPerc { get; set; }
-        }
+
+        //public class DipendenteTurno
+        //{
+        //    public string Matricola { get; set; }
+        //    public string Nominativo { get; set; }
+        //    public string Ufficio { get; set; }
+        //    public bool IsAutista { get; set; }
+        //    public int QuartinaID { get; set; }
+        //    public string StringaGiorniQ { get; set; } // Es: "5,12,21"
+        //    public string[] TurniMensili { get; set; } // Array [32] (indice 1-31)
+        //    public string StatisticaPerc { get; set; }
+        //}
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -52,12 +52,12 @@ namespace Uote
 
             // 3. MAPPO E CALCOLO I TURNI
             List<DipendenteTurno> listaDipendenti = ElaboraDati(dtDip, mappaGiorniQuartina, anno, mese);
-
+            Session["ListaDipendentiTurni"] = listaDipendenti;
             // 4. GENERO L'HTML (Usando il metodo grafico fatto prima)
             GeneraHtml(listaDipendenti, anno, mese);
 
 
-          
+
         }
         private Dictionary<int, string> CostruisciMappaQuartine(DataTable dt, int meseInt)
         {
@@ -103,7 +103,7 @@ namespace Uote
 
             for (int i = 1; i <= giorniMese; i++)
             {
-                // ... (codice giorni header invariato) ...
+
                 // Esempio:
                 DateTime dt = new DateTime(anno, mese, i);
                 bool isWeekend = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday);
@@ -127,35 +127,42 @@ namespace Uote
                     sb.Append("<tr>");
 
                     // Colonna Nome
-                    sb.AppendFormat("<td class='col-dipendente' title='{0}'>", dip.Nominativo);
-                    sb.Append(dip.Nominativo);
-                    sb.AppendFormat("<span class='badge-q'>Q{0}</span>", dip.QuartinaID);
-                    sb.Append("</td>");
+                    sb.AppendFormat("<td class='col-dipendente' title='{0}'>{1}<span class='badge-q'>Q{2}</span></td>",
+                        dip.Nominativo, dip.Nominativo, dip.QuartinaID);
 
-                    // NUOVA COLONNA VALORE PERCENTUALE
-                    // Opzionale: colora di rosso se molto lontano dal 60%
-                    string valPerc = dip.StatisticaPerc.Replace("%", ""); // Tolgo il % per il check
+                    // Colonna Percentuale (Aggiungo classe per JS)
+                    string valPerc = dip.StatisticaPerc.Replace("%", "");
                     string styleColor = "";
-                    if (int.TryParse(valPerc, out int p) && (p < 50 || p > 70))
-                        styleColor = "style='color:red;'"; // Evidenzia anomalie
+                    if (int.TryParse(valPerc, out int p) && (p < 50 || p > 60)) styleColor = "style='color:red;'";
+                    else styleColor = "style='color:green;'";
 
                     sb.AppendFormat("<td class='col-stats' {0}>{1}</td>", styleColor, dip.StatisticaPerc);
 
-                    // Colonne Giorni (invariato)
+                    // COLONNE GIORNI MODIFICABILI
                     for (int i = 1; i <= giorniMese; i++)
                     {
-                        // ... (codice celle giorni esistente) ...
-                        string val = dip.TurniMensili[i];
+                        string val = dip.TurniMensili[i] ?? ""; // Gestione null
                         DateTime dt = new DateTime(anno, mese, i);
                         bool isWeekend = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday);
-                        string cssClass = isWeekend ? "weekend-col" : "";
 
+                        // Determina classe CSS per colore sfondo iniziale
+                        string cssClass = isWeekend ? "weekend-col" : "";
                         if (val == "Q") cssClass += " t-q";
                         else if (val == "1") cssClass += " t-1";
                         else if (val == "2") cssClass += " t-2";
                         else if (val == "RF") cssClass += " t-rf";
 
-                        sb.AppendFormat("<td class='{0}'>{1}</td>", cssClass, val);
+                        // --- PUNTO CHIAVE: INPUT INVECE DI TESTO ---
+                        // Name format: "T_{Matricola}_{Giorno}" es: "T_12345_1", "T_12345_2"
+                        // OnChange: Chiama la funzione JS per ricalcolare
+                        string inputHtml = string.Format(
+                            "<input type='text' name='T_{0}_{1}' value='{2}' class='shift-input' maxlength='2' onchange='ricalcolaRiga(this)' autocomplete='off' />",
+                            dip.Matricola.Trim(), // Importante: Matricola pulita per il nome univoco
+                            i,
+                            val
+                        );
+
+                        sb.AppendFormat("<td class='{0}' style='padding:0;'>{1}</td>", cssClass, inputHtml);
                     }
                     sb.Append("</tr>");
                 }
@@ -317,7 +324,8 @@ namespace Uote
                 // 5. ASSEGNAZIONE FLESSIBILI BILANCIATA (Il cuore della modifica)
 
                 // Creiamo una lista temporanea con la % attuale di ognuno per poter ordinare
-                var candidati = flessibili.Select(d => new {
+                var candidati = flessibili.Select(d => new
+                {
                     Dip = d,
                     Perc1 = GetPercTurno1Attuale(d.TurniMensili, i)
                 }).ToList();
@@ -533,7 +541,7 @@ namespace Uote
             for (int i = 1; i <= giorniMese; i++)
             {
                 // ---------------------------------------------------
-                // FASE 1: FOTOGRAFIA STATO ATTUALE
+                // 1. FOTOGRAFIA INIZIALE DEL GIORNO
                 // ---------------------------------------------------
                 int count1 = 0;
                 int count2 = 0;
@@ -545,183 +553,152 @@ namespace Uote
                 foreach (var dip in gruppo)
                 {
                     string t = dip.TurniMensili[i];
-                    if (t == "1")
-                    {
-                        count1++;
-                        if (dip.IsAutista) hasAutista1 = true;
-                    }
-                    else if (t == "2")
-                    {
-                        count2++;
-                        if (dip.IsAutista) hasAutista2 = true;
-                    }
-                    else if (t == null)
-                    {
-                        liberi.Add(dip);
-                    }
+                    if (t == "1") { count1++; if (dip.IsAutista) hasAutista1 = true; }
+                    else if (t == "2") { count2++; if (dip.IsAutista) hasAutista2 = true; }
+                    else if (t == null) { liberi.Add(dip); }
+                    // Ignoriamo Q e RF ai fini del conteggio autisti attivi
                 }
 
                 // ---------------------------------------------------
-                // FASE 2: GESTIONE VINCOLI CONSECUTIVI (Safety)
+                // 2. GESTIONE CONSECUTIVI (Safety First)
                 // ---------------------------------------------------
-                var candidati = new List<DipendenteTurno>();
+                var poolLavoro = new List<DipendenteTurno>();
 
                 foreach (var dip in liberi)
                 {
                     string p1 = (i > 1) ? dip.TurniMensili[i - 1] : "";
                     string p2 = (i > 2) ? dip.TurniMensili[i - 2] : "";
-                    bool vietato1 = (p1 == "1" && p2 == "1");
-                    bool vietato2 = (p1 == "2" && p2 == "2");
 
-                    if (vietato1 && !vietato2) // Obbligato al 2
+                    bool no1 = (p1 == "1" && p2 == "1");
+                    bool no2 = (p1 == "2" && p2 == "2");
+
+                    // Assegnazione forzata per consecutivi
+                    if (no1 && !no2)
                     {
-                        dip.TurniMensili[i] = "2"; count2++;
+                        dip.TurniMensili[i] = "2";
+                        count2++;
                         if (dip.IsAutista) hasAutista2 = true;
                     }
-                    else if (vietato2 && !vietato1) // Obbligato all'1
+                    else if (no2 && !no1)
                     {
-                        dip.TurniMensili[i] = "1"; count1++;
+                        dip.TurniMensili[i] = "1";
+                        count1++;
                         if (dip.IsAutista) hasAutista1 = true;
-                    }
-                    else if (vietato1 && vietato2)
-                    {
-                        // Caso estremo: bloccato su entrambi. Diventa jolly (gestione manuale o flessibile)
-                        candidati.Add(dip);
                     }
                     else
                     {
-                        candidati.Add(dip);
+                        // Se bloccato da entrambi o libero, lo gestiamo dopo
+                        poolLavoro.Add(dip);
                     }
                 }
 
-                // Separiamo autisti e non per la fase di garanzia
-                var autistiLiberi = candidati.Where(d => d.IsAutista).ToList();
+                // Separiamo temporaneamente gli autisti per garantire copertura
+                var autistiDisponibili = poolLavoro.Where(d => d.IsAutista).ToList();
 
-                // Rimuoviamo gli autisti dalla lista generica momentaneamente
-                foreach (var a in autistiLiberi) candidati.Remove(a);
+                // RIMUOVIAMO gli autisti dalla pool generale per processarli PRIMA
+                foreach (var a in autistiDisponibili) poolLavoro.Remove(a);
 
                 // ---------------------------------------------------
-                // FASE 3: GARANZIA "CAPO MACCHINA" (AUTISTA)
+                // 3. PIAZZAMENTO AUTISTI (Priorità: Coprire i turni scoperti)
                 // ---------------------------------------------------
 
-                // Serve Autista su 1?
-                if (!hasAutista1 && autistiLiberi.Count > 0)
+                // Serve autista su 1?
+                if (!hasAutista1 && autistiDisponibili.Count > 0)
                 {
-                    var scelto = autistiLiberi.OrderBy(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
-                    scelto.TurniMensili[i] = "1";
+                    var a = autistiDisponibili.OrderBy(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
+                    a.TurniMensili[i] = "1";
                     hasAutista1 = true; count1++;
-                    autistiLiberi.Remove(scelto);
+                    autistiDisponibili.Remove(a);
                 }
 
-                // Serve Autista su 2?
-                if (!hasAutista2 && autistiLiberi.Count > 0)
+                // Serve autista su 2?
+                if (!hasAutista2 && autistiDisponibili.Count > 0)
                 {
-                    var scelto = autistiLiberi.OrderByDescending(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
-                    scelto.TurniMensili[i] = "2";
+                    var a = autistiDisponibili.OrderByDescending(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
+                    a.TurniMensili[i] = "2";
                     hasAutista2 = true; count2++;
-                    autistiLiberi.Remove(scelto);
+                    autistiDisponibili.Remove(a);
                 }
 
+                // Reimmettiamo gli autisti avanzati nel pool generale
+                poolLavoro.AddRange(autistiDisponibili);
+
                 // ---------------------------------------------------
-                // FASE 4: RIEMPIMENTO FINALE (Priorità al Minimo 2 Pax)
+                // 4. CICLO DI ASSEGNAZIONE DEFINITIVO (Decision Tree)
                 // ---------------------------------------------------
 
-                // Rimettiamo tutti insieme
-                var poolFinale = new List<DipendenteTurno>();
-                poolFinale.AddRange(autistiLiberi);
-                poolFinale.AddRange(candidati); // Qui ci sono i non autisti
-
-                // Prepariamo la lista con le info percentuali per l'ordinamento
-                var codaLavoro = poolFinale.Select(d => new {
+                // Ordiniamo per chi ha più bisogno di bilanciamento personale
+                // Questo determina CHI processiamo, ma il DOVE dipenderà dai vincoli
+                var coda = poolLavoro.Select(d => new {
                     Dip = d,
-                    PercAttuale = GetPercTurno1Attuale(d.TurniMensili, i),
+                    Perc = GetPercTurno1Attuale(d.TurniMensili, i),
                     IsDriver = d.IsAutista
                 }).ToList();
 
-                while (codaLavoro.Count > 0)
+                while (coda.Count > 0)
                 {
-                    // 1. Ordiniamo per chi ha più bisogno di essere bilanciato (chi è lontano dal 50%)
-                    //    Questo rimane il criterio di scelta "Chi piazziamo adesso?", ma DOVE lo piazziamo
-                    //    dipenderà dal fabbisogno del turno (Min 2).
-                    var item = codaLavoro
-                        .OrderByDescending(x => Math.Abs(x.PercAttuale - 50.0))
-                        .First();
+                    // Processiamo prima chi è più sbilanciato (lontano dal 50%)
+                    var item = coda.OrderByDescending(x => Math.Abs(x.Perc - 50.0)).First();
 
-                    // Calcolo Fattibilità Tecnica (Semaforo)
-                    bool semaforo1 = hasAutista1 || item.IsDriver;
-                    bool semaforo2 = hasAutista2 || item.IsDriver;
-
-                    // Calcolo Fabbisogno Numerico (Siamo sotto i 2?)
-                    // NOTA: Calcoliamo "missing" in tempo reale dentro il while
-                    bool serveGente1 = count1 < 2;
-                    bool serveGente2 = count2 < 2;
+                    // ANALISI DI FATTIBILITÀ (Semafori)
+                    // Un non-autista può andare sul turno X solo se c'è un autista
+                    bool canGo1 = hasAutista1 || item.IsDriver;
+                    bool canGo2 = hasAutista2 || item.IsDriver;
 
                     string decisione = null;
 
-                    // --- A. PRIORITÀ COPERTURA BUCHI (Min 2 Persone) ---
-
-                    // Caso critico: Serve gente sul 1 e POSSO andare sull'1 -> Vado sull'1
-                    // (Ignoro la percentuale se serve coprire il minimo)
-                    if (serveGente1 && !serveGente2 && semaforo1)
+                    // --- LIVELLO 1: IMPOSSIBILITÀ TECNICA ---
+                    if (!canGo1 && !canGo2)
                     {
-                        decisione = "1";
+                        // Disastro: non ci sono autisti su nessun turno.
+                        // Assegniamo "RF" (Riposo Forzato) o "1" come default emergenza
+                        decisione = "RF";
                     }
-                    // Caso critico: Serve gente sul 2 e POSSO andare sul 2 -> Vado sul 2
-                    else if (serveGente2 && !serveGente1 && semaforo2)
-                    {
-                        decisione = "2";
-                    }
-                    // Caso critico doppio: Servono entrambi.
-                    // Qui uso la mia preferenza percentuale per decidere quale buco tappare.
-                    else if (serveGente1 && serveGente2)
-                    {
-                        bool preferisce1 = item.PercAttuale < 50.0;
-                        if (preferisce1 && semaforo1) decisione = "1";
-                        else if (!preferisce1 && semaforo2) decisione = "2";
-                        // Fallback se la preferenza non è disponibile tecnicamente (manca autista)
-                        else if (semaforo1) decisione = "1";
-                        else if (semaforo2) decisione = "2";
-                    }
+                    // --- LIVELLO 2: SCELTA OBBLIGATA (Solo una strada aperta) ---
+                    else if (canGo1 && !canGo2) decisione = "1";
+                    else if (!canGo1 && canGo2) decisione = "2";
 
-                    // --- B. NESSUNA EMERGENZA (Turni già a 2+ persone) ---
-                    // Assegnazione pura basata sul bilanciamento percentuale
-                    if (decisione == null)
+                    // --- LIVELLO 3: SCELTA LIBERA (Entrambe le strade aperte) ---
+                    else // (canGo1 && canGo2)
                     {
-                        bool preferisce1 = item.PercAttuale < 50.0;
+                        // Qui decidiamo in base alle priorità numeriche
 
-                        if (preferisce1)
+                        // A. Minimo Sindacale (2 persone)
+                        if (count1 < 2 && count2 >= 2) decisione = "1";
+                        else if (count2 < 2 && count1 >= 2) decisione = "2";
+                        else if (count1 < 2 && count2 < 2)
                         {
-                            // Voglio 1. Posso?
-                            if (semaforo1) decisione = "1";
-                            else if (semaforo2) decisione = "2"; // Mi adatto
+                            // Mancano a entrambi: seguo la preferenza personale
+                            decisione = (item.Perc < 50.0) ? "1" : "2";
                         }
+
+                        // B. Bilanciamento Numerico (Evitare 5 persone su un turno e 2 sull'altro)
+                        // Se count1 supera count2 di 1 unità o più, mandiamo al 2
+                        else if (count1 > count2) decisione = "2";
+                        else if (count2 > count1) decisione = "1";
+
+                        // C. Bilanciamento Personale (Se i numeri sono pari)
                         else
                         {
-                            // Voglio 2. Posso?
-                            if (semaforo2) decisione = "2";
-                            else if (semaforo1) decisione = "1"; // Mi adatto
+                            decisione = (item.Perc < 50.0) ? "1" : "2";
                         }
                     }
 
-                    // --- C. APPLICAZIONE ---
-                    if (decisione != null)
+                    // APPLICAZIONE
+                    item.Dip.TurniMensili[i] = decisione;
+
+                    if (decisione == "1")
                     {
-                        item.Dip.TurniMensili[i] = decisione;
-
-                        // Aggiorniamo contatori e flag
-                        if (decisione == "1")
-                        {
-                            count1++;
-                            if (item.IsDriver) hasAutista1 = true;
-                        }
-                        else
-                        {
-                            count2++;
-                            if (item.IsDriver) hasAutista2 = true;
-                        }
+                        count1++;
+                        if (item.IsDriver) hasAutista1 = true; // Apre la porta per i successivi
+                    }
+                    else if (decisione == "2")
+                    {
+                        count2++;
+                        if (item.IsDriver) hasAutista2 = true;
                     }
 
-                    codaLavoro.Remove(item);
+                    coda.Remove(item);
                 }
             }
         }
@@ -899,6 +876,7 @@ namespace Uote
         {
             try
             {
+                int giorniMese = 0;
                 int anno = Convert.ToInt32(txtAnno.Text);
                 //int mese = int.Parse(ddlMese.SelectedValue);
                 int mese = System.Convert.ToInt32(ddlMese.SelectedValue);
@@ -909,15 +887,53 @@ namespace Uote
                 DataTable dtDipendenti = mn.getListDipendenti(); // dipendenti
                 DataTable dtQuartine = mn.getListQuartina(anno); // lista quartine
                 var mappaGiorniQuartina = CostruisciMappaQuartine(dtQuartine, mese);
+                List<DipendenteTurno> listaDaSalvare = new List<DipendenteTurno>();
 
-                // Rilanciamo l'algoritmo completo
-                List<DipendenteTurno> listaDaSalvare = ElaboraDati(dtDipendenti, mappaGiorniQuartina, anno, mese);
+                //if (Session["ListaDipendentiTurni"] == null)
+                //{
+                //    // Rilanciamo l'algoritmo completo
+                //     //listaDaSalvare = ElaboraDati(dtDipendenti, mappaGiorniQuartina, anno, mese);
+                //}
+                //else
+                //{
+                    foreach (DataRow row in dtDipendenti.Rows)
+                    {
+                        DipendenteTurno dip = new DipendenteTurno();
+                        dip.Matricola = row["matricola"].ToString().Trim();
+                        dip.Nominativo = row["nominativo"].ToString().Trim();
+                        dip.Ufficio= row["ufficio"].ToString().Trim();
 
+                        // Inizializza array vuoto
+                        dip.TurniMensili = new string[32];
+
+                        // 2. LEGGI LE MODIFICHE DAL FORM HTML
+                        giorniMese = DateTime.DaysInMonth(anno, mese);
+                        for (int i = 1; i <= giorniMese; i++)
+                        {
+                            // Ricostruisco la chiave "name" che ho generato nell'HTML
+                            // es: "T_12345_1"
+                            string key = $"T_{dip.Matricola}_{i}";
+
+                            // Leggo il valore inviato dal browser
+                            string valUtente = Request.Form[key];
+
+                            if (!string.IsNullOrEmpty(valUtente))
+                            {
+                                dip.TurniMensili[i] = valUtente.ToUpper().Trim();
+                            }
+                        }
+
+                        listaDaSalvare.Add(dip);
+                    }
+                //}
                 // 2. ESEGUE IL SALVATAGGIO
-               Boolean resp= mn.SalvaTurnoMensileN(listaDaSalvare, anno, ddlMese.SelectedItem.Text, dtDipendenti);
+                Boolean resp = mn.SalvaTurnoMensileN(listaDaSalvare, anno, ddlMese.SelectedItem.Text, dtDipendenti);
 
                 lblError.Text = "✅ Salvataggio completato con successo!";
                 lblError.ForeColor = System.Drawing.Color.Green;
+                RecalcolaPercentuali(listaDaSalvare, giorniMese);
+                GeneraHtml(listaDaSalvare, anno, mese);
+                Session.Remove("ListaDipendentiTurni");
             }
             catch (Exception ex)
             {
@@ -925,7 +941,146 @@ namespace Uote
                 lblError.ForeColor = System.Drawing.Color.Red;
             }
         }
+        // Piccolo helper per aggiornare le percentuali nel model prima di ridisegnare la tabella dopo il salvataggio
+        private void RecalcolaPercentuali(List<DipendenteTurno> lista, int giorniMese)
+        {
+            foreach (var dip in lista)
+            {
+                int c1 = 0, c2 = 0;
+                for (int i = 1; i <= giorniMese; i++)
+                {
+                    if (dip.TurniMensili[i] == "1") c1++;
+                    else if (dip.TurniMensili[i] == "2") c2++;
+                }
+                int tot = c1 + c2;
+                if (tot > 0) dip.StatisticaPerc = ((double)c1 / tot * 100).ToString("0") + "%";
+                else dip.StatisticaPerc = "N/A";
+            }
+        }
 
-        
+        protected void btnVisualizzaDB_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int anno = Convert.ToInt32(txtAnno.Text);
+                int mese = Convert.ToInt32(ddlMese.SelectedValue);
+                Manager mn = new Manager();
+                // 1. Recupera i dati dal DB (Unione tra Anagrafica e Turni Salvati)
+                List<DipendenteTurno> listaDalDB = mn.GetTurniMensile(anno, ddlMese.SelectedItem.Text);
+
+                if (listaDalDB.Count == 0)
+                {
+                    lblError.Text = "⚠️ Nessun turno trovato nel database per questo periodo.";
+                    lblError.ForeColor = System.Drawing.Color.Orange;
+                    ltlTabella.Text = ""; // Pulisce la tabella
+                    return;
+                }
+
+                // 2. Calcola le percentuali in base ai dati caricati
+                // (Fondamentale perché nel DB salviamo solo "1" o "2", non la %)
+                RecalcolaPercentuali(listaDalDB, DateTime.DaysInMonth(anno, mese));
+
+                // 3. Genera l'HTML (usa la stessa funzione di prima, così sono modificabili!)
+                GeneraHtml(listaDalDB, anno, mese);
+
+                lblError.Text = "📂 Dati caricati dal Database.";
+                lblError.ForeColor = System.Drawing.Color.Blue;
+            }
+            catch (Exception ex)
+            {
+                lblError.Text = "❌ Errore caricamento: " + ex.Message;
+                lblError.ForeColor = System.Drawing.Color.Red;
+            }
+        }
+        // Metodo per estrarre e mappare i dati SQL
+        private List<DipendenteTurno> GetTurniSalvati(int anno, int mese)
+        {
+            List<DipendenteTurno> lista = new List<DipendenteTurno>();
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["TuaConnectionString"].ConnectionString;
+
+            // QUERY:
+            // Prendo TUTTI i dipendenti attivi.
+            // Faccio LEFT JOIN con i turni per il mese specifico.
+            // In questo modo ottengo Nome, Ufficio, Autista (dall'anagrafica) 
+            // e i turni (dallo storico).
+            string query = @"
+        SELECT 
+            d.matricola, 
+            d.nominativo, 
+            d.ufficio, 
+            d.quartina, 
+            d.autista,
+            t.giorno, 
+            t.CodiceTurno
+        FROM Dipendenti d
+        LEFT JOIN TurniMensile t 
+            ON d.matricola = t.matricola 
+            AND t.anno = @anno 
+            AND t.mese = @mese
+        ORDER BY d.ufficio, d.nominativo";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@anno", anno);
+                cmd.Parameters.AddWithValue("@mese", mese);
+
+                conn.Open();
+                using (SqlDataReader r = cmd.ExecuteReader())
+                {
+                    // Usiamo un dizionario temporaneo per raggruppare le righe SQL
+                    // (La query restituisce N righe per ogni dipendente, una per ogni giorno salvato)
+                    var dictDipendenti = new Dictionary<string, DipendenteTurno>();
+
+                    while (r.Read())
+                    {
+                        string matricola = r["matricola"].ToString().Trim();
+
+                        // Se è la prima volta che incontro questa matricola, creo l'oggetto
+                        if (!dictDipendenti.ContainsKey(matricola))
+                        {
+                            DipendenteTurno dip = new DipendenteTurno();
+                            dip.Matricola = matricola;
+                            dip.Nominativo = r["nominativo"].ToString();
+                            dip.Ufficio = r["ufficio"] != DBNull.Value ? r["ufficio"].ToString() : "Nessun Ufficio";
+
+                            // Gestione Autista
+                            if (r["autista"] != DBNull.Value)
+                                dip.IsAutista = Convert.ToBoolean(r["autista"]);
+                            else
+                                dip.IsAutista = false;
+
+                            // Gestione Quartina
+                            if (r["quartina"] != DBNull.Value)
+                                dip.QuartinaID = Convert.ToInt32(r["quartina"]);
+                            else
+                                dip.QuartinaID = 0;
+
+                            // Inizializza array vuoto (1-31)
+                            dip.TurniMensili = new string[32];
+
+                            dictDipendenti.Add(matricola, dip);
+                        }
+
+                        // Ora popolo il giorno specifico, se presente nel DB
+                        if (r["giorno"] != DBNull.Value && r["CodiceTurno"] != DBNull.Value)
+                        {
+                            int giorno = Convert.ToInt32(r["giorno"]);
+                            string turno = r["CodiceTurno"].ToString().Trim().ToUpper();
+
+                            // Controllo di sicurezza sull'indice array
+                            if (giorno >= 1 && giorno <= 31)
+                            {
+                                dictDipendenti[matricola].TurniMensili[giorno] = turno;
+                            }
+                        }
+                    }
+
+                    // Convertiamo i valori del dizionario in Lista
+                    lista = dictDipendenti.Values.ToList();
+                }
+            }
+            return lista;
+        }
     }
 }

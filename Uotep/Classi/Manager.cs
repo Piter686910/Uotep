@@ -20,6 +20,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Security.Principal;
@@ -465,7 +466,94 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public List<DipendenteTurno> GetTurniMensile(int anno, string mese)
+        {
+            List<DipendenteTurno> lista = new List<DipendenteTurno>();
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                // QUERY:
+                // Prendo TUTTI i dipendenti attivi.
+                // Faccio LEFT JOIN con i turni per il mese specifico.
+                // In questo modo ottengo Nome, Ufficio, Autista (dall'anagrafica) 
+                // e i turni (dallo storico).
+                string query = @"
+        SELECT 
+            d.matricola, 
+            d.nominativo, 
+            d.ufficio, 
+            d.quartina, 
+            d.autista,
+            t.giorno, 
+            t.CodiceTurno
+        FROM TurnoDipendenti d
+        LEFT JOIN TurniMensile t 
+            ON d.matricola = t.matricola 
+            AND t.anno = @anno 
+            AND t.mese = @mese
+        ORDER BY d.ufficio, d.nominativo";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@anno", anno);
+                cmd.Parameters.AddWithValue("@mese", mese);
 
+                conn.Open();
+                using (SqlDataReader r = cmd.ExecuteReader())
+                {
+                    // Usiamo un dizionario temporaneo per raggruppare le righe SQL
+                    // (La query restituisce N righe per ogni dipendente, una per ogni giorno salvato)
+                    var dictDipendenti = new Dictionary<string, DipendenteTurno>();
+
+                    while (r.Read())
+                    {
+                        string matricola = r["matricola"].ToString().Trim();
+
+                        // Se è la prima volta che incontro questa matricola, creo l'oggetto
+                        if (!dictDipendenti.ContainsKey(matricola))
+                        {
+                            DipendenteTurno dip = new DipendenteTurno();
+                            dip.Matricola = matricola;
+                            dip.Nominativo = r["nominativo"].ToString();
+                            dip.Ufficio = r["ufficio"] != DBNull.Value ? r["ufficio"].ToString() : "Nessun Ufficio";
+
+                            // Gestione Autista
+                            if (r["autista"] != DBNull.Value)
+                                dip.IsAutista = Convert.ToBoolean(r["autista"]);
+                            else
+                                dip.IsAutista = false;
+
+                            // Gestione Quartina
+                            if (r["quartina"] != DBNull.Value)
+                                dip.QuartinaID = Convert.ToInt32(r["quartina"]);
+                            else
+                                dip.QuartinaID = 0;
+
+                            // Inizializza array vuoto (1-31)
+                            dip.TurniMensili = new string[32];
+
+                            dictDipendenti.Add(matricola, dip);
+                        }
+
+                        // Ora popolo il giorno specifico, se presente nel DB
+                        if (r["giorno"] != DBNull.Value && r["CodiceTurno"] != DBNull.Value)
+                        {
+                            int giorno = Convert.ToInt32(r["giorno"]);
+                            string turno = r["CodiceTurno"].ToString().Trim().ToUpper();
+
+                            // Controllo di sicurezza sull'indice array
+                            if (giorno >= 1 && giorno <= 31)
+                            {
+                                dictDipendenti[matricola].TurniMensili[giorno] = turno;
+                            }
+                        }
+                    }
+
+                    // Convertiamo i valori del dizionario in Lista
+                    lista = dictDipendenti.Values.ToList();
+                }
+
+            }
+
+            return lista;
+        }
         public DataTable getListDipendenti()
         {
             DataTable tb = new DataTable();
@@ -919,8 +1007,8 @@ namespace Uotep.Classi
         public DataTable GetTurnoMensile(string mese, int anno)
         {
             // Calcola il numero di giorni nel mese
-         //   int mes = int.Parse(mese);
-            
+            //   int mes = int.Parse(mese);
+
             int giorniNelMese = DateTime.DaysInMonth(anno, 12);
             // 1. Costruisci la lista dinamica delle colonne [1], [2], [3], ... [giorniNelMese]
             StringBuilder colonnePivot = new StringBuilder();
@@ -962,8 +1050,8 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 // 3. Aggiungi i parametri
-               
-                 
+
+
                 using (SqlCommand cmd = new SqlCommand(queryPivot, conn))
                 {
                     //cmd.Parameters.AddWithValue("@Anno", anno);
@@ -976,10 +1064,10 @@ namespace Uotep.Classi
                         return dtTurni;
                     }
                 }
-               
+
             }
         }
-        
+
 
         /// <summary>
         /// elenca i file cancellabili
@@ -4692,7 +4780,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean SalvaTurnoMensileN(List<DipendenteTurno> lista, int anno, string mese,DataTable dipendente)
+        public Boolean SalvaTurnoMensileN(List<DipendenteTurno> lista, int anno, string mese, DataTable dipendente)
         {
             bool resp = true;
             DateTime dt = DateTime.ParseExact(mese, "MMMM", CultureInfo.CreateSpecificCulture("it-IT"));
@@ -4728,7 +4816,7 @@ namespace Uotep.Classi
                     using (SqlCommand cmdIns = new SqlCommand(sqlInsert, conn, trans))
                     {
                         // Parametri riutilizzabili
-                        cmdIns.Parameters.Add("@mese", SqlDbType.NChar,10).Value = mese;
+                        cmdIns.Parameters.Add("@mese", SqlDbType.NChar, 10).Value = mese;
                         cmdIns.Parameters.Add("@anno", SqlDbType.Int).Value = anno;
                         cmdIns.Parameters.Add("@matricola", SqlDbType.NChar, 10); // Adatta lunghezza al DB
                         cmdIns.Parameters.Add("@nominativo", SqlDbType.VarChar, 50);
@@ -4769,7 +4857,7 @@ namespace Uotep.Classi
                     // In caso di errore, annulla tutto (anche la cancellazione)
                     trans.Rollback();
                     throw; // Rilancia l'errore per mostrarlo nella label
-                    
+
                 }
             }
         }
@@ -4886,7 +4974,7 @@ namespace Uotep.Classi
                         }
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     // Errore: annulla tutte le operazioni
                     transaction.Rollback();
