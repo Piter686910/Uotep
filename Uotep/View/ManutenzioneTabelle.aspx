@@ -2,6 +2,7 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
     <script>
 
         function ShowErrorMessage(message) {
@@ -9,6 +10,15 @@
         }
 
     </script>
+    <style>
+        .custom-border {
+            border: 2px solid #007bff; /* Cornice blu */
+            border-radius: 8px; /* Angoli arrotondati */
+            padding: 15px; /* Spazio interno */
+            margin: 5px 0; /* Spazio esterno */
+            margin-left: -10px;
+        }
+    </style>
     <div class="jumbotron">
         <h1>CRUSCOTTO GESTIONE TABELLE</h1>
         <p class="lead">In questa pagina è possibile inserire nuovi elementi nelle seguenti tabelle</p>
@@ -29,6 +39,8 @@
                 <asp:Button ID="btTipologiaNotaAg" runat="server" OnClick="btTipologiaNotaAg_Click" Text="Tabella Tipologia Ag" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
                 <asp:Button ID="btInviati" runat="server" OnClick="btInviati_Click" Text="Tabella Inviata" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
                 <asp:Button ID="btTipoAbuso" runat="server" OnClick="btTipoAbuso_Click" Text="Tabella Tipo Abuso" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
+                <asp:Button ID="btDecretazione" runat="server" OnClick="btDecretazione_Click" Text="Tabella Decretazione" ToolTip="Riapri Decretazione" CssClass="btn btn-primary mx-2" />
+
 
             </p>
         </div>
@@ -38,10 +50,13 @@
 
     <asp:Panel ID="pnlGestTabelle" runat="server" CssClass="text-center">
         <div id="DivTabelle" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
+            <div id="divMesDecretazione" runat="server" style="margin-left:-450px" visible="false">
+                <p class="lead">In questa pagina è possibile riaprire una decretazione chiusa</p>
+            </div>
             <!-- Righe di input  -->
-            <div class="col-md-4 custom-border">
+            <div class="col-md-4 ">
                 <%-- DIV Giudice --%>
-                <div id="DivGiudice" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivGiudice" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label8" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -74,7 +89,7 @@
                     </div>--%>
                 </div>
                 <%-- DIV Scaturito --%>
-                <div id="DivScaturito" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivScaturito" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label10" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -86,7 +101,7 @@
                 </div>
 
                 <%-- DIV Provenienza --%>
-                <div id="DivProvenienza" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivProvenienza" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label13" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -98,7 +113,7 @@
 
                 </div>
                 <%-- DIV  Tipologia --%>
-                <div id="DivTipologia" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivTipologia" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label14" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -110,7 +125,7 @@
                 </div>
 
                 <%-- DIV  Tipologia Abuso --%>
-                <div id="DivtipoAbuso" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivtipoAbuso" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label1" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -123,7 +138,7 @@
 
 
                 <%-- DIV  Inviati --%>
-                <div id="DivInviati" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivInviati" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label18" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -135,7 +150,7 @@
                 </div>
 
                 <%-- DIV Tipologia nota ag --%>
-                <div id="DivTipologiaNotaAg" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+                <div id="DivTipologiaNotaAg" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
 
                     <asp:Label ID="Label20" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -144,7 +159,22 @@
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV Decretazione --%>
+
+                <div id="DivDecretazione" runat="server" visible="false" class="form-group text-center custom-border" style="text-align: left !important">
+
+
+                    <asp:Label ID="Label2" runat="server" Text="Inserisci il numero carico" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtCarico" runat="server" CssClass="form-control" placeholder="Numero carico" />
+                    <asp:Label ID="Label3" runat="server" Text="Inserisci l'anno del carico" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:TextBox ID="txtAnnoCarico" runat="server" CssClass="form-control" placeholder="Anno carico" MaxLength="4" />
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Riapri" OnClick="btInserisci_Click" runat="server" ToolTip="Riapri" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
             </div>
+
         </div>
 
 

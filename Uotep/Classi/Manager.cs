@@ -5305,6 +5305,102 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean UpdApriDecretazione(string carico, string anno)
+        {
+            bool resp = true;
+
+            string sql_updDecretazione = String.Empty;
+            string sql_updPrincipale = String.Empty;
+            string sql_SelPrincipale = String.Empty;
+            string testoSql = string.Empty;
+            int? idPrincipaleRecuperato = null;
+            try
+            {
+                sql_SelPrincipale = "select id from principale where Nr_Protocollo = '" + carico + "' and anno = '" + anno + "'";
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+
+                    // 1. Eseguo la SELECT per prelevare l'ID del record principale
+                    using (SqlCommand cmdSel = new SqlCommand(sql_SelPrincipale, conn))
+                    {
+                        cmdSel.Parameters.AddWithValue("@protocollo", carico); // Il valore 'carico' ora lo usiamo come protocollo
+                        cmdSel.Parameters.AddWithValue("@anno", anno);
+
+                        var resId = cmdSel.ExecuteScalar();
+                        if (resId != null)
+                        {
+                            idPrincipaleRecuperato = Convert.ToInt32(resId);
+                        }
+                    }
+
+                    // Se non trovo l'ID in principale, esco subito
+                    if (!idPrincipaleRecuperato.HasValue)
+                    {
+                        // Logica se il record non esiste (es: log o return false)
+                        return false;
+                    }
+
+                    // 2. Inizio la transazione per le modifiche
+                    using (SqlTransaction tran = conn.BeginTransaction())
+                    {
+                        using (SqlCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = tran;
+
+                            try
+                            {
+                                sql_updDecretazione = "update decretazione set decr_dataChiusura = NULL, decr_chiuso = 'False'" +
+                              //"OUTPUT inserted.decr_idPratica " +
+                              " where decr_pratica ='" + carico + "' and decr_idPratica =" + idPrincipaleRecuperato;
+                                // Update Decretazione
+                                command.CommandText = sql_updDecretazione;
+                                command.Parameters.Clear();
+                                
+                                command.ExecuteNonQuery();
+                               
+                                // Update Principale
+                                sql_updPrincipale = "update principale set Evasa = 'False' where id = " + idPrincipaleRecuperato;
+                                command.CommandText = sql_updPrincipale;
+                                command.Parameters.Clear();
+                                command.Parameters.AddWithValue("@idPrincipale", idPrincipaleRecuperato.Value);
+
+                                //command.ExecuteNonQuery();
+                                var resDecretazione = command.ExecuteNonQuery();
+                                if (resDecretazione >0)
+                                {
+                                    tran.Commit();
+                                    resp = true;
+                                    
+                                }
+                                else
+                                {
+                                    // Se l'UPDATE di decretazione non trova righe 
+                                    tran.Rollback();
+                                    resp = false;
+                                }
+                            }
+                            catch (Exception )
+                            {
+                                tran.Rollback();
+                                //ScriviLog(ex.Message); // Gestione log
+                                resp = false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception )
+            {
+                // ScriviLog(ex.Message);
+                resp = false;
+            }
+
+            return resp;
+
+        }
+
         public Boolean UpdScheda(RappUote rapp)
         {
             bool resp = true;

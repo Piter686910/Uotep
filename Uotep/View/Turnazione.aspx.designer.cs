@@ -96,22 +96,40 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btGetTurnoMensile;
 
         /// <summary>
-        /// Controllo lblErrore.
+        /// Controllo btnExportExcel.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblErrore;
+        protected global::System.Web.UI.WebControls.Button btnExportExcel;
 
         /// <summary>
-        /// Controllo gvCalendario.
+        /// Controllo btnExportPdf.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvCalendario;
+        protected global::System.Web.UI.WebControls.Button btnExportPdf;
+
+        /// <summary>
+        /// Controllo lblError.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblError;
+
+        /// <summary>
+        /// Controllo ltlTabella.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltlTabella;
 
         /// <summary>
         /// Controllo errorMessage.

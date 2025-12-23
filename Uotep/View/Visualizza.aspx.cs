@@ -424,6 +424,7 @@ namespace Uotep
 
         protected void btAccertatori_Click(object sender, EventArgs e)
         {
+            
             NascondiDiv();
             DivAccertatori.Visible = true;
 
@@ -455,6 +456,7 @@ namespace Uotep
             DivDataArrivo.Visible = false;
             DivDettagli.Visible = false;
             Session.Remove("ListPratiche");
+            Session.Remove("ListRicerca");
         }
         protected void gvPopup_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {

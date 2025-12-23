@@ -96,6 +96,24 @@ namespace Uote
         protected global::System.Web.UI.WebControls.Button btnVisualizzaDB;
 
         /// <summary>
+        /// Controllo btnExportExcel.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportExcel;
+
+        /// <summary>
+        /// Controllo btnExportPdf.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnExportPdf;
+
+        /// <summary>
         /// Controllo lblError.
         /// </summary>
         /// <remarks>

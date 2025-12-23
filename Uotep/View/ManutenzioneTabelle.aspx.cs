@@ -162,6 +162,17 @@ namespace Uotep
 
                 }
             }
+            if (!String.IsNullOrEmpty(txtCarico.Text)&& !String.IsNullOrEmpty(txtAnnoCarico.Text))
+            {
+
+                
+                Boolean resp = mn.UpdApriDecretazione(txtCarico.Text.Trim(), txtAnnoCarico.Text);
+                if (resp)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Decretazione: " + txtCarico.Text + " riaperta." + "'); $('#errorModal').modal('show');", true);
+
+                }
+            }
         }
         protected void NascondiDiv()
         {
@@ -173,6 +184,8 @@ namespace Uotep
             DivScaturito.Visible = false;
             DivGiudice.Visible = false;
             DivtipoAbuso.Visible = false;
+            DivDecretazione.Visible = false;
+            divMesDecretazione.Visible = false;
         }
 
         protected void btProvenienza_Click(object sender, EventArgs e)
@@ -235,6 +248,13 @@ namespace Uotep
         {
             NascondiDiv();
             DivtipoAbuso.Visible = true;
+        }
+
+        protected void btDecretazione_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            DivDecretazione.Visible = true;
+            divMesDecretazione.Visible = true;
         }
     }
 }

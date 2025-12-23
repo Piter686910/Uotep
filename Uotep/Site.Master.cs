@@ -228,6 +228,11 @@ namespace Uotep
                                 SchedaCarburante.Visible = true;
                                 //*
                                 break;
+                            case "fureria":
+                                menuFureria.Visible= true;
+                                TurnoMensile.Visible = true;
+                                menuEsci.Visible = true;
+                                break;
                             default:
                                 // menuHome.Visible = true;
                                 break;

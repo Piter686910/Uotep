@@ -229,6 +229,32 @@
             .btn-load:hover {
                 background-color: #138496;
             }
+
+        .btn-excel {
+            background-color: #217346;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+            .btn-excel:hover {
+                background-color: #1e6b41;
+            }
+
+        .btn-pdf {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+            .btn-pdf:hover {
+                background-color: #c82333;
+            }
     </style>
     <script type="text/javascript">
         function ricalcolaRiga(inputElement) {
@@ -314,6 +340,10 @@
                     OnClick="btnSalva_Click" CssClass="btn-save" />
                 <asp:Button ID="btnVisualizzaDB" runat="server" Text="📂 Carica da DB"
                     OnClick="btnVisualizzaDB_Click" CssClass="btn-load" />
+                <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
+                    OnClick="btnExportExcel_Click" CssClass="btn-excel" />
+                <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
+                    OnClick="btnExportPdf_Click" CssClass="btn-pdf" />
                 <asp:Label ID="lblError" runat="server" ForeColor="Red" EnableViewState="false"></asp:Label>
             </div>
 

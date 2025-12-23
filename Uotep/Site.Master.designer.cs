@@ -231,6 +231,24 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor EstraiStatistiche;
 
         /// <summary>
+        /// Controllo menuFureria.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuFureria;
+
+        /// <summary>
+        /// Controllo TurnoMensile.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor TurnoMensile;
+
+        /// <summary>
         /// Controllo menuManTabelle.
         /// </summary>
         /// <remarks>
