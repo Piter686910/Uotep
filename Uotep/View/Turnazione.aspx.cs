@@ -217,13 +217,6 @@ namespace Uotep
             return ""; // Gestione di valori non validi
         }
 
-
-
-
-
-
-
-
         protected void btnCarica_Click(object sender, EventArgs e)
         {
             // Rimuovo la cache vecchia per forzare il ricalcolo dentro GeneraGriglia
@@ -380,26 +373,34 @@ namespace Uotep
         }
         protected void btGetTurnoMensile_Click(object sender, EventArgs e)
         {
-            int anno = int.Parse(txtAnno.Text);
-            int mese = int.Parse(ddlMese.SelectedValue);
-
+            int anno = Convert.ToInt32(txtAnno.Text);
+            int mese = Convert.ToInt32(ddlMese.SelectedValue);
             Manager mn = new Manager();
-            DataTable dtDip = mn.getListDipendenti();
-            //var listaDipendenti = MappaDaDataTable(dt, mese);
-            // DataTable delle quartine (ID e colonne mesi)
-            DataTable dtQuartine = mn.getListQuartina(anno);
-            // 3. Applico l'algoritmo (Q, Sabati, Regola 60/40)
-            // CalcolaLogicaTurni(listaDipendenti, anno, mese);
-            // 2. CREO UNA MAPPA DI QUARTINE (IdQuartina -> Stringa Giorni)
-            // Questo serve per non ciclare la tabella quartine per ogni dipendente
-            Dictionary<int, string> mappaGiorniQuartina = CostruisciMappaQuartine(dtQuartine, mese);
+            // 1. Recupera i dati dal DB (Unione tra Anagrafica e Turni Salvati)
+            List<DipendenteTurno> listaDalDB = mn.GetTurniMensile(anno, ddlMese.SelectedItem.Text);
+
+            if (listaDalDB.Count == 0)
+            {
+                lblError.Text = "⚠️ Nessun turno trovato nel database per questo periodo.";
+                lblError.ForeColor = System.Drawing.Color.Orange;
+                ltlTabella.Text = ""; // Pulisce la tabella
+                return;
+            }
+
+            // 2. Calcola le percentuali in base ai dati caricati
+            // (Fondamentale perché nel DB salviamo solo "1" o "2", non la %)
+            RecalcolaPercentuali(listaDalDB, DateTime.DaysInMonth(anno, mese));
+
+            // 3. Genera l'HTML (usa la stessa funzione di prima, così sono modificabili!)
+            GeneraHtml(listaDalDB, anno, mese);
+
+            lblError.Text = "📂 Dati caricati dal Database.";
+            lblError.ForeColor = System.Drawing.Color.Blue;
 
 
             // 3. MAPPO E CALCOLO I TURNI
-            List<DipendenteTurno> listaDipendenti = ElaboraDati(dtDip, mappaGiorniQuartina, anno, mese);
-            Session["ListaDipendentiTurni"] = listaDipendenti;
-            // 4. GENERO L'HTML (Usando il metodo grafico fatto prima)
-            GeneraHtml(listaDipendenti, anno, mese);
+            Session["ListaDipendentiTurni"] = listaDalDB;
+            
         }
         private void GeneraHtml(List<DipendenteTurno> lista, int anno, int mese)
         {
@@ -1337,6 +1338,7 @@ namespace Uotep
         //STAMPE ED EXCEL
         protected void btnExportExcel_Click(object sender, EventArgs e)
         {
+
             try
             {
                 int anno = Convert.ToInt32(txtAnno.Text);
@@ -1353,163 +1355,9 @@ namespace Uotep
                     return;
                 }
 
-                // 2. CREA IL WORKBOOK
-                using (var wb = new XLWorkbook())
-                {
-                    var ws = wb.Worksheets.Add($"Turni {mese}-{anno}");
-                    var itCulture = CultureInfo.GetCultureInfo("it-IT"); // Per i nomi giorni in Italiano
-
-                    // --- STILI ---
-                    var stileCellaBase = wb.Style;
-                    stileCellaBase.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    stileCellaBase.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                    stileCellaBase.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    stileCellaBase.Font.FontSize = 10;
-
-                    // --- RIGA 1: INTESTAZIONI ---
-                    int riga = 1;
-
-                    // Colonne Fisse (Senza Matricola)
-                    ws.Cell(riga, 1).Value = "Nominativo";
-                    ws.Cell(riga, 2).Value = "Q";
-
-                    // Stile Intestazione Fissa
-                    var headFixed = ws.Range(riga, 1, riga, 2);
-                    headFixed.Style.Fill.BackgroundColor = XLColor.DarkSlateGray;
-                    headFixed.Style.Font.FontColor = XLColor.White;
-                    headFixed.Style.Font.Bold = true;
-                    headFixed.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                    // Colonne Giorni
-                    for (int i = 1; i <= giorniMese; i++)
-                    {
-                        var dt = new DateTime(anno, mese, i);
-
-                        // Calcolo lettera giorno (es. "lun" -> "L")
-                        string nomeGiorno = dt.ToString("ddd", itCulture).ToUpper(); // LUN, MAR...
-                        string lettera = nomeGiorno.Substring(0, 1);
-
-                        // Scrittura Header: "1 L"
-                        var cella = ws.Cell(riga, 2 + i); // Offset di 2 colonne (Nom, Q)
-                        cella.Value = $"{i} {lettera}";
-
-                        // Colora Header Festivi/Weekend
-                        if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday || IsGiornoFestivo(dt))
-                        {
-                            cella.Style.Fill.BackgroundColor = XLColor.DarkRed;
-                        }
-                        else
-                        {
-                            cella.Style.Fill.BackgroundColor = XLColor.DarkSlateGray;
-                        }
-                        cella.Style.Font.FontColor = XLColor.White;
-                        cella.Style.Font.Bold = true;
-                        cella.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                        cella.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    }
-
-                    // --- CORPO DEL REPORT ---
-                    var gruppi = listaDati.GroupBy(x => x.Ufficio).OrderBy(k => k.Key);
-
-                    riga++;
-
-                    foreach (var gruppo in gruppi)
-                    {
-                        // RIGA UFFICIO (Colspan adattato: giorniMese + 2 colonne fisse)
-                        var cellaUfficio = ws.Range(riga, 1, riga, 2 + giorniMese);
-                        cellaUfficio.Merge();
-                        cellaUfficio.Value = "📂 " + gruppo.Key.ToUpper();
-                        cellaUfficio.Style.Fill.BackgroundColor = XLColor.LightGray;
-                        cellaUfficio.Style.Font.Bold = true;
-                        cellaUfficio.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                        riga++;
-
-                        foreach (var dip in gruppo)
-                        {
-                            // 1. NOMINATIVO
-                            ws.Cell(riga, 1).Value = dip.Nominativo;
-                            ws.Cell(riga, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left; // Nome a sx
-
-                            // 2. QUARTINA
-                            ws.Cell(riga, 2).Value = "Q" + dip.QuartinaID;
-
-                            // Bordo per anagrafica
-                            ws.Range(riga, 1, riga, 2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                            // 3. GIORNI
-                            for (int i = 1; i <= giorniMese; i++)
-                            {
-                                var cella = ws.Cell(riga, 2 + i); // Offset 2
-                                string turno = dip.TurniMensili[i] ?? "";
-
-                                cella.Value = turno;
-                                cella.Style = stileCellaBase; // Applica stile centrato con bordi
-
-                                // --- COLORI (Uguali al web) ---
-                                if (turno == "Q")
-                                {
-                                    cella.Style.Fill.BackgroundColor = XLColor.FromHtml("#ffcdd2");
-                                    cella.Style.Font.FontColor = XLColor.DarkRed;
-                                    cella.Style.Font.Bold = true;
-                                }
-                                else if (turno == "1")
-                                {
-                                    cella.Style.Fill.BackgroundColor = XLColor.FromHtml("#e3f2fd");
-                                    cella.Style.Font.FontColor = XLColor.DarkBlue;
-                                    cella.Style.Font.Bold = true;
-                                }
-                                else if (turno == "2")
-                                {
-                                    cella.Style.Fill.BackgroundColor = XLColor.FromHtml("#fff8e1");
-                                    cella.Style.Font.FontColor = XLColor.FromHtml("#e65100");
-                                    cella.Style.Font.Bold = true;
-                                }
-                                else if (turno == "RF")
-                                {
-                                    cella.Style.Fill.BackgroundColor = XLColor.FromHtml("#c8e6c9");
-                                    cella.Style.Font.FontColor = XLColor.DarkGreen;
-                                    cella.Style.Font.Bold = true;
-                                }
-                                else
-                                {
-                                    // Celle vuote weekend grigie
-                                    DateTime dt = new DateTime(anno, mese, i);
-                                    if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday)
-                                    {
-                                        cella.Style.Fill.BackgroundColor = XLColor.FromHtml("#f2f2f2");
-                                    }
-                                }
-                            }
-                            riga++;
-                        }
-                    }
-
-                    // --- FORMATTAZIONE LARGHEZZE ---
-                    ws.Column(1).Width = 35;  // Nominativo più largo
-                    ws.Column(2).Width = 5;   // Q stretta
-
-                    // Colonne Giorni
-                    for (int i = 1; i <= giorniMese; i++)
-                    {
-                        ws.Column(2 + i).Width = 4; // Larghezza fissa per i giorni
-                    }
-
-                    // --- DOWNLOAD ---
-                    Response.Clear();
-                    Response.Buffer = true;
-                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                    Response.AddHeader("content-disposition", $"attachment;filename=Turni_{mese}_{anno}.xlsx");
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        wb.SaveAs(ms);
-                        ms.WriteTo(Response.OutputStream);
-                        Response.Flush();
-                        Response.SuppressContent = true;
-                        Context.ApplicationInstance.CompleteRequest();
-                    }
-                }
+                Routine stampa = new Routine();
+                stampa.CreaExcelTurnazioneMensile(listaDati, anno, mese, giorniMese,Context);
+                    
             }
             catch (Exception ex)
             {
@@ -1518,340 +1366,34 @@ namespace Uotep
             }
         }
 
-    
+
         protected void btnExportPdf_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int anno = Convert.ToInt32(txtAnno.Text);
-                int mese = Convert.ToInt32(ddlMese.SelectedValue);
-                int giorniMese = DateTime.DaysInMonth(anno, mese);
-                string nomeMeseTesto = ddlMese.SelectedItem.Text;
-
-                Manager mn = new Manager();
-                // ATTENZIONE: Se hai appena modificato i dati a video e non hai salvato, 
-                // GetTurniMensile caricherà i vecchi dati dal DB.
-                List<DipendenteTurno> listaDati = mn.GetTurniMensile(anno, nomeMeseTesto);
-
-                if (listaDati == null || listaDati.Count == 0)
-                {
-                    lblError.Text = "⚠️ Nessun dato trovato nel database per questo mese. Salva prima di stampare.";
-                    lblError.ForeColor = System.Drawing.Color.Orange;
-                    return;
-                }
-
-                byte[] bytes;
-
-                // USARE GLI USING CORRETTAMENTE PER GARANTIRE IL FLUSH DEI DATI
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    using (PdfWriter writer = new PdfWriter(stream))
-                    {
-                        using (PdfDocument pdf = new PdfDocument(writer))
-                        {
-                            // Orientamento Orizzontale (Landscape) per far stare 31 giorni
-                            using (Document document = new Document(pdf, PageSize.A4.Rotate()))
-                            {
-                                document.SetMargins(10, 10, 10, 10);
-                                PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-                                PdfFont fontNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-
-                                // Titolo
-                                document.Add(new Paragraph($"TURNAZIONE: {nomeMeseTesto.ToUpper()} {anno}")
-                                    .SetTextAlignment(TextAlignment.CENTER)
-                                    .SetFontSize(14)
-                                    .SetFont(fontBold));
-
-                                // Definizione larghezze colonne (2 + giorniMese)
-                                float[] colWidths = new float[2 + giorniMese];
-                                colWidths[0] = 10f; // Nominativo
-                                colWidths[1] = 2f;  // Q
-                                for (int i = 0; i < giorniMese; i++) colWidths[2 + i] = 1.3f;
-
-                                iText.Layout.Element.Table table = new iText.Layout.Element.Table(UnitValue.CreatePercentArray(colWidths));
-                                table.SetWidth(UnitValue.CreatePercentValue(100));
-
-                                // HEADER
-                                AddCellHeader(table, "Nominativo", new DeviceRgb(64, 64, 64), fontBold);
-                                AddCellHeader(table, "Q", new DeviceRgb(64, 64, 64), fontBold);
-
-                                var itCulture = CultureInfo.GetCultureInfo("it-IT");
-                                for (int i = 1; i <= giorniMese; i++)
-                                {
-                                    DateTime dt = new DateTime(anno, mese, i);
-                                    string lettera = dt.ToString("ddd", itCulture).Substring(0, 1).ToUpper();
-
-                                    Color headColor = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday || IsGiornoFestivo(dt))
-                                                      ? new DeviceRgb(150, 0, 0) : new DeviceRgb(64, 64, 64);
-
-                                    AddCellHeader(table, $"{i}\n{lettera}", headColor, fontBold);
-                                }
-
-                                // CORPO
-                                var gruppi = listaDati.GroupBy(x => x.Ufficio).OrderBy(k => k.Key);
-                                foreach (var gruppo in gruppi)
-                                {
-                                    // Riga Ufficio
-                                    Cell cellUfficio = new Cell(1, 2 + giorniMese)
-                                        .Add(new Paragraph("📂 " + gruppo.Key.ToUpper()))
-                                        .SetBackgroundColor(new DeviceRgb(220, 220, 220))
-                                        .SetFont(fontBold).SetFontSize(8).SetPadding(2);
-                                    table.AddCell(cellUfficio);
-
-                                    foreach (var dip in gruppo)
-                                    {
-                                        string nomeDaStampare = string.IsNullOrEmpty(dip.Nominativo) ? "NOME MANCANTE" : dip.Nominativo.ToUpper();
-                                        AddCellBody(table, nomeDaStampare, ColorConstants.WHITE, fontNormal, 6, TextAlignment.LEFT);
-
-
-                            //            AddCellBody(table, dip.Nominativo, ColorConstants.WHITE, fontNormal, 7, TextAlignment.LEFT);
-                                        AddCellBody(table, "Q" + dip.QuartinaID, ColorConstants.WHITE, fontNormal, 7, TextAlignment.CENTER);
-
-                                        for (int i = 1; i <= giorniMese; i++)
-                                        {
-                                            //     string turno = (dip.TurniMensili != null && i < dip.TurniMensili.Length) ? dip.TurniMensili[i] : "";
-                                            // Se TurniMensili è null o l'indice è vuoto, metti un segnaposto per il debug
-                                            string turno = "";
-                                            if (dip.TurniMensili != null && i < dip.TurniMensili.Length)
-                                            {
-                                                turno = dip.TurniMensili[i];
-                                            }
-
-                                            // --- DEBUG: Se vedi "-" nel PDF, significa che la lista ha i dipendenti ma l'array Turni è vuoto ---
-                                            if (string.IsNullOrEmpty(turno)) turno = "-";
-                                            // Semplificazione colori per brevità
-                                            Color bg = ColorConstants.WHITE;
-                                            if (turno == "Q") bg = new DeviceRgb(255, 205, 210);
-                                            else if (turno == "1") bg = new DeviceRgb(227, 242, 253);
-                                            else if (turno == "2") bg = new DeviceRgb(255, 248, 225);
-                                            else if (turno == "RF") bg = new DeviceRgb(200, 230, 201);
-
-                                            Cell c = new Cell().Add(new Paragraph(turno ?? ""))
-                                                .SetBackgroundColor(bg).SetFontSize(7).SetTextAlignment(TextAlignment.CENTER);
-                                            table.AddCell(c);
-                                        }
-                                    }
-                                }
-
-                                document.Add(table);
-                                // FONDAMENTALE: document.Close() deve essere chiamato DENTRO l'using dello stream 
-                                // ma PRIMA di fare ToArray()
-                                document.Close();
-                            }
-                        }
-                    }
-                    bytes = stream.ToArray();
-                }
-
-                // INVIO FILE AL BROWSER
-                Response.Clear();
-                Response.ClearHeaders();
-                Response.ClearContent();
-                Response.ContentType = "application/pdf";
-                Response.AddHeader("Content-Length", bytes.Length.ToString());
-                Response.AddHeader("Content-Disposition", $"attachment; filename=Turni_{mese}_{anno}.pdf");
-
-                Response.BinaryWrite(bytes);
-                Response.Flush();
-                // Non usare Response.End() perché lancia eccezioni che rompono gli using. 
-                // Meglio questa sequenza:
-                Response.SuppressContent = true;
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
-            }
-            catch (Exception ex)
-            {
-                lblError.Text = "Errore Generazione PDF: " + ex.Message;
-                lblError.ForeColor = System.Drawing.Color.Red;
-            }
-        }
-            //Manager mn = new Manager();
-            //System.Data.DataTable scheda = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
-
-            //Routine stampa = new Routine();
-            //stampa.CreaPdfSchedaCarburante(scheda);
-            // stampa.CreaPdfLetteraAccompagnamento(scheda, PathLetteraAccompagnamento, "LetteraAccompagnamento.pdf");
             //try
             //{
-            //    int anno = Convert.ToInt32(txtAnno.Text);
-            //    int mese = Convert.ToInt32(ddlMese.SelectedValue);
-            //    int giorniMese = DateTime.DaysInMonth(anno, mese);
-            //    // 1. RECUPERA DATI
+            int anno = Convert.ToInt32(txtAnno.Text);
+            int mese = Convert.ToInt32(ddlMese.SelectedValue);
+            int giorniMese = DateTime.DaysInMonth(anno, mese);
+            string nomeMeseTesto = ddlMese.SelectedItem.Text;
 
-            //    Manager mn = new Manager();
-            //    // 1. Recupera i dati dal DB (Unione tra Anagrafica e Turni Salvati)
-            //    List<DipendenteTurno> listaDati = mn.GetTurniMensile(anno, ddlMese.SelectedItem.Text);
-            //    if (listaDati.Count == 0)
-            //    {
-            //        lblError.Text = "⚠️ Nessun dato da stampare.";
-            //        return;
-            //    }
+            Manager mn = new Manager();
+            // ATTENZIONE: Se hai appena modificato i dati a video e non hai salvato, 
+            // GetTurniMensile caricherà i vecchi dati dal DB.
+            List<DipendenteTurno> listaDati = mn.GetTurniMensile(anno, nomeMeseTesto);
 
-            //    using (MemoryStream stream = new MemoryStream())
-            //    {
+            if (listaDati == null || listaDati.Count == 0)
+            {
+                lblError.Text = "⚠️ Nessun dato trovato nel database per questo mese. Salva prima di stampare.";
+                lblError.ForeColor = System.Drawing.Color.Orange;
+                return;
+            }
 
-            //        using (PdfWriter writer = new PdfWriter(stream))
-            //        {
-            //            using (PdfDocument pdf = new PdfDocument(writer))
-            //            {
-            //                // =========================================================================
-            //                // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
-            //                // =========================================================================
-            //                using (Document document = new Document(pdf, PageSize.A4.Rotate()))
-            //                {
-            //                    // Document document = new Document(pdf);
-            //                    document.SetMargins(10, 10, 10, 10); // Margini stretti
+            Routine stampa = new Routine();
+            stampa.CreaPdfTurnazioneMensile(listaDati, nomeMeseTesto,anno,mese,giorniMese);
 
-            //                    // Font piccolo per far stare tutto
-            //                    PdfFont font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            //                    float fontSize = 7f; // Molto piccolo ma leggibile
 
-            //                    // Titolo
-            //                    // --- DEFINIZIONE FONT (Metodo Robusto) ---
-            //                    PdfFont fontNormal = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            //                    PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD); // Grassetto esplicito
+        }
 
-            //                    Paragraph titolo = new Paragraph($"TURNI DEL MESE: {mese}/{anno}")
-            //                        .SetTextAlignment(TextAlignment.CENTER)
-            //                    .SetFont(fontBold)
-            //                        .SetFontSize(14);
-
-            //                    //.SetBold();
-
-            //                    document.Add(titolo);
-
-            //                    // 3. DEFINIZIONE TABELLA
-            //                    // Colonne: Nominativo (larga), Q (stretta), 31 giorni (stretti uguali)
-            //                    // Usiamo pesi relativi per le larghezze
-            //                    float[] colWidths = new float[2 + giorniMese];
-            //                    colWidths[0] = 10f; // Nominativo largo
-            //                    colWidths[1] = 2f;  // Q stretta
-            //                    for (int i = 0; i < giorniMese; i++) colWidths[2 + i] = 1.3f; // Giorni
-
-            //                    iText.Layout.Element.Table table = new iText.Layout.Element.Table(UnitValue.CreatePercentArray(colWidths));
-            //                    table.SetWidth(UnitValue.CreatePercentValue(100)); // Tabella larga 100% pagina
-
-            //                    // --- HEADER (RIGA 1) ---
-            //                    // Intestazioni Fisse
-            //                    AddCellHeader(table, "Nominativo", ColorConstants.DARK_GRAY, fontBold);
-            //                    AddCellHeader(table, "Q", ColorConstants.DARK_GRAY, fontBold);
-
-            //                    var itCulture = CultureInfo.GetCultureInfo("it-IT");
-
-            //                    for (int i = 1; i <= giorniMese; i++)
-            //                    {
-            //                        var dt = new DateTime(anno, mese, i);
-            //                        string lettera = dt.ToString("ddd", itCulture).Substring(0, 1).ToUpper();
-            //                        string testo = $"{i}\n{lettera}";
-
-            //                        // Colore Header (Weekend Rosso, Feriale Grigio)
-            //                        Color bgColor = ColorConstants.DARK_GRAY;
-            //                        if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday || IsGiornoFestivo(dt))
-            //                        {
-            //                            bgColor = new DeviceRgb(139, 0, 0); // Rosso Scuro
-            //                        }
-
-            //                        AddCellHeader(table, testo, bgColor, fontBold);
-            //                    }
-
-            //                    // --- CORPO DEL REPORT ---
-            //                    var gruppi = listaDati.GroupBy(x => x.Ufficio).OrderBy(k => k.Key);
-
-            //                    foreach (var gruppo in gruppi)
-            //                    {
-            //                        // RIGA GRUPPO UFFICIO
-            //                        Cell cellUfficio = new Cell(1, 2 + giorniMese) // Colspan
-            //                            .Add(new Paragraph("📂 " + gruppo.Key.ToUpper()))
-            //                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-            //                            .SetFont(font)
-            //                            .SetFontSize(8)
-            //                            .SetFont(fontBold)
-            //                            .SetPadding(2);
-            //                        table.AddCell(cellUfficio);
-
-            //                        foreach (var dip in gruppo)
-            //                        {
-            //                            // Anagrafica
-            //                            AddCellBody(table, dip.Nominativo, ColorConstants.WHITE, font, fontSize, TextAlignment.LEFT);
-            //                            AddCellBody(table, "Q" + dip.QuartinaID, ColorConstants.WHITE, font, fontSize, TextAlignment.CENTER);
-
-            //                            // Giorni
-            //                            for (int i = 1; i <= giorniMese; i++)
-            //                            {
-            //                                string turno = dip.TurniMensili[i] ?? "";
-
-            //                                // Mappatura Colori (uguali all'HTML/Excel)
-            //                                Color bgCell = ColorConstants.WHITE;
-            //                                Color txtColor = ColorConstants.BLACK;
-
-            //                                if (turno == "Q")
-            //                                {
-            //                                    bgCell = new DeviceRgb(255, 205, 210); // #ffcdd2 Rosso chiaro
-            //                                    txtColor = new DeviceRgb(183, 28, 28); // Rosso scuro
-            //                                }
-            //                                else if (turno == "1")
-            //                                {
-            //                                    bgCell = new DeviceRgb(227, 242, 253); // #e3f2fd Blu chiaro
-            //                                    txtColor = new DeviceRgb(13, 71, 161); // Blu scuro
-            //                                }
-            //                                else if (turno == "2")
-            //                                {
-            //                                    bgCell = new DeviceRgb(255, 248, 225); // #fff8e1 Arancio chiaro
-            //                                    txtColor = new DeviceRgb(230, 81, 0);  // Arancio scuro
-            //                                }
-            //                                else if (turno == "RF")
-            //                                {
-            //                                    bgCell = new DeviceRgb(200, 230, 201); // #c8e6c9 Verde chiaro
-            //                                    txtColor = new DeviceRgb(27, 94, 32);  // Verde scuro
-            //                                }
-            //                                else
-            //                                {
-            //                                    // Celle vuote weekend grigine
-            //                                    DateTime dt = new DateTime(anno, mese, i);
-            //                                    if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday)
-            //                                    {
-            //                                        bgCell = new DeviceRgb(242, 242, 242);
-            //                                    }
-            //                                }
-
-            //                                Cell c = new Cell().Add(new Paragraph(turno));
-            //                                c.SetBackgroundColor(bgCell);
-            //                                c.SetFontColor(txtColor);
-            //                                c.SetFont(font).SetFontSize(fontSize);
-            //                                c.SetTextAlignment(TextAlignment.CENTER);
-            //                                c.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-            //                                c.SetPadding(0); // Compatta
-            //                                table.AddCell(c);
-            //                            }
-            //                        }
-            //                    }
-
-            //                    document.Add(table);
-            //                    document.Close();
-
-            //                }
-            //            }
-            //        }
-
-            //        // 4. INVIO FILE AL BROWSER
-            //        byte[] bytes = stream.ToArray();
-            //        Response.Clear();
-            //        Response.ContentType = "application/pdf";
-            //        Response.AddHeader("Content-Disposition", $"attachment; filename=Turni_{mese}_{anno}.pdf");
-            //        Response.BinaryWrite(bytes);
-            //        Response.Flush();
-            //        Response.End();
-            //        Response.SuppressContent = true;
-            //        Context.ApplicationInstance.CompleteRequest();
-
-            //    }
-
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
-    
         protected void btnSalva_Click(object sender, EventArgs e)
         {
             try
@@ -1921,28 +1463,7 @@ namespace Uotep
                 lblError.ForeColor = System.Drawing.Color.Red;
             }
         }
-        private void AddCellHeader(iText.Layout.Element.Table table, string text, Color bgColor, PdfFont font)
-        {
-            Cell c = new Cell().Add(new Paragraph(text));
-            c.SetBackgroundColor(bgColor);
-            c.SetFontColor(ColorConstants.WHITE);
-            c.SetFont(font); // Qui applico Helvetica Bold
-            c.SetFontSize(7);
-            c.SetTextAlignment(TextAlignment.CENTER);
-            c.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-            table.AddCell(c);
-        }
-        private void AddCellBody(iText.Layout.Element.Table table, string text, Color bgColor, PdfFont font, float fontSize, TextAlignment align)
-        {
-            Cell c = new Cell().Add(new Paragraph(text));
-            c.SetBackgroundColor(bgColor);
-            c.SetFont(font);
-            c.SetFontSize(fontSize);
-            c.SetTextAlignment(align);
-            c.SetVerticalAlignment(VerticalAlignment.MIDDLE);
-            c.SetPaddingLeft(2);
-            table.AddCell(c);
-        }
+       
 
         protected void btnsalva_Click1(object sender, EventArgs e)
         {

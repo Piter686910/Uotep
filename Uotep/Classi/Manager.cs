@@ -1004,69 +1004,69 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
-        public DataTable GetTurnoMensile(string mese, int anno)
-        {
-            // Calcola il numero di giorni nel mese
-            //   int mes = int.Parse(mese);
+        //public DataTable GetTurnoMensile(string mese, int anno)
+        //{
+        //    // Calcola il numero di giorni nel mese
+        //    //   int mes = int.Parse(mese);
 
-            int giorniNelMese = DateTime.DaysInMonth(anno, 12);
-            // 1. Costruisci la lista dinamica delle colonne [1], [2], [3], ... [giorniNelMese]
-            StringBuilder colonnePivot = new StringBuilder();
-            for (int i = 1; i <= giorniNelMese; i++)
-            {
-                colonnePivot.Append($"[{i}],");
-            }
-            // Rimuovi l'ultima virgola
-            string colonnePivotList = colonnePivot.ToString().TrimEnd(',');
-            string queryPivot =
-                $@"
-        WITH TurniGrezzi AS (
-            SELECT 
-                t.nominativo,
-                T.codiceturno,
-                CAST(T.giorno AS INT) AS GiornoDelMese 
-            FROM TurniMensile T
+        //    int giorniNelMese = DateTime.DaysInMonth(anno, 12);
+        //    // 1. Costruisci la lista dinamica delle colonne [1], [2], [3], ... [giorniNelMese]
+        //    StringBuilder colonnePivot = new StringBuilder();
+        //    for (int i = 1; i <= giorniNelMese; i++)
+        //    {
+        //        colonnePivot.Append($"[{i}],");
+        //    }
+        //    // Rimuovi l'ultima virgola
+        //    string colonnePivotList = colonnePivot.ToString().TrimEnd(',');
+        //    string queryPivot =
+        //        $@"
+        //WITH TurniGrezzi AS (
+        //    SELECT 
+        //        t.nominativo,
+        //        T.codiceturno,
+        //        CAST(T.giorno AS INT) AS GiornoDelMese 
+        //    FROM TurniMensile T
             
-            WHERE t.anno = {anno} AND t.mese = '{mese}'
-        )
-        SELECT 
-            nominativo, 
-            {colonnePivotList} 
-        FROM 
-            TurniGrezzi
-        PIVOT (
-            MAX(codiceturno) 
-            FOR GiornoDelMese IN ({colonnePivotList})
-        ) AS PivotTable
-        ORDER BY nominativo;";
+        //    WHERE t.anno = {anno} AND t.mese = '{mese}'
+        //)
+        //SELECT 
+        //    nominativo, 
+        //    {colonnePivotList} 
+        //FROM 
+        //    TurniGrezzi
+        //PIVOT (
+        //    MAX(codiceturno) 
+        //    FOR GiornoDelMese IN ({colonnePivotList})
+        //) AS PivotTable
+        //ORDER BY nominativo;";
 
 
-            //  string  sql = "SELECT matricola,nominativo,giorno,codiceturno  FROM TurniMensile where mese ='" + mese + "' and anno= " + anno;
+        //    //  string  sql = "SELECT matricola,nominativo,giorno,codiceturno  FROM TurniMensile where mese ='" + mese + "' and anno= " + anno;
 
 
-            String testoSql = String.Empty;
-            DataTable tb = new DataTable();
+        //    String testoSql = String.Empty;
+        //    DataTable tb = new DataTable();
 
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                // 3. Aggiungi i parametri
+        //    using (SqlConnection conn = new SqlConnection(ConnString))
+        //    {
+        //        // 3. Aggiungi i parametri
 
 
-                using (SqlCommand cmd = new SqlCommand(queryPivot, conn))
-                {
-                    //cmd.Parameters.AddWithValue("@Anno", anno);
-                    //cmd.Parameters.AddWithValue("@Mese", mese);
-                    conn.Open();
-                    DataTable dtTurni = new DataTable();
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        da.Fill(dtTurni);
-                        return dtTurni;
-                    }
-                }
+        //        using (SqlCommand cmd = new SqlCommand(queryPivot, conn))
+        //        {
+        //            //cmd.Parameters.AddWithValue("@Anno", anno);
+        //            //cmd.Parameters.AddWithValue("@Mese", mese);
+        //            conn.Open();
+        //            DataTable dtTurni = new DataTable();
+        //            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+        //            {
+        //                da.Fill(dtTurni);
+        //                return dtTurni;
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
 
         /// <summary>
