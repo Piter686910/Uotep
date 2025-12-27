@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -39,12 +40,14 @@ using Table = System.Web.UI.WebControls.Table;
 
 namespace Uotep
 {
+   
     public partial class Turnazione : System.Web.UI.Page
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        String FileCalendarioRSNL = ConfigurationManager.AppSettings["CartellaFureria"];
         bool isEditMode = false;
         // Dizionario per annotare DOVE inserire le intestazioni.
         // La chiave (int) è l'indice della riga, il valore (string) è il nome dell'ufficio.
@@ -400,7 +403,7 @@ namespace Uotep
 
             // 3. MAPPO E CALCOLO I TURNI
             Session["ListaDipendentiTurni"] = listaDalDB;
-            
+
         }
         private void GeneraHtml(List<DipendenteTurno> lista, int anno, int mese)
         {
@@ -1356,8 +1359,8 @@ namespace Uotep
                 }
 
                 Routine stampa = new Routine();
-                stampa.CreaExcelTurnazioneMensile(listaDati, anno, mese, giorniMese,Context);
-                    
+                stampa.CreaExcelTurnazioneMensile(listaDati, anno, mese, giorniMese, Context);
+
             }
             catch (Exception ex)
             {
@@ -1389,7 +1392,7 @@ namespace Uotep
             }
 
             Routine stampa = new Routine();
-            stampa.CreaPdfTurnazioneMensile(listaDati, nomeMeseTesto,anno,mese,giorniMese);
+            stampa.CreaPdfTurnazioneMensile(listaDati, nomeMeseTesto, anno, mese, giorniMese);
 
 
         }
@@ -1463,7 +1466,7 @@ namespace Uotep
                 lblError.ForeColor = System.Drawing.Color.Red;
             }
         }
-       
+
 
         protected void btnsalva_Click1(object sender, EventArgs e)
         {
@@ -1534,6 +1537,155 @@ namespace Uotep
                 lblError.ForeColor = System.Drawing.Color.Red;
             }
         }
+
+        protected void btImportaMatriceExcel_Click(object sender, EventArgs e)
+        {
+            
+            List<RecordRsnl> datiDaInserire = new List<RecordRsnl>();
+            datiDaInserire = LeggiFileExcel(FileCalendarioRSNL);
+            SalvaSuSql(datiDaInserire);
+
+        }
+        static void SalvaSuSql(List<RecordRsnl> records)
+        {
+            Manager mn = new Manager();
+
+          
+
+            Boolean resp = mn.InsRSNL(records);
+            
+        }
+    
+        static List<RecordRsnl> LeggiFileExcel(string path)
+        {
+            var output = new List<RecordRsnl>();
+
+            using (var wb = new XLWorkbook(path))
+            {
+                var ws = wb.Worksheet(1);
+                int lastRow = ws.LastRowUsed().RowNumber();
+                int startRow = 4; // Modifica se i dati iniziano diversamente
+
+                for (int r = startRow; r <= lastRow; r++)
+                {
+                    var row = ws.Row(r);
+
+                    // Verifica se questa riga è una Domenica attiva (Colonna AF / 32)
+                    string valAF = row.Cell(32).GetValue<string>();
+
+                    if (int.TryParse(valAF, out int quartina) && quartina >= 1 && quartina <= 4)
+                    {
+                        // Dati della riga Domenica
+                        string giornoStr = row.Cell(1).GetValue<string>();
+                        string meseStr = row.Cell(2).GetValue<string>().Trim(); // Colonna B (Mese stringa)
+
+                        // Saltiamo se il mese non è riconosciuto o manca il giorno
+                        if (!int.TryParse(giornoStr, out int gDom) || !MappaMesi.ContainsKey(meseStr))
+                            continue;
+
+                        // Creiamo la data ancora della Domenica (es. 01/02/2026)
+                        DateTime dataDomenica;
+                        try
+                        {
+                            dataDomenica = new DateTime(2026, MappaMesi[meseStr], gDom);
+                        }
+                        catch { continue; } // Salta date non valide (es. 30 Febbraio)
+
+                        // Impostiamo i range colonne in base alla Quartina (gestendo le colonne vuote)
+                        int colStart = 0, colEnd = 0;
+                        string prefix = "";
+
+                        switch (quartina)
+                        {
+                            case 1: colStart = 5; colEnd = 10; prefix = "A"; break; // A1-A6 (E-J)
+                            case 2: colStart = 12; colEnd = 17; prefix = "B"; break; // B1-B6 (L-Q) - Salta K
+                            case 3: colStart = 19; colEnd = 24; prefix = "C"; break; // C1-C6 (S-X) - Salta R
+                            case 4: colStart = 26; colEnd = 31; prefix = "D"; break; // D1-D6 (Z-AE) - Salta Y
+                        }
+
+                        // Analisi per ogni gruppo della quartina
+                        for (int c = colStart; c <= colEnd; c++)
+                        {
+                            int subIndex = c - colStart + 1;
+                            string nomeGruppo = $"{prefix}{subIndex}";
+
+                            // CERCA RS: Settimana corrente (fino alla domenica inclusa) -> Offset -6 a 0
+                            DateTime? dataRS = CercaDataEvento(ws, "RS", c, r, -6, 0, dataDomenica);
+
+                            // CERCA NL: Settimana successiva -> Offset +1 a +7
+                            DateTime? dataNL = CercaDataEvento(ws, "NL", c, r, 1, 7, dataDomenica);
+
+                            // Se troviamo qualcosa, aggiungiamo alla lista
+                            if (dataRS.HasValue || dataNL.HasValue)
+                            {
+                                output.Add(new RecordRsnl
+                                {
+                                    Gruppo = nomeGruppo,
+                                    Quartina = quartina,
+                                    DataRS = dataRS,
+                                    DataNL = dataNL,
+                                    MeseStringa = meseStr // Manteniamo la stringa originale (es. "GEN")
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return output;
+        }
+        // Cerca "RS" o "NL" e restituisce la DATA CALCOLATA (gestisce cambio mese/anno)
+        static DateTime? CercaDataEvento(IXLWorksheet ws, string target, int colIdx, int baseRow, int minOff, int maxOff, DateTime baseDate)
+        {
+            int maxExcelRows = ws.LastRowUsed().RowNumber();
+
+            for (int offset = minOff; offset <= maxOff; offset++)
+            {
+                int targetRow = baseRow + offset;
+
+                // Controllo limiti foglio
+                if (targetRow < 1 || targetRow > maxExcelRows) continue;
+
+                string val = ws.Cell(targetRow, colIdx).GetValue<string>().Trim().ToUpper();
+
+                if (val == target)
+                {
+                    // La magia di DateTime: se aggiungo -2 giorni al 1 Febbraio, ottengo 30 Gennaio
+                    return baseDate.AddDays(offset);
+                }
+            }
+            return null;
+        }
+
+        // Funzione Helper per cercare un valore in una colonna specifica tra due righe
+        static RisultatoRicerca CercaValoreNelRange(IXLWorksheet ws, string targetVal, int colIndex, int rStart, int rEnd)
+        {
+            // Gestione limiti foglio (non andare sotto riga 1 o oltre la fine)
+            int lastRowReal = ws.LastRowUsed().RowNumber();
+            if (rStart < 1) rStart = 1;
+            if (rEnd > lastRowReal) rEnd = lastRowReal;
+
+            for (int i = rStart; i <= rEnd; i++)
+            {
+                string val = ws.Cell(i, colIndex).GetValue<string>().Trim().ToUpper();
+                if (val == targetVal)
+                {
+                    // Trovato! Recuperiamo il giorno (Colonna A = 1)
+                    string gStr = ws.Cell(i, 1).GetValue<string>();
+                    if (int.TryParse(gStr, out int g))
+                    {
+                        return new RisultatoRicerca { Trovato = true, Giorno = g };
+                    }
+                }
+            }
+            return new RisultatoRicerca { Trovato = false, Giorno = null };
+        }
+        // Dizionario per convertire Mese stringa in numero
+        static readonly Dictionary<string, int> MappaMesi = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "GEN", 1 }, { "FEB", 2 }, { "MAR", 3 }, { "APR", 4 }, { "MAG", 5 }, { "GIU", 6 },
+            { "LUG", 7 }, { "AGO", 8 }, { "SET", 9 }, { "OTT", 10 }, { "NOV", 11 }, { "DIC", 12 }
+        };
+
     }
 }
 

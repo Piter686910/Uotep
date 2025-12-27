@@ -350,8 +350,8 @@
                 background-color: #c82333;
             }
 
-      
-            /***************/
+
+        /***************/
     </style>
 
     <div class="jumbotron">
@@ -393,21 +393,24 @@
                         <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
                             <asp:Button ID="btnCarica" runat="server" Text="Calcola Turni" CssClass="btn btn-primary" OnClick="btnCarica_Click" />
                         </div>
-                        <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
-                            <asp:Button ID="btnsalva" runat="server" Text="💾 Salva Turni su DB" CssClass="btn btn-primary" OnClick="btnsalva_Click1" Enabled="false" />
-                        </div>
-                        <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
-                            <asp:Button ID="btGetTurnoMensile" runat="server" Text="📂 Ricerca da DB" CssClass="btn btn-primary" OnClick="btGetTurnoMensile_Click" />
-                        </div>
-                        <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
-                            <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
-                                OnClick="btnExportExcel_Click" CssClass="btn-excel" />
-                        </div>
-                        <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
-                            <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
-                                OnClick="btnExportPdf_Click" CssClass="btn-pdf" />
-                        </div>
+                        <div class="row" style="margin-top: 40px; margin-bottom: 10px;">
+                            <div class="col-md-12">
+                                <asp:Button ID="btnsalva" runat="server" Text="💾 Salva Turni su DB"
+                                    CssClass="btn btn-primary" OnClick="btnsalva_Click1" Enabled="false" Style="margin-right: 15px;" />
 
+                                <asp:Button ID="btGetTurnoMensile" runat="server" Text="📂 Ricerca da DB"
+                                    CssClass="btn btn-primary" OnClick="btGetTurnoMensile_Click" Style="margin-right: 15px;" />
+
+                                <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
+                                    OnClick="btnExportExcel_Click" CssClass="btn-excel" Style="margin-right: 15px;" />
+
+                                <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
+                                    OnClick="btnExportPdf_Click" CssClass="btn-pdf" Style="margin-right: 15px;" />
+
+                                <asp:Button ID="btImportaMatriceExcel" runat="server" Text="📄 Importa file RS/NL"
+                                    OnClick="btImportaMatriceExcel_Click" CssClass="btn-pdf" />
+                            </div>
+                        </div>
 
 
 

@@ -100,5 +100,22 @@ namespace Uotep.Classi
             // Ritorna la descrizione se presente, altrimenti il nome del membro stesso.
             return attribute != null ? attribute.Description : value.ToString();
         }
+
+        // Classi di supporto
+      public  class RisultatoRicerca
+        {
+            public bool Trovato { get; set; }
+            public int? Giorno { get; set; }
+        }
+
+        public class RecordRsnl
+        {
+            public string Gruppo { get; set; }
+            public int Quartina { get; set; }
+            public DateTime? DataRS { get; set; }
+            public DateTime? DataNL { get; set; }
+            public string MeseStringa { get; set; } // Campo richiesto: stringa originale
+        }
+
     }
 }

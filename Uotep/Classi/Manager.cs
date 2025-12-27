@@ -240,6 +240,39 @@ namespace Uotep.Classi
             }
         }
 
+        /// <summary>
+        /// delete la tabella rsnl
+        /// </summary>
+        /// <returns></returns>
+        public Boolean DeleteRSNL()
+        {
+            String Del_FileCaricati = "delete from rsnl ";
+
+            String testoSql = String.Empty;
+            Boolean resp = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+                try
+                {
+
+                    command.CommandText = Del_FileCaricati;
+                    testoSql = "rsnl";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn.Close();
+                return resp;
+            }
+        }
         //get
         public DataTable getPass(String user)
         {
@@ -1026,7 +1059,7 @@ namespace Uotep.Classi
         //        T.codiceturno,
         //        CAST(T.giorno AS INT) AS GiornoDelMese 
         //    FROM TurniMensile T
-            
+
         //    WHERE t.anno = {anno} AND t.mese = '{mese}'
         //)
         //SELECT 
@@ -2259,6 +2292,95 @@ namespace Uotep.Classi
             return resp;
 
         }
+
+
+
+        /// <summary>
+        /// inserimento tabella RSNL annuale
+        /// </summary>
+        /// <param name="mese"></param>
+        /// <param name="giorno"></param>
+        /// <param name="gruppo"></param>
+        /// <param name="codice"></param>
+        /// <returns></returns>
+        public Boolean InsRSNL(List<RecordRsnl> records)
+        {
+            bool resp = true;
+
+            string sql = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql = @"INSERT INTO Rsnl (Gruppo, DataRS, DataNL, Mese, Quartina) 
+                                       VALUES (@grp, @drs, @dnl, @mese, @qrt)";
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+
+                    using (var trans = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            // (Opzionale) Pulisci tabella
+                             new SqlCommand("TRUNCATE TABLE Rsnl", conn, trans).ExecuteNonQuery();
+
+
+
+                            foreach (var item in records)
+                            {
+                                using (SqlCommand cmd = new SqlCommand(sql, conn, trans))
+                                {
+                                    cmd.Parameters.AddWithValue("@grp", item.Gruppo);
+                                    // Passiamo DateTime oggetti -> SQL Server gestirà il formato 'YYYY-MM-DD'
+                                    cmd.Parameters.AddWithValue("@drs", (object)item.DataRS ?? DBNull.Value);
+                                    cmd.Parameters.AddWithValue("@dnl", (object)item.DataNL ?? DBNull.Value);
+                                    // Passiamo anche la stringa originale
+                                    cmd.Parameters.AddWithValue("@mese", item.MeseStringa);
+                                    cmd.Parameters.AddWithValue("@qrt", item.Quartina);
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                            trans.Commit();
+                        }
+                        catch
+                        {
+                            trans.Rollback();
+                            throw; // Rilancia errore
+                        }
+                    }
+
+                    conn.Close();
+                    conn.Dispose();
+                    resp = true;
+
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine("RSNL:" + ex.Message + @" - Errore in inserimento tabella RSNL ");
+                    sw.Close();
+                }
+
+                resp = false;
+               
+
+            }
+            return resp;
+
+        }
         public Boolean InsOperatore(Operatore op)
         {
             bool resp = true;
@@ -2902,57 +3024,57 @@ namespace Uotep.Classi
                 {
 
                     sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
-  "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
-  "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
-  "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
-  "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-  "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-  "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
-" Values('" + rapp.pratica + "','" +
-//@rapp.ora + "','" +
-@rapp.data + "','" +
-@rapp.nominativo.Replace("'", "''") + "','" +
-@rapp.indirizzo.Replace("'", "''") + "','" +
-@rapp.pattuglia.Replace("'", "''") + "','" +
-@rapp.delegaAG + "','" +
-@rapp.resa + "','" +
-@rapp.segnalazione + "','" +
-@rapp.esposti + "','" +
-@rapp.num_esposti + "','" +
-@rapp.notifica + "','" +
-@rapp.iniziativa + "','" +
-@rapp.cdr + "','" +
-@rapp.coordinatore + "','" +
-@rapp.relazione + "','" +
-@rapp.cnr + "','" +
-@rapp.annotazionePG + "','" +
-@rapp.verbaleSeq + "','" +
-@rapp.esitoDelega + "','" +
-@rapp.contestazioneAmm + "','" +
-@rapp.convalida + "','" +
-@rapp.dissequestroDef + "','" +
-@rapp.dissequestroTemp + "','" +
-@rapp.rimozione + "','" +
-@rapp.riapposizione + "','" +
-@rapp.violazioneSigilli + "','" +
-@rapp.controlliScia + "','" +
-@rapp.accertAvvenutoRip + "','" +
-@rapp.totale + "','" +
-@rapp.parziale + "','" +
-@rapp.violazioneBeniCult + "','" +
-@rapp.contrCantSuoloPubb + "','" +
-@rapp.contrEdiliDPI + "','" +
-@rapp.contr_cantiereSeq + "','" +
-@rapp.contrDaEsposti + "','" +
-@rapp.contrDaSegn + "','" +
-@rapp.attività_interna + "','" +
-@rapp.nota.Replace("'", "''") + "','" +
-@rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-@rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
-@rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
-@rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-@rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-@rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+        "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
+        "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
+        "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
+        "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
+        "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
+        "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
+        " Values('" + rapp.pratica + "','" +
+        //@rapp.ora + "','" +
+        @rapp.data + "','" +
+        @rapp.nominativo.Replace("'", "''") + "','" +
+        @rapp.indirizzo.Replace("'", "''") + "','" +
+        @rapp.pattuglia.Replace("'", "''") + "','" +
+        @rapp.delegaAG + "','" +
+        @rapp.resa + "','" +
+        @rapp.segnalazione + "','" +
+        @rapp.esposti + "','" +
+        @rapp.num_esposti + "','" +
+        @rapp.notifica + "','" +
+        @rapp.iniziativa + "','" +
+        @rapp.cdr + "','" +
+        @rapp.coordinatore + "','" +
+        @rapp.relazione + "','" +
+        @rapp.cnr + "','" +
+        @rapp.annotazionePG + "','" +
+        @rapp.verbaleSeq + "','" +
+        @rapp.esitoDelega + "','" +
+        @rapp.contestazioneAmm + "','" +
+        @rapp.convalida + "','" +
+        @rapp.dissequestroDef + "','" +
+        @rapp.dissequestroTemp + "','" +
+        @rapp.rimozione + "','" +
+        @rapp.riapposizione + "','" +
+        @rapp.violazioneSigilli + "','" +
+        @rapp.controlliScia + "','" +
+        @rapp.accertAvvenutoRip + "','" +
+        @rapp.totale + "','" +
+        @rapp.parziale + "','" +
+        @rapp.violazioneBeniCult + "','" +
+        @rapp.contrCantSuoloPubb + "','" +
+        @rapp.contrEdiliDPI + "','" +
+        @rapp.contr_cantiereSeq + "','" +
+        @rapp.contrDaEsposti + "','" +
+        @rapp.contrDaSegn + "','" +
+        @rapp.attività_interna + "','" +
+        @rapp.nota.Replace("'", "''") + "','" +
+        @rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
+        @rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
+        @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
+        @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
+        @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
+        @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
 
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
@@ -5357,9 +5479,9 @@ namespace Uotep.Classi
                                 // Update Decretazione
                                 command.CommandText = sql_updDecretazione;
                                 command.Parameters.Clear();
-                                
+
                                 command.ExecuteNonQuery();
-                               
+
                                 // Update Principale
                                 sql_updPrincipale = "update principale set Evasa = 'False' where id = " + idPrincipaleRecuperato;
                                 command.CommandText = sql_updPrincipale;
@@ -5368,11 +5490,11 @@ namespace Uotep.Classi
 
                                 //command.ExecuteNonQuery();
                                 var resDecretazione = command.ExecuteNonQuery();
-                                if (resDecretazione >0)
+                                if (resDecretazione > 0)
                                 {
                                     tran.Commit();
                                     resp = true;
-                                    
+
                                 }
                                 else
                                 {
@@ -5381,7 +5503,7 @@ namespace Uotep.Classi
                                     resp = false;
                                 }
                             }
-                            catch (Exception )
+                            catch (Exception)
                             {
                                 tran.Rollback();
                                 //ScriviLog(ex.Message); // Gestione log
@@ -5391,7 +5513,7 @@ namespace Uotep.Classi
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 // ScriviLog(ex.Message);
                 resp = false;
