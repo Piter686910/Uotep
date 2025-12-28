@@ -517,7 +517,8 @@ namespace Uotep.Classi
             d.quartina, 
             d.autista,
             t.giorno, 
-            t.CodiceTurno
+            t.CodiceTurno,
+            d.gruppo
         FROM TurnoDipendenti d
         LEFT JOIN TurniMensile t 
             ON d.matricola = t.matricola 
@@ -545,6 +546,7 @@ namespace Uotep.Classi
                             DipendenteTurno dip = new DipendenteTurno();
                             dip.Matricola = matricola;
                             dip.Nominativo = r["nominativo"].ToString();
+                            dip.Gruppo = r["gruppo"].ToString();
                             dip.Ufficio = r["ufficio"] != DBNull.Value ? r["ufficio"].ToString() : "Nessun Ufficio";
 
                             // Gestione Autista
@@ -590,7 +592,7 @@ namespace Uotep.Classi
         public DataTable getListDipendenti()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,sottogruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
+            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
                          "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -601,7 +603,7 @@ namespace Uotep.Classi
         public DataTable getListDipendentiById(int id)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,sottogruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
+            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
                          "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1168,6 +1170,42 @@ namespace Uotep.Classi
             }
         }
 
+
+        public List<RegolaRSNL> getRsNlnlByAnnoMese(int anno, int mese)
+        {
+            string sql = string.Empty;
+            List<RegolaRSNL> lista = new List<RegolaRSNL>();
+            DataTable tb = new DataTable();
+            sql = "SELECT gruppo, DataRS, DataNL, quartina,mese FROM rsnl " +
+                             "WHERE (MONTH(DataRS) = @mese AND YEAR(DataRS) = @anno) " +
+                             "OR (MONTH(DataNL) = @mese AND YEAR(DataNL) = @anno)";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@mese", mese);
+                    cmd.Parameters.AddWithValue("@anno", anno);
+                    conn.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        lista.Add(new RegolaRSNL
+                        {
+                            Gruppo = rdr["gruppo"].ToString().Trim(),
+                            Quartina = Convert.ToInt32(rdr["quartina"]),
+                            DataRS = rdr["DataRS"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(rdr["DataRS"]) : null,
+                            DataNL = rdr["DataNL"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(rdr["DataNL"]) : null,
+                            Mese = rdr["mese"].ToString().Trim()
+                        });
+                    }
+                }
+            }
+
+            return lista;
+            
+        }
         public DataTable getPraticaArchivioUOTPById(int id)
         {
             string sql = string.Empty;
@@ -4929,11 +4967,7 @@ namespace Uotep.Classi
                     }
 
                     // B. INSERIMENTO NUOVI DATI
-                    string sqlInsert = @"
-                INSERT INTO TurniMensile 
-                (mese, anno, matricola, nominativo, giorno, CodiceTurno, DataUltimaModifica) 
-                VALUES 
-                (@mese, @anno, @matricola, @nominativo, @giorno, @codice, @dataMod)";
+                    string sqlInsert = @"INSERT INTO TurniMensile (mese, anno, matricola, nominativo, giorno, CodiceTurno, DataUltimaModifica,gruppo) VALUES (@mese, @anno, @matricola, @nominativo, @giorno, @codice, @dataMod,@gruppo)";
 
                     using (SqlCommand cmdIns = new SqlCommand(sqlInsert, conn, trans))
                     {
@@ -4945,13 +4979,13 @@ namespace Uotep.Classi
                         cmdIns.Parameters.Add("@giorno", SqlDbType.Int);
                         cmdIns.Parameters.Add("@codice", SqlDbType.VarChar, 5); // Per "1", "2", "Q", "RF"
                         cmdIns.Parameters.Add("@dataMod", SqlDbType.DateTime).Value = DateTime.Now;
-
+                        cmdIns.Parameters.Add("@gruppo", SqlDbType.VarChar, 2);
                         foreach (var dip in lista)
                         {
                             // Imposta parametri dipendente (fissi per tutti i giorni)
                             cmdIns.Parameters["@matricola"].Value = dip.Matricola ?? ""; // Gestione null
                             cmdIns.Parameters["@nominativo"].Value = dip.Nominativo;
-
+                            cmdIns.Parameters["@gruppo"].Value = dip.Gruppo;
                             // Ciclo sui giorni (1..31)
                             for (int i = 1; i <= giorniMese; i++)
                             {

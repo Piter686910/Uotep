@@ -396,19 +396,19 @@
                         <div class="row" style="margin-top: 40px; margin-bottom: 10px;">
                             <div class="col-md-12">
                                 <asp:Button ID="btnsalva" runat="server" Text="💾 Salva Turni su DB"
-                                    CssClass="btn btn-primary" OnClick="btnsalva_Click1" Enabled="false" Style="margin-right: 15px;" />
+                                    CssClass="btn btn-primary" OnClick="btnsalva_Click" Style="margin-right: 15px;" />
 
                                 <asp:Button ID="btGetTurnoMensile" runat="server" Text="📂 Ricerca da DB"
                                     CssClass="btn btn-primary" OnClick="btGetTurnoMensile_Click" Style="margin-right: 15px;" />
 
                                 <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
-                                    OnClick="btnExportExcel_Click" CssClass="btn-excel" Style="margin-right: 15px;" />
+                                    OnClick="btnExportExcel_Click" CssClass="btn btn-primary" Style="margin-right: 15px;" />
 
                                 <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
-                                    OnClick="btnExportPdf_Click" CssClass="btn-pdf" Style="margin-right: 15px;" />
+                                    OnClick="btnExportPdf_Click" CssClass="btn btn-primary" Style="margin-right: 15px;" />
 
                                 <asp:Button ID="btImportaMatriceExcel" runat="server" Text="📄 Importa file RS/NL"
-                                    OnClick="btImportaMatriceExcel_Click" CssClass="btn-pdf" />
+                                    OnClick="btImportaMatriceExcel_Click" CssClass="btn btn-primary" />
                             </div>
                         </div>
 
@@ -417,34 +417,36 @@
                         <asp:Label ID="lblError" runat="server" ForeColor="Red"></asp:Label>
                     </div>
                     <asp:Literal ID="ltlTabella" runat="server"></asp:Literal>
+                    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <p id="errorMessage" runat="server" style="color: red;font-size:14px"></p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ContentTemplate>
                 <Triggers>
                     <%-- AGGIUNGI QUESTA RIGA: Forza il pulsante a ricaricare l'intera pagina --%>
                     <asp:PostBackTrigger ControlID="btnExportPdf" />
                     <asp:PostBackTrigger ControlID="btnExportExcel" />
+                    <asp:PostBackTrigger ControlID="btnExportExcel" />
                 </Triggers>
+                <%-- popup errori --%>
             </asp:UpdatePanel>
         </div>
     </div>
 
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <p id="errorMessage" runat="server" style="color: red"></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
     <script type="text/javascript">

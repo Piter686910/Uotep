@@ -532,7 +532,6 @@
     </Compile>
     <Compile Include="View\Turnazione.aspx.cs">
       <DependentUpon>Turnazione.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="View\Turnazione.aspx.designer.cs">
       <DependentUpon>Turnazione.aspx</DependentUpon>

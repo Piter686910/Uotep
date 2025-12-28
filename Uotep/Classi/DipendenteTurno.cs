@@ -17,5 +17,6 @@ namespace Uotep.Classi
         public string StringaGiorniQ { get; set; } // Es: "5,12,21"
         public string[] TurniMensili { get; set; } // Array [32] (indice 1-31)
         public string StatisticaPerc { get; set; }
+        public string Gruppo { get; set; }
     }
 }
