@@ -2341,16 +2341,16 @@ namespace Uotep.Classi
         /// <param name="gruppo"></param>
         /// <param name="codice"></param>
         /// <returns></returns>
-        public Boolean InsRSNL(List<RecordRsnl> records)
+        public string InsRSNL(List<RecordRsnl> records)
         {
-            bool resp = true;
+            string resp = string.Empty;
 
             string sql = String.Empty;
             string testoSql = string.Empty;
 
             try
             {
-                sql = @"INSERT INTO Rsnl (Gruppo, DataRS, DataNL, Mese, Quartina) 
+                sql = @"INSERT INTO RSNL (Gruppo, DataRS, DataNL, Mese, Quartina) 
                                        VALUES (@grp, @drs, @dnl, @mese, @qrt)";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2362,7 +2362,7 @@ namespace Uotep.Classi
                         try
                         {
                             // (Opzionale) Pulisci tabella
-                             new SqlCommand("TRUNCATE TABLE Rsnl", conn, trans).ExecuteNonQuery();
+                             new SqlCommand("TRUNCATE TABLE RSNL", conn, trans).ExecuteNonQuery();
 
 
 
@@ -2383,16 +2383,27 @@ namespace Uotep.Classi
                             }
                             trans.Commit();
                         }
-                        catch
+                        catch (Exception ex1)
                         {
                             trans.Rollback();
-                            throw; // Rilancia errore
+                            if (!File.Exists(LogFile))
+                            {
+                                using (StreamWriter sw = File.CreateText(LogFile)) { }
+                            }
+
+                            using (StreamWriter sw = File.AppendText(LogFile))
+                            {
+                                sw.WriteLine("RSNL:" + ex1.Message + @" - Errore in inserimento tabella RSNL ");
+                                sw.Close();
+                            }
+                            resp = ex1.Message + "--" + ConnString;
+                            //throw; // Rilancia errore
                         }
                     }
 
                     conn.Close();
                     conn.Dispose();
-                    resp = true;
+                    return resp;
 
                 }
 
@@ -2412,7 +2423,7 @@ namespace Uotep.Classi
                     sw.Close();
                 }
 
-                resp = false;
+                resp = ex.Message + " 2";
                
 
             }

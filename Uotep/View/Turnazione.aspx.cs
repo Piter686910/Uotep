@@ -226,11 +226,12 @@ namespace Uotep
 
         protected void btnCarica_Click(object sender, EventArgs e)
         {
+           // lblError.Text = "⏳ btn click";
             // Rimuovo la cache vecchia per forzare il ricalcolo dentro GeneraGriglia
             Session.Remove("ListaDipendentiTurni");
             int anno = int.Parse(txtAnno.Text);
             int mese = int.Parse(ddlMese.SelectedValue);
-
+          //  lblError.Text = "⏳ Caricamento dati...list dip";
             Manager mn = new Manager();
             DataTable dtDip = mn.getListDipendenti();
             //var listaDipendenti = MappaDaDataTable(dt, mese);
@@ -244,9 +245,11 @@ namespace Uotep
 
 
             // 3. MAPPO E CALCOLO I TURNI
+           // lblError.Text = "⏳ Caricamento dati...elabora";
             List<DipendenteTurno> listaDipendenti = ElaboraDati(dtDip, mappaGiorniQuartina, anno, mese);
             Session["ListaDipendentiTurni"] = listaDipendenti;
             // 4. GENERO L'HTML (Usando il metodo grafico fatto prima)
+            //lblError.Text = "⏳ Caricamento html";
             GeneraHtml(listaDipendenti, anno, mese);
 
             //btnsalva.Enabled = true;
@@ -302,8 +305,10 @@ namespace Uotep
             Manager mn = new Manager();
             // 1. Recupera i dati dal DB (Unione tra Anagrafica e Turni Salvati)
             List<DipendenteTurno> listaDalDB = mn.GetTurniMensile(anno, ddlMese.SelectedItem.Text);
-            if (listaDalDB[0].TurniMensili[0] == null)
-            //  if (listaDalDB.Count == 0)
+           // verifico che l'array turni mensili abbia almeno un elemento valido da mostrare
+            bool esisteElementoValido = listaDalDB[0].TurniMensili != null && listaDalDB[0].TurniMensili.Any(x => x != null);
+
+            if (!esisteElementoValido)
             {
                 // lblError.Text = "⚠️ Nessun turno trovato nel database per questo periodo.";
                 // lblError.ForeColor = System.Drawing.Color.Orange;
@@ -519,7 +524,9 @@ namespace Uotep
     .ToUpper();
 
             // --- NUOVO: Caricamento Regole RSNL dal Database ---
+            lblError.Text = "⏳ Caricamento regole RSNL..."; 
             List<RegolaRSNL> regoleRSNL = CaricaRegoleRSNL(anno, mese);
+            lblError.Text = "⏳ esco Caricamento regole RSNL...";
             // --- PRIMA PASSATA: Creazione e Vincoli Assoluti ---
             foreach (DataRow row in dtDip.Rows)
             {
@@ -548,8 +555,9 @@ namespace Uotep
                 dip.TurniMensili = new string[giorniMese + 1];
 
                 // Applica vincoli base (Q, Sabati, Festivi)
+                lblError.Text = "⏳ Caricamento applica regole q...";
                 List<int> giorniQ = ApplicaRegolaQ(dip.TurniMensili, stringaGiorni, giorniMese);
-
+                lblError.Text = "⏳ esco Caricamento applica regole q...";
                 ApplicaRegolaSabati(dip.TurniMensili, giorniQ, giorniMese, anno, mese);
                 ApplicaRegolaRSNL(dip, regoleRSNL, giorniMese, anno, mese, meseStringa);
                 ApplicaRegolaFestivi(dip.TurniMensili, giorniMese, anno, mese);
@@ -1429,8 +1437,10 @@ namespace Uotep
                 Manager mn = new Manager();
                 // 1. Recupera i dati dal DB (Unione tra Anagrafica e Turni Salvati)
                 List<DipendenteTurno> listaDati = mn.GetTurniMensile(anno, ddlMese.SelectedItem.Text);
+                // verifico che l'array turni mensili abbia almeno un elemento valido da mostrare
+                bool esisteElementoValido = listaDati[0].TurniMensili != null && listaDati[0].TurniMensili.Any(x => x != null);
 
-                if (listaDati[0].TurniMensili[0] == null)
+                if (!esisteElementoValido)
                 {
                     //lblError.Text = "⚠️ Nessun dato da esportare.";
 
@@ -1467,8 +1477,11 @@ namespace Uotep
             // GetTurniMensile caricherà i vecchi dati dal DB.
             List<DipendenteTurno> listaDati = mn.GetTurniMensile(anno, nomeMeseTesto);
 
-            //if (listaDati == null || listaDati.Count == 0)
-            if (listaDati[0].TurniMensili[0] == null)
+            // verifico che l'array turni mensili abbia almeno un elemento valido da mostrare
+            bool esisteElementoValido = listaDati[0].TurniMensili != null && listaDati[0].TurniMensili.Any(x => x != null);
+
+            if (!esisteElementoValido)
+
             {
                 //lblError.Text = "⚠️ Nessun dato trovato nel database per questo mese. Salva prima di stampare.";
                 //lblError.ForeColor = System.Drawing.Color.Orange;
@@ -1568,23 +1581,30 @@ namespace Uotep
             List<RecordRsnl> datiDaInserire = new List<RecordRsnl>();
             if (File.Exists(FileCalendarioRSNL))
             {
+                //lblError.Text = "entrato in file exist";
                 datiDaInserire = LeggiFileExcel(FileCalendarioRSNL);
                 SalvaSuSql(datiDaInserire);
+               // lblError.Text = "esco da salva file";
             }
             else
             {
-
-                errorMessage.InnerText = @"⚠️ Nessun dato trovato nel database per questo mese. Salva prima di stampare.";
+                lblError.Text = "entrato in errore";
+                errorMessage.InnerText = @"⚠️ Nessun file calendario trovato.";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
             }
         }
-        static void SalvaSuSql(List<RecordRsnl> records)
+        public void SalvaSuSql(List<RecordRsnl> records)
         {
             Manager mn = new Manager();
 
 
 
-            Boolean resp = mn.InsRSNL(records);
+            string resp = mn.InsRSNL(records);
+            if (!String.IsNullOrEmpty(resp))
+            {
+                errorMessage.InnerText = @"⚠️ errore in inserimento rsnl. " + resp;
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+            }
 
         }
 
