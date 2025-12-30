@@ -335,87 +335,102 @@ namespace Uotep
         }
         private void GeneraHtml(List<DipendenteTurno> lista, int anno, int mese)
         {
-
-            int giorniMese = DateTime.DaysInMonth(anno, mese);
+            int giorniMese = DateTime.DaysInMonth(anno, mese); // Gestione bisestile automatica
             StringBuilder sb = new StringBuilder();
 
             sb.Append("<table class='tabella-turni'>");
 
-            // --- HEADER ---
+            // --- HEADER DELLA TABELLA ---
             sb.Append("<thead><tr>");
             sb.Append("<th class='col-dip-header'>DIPENDENTE</th>");
-
-            // NUOVA COLONNA HEADER
             sb.Append("<th class='col-stats-header'>%1°/2°</th>");
 
             for (int i = 1; i <= giorniMese; i++)
             {
-
-                // Esempio:
                 DateTime dt = new DateTime(anno, mese, i);
                 bool isWeekend = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday);
                 string classHeader = isWeekend ? "giorno-header weekend-h" : "giorno-header";
-                string lettera = dt.ToString("ddd").Substring(0, 1).ToUpper();
+                string lettera = dt.ToString("ddd", new System.Globalization.CultureInfo("it-IT")).Substring(0, 1).ToUpper();
                 sb.AppendFormat("<th class='{0}'>{1}<br/><small>{2}</small></th>", classHeader, i, lettera);
             }
             sb.Append("</tr></thead><tbody>");
 
-            // --- BODY ---
-            var gruppi = lista.GroupBy(x => x.Ufficio).OrderBy(k => k.Key);
+            // --- BODY: 1° LIVELLO RAGGRUPPAMENTO (UFFICIO) ---
+            var gruppiUfficio = lista.GroupBy(x => x.Ufficio).OrderBy(k => k.Key);
 
-            foreach (var g in gruppi)
+            foreach (var gu in gruppiUfficio)
             {
-                // ATTENZIONE AL COLSPAN: Ora è giorniMese + 2 (Nome + Stats)
+                string nomeUfficio = gu.Key.ToUpper().Trim();
+
+                // RIGA INTESTAZIONE UFFICIO
                 sb.AppendFormat("<tr class='tr-ufficio'><td colspan='{0}'>{1}</td></tr>",
-                    giorniMese + 2, g.Key.ToUpper());
+                    giorniMese + 2, nomeUfficio);
 
-                foreach (var dip in g)
+                if (nomeUfficio.StartsWith("MACRO"))
                 {
-                    sb.Append("<tr>");
+                    // --- 2° LIVELLO RAGGRUPPAMENTO PER AREA (UOTE / UOTP) ---
+                    var gruppiArea = gu.GroupBy(d => string.IsNullOrEmpty(d.Area) ? "NON DEFINITA" : d.Area.ToUpper().Trim())
+                                       .OrderBy(k => k.Key); // Ordina UOTE, poi UOTP
 
-                    // Colonna Nome
-                    sb.AppendFormat("<td class='col-dipendente' title='{0}'>{1}<span class='badge-q'>Q{2}</span><span class='badge-q'>Gr.{3}</span></td>",
-                        dip.Nominativo, dip.Nominativo, dip.QuartinaID, dip.Gruppo.ToUpper());
-
-                    // Colonna Percentuale (Aggiungo classe per JS)
-                    string valPerc = dip.StatisticaPerc.Replace("%", "");
-                    string styleColor = "";
-                    if (int.TryParse(valPerc, out int p) && (p < 50 || p > 60)) styleColor = "style='color:red;'";
-                    else styleColor = "style='color:green;'";
-
-                    sb.AppendFormat("<td class='col-stats' {0}>{1}</td>", styleColor, dip.StatisticaPerc);
-
-                    // COLONNE GIORNI MODIFICABILI
-                    for (int i = 1; i <= giorniMese; i++)
+                    foreach (var ga in gruppiArea)
                     {
-                        string val = dip.TurniMensili[i] ?? ""; // Gestione null
-                        DateTime dt = new DateTime(anno, mese, i);
-                        bool isWeekend = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday);
+                        // RIGA DIVISORE AREA
+                        sb.AppendFormat("<tr class='tr-area-divisore'><td colspan='{0}' style='background-color: #e9ecef; color: #495057; font-weight: bold; padding-left: 25px; border-left: 5px solid #007bff;'>{1}</td></tr>",
+                            giorniMese + 2, ga.Key);
 
-                        // Determina classe CSS per colore sfondo iniziale
-                        string cssClass = isWeekend ? "weekend-col" : "";
-                        if (val == "Q") cssClass += " t-q";
-                        else if (val == "1") cssClass += " t-1";
-                        else if (val == "2") cssClass += " t-2";
-                        else if (val == "RF") cssClass += " t-rf";
-
-                        // --- PUNTO CHIAVE: INPUT INVECE DI TESTO ---
-                        // Name format: "T_{Matricola}_{Giorno}" es: "T_12345_1", "T_12345_2"
-                        // OnChange: Chiama la funzione JS per ricalcolare
-                        string inputHtml = string.Format(
-                            "<input type='text' name='T_{0}_{1}' value='{2}' class='shift-input' maxlength='3' onchange='ricalcolaRiga(this)' autocomplete='off' />",
-                            dip.Matricola.Trim(), // Importante: Matricola pulita per il nome univoco
-                            i,
-                            val
-                        );
-
-                        sb.AppendFormat("<td class='{0}' style='padding:0;'>{1}</td>", cssClass, inputHtml);
+                        foreach (var dip in ga)
+                        {
+                            GeneraRigaDipendente(sb, dip, giorniMese, anno, mese);
+                        }
                     }
-                    sb.Append("</tr>");
+                }
+                else
+                {
+                    // UFFICI NON MACRO (CDR, GIRO, etc.) - Elenco semplice
+                    foreach (var dip in gu)
+                    {
+                        GeneraRigaDipendente(sb, dip, giorniMese, anno, mese);
+                    }
                 }
             }
+
             sb.Append("</tbody></table>");
             ltlTabella.Text = sb.ToString();
+        }
+
+        private void GeneraRigaDipendente(StringBuilder sb, DipendenteTurno dip, int giorniMese, int anno, int mese)
+        {
+            sb.Append("<tr>");
+            // Colonna Nome e dettaglio Gruppo/Area
+            sb.AppendFormat("<td class='col-dipendente' title='{0}'>{1}<span class='badge-q'>Q{2}</span><span class='badge-q'>Gr.{3}</span></td>",
+                dip.Nominativo, dip.Nominativo, dip.QuartinaID, dip.Gruppo);
+
+            // Colonna Statistica %
+            string valPerc = dip.StatisticaPerc.Replace("%", "");
+            string styleColor = (int.TryParse(valPerc, out int p) && p > 60) ? "style='color:red;'" : "style='color:green;'";
+            sb.AppendFormat("<td class='col-stats' {0}>{1}</td>", styleColor, dip.StatisticaPerc);
+
+            for (int i = 1; i <= giorniMese; i++)
+            {
+                string val = (dip.TurniMensili != null && i < dip.TurniMensili.Length) ? dip.TurniMensili[i] : "";
+                DateTime dt = new DateTime(anno, mese, i);
+                bool isWeekend = (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday);
+
+                string cssClass = isWeekend ? "weekend-col" : "";
+                if (val == "Q") cssClass += " t-q";
+                else if (val == "1") cssClass += " t-1";
+                else if (val == "2") cssClass += " t-2";
+                else if (val == "RF") cssClass += " t-rf";
+                else if (val == "RS") cssClass += " t-rs";
+                else if (val == "NL") cssClass += " t-nl";
+
+                string inputHtml = string.Format(
+                    "<input type='text' name='T_{0}_{1}' value='{2}' class='shift-input' maxlength='2' onchange='ricalcolaRiga(this)' autocomplete='off' />",
+                    dip.Matricola.Trim(), i, val);
+
+                sb.AppendFormat("<td class='{0}' style='padding:0;'>{1}</td>", cssClass, inputHtml);
+            }
+            sb.Append("</tr>");
         }
         // --- LOGICA UFFICI NUMEROSI AVANZATA ---
         // Target: 50% Turno 1. Max: 60%. Min 2 dipendenti per turno.
@@ -440,7 +455,7 @@ namespace Uotep
                 int missing1 = Math.Max(0, 2 - count1);
                 int missing2 = Math.Max(0, 2 - count2);
 
-                // 3. ANALISI DEI VINCOLI CONSECUTIVI (Non si discute)
+                // 3. ANALISI DEI VINCOLI CONSECUTIVI 
                 var obbligatiA1 = new List<DipendenteTurno>();
                 var obbligatiA2 = new List<DipendenteTurno>();
                 var flessibili = new List<DipendenteTurno>();
@@ -524,9 +539,9 @@ namespace Uotep
     .ToUpper();
 
             // --- NUOVO: Caricamento Regole RSNL dal Database ---
-            lblError.Text = "⏳ Caricamento regole RSNL..."; 
+           // lblError.Text = "⏳ Caricamento regole RSNL..."; 
             List<RegolaRSNL> regoleRSNL = CaricaRegoleRSNL(anno, mese);
-            lblError.Text = "⏳ esco Caricamento regole RSNL...";
+          // lblError.Text = "⏳ esco Caricamento regole RSNL...";
             // --- PRIMA PASSATA: Creazione e Vincoli Assoluti ---
             foreach (DataRow row in dtDip.Rows)
             {
@@ -537,6 +552,7 @@ namespace Uotep
                 dip.Gruppo = row["gruppo"].ToString();
                 dip.TurniMensili = new string[32];
                 dip.QuartinaID = row["quartina"] != DBNull.Value ? Convert.ToInt32(row["quartina"]) : 0;
+                dip.Area = row["area"].ToString();
                 // LETTURA AUTISTA
                 if (row.Table.Columns.Contains("autista") && row["autista"] != DBNull.Value)
                 {
@@ -555,9 +571,9 @@ namespace Uotep
                 dip.TurniMensili = new string[giorniMese + 1];
 
                 // Applica vincoli base (Q, Sabati, Festivi)
-                lblError.Text = "⏳ Caricamento applica regole q...";
+            //    lblError.Text = "⏳ Caricamento applica regole q...";
                 List<int> giorniQ = ApplicaRegolaQ(dip.TurniMensili, stringaGiorni, giorniMese);
-                lblError.Text = "⏳ esco Caricamento applica regole q...";
+              //  lblError.Text = "⏳ esco Caricamento applica regole q...";
                 ApplicaRegolaSabati(dip.TurniMensili, giorniQ, giorniMese, anno, mese);
                 ApplicaRegolaRSNL(dip, regoleRSNL, giorniMese, anno, mese, meseStringa);
                 ApplicaRegolaFestivi(dip.TurniMensili, giorniMese, anno, mese);
@@ -1168,94 +1184,19 @@ namespace Uotep
             }
         }
         // ---  (Min 2 Dipendenti) ---
+        // --- UFFICI CON AUTISTA (MACRO) ---
         // Priorità: 
         // 1. Presenza Autista (Bloccante)
-        // 2. Minimo 2 Dipendenti per turno (Operativo)
-        // 3. Ratio 50% (Bilanciamento)
+        // 2. Bilanciamento Sabati (Evitare tutti 1 o tutti 2)
+        // 3. Ratio 50% (Bilanciamento generale)
         private void RiempimentoUfficioConAutista(List<DipendenteTurno> gruppo, int giorniMese)
         {
+            // FASE PRELIMINARE: PRE-BILANCIAMENTO PER AREA (La funzione appena modificata)
             EseguiPreBilanciamentoSabati(gruppo, giorniMese);
-            // =========================================================================
-            // FASE 0: PRE-BILANCIAMENTO SABATI (CORREZIONE MACRO)
-            // =========================================================================
-            // Questa fase "rompe" la regola dell'ancoraggio se tutti i dipendenti sono finiti
-            // sullo stesso turno di Sabato, garantendo copertura su entrambi i turni.
 
-            // Troviamo tutti i sabati del mese
-            List<int> sabati = new List<int>();
-
-
-            // Nota: Il metodo attuale accetta (gruppo, giorniMese). Non ho anno/mese qui dentro,
-            // ma posso dedurre i sabati verificando la posizione se avessi la data.
-            // PER SEMPLICITÀ: Scorro tutti i giorni. Se trovo un giorno dove sono TUTTI bloccati
-            // su un solo turno e l'altro è vuoto, intervengo. (Vale per i Sabati e per i festivi ancorati).
-
-            for (int k = 1; k <= giorniMese; k++)
-            {
-                // Analizza chi è già fissato in questo giorno (dalla Fase 1: Q, Sabati Ancorati)
-                var fissatiSu1 = gruppo.Where(d => d.TurniMensili[k] == "1").ToList();
-                var fissatiSu2 = gruppo.Where(d => d.TurniMensili[k] == "2").ToList();
-
-                // Se non c'è nessuno fissato (giorno lavorativo normale), saltiamo (ci penserà il riempimento dopo)
-                if (fissatiSu1.Count == 0 && fissatiSu2.Count == 0) continue;
-
-                // Se siamo equilibrati (almeno uno di qua e uno di là), saltiamo.
-                if (fissatiSu1.Count > 0 && fissatiSu2.Count > 0) continue;
-
-                // --- CASO CRITICO: TUTTI SU 1 ---
-                if (fissatiSu1.Count > 1 && fissatiSu2.Count == 0)
-                {
-                    // Dobbiamo spostarne alcuni sul 2. Quanti? Metà del gruppo o almeno 1/2.
-                    int daSpostare = Math.Max(1, fissatiSu1.Count / 2);
-
-                    // CHI SPOSTIAMO? 
-                    // 1. Priorità: Chi NON rompe un consecutivo (se i giorni prima sono già fissati, cosa rara ma possibile)
-                    // 2. Priorità: Autista (se serve garantire autista anche sul turno 2)
-
-                    // Ordiniamo: Prima gli Autisti (per coprire il turno 2 che è vuoto), poi chi ha più bisogno di turno 2
-                    var candidati = fissatiSu1
-                        .OrderByDescending(d => d.IsAutista) // Mette autisti in cima
-                        .ThenByDescending(d => GetPercTurno1Attuale(d.TurniMensili, k)) // Mette chi ha tanti "1"
-                        .ToList();
-
-                    for (int x = 0; x < daSpostare; x++)
-                    {
-                        // Verifica di sicurezza (opzionale): non spostare se il giorno prima era 2 e l'altro prima 2.
-                        // Ma essendo sabato, spesso venerdì è vuoto (null), quindi è sicuro.
-                        candidati[x].TurniMensili[k] = "2";
-
-                        // NOTA: Poiché l'utente chiede di forzare anche i successivi, l'algoritmo di riempimento
-                        // che gira DOPO (Fase 4) si adatterà a questo nuovo valore "2" per calcolare domenica/lunedì.
-                        // Per i precedenti (Venerdì), essendo null, verranno riempiti coerentemente.
-                    }
-                }
-
-                // --- CASO CRITICO: TUTTI SU 2 ---
-                else if (fissatiSu2.Count > 1 && fissatiSu1.Count == 0)
-                {
-                    int daSpostare = Math.Max(1, fissatiSu2.Count / 2);
-
-                    var candidati = fissatiSu2
-                        .OrderByDescending(d => d.IsAutista) // Serve autista sull'1?
-                        .ThenBy(d => GetPercTurno1Attuale(d.TurniMensili, k)) // Mette chi ha pochi "1"
-                        .ToList();
-
-                    for (int x = 0; x < daSpostare; x++)
-                    {
-                        candidati[x].TurniMensili[k] = "1";
-                    }
-                }
-            }
-
-
-            // =========================================================================
             // FASE 1-4: RIEMPIMENTO GIORNALIERO 
-            // =========================================================================
             for (int i = 1; i <= giorniMese; i++)
             {
-                // ... (Copia qui tutto il codice "Fase 1: Fotografia" fino alla fine del metodo
-                // che ti ho dato nella risposta precedente "Codice Corretto e Indistruttibile") ...
-
                 // 1. FOTOGRAFIA
                 int count1 = 0;
                 int count2 = 0;
@@ -1271,7 +1212,7 @@ namespace Uotep
                     else if (t == null) { liberi.Add(dip); }
                 }
 
-                // 2. GESTIONE CONSECUTIVI
+                // 2. CONSECUTIVI
                 var poolLavoro = new List<DipendenteTurno>();
                 foreach (var dip in liberi)
                 {
@@ -1311,7 +1252,7 @@ namespace Uotep
                 }
                 poolLavoro.AddRange(autistiDisponibili);
 
-                // 4. CICLO ASSEGNAZIONE DEFINITIVO
+                // 4. CICLO ASSEGNAZIONE DEFINITIVO (INTELLIGENZA PER AREA)
                 var coda = poolLavoro.Select(d => new { Dip = d, Perc = GetPercTurno1Attuale(d.TurniMensili, i), IsDriver = d.IsAutista }).ToList();
 
                 while (coda.Count > 0)
@@ -1326,11 +1267,24 @@ namespace Uotep
                     else if (!canGo1 && canGo2) decisione = "2";
                     else
                     {
-                        if (count1 < 2 && count2 >= 2) decisione = "1";
-                        else if (count2 < 2 && count1 >= 2) decisione = "2";
-                        else if (count1 > count2) decisione = "2";
-                        else if (count2 > count1) decisione = "1";
-                        else decisione = (item.Perc < 50.0) ? "1" : "2";
+                        // CONTROLLO BILANCIAMENTO AREA (Nuova Logica)
+                        // Prima di guardare i numeri totali dell'ufficio, guardiamo i numeri della mia AREA (UOTE o UOTP)
+                        int colleghiAreaSu1 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "1");
+                        int colleghiAreaSu2 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "2");
+
+                        // Se la mia area è sbilanciata verso 1, io vado su 2
+                        if (colleghiAreaSu1 > colleghiAreaSu2 + 1) decisione = "2";
+                        // Se la mia area è sbilanciata verso 2, io vado su 1
+                        else if (colleghiAreaSu2 > colleghiAreaSu1 + 1) decisione = "1";
+                        else
+                        {
+                            // Se l'area è ok, guardiamo il totale dell'Ufficio Macro
+                            if (count1 < 2 && count2 >= 2) decisione = "1";
+                            else if (count2 < 2 && count1 >= 2) decisione = "2";
+                            else if (count1 > count2) decisione = "2";
+                            else if (count2 > count1) decisione = "1";
+                            else decisione = (item.Perc < 50.0) ? "1" : "2";
+                        }
                     }
 
                     item.Dip.TurniMensili[i] = decisione;
@@ -1338,59 +1292,176 @@ namespace Uotep
                     else if (decisione == "2") { count2++; if (item.IsDriver) hasAutista2 = true; }
                     coda.Remove(item);
                 }
+                EseguiCorrezioneMinimoDuePerArea(gruppo, i);
             }
         }
 
+        // --- METODO FONDAMENTALE PER ROMPERE I BLOCCHI "TUTTI SU 1" ---
         private void EseguiPreBilanciamentoSabati(List<DipendenteTurno> gruppo, int giorniMese)
         {
-            // Scorre tutti i giorni (inclusi i sabati ancorati dalla Fase 1)
-            for (int k = 1; k <= giorniMese; k++)
+            // RAGGRUPPA PER AREA (UOTE, UOTP, ecc...)
+            // Se Area è vuota, raggruppa sotto "NESSUNA_AREA"
+            var aree = gruppo.GroupBy(d => d.Area ?? "NESSUNA_AREA").ToList();
+
+            foreach (var areaGroup in aree)
             {
-                // 1. Conta chi è GIA' fissato su 1 e 2
-                var fissatiSu1 = gruppo.Where(d => d.TurniMensili[k] == "1").ToList();
-                var fissatiSu2 = gruppo.Where(d => d.TurniMensili[k] == "2").ToList();
+                var dipendentiArea = areaGroup.ToList();
 
-                // Se non c'è nessuno fissato (giorno vuoto) o se c'è già equilibrio, salta.
-                if ((fissatiSu1.Count == 0 && fissatiSu2.Count == 0) ||
-                    (fissatiSu1.Count > 0 && fissatiSu2.Count > 0))
+                // Se c'è un solo dipendente nell'area, non possiamo bilanciare nulla
+                if (dipendentiArea.Count < 2) continue;
+
+                // SCORRI TUTTI I GIORNI (Sabati e festivi ancorati)
+                for (int k = 1; k <= giorniMese; k++)
                 {
-                    continue;
+                    // Analizza lo sbilanciamento INTERNO ALL'AREA
+                    var fissatiSu1 = dipendentiArea.Where(d => d.TurniMensili[k] == "1").ToList();
+                    var fissatiSu2 = dipendentiArea.Where(d => d.TurniMensili[k] == "2").ToList();
+
+                    // Saltiamo se il giorno è vuoto o se è già misto
+                    if ((fissatiSu1.Count == 0 && fissatiSu2.Count == 0) ||
+                        (fissatiSu1.Count > 0 && fissatiSu2.Count > 0))
+                    {
+                        continue;
+                    }
+
+                    // --- CASO: TUTTA L'AREA SU 1 ---
+                    if (fissatiSu1.Count > 1 && fissatiSu2.Count == 0)
+                    {
+                        // Spostiamo la metà esatta dei dipendenti di quest'area
+                        int daSpostare = Math.Max(1, fissatiSu1.Count / 2);
+
+                        var candidati = fissatiSu1
+                            .OrderByDescending(d => d.IsAutista) // Priorità spostamento Autisti
+                            .ThenByDescending(d => GetPercTurno1Attuale(d.TurniMensili, k)) // Poi chi ha troppi "1"
+                            .ToList();
+
+                        for (int x = 0; x < daSpostare; x++)
+                        {
+                            candidati[x].TurniMensili[k] = "2"; // FORZA SPOSTAMENTO
+                        }
+                    }
+
+                    // --- CASO: TUTTA L'AREA SU 2 ---
+                    else if (fissatiSu2.Count > 1 && fissatiSu1.Count == 0)
+                    {
+                        int daSpostare = Math.Max(1, fissatiSu2.Count / 2);
+
+                        var candidati = fissatiSu2
+                            .OrderByDescending(d => d.IsAutista)
+                            .ThenBy(d => GetPercTurno1Attuale(d.TurniMensili, k))
+                            .ToList();
+
+                        for (int x = 0; x < daSpostare; x++)
+                        {
+                            candidati[x].TurniMensili[k] = "1"; // FORZA SPOSTAMENTO
+                        }
+                    }
                 }
+            }
+        }
+        private void EseguiCorrezioneMinimoDuePerArea(List<DipendenteTurno> gruppo, int giornoIdx)
+        {
+            // Analizziamo area per area (UOTE, UOTP)
+            var aree = gruppo.GroupBy(d => d.Area ?? "NESSUNA").ToList();
 
-                // --- CASO: TUTTI SU 1 ---
-                // Se ci sono più di 2 persone e sono tutte sull'1...
-                if (fissatiSu1.Count > 1 && fissatiSu2.Count == 0)
+            foreach (var areaGroup in aree)
+            {
+                var dipendentiArea = areaGroup.ToList();
+
+                // Identifichiamo chi è finito su turno 1 e turno 2 OGGI
+                var su1 = dipendentiArea.Where(d => d.TurniMensili[giornoIdx] == "1").ToList();
+                var su2 = dipendentiArea.Where(d => d.TurniMensili[giornoIdx] == "2").ToList();
+
+                // CASO A: C'è SOLO 1 persona sul Turno 1, e abbiamo risorse sul Turno 2 da rubare
+                if (su1.Count == 1 && su2.Count > 1)
                 {
-                    int daSpostare = Math.Max(1, fissatiSu1.Count / 2); // Sposta il 50%
+                    var solitario = su1.First();
 
-                    // Scegliamo chi spostare:
-                    // 1. Priorità Autisti (se ce ne sono, per coprire il turno 2)
-                    // 2. Chi ha più % di Turno 1 (così gli facciamo un favore dandogli il 2)
-                    var candidati = fissatiSu1
-                        .OrderByDescending(d => d.IsAutista)
-                        .ThenByDescending(d => GetPercTurno1Attuale(d.TurniMensili, k))
+                    // Dobbiamo spostare qualcuno da 'su2' a 'su1'.
+                    // REGOLA COPPIA: La coppia finale (solitario + nuovo) deve avere ALMENO un autista.
+                    // QUINDI: O il solitario è autista, o il candidato che sposto DEVE essere autista.
+
+                    // Cerchiamo candidati validi nel turno 2
+                    var candidati = su2
+                        .Where(c => (solitario.IsAutista || c.IsAutista)) // Soddisfa la regola coppia
+                        .OrderBy(c => c.IsAutista) // Preferiamo non spostare autisti se non necessario, ma va bene tutto
+                        .ThenBy(c => GetPercTurno1Attuale(c.TurniMensili, giornoIdx)) // Chi ha fatto pochi 1
                         .ToList();
 
-                    for (int x = 0; x < daSpostare; x++)
+                    if (candidati.Count > 0)
                     {
-                        candidati[x].TurniMensili[k] = "2"; // Forza spostamento
+                        var sposto = candidati.First();
+                        sposto.TurniMensili[giornoIdx] = "1"; // SPOSTAMENTO
+
+                        // CORREZIONE GIORNO PRECEDENTE (fondamentale!)
+                        // Se sposto uno da 2 a 1, devo controllare che ieri non avesse 2.
+                        CorreggiTurnoPrecedente(sposto, giornoIdx, "1");
                     }
                 }
 
-                // --- CASO: TUTTI SU 2 ---
-                else if (fissatiSu2.Count > 1 && fissatiSu1.Count == 0)
+                // CASO B: C'è SOLO 1 persona sul Turno 2, e abbiamo risorse sul Turno 1
+                else if (su2.Count == 1 && su1.Count > 1)
                 {
-                    int daSpostare = Math.Max(1, fissatiSu2.Count / 2);
+                    var solitario = su2.First();
 
-                    var candidati = fissatiSu2
-                        .OrderByDescending(d => d.IsAutista)
-                        .ThenBy(d => GetPercTurno1Attuale(d.TurniMensili, k)) // Chi ha pochi "1"
+                    // Cerchiamo candidati nel turno 1
+                    var candidati = su1
+                        .Where(c => (solitario.IsAutista || c.IsAutista)) // Regola coppia
+                        .OrderBy(c => c.IsAutista)
+                        .ThenByDescending(c => GetPercTurno1Attuale(c.TurniMensili, giornoIdx))
                         .ToList();
 
-                    for (int x = 0; x < daSpostare; x++)
+                    if (candidati.Count > 0)
                     {
-                        candidati[x].TurniMensili[k] = "1"; // Forza spostamento
+                        var sposto = candidati.First();
+                        sposto.TurniMensili[giornoIdx] = "2"; // SPOSTAMENTO
+
+                        // Correggere il precedente da 1 a 2 solitamente non crea problemi (1->2 è lecito),
+                        // ma per sicurezza potremmo controllare non si creino blocchi strani.
+                        // In generale 1->2 ok. 
                     }
+                }
+
+                // CASO SPECIALE: 1 su Turno 1 e 1 su Turno 2 (Totale 2 persone)
+                // Se non formano coppia valida, o se è meglio stare insieme...
+                else if (su1.Count == 1 && su2.Count == 1)
+                {
+                    var p1 = su1.First();
+                    var p2 = su2.First();
+
+                    // Se insieme formano una coppia con autista (almeno uno dei due lo è),
+                    // conviene metterli entrambi sullo stesso turno (es. 1) per non lasciarli soli?
+                    // L'utente chiede: "Non puoi fare coppia se uno non è autista".
+                    // Se li mettiamo insieme devono essere validi.
+
+                    if (p1.IsAutista || p2.IsAutista)
+                    {
+                        // Li uniamo sul turno 1 (standard)
+                        p2.TurniMensili[giornoIdx] = "1";
+                        CorreggiTurnoPrecedente(p2, giornoIdx, "1");
+                    }
+                    // Se nessuno è autista, non possiamo fare coppia.
+                    // Li lasciamo separati? O mettiamo RF?
+                    // Qui dipende dalle regole estreme. Per ora lasciamo invariato se non hanno autista.
+                }
+            }
+        }
+
+        // Funzione ricorsiva per sistemare il passato ed evitare 2->1
+        private void CorreggiTurnoPrecedente(DipendenteTurno dip, int giornoOggi, string nuovoTurnoOggi)
+        {
+            // Se oggi ho messo "1", controllo ieri
+            if (nuovoTurnoOggi == "1")
+            {
+                int ieri = giornoOggi - 1;
+                if (ieri < 1) return;
+
+                // Se ieri era "2", è illegale fare 2->1. Devo cambiare ieri in "1".
+                if (dip.TurniMensili[ieri] == "2")
+                {
+                    dip.TurniMensili[ieri] = "1";
+                    // E siccome ho cambiato ieri in 1, devo controllare l'altro ieri! (Ricorsione)
+                    CorreggiTurnoPrecedente(dip, ieri, "1");
                 }
             }
         }
@@ -1588,7 +1659,7 @@ namespace Uotep
             }
             else
             {
-                lblError.Text = "entrato in errore";
+               // lblError.Text = "entrato in errore";
                 errorMessage.InnerText = @"⚠️ Nessun file calendario trovato.";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
             }

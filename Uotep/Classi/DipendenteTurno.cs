@@ -18,5 +18,6 @@ namespace Uotep.Classi
         public string[] TurniMensili { get; set; } // Array [32] (indice 1-31)
         public string StatisticaPerc { get; set; }
         public string Gruppo { get; set; }
+        public string Area { get; set; }
     }
 }

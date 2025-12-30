@@ -519,6 +519,7 @@
                                 <asp:ListItem Text=""> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>
                                 <asp:ListItem Text="CDR"> </asp:ListItem>
+                                <asp:ListItem Text="FURERIA"> </asp:ListItem>
                                 <asp:ListItem Text="MA1"> </asp:ListItem>
                                 <asp:ListItem Text="MA2"> </asp:ListItem>
                                 <asp:ListItem Text="MA3"> </asp:ListItem>
