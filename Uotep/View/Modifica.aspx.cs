@@ -959,8 +959,7 @@ namespace Uotep
                     decr.decretato = txtDecretato.Text;
                     decr.nota = txtNotaDecretazione.Text;
                     Boolean resp = mn.UpdDecretazione(decr);
-                    // Chiudi il popup
-                    // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                    Decretazione_Click(sender, e);
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
 
                 }

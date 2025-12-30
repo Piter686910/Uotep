@@ -1181,7 +1181,8 @@
                                 <div class="form-group">
                                     <!-- GridView nel popup -->
                                     <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit"
-                                        OnRowDataBound="GVDecretazione_RowDataBound" OnRowCommand="GVDecretazione_RowCommand" AllowPaging="true" PageSize="5" OnPageIndexChanging="GVDecretazione_PageIndexChanging">
+                                        OnRowDataBound="GVDecretazione_RowDataBound" OnRowCommand="GVDecretazione_RowCommand" AllowPaging="true" PageSize="5" OnPageIndexChanging="GVDecretazione_PageIndexChanging"
+                                        AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                                         <Columns>
                                             <asp:BoundField DataField="decr_id" HeaderText="ID" Visible="false" />
                                             <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
