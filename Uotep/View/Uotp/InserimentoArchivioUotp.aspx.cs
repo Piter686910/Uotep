@@ -211,8 +211,10 @@ namespace Uotep
 
 
                 if (HfStato.Value == "M")
-
+                {
                     ins = mn.UpdPraticaArchivioUotp(arch);
+                    
+                }
                 else
                     ins = mn.SavePraticaArchivioUotp(arch);
 
@@ -277,6 +279,7 @@ namespace Uotep
             txtDestinatarioTp.Text = String.Empty;
             txtNotaTp.Text = String.Empty;
             txtOggettoTp.Text = String.Empty;
+            txtOggettoTp2.Text = String.Empty;
             txtDestinatarioTp.Text = String.Empty;
             txtCognomeTp.Text = String.Empty;
             txtBuEdificioTp.Text = string.Empty;
