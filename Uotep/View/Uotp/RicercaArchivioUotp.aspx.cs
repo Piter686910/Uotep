@@ -430,8 +430,12 @@ namespace Uotep
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
-            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
-            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
+            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
+
+            txtOggettoTp2.Text =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp2.ToolTip =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
+
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();

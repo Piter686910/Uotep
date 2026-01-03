@@ -3398,7 +3398,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_relazione) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_relazione='true'";
+            sql = "SELECT count(rapp_relazione) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_relazione='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3445,7 +3445,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_annotazionePG) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_annotazionePG='true'";
+            sql = "SELECT count(rapp_annotazionePG) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_annotazionePG='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3492,7 +3492,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_notifica) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_notifica='true'";
+            sql = "SELECT count(rapp_notifica) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_notifica='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3539,7 +3539,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_esito_delega) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_esito_delega='true'";
+            sql = "SELECT count(rapp_esito_delega) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_esito_delega='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3586,7 +3586,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT SUM(TRY_CAST(rapp_numEsposti AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "'";
+            sql = "SELECT SUM(TRY_CAST(rapp_numEsposti AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3681,7 +3681,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contestaz_amm) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contestaz_amm='true'";
+            sql = "SELECT count(rapp_contestaz_amm) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contestaz_amm='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3728,7 +3728,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_accert_avvenuto) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_accert_avvenuto='true'";
+            sql = "SELECT count(rapp_accert_avvenuto) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_accert_avvenuto='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3775,7 +3775,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_controlliScia) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_controlliScia='true'";
+            sql = "SELECT count(rapp_controlliScia) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_controlliScia='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3822,7 +3822,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_verbale_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_verbale_seq='true'";
+            sql = "SELECT count(rapp_verbale_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_verbale_seq='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3869,7 +3869,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_disseq_temp_Riapp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Riapp='true'";
+            sql = "SELECT count(rapp_disseq_temp_Riapp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Riapp='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3916,7 +3916,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_convalida) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_convalida='true'";
+            sql = "SELECT count(rapp_convalida) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_convalida='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3963,7 +3963,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_violazione_sigilli) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_violazione_sigilli='true'";
+            sql = "SELECT count(rapp_violazione_sigilli) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_violazione_sigilli='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4010,7 +4010,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_disseq_temp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp='true'";
+            sql = "SELECT count(rapp_disseq_temp) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4057,7 +4057,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_disseq_def) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_def='true'";
+            sql = "SELECT count(rapp_disseq_def) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_disseq_def='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4104,7 +4104,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_disseq_temp_Rim) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Rim='true'";
+            sql = "SELECT count(rapp_disseq_temp_Rim) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_disseq_temp_Rim='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4151,7 +4151,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_violazioneBeniCult) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_violazioneBeniCult='true'";
+            sql = "SELECT count(rapp_violazioneBeniCult) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_violazioneBeniCult='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4192,7 +4192,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contr_cantieri_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_cantieri_seq='true'";
+            sql = "SELECT count(rapp_contr_cantieri_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_cantieri_seq='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4274,7 +4274,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_sgomberi_abus) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_abus='true'";
+            sql = "SELECT count(rapp_sgomberi_abus) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_abus='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4315,7 +4315,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_sgomberi_immobili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_immobili='true'";
+            sql = "SELECT count(rapp_sgomberi_immobili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_sgomberi_immobili='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4356,7 +4356,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_notifica_no_ag) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_notifica_no_ag='true'";
+            sql = "SELECT count(rapp_notifica_no_ag) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_notifica_no_ag='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4397,7 +4397,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contr_occ_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_abitativo='true'";
+            sql = "SELECT count(rapp_contr_occ_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_abitativo='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4438,7 +4438,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contr_occ_no_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_no_abitativo='true'";
+            sql = "SELECT count(rapp_contr_occ_no_abitativo) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_occ_no_abitativo='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4484,7 +4484,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contr_lavori_edili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_contr_lavori_edili='true'";
+            sql = "SELECT count(rapp_contr_lavori_edili) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_lavori_edili='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4525,7 +4525,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_cnr) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<'" + @dataFine.ToShortDateString() + "' and rapp_cnr='true'";
+            sql = "SELECT count(rapp_cnr) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_cnr='true'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -5272,8 +5272,8 @@ namespace Uotep.Classi
             sql_pratica = "update Archiviotp set destinatario1 = '" + @arch.arch_destinatario.Replace("'", "''") + "', cognome = '" + @arch.arch_cognome.Replace("'", "''") + "', codice ='" + @arch.arch_codice.Replace("'", "''") +
                                  "', via = '" + @arch.arch_indirizzo.Replace("'", "''") + "', codice_edificio = '" + @arch.arch_edificio.Replace("'", "''") + "', note = '" + @arch.arch_note.Replace("'", "''") +
                                  "', data1 = '" + @arch.arch_dataInserimento.Replace("'", "''") +
-                                 "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") + "'" +
-
+                                 "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") +
+                                 "', oggetto2 = '" + @arch.arch_oggetto2.Replace("'", "''") + "'" +
                                  " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {

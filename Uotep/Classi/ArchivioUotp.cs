@@ -24,6 +24,7 @@ namespace Uotep.Classi
         public string arch_cartellina = string.Empty;
         public string arch_note = string.Empty;
         public string arch_oggetto = string.Empty;
+        public string arch_oggetto2 = string.Empty;
         public string arch_quartiere = string.Empty;
         public string arch_destinatario = string.Empty;
         public string arch_indirizzo = string.Empty;

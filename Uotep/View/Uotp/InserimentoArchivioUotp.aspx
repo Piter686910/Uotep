@@ -251,20 +251,21 @@
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
                                     <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" />
                                 </div>
-
-                            </div>
-                            <div class="col-md-12">
                                 <div class="form-check mb-2">
                                     <label for="txtNotaTp">Nota</label>
                                     <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="3" Style="margin-left: -10px; width: 100%; max-width: 800px;" />
                                 </div>
-
                             </div>
                             <div class="col-md-12">
                                 <div class="form-check mb-2">
                                     <label for="txtOggettoTp">Oggetto</label>
                                     <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" />
-
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check mb-2">
+                                    <label for="txtOggettoTp2">Oggetto 2</label>
+                                    <asp:TextBox ID="txtOggettoTp2" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" />
                                 </div>
                             </div>
                         </div>
@@ -282,12 +283,11 @@
             <div class="col-12 text-center">
                 <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
                 <%--<asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />--%>
-
             </div>
         </div>
     </div>
 
-   
+
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">

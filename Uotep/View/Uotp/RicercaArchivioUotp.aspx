@@ -334,9 +334,6 @@
                                     <label for="TxtIndirizzoTp">Indirizzo</label>
                                     <asp:TextBox ID="TxtIndirizzoTp" runat="server" CssClass="form-control" Enabled="false" />
                                 </div>
-
-                            </div>
-                            <div class="col-md-12">
                                 <div class="form-check mb-2">
                                     <label for="txtNotaTp">Nota</label>
                                     <asp:TextBox ID="txtNotaTp" runat="server" CssClass="form-control" Enabled="false" />
@@ -346,6 +343,13 @@
                                 <div class="form-check mb-2">
                                     <label for="txtOggettoTp">Oggetto</label>
                                     <asp:TextBox ID="txtOggettoTp" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" Enabled="false" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-check mb-2">
+                                    <label for="txtOggettoTp2">Oggetto 2</label>
+                                    <asp:TextBox ID="txtOggettoTp2" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="10" Style="margin-left: -10px; width: 100%; max-width: 800px;" Enabled="false" />
 
                                 </div>
                             </div>

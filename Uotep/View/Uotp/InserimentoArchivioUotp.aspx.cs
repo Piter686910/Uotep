@@ -154,8 +154,10 @@ namespace Uotep
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
-            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
-            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
+            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
+            txtOggettoTp2.Text =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp2.ToolTip = arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtBuEdificioTp.Text = arc.Rows[0].ItemArray[37].ToString().ToUpper();
@@ -197,6 +199,7 @@ namespace Uotep
                 // arch.arch_dataArrivo = txtDataProtGen.Text;
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
                 arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
+                arch.arch_oggetto2 = txtOggettoTp2.Text.ToUpper();
                 arch.arch_destinatario = txtDestinatarioTp.Text.ToUpper();
                 // arch.arch_ProtGen = txtProGenTp.Text;
                 // arch.arch_Protocollo_Procura = txtDataProtProc.Text;
