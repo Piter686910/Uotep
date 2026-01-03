@@ -199,7 +199,12 @@ namespace Uotep
                 // arch.arch_dataArrivo = txtDataProtGen.Text;
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
                 arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
-                arch.arch_oggetto2 = txtOggettoTp2.Text.ToUpper();
+                if (!String.IsNullOrEmpty(txtOggettoTp2.Text))
+                
+                    arch.arch_oggetto2 = txtOggettoTp2.Text.ToUpper();
+                else
+                    arch.arch_oggetto2 = string.Empty;
+
                 arch.arch_destinatario = txtDestinatarioTp.Text.ToUpper();
                 // arch.arch_ProtGen = txtProGenTp.Text;
                 // arch.arch_Protocollo_Procura = txtDataProtProc.Text;

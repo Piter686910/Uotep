@@ -54,6 +54,11 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
+
+
+        .larghezzaText {
+            width: 80px;
+        }
     </style>
 
     <div class="jumbotron">
@@ -67,10 +72,10 @@
             <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
                 <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Enabled="false" />
             </div>
-             <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
-                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
-                    <asp:Button ID="btCerca" Text="Cerca" runat="server" OnClick="btCerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                    <asp:Button ID="btStampa" Text="Stampa" runat="server" OnClick="btStampa_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+            <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
+                <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                <asp:Button ID="btCerca" Text="Cerca" runat="server" OnClick="btCerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                <asp:Button ID="btStampa" Text="Stampa" runat="server" OnClick="btStampa_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
 
 
 
@@ -104,7 +109,7 @@
                             <asp:TextBox ID="txtTarga" runat="server" CssClass="form-control" Font-Bold="true" />
                         </div>
                         <div class="form-group mb-3">
-                            <label for="txtStan">Data</label>
+                            <label for="TxtData">Data</label>
                             <asp:TextBox ID="TxtData" runat="server" CssClass="form-control" />
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtData" ValidationGroup="bt" ErrorMessage="Inserire data" ForeColor="Red">
                             </asp:RequiredFieldValidator>
@@ -219,7 +224,7 @@
 
             <asp:HiddenField ID="Hfuser" runat="server" />
             <asp:HiddenField ID="HfFiltroData" runat="server" />
-
+            <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
         </div>
 
@@ -233,7 +238,20 @@
             AlternatingRowStyle-CssClass="GridViewAlternatingRow">
             <Columns>
                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                <asp:BoundField DataField="sigla" HeaderText="Sigla" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                <%--<asp:BoundField DataField="sigla" HeaderText="Sigla" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />--%>
+
+                <asp:TemplateField HeaderText="Sigla" ItemStyle-Width="50px">
+                    <HeaderTemplate>
+                        sigla
+                          <br />
+                        <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" CssClass="larghezzaText"></asp:TextBox>
+                        Filtro
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <%# Eval("sigla") %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
                 <asp:BoundField DataField="targa" HeaderText="Targa" ItemStyle-Width="40px" />
                 <asp:BoundField DataField="stan" HeaderText="STAN" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
 
@@ -241,7 +259,7 @@
                     <HeaderTemplate>
                         data
                           <br />
-                        <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True"></asp:TextBox>
+                        <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True" CssClass="larghezzaText"></asp:TextBox>
                         Filtro
                     </HeaderTemplate>
                     <ItemTemplate>

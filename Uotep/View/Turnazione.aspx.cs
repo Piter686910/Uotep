@@ -56,11 +56,11 @@ namespace Uotep
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         String FileCalendarioRSNL = ConfigurationManager.AppSettings["CartellaFureria"];
-        bool isEditMode = false;
+        //bool isEditMode = false;
         // Dizionario per annotare DOVE inserire le intestazioni.
         // La chiave (int) è l'indice della riga, il valore (string) è il nome dell'ufficio.
         private Dictionary<int, string> _headerRowsToInsert = new Dictionary<int, string>();
-        private string _currentUfficio = null;
+       // private string _currentUfficio = null;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -115,73 +115,7 @@ namespace Uotep
                 throw new FormatException($"La stringa '{inputStringa}' non è un formato numerico valido per float.");
             }
         }
-        //protected void Salva_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        int giorniMese = 0;
-        //        int anno = Convert.ToInt32(txtAnno.Text);
-        //        int mese = System.Convert.ToInt32(ddlMese.SelectedValue);
-        //        // 1. RICALCOLA I TURNI 
-        //        // (È necessario perché in WebForms lo stato si perde tra i postback, 
-        //        // a meno che tu non abbia salvato la "listaDipendenti" in Session)
-        //        Manager mn = new Manager();
-        //        DataTable dtDipendenti = mn.getListDipendenti(); // dipendenti
-        //        DataTable dtQuartine = mn.getListQuartina(anno); // lista quartine
-        //        var mappaGiorniQuartina = CostruisciMappaQuartine(dtQuartine, mese);
-        //        List<DipendenteTurno> listaDaSalvare = new List<DipendenteTurno>();
-
-
-        //        foreach (DataRow row in dtDipendenti.Rows)
-        //        {
-        //            DipendenteTurno dip = new DipendenteTurno();
-        //            dip.Matricola = row["matricola"].ToString().Trim();
-        //            dip.Nominativo = row["nominativo"].ToString().Trim();
-        //            dip.Ufficio = row["ufficio"].ToString().Trim();
-
-        //            // Inizializza array vuoto
-        //            dip.TurniMensili = new string[32];
-
-        //            // 2. LEGGI LE MODIFICHE DAL FORM HTML
-        //            giorniMese = DateTime.DaysInMonth(anno, mese);
-        //            for (int i = 1; i <= giorniMese; i++)
-        //            {
-        //                // Ricostruisco la chiave "name" che ho generato nell'HTML
-        //                // es: "T_12345_1"
-        //                string key = $"T_{dip.Matricola}_{i}";
-
-        //                // Leggo il valore inviato dal browser
-        //                string valUtente = Request.Form[key];
-
-        //                if (!string.IsNullOrEmpty(valUtente))
-        //                {
-        //                    dip.TurniMensili[i] = valUtente.ToUpper().Trim();
-        //                }
-        //            }
-
-        //            listaDaSalvare.Add(dip);
-        //        }
-        //        //}
-        //        // 2. ESEGUE IL SALVATAGGIO
-        //        Boolean resp = mn.SalvaTurnoMensileN(listaDaSalvare, anno, ddlMese.SelectedItem.Text, dtDipendenti);
-
-        //        lblError.Text = "✅ Salvataggio completato con successo!";
-        //        lblError.ForeColor = System.Drawing.Color.Green;
-        //        RecalcolaPercentuali(listaDaSalvare, giorniMese);
-        //        GeneraHtml(listaDaSalvare, anno, mese);
-        //        Session.Remove("ListaDipendentiTurni");
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
-        //        Response.Redirect(url + ex.Message);
-
-        //        Session["MessaggioErrore"] = ex.Message;
-        //        Session["PaginaChiamante"] = "~/View/GestioneAuto.aspx";
-        //    }
-        //}
-        // Piccolo helper per aggiornare le percentuali nel model prima di ridisegnare la tabella dopo il salvataggio
+       
         private void RecalcolaPercentuali(List<DipendenteTurno> lista, int giorniMese)
         {
             foreach (var dip in lista)
@@ -401,15 +335,16 @@ namespace Uotep
         private void GeneraRigaDipendente(StringBuilder sb, DipendenteTurno dip, int giorniMese, int anno, int mese)
         {
             sb.Append("<tr>");
-            // Colonna Nome e dettaglio Gruppo/Area
+            // NOME
             sb.AppendFormat("<td class='col-dipendente' title='{0}'>{1}<span class='badge-q'>Q{2}</span><span class='badge-q'>Gr.{3}</span></td>",
                 dip.Nominativo, dip.Nominativo, dip.QuartinaID, dip.Gruppo);
 
-            // Colonna Statistica %
-            string valPerc = dip.StatisticaPerc.Replace("%", "");
+            // STATISTICA
+            string valPerc = string.IsNullOrEmpty(dip.StatisticaPerc) ? "0" : dip.StatisticaPerc.Replace("%", "");
             string styleColor = (int.TryParse(valPerc, out int p) && p > 60) ? "style='color:red;'" : "style='color:green;'";
             sb.AppendFormat("<td class='col-stats' {0}>{1}</td>", styleColor, dip.StatisticaPerc);
 
+            // CELLE GIORNI
             for (int i = 1; i <= giorniMese; i++)
             {
                 string val = (dip.TurniMensili != null && i < dip.TurniMensili.Length) ? dip.TurniMensili[i] : "";
@@ -424,11 +359,32 @@ namespace Uotep
                 else if (val == "RS") cssClass += " t-rs";
                 else if (val == "NL") cssClass += " t-nl";
 
-                string inputHtml = string.Format(
-                    "<input type='text' name='T_{0}_{1}' value='{2}' class='shift-input' maxlength='2' onchange='ricalcolaRiga(this)' autocomplete='off' />",
-                    dip.Matricola.Trim(), i, val);
+                // Dati puliti
+                string matricolaClean = dip.Matricola.Trim();
+                string areaStr = string.IsNullOrEmpty(dip.Area) ? "NESSUNA" : dip.Area.Trim().ToUpper();
+                string isAutistaStr = dip.IsAutista.ToString().ToLower(); // "true" o "false"
+                string ufficioStr = dip.Ufficio.Trim().ToUpper();
+                string inputId = $"T_{matricolaClean}_{i}";
 
-                sb.AppendFormat("<td class='{0}' style='padding:0;'>{1}</td>", cssClass, inputHtml);
+                // COSTRUZIONE INPUT MANUALE E PULITA
+                // Nota come onchange chiama window.GestisciCambioTurnoJS
+                sb.AppendFormat("<td class='{0}' style='padding:0;'>", cssClass);
+                sb.Append("<input type='text' ");
+                sb.AppendFormat("id='{0}' name='{0}' value='{1}' ", inputId, val);
+                sb.Append("class='shift-input' maxlength='4' autocomplete='off' ");
+
+                // Data Attributes
+                sb.AppendFormat("data-matricola='{0}' ", matricolaClean);
+                sb.AppendFormat("data-ufficio='{0}' ", ufficioStr);
+                sb.AppendFormat("data-area='{0}' ", areaStr);
+                sb.AppendFormat("data-autista='{0}' ", isAutistaStr);
+                sb.AppendFormat("data-giorno='{0}' ", i);
+
+                // Evento JS (Fondamentale)
+                sb.Append("onchange='window.GestisciCambioTurnoJS(this)' ");
+
+                sb.Append("/>");
+                sb.Append("</td>");
             }
             sb.Append("</tr>");
         }
@@ -1191,28 +1147,78 @@ namespace Uotep
         // 3. Ratio 50% (Bilanciamento generale)
         private void RiempimentoUfficioConAutista(List<DipendenteTurno> gruppo, int giorniMese)
         {
-            // FASE PRELIMINARE: PRE-BILANCIAMENTO PER AREA (La funzione appena modificata)
+            // 1. PRE-BILANCIAMENTO (Invariato)
             EseguiPreBilanciamentoSabati(gruppo, giorniMese);
 
-            // FASE 1-4: RIEMPIMENTO GIORNALIERO 
             for (int i = 1; i <= giorniMese; i++)
             {
+                // ------------------------------------------------------------
+                // NUOVA REGOLA: GESTIONE TRIPLETTO PER AREA (Prima di tutto)
+                // ------------------------------------------------------------
+                var aree = gruppo.GroupBy(d => d.Area ?? "NESSUNA").ToList();
+
+                foreach (var areaGroup in aree)
+                {
+                    // Troviamo chi lavora oggi in questa Area (escludiamo ferie/malattia)
+                    var disponibiliArea = areaGroup.Where(d =>
+                        d.TurniMensili[i] != "RF" &&
+                        d.TurniMensili[i] != "Q" &&
+                        d.TurniMensili[i] != "RS" &&
+                        d.TurniMensili[i] != "NL").ToList();
+
+                    // SE SONO ESATTAMENTE 3: NON POSSONO DIVIDERSI (2+1 vietato) -> UNIAMOLI
+                    if (disponibiliArea.Count == 3)
+                    {
+                        // Decidiamo il turno target:
+                        // 1. Se c'è un Autista già assegnato a 1 o 2 (da regole precedenti), seguiamo lui.
+                        // 2. Altrimenti valutiamo bilanciamento o giorni precedenti.
+
+                        string target = "1"; // Default Mattina
+
+                        // Se qualcuno è già fissato su "2" ed è Autista, vincono tutti su "2"
+                        if (disponibiliArea.Any(d => d.TurniMensili[i] == "2" && d.IsAutista)) target = "2";
+
+                        // Se la maggioranza è già orientata sul 2 (perché spostata da regole precedenti), andiamo tutti su 2
+                        else if (disponibiliArea.Count(d => d.TurniMensili[i] == "2") >= 2) target = "2";
+
+                        // Verifica sicurezza: Se target è "1", controlliamo che nessuno abbia fatto "2" ieri
+                        if (target == "1")
+                        {
+                            bool qualcunoHaFattoPomeIeri = disponibiliArea.Any(d => HasPrevShift(d.TurniMensili, i, "2"));
+                            if (qualcunoHaFattoPomeIeri) target = "2"; // Meglio tutti pome che rompere il riposo
+                        }
+
+                        // APPLICAZIONE FORZATA: TUTTI INSIEME
+                        foreach (var dip in disponibiliArea)
+                        {
+                            dip.TurniMensili[i] = target;
+                        }
+
+                        // Rimuoviamoli dal pool successivo per non farli toccare dall'algoritmo standard
+                        // (Li consideriamo "Sistemati")
+                    }
+                }
+
+                // ------------------------------------------------------------
+                // PROCEDURA STANDARD (PER GLI ALTRI GRUPPI)
+                // ------------------------------------------------------------
+
                 // 1. FOTOGRAFIA
-                int count1 = 0;
-                int count2 = 0;
-                bool hasAutista1 = false;
-                bool hasAutista2 = false;
+                int count1 = 0; int count2 = 0;
+                bool hasAutista1 = false; bool hasAutista2 = false;
                 List<DipendenteTurno> liberi = new List<DipendenteTurno>();
 
                 foreach (var dip in gruppo)
                 {
+                    // Se sono già stati sistemati dalla regola del 3, li contiamo e basta
                     string t = dip.TurniMensili[i];
                     if (t == "1") { count1++; if (dip.IsAutista) hasAutista1 = true; }
                     else if (t == "2") { count2++; if (dip.IsAutista) hasAutista2 = true; }
                     else if (t == null) { liberi.Add(dip); }
                 }
 
-                // 2. CONSECUTIVI
+                // 2. CONSECUTIVI E ASSEGNAZIONE STANDARD
+                // (Solo per chi è rimasto null/libero)
                 var poolLavoro = new List<DipendenteTurno>();
                 foreach (var dip in liberi)
                 {
@@ -1221,20 +1227,12 @@ namespace Uotep
                     bool no1 = (p1 == "1" && p2 == "1");
                     bool no2 = (p1 == "2" && p2 == "2");
 
-                    if (no1 && !no2)
-                    {
-                        dip.TurniMensili[i] = "2"; count2++;
-                        if (dip.IsAutista) hasAutista2 = true;
-                    }
-                    else if (no2 && !no1)
-                    {
-                        dip.TurniMensili[i] = "1"; count1++;
-                        if (dip.IsAutista) hasAutista1 = true;
-                    }
+                    if (no1 && !no2) { dip.TurniMensili[i] = "2"; count2++; if (dip.IsAutista) hasAutista2 = true; }
+                    else if (no2 && !no1) { dip.TurniMensili[i] = "1"; count1++; if (dip.IsAutista) hasAutista1 = true; }
                     else poolLavoro.Add(dip);
                 }
 
-                // 3. GARANZIA AUTISTA
+                // 3. GARANZIA AUTISTA STANDARD
                 var autistiDisponibili = poolLavoro.Where(d => d.IsAutista).ToList();
                 foreach (var a in autistiDisponibili) poolLavoro.Remove(a);
 
@@ -1252,7 +1250,7 @@ namespace Uotep
                 }
                 poolLavoro.AddRange(autistiDisponibili);
 
-                // 4. CICLO ASSEGNAZIONE DEFINITIVO (INTELLIGENZA PER AREA)
+                // 4. RIEMPIMENTO FINALE
                 var coda = poolLavoro.Select(d => new { Dip = d, Perc = GetPercTurno1Attuale(d.TurniMensili, i), IsDriver = d.IsAutista }).ToList();
 
                 while (coda.Count > 0)
@@ -1267,33 +1265,36 @@ namespace Uotep
                     else if (!canGo1 && canGo2) decisione = "2";
                     else
                     {
-                        // CONTROLLO BILANCIAMENTO AREA (Nuova Logica)
-                        // Prima di guardare i numeri totali dell'ufficio, guardiamo i numeri della mia AREA (UOTE o UOTP)
+                        // Controllo se nell'area del dipendente sono rimasti solo in 2 a dover decidere
+                        // Ma qui la Regola del 3 ha già agito a monte, quindi usiamo la logica standard
                         int colleghiAreaSu1 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "1");
                         int colleghiAreaSu2 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "2");
 
-                        // Se la mia area è sbilanciata verso 1, io vado su 2
                         if (colleghiAreaSu1 > colleghiAreaSu2 + 1) decisione = "2";
-                        // Se la mia area è sbilanciata verso 2, io vado su 1
                         else if (colleghiAreaSu2 > colleghiAreaSu1 + 1) decisione = "1";
                         else
                         {
-                            // Se l'area è ok, guardiamo il totale dell'Ufficio Macro
                             if (count1 < 2 && count2 >= 2) decisione = "1";
                             else if (count2 < 2 && count1 >= 2) decisione = "2";
-                            else if (count1 > count2) decisione = "2";
-                            else if (count2 > count1) decisione = "1";
                             else decisione = (item.Perc < 50.0) ? "1" : "2";
                         }
                     }
-
                     item.Dip.TurniMensili[i] = decisione;
                     if (decisione == "1") { count1++; if (item.IsDriver) hasAutista1 = true; }
                     else if (decisione == "2") { count2++; if (item.IsDriver) hasAutista2 = true; }
                     coda.Remove(item);
                 }
+
+                // Eseguo comunque la correzione coppie standard (per gruppi > 3)
                 EseguiCorrezioneMinimoDuePerArea(gruppo, i);
             }
+        }
+
+        // Funzione Helper per C#
+        private bool HasPrevShift(string[] turni, int oggi, string target)
+        {
+            if (oggi > 1 && turni[oggi - 1] == target) return true;
+            return false;
         }
 
         // --- METODO FONDAMENTALE PER ROMPERE I BLOCCHI "TUTTI SU 1" ---

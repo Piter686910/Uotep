@@ -418,7 +418,28 @@ namespace Uotep
                 }
             }
         }
+        protected void txtFilterSigla_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "sigla", DdlSigla.SelectedItem.Text };
+            // Salva la lista nella Sessione
+            Session["ListAuto"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroSigla.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterSigla")
+            {
+                columnName = "sigla";
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
 
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroSigla.Value);
+        }
         protected void txtFilterData_TextChanged(object sender, EventArgs e)
         {
             TextBox txtFilter = (TextBox)sender;
@@ -517,21 +538,21 @@ namespace Uotep
                         dv.RowFilter = filtro;
 
                         break;
-                    //case "Indirizzo":
+                    case "sigla":
 
-                    //    filtro = $"Nominativo LIKE '%{HfFiltroNominativo.Value}%'";
-                    //    dv = new DataView(pratica);
+                        filtro = $"sigla LIKE '%{HfFiltroSigla.Value}%'";
+                        dv = new DataView(auto);
 
-                    //    dv.RowFilter = filtro;
-                    //    break;
-                    //case "Accertatori":
+                        dv.RowFilter = filtro;
+                        break;
+                        //case "Accertatori":
 
-                    //    filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
-                    //    dv = new DataView(pratica);
+                        //    filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
+                        //    dv = new DataView(pratica);
 
-                    //    dv.RowFilter = filtro;
+                        //    dv.RowFilter = filtro;
 
-                    //    break;
+                        //    break;
 
 
                 }
@@ -552,5 +573,7 @@ namespace Uotep
             return auto;
             // return dt;
         }
+
+
     }
 }

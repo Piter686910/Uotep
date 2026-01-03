@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <script>
+    <script type="text/javascript">
         // Mostra il popup 
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
@@ -12,53 +12,143 @@
             $('#errorModal').modal('hide');
         }
 
-        function ricalcolaRiga(inputElement) {
-            // 1. Trova la riga (TR) a cui appartiene l'input modificato
-            var row = inputElement.closest('tr');
+        // --- FUNZIONE COLORI ---
+        function ColoraInput(el) {
+            var val = el.value.trim().toUpperCase();
 
-            // 2. Colleziona tutti gli input di quella riga
-            var inputs = row.querySelectorAll('.shift-input');
+            el.style.backgroundColor = "#ffffff";
+            el.style.color = "#000000";
+            el.style.fontWeight = "normal";
 
-            var count1 = 0;
-            var count2 = 0;
+            if (val === "1") {
+                el.style.backgroundColor = "#e3f2fd"; el.style.color = "#0d47a1"; el.style.fontWeight = "bold";
+            }
+            else if (val === "2") {
+                el.style.backgroundColor = "#fff3e0"; el.style.color = "#e65100"; el.style.fontWeight = "bold";
+            }
+            else if (val === "Q") {
+                el.style.backgroundColor = "#28a745"; el.style.color = "#ffffff"; el.style.fontWeight = "bold";
+            }
+            else if (val === "RF") {
+                el.style.backgroundColor = "#17a2b8"; el.style.color = "#ffffff"; el.style.fontWeight = "bold";
+            }
+            else if (val === "RS" || val === "NL") {
+                el.style.backgroundColor = "#343a40"; el.style.color = "#ffffff";
+            }
+        }
 
-            // 3. Conta le occorrenze
-            inputs.forEach(function (inp) {
-                var val = inp.value.trim().toUpperCase();
-                if (val === '1') count1++;
-                else if (val === '2') count2++;
-            });
+        // --- FUNZIONE PRINCIPALE ---
+        window.GestisciCambioTurnoJS = function (inputChanged) {
 
-            // 4. Calcolo Matematico
-            var totale = count1 + count2;
-            var cellaPerc = row.querySelector('.col-stats'); // La cella percentuale
+            // 1. Aggiorna colore
+            ColoraInput(inputChanged);
 
-            if (totale > 0) {
-                var perc = (count1 / totale) * 100;
-                var percFixed = perc.toFixed(0); // Arrotonda (es 60)
+            var valore = inputChanged.value.trim().toUpperCase();
+            var giorno = inputChanged.getAttribute("data-giorno");
+            var area = inputChanged.getAttribute("data-area");
+            var ufficio = inputChanged.getAttribute("data-ufficio");
+            var matricola = inputChanged.getAttribute("data-matricola");
 
-                cellaPerc.innerText = percFixed + '%';
+            // VALIDAZIONE BASE E FILTRO MACRO
+            if (!area || !ufficio) return;
+            if (ufficio.toUpperCase().indexOf("MACRO") !== 0) return; // Solo per MACRO
 
-                // 5. Cambio Colore Dinamico
-                if (percFixed < 50 || percFixed > 60) {
-                    cellaPerc.style.color = 'red'; // Avviso fuori range
-                } else {
-                    cellaPerc.style.color = 'green'; // OK
-                }
-            } else {
-                cellaPerc.innerText = 'N/A';
-                cellaPerc.style.color = 'black';
+            console.log("CAMBIO MACRO [" + area + "]: " + matricola + " -> " + valore);
+
+            // Selettore Area
+            var selector = "input[data-giorno='" + giorno + "'][data-area='" + area + "'][data-ufficio='" + ufficio + "']";
+            var tuttiInput = document.querySelectorAll(selector);
+
+            var su1 = []; // Colleghi sul turno 1
+            var su2 = []; // Colleghi sul turno 2
+            var tuttiAttivi = [];
+
+            // Censimento della situazione DOPO la modifica
+            for (var i = 0; i < tuttiInput.length; i++) {
+                var el = tuttiInput[i];
+                var v = el.value.trim().toUpperCase();
+
+                if (v === "1") { su1.push(el); tuttiAttivi.push(el); }
+                else if (v === "2") { su2.push(el); tuttiAttivi.push(el); }
             }
 
-            // (Opzionale) Cambia colore della cella stessa in base al valore inserito
-            var cella = inputElement.parentElement;
-            cella.className = ''; // Reset classi
-            if (inputElement.value.toUpperCase() === '1') cella.classList.add('t-1');
-            else if (inputElement.value.toUpperCase() === '2') cella.classList.add('t-2');
-            else if (inputElement.value.toUpperCase() === 'Q') cella.classList.add('t-q');
-            else if (inputElement.value.toUpperCase() === 'RF') cella.classList.add('t-rf');
-            // Re-aggiunge eventuale bordo se necessario, ma base colore funziona
-        }
+            console.log("Stato Area: (1): " + su1.length + " | (2): " + su2.length);
+
+            // =========================================================
+            // REGOLA A: SINCRONIZZAZIONE TRIPLETTO (Se metto 1 o 2)
+            // =========================================================
+            if (tuttiAttivi.length === 3 && (valore === "1" || valore === "2")) {
+                // Se eravamo in 3 e qualcuno cambia turno, tutti lo seguono
+                tuttiAttivi.forEach(function (collega) {
+                    if (collega.value !== valore) {
+                        CambiaValore(collega, valore, giorno);
+                    }
+                });
+                return;
+            }
+
+            // =========================================================
+            // REGOLA B: LOGICA ANTI-SOLITARIO (Merge verso la maggioranza)
+            // =========================================================
+            // Scatta quando inserisci FERIE/MALATTIA o sposti turni creando un residuo di 1.
+
+            // CASO 1: È rimasto UN SOLO collega sul turno 1.
+            // Se sull'altro turno (2) c'è qualcuno, sposta il solitario là.
+            if (su1.length === 1 && su2.length > 0) {
+                console.warn("⚠️ SOS: Dipendente rimasto solo a Mattina. Lo sposto a Pomeriggio con gli altri.");
+                CambiaValore(su1[0], "2", giorno);
+            }
+
+            // CASO 2: È rimasto UN SOLO collega sul turno 2.
+            // Se sull'altro turno (1) c'è qualcuno, sposta il solitario là.
+            else if (su2.length === 1 && su1.length > 0) {
+                console.warn("⚠️ SOS: Dipendente rimasto solo a Pomeriggio. Lo sposto a Mattina con gli altri.");
+                CambiaValore(su2[0], "1", giorno);
+            }
+        };
+
+        // --- HELPER CAMBIO VALORE ---
+        window.CambiaValore = function (el, nuovoValore, giorno) {
+            // Applica valore
+            el.value = nuovoValore;
+            ColoraInput(el);
+
+            // Flash visivo Giallo
+            var oldBg = el.style.backgroundColor;
+            el.style.backgroundColor = "yellow";
+            setTimeout(function () { el.style.backgroundColor = oldBg; }, 1000);
+
+            // Controllo e Correzione giorno precedente (Se sposto su 1, ieri non doveva essere 2)
+            if (nuovoValore === "1") {
+                CorreggiGiornoPrecedenteJS(el.getAttribute("data-matricola"), giorno, "1");
+            }
+        };
+
+        // --- CORREZIONE IERI ---
+        window.CorreggiGiornoPrecedenteJS = function (matricola, giornoOggiStr, nuovoTurnoOggi) {
+            if (nuovoTurnoOggi !== "1") return;
+            var giornoOggi = parseInt(giornoOggiStr);
+            var giornoIeri = giornoOggi - 1;
+            if (giornoIeri < 1) return;
+
+            var idIeri = "T_" + matricola + "_" + giornoIeri;
+            var inputIeri = document.getElementById(idIeri);
+
+            if (inputIeri && inputIeri.value.trim() === "2") {
+                // Corregge ieri da 2 a 1
+                inputIeri.value = "1";
+                ColoraInput(inputIeri);
+
+                // Flash Rosso
+                var old = inputIeri.style.backgroundColor;
+                inputIeri.style.backgroundColor = "#f8d7da";
+                setTimeout(function () { inputIeri.style.backgroundColor = old; }, 1000);
+
+                // Ricorsione
+                CorreggiGiornoPrecedenteJS(matricola, giornoIeri, "1");
+            }
+        };
+
     </script>
     <style>
         /* Stile per l'intestazione della colonna (il giorno) */

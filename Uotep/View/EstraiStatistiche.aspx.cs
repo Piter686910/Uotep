@@ -211,7 +211,7 @@ namespace Uotep
             {
                 dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
 
-                dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
+                //dt = mn.GetStatistiche(txtMese.Text.Trim(), anno);
                 if (dt.Rows.Count > 0)
                 {
                     divDettagli.Visible = true;
