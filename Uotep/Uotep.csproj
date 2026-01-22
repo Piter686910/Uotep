@@ -266,6 +266,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="FileComuni\Logo.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -293,6 +294,7 @@
     </Content>
     <Content Include="View\GestionePratica.aspx" />
     <Content Include="View\GestioneAuto.aspx" />
+    <Content Include="View\SchedaDipendente.aspx" />
     <Content Include="View\StatisticheAtti.aspx" />
     <Content Include="View\StatistichePg.aspx" />
     <Content Include="View\RicercaArchivio.aspx" />
@@ -356,6 +358,7 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classi\SchedaDipendenteClass.cs" />
     <Compile Include="Classi\GestAuto.cs" />
     <Compile Include="Classi\ArchivioUotp.cs" />
     <Compile Include="Classi\ArchivioUote.cs" />
@@ -392,6 +395,13 @@
     </Compile>
     <Compile Include="View\GestioneAuto.aspx.designer.cs">
       <DependentUpon>GestioneAuto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\SchedaDipendente.aspx.cs">
+      <DependentUpon>SchedaDipendente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\SchedaDipendente.aspx.designer.cs">
+      <DependentUpon>SchedaDipendente.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\StatisticheAtti.aspx.cs">
       <DependentUpon>StatisticheAtti.aspx</DependentUpon>

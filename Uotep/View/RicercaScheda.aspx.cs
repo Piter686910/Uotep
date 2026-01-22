@@ -68,6 +68,7 @@ namespace Uotep
                 SetControlsEnabled(divTesta, false);
                 //SetControlsVisible(divDDLPattuglia, false);
                 //SetControlsVisible(divPattuglia, true);
+                btStampa.Enabled = true;
                 CaricaDLL();
             }
 
@@ -84,6 +85,7 @@ namespace Uotep
             {
                 if (ctrl is WebControl webCtrl)
                 {
+                   
                     webCtrl.Enabled = isEnabled;
                 }
 
@@ -386,6 +388,7 @@ namespace Uotep
             SetControlsEnabled(divDettagli, true);
             //SetControlsVisible(divDDLPattuglia, true);
             //SetControlsVisible(divPattuglia, false);
+            //btStampa.Enabled = true;
             CkAttivita.Enabled = true;
             rdUote.Enabled = true;
             rdUotp.Enabled = true;
@@ -800,6 +803,7 @@ namespace Uotep
                                     if (ultimoC == "/")
                                     {
                                         rap.pattuglia = rap.pattuglia.Remove(rap.pattuglia.Length - 1, 1);
+                                        rap.pattuglia = rap.pattuglia.Replace("//","/");
 
                                     }
                                     string primoC = rap.pattuglia.Substring(0, 1);
@@ -928,8 +932,7 @@ namespace Uotep
                                 rap.parziale = rdParziale.Checked;
                                 rap.non_avvenuto = rdNonAvvenuto.Checked;
 
-                                rap.conProt = rdCon.Checked;
-                                rap.senzaProt = rdSenza.Checked;
+                              
                                 if (ckViolazioneBeniCult.Checked)
                                 {
                                     stat.controlli_42_04 = 1;
@@ -957,8 +960,15 @@ namespace Uotep
                                 {
                                     stat.dpi = 1;
                                     list.Add(Enumerate.CampiXStatistiche.dpi.ToString());
+                                    rap.conProt = rdCon.Checked;
+                                    rap.senzaProt = rdSenza.Checked;
                                 }
-                                rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
+                                else
+                                {
+                                    rap.conProt = false;
+                                    rap.senzaProt = false;
+                                }
+                                    rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
                                 rap.contrDaEsposti = ckControlloDaEsposti.Checked;
                                 rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
                                 rap.uote = rdUote.Checked;

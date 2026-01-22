@@ -268,8 +268,8 @@
                         </div>
                         <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text=">>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
-                                <asp:Button ID="btElimina" runat="server" Text="<<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
+                                <asp:Button ID="btAggiungi" runat="server" Text="👤➕ >>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
+                                <asp:Button ID="btElimina" runat="server" Text="👤➖ <<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
                             </div>
                         </div>
                         <!-- Colonna 4 -->
@@ -307,7 +307,7 @@
                 <!-- Bottone Salva -->
                 <div class="row">
                     <div class="col-6">
-                        <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Salva Scheda" CssClass="btn btn-primary me-3" OnClick="Salva_Click" />
+                        <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="💾 Salva Scheda" CssClass="btn btn-primary me-3" OnClick="Salva_Click" />
                     </div>
                     <%--<div class="col-6">
                         <asp:Button ID="btStampa" runat="server" ValidationGroup="bt" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />

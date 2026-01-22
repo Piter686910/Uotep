@@ -36,13 +36,52 @@
                 el.style.backgroundColor = "#343a40"; el.style.color = "#ffffff";
             }
         }
+        function AggiornaPercentualeRiga(el) {
+            // Trova la riga padre (TR) dell'input
+            var row = el.closest("tr");
+            if (!row) return;
 
+            // Trova tutti gli input dentro questa riga
+            var inputsRiga = row.querySelectorAll("input.shift-input");
+
+            var count1 = 0;
+            var count2 = 0;
+
+            inputsRiga.forEach(function (inp) {
+                var v = inp.value.trim().toUpperCase();
+                if (v === "1") count1++;
+                if (v === "2") count2++;
+            });
+
+            var totale = count1 + count2;
+            var perc = 0;
+
+            if (totale > 0) {
+                perc = Math.round((count1 / totale) * 100);
+            }
+
+            // Trova la cella delle statistiche (che ha classe 'col-stats')
+            var cellaStats = row.querySelector(".col-stats");
+            if (cellaStats) {
+                cellaStats.innerText = perc + "%";
+
+                // Aggiorna colore testo (Verde ok, Rosso > 60%)
+                if (perc > 60) {
+                    cellaStats.style.color = "red";
+                    cellaStats.style.fontWeight = "bold";
+                } else {
+                    cellaStats.style.color = "green";
+                    cellaStats.style.fontWeight = "normal";
+                }
+            }
+        }
         // --- FUNZIONE PRINCIPALE ---
         window.GestisciCambioTurnoJS = function (inputChanged) {
 
             // 1. Aggiorna colore
             ColoraInput(inputChanged);
-
+            // 2. Ricalcola subito la % della riga modificata
+            AggiornaPercentualeRiga(inputChanged);
             var valore = inputChanged.value.trim().toUpperCase();
             var giorno = inputChanged.getAttribute("data-giorno");
             var area = inputChanged.getAttribute("data-area");
@@ -494,7 +533,7 @@
                                 <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
                                     OnClick="btnExportExcel_Click" CssClass="btn btn-primary" Style="margin-right: 15px;" />
 
-                                <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
+                                <asp:Button ID="btnExportPdf" runat="server" Text="🖨️ Stampa PDF"
                                     OnClick="btnExportPdf_Click" CssClass="btn btn-primary" Style="margin-right: 15px;" />
 
                                 <asp:Button ID="btImportaMatriceExcel" runat="server" Text="📄 Importa file RS/NL"

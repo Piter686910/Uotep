@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using Org.BouncyCastle.Utilities.Zlib;
@@ -511,17 +512,18 @@ namespace Uotep.Classi
                 // e i turni (dallo storico).
                 string query = @"
         SELECT 
-            d.matricola, 
+            d.matricola_ced, 
             d.nominativo, 
             d.ufficio, 
             d.quartina, 
             d.autista,
             t.giorno, 
             t.CodiceTurno,
-            d.gruppo
-        FROM TurnoDipendenti d
+            d.gruppo_quartina,
+            d.area
+        FROM SchedaDipendente d
         LEFT JOIN TurniMensile t 
-            ON d.matricola = t.matricola 
+            ON d.matricola_ced = t.matricola 
             AND t.anno = @anno 
             AND t.mese = @mese
         ORDER BY d.ufficio, d.nominativo";
@@ -538,7 +540,7 @@ namespace Uotep.Classi
 
                     while (r.Read())
                     {
-                        string matricola = r["matricola"].ToString().Trim();
+                        string matricola = r["matricola_ced"].ToString().Trim();
 
                         // Se è la prima volta che incontro questa matricola, creo l'oggetto
                         if (!dictDipendenti.ContainsKey(matricola))
@@ -546,9 +548,9 @@ namespace Uotep.Classi
                             DipendenteTurno dip = new DipendenteTurno();
                             dip.Matricola = matricola;
                             dip.Nominativo = r["nominativo"].ToString();
-                            dip.Gruppo = r["gruppo"].ToString();
+                            dip.Gruppo = r["gruppo_quartina"].ToString();
                             dip.Ufficio = r["ufficio"] != DBNull.Value ? r["ufficio"].ToString() : "Nessun Ufficio";
-
+                            dip.Area = r["area"] != DBNull.Value ? r["area"].ToString() : "Nessuna Area";
                             // Gestione Autista
                             if (r["autista"] != DBNull.Value)
                                 dip.IsAutista = Convert.ToBoolean(r["autista"]);
@@ -579,6 +581,8 @@ namespace Uotep.Classi
                                 dictDipendenti[matricola].TurniMensili[giorno] = turno;
                             }
                         }
+
+                       
                     }
 
                     // Convertiamo i valori del dizionario in Lista
@@ -592,8 +596,8 @@ namespace Uotep.Classi
         public DataTable getListDipendenti()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
-                         "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
+            string sql = "SELECT ufficio, nominativo,matricola_ced, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
+                         "perm_53,perm_104,limitazioni,turni_pref,Macro_area,area,data_sorv_sanitaria FROM SchedaDipendente  ORDER BY ufficio,nominativo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -603,8 +607,8 @@ namespace Uotep.Classi
         public DataTable getListDipendentiById(int id)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo,reperibilita,gruppo_reper,giorni_ferie,giorni_937,permessi_studio,perm_41," +
-                         "perm_44,perm_40,perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area FROM TurnoDipendenti  ORDER BY ufficio,nominativo";
+            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
+                         "perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area,data_sorv_sanitaria FROM SchedaDipendente  ORDER BY ufficio,nominativo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1204,7 +1208,7 @@ namespace Uotep.Classi
             }
 
             return lista;
-            
+
         }
         public DataTable getPraticaArchivioUOTPById(int id)
         {
@@ -1463,6 +1467,34 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        /// <summary>
+        /// ricerca la sche dipendente
+        /// </summary>
+        /// <param name="matricola"></param>
+        /// <param name="nominativo"></param>
+        /// <returns></returns>
+        public DataTable getSchedaDip(string matricola, string nominativo)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            if (!String.IsNullOrEmpty(nominativo))
+            {
+                sql = "SELECT * FROM SchedaDipendente where nominativo like '" + nominativo + "%'";
+            }
+            else if (!String.IsNullOrEmpty(matricola))
+
+                sql = "SELECT * FROM SchedaDipendente where matricola = '" + matricola + "'";
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+
         /// <summary>
         /// estrazione totale del DB
         /// </summary>
@@ -2255,6 +2287,66 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean InsSchedaDipendente(SchedaDipendenteClass scheda)
+        {
+            Boolean resp = true;
+
+            string sql = String.Empty;
+            string testoSql = string.Empty;
+            sql = "IF NOT EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola = " + scheda.Matricola + ") BEGIN INSERT INTO SchedaDipendente (matricola_ced, nominativo,grado," +
+                 "data_assunzione,categ_economica,autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,perm_53,perm_104,limitazioni,turni_pref,Macro_area,area,data_sorv_sanitaria) " +
+                 " VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
+                 scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "')  END";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    conn.Open();
+
+
+                    try
+                    {
+                        conn.Open();
+
+                        // Esegue il comando
+                        int righeCoinvolte = cmd.ExecuteNonQuery();
+
+                        if (righeCoinvolte > 0)
+                        {
+                            // Inserimento riuscito
+                            resp = true;
+                        }
+                        else
+                        {
+                            // La matricola esisteva già, l'insert non è scattato
+                            resp = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Gestione errori
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("InsSchedaDipendente:" + ex.Message + @" - Errore in inserimento tabella scheda dipendente ");
+                            sw.Close();
+                        }
+                    }
+
+                }
+
+
+                conn.Close();
+                conn.Dispose();
+                return resp;
+
+            }
+        }
         /// <summary>
         /// Inserisce una decretazione e aggiorna la tabella principale con il nuovo accertatore
         /// </summary>
@@ -2362,7 +2454,7 @@ namespace Uotep.Classi
                         try
                         {
                             // (Opzionale) Pulisci tabella
-                             new SqlCommand("TRUNCATE TABLE RSNL", conn, trans).ExecuteNonQuery();
+                            new SqlCommand("TRUNCATE TABLE RSNL", conn, trans).ExecuteNonQuery();
 
 
 
@@ -2424,7 +2516,7 @@ namespace Uotep.Classi
                 }
 
                 resp = ex.Message + " 2";
-               
+
 
             }
             return resp;
@@ -2506,11 +2598,7 @@ namespace Uotep.Classi
 
                 try
                 {
-
-
                     if (!exist)
-
-
 
                         sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
                             ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
@@ -2533,8 +2621,6 @@ namespace Uotep.Classi
 
 
                     }
-
-
 
                     command.CommandText = sql_Statistiche;
                     command.ExecuteNonQuery();
@@ -2584,10 +2670,7 @@ namespace Uotep.Classi
                 try
                 {
 
-
                     if (!exist)
-
-
 
                         sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
                             ",sequestri,riapp_sigilli,deleghe_ricevute,deleghe_esitate,cnr_annotazioni,interrogazioni,denunce_uff,convalide,demolizioni" +
@@ -2609,10 +2692,7 @@ namespace Uotep.Classi
 
                         " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
-
                     }
-
-
 
                     command.CommandText = sql_Statistiche;
                     command.ExecuteNonQuery();
@@ -4187,13 +4267,16 @@ namespace Uotep.Classi
         public string GetNumControlliCant(string mese, int anno)
         {
             string sql = string.Empty;
-
-            //  trasformio stringa mese in numero;
+            string giro=string.Empty;
+            //  trasformo stringa mese in numero;
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_contr_cantieri_seq) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_cantieri_seq='true'";
-            string res = null;
+            sql = "SELECT count(rapp_contr_cantieri_seq) as cantieri FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_contr_cantieri_seq='true'";
+            giro = "SELECT sum(isnull(rapp_numero_controlli_cant_seq,0)) as giro FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "'";
+
+            int tot = 0;
+            string res = string.Empty;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
@@ -4202,7 +4285,13 @@ namespace Uotep.Classi
                 try
                 {
                     command.CommandText = sql;
-                    return res = command.ExecuteScalar().ToString();
+                    //return res = command.ExecuteScalar().ToString();
+                    res = command.ExecuteScalar().ToString();
+                    tot = System.Convert.ToInt32(res);
+                    command.CommandText = giro;
+                    string a = command.ExecuteScalar().ToString();
+                    tot += Convert.ToInt32(a); //sommo i due valori provenienti dai controlli cantieri e dai numeri dei controlli cantieri fatti nei giri
+                    return tot.ToString();
                 }
 
                 catch (Exception ex)
@@ -5091,7 +5180,7 @@ namespace Uotep.Classi
                     // =================================================================
                     // 1. SELECT: Recupera la Matricola dal Dipendente
                     // =================================================================
-                    string querySelect = "SELECT matricola FROM TurnoDipendenti WHERE id_dip = " + idDipendente;
+                    string querySelect = "SELECT matricola FROM SchedaDipendente WHERE id_dip = " + idDipendente;
                     using (SqlCommand cmdSelect = new SqlCommand(querySelect, conn, transaction))
                     {
                         cmdSelect.Parameters.AddWithValue("@IDDipendente", idDipendente);

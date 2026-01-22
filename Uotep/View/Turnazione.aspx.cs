@@ -91,7 +91,14 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 txtAnno.Text = System.Convert.ToInt32(DateTime.Now.Year).ToString();
-
+                if (ruolo != "fureria" && ruolo !="admin")
+                {
+                    btImportaMatriceExcel.Visible = false;
+                    btnExportPdf.Visible = false;
+                    btnExportExcel.Visible = false;
+                    btnsalva.Visible = false;
+                    btnCarica.Visible = false;
+                }
             }
         }
 
@@ -490,25 +497,24 @@ namespace Uotep
             var lista = new List<DipendenteTurno>();
             int giorniMese = DateTime.DaysInMonth(anno, mese);
             string meseStringa = new DateTime(anno, mese, 1)
-    .ToString("MMMM", new System.Globalization.CultureInfo("it-IT"))
-    .Substring(0, 3)
-    .ToUpper();
+                .ToString("MMMM", new System.Globalization.CultureInfo("it-IT"))
+                .Substring(0, 3)
+                .ToUpper();
 
-            // --- NUOVO: Caricamento Regole RSNL dal Database ---
-           // lblError.Text = "⏳ Caricamento regole RSNL..."; 
+            // Caricamento Regole RSNL dal Database
             List<RegolaRSNL> regoleRSNL = CaricaRegoleRSNL(anno, mese);
-          // lblError.Text = "⏳ esco Caricamento regole RSNL...";
+
             // --- PRIMA PASSATA: Creazione e Vincoli Assoluti ---
             foreach (DataRow row in dtDip.Rows)
             {
                 var dip = new DipendenteTurno();
                 dip.Nominativo = row["nominativo"].ToString();
                 dip.Ufficio = row["ufficio"].ToString();
-                dip.Matricola = row["matricola"].ToString();
-                dip.Gruppo = row["gruppo"].ToString();
+                dip.Matricola = row["matricola_ced"].ToString(); // Attenzione: verifica se usare matricola o matricola_ced
+                dip.Gruppo = row["gruppo_quartina"].ToString();
                 dip.TurniMensili = new string[32];
-                dip.QuartinaID = row["quartina"] != DBNull.Value ? Convert.ToInt32(row["quartina"]) : 0;
                 dip.Area = row["area"].ToString();
+
                 // LETTURA AUTISTA
                 if (row.Table.Columns.Contains("autista") && row["autista"] != DBNull.Value)
                 {
@@ -520,19 +526,29 @@ namespace Uotep
                 }
 
                 int idQuartina = (row.Table.Columns.Contains("quartina") && row["quartina"] != DBNull.Value)
-                                 ? Convert.ToInt32(row["quartina"]) : 0;
+                                    ? Convert.ToInt32(row["quartina"]) : 0;
                 dip.QuartinaID = idQuartina;
 
                 string stringaGiorni = mappaQuartine.ContainsKey(idQuartina) ? mappaQuartine[idQuartina] : "";
                 dip.TurniMensili = new string[giorniMese + 1];
 
-                // Applica vincoli base (Q, Sabati, Festivi)
-            //    lblError.Text = "⏳ Caricamento applica regole q...";
+                // --- APPLICAZIONE REGOLE VINCOLANTI ---
+
+                // 1. Quartine (Q)
                 List<int> giorniQ = ApplicaRegolaQ(dip.TurniMensili, stringaGiorni, giorniMese);
-              //  lblError.Text = "⏳ esco Caricamento applica regole q...";
+
+                // 2. Sabati Ancorati
                 ApplicaRegolaSabati(dip.TurniMensili, giorniQ, giorniMese, anno, mese);
+
+                // 3. Regole Speciali (RS/NL)
                 ApplicaRegolaRSNL(dip, regoleRSNL, giorniMese, anno, mese, meseStringa);
+
+                // 4. Festivi (RF)
                 ApplicaRegolaFestivi(dip.TurniMensili, giorniMese, anno, mese);
+
+                // 5. NUOVA REGOLA: PREFERENZE (turni_pref)
+                // La applichiamo qui in modo che rispetti Q e RF già impostati
+                ApplicaRegolaPreferenze(dip, row, giorniMese, anno, mese);
 
                 lista.Add(dip);
             }
@@ -544,12 +560,12 @@ namespace Uotep
             {
                 string nomeUfficio = gruppo.Key.ToUpper().Trim();
                 List<DipendenteTurno> dipsDelGruppo = gruppo.ToList();
+
                 if (dipsDelGruppo.Count == 1)
                 {
-                    // LOGICA PER UFFICIO CON 1 SOLO DIPENDENTE
                     RiempimentoUfficioSingolo(dipsDelGruppo[0], giorniMese);
                 }
-                if (nomeUfficio == "CDR")
+                else if (nomeUfficio == "CDR")
                 {
                     RiempimentoUfficioCDR(dipsDelGruppo, giorniMese);
                 }
@@ -557,9 +573,8 @@ namespace Uotep
                 {
                     RiempimentoUfficioGemelli(dipsDelGruppo[0], dipsDelGruppo[1], giorniMese);
                 }
-                else if (nomeUfficio.StartsWith("MACRO")) // Intercetta MACRO 1, MACRO 2, ecc.
+                else if (nomeUfficio.StartsWith("MACRO"))
                 {
-                    //  Copertura Autista Obbligatoria
                     RiempimentoUfficioConAutista(dipsDelGruppo, giorniMese);
                 }
                 else if (nomeUfficio == "FURERIA")
@@ -572,12 +587,9 @@ namespace Uotep
                 }
                 else
                 {
-                    // Uffici numerosi standard (senza vincolo autista)
                     RiempimentoUfficioMultiplo(dipsDelGruppo, giorniMese);
                 }
             }
-
-
 
             // --- TERZA PASSATA: CALCOLO STATISTICHE (%) ---
             foreach (var dip in lista)
@@ -585,29 +597,62 @@ namespace Uotep
                 int count1 = 0;
                 int count2 = 0;
 
-                // Scansioniamo l'array (saltando l'indice 0)
                 for (int i = 1; i <= giorniMese; i++)
                 {
                     string t = dip.TurniMensili[i];
                     if (t == "1") count1++;
                     else if (t == "2") count2++;
-                    // Ignoriamo Q e RF dal calcolo percentuale lavorativo
                 }
 
                 int totaleLavorati = count1 + count2;
 
                 if (totaleLavorati > 0)
                 {
-                    // Calcolo percentuale Turno 1
                     double perc = (double)count1 / totaleLavorati * 100;
-                    dip.StatisticaPerc = perc.ToString("0") + "%"; // Es: "60%"
+                    dip.StatisticaPerc = perc.ToString("0") + "%";
                 }
                 else
                 {
-                    dip.StatisticaPerc = "N/A"; // Solo ferie o malattie
+                    dip.StatisticaPerc = "N/A";
                 }
             }
             return lista;
+        }
+        private void ApplicaRegolaPreferenze(DipendenteTurno dip, DataRow row, int giorniMese, int anno, int mese)
+        {
+            // Verifica se la colonna esiste e se c'è un valore
+            if (!row.Table.Columns.Contains("turni_pref") || row["turni_pref"] == DBNull.Value)
+                return;
+
+            string preferenze = row["turni_pref"].ToString().ToUpper();
+            if (string.IsNullOrEmpty(preferenze)) return;
+
+            // CultureInfo per ottenere i nomi dei giorni in Italiano
+            var culture = new System.Globalization.CultureInfo("it-IT");
+
+            for (int i = 1; i <= giorniMese; i++)
+            {
+                // Se il giorno è già bloccato da regole superiori (Riposo Q, Festivo RF, ecc.), saltiamo
+                string turnoAttuale = dip.TurniMensili[i];
+                if (turnoAttuale == "Q" || turnoAttuale == "RF" || turnoAttuale == "RS" || turnoAttuale == "NL")
+                {
+                    continue;
+                }
+
+                DateTime d = new DateTime(anno, mese, i);
+                // Ottiene "LUN", "MAR", "MER", etc.
+                string giornoAbbr = d.ToString("ddd", culture).ToUpper().Replace(".", "");
+
+                // Controllo se la stringa preferenze contiene il giorno + turno (es. "LUN2")
+                if (preferenze.Contains($"{giornoAbbr}2"))
+                {
+                    dip.TurniMensili[i] = "2";
+                }
+                else if (preferenze.Contains($"{giornoAbbr}1"))
+                {
+                    dip.TurniMensili[i] = "1";
+                }
+            }
         }
         private void ApplicaRegolaRSNL(DipendenteTurno dip, List<RegolaRSNL> regole, int giorniMese, int anno, int mese, string meseStringa)
         {
@@ -1590,10 +1635,10 @@ namespace Uotep
                 foreach (DataRow row in dtDipendenti.Rows)
                 {
                     DipendenteTurno dip = new DipendenteTurno();
-                    dip.Matricola = row["matricola"].ToString().Trim();
+                    dip.Matricola = row["matricola_ced"].ToString().Trim();
                     dip.Nominativo = row["nominativo"].ToString().Trim();
                     dip.Ufficio = row["ufficio"].ToString().Trim();
-                    dip.Gruppo = row["gruppo"].ToString().Trim();
+                    dip.Gruppo = row["gruppo_quartina"].ToString().Trim();
                     // Inizializza array vuoto
                     dip.TurniMensili = new string[32];
 

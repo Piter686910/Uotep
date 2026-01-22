@@ -225,7 +225,7 @@
                 <%-- DIV RICERCA Intestatario --%>
                 <div id="DivIntestatario" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label7" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label7" runat="server" Text="Intestatario" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" />
 

@@ -466,7 +466,9 @@ namespace Uotep
         {
             Convalida();
             txtProt.Text = String.Empty;
-
+            txtDataDecretazione.Text = String.Empty;
+            txtDecretato.Text = String.Empty;
+            txtNotaDecretazione.Text = String.Empty;
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
                 txtGiudice.Text = string.Empty;

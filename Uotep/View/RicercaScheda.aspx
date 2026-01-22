@@ -83,6 +83,10 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
+
+
+        
+
     </script>
 
     <div class="panel panel-default">
@@ -162,8 +166,8 @@
                         </div>
                         <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text=">>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
-                                <asp:Button ID="btElimina" runat="server" Text="<<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
+                                <asp:Button ID="btAggiungi" runat="server" Text="👤➕ >>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" ValidationGroup="bottoni"/>
+                                <asp:Button ID="btElimina" runat="server" Text="👤➖ <<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" ValidationGroup="bottoni"/>
                             </div>
                         </div>
                         <!-- Colonna 4 -->
@@ -195,17 +199,17 @@
                 <!-- Bottone Salva -->
                 <div class="row">
                     <div class="col-12">
-                        <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="Salva Scheda" CssClass="btn btn-primary me-3" OnClick="btSalva_Click" Enabled="false" />
+                        <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="💾 Salva Scheda" CssClass="btn btn-primary me-3" OnClick="btSalva_Click" Enabled="false" />
 
                     </div>
                 </div>
             </div>
         </div>
 
-        <asp:Button ID="btStampa" runat="server" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />
-        <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="Modifica Scheda" CssClass="btn btn-primary me-3" OnClick="btModificaScheda_Click" />
 
     </div>
+            <asp:Button ID="btStampa" runat="server" Text="🖨️  Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" ValidationGroup="bottoni" />
+        <asp:Button ID="btModificaScheda" runat="server" ValidationGroup="bottoni" Text="📄 Modifica Scheda" CssClass=" fa-pencil btn btn-primary me-3" OnClick="btModificaScheda_Click" />
 
     <!-- Bottone Salva -->
     <div cssclass="text-center" style="margin-bottom: 15px!important">
@@ -558,7 +562,7 @@
         </div>
     </div>
     <%-- popup stampa scheda --%>
-    <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-modal="true">
         <div class="modal-dialog"
             role="document">
             <div class="modal-content">
@@ -576,8 +580,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="Stampa" OnClick="btPopStampa_Click" />
+                    <!-- Bottone per avviare la stampa -->
+                    <asp:Button ID="btPopStampa" runat="server" class="btn btn-primary me-3" Text="🖨️  Stampa" OnClick="btPopStampa_Click" ValidationGroup="bottoni"/>
 
                     <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModalS()" />
                 </div>

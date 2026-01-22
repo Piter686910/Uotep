@@ -75,7 +75,8 @@ namespace Uotep
                                     StatisticheAtti.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                                     EstraiStatistiche.Visible = true;
-
+                                menuFureria.Visible = true;
+                                 TurnoMensile.Visible = true;
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
@@ -105,6 +106,9 @@ namespace Uotep
                                     Decretazione.Visible = true;
                                     Attivita.Visible = true;
                                 }
+                                menuFureria.Visible = true;
+                                Turnazione.Visible = true;
+                                AccTrunoMensile.Visible= true;  
                                 break;
                             case "PG":
                                 // Mostra voci per utenti standard
@@ -121,7 +125,7 @@ namespace Uotep
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
-
+                                GestionePraticaUote.Visible = true;
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
                                 {
                                     menuCoordinamentoAtti.Visible = true;
@@ -234,7 +238,7 @@ namespace Uotep
                                 menuEsci.Visible = true;
                                 break;
                             default:
-                                // menuHome.Visible = true;
+                               
                                 break;
                         }
                     }
