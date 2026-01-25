@@ -186,9 +186,7 @@
             margin-left: -10px;
         }
 
-        .larghezzaText {
-            width: 110px;
-        }
+        
     </style>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">

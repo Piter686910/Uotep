@@ -38,6 +38,9 @@ namespace Uotep
             // pronti per passare alla produzione, usare lo strumento di compilazione disponibile all'indirizzo https://modernizr.com per selezionare solo i test necessari
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                             "~/Scripts/modernizr-*"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+          "~/Content/bootstrap.css",
+          "~/Content/Site.css"));
         }
     }
 }

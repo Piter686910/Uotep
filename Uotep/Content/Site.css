@@ -17,8 +17,17 @@ select,
 textarea {
     max-width: 280px;
 }
-
-
+/* il seguente style serve per i bordi azzurri */
+.custom-border {
+    border: 2px solid #007bff; /* Cornice blu */
+    border-radius: 8px; /* Angoli arrotondati */
+    padding: 15px; /* Spazio interno */
+    margin: 5px 0; /* Spazio esterno */
+    margin-left: -10px;
+}
+.larghezzaText {
+    width: 110px;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

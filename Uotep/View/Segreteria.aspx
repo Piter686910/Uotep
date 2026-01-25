@@ -23,8 +23,11 @@
             $('#ModalRicercaFile').modal('hide');
         }
     </script>
-    <div class="jumbotron">
-        <h1>Caricamento file</h1>
+    <div class="jumbotron" >
+        <div class="text-center lead">
+            <h2>Caricamento file</h2>
+        </div>
+
         <p class="lead"></p>
     </div>
     <%-- LOGIN --%>
@@ -50,7 +53,7 @@
                             <div class="form-group text-center mt-4" style="text-align: left !important">
                                 <asp:Label ID="Label3" runat="server" Text="Numero Fascicolo" CssClass="form-label d-block mb-2"></asp:Label>
                                 <%--<label for="txPratica">Numero Fascicolo</label>--%>
-                                <asp:TextBox ID="txtNrFascicolo" runat="server" CssClass="form-control form-control-sm w-50" />
+                                <asp:TextBox ID="txtNrFascicolo" runat="server" CssClass="form-control form-control-sm w-50 larghezzaText" />
                                 <asp:RequiredFieldValidator ID="RqFascicolo" runat="server" ControlToValidate="txtNrFascicolo" ErrorMessage="Inserire il numero fascicolo" ForeColor="Red" ValidationGroup="bt">
 
                                 </asp:RequiredFieldValidator>
@@ -60,7 +63,7 @@
 
                                     <asp:Label ID="Label4" runat="server" Text="Data" CssClass="form-label d-block mb-2"></asp:Label>
 
-                                    <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control" placeholder="dd-MM-yyyy" />
+                                    <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control larghezzaText" placeholder="dd-MM-yyyy" />
                                     <asp:RequiredFieldValidator ID="RqData" runat="server" ControlToValidate="txtDataI" ErrorMessage="Inserire la data" ForeColor="Red" ValidationGroup="bt">
 
                                     </asp:RequiredFieldValidator>
@@ -125,7 +128,7 @@
         </div>
     </asp:Panel>
     <%-- Modale ricerca file --%>
-    <div class="modal fade" id="ModalRicercaFile"  tabindex="-1" aria-labelledby="modalLabel" aria-hidden="false">
+    <div class="modal fade" id="ModalRicercaFile" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="false">
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,7 +146,7 @@
                                 OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaFile_PageIndexChanging">
 
                                 <Columns>
-                                    <asp:BoundField DataField="id_file" HeaderText="ID" Visible="false"/>
+                                    <asp:BoundField DataField="id_file" HeaderText="ID" Visible="false" />
                                     <asp:BoundField DataField="fascicolo" HeaderText="Numero Fascicolo" />
                                     <asp:BoundField DataField="data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
                                     <asp:BoundField DataField="nomefile" HeaderText="Nome File" ItemStyle-Width="50%" />
@@ -151,7 +154,7 @@
 
                                     <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona"  CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
+                                            <asp:LinkButton ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Container.DataItemIndex + ";" + Eval("fascicolo") + ";" + Eval("data") + ";"  + Eval("nomefile") + ";" + Eval("folder") +";"+  Eval("id_file")  +";"  %>' CssClass="btn btn-success btn-sm" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
 
@@ -179,12 +182,12 @@
                             </asp:GridView>
 
                         </div>
-                       
+
                     </div>
                 </div>
-             
+
                 <div class="modal-footer">
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi"  OnClick="btChiudi_Click"/>
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudi_Click" />
                 </div>
             </div>
         </div>
@@ -208,7 +211,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click"/>
+                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>

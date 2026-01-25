@@ -20,8 +20,12 @@
         }
     </style>
     <div class="jumbotron">
-        <h1>CRUSCOTTO GESTIONE TABELLE</h1>
-        <p class="lead">In questa pagina è possibile inserire nuovi elementi nelle seguenti tabelle</p>
+        <div class="text-center lead">
+
+ <h2>CRUSCOTTO GESTIONE TABELLE</h2>
+        </div>
+       
+        <%--<p class="lead">In questa pagina è possibile inserire nuovi elementi nelle seguenti tabelle</p>--%>
     </div>
     <%-- --%>
 

@@ -56,9 +56,7 @@
             }
 
 
-        .larghezzaText {
-            width: 80px;
-        }
+       
     </style>
 
     <div class="jumbotron">

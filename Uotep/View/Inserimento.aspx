@@ -524,6 +524,7 @@
                                 <asp:ListItem Text="MA2"> </asp:ListItem>
                                 <asp:ListItem Text="MA3"> </asp:ListItem>
                                 <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
+                                 <asp:ListItem Text="PG"> </asp:ListItem>
                                 <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
                                 <asp:ListItem Text="URP"> </asp:ListItem>
                             </asp:DropDownList>

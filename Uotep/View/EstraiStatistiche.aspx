@@ -88,9 +88,7 @@
             margin-left: -10px;
         }
 
-        .larghezzaText {
-            width: 110px;
-        }
+       
 
         .GridViewRow {
             background-color: white;

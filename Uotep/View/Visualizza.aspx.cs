@@ -131,6 +131,8 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
             Pulisci();
+            Session.Remove("ListPratiche");
+            Session.Remove("ListRicerca");
         }
        
         protected void apripopup_Click(object sender, EventArgs e)

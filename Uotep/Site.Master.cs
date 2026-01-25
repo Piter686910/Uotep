@@ -236,6 +236,7 @@ namespace Uotep
                                 menuFureria.Visible= true;
                                 TurnoMensile.Visible = true;
                                 menuEsci.Visible = true;
+                                FSchedaDipendente.Visible= true;
                                 break;
                             default:
                                

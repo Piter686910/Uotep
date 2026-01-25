@@ -56,7 +56,17 @@ namespace Uotep
             scheda.Nominativo = txtNominativo.Text.ToUpper().Trim();
             scheda.Ufficio = txtUfficio.Text.ToUpper().Trim();
             scheda.dataAssunzione = Convert.ToDateTime(TxtDataAssunzione.Text.Trim());
-            scheda.dataSorveglianza = Convert.ToDateTime(txtDataProssimaSorveglianza.Text.Trim());
+            DateTime dataTemp;
+            if (DateTime.TryParse(txtDataProssimaSorveglianza.Text.Trim(), out dataTemp))
+            {
+                scheda.dataSorveglianza = dataTemp;
+            }
+            else
+            {
+                // Assegna un valore di default o gestisci l'errore
+                scheda.dataSorveglianza = DateTime.MinValue;
+            }
+            // scheda.dataSorveglianza = Convert.ToDateTime(txtDataProssimaSorveglianza.Text.Trim());
             scheda.MacroArea = txtMacroArea.Text.ToUpper().Trim();
             scheda.GruppoReperibilita = txtGruppoRep.Text.ToUpper().Trim();
             scheda.TurnoPref = txtTurnoPref.Text.ToUpper().Trim();
@@ -95,11 +105,13 @@ namespace Uotep
 
             if (!resp)
             {
+                errorMessage.InnerText = "Inserimento della scheda non riuscito";
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#MsgStampa').text('" + "Inserimento scheda effettuato." + "'); $('#PopStampa').modal('show');", true);
+                errorMessage.InnerText = "Inserimento scheda effettuato";
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento scheda effettuato." + "'); $('#errorModal').modal('show');", true);
 
                 Pulisci();
 
@@ -133,6 +145,7 @@ namespace Uotep
                 rdUote.Checked = false;
                 rdUotp.Checked = false;
                 ckLimitazioni.Checked = false;
+                TxtCategoriaEconomica.Text = string.Empty;
 
             }
             catch (Exception ex)
@@ -176,52 +189,6 @@ namespace Uotep
 
         }
 
-        private void CaricaDLL()
-        {
-            try
-            {
-
-                //DataTable CaricaOperatori = mn.getListOperatore();
-                //DdlPattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
-                //DdlPattuglia.DataTextField = "Nominativo"; // Il campo visibile
-                ////DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
-                //DdlPattuglia.Items.Insert(0, new ListItem("", "0"));
-                //DdlPattuglia.DataBind();
-                //DdlPattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-
-                ////DdlPattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-                ////DataTable CaricaOperatori = mn.getListOperatore();
-                //ddlCapopattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
-                //ddlCapopattuglia.DataTextField = "Nominativo"; // Il campo visibile
-                ////DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
-                //ddlCapopattuglia.Items.Insert(0, new ListItem("", "0"));
-                //ddlCapopattuglia.DataBind();
-                //ddlCapopattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-
-                //DataTable RicercaQuartiere = mn.getListQuartiereTP();
-                //DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                //DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                //DdlQuartiere.DataValueField = "id";
-                //DdlQuartiere.DataBind();
-                //DdlQuartiere.Items.Insert(0, new ListItem("", "0"));
-
-
-            }
-            catch (Exception ex)
-            {
-                if (!File.Exists(LogFile))
-                {
-                    using (StreamWriter sw = File.CreateText(LogFile)) { }
-                }
-
-                using (StreamWriter sw = File.AppendText(LogFile))
-                {
-                    sw.WriteLine(ex.Message + @" - Errore in carica ddl file inserimento.cs ");
-                    sw.Close();
-                }
-            }
-        }
-
 
         private void ToggleDivControls(Control container, bool isEnabled)
         {
@@ -254,17 +221,27 @@ namespace Uotep
                 dt = mn.getSchedaDip(txtMatricola.Text.Trim(), txtNominativo.Text.ToUpper().Trim());
             if (dt.Rows.Count > 0)
             {
-                txtMatricola.Text = dt.Rows[0]["matricola"].ToString().Trim();
+                txtMatricola.Text = dt.Rows[0]["matricola_ced"].ToString().Trim();
                 txtNominativo.Text = dt.Rows[0]["nominativo"].ToString().ToUpper().Trim();
-                txtGruppoRep.Text = dt.Rows[0]["gruppo_reper"].ToString();
+                txtGruppoRep.Text = dt.Rows[0]["gruppo_reperibilita"].ToString();
                 txtUfficio.Text = dt.Rows[0]["ufficio"].ToString().ToUpper().Trim();
                 txtMacroArea.Text = dt.Rows[0]["macro_area"].ToString().ToUpper().Trim();
                 TxtDataAssunzione.Text = Convert.ToDateTime(dt.Rows[0]["data_assunzione"].ToString()).ToString("dd/MM/yyyy");
                 txtGrado.Text = dt.Rows[0]["grado"].ToString().ToUpper().Trim();
+                var valoreData = dt.Rows[0]["data_sorv_sanitaria"];
 
+                if (valoreData != DBNull.Value && valoreData.ToString() != "")
+                {
+                    // Converti in Data e poi prendi solo "dd/MM/yyyy"
+                    txtDataProssimaSorveglianza.Text = Convert.ToDateTime(valoreData).ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    txtDataProssimaSorveglianza.Text = "";
+                }
                 txtTurnoPref.Text = dt.Rows[0]["turni_pref"].ToString().ToUpper();
                 //txtQuartina.Text = dt.Rows[0]["quartina"].ToString();
-                txtGruppoQ.Text = dt.Rows[0]["gruppo"].ToString().ToUpper().Trim();
+                txtGruppoQ.Text = dt.Rows[0]["gruppo_quartina"].ToString().ToUpper().Trim();
                 ckL104.Checked = dt.Rows[0]["perm_104"] != DBNull.Value ? Convert.ToBoolean(dt.Rows[0]["perm_104"]) : false;
                 ckAutista.Checked = dt.Rows[0]["autista"] != DBNull.Value ? Convert.ToBoolean(dt.Rows[0]["autista"]) : false;
                 ckArt53.Checked = dt.Rows[0]["perm_53"] != DBNull.Value ? Convert.ToBoolean(dt.Rows[0]["perm_53"]) : false;

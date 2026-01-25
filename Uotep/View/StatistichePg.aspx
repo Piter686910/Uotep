@@ -76,9 +76,7 @@
             margin-left: -10px;
         }
 
-        .larghezzaText {
-            width: 110px;
-        }
+       
     </style>
 
 

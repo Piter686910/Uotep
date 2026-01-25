@@ -512,6 +512,8 @@ namespace Uotep
             txtProt.Text = string.Empty;
             txtGiudice.Text = string.Empty;
             txtProdPenNr.Text = string.Empty;
+            txtBU.Text = string.Empty;
+            txtCodEdificio.Text = string.Empty; 
         }
 
         protected void NuovaRicerca_Click(object sender, EventArgs e)

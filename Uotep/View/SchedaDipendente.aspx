@@ -8,15 +8,7 @@
             $('#errorModal').modal('show');
         }
 
-        // Mostra il popup
-        function showModal() {
-            $('#myModal').modal('show');
-        }
-
-        // Nasconde il popup
-        function hideModal() {
-            $('#myModal').modal('hide');
-        }
+       
 
         // Funzione per aggiungere testo a un TextBox
         function appendToTextBox(TextPattugliaCompleta, DdlPattuglia) {

@@ -16,7 +16,7 @@
         .centered-panel {
             position: absolute;
             top: 50%;
-            left: 50%;
+            left: 17%;
             transform: translate(-50%, -50%);
             width: 100%;
             max-width: 400px; /* Limita la larghezza del form */
@@ -37,31 +37,31 @@
             <!-- Etichetta Matricola e Campo -->
             <div class="form-group">
                 <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label text-start d-block mb-2"></asp:Label>
-                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control1"></asp:TextBox>
                 <asp:HiddenField ID="Hmatricola" runat="server" />
             </div>
 
             <!-- Etichetta Password e Campo -->
             <div class="form-group mt-3">
                 <asp:Label ID="Label1" runat="server" Text="Password" CssClass="form-label text-start d-block mb-2"></asp:Label>
-                <asp:TextBox ID="TxtPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="TxtPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control1"></asp:TextBox>
             </div>
 
             <!-- Etichetta nuova password -->
             <div id="DivNewPassw" runat="server" class="form-group mt-3" visible="false">
                 <asp:Label ID="Label2" runat="server" Text="Nuova Password" CssClass="form-label text-start d-block mb-2 text-danger"></asp:Label>
-                <asp:TextBox ID="txtNewPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control"></asp:TextBox>
+                <asp:TextBox ID="txtNewPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control1"></asp:TextBox>
             </div>
 
             <!-- Pulsanti -->
-            <div class="col-md-6 ">
+            <div class="col-md-6 " style="margin-left:-10px">
                 <asp:Button ID="btLogin" Text="Entra" runat="server" OnClick="trova_Click" ToolTip="Login" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
 
                 <%--<asp:Button ID="btResetPassw" Text="Reset Password" runat="server" OnClick="btResetPassw_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />--%>
                 <asp:Button ID="btsave" Text="Save" runat="server" OnClick="SalvaPassw_Click" ToolTip="Salva password" CssClass="btn btn-primary px-4" Visible="false" />
             </div>
-        <div class="col-md-6 ">
-            <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" Text="Reset Password" runat="server"> </asp:LinkButton>
+        <div class="col-md-6 " style="margin-left:-50px">
+            <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" Text="Reset Password" Font-Bold="true" Font-Underline="true" runat="server"> </asp:LinkButton>
         </div>
         </div>
     </asp:Panel>

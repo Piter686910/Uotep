@@ -1485,7 +1485,7 @@ namespace Uotep.Classi
             }
             else if (!String.IsNullOrEmpty(matricola))
 
-                sql = "SELECT * FROM SchedaDipendente where matricola = '" + matricola + "'";
+                sql = "SELECT * FROM SchedaDipendente where matricola_ced = '" + matricola + "'";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2293,10 +2293,41 @@ namespace Uotep.Classi
 
             string sql = String.Empty;
             string testoSql = string.Empty;
-            sql = "IF NOT EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola = " + scheda.Matricola + ") BEGIN INSERT INTO SchedaDipendente (matricola_ced, nominativo,grado," +
-                 "data_assunzione,categ_economica,autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,perm_53,perm_104,limitazioni,turni_pref,Macro_area,area,data_sorv_sanitaria) " +
-                 " VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
-                 scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "')  END";
+            //sql = "IF NOT EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola_ced = '" + scheda.Matricola + "') BEGIN INSERT INTO SchedaDipendente (matricola_ced, nominativo,grado," +
+            //     "data_assunzione,categ_economica,autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,perm_53,perm_104,limitazioni,turni_pref,Macro_area,area,data_sorv_sanitaria) " +
+            //     " VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
+            //     scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "')  END";
+            sql =
+    "IF EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola_ced = '" + scheda.Matricola + "') " +
+    "BEGIN " +
+        "UPDATE SchedaDipendente SET " +
+            "nominativo = '" + scheda.Nominativo + "', " +
+            "grado = '" + scheda.Grado + "', " +
+            "data_assunzione = '" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "', " +
+            "categ_economica = '" + scheda.CategoriaEconomica + "', " +
+            "autista = '" + scheda.IsAutista + "', " +
+            "armato = '" + scheda.Armato + "', " +
+            "quartina = '" + scheda.Quartina + "', " +
+            "gruppo_quartina = '" + scheda.GruppoQuartina + "', " +
+            "gruppo_reperibilita = '" + scheda.GruppoReperibilita + "', " +
+            "perm_53 = '" + scheda.l53 + "', " +
+            "perm_104 = '" + scheda.l104 + "', " +
+            "limitazioni = '" + scheda.limitazione + "', " +
+            "turni_pref = '" + scheda.TurnoPref + "', " +
+            "Macro_area = '" + scheda.MacroArea + "', " +
+            "area = '" + scheda.Area + "', " +
+            "data_sorv_sanitaria = '" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "' " +
+        "WHERE matricola_ced = '" + scheda.Matricola + "' " +
+    "END " +
+    "ELSE " +
+    "BEGIN " +
+        "INSERT INTO SchedaDipendente (matricola_ced, nominativo, grado, data_assunzione, categ_economica, autista, armato, quartina, gruppo_quartina, gruppo_reperibilita, perm_53, perm_104, limitazioni, turni_pref, Macro_area, area, data_sorv_sanitaria) " +
+        "VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
+        scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "') " +
+    "END";
+
+
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2307,7 +2338,7 @@ namespace Uotep.Classi
 
                     try
                     {
-                        conn.Open();
+                       // conn.Open();
 
                         // Esegue il comando
                         int righeCoinvolte = cmd.ExecuteNonQuery();

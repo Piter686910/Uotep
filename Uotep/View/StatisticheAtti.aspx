@@ -72,23 +72,7 @@
         </div>
 
     </div>
-
-
-
-    <%-- il seguente style serve per i bordi azzurri --%>
-    <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -10px;
-        }
-
-        .larghezzaText {
-            width: 110px;
-        }
-    </style>
+    
     <%-- popup errori --%>
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
     <div class="modal-dialog"
