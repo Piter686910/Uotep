@@ -321,11 +321,11 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtDataInserimento">Data Inserimento</label>
-                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtDataInizioAttivita">Data Inizio Attività</label>
-                        <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control" Font-Bold="true" />
+                        <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" />
                         <asp:RegularExpressionValidator
                             ID="RegularExpressionValidator2"
                             runat="server"
@@ -397,7 +397,7 @@
 
                     <div class="form-group mb-3">
                         <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
-                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control" />
+                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control data-auto" />
                         <asp:RegularExpressionValidator
                             ID="RegularExpressionValidator1"
                             runat="server"
@@ -420,7 +420,7 @@
                     <div class="form-group mb-3">
                         <label for="txtDataNascita">Data Nascita</label>
 
-                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control data-auto"></asp:TextBox>
 
                     </div>
 

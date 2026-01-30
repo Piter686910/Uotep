@@ -260,5 +260,6 @@
         </div>
 
     </form>
+    <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'></script>
 </body>
 </html>

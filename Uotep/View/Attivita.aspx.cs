@@ -73,31 +73,7 @@ namespace Uotep
                 }
 
             }
-            //else
-            //  {
-            //if (!String.IsNullOrEmpty(HfFiltroMA1.Value))
-            //{
-            //    PopulateGridView("arch_note", HfFiltroMA1.Value);
-            //    apripopupPratica_Click(sender, e);
-            //}
-            //else
-            //{
-            //    if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
-            //    {
-            //        PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value);
-            //        apripopupPratica_Click(sender, e);
-            //    }
-            //    else
-            //    {
-            //        if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
-            //        {
-            //            PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value);
-            //            apripopupPratica_Click(sender, e);
-            //        }
-            //    }
-            //}
-            //   }
-
+           
 
         }
         

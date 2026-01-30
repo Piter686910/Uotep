@@ -24,7 +24,7 @@ namespace Uotep
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-        
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -126,8 +126,8 @@ namespace Uotep
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta effettuare login" + "'); $('#errorModal').modal('show');", true);
 
-                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
-                            Response.Redirect(url, false);
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                    Response.Redirect(url, false);
                 }
 
                 Manager mn = new Manager();
@@ -262,7 +262,7 @@ namespace Uotep
 
         }
 
-   
+
         /// <summary>
         /// funzione che inserisce spaces al posto del min data value
         /// </summary>
@@ -292,10 +292,10 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable scheda = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
-           
+
             Routine stampa = new Routine();
             stampa.CreaPdfSchedaCarburante(scheda);
-           // stampa.CreaPdfLetteraAccompagnamento(scheda, PathLetteraAccompagnamento, "LetteraAccompagnamento.pdf");
+            // stampa.CreaPdfLetteraAccompagnamento(scheda, PathLetteraAccompagnamento, "LetteraAccompagnamento.pdf");
         }
 
         protected void DdlSigla_SelectedIndexChanged1(object sender, EventArgs e)
@@ -339,6 +339,7 @@ namespace Uotep
 
             gvDett.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             btCerca_Click(sender, e);
+
         }
         protected void gvDett_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -395,9 +396,9 @@ namespace Uotep
                 {
                     GestAuto obj = new GestAuto();
                     obj.id = System.Convert.ToInt32(values[0]);    // id riga
-                    obj.targa= values[1];     // targa
-                    obj.data = Convert.ToDateTime( values[2]); // DataInserimento
-                    obj.autista= values[3]; // autista
+                    obj.targa = values[1];     // targa
+                    obj.data = Convert.ToDateTime(values[2]); // DataInserimento
+                    obj.autista = values[3]; // autista
                     //Hid.Value = values[4]; // id
 
                     obj.matricola = Vuser;
@@ -407,7 +408,7 @@ namespace Uotep
                     if (upd)
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Rifornimento per : " + obj.targa + " verificato." + "'); $('#errorModal').modal('show');", true);
-                        btCerca_Click(sender,e);
+                        btCerca_Click(sender, e);
 
                     }
                     else
@@ -453,7 +454,7 @@ namespace Uotep
             string columnName = ""; // Devi decidere su quale campo del DB filtrare
             if (txtFilter.ID == "txtFilterData")
             {
-                columnName = "data"; 
+                columnName = "data";
             }
             // Puoi aggiungere altri if/else per altre TextBox di filtro
 
@@ -461,8 +462,8 @@ namespace Uotep
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
             PopulateGridView(columnName, HfFiltroData.Value); // Esempio di funzione di filtro
-                                                                    //            apripopup_Click(sender, e);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+                                                              //            apripopup_Click(sender, e);
+                                                              //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
         private void PopulateGridView(string filterColumn = "", string filterValue = "")
         {
@@ -473,12 +474,14 @@ namespace Uotep
             try
             {
                 //applico il filtro
+                string filterExpression = string.Empty;
                 if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
                 {
 
-
-
-                    string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                    if (filterColumn == "data")
+                        filterExpression = $"{filterColumn} IN ('{filterValue.Replace("'", "''")}')";
+                    else
+                        filterExpression = $"{filterColumn} LIKE ('%{filterValue.Replace("'", "''")}%')";
                     DataRow[] filteredRows = dt.Select(filterExpression);
 
                     if (filteredRows.Length > 0)

@@ -224,7 +224,7 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
-                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator
@@ -241,7 +241,7 @@
 
                             <div class="form-group mb-3" style="margin-top: -10px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 

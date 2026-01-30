@@ -24,23 +24,7 @@
     </script>
     <%-- il seguente style serve per i bordi azzurri --%>
     <style>
-        .GridViewRow {
-            background-color: white;
-        }
-
-        /* Stile per la riga alternata (azzurro chiaro) */
-        .GridViewAlternatingRow {
-            background-color: #E6F3FF; /* Un azzurro molto chiaro */
-            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-        }
-
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            /*margin-left: -30px;*/
-        }
+       
 
         .table-layout-fixed {
             table-layout: fixed;
@@ -108,7 +92,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="TxtData">Data</label>
-                            <asp:TextBox ID="TxtData" runat="server" CssClass="form-control" />
+                            <asp:TextBox ID="TxtData" runat="server" CssClass="form-control data-auto" />
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtData" ValidationGroup="bt" ErrorMessage="Inserire data" ForeColor="Red">
                             </asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator

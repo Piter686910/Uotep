@@ -147,7 +147,7 @@
 
                             <div class="form-group mb-3">
                                 <label for="TxtDataAssunzione">Data Assunzione</label>
-                                <asp:TextBox ID="TxtDataAssunzione" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                                <asp:TextBox ID="TxtDataAssunzione" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" />
 
                             </div>
 
@@ -166,7 +166,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDataProssimaSorveglianza">Prox. Sorveglianza Sanitaria</label>
-                                <asp:TextBox ID="txtDataProssimaSorveglianza" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtDataProssimaSorveglianza" runat="server" CssClass="form-control data-auto" />
                             </div>
 
                         </div>

@@ -49,7 +49,7 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
                                 <asp:Label ID="Label4" runat="server">Data Uscita</asp:Label>
-                                <asp:TextBox ID="TxtDataUscita" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="TxtDataUscita" runat="server" CssClass="form-control data-auto" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataUscita" ValidationGroup="bt" ErrorMessage="Inserire data uscita" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator
@@ -66,7 +66,7 @@
 
                             <div class="form-group mb-3" style="margin-top: -15px!important">
                                 <asp:Label ID="Label3" runat="server">Data Rientro</asp:Label>
-                                <asp:TextBox ID="txtDataRientro" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtDataRientro" runat="server" CssClass="form-control data-auto" />
 
                             </div>
 
@@ -80,7 +80,7 @@
                             <div class="form-group mb-3">
                                 <div class="form-group mb-3">
                                     <asp:Label ID="Label2" runat="server">Data Spostamento</asp:Label>
-                                    <asp:TextBox ID="txtDataSpostamento" runat="server" CssClass="form-control" />
+                                    <asp:TextBox ID="txtDataSpostamento" runat="server" CssClass="form-control data-auto" />
 
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                             <div class="form-group mb-3" style="margin-top: 40px!important">
                                 <div class="form-group mb-3">
                                     <asp:Label ID="Label1" runat="server">Data Riscontro</asp:Label>
-                                    <asp:TextBox ID="txtDataRiscontro" runat="server" CssClass="form-control" />
+                                    <asp:TextBox ID="txtDataRiscontro" runat="server" CssClass="form-control data-auto" />
 
                                 </div>
                             </div>

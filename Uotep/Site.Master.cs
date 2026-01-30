@@ -270,6 +270,8 @@ namespace Uotep
             Session.Remove("ListRicercaGestioneAuto");
             Session.Remove("ListAuto");
             Session.Remove("TurniMensili");
+            Session.Remove("ListScadenziario");
+            Session.Remove("ListRicercaFiltro");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

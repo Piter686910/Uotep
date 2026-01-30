@@ -589,7 +589,7 @@ namespace Uotep
 
 
 
-                    string filterExpression = $"{filterColumn} LIKE '%{filterValue.Replace("'", "''")}%'";
+                    string filterExpression = $"{filterColumn} LIKE ('%{filterValue.Replace("'", "''")}%')";
                     DataRow[] filteredRows = dt.Select(filterExpression);
 
                     if (filteredRows.Length > 0)

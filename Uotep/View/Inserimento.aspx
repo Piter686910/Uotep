@@ -438,7 +438,7 @@
 
                         <div class="form-group mb-3">
                             <label for="txtDataInsCarico">Data Inserimento</label>
-                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control" Font-Bold="true" />
+                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control data-auto" Font-Bold="true" />
                         </div>
                         <div class="form-group mb-3">
                             <%--<asp:Button ID="btinsProv" runat="server" Text="+" CssClass="btn btn-primary mt-3" OnClick="apripopupProvenienza_Click" />--%>
@@ -534,7 +534,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtDataCarico">Data Carico</label>
-                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control"></asp:TextBox>
+                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                         </div>
 
                     </div>
@@ -769,7 +769,7 @@
                 <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
                     <div class="form-group mb-3">
                         <label for="txtdataEvasaPopup">Data Evasa</label>
-                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                     </div>
                 </div>
 
@@ -808,7 +808,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDataDecretazione">Data</label>
-                                <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3"></asp:TextBox>
+                                <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3 data-auto"></asp:TextBox>
 
                             </div>
 

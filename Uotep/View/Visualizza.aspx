@@ -127,11 +127,11 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Data Inizio Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
+                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" />
 
                     <asp:Label ID="Label4" runat="server" Text="Data Fine Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDataA" runat="server" CssClass="form-control" placeholder="Data Fine" />
+                    <asp:TextBox ID="txtDataA" runat="server" CssClass="form-control data-auto" placeholder="Data Fine" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -219,11 +219,11 @@
 
                     <asp:Label ID="Label12" runat="server" Text="Data Inserimento Da" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDatArrivoDa" runat="server" CssClass="form-control" placeholder="Data Inizio" />
+                    <asp:TextBox ID="txtDatArrivoDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" />
 
                     <asp:Label ID="Label13" runat="server" Text="Data Inserimento A" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDatArrivoA" runat="server" CssClass="form-control" placeholder="Data Fine" />
+                    <asp:TextBox ID="txtDatArrivoA" runat="server" CssClass="form-control data-auto" placeholder="Data Fine" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -258,7 +258,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtDataInsCarico">Data Inserimento</label>
-                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                            <asp:TextBox ID="txtDataInsCarico" runat="server" CssClass="form-control mb-3 data-auto" Enabled="false" />
 
                         </div>
                         <div class="form-group mb-3">
@@ -306,7 +306,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="txtDataCarico">Data Carico</label>
-                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                            <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3 data-auto" Enabled="false" />
                         </div>
                     </div>
 
@@ -331,7 +331,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtDataDataEvasa" class="form-label">Data Esito</label>
-                            <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3" Enabled="false" />
+                            <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3 data-auto" Enabled="false" />
 
                         </div>
 

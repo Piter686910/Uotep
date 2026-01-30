@@ -260,6 +260,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.aspx" />
+    <Content Include="Scripts\Utility.js" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -295,6 +296,7 @@
     </Content>
     <Content Include="View\GestionePratica.aspx" />
     <Content Include="View\GestioneAuto.aspx" />
+    <Content Include="View\Urp.aspx" />
     <Content Include="View\SchedaDipendente.aspx" />
     <Content Include="View\StatisticheAtti.aspx" />
     <Content Include="View\StatistichePg.aspx" />
@@ -359,6 +361,8 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classi\UrpRegistro.cs" />
+    <Compile Include="Classi\UrpScadenziario.cs" />
     <Compile Include="Classi\SchedaDipendenteClass.cs" />
     <Compile Include="Classi\GestAuto.cs" />
     <Compile Include="Classi\ArchivioUotp.cs" />
@@ -396,6 +400,13 @@
     </Compile>
     <Compile Include="View\GestioneAuto.aspx.designer.cs">
       <DependentUpon>GestioneAuto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Urp.aspx.cs">
+      <DependentUpon>Urp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Urp.aspx.designer.cs">
+      <DependentUpon>Urp.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\SchedaDipendente.aspx.cs">
       <DependentUpon>SchedaDipendente.aspx</DependentUpon>
