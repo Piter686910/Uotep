@@ -1,4 +1,5 @@
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.CustomXmlSchemaReferences;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.EMMA;
@@ -27,6 +28,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Web.Services;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using static System.Windows.Forms.AxHost;
 using static Uote.test;
@@ -373,6 +375,15 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListRicercaEsitoUrp()
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT  * FROM EsitoUrp order by descrizione";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn);
+            }
+        }
         public DataTable getListQuartiere()
         {
             DataTable tb = new DataTable();
@@ -500,6 +511,20 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable GetListRegistro()
+        {
+            DataTable dt = new DataTable();
+
+            string sql = "SELECT oggetto,dataPresentRichiesta, nrPgTrasmissioneRichiesto, uffDetentore,controInteressati,esito,motivazione, nrPgTrasmissioneRiscontro, dataConclProcedimento FROM RegistroUrp " +
+    " ORDER BY dataConclProcedimento";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return dt = FillTable(sql, conn);
+            }
+
+        }
         public List<DipendenteTurno> GetTurniMensile(int anno, string mese)
         {
             List<DipendenteTurno> lista = new List<DipendenteTurno>();
@@ -582,7 +607,7 @@ namespace Uotep.Classi
                             }
                         }
 
-                       
+
                     }
 
                     // Convertiamo i valori del dizionario in Lista
@@ -1418,6 +1443,62 @@ namespace Uotep.Classi
 
 
             sql = "SELECT * FROM parcoauto order by sigla";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable GetScadenziarioById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM ScadenziarioUrp where id_scadenziario = " + id;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable GetListRegistroUrp()
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM RegistroUrp order by dataConclProcedimento";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable GetListScadenziarioUrpEsitoVuoto(string filterValue)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM ScadenziarioUrp where esito='"+ filterValue + "'" ;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
+        public DataTable GetListScadenziarioUrp()
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM ScadenziarioUrp order by nr_carico, dataArrivo";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2338,7 +2419,7 @@ namespace Uotep.Classi
 
                     try
                     {
-                       // conn.Open();
+                        // conn.Open();
 
                         // Esegue il comando
                         int righeCoinvolte = cmd.ExecuteNonQuery();
@@ -2454,7 +2535,266 @@ namespace Uotep.Classi
 
         }
 
+        public Boolean InsScadenziarioRegistro(UrpScadenziario scadenziario, int id, String HfRegistro, UrpRegistro registro, String newScadenza)
+        {
+            bool resp = true;
+            string sql_scadenziario = String.Empty;
+            string sql_registro = String.Empty;
+            DateTime dataScadenzaNew = new DateTime();
+            string testoSql = string.Empty;
+            if (!string.IsNullOrWhiteSpace(newScadenza))
+                dataScadenzaNew = Convert.ToDateTime(newScadenza);
+            try
+            {
 
+                sql_scadenziario = "UPDATE ScadenziarioUrp SET " +
+        "nr_carico = '" + scadenziario.nr_carico.Trim() + "', " +
+        "anno = " + scadenziario.anno + ", " +
+        "nr_pratica = '" + scadenziario.nr_pratica.Trim() + "', " +
+        "richiedente = '" + scadenziario.richiedente.Replace("'", "''").Trim() + "', " +
+        "protGen = '" + scadenziario.protGen.Trim() + "', " +
+        "dataArrivo = '" + scadenziario.dataArrivo.ToString("yyyy-MM-dd") + "', " +
+        "dataScadenza = '" + scadenziario.dataScadenza.ToString("yyyy-MM-dd") + "', " +
+        "controInteressati = '" + scadenziario.controInteressati + "', " +
+        "esito = '" + scadenziario.esito.Replace("'", "''").Trim() + "', " +
+        "motivazione = '" + scadenziario.motivazione.Replace("'", "''").Trim() + "', " +
+        "protUscita = '" + scadenziario.protUscita.Trim() + "', " +
+        "dataUscita = '" + scadenziario.dataUscita.ToString("yyyy-MM-dd") + "', " +
+        "ric24190 = '" + scadenziario.ric24190 + "', " +
+        "ric3313 = '" + scadenziario.ric3313 + "' " + // TOLTA LA VIRGOLA QUI
+    "WHERE id_scadenziario = " + id + " ";
+                // scadenziario.dataScadenza = dataScadenzaNew;
+                string sql_ins = "INSERT INTO ScadenziarioUrp (nr_carico, anno, nr_pratica, richiedente, protGen, dataArrivo, dataScadenza, " +
+                "controInteressati, esito, motivazione, protUscita, dataUscita, ric24190, ric3313) " +
+    "VALUES ('" + scadenziario.nr_carico.Trim() + "'," +
+                  scadenziario.anno + ",'" +
+                  scadenziario.nr_pratica.Trim() + "','" +
+                  scadenziario.richiedente.Replace("'", "''").Trim() + "','" +
+                  scadenziario.protGen.Trim() + "','" +
+                  scadenziario.dataArrivo.ToString("yyyy-MM-dd") + "','" +  // AGGIUNTA FORMATTAZIONE
+                  dataScadenzaNew.ToString("yyyy-MM-dd") + "','" +  // AGGIUNTA FORMATTAZIONE
+                  false + "','" + //controinteressati
+                  null + "','" + // esito vuoto
+                  null + "','" + // motivazione vuota
+                  null + "','" + // prot uscita vuoto
+                  null + "','" + //  data uscita vuota
+                  scadenziario.ric24190 + "','" +
+                  scadenziario.ric3313 + "') ";
+
+
+                sql_registro = "INSERT INTO RegistroUrp (oggetto, dataPresentRichiesta, nrPgTrasmissioneRichiesto, uffDetentore, controInteressati, esito, motivazione, nrPgTrasmissioneRiscontro, dataConclProcedimento) " +
+                "VALUES ('" + registro.oggetto.Trim() + "','" +
+                     registro.dataPresentRichiesta.ToString("yyyy-MM-dd") + "','" +  // AGGIUNTA FORMATTAZIONE
+                     registro.nrPgTrasmissioneRichiesto + "','" +
+                     registro.uffDetentore.Replace("'", "''").Trim() + "','" +
+                     registro.controInteressati + "','" +
+                     registro.esito.Replace("'", "''").Trim() + "','" +
+                     registro.motivazione.Replace("'", "''").Trim() + "','" +
+                     registro.nrPgTrasmissioneRiscontro + "','" +
+                     registro.dataConclProcedimento.ToString("yyyy-MM-dd") + "') ";
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    using (SqlTransaction tran = conn.BeginTransaction("trans"))
+                    {
+
+                        using (SqlCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = tran;
+
+                            try
+                            {
+                                command.CommandText = sql_scadenziario;
+                                testoSql = "UrpScadenziario";
+                                int res = command.ExecuteNonQuery();
+
+                                if (res > 0)
+                                {
+                                    if (!String.IsNullOrWhiteSpace(HfRegistro))
+                                    {
+                                        switch (HfRegistro)
+                                        {
+                                            case "duplica":
+                                                // SECONDA OPERAZIONE: solo se duplico
+                                                command.CommandText = sql_ins;
+
+                                                command.ExecuteNonQuery();
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    // terza operazione
+                                    command.CommandText = sql_registro;
+
+                                    command.ExecuteNonQuery();
+
+                                    tran.Commit();
+                                    resp = true;
+                                }
+                                else
+                                {
+                                    // Se il primo inserimento non ha modificato righe, annulla tutto.
+                                    tran.Rollback();
+                                    resp = false;
+                                }
+                            }
+
+                            catch (Exception ex)
+                            {
+                                if (!File.Exists(LogFile))
+                                {
+                                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                                }
+
+                                using (StreamWriter sw = File.AppendText(LogFile))
+                                {
+                                    sw.WriteLine("carico:" + scadenziario.nr_carico.Trim() + ", " + scadenziario.anno + " - " + ex.Message + @" - Errore in inserimento tabella UrpScadenziario ");
+                                    sw.Close();
+                                }
+                                tran.Rollback();
+                                resp = false;
+
+
+                            }
+                        }
+                        conn.Close();
+                        conn.Dispose();
+                        return resp;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+
+        public Boolean InsScadenziario(UrpScadenziario scadenziario, int id)
+        {
+            bool resp = true;
+            string sql_scadenziario = String.Empty;
+            string sql_registro = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+
+                sql_scadenziario =
+    "IF EXISTS (SELECT 1 FROM ScadenziarioUrp WHERE id_scadenziario = " + id + ") " +
+"BEGIN " +
+    "UPDATE ScadenziarioUrp SET " +
+        "nr_carico = '" + scadenziario.nr_carico.Trim() + "', " +
+        "anno = " + scadenziario.anno + ", " +
+        "nr_pratica = '" + scadenziario.nr_pratica.Trim() + "', " +
+        "richiedente = '" + scadenziario.richiedente.Replace("'", "''").Trim() + "', " +
+        "protGen = '" + scadenziario.protGen.Trim() + "', " +
+        "dataArrivo = '" + scadenziario.dataArrivo.ToString("yyyy-MM-dd") + "', " +
+        "dataScadenza = '" + scadenziario.dataScadenza.ToString("yyyy-MM-dd") + "', " +
+        "controInteressati = '" + scadenziario.controInteressati + "', " +
+        "esito = '" + scadenziario.esito.Replace("'", "''").Trim() + "', " +
+        "motivazione = '" + scadenziario.motivazione.Replace("'", "''").Trim() + "', " +
+        "protUscita = '" + scadenziario.protUscita.Trim() + "', " +
+        "dataUscita = '" + scadenziario.dataUscita.ToString("yyyy-MM-dd") + "', " +
+        "ric24190 = '" + scadenziario.ric24190 + "', " +
+        "ric3313 = '" + scadenziario.ric3313 + "' " + // TOLTA LA VIRGOLA QUI
+    "WHERE id_scadenziario = " + id + " " +
+"END " +
+"ELSE " +
+"BEGIN " +
+    "INSERT INTO ScadenziarioUrp (nr_carico, anno, nr_pratica, richiedente, protGen, dataArrivo, dataScadenza, " +
+                "controInteressati, esito, motivazione, protUscita, dataUscita, ric24190, ric3313) " +
+    "VALUES ('" + scadenziario.nr_carico.Trim() + "'," +
+                  scadenziario.anno + ",'" +
+                  scadenziario.nr_pratica.Trim() + "','" +
+                  scadenziario.richiedente.Replace("'", "''").Trim() + "','" +
+                  scadenziario.protGen.Trim() + "','" +
+                  scadenziario.dataArrivo.ToString("yyyy-MM-dd") + "','" +  // AGGIUNTA FORMATTAZIONE
+                  scadenziario.dataScadenza.ToString("yyyy-MM-dd") + "','" + // AGGIUNTA FORMATTAZIONE
+                  scadenziario.controInteressati + "','" +
+                  scadenziario.esito.Replace("'", "''").Trim() + "','" +
+                  scadenziario.motivazione.Replace("'", "''").Trim() + "','" +
+                  scadenziario.protUscita.Trim() + "','" +
+                  scadenziario.dataUscita.ToString("yyyy-MM-dd") + "','" + // AGGIUNTA FORMATTAZIONE
+                  scadenziario.ric24190 + "','" +
+                  scadenziario.ric3313 + "') " +
+"END";
+
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    using (SqlTransaction tran = conn.BeginTransaction("trans"))
+                    {
+
+                        using (SqlCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = tran;
+
+                            try
+                            {
+                                command.CommandText = sql_scadenziario;
+                                testoSql = "UrpScadenziario";
+                                int res = command.ExecuteNonQuery();
+
+                                if (res > 0)
+                                {
+
+                                    tran.Commit();
+                                    resp = true;
+                                }
+                                else
+                                {
+                                    // Se il primo inserimento non ha modificato righe, annulla tutto.
+                                    tran.Rollback();
+                                    resp = false;
+                                }
+                            }
+
+                            catch (Exception ex)
+                            {
+                                if (!File.Exists(LogFile))
+                                {
+                                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                                }
+
+                                using (StreamWriter sw = File.AppendText(LogFile))
+                                {
+                                    sw.WriteLine("carico:" + scadenziario.nr_carico.Trim() + ", " + scadenziario.anno + " - " + ex.Message + @" - Errore in inserimento tabella UrpScadenziario ");
+                                    sw.Close();
+                                }
+                                tran.Rollback();
+                                resp = false;
+
+
+                            }
+                        }
+                        conn.Close();
+                        conn.Dispose();
+                        return resp;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
 
         /// <summary>
         /// inserimento tabella RSNL annuale
@@ -4298,7 +4638,7 @@ namespace Uotep.Classi
         public string GetNumControlliCant(string mese, int anno)
         {
             string sql = string.Empty;
-            string giro=string.Empty;
+            string giro = string.Empty;
             //  trasformo stringa mese in numero;
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);

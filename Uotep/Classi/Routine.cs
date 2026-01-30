@@ -1379,7 +1379,120 @@ namespace Uotep.Classi
             }
 
         }
-        public void CreaExcelTurnazioneMensile(List<DipendenteTurno> listaDati, int anno, int mese, int giorniMese,HttpContext Context)
+        /// <summary>
+        /// estrae la tabella Registro e la esporta in un file Excel
+        /// </summary>
+        /// <param name="listaDati"></param>
+        /// <param name="Filename"></param>
+        /// <param name="Context"></param>
+        public void CreaExcelRegistro(DataTable listaDati, string Filename, HttpContext Context)
+        {
+            // 2. CREA IL WORKBOOK
+            string tempFilePath = System.IO.Path.GetTempFileName(); // Ottieni un nome di file temporaneo univoco
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".xlsx"); // Cambia l'estensione in .xlsx
+            string semestre = (DateTime.Now.Month <= 6) ? "I SEM" : "II SEM";
+            // 2. Esporta la DataTable in Excel
+
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Registro " + semestre + " " + DateTime.Now.Year);
+
+                // 1. AGGIUNTA COLONNA CONTATORE (PRIMA DELL'ESPORTAZIONE)
+                // Aggiungo la colonna "N." di tipo intero
+                DataColumn colContatore = new DataColumn("N.", typeof(int));
+                if (!listaDati.Columns.Contains("N."))
+                {
+                    listaDati.Columns.Add(colContatore);
+                }
+
+                // Sposto la colonna "N." in prima posizione (indice 0)
+                listaDati.Columns["N."].SetOrdinal(0);
+
+                // Popolo il contatore progressivo
+                for (int i = 0; i < listaDati.Rows.Count; i++)
+                {
+                    listaDati.Rows[i]["N."] = i + 1;
+                }
+
+                // 2. RINOMINA COLONNE (Tuo codice esistente)
+                var columnRenameMap = new Dictionary<string, string>
+    {
+        { "oggetto", "OGGETTO" },
+        { "dataPresentRichiesta", "DATA PRESENTAZIONE RICHIESTA" },
+        { "nrPgTrasmissioneRichiesto", "NUMERO PG TRASMISSIONE\r\nRICHIESTA DA PARTE DELL'URP" },
+        { "uffDetentore", "UFFICIO DETENTORE" },
+        { "CONTROINTERESSATI", "CONTRO INTERESSATI" },
+        { "esito", "ESITO" },
+        { "motivazione", "MOTIVAZIONE\r\n(diniego/differimento)" },
+        { "nrPgTrasmissioneRiscontro", "NUMERO PG TRASMISSIONE\r\n RISCONTRO ALL'URP" },
+        { "dataConclProcedimento", "DATA CONCLUSIONE\r\nPROCEDIMENTO" }
+    };
+
+                foreach (var entry in columnRenameMap)
+                {
+                    if (listaDati.Columns.Contains(entry.Key))
+                    {
+                        listaDati.Columns[entry.Key].ColumnName = entry.Value;
+                    }
+                }
+
+                // 3. CREAZIONE RIGA DI INTESTAZIONE (TITOLO) ALLA RIGA 1
+                string titoloPrincipale = "REGISTRO DELLE RICHIESTE DI ACCESSO DOCUMENTALE\r\n(ART. 22 LEGGE 241/1990)\r\n " + semestre + " " + DateTime.Now.Year;
+                var cellaTitolo = worksheet.Cell(1, 1);
+                cellaTitolo.Value = titoloPrincipale;
+                
+                // Unisco le celle dalla colonna 1 fino all'ultima colonna occupata dai dati
+                worksheet.Range(1, 1, 1, listaDati.Columns.Count).Merge();
+
+                // Stile del titolo principale
+                var stileTitolo = worksheet.Range(1, 1, 1, listaDati.Columns.Count).Style;
+                stileTitolo.Font.Bold = true;
+                stileTitolo.Font.FontSize = 14;
+                stileTitolo.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                stileTitolo.Fill.BackgroundColor = XLColor.Orange; 
+
+
+                // Stile riga intestazione
+                var stileRigaIntest = worksheet.Range(2,1,2, listaDati.Columns.Count).Style;
+                stileRigaIntest.Font.Bold = true;
+                stileRigaIntest.Font.FontSize = 12;
+                stileRigaIntest.Font.FontColor = XLColor.Black;
+                stileRigaIntest.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                stileRigaIntest.Fill.BackgroundColor = XLColor.Silver; // Opzionale: sfondo grigio chiaro per il titolo
+
+                // 4. INSERIMENTO TABELLA DATI (PARTENDO DALLA RIGA 2)
+                // Usiamo Cell(2, 1) invece di Cell(1, 1) per lasciare spazio al titolo
+                var table = worksheet.Cell(2, 1).InsertTable(listaDati);
+                table.Theme = XLTableTheme.None;
+                // Opzionale: se non vuoi le freccette dei filtri sulla riga 2
+                table.ShowAutoFilter = false;
+                // Opzionale: togliere i filtri automatici se non li vuoi
+                // table.ShowAutoFilter = false;
+
+                // 5. FORMATTAZIONE
+                worksheet.Columns().AdjustToContents(); // Auto-fit
+
+                // Forza il "Testo a capo" per le intestazioni della tabella (riga 2) perché contengono \r\n
+                worksheet.Row(2).Style.Alignment.WrapText = true;
+                // Rieseguo l'autofit sulla riga 2 per adattare l'altezza al testo a capo
+                worksheet.Row(2).AdjustToContents();
+                
+                worksheet.Row(1).Height = 60;
+                worksheet.Row(1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                worksheet.Row(1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                // Routine per convertire booleani (True/False -> Si/No)
+                Routine al = new Routine();
+                // NOTA: Controlla che la tua Routine gestisca il fatto che ora i dati partono dalla riga 3 (Riga 1 Titolo, Riga 2 Intestazioni)
+                al.ConvertiBooleaniInItaliano(worksheet);
+
+
+                string fileNameForDownload = Filename + @"\\REG ACC " + semestre + " " + DateTime.Now.Year + ".xlsx";
+                workbook.SaveAs(fileNameForDownload);
+            }
+        }
+        public void CreaExcelTurnazioneMensile(List<DipendenteTurno> listaDati, int anno, int mese, int giorniMese, HttpContext Context)
         {
             // 2. CREA IL WORKBOOK
             using (var wb = new XLWorkbook())

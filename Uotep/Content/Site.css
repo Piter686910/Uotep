@@ -3,7 +3,12 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
+.larghezzaText70 {
+    width: 70px !important; /* Usa !important per sicurezza */
+    padding-left: 2px !important; /* Riduci lo spazio a sinistra */
+    padding-right: 2px !important; /* Riduci lo spazio a destra */
+    text-align: center; /* Opzionale: centra il numero */
+}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -27,6 +32,14 @@ textarea {
 }
 .larghezzaText {
     width: 110px;
+}
+/* Stile per la riga alternata (azzurro chiaro) */
+.GridViewAlternatingRow {
+    background-color: #E6F3FF; /* Un azzurro molto chiaro */
+    /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
+}
+.GridViewRow {
+    background-color: white;
 }
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

@@ -274,7 +274,7 @@
 
                                     <div class="form-check mb-2">
                                         <label for="txtDataInserimentoTp">Data Inserimento</label>
-                                        <asp:TextBox ID="txtDataInserimentoTp" runat="server" CssClass="form-control" Enabled="false" Font-Bold="true" />
+                                        <asp:TextBox ID="txtDataInserimentoTp" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
 
 
                                     </div>
