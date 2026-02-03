@@ -85,7 +85,7 @@ namespace Uotep
             {
                 if (ctrl is WebControl webCtrl)
                 {
-                   
+
                     webCtrl.Enabled = isEnabled;
                 }
 
@@ -203,7 +203,7 @@ namespace Uotep
             ckNotifica.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[11]);
             ckIniziativa.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[12]);
             ckCdr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[13]);
-            ckCoordinatore.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[14]);
+            //ckCoordinatore.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[14]);
             ckRelazione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[15]);
             ckCnr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[16]);
             ckAnnotazionePG.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[17]);
@@ -263,6 +263,58 @@ namespace Uotep
             //txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
             DdlQuartiereIns.SelectedItem.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
             txtNumCensimento.Text = rap.Rows[0].ItemArray[57].ToString();
+            //I- mod 31/01/2026 scheda int
+            if (rap.Rows[0]["rapp_accRichiesti"] != DBNull.Value)
+            {
+                Boolean res = System.Convert.ToBoolean(rap.Rows[0]["rapp_accRichiesti"]);
+                if (res)
+                {
+                    ckAccRichiesti.Checked = true;
+                }
+                else
+                {
+                    ckAccRichiesti.Checked = false;
+                }
+            }
+            if (rap.Rows[0]["rapp_numAccRichiesti"] != DBNull.Value)
+
+                txtNumAccRichiesti.Text = rap.Rows[0]["rapp_numAccRichiesti"].ToString();
+            else
+
+                txtNumAccRichiesti.Text = "0";
+            if (rap.Rows[0]["rapp_verbOccCensimento"] != DBNull.Value)
+            {
+                Boolean res = System.Convert.ToBoolean(rap.Rows[0]["rapp_verbOccCensimento"]);
+                if (res)
+                {
+                    ckVerbaleOccCens.Checked = true;
+                }
+                else
+                {
+                    ckVerbaleOccCens.Checked = false;
+                }
+            }
+
+            if (rap.Rows[0]["rapp_contrNatoDaAcc"] != DBNull.Value)
+            {
+                Boolean res = System.Convert.ToBoolean(rap.Rows[0]["rapp_contrNatoDaAcc"]);
+                if (res)
+                {
+                    ckContrNatoDaAccert.Checked = true;
+                }
+                else
+                {
+                    ckContrNatoDaAccert.Checked = false;
+                }
+            }
+            if (rap.Rows[0]["rapp_NumcontrNatoDaAcc"] != DBNull.Value)
+
+                txtNumContrNatoDaAccert.Text = rap.Rows[0]["rapp_NumcontrNatoDaAcc"].ToString();
+            else
+
+                txtNumContrNatoDaAccert.Text = "0";
+
+            //F- mod 31/01/2026 scheda int
         }
 
         protected void btA_Click(object sender, EventArgs e)
@@ -310,7 +362,7 @@ namespace Uotep
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(numPratica, null, null, ckModAttivitòInterna.Checked, 0, quartiere);
+                DataTable schede = mn.GetSchedeBy(numPratica, null, null, ckModAttivitaInterna.Checked, 0, quartiere);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -329,7 +381,7 @@ namespace Uotep
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0, null);
+                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitaInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -347,7 +399,7 @@ namespace Uotep
             {
 
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, null, txtModDataIntervento.Text, ckModAttivitòInterna.Checked, 0, null);
+                DataTable schede = mn.GetSchedeBy(null, null, txtModDataIntervento.Text, ckModAttivitaInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -357,7 +409,7 @@ namespace Uotep
                 }
 
             }
-            if (ckModAttivitòInterna.Checked)
+            if (ckModAttivitaInterna.Checked)
             {
                 //if (String.IsNullOrEmpty(txtModPattuglia.Text))
                 //{
@@ -365,7 +417,7 @@ namespace Uotep
 
                 //}
                 Manager mn = new Manager();
-                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitòInterna.Checked, 0, null);
+                DataTable schede = mn.GetSchedeBy(null, txtModPattuglia.Text, null, ckModAttivitaInterna.Checked, 0, null);
 
                 if (schede.Rows.Count > 0)
                 {
@@ -404,7 +456,67 @@ namespace Uotep
                 ret = false;
                 return ret;
             }
+            if (ckEsposto.Checked && String.IsNullOrEmpty(txt_numEspostiSegn.Text))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Se hai selezionato esposti è necessario inserire il numero di esposti." + "'); $('#errorModal').modal('show');", true);
 
+                ret = false;
+            }
+            if (ckAccertAvvenutoRipr.Checked == true)
+            {
+                if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale o Non Avvenuto ." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckControlliLavoriEdiliSenzaProt.Checked && (rdCon.Checked == false && rdSenza.Checked == false))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Con o Senza." + "'); $('#errorModal').modal('show');", true);
+
+                ret = false;
+            }
+            if (ckSgomberi.Checked == true)
+            {
+                if (CkSgombAbusiva.Checked == false && CkSgombImmobili.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di sgombero." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckControlliOccupazioneAbus.Checked == true)
+            {
+                if (ckAbitativo.Checked == false && ckNonAbitativo.Checked == false)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di occupazione." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+
+            //I- mod 31/01/2026 scheda int
+            if (ckAccRichiesti.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumAccRichiesti.Text))
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero accertamenti." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckContrNatoDaAccert.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumContrNatoDaAccert.Text))
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero controlli noto/i da accertamenti." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+
+            //F- mod 31/01/2026 scheda int
             return ret;
         }
         protected void btSalva_Click(object sender, EventArgs e)
@@ -423,11 +535,11 @@ namespace Uotep
                 String meseCorr = DateTime.Now.ToString("MMMM").ToUpper();
                 int annoCorr = System.Convert.ToInt32(DateTime.Now.ToString("yyyy"));
                 List<string> list = new List<string>();
-//#if DEBUG
-//                mese = "APRILE";
-//                anno = 2025;
-//                meseCorr = "APRILE";
-//#endif
+                //#if DEBUG
+                //                mese = "APRILE";
+                //                anno = 2025;
+                //                meseCorr = "APRILE";
+                //#endif
                 //controllo se diverso da anno e mese corrente, in questo caso non si può modificare
                 if (anno == annoCorr)
                 {
@@ -803,7 +915,7 @@ namespace Uotep
                                     if (ultimoC == "/")
                                     {
                                         rap.pattuglia = rap.pattuglia.Remove(rap.pattuglia.Length - 1, 1);
-                                        rap.pattuglia = rap.pattuglia.Replace("//","/");
+                                        rap.pattuglia = rap.pattuglia.Replace("//", "/");
 
                                     }
                                     string primoC = rap.pattuglia.Substring(0, 1);
@@ -842,7 +954,7 @@ namespace Uotep
                                 rap.notifica = ckNotifica.Checked;
                                 rap.iniziativa = ckIniziativa.Checked;
                                 rap.cdr = ckCdr.Checked;
-                                rap.coordinatore = ckCoordinatore.Checked;
+                                // rap.coordinatore = ckCoordinatore.Checked;
                                 if (ckRelazione.Checked)
                                 {
                                     stat.relazioni = 1;
@@ -932,7 +1044,7 @@ namespace Uotep
                                 rap.parziale = rdParziale.Checked;
                                 rap.non_avvenuto = rdNonAvvenuto.Checked;
 
-                              
+
                                 if (ckViolazioneBeniCult.Checked)
                                 {
                                     stat.controlli_42_04 = 1;
@@ -968,7 +1080,7 @@ namespace Uotep
                                     rap.conProt = false;
                                     rap.senzaProt = false;
                                 }
-                                    rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
+                                rap.contrEdiliDPI = ckControlliLavoriEdiliSenzaProt.Checked;
                                 rap.contrDaEsposti = ckControlloDaEsposti.Checked;
                                 rap.contrDaSegn = ckControlliDaSegnalazioni.Checked;
                                 rap.uote = rdUote.Checked;
@@ -1029,7 +1141,30 @@ namespace Uotep
                                 rap.quartiere = DdlQuartiereIns.SelectedItem.Text.ToUpper();
                                 Boolean resp = false;
                                 Int32 idN = 0;
+                                //I- mod 31/01/2026 scheda int
+                                rap.accRichiesti = ckAccRichiesti.Checked;
+                                if (ckAccRichiesti.Checked)
+                                {
+                                    rap.numAccRichiesti = Convert.ToInt32(txtNumAccRichiesti.Text);
+                                }
+                                else
+                                {
+                                    rap.numAccRichiesti = 0;
+                                }
 
+                                rap.verbOccCensimento = ckVerbaleOccCens.Checked;
+                                rap.contrNatoDaAcc = ckContrNatoDaAccert.Checked;
+
+                                if (ckContrNatoDaAccert.Checked)
+                                {
+                                    rap.NumcontrNatoDaAcc = Convert.ToInt32(txtNumContrNatoDaAccert.Text);
+                                }
+                                else
+                                {
+                                    rap.NumcontrNatoDaAcc = 0;
+                                }
+
+                                //F- mod 31/01/2026 scheda int
                                 VerificaStatistiche(stat, list);
 
                                 resp = mn.InsRappUote(rap, stat, out idN);
@@ -1317,6 +1452,7 @@ namespace Uotep
             txtNote.Text = string.Empty;
             txtDataConsegna.Text = string.Empty;
             txtPratica.Text = string.Empty;
+            txtNumCensimento.Text = string.Empty;
             LPattugliaCompleta.Items.Clear();
             rdParziale.Checked = false;
             ckRiapposizione.Checked = false;
@@ -1333,7 +1469,7 @@ namespace Uotep
             ckCdr.Checked = false;
             ckResa.Checked = false;
             ckEsposto.Checked = false;
-            ckCoordinatore.Checked = false;
+            //ckCoordinatore.Checked = false;
             ckRelazione.Checked = false;
             ckAnnotazionePG.Checked = false;
             ckEsitoDelega.Checked = false;
@@ -1365,12 +1501,19 @@ namespace Uotep
             DdlPattuglia.ClearSelection();
             //txtQuartiere.Text = string.Empty;
             DdlQuartiereIns.ClearSelection();
+            //I- mod 31/01/2026 scheda int
+            ckAccRichiesti.Checked = false;
+            ckContrNatoDaAccert.Checked = false;
+            txtNumAccRichiesti.Text = string.Empty;
+            txtNumContrNatoDaAccert.Text = string.Empty;
+            ckVerbaleOccCens.Checked = false;
+            //F- mod 31/01/2026 scheda int
         }
 
         protected void btStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
-            DataTable schede = mn.GetSchedeBy(null, null, null, ckModAttivitòInterna.Checked, id, null);
+            DataTable schede = mn.GetSchedeBy(null, null, null, ckModAttivitaInterna.Checked, id, null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);

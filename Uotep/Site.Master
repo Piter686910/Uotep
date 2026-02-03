@@ -53,32 +53,28 @@
                 border: none;
             }
             /* Questo CSS vale solo per questa pagina */
-        .sfondo-personalizzato {
-            position: relative;
-            min-height: 80vh; /* Assicura altezza sufficiente */
-            overflow: hidden; /* Evita sbordature */
-        }
+            .sfondo-personalizzato {
+                position: relative;
+                min-height: 80vh; /* Assicura altezza sufficiente */
+                overflow: hidden; /* Evita sbordature */
+            }
 
-        .sfondo-personalizzato::before {
-            content: "";
-            position: absolute;
-            top: 13px;
-            left: 5px;
-            width: 91%;
-            height: 91%;
-            
-            /* Inserisci qui il percorso della tua immagine caricata nel progetto */
-            background-image: url('<%= ResolveUrl("~/FileComuni/Logo2.jpeg") %>'); 
-            
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: contain; /* O 'cover' se vuoi riempire tutto */
-            
-            /* QUI REGOLI LA TRASPARENZA (0.1 = molto chiaro, 1 = normale) */
-            opacity: 0.65; 
-            
-            z-index: -1; /* Lo manda dietro al testo */
-        }
+                .sfondo-personalizzato::before {
+                    content: "";
+                    position: absolute;
+                    top: 13px;
+                    left: 5px;
+                    width: 91%;
+                    height: 91%;
+                    /* Inserisci qui il percorso della tua immagine caricata nel progetto */
+                    background-image: url('<%= ResolveUrl("~/FileComuni/Logo2.jpeg") %>');
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: contain; /* O 'cover' se vuoi riempire tutto */
+                    /* QUI REGOLI LA TRASPARENZA (0.1 = molto chiaro, 1 = normale) */
+                    opacity: 0.65;
+                    z-index: -1; /* Lo manda dietro al testo */
+                }
         </style>
         <asp:ScriptManager runat="server">
             <Scripts>
@@ -178,7 +174,7 @@
                                 <%--<li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>--%>
                                 <%--<li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>--%>
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
-                                
+
 
                             </ul>
                         </li>
@@ -193,7 +189,7 @@
                                 <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
                                 <li><a id="mnGestioneAuto" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                                 <li><a id="EstraiStatistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
-                                
+
 
                             </ul>
                         </li>
@@ -201,10 +197,10 @@
                         <li runat="server" id="menuFureria" visible="false" class="dropdown">
                             <a runat="server" style="color: #ffffff !important" href="~/View/Turnazione" class="dropdown-toggle" data-toggle="dropdown">Fureria<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                 <li><a id="FSchedaDipendente" runat="server" visible="false" href="~/View/SchedaDipendente">SchedaDipendente</a></li>
+                                <li><a id="FSchedaDipendente" runat="server" visible="false" href="~/View/SchedaDipendente">SchedaDipendente</a></li>
                                 <li><a id="AccTrunoMensile" runat="server" visible="false" href="~/View/Turnazione">Turnazione Mensile</a></li>
                                 <li><a id="TurnoMensile" runat="server" visible="false" href="~/View/Turnazione">Turnazione Mensile</a></li>
-                                
+
                             </ul>
                         </li>
                         <%-- manutenzione tabelle --%>
@@ -218,7 +214,7 @@
 
                             </ul>
                         </li>
-
+                        <li><a id="Urp" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Urp">Urp</a></li>
 
                         <li runat="server" id="LiHelp">
                             <asp:HyperLink
@@ -233,7 +229,7 @@
                         </li>
 
                         <li runat="server" id="menuEsci" visible="false">
-                            <asp:LinkButton ID="lnkLogout" runat="server"  ValidationGroup="bottoni" OnClick="Esci_Click" Style="color: #ffffff !important">ESCI</asp:LinkButton>
+                            <asp:LinkButton ID="lnkLogout" runat="server" ValidationGroup="bottoni" OnClick="Esci_Click" Style="color: #ffffff !important">ESCI</asp:LinkButton>
                         </li>
 
 

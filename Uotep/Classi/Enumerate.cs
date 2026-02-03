@@ -20,14 +20,15 @@ namespace Uotep.Classi
             CoordinamentoAtti = 4,
             PG = 5,
             SuperAdmin = 6,
-            CoordinamentoPg = 7
+            CoordinamentoPg = 7,
+            urp = 8
         }
         public enum Profilo
         {
             accertatore = 1, //accertatori
             due = 2,
             tre = 3, //admin, responsabili, sa
-            V= 4 // solo visualizzazine
+            V = 4 // solo visualizzazine
 
         }
 
@@ -42,6 +43,27 @@ namespace Uotep.Classi
             [Description("ESPOSTO - SEGNALAZIONE - RICHIESTA ACCERTAMENTI")]
             EspostoSegnalazione = 3
 
+
+        }
+        public enum MsgOutput
+        {
+            [Description("Sessione Scaduta, effettuare Login.")]
+            SScaduta = 1,
+
+            [Description("Nome utente o password errati.")]
+            UserWrong = 2,
+
+            [Description("La matricola ineserita è inesistente.")]
+            NoUser = 3,
+
+            [Description("password non salvata.")]
+            PwNoSave = 4,
+            [Description("Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old")]
+            PwResetOk = 5,
+            [Description("modifica non effettuata, controllare il log.")]
+            ErrorLog = 6,
+            [Description("modifica effettuata correttamente.")]
+            ModificaCorretta = 7
 
         }
         public enum Sigla
@@ -75,11 +97,11 @@ namespace Uotep.Classi
             contrCant = 19,
             contr_cant_suolo_pubb = 20,
             censimentoAllPubb = 21,
-            controlliOccupazioneAbus=22,
-            abitativo=23,
-            nonAbitativo=24,
-            SgomberiAbus=25,
-            SgomberiImmobili=26,
+            controlliOccupazioneAbus = 22,
+            abitativo = 23,
+            nonAbitativo = 24,
+            SgomberiAbus = 25,
+            SgomberiImmobili = 26,
             NotificaTp = 27
 
 
@@ -102,7 +124,7 @@ namespace Uotep.Classi
         }
 
         // Classi di supporto
-      public  class RisultatoRicerca
+        public class RisultatoRicerca
         {
             public bool Trovato { get; set; }
             public int? Giorno { get; set; }

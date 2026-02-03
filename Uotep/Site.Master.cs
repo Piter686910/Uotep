@@ -76,7 +76,7 @@ namespace Uotep
                                 if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                                     EstraiStatistiche.Visible = true;
                                 menuFureria.Visible = true;
-                                 TurnoMensile.Visible = true;
+                                TurnoMensile.Visible = true;
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
@@ -98,7 +98,7 @@ namespace Uotep
                                 subMenuUOTE.Visible = true;
                                 subMenuUOTP.Visible = true;
                                 RicercaArchivioUotp.Visible = true;
-                                mnGestioneAuto.Visible = true;  
+                                mnGestioneAuto.Visible = true;
 
                                 RicercaArchivioUote.Visible = true;
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
@@ -108,7 +108,38 @@ namespace Uotep
                                 }
                                 menuFureria.Visible = true;
                                 Turnazione.Visible = true;
-                                AccTrunoMensile.Visible= true;  
+                                AccTrunoMensile.Visible = true;
+                                break;
+                            case "urp":
+                                // Mostra voci per utenti standard
+                                menuCoordinamentoAtti.Visible = false;
+                                menuAccertatori.Visible = false;
+                                menuSegreteria.Visible = false;
+                                menuAmministratore.Visible = false;
+                                menuEsci.Visible = true;
+                                // menuHome.Visible = true;
+                                PG.Visible = true;
+                                GestionePraticaUote.Visible = true;
+
+                                menuNuovaScheda.Visible = false;
+                                menuRicercaScheda.Visible = false;
+                                EstraiStatistiche.Visible = false;
+
+                                menuArchivio.Visible = true;
+                                subMenuUOTE.Visible = true;
+                                subMenuUOTP.Visible = true;
+                                RicercaArchivioUotp.Visible = true;
+                                mnGestioneAuto.Visible = false;
+
+                                RicercaArchivioUote.Visible = true;
+
+                                Decretazione.Visible = false;
+                                Attivita.Visible = false;
+
+                                menuFureria.Visible = true;
+                                Turnazione.Visible = true;
+                                AccTrunoMensile.Visible = true;
+                                Urp.Visible = true;
                                 break;
                             case "PG":
                                 // Mostra voci per utenti standard
@@ -165,7 +196,7 @@ namespace Uotep
                                 subMenuUOTP.Visible = true;
 
                                 RicercaArchivioUotp.Visible = true;
-                                
+
                                 break;
                             case "admin":
                                 // Mostra voci per utenti standard
@@ -201,6 +232,7 @@ namespace Uotep
                                 menuAttivita.Visible = true;
                                 Amministratore.Visible = true;
                                 SchedaCarburante.Visible = true;
+                                Urp.Visible = true;
                                 //*
                                 break;
                             case "superAdmin":
@@ -233,13 +265,13 @@ namespace Uotep
                                 //*
                                 break;
                             case "fureria":
-                                menuFureria.Visible= true;
+                                menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
                                 menuEsci.Visible = true;
-                                FSchedaDipendente.Visible= true;
+                                FSchedaDipendente.Visible = true;
                                 break;
                             default:
-                               
+
                                 break;
                         }
                     }

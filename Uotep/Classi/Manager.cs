@@ -785,6 +785,22 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn);
             }
         }
+        public DataTable getListProtGenInDecretazione(string protgen)
+        {
+            DataTable tb = new DataTable();
+
+            string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa" +
+                            ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area" +
+                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id where "+
+                            "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
+
+           // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+
+                return tb = FillTable(sql, conn);
+            }
+        }
         /// <summary>
         /// ricerca per giudice
         /// </summary>
@@ -3283,8 +3299,10 @@ namespace Uotep.Classi
                      "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
                      "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                      "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag,rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
+                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
+                     "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
+                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
+                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +
                  @rapp.data + "','" +
@@ -3329,7 +3347,12 @@ namespace Uotep.Classi
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
                  @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
+                 //I- mod 31/01/2026 scheda int
+                 "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
+                 @rapp.contrNatoDaAcc + "','" + @rapp.NumcontrNatoDaAcc + "'" +
+                 //F- mod 31/01/2026 scheda int
+                 "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -3414,11 +3437,13 @@ namespace Uotep.Classi
                      "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
                      "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
                      "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
-               " Values('" + rapp.pratica + "','" +
-                 //@rapp.ora + "','" +
-                 @rapp.data + "','" +
+                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
+                     "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
+                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
+                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc)" +                                                                                     
+               " Values('" + rapp.pratica + "','" +                                                                 
+                 //@rapp.ora + "','" +                                                                              
+                 @rapp.data + "','" +                                                                               
                  @rapp.nominativo.Replace("'", "''") + "','" +
                  @rapp.indirizzo.Replace("'", "''") + "','" +
                  @rapp.pattuglia.Replace("'", "''") + "','" +
@@ -3460,7 +3485,12 @@ namespace Uotep.Classi
                  @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
                  @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
                  @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+                 @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
+                 //I- mod 31/01/2026 scheda int
+                 "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" + 
+                 @rapp.contrNatoDaAcc + "','" + @rapp.NumcontrNatoDaAcc + "'" +
+                 //F- mod 31/01/2026 scheda int
+                 "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
 
@@ -3524,12 +3554,14 @@ namespace Uotep.Classi
                 {
 
                     sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
-        "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
-        "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
-        "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
-        "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-        "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento,rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-        "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri)" +
+                     "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
+                     "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
+                     "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
+                     "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
+                     "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
+                     "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
+                     "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
+                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc)" +
         " Values('" + rapp.pratica + "','" +
         //@rapp.ora + "','" +
         @rapp.data + "','" +
@@ -3574,25 +3606,21 @@ namespace Uotep.Classi
         @rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
         @rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
         @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-        @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli + "'" + "); SELECT SCOPE_IDENTITY();";
+        @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
+                 //I- mod 31/01/2026 scheda int
+                 "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
+                 @rapp.contrNatoDaAcc + "','" + @rapp.NumcontrNatoDaAcc + "'" +
+                 //F- mod 31/01/2026 scheda int
+                 "); SELECT SCOPE_IDENTITY();";
 
                     command.CommandText = sql_insRap;
                     object a = command.ExecuteScalar();
-
-
-                    //command.CommandText = sql_Statistiche;
-                    //command.ExecuteNonQuery();
-                    //transaction.Commit();
                     idN = Convert.ToInt32(a);
                     resp = true;
                 }
 
                 catch (Exception ex)
                 {
-                    //if (transaction != null)
-                    //{
-                    //    transaction.Rollback();
-
                     if (!File.Exists(LogFile))
                     {
                         using (StreamWriter sw = File.CreateText(LogFile)) { }
@@ -3603,7 +3631,6 @@ namespace Uotep.Classi
                         sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
                         sw.Close();
                     }
-                    //}
                     resp = false;
 
 
@@ -3770,7 +3797,7 @@ namespace Uotep.Classi
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
-            sql = "SELECT impalcature,dpi,contcantseq,contr_esposti,cens_allogg_pubb,occ_prop_com_abit,occ_prop_com_no_abit FROM obiettivi where anno =" + anno;
+            sql = "SELECT impalcature,dpi,contcantseq,contr_esposti,cens_allogg_pubb,occ_prop_com_abit,occ_prop_com_no_abit,contr_nati_da_accer_richiesti FROM obiettivi where anno =" + anno;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -3813,7 +3840,9 @@ namespace Uotep.Classi
                 "SUM(CASE WHEN ISNUMERIC(rapp_numEsposti) = 1 THEN CAST(rapp_numEsposti AS DECIMAL(18, 0))  ELSE 0 END) as rapp_numEsposti, " +
                 "SUM(CASE WHEN rapp_censimento_all_pubb = 1 THEN rapp_num_censimento_all_pubb ELSE 0 END) as rapp_censimento_all_pubb, " +
                 "SUM(CASE WHEN rapp_contr_occ_abitativo = 'true' THEN 1 ELSE 0 END) as rapp_contr_occ_abitativo, " +
-                "SUM(CASE WHEN rapp_contr_occ_no_abitativo = 'true' THEN 1 ELSE 0 END)  as rapp_contr_occ_no_abitativo " +
+                "SUM(CASE WHEN rapp_contr_occ_no_abitativo = 'true' THEN 1 ELSE 0 END)  as rapp_contr_occ_no_abitativo, " +
+                "SUM(CASE WHEN ISNUMERIC(rapp_NumcontrNatoDaAcc) = 1 THEN CAST(rapp_NumcontrNatoDaAcc AS DECIMAL(18, 0))  ELSE 0 END) as rapp_NumcontrNatoDaAcc " +
+                //"SUM(CASE WHEN rapp_NumcontrNatoDaAcc = 'true' THEN 1 ELSE 0 END)  as rapp_NumcontrNatoDaAcc " +
                 "FROM rappuote WHERE DATEPART(year, rapp_data_consegna_intervento) =" + anno +
                 " GROUP BY DATENAME(month, rapp_data_consegna_intervento), DATEPART(month, rapp_data_consegna_intervento)  " +
                 " ORDER BY DATEPART(month, rapp_data_consegna_intervento)";
@@ -5721,6 +5750,53 @@ namespace Uotep.Classi
                 resp = false;
             }
             return resp;
+
+        }
+        public Boolean DuplicaCarico(string carico,string sigla, int id)
+        {
+            bool resp = true;
+            string sql_principale = String.Empty;
+            string testoSql = string.Empty;
+            //arch.arch_dataInserimento = System.Convert.ToString(DateTime.Now.ToString("dd/mm/yyyy"));
+            sql_principale = "INSERT INTO principale (Nr_Protocollo, Sigla, DataArrivo, Provenienza, Tipologia_atto, Giudice, TipoProvvedimentoAG, ProcedimentoPen, Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, " +
+       "DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, Matricola, DataInserimento, Macro_area, UlterioreTipoAtto, BU, CodiceEdificio) " +
+      "SELECT[Nr_Protocollo] ,[Sigla],[DataArrivo],[Provenienza],[Tipologia_atto],[Giudice],[TipoProvvedimentoAG],[ProcedimentoPen],[Nominativo],[Indirizzo],[via],[Evasa],[EvasaData],[Inviata],[DataInvio],[Scaturito]" +
+      ",[Accertatori],[DataCarico],[nr_Pratica],[Quartiere],[Note],[Anno],[Giorno],[Rif_Prot_Gen],[Matricola],[DataInserimento],[Macro_area],[UlterioreTipoAtto],[BU],[CodiceEdificio] " +
+      "FROM principale where Id = "+ id;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql_principale;
+                    testoSql = "principale";
+                    int res = command.ExecuteNonQuery();
+                }
+
+                catch (Exception ex)
+                {
+
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("carico:" + carico + ", sigla= " + sigla + ": " + ex.Message + @" - Errore in DuplicaCarico ");
+                        sw.Close();
+                    }
+
+                    resp = false;
+
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return resp;
+            }
 
         }
         public Boolean UpdPraticaArchivioUotp(ArchivioUotp arch)

@@ -23,7 +23,7 @@ namespace Uotep
            
             if (categoria == "true")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare il login " + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
 
             }
@@ -91,20 +91,20 @@ namespace Uotep
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Nome utente o password errati." + "'); $('#errorModal').modal('show');", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
                         Session.Abandon();
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "La matricola ineserita è inesistente." + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.NoUser.GetDescription() + "'); $('#errorModal').modal('show');", true);
                     Session.Abandon();
                 }
 
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Nome utente o password errati." + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
             }
 
@@ -137,7 +137,7 @@ namespace Uotep
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "password non salvata." + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwNoSave.GetDescription() + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
             }
 
@@ -151,7 +151,7 @@ namespace Uotep
             Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text.ToUpper());
             if (upd)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old" + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwResetOk.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
             }
             else

@@ -145,7 +145,7 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
-
+        
     </script>
 
     <div class="panel panel-default">
@@ -163,10 +163,10 @@
             </div>
 
             <!-- Colonna destra -->
-            <div class="col-md-3 form-check">
+            <div class="col-md-3 form-check" style="visibility: hidden">
                 <label class="form-check-label ms-3 mt-3 text-left" for="RadioButton1">Area Appartenenza</label>
-                <asp:RadioButton ID="rdUote" runat="server" GroupName="AreaGroup" Text="UOTE" onclick="gestisciVisibilita();" />
-                <asp:RadioButton ID="rdUotp" runat="server" GroupName="AreaGroup" Text="UOTP" onclick="gestisciVisibilita();" />
+                <asp:RadioButton ID="rdUote" runat="server" GroupName="AreaGroup" Text="UOTE" /><%-- onclick="gestisciVisibilita();"--%>
+                <asp:RadioButton ID="rdUotp" runat="server" GroupName="AreaGroup" Text="UOTP" /><%-- onclick="gestisciVisibilita();"--%>
             </div>
         </div>
 
@@ -201,7 +201,7 @@
                         <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <label for="txtPratica">Nr Pratica/Cartellina</label>
-                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
+                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus=""/>
                             </div>
 
                             <div class="form-group mb-3">
@@ -224,7 +224,7 @@
                         <div class="col-md-3 d-flex flex-column justify-content-center">
                             <div class="form-group mb-3">
                                 <label for="TxtDataIntervento">Data Intervento</label>
-                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy"/>
+                                <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator
@@ -241,7 +241,7 @@
 
                             <div class="form-group mb-3" style="margin-top: -10px!important">
                                 <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy"/>
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 
@@ -359,16 +359,15 @@
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckCdr" runat="server" CssClass="form-check-input" />
-                                <label class="form-check-label" for="ckCdr">CDR</label>
+                                <label class="form-check-label" for="ckCdr">CDR / Capo Turno</label>
                             </div>
-
                             <div id="divNotificaTp" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
                             </div>
+
+
                         </div>
-
-
                         <div class="col-md-6">
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckResa" runat="server" CssClass="form-check-input" />
@@ -377,18 +376,36 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Quanti Esposti evasi</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="form-control" MaxLength="2" />
-                                <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass=" larghezzaText70" MaxLength="2" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,2}"></asp:RegularExpressionValidator>
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckIniziativa" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckIniziativa">Iniziativa</label>
                             </div>
-                            <div class="form-check mb-2">
+                            <%-- I- mod 31/01/2026 scheda int --%>
+                            <%--                            <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckCoordinatore" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ChecckCoordinatorekBox8">Coordinatore di turno</label>
+                            </div>--%>
+                        </div>
+
+
+
+                        <div class="col-md-12">
+                            <div class="form-check mb-4">
+                                <asp:CheckBox ID="ckAccRichiesti" runat="server" CssClass="form-check-input" />
+
+                                <label class="form-check-label" for="ckAccRichiesti">Accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti, Servizi e Amministrazioni nel n. </label>
+                                <asp:TextBox ID="txtNumAccRichiesti" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <label class="form-check-label" for="ckAccRichiesti">
+                                    (se riferiti a più protocolli indicare numero. Questa voce comprenderà gli sgomberi amministrativi, le
+notifiche non A.G., gli interventi in supporto ad altre UU.OO. e FF.PP., supporto ai C.T.U., Servizi
+Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ControlToValidate="txtNumAccRichiesti" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
                         </div>
+                        <%-- F- mod 31/01/2026 scheda int --%>
                     </div>
 
                     <div class="tab-content">
@@ -427,65 +444,71 @@
                                 </div>
 
                             </div>
-                        </div>
 
-                    </div>
-                    <div class="tab-content">
-                        <%--<div class="tab-pane fade show active" id="scheda1" role="tabpanel">--%>
-                        <p style="font-weight: bold;">Provvedimenti adottati e attività svolte</p>
 
-                        <div class="row custom-border">
-                            <div class="col-md-6">
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckConvalida" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckConvalida">Convalida</label>
+
+                            <div class="tab-content">
+                                <%--<div class="tab-pane fade show active" id="scheda1" role="tabpanel">--%>
+                                <%--<p style="font-weight: bold;">Provvedimenti adottati e attività svolte</p>--%>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckConvalida" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckConvalida">Convalida</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckViolazioneSigilli" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckViolazioneSigilli">Violazione Sigilli</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
+                                    </div>
+                                    <div id="divSgombero" runat="server" class="form-check mb-2" style="display: none;">
+                                        <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
+                                        <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
+                                        <asp:CheckBox ID="CkSgombImmobili" runat="server" Text="Immobili e/o aree pubbl." />
+                                        <label class="form-check-label">]</label>
+                                    </div>
+                                    <%-- I- mod 31/01/2026 scheda int --%>
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckVerbaleOccCens" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckVerbaleOccCens">Verbale di verifica occupazionale / censimento</label>
+                                    </div>
+                                    <%-- F- mod 31/01/2026 scheda int --%>
                                 </div>
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckViolazioneSigilli" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckViolazioneSigilli">Violazione Sigilli</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckViolazioneBeniCult" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckViolazioneBeniCult">Violazione Codici dei Beni Culturali(D.Lgs. n. 42/04 artt. 169/181)</label>
-                                </div>
-                                <div id="divSgombero" runat="server" class="form-check mb-2" style="display: none;">
-                                    <asp:CheckBox ID="ckSgomberi" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckSgomberi">Sgomberi [</label>
-                                    <asp:CheckBox ID="CkSgombAbusiva" runat="server" Text="Occupazione abusiva" />
-                                    <asp:CheckBox ID="CkSgombImmobili" runat="server" Text="Immobili e/o aree pubbl." />
-                                    <label class="form-check-label">]</label>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckDisseqDefinitivo" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckDisseqDefinitivo">Dissequestro Definitivo</label>
+                                    </div>
+
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckDisseqTemp" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckDisseqTemp">Dissequestro Temporaneo [</label>
+                                        <asp:CheckBox ID="ckRimozione" runat="server" Text="Rimozione" />
+                                        <asp:CheckBox ID="ckRiapposizione" runat="server" Text="Riapposizione" />
+                                        <label class="form-check-label">]</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckAccertAvvenutoRipr" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckAccertAvvenutoRipr">Accertamento avvenuto ripristino [</label>
+                                        <asp:RadioButton ID="rdTotale" runat="server" GroupName="AccertamentoGroup" Text="Totale" />
+                                        <asp:RadioButton ID="rdParziale" runat="server" GroupName="AccertamentoGroup" Text="Parziale" />
+                                        <asp:RadioButton ID="rdNonAvvenuto" runat="server" GroupName="AccertamentoGroup" Text="Non Avvenuto" />
+
+                                        <label class="form-check-label">]</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <asp:CheckBox ID="ckControlliSCIA" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label" for="ckControlliSCIA">Controlli SCIA</label>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckDisseqDefinitivo" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckDisseqDefinitivo">Dissequestro Definitivo</label>
-                                </div>
-
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckDisseqTemp" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckDisseqTemp">Dissequestro Temporaneo [</label>
-                                    <asp:CheckBox ID="ckRimozione" runat="server" Text="Rimozione" />
-                                    <asp:CheckBox ID="ckRiapposizione" runat="server" Text="Riapposizione" />
-                                    <label class="form-check-label">]</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckAccertAvvenutoRipr" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckAccertAvvenutoRipr">Accertamento avvenuto ripristino [</label>
-                                    <asp:RadioButton ID="rdTotale" runat="server" GroupName="AccertamentoGroup" Text="Totale" />
-                                    <asp:RadioButton ID="rdParziale" runat="server" GroupName="AccertamentoGroup" Text="Parziale" />
-                                    <asp:RadioButton ID="rdNonAvvenuto" runat="server" GroupName="AccertamentoGroup" Text="Non Avvenuto" />
-
-                                    <label class="form-check-label">]</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <asp:CheckBox ID="ckControlliSCIA" runat="server" CssClass="form-check-input" />
-                                    <label class="form-check-label" for="ckControlliSCIA">Controlli SCIA</label>
-                                </div>
-
-                            </div>
                         </div>
-
                     </div>
                     <div class="tab-content">
                         <%--<div class="tab-pane fade show active" id="scheda1" role="tabpanel">--%>
@@ -517,20 +540,31 @@
                                 <label class="form-check-label">]</label>
                             </div>
 
-                            <div id="divOccupazione" runat="server" class="form-check mb-2" style="display: none;">
+                            <div id="divOccupazione" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
                                 <label class="form-check-label">]</label>
                             </div>
-                            <div id="divCensimento" runat="server" class="form-check mb-2" style="display: none;">
+                            <div id="divCensimento" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
-                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" />
+                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
                                 <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
-                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
+                            <%-- I- mod 31/01/2026 scheda int --%>
+                            <div id="divContrNatoDaAccert" runat="server" class="form-check mb-2">
+                                <asp:CheckBox ID="ckContrNatoDaAccert" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label" for="txtNumContrNatoDaAccert">Controllo/i nel nr. </label>
+                                <asp:TextBox ID="txtNumContrNatoDaAccert" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
+                                <label class="form-check-label" for="txtNumContrNatoDaAccert">
+                                    nato/i da accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti,
+Servizi e Amministrazioni</label>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" ControlToValidate="txtNumContrNatoDaAccert" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
+                            </div>
+                            <%-- F- mod 31/01/2026 scheda int --%>
                         </div>
 
                     </div>
@@ -554,12 +588,11 @@
             <div class="container">
                 <div class="row custom-border">
                     <div class="col-md-6 ">
-                        
-                        <label  for="txtNumCantControllati">Nr Controlli Cantieri</label>
+
+                        <label for="txtNumCantControllati">Nr Controlli Cantieri</label>
                         <asp:TextBox ID="txtNumCantControllati" runat="server" MaxLength="3" />
                         <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
                         <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" ControlToValidate="txtNumCantControllati" ValidationGroup="bt" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{3}"></asp:RegularExpressionValidator>--%>
-
                     </div>
                 </div>
 
@@ -703,9 +736,9 @@
         function gestisciVisibilitaGiro() {
             var divGiroControlli = document.getElementById('<%= divGiroControlli.ClientID %>');
             var divNotificaTp = document.getElementById('<%= divNotificaTp.ClientID %>');
-           
 
-    // Recupera gli altri elementi, verificando sempre
+
+            // Recupera gli altri elementi, verificando sempre
             var ckgiro = document.getElementById('<%= CkGiroControlli.ClientID %>');
 
             // mostrare/nascondere
@@ -717,7 +750,7 @@
 
                 divGiroControlli.style.display = 'block';
                 divDettagli.style.display = 'block';
-                
+
             }
         }
         //al caricamento della pagian effettua il primno controllo

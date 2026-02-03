@@ -12,14 +12,15 @@
             document.getElementById("overlay").style.display = "block";
         }
         // Mostra il popup
-        function showModal() {
-            $('#Message').modal('show');
+        function showMsgModal() {
+            $('#MsgModal').modal('show');
         }
 
         // Nasconde il popup
-        function hideModal() {
-            $('#Message').modal('hide');
+        function hideMsgModal() {
+            $('#MsgModal').modal('hide');
         }
+        
         // Mostra il popup ricerca
         function showModal() {
             $('#ModalRicerca').modal('show');
@@ -30,29 +31,7 @@
             $('#ModalRicerca').modal('hide');
         }
     </script>
-    <style>
-        .GridViewRow {
-            background-color: white;
-        }
-
-        /* Stile per la riga alternata (azzurro chiaro) */
-        .GridViewAlternatingRow {
-            background-color: #E6F3FF; /* Un azzurro molto chiaro */
-            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-        }
-
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -30px;
-        }
-
-        .uppercase-text {
-            text-transform: uppercase;
-        }
-    </style>
+   
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
@@ -90,14 +69,14 @@
         <div id="DivRicerca" runat="server" visible="false" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
             <!-- Righe di input  -->
             <div class="col-md-4 ">
-                <%-- DIV RICERCA PROTOCOLLO --%>
+                <%-- DIV RICERCA Carico --%>
                 <div id="DivProtocollo" runat="server" class="form-group text-center" style="text-align: left !important">
 
                     <asp:Label ID="lblm" runat="server" Text="Nr Protocollo" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtNProtocollo" ErrorMessage="Inserire numero pratica" ForeColor="Red" ValidationGroup="bt">
 
                     </asp:RequiredFieldValidator>
-                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" />
+                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" autofocus=""/>
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
@@ -114,7 +93,7 @@
 
                     <asp:Label ID="Label2" runat="server" Text="Nr Procediemnto Penale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" />
+                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" autofocus=""/>
 
 
 
@@ -127,7 +106,7 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Data Inizio Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" />
+                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" autofocus=""/>
 
                     <asp:Label ID="Label4" runat="server" Text="Data Fine Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -142,7 +121,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="Rif. Protocollo Generale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." />
+                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -153,7 +132,7 @@
 
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" />
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -164,7 +143,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Giudice" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" />
+                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -175,7 +154,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Provenienza" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" />
+                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -186,7 +165,7 @@
 
                     <asp:Label ID="Label9" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" />
+                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -197,7 +176,7 @@
 
                     <asp:Label ID="Label10" runat="server" Text="Accertatori" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" />
+                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -208,7 +187,7 @@
 
                     <asp:Label ID="Label11" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" />
+                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -451,6 +430,7 @@
                 <div class="col-12 text-center">
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
+                     <asp:Button ID="btDuplica" Text="Duplica" runat="server" OnClick="btDuplica_Click" ToolTip="Duplica" CssClass="btn btn-primary mt-3" />
 
                 </div>
             </div>
@@ -609,6 +589,32 @@
             </div>
         </div>
     </div>
+     <%-- popup errori --%>
+ <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
+     <div class="modal-dialog"
+         role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
+
+             </div>
+             <div class="modal-body">
+                 <!-- Campi di input per la ricerca -->
+                 <div class="form-group">
+
+                     <p id="TextMessage" runat="server" style="color: red"></p>
+
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <!-- Bottone per avviare la ricerca -->
+                 <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
+                  <asp:Button ID="btOKDup" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKDup_Click" />
+             </div>
+         </div>
+     </div>
+ </div>
+
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"

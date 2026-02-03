@@ -124,7 +124,7 @@ namespace Uotep
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta effettuare login" + "'); $('#errorModal').modal('show');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                     Response.Redirect(url, false);

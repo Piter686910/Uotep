@@ -437,7 +437,7 @@ namespace Uotep.Classi
                                 stampaX(startX_50, startY_CDR, document, true);
 
                                 // --- Paragrafo per la descrizione "CDR:", posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("CDR:");
+                                Paragraph descriptionParagraph = new Paragraph("CDR / Capoturno:");
                                 descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_CDR - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
@@ -445,7 +445,7 @@ namespace Uotep.Classi
                             {
                                 stampaX(startX_50, startY_CDR, document, false);
                                 // --- Solo la descrizione "CDR:", nella posizione originale ---
-                                Paragraph descriptionParagraph = new Paragraph("CDR:");
+                                Paragraph descriptionParagraph = new Paragraph("CDR / Capoturno:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_CDR, 200);
                                 document.Add(descriptionParagraph);
                             }
@@ -475,31 +475,67 @@ namespace Uotep.Classi
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line 470
-
-                            // Coordinatore di turno
-                            bool? coordinatorediturnoNullable = schede.Rows[0].ItemArray[14] as bool?;
-                            string coordinatorediturnoString = coordinatorediturnoNullable.HasValue && coordinatorediturnoNullable.Value ? "X" : "";
+                            // Accertamenti Richiesti
+                            bool? accertamentiRichNullable = schede.Rows[0]["rapp_accRichiesti"] as bool?;
+                            string accertamentiRichString = accertamentiRichNullable.HasValue && accertamentiRichNullable.Value ? "X" : "";
                             // --- Posizione di riferimento per "Coordinatore di turno" ---
                             // float startX_70_Coord = 70; // Use startX_70 for single column
-                            float startY_Coord = startY; // Use the dynamic startY 450
-                            if (coordinatorediturnoString == "X")
+                            float startY_accertamentiRich = startY; // Use the dynamic startY 450
+                            if (accertamentiRichString == "X")
                             {
-                                stampaX(startX_50, startY_Coord, document, true);
+                                stampaX(startX_50, startY_accertamentiRich, document, true);
 
                                 // --- Paragrafo per la descrizione "Coordinatore:", posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
-                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Coord - 5, 200);
+                                Paragraph descriptionParagraph = new Paragraph("Accertamenti richiesti :");
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_accertamentiRich - 5, 200);
                                 document.Add(descriptionParagraph);
                             }
                             else
                             {
-                                stampaX(startX_50, startY_Coord, document, false);
+                                stampaX(startX_50, startY_accertamentiRich, document, false);
                                 // --- Solo la descrizione "Coordinatore:", nella posizione originale ---
-                                Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
-                                descriptionParagraph.SetFixedPosition(startX_70, startY_Coord, 200);
+                                Paragraph descriptionParagraph = new Paragraph("Accertamenti richiesti:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_accertamentiRich, 200);
                                 document.Add(descriptionParagraph);
                             }
-                            startY -= lineHeight; // Move to the next line
+
+                            // Num. accertamenti richiesti
+                            // --- Posizione di riferimento per "accertamenti richiesti" ---
+
+                            float startY_NumaccertamentiRichiesti = startY_430; //
+
+
+                            document.Add(new Paragraph($"Num. accertam: {schede.Rows[0]["rapp_numAccRichiesti"]}").SetFixedPosition(startX_270, 475, 200));
+
+                          //  startY -= lineHeight; // Move to the next line
+
+
+
+
+                            //// Coordinatore di turno
+                            //bool? coordinatorediturnoNullable = schede.Rows[0].ItemArray[14] as bool?;
+                            //string coordinatorediturnoString = coordinatorediturnoNullable.HasValue && coordinatorediturnoNullable.Value ? "X" : "";
+                            //// --- Posizione di riferimento per "Coordinatore di turno" ---
+                            //// float startX_70_Coord = 70; // Use startX_70 for single column
+                            //float startY_Coord = startY; // Use the dynamic startY 450
+                            //if (coordinatorediturnoString == "X")
+                            //{
+                            //    stampaX(startX_50, startY_Coord, document, true);
+
+                            //    // --- Paragrafo per la descrizione "Coordinatore:", posizionato *A DESTRA* del riquadro ---
+                            //    Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
+                            //    descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_Coord - 5, 200);
+                            //    document.Add(descriptionParagraph);
+                            //}
+                            //else
+                            //{
+                            //    stampaX(startX_50, startY_Coord, document, false);
+                            //    // --- Solo la descrizione "Coordinatore:", nella posizione originale ---
+                            //    Paragraph descriptionParagraph = new Paragraph("Coordinatore di turno:");
+                            //    descriptionParagraph.SetFixedPosition(startX_70, startY_Coord, 200);
+                            //    document.Add(descriptionParagraph);
+                            //}
+                           // startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione
                             float x1 = 65;
                             float y1 = startY;
@@ -662,14 +698,14 @@ namespace Uotep.Classi
                             float y2 = startY;
                             float width2 = 490;
                             // float height = 82;  non necessario per una linea orizzontale semplice
-                            PdfCanvas canvas2 = new PdfCanvas(pdf.GetFirstPage());
-                            canvas.MoveTo(x2, y2) // Inizia la linea nel punto (x, y)
-                                  .LineTo(x2 + width2, y2) // Traccia la linea orizzontale fino a (x + width, y)
-                                  .Stroke(); // Applica il tratto per rendere la linea visibile
-                            startY -= lineHeight; // Move to the next line
-                            // PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE
-                            document.Add(new Paragraph("PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
-                            startY -= lineHeight; // Move to the next line
+                            //PdfCanvas canvas2 = new PdfCanvas(pdf.GetFirstPage());
+                            //canvas.MoveTo(x2, y2) // Inizia la linea nel punto (x, y)
+                            //      .LineTo(x2 + width2, y2) // Traccia la linea orizzontale fino a (x + width, y)
+                            //      .Stroke(); // Applica il tratto per rendere la linea visibile
+                            //startY -= lineHeight; // Move to the next line
+                            //// PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE
+                            //document.Add(new Paragraph("PROVVEDIMENTI ADOTTATI E ATTIVITA' SVOLTE").SetFixedPosition(70, startY, 500).SetTextAlignment(TextAlignment.CENTER));
+                            //startY -= lineHeight; // Move to the next line
                             // Convalida
                             //bool? convalidaNullable = schede.Rows[0].ItemArray[21] as bool?;
                             //string convalidaString = convalidaNullable.HasValue && convalidaNullable.Value ? "X" : "";
@@ -1046,6 +1082,31 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_scia, 100);
                                 document.Add(descriptionParagraph);
                             }
+                            startY -= lineHeight; // Move to the next line
+                            //  Verbale di verifica occupazionale / censimento
+                            bool? VerbOccCensNullable = schede.Rows[0]["rapp_verbOccCensimento"] as bool?;
+                            string VerbOccCensString = VerbOccCensNullable.HasValue && VerbOccCensNullable.Value ? "X" : "";
+                            float startY_VerbOccCens = startY; // Use the dynamic startY
+                            if (VerbOccCensString == "X")
+                            {
+                                stampaX(startX_50, startY_VerbOccCens, document, true);
+
+                                // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Verbale di verifica occupazionale / censimento:");
+                                // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 1, startY_VerbOccCens - 5, 400); // Spazio di 5 pixel tra riquadro e descrizione
+                                document.Add(descriptionParagraph);
+
+                            }
+                            else
+                            {
+                                stampaX(startX_50, startY_VerbOccCens, document, false);
+                                // --- Solo la descrizione, nella posizione originale ---
+                                // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
+                                Paragraph descriptionParagraph = new Paragraph("Verbale di verifica occupazionale / censimento:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_VerbOccCens, 400);
+                                document.Add(descriptionParagraph);
+                            }
                             //riga interruzione sezione
                             float x3 = 65;
                             float y3 = startY;
@@ -1336,10 +1397,35 @@ namespace Uotep.Classi
                                 document.Add(descriptionParagraph);
                             }
                             startY -= lineHeight; // Move to the next line
+
+                            // controllo nato da accertamenti
+                            bool? contrNatoDaAccNullable = schede.Rows[0]["rapp_contrNatoDaAcc"] as bool?;
+                            string contrNatoDaAccString = contrNatoDaAccNullable.HasValue && contrNatoDaAccNullable.Value ? "X" : "";
+                            // --- Posizione di riferimento per "notifica no Ag" ---
+
+                            float startY_contrNatoDaAcc = startY; // Use the dynamic startY
+                            if (contrNatoDaAccString == "X")
+                            {
+                                stampaX(startX_50, startY_contrNatoDaAcc, document, true);
+
+                                // --- Paragrafo per la descrizione "startY_notif no Ag:", posizionato *A DESTRA* del riquadro ---
+                                Paragraph descriptionParagraph = new Paragraph("Controllo/i nato da acc. Rich:");
+                                descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrNatoDaAcc - 5, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            else
+                            {
+                                stampaX(startX_50, startY_contrNatoDaAcc, document, false);
+                                // --- Solo la descrizione "startY_notif no Ag:", nella posizione originale ---
+                                Paragraph descriptionParagraph = new Paragraph("Controllo/i nato da acc. Rich:");
+                                descriptionParagraph.SetFixedPosition(startX_70, startY_contrNatoDaAcc, 200);
+                                document.Add(descriptionParagraph);
+                            }
+                            startY -= lineHeight; // Move to the next line
                                                   // float startY_NumCensimenti = startY_430; //
 
 
-                            document.Add(new Paragraph($"Num. Censimenti: {schede.Rows[0].ItemArray[57]}").SetFixedPosition(300, startY_cenrimentoNucFam, 200));
+                            document.Add(new Paragraph($"Num. Acc. Rich: {schede.Rows[0]["rapp_NumcontrNatoDaAcc"]}").SetFixedPosition(300, startY_contrNatoDaAcc, 200));
 
                             startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione

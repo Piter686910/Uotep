@@ -454,7 +454,7 @@ namespace Uotep
                             {
                                 if (HfStato.Value == "Mod")
 
-                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " modificata correttamente .";
+                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " " + Enumerate.MsgOutput.ModificaCorretta.GetDescription();
 
                                 else
                                     errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";

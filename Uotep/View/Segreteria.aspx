@@ -63,7 +63,7 @@
 
                                     <asp:Label ID="Label4" runat="server" Text="Data" CssClass="form-label d-block mb-2"></asp:Label>
 
-                                    <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control larghezzaText data-auto" placeholder="dd-MM-yyyy" />
+                                    <asp:TextBox ID="txtDataI" runat="server" CssClass="form-control larghezzaText" placeholder="dd-MM-yyyy" />
                                     <asp:RequiredFieldValidator ID="RqData" runat="server" ControlToValidate="txtDataI" ErrorMessage="Inserire la data" ForeColor="Red" ValidationGroup="bt">
 
                                     </asp:RequiredFieldValidator>
@@ -88,7 +88,7 @@
                         <div class="form-group mb-3">
                             <div class="form-group text-center mt-4" style="text-align: left !important">
                                 <asp:Label ID="Label1" runat="server" Text="Data" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="TxtData" runat="server" ToolTip="data" TabIndex="2" CssClass="form-control data-auto"></asp:TextBox>
+                                <asp:TextBox ID="TxtData" runat="server" ToolTip="data" TabIndex="2" CssClass="form-control"></asp:TextBox>
 
                             </div>
                         </div>

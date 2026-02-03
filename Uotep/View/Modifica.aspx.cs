@@ -287,7 +287,7 @@ namespace Uotep
                     {
                         if (String.IsNullOrEmpty(Session["user"].ToString()))
                         {
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare login" + "'); $('#errorModal').modal('show');", true);
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                             Response.Redirect(url, false);
@@ -432,11 +432,11 @@ namespace Uotep
                     Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat);
                     if (!ins)
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ErrorLog.GetDescription() + "'); $('#errorModal').modal('show');", true);
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "modifica effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ModificaCorretta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                         //DivDettagli.Visible = false;
                         //Pulisci();

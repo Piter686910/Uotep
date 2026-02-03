@@ -735,6 +735,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btModifica;
 
         /// <summary>
+        /// Controllo btDuplica.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btDuplica;
+
+        /// <summary>
         /// Controllo DivGrid.
         /// </summary>
         /// <remarks>
@@ -814,6 +823,33 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btChiudi;
+
+        /// <summary>
+        /// Controllo TextMessage.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl TextMessage;
+
+        /// <summary>
+        /// Controllo btChiudiMsgModal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btChiudiMsgModal;
+
+        /// <summary>
+        /// Controllo btOKDup.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btOKDup;
 
         /// <summary>
         /// Controllo Button2.

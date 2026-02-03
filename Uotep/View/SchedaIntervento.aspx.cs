@@ -116,7 +116,7 @@ namespace Uotep
                 rap.notifica = ckNotifica.Checked;
                 rap.iniziativa = ckIniziativa.Checked;
                 rap.cdr = ckCdr.Checked;
-                rap.coordinatore = ckCoordinatore.Checked;
+                //  rap.coordinatore = ckCoordinatore.Checked;
                 if (ckRelazione.Checked)
                 {
                     stat.relazioni = 1;
@@ -288,6 +288,32 @@ namespace Uotep
                 rap.notifica_no_ag = ckNotificaTp.Checked;
                 rap.quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
                 rap.dataInserimento = DateTime.Now;
+                //I- mod 31/01/2026 scheda int
+                rap.accRichiesti = ckAccRichiesti.Checked;
+                if (ckAccRichiesti.Checked)
+                {
+                    if (!string.IsNullOrEmpty(txtNumAccRichiesti.Text))
+
+                        rap.numAccRichiesti = Convert.ToInt32(txtNumAccRichiesti.Text);
+
+                    else
+                        rap.numAccRichiesti = 0;
+                }
+
+                rap.verbOccCensimento = ckVerbaleOccCens.Checked;
+                rap.contrNatoDaAcc = ckContrNatoDaAccert.Checked;
+                if (ckContrNatoDaAccert.Checked)
+                {
+                    if (!string.IsNullOrEmpty(txtNumContrNatoDaAccert.Text))
+
+                        rap.NumcontrNatoDaAcc = Convert.ToInt32(txtNumContrNatoDaAccert.Text);
+
+                    else
+                        rap.NumcontrNatoDaAcc = 0;
+                }
+
+
+                //F- mod 31/01/2026 scheda int
                 stat.mese = MeseCorrente;
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
                 string txt = string.Empty;
@@ -412,7 +438,7 @@ namespace Uotep
                 ckCdr.Checked = false;
                 ckResa.Checked = false;
                 ckEsposto.Checked = false;
-                ckCoordinatore.Checked = false;
+                // ckCoordinatore.Checked = false;
                 ckRelazione.Checked = false;
                 ckAnnotazionePG.Checked = false;
                 ckEsitoDelega.Checked = false;
@@ -441,6 +467,13 @@ namespace Uotep
                 CkSgombImmobili.Checked = false;
                 ckNotificaTp.Checked = false;
                 DdlQuartiere.ClearSelection();
+                //I- mod 31/01/2026 scheda int
+                ckAccRichiesti.Checked = false;
+                ckContrNatoDaAccert.Checked = false;
+                txtNumAccRichiesti.Text = string.Empty;
+                txtNumContrNatoDaAccert.Text = string.Empty;
+                ckVerbaleOccCens.Checked = false;
+                //F- mod 31/01/2026 scheda int
             }
             catch (Exception ex)
             {
@@ -507,6 +540,27 @@ namespace Uotep
                     ret = false;
                 }
             }
+            //I- mod 31/01/2026 scheda int
+            if (ckAccRichiesti.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumAccRichiesti.Text))
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero accertamenti." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+            if (ckContrNatoDaAccert.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumContrNatoDaAccert.Text))
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero controlli noto/i da accertamenti." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
+
+            //F- mod 31/01/2026 scheda int
             return ret;
         }
         protected void apripopup_Click(object sender, EventArgs e)

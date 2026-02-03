@@ -37,6 +37,7 @@ namespace Uotep
         int totalDPI = 0;
         int totalOccAbitativo = 0;
         int totalOccNoAbitativo = 0;
+        int totalNumcontrNatoDaAcc = 0;
         int totalCantSeq = 0;
         int totalEsposti = 0;
         String annoCorr = DateTime.Now.Year.ToString();
@@ -249,6 +250,7 @@ namespace Uotep
 
                 totalOccAbitativo += Convert.ToInt32(drv["rapp_contr_occ_abitativo"]);
                 totalOccNoAbitativo += Convert.ToInt32(drv["rapp_contr_occ_no_abitativo"]);
+                totalNumcontrNatoDaAcc += Convert.ToInt32(drv["rapp_NumcontrNatoDaAcc"]);
             }
             else if (e.Row.RowType == DataControlRowType.Footer)
             {
@@ -291,6 +293,11 @@ namespace Uotep
                 e.Row.Cells[7].Text = totalOccNoAbitativo.ToString();
                 e.Row.Cells[7].HorizontalAlign = HorizontalAlign.Right;
                 e.Row.Cells[7].Font.Bold = true;
+                // Colonna Numero controli Nato Da accertamenti (8)
+                e.Row.Cells[8].Text = totalNumcontrNatoDaAcc.ToString();
+                e.Row.Cells[8].HorizontalAlign = HorizontalAlign.Right;
+                e.Row.Cells[8].Font.Bold = true;
+              
             }
         }
 
@@ -298,5 +305,7 @@ namespace Uotep
         {
 
         }
+
+        
     }
 }

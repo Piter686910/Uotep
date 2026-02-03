@@ -27,20 +27,20 @@ namespace Uotep
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //Session["PaginaChiamante"] = "~/View/Urp.aspx";
+            Session["PaginaChiamante"] = "~/View/Urp.aspx";
 
-            //if (Session["user"] != null)
-            //{
-            //    Vuser = Session["user"].ToString();
-            //    ruolo = Session["ruolo"].ToString();
+            if (Session["user"] != null)
+            {
+                Vuser = Session["user"].ToString();
+                ruolo = Session["ruolo"].ToString();
 
-            //}
-            //else
-            //{
-            //    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
-            //    Response.Redirect(url);
+            }
+            else
+            {
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                Response.Redirect(url);
 
-            //}
+            }
             //     CaricaDLL();
             if (!IsPostBack)
             {
@@ -204,14 +204,17 @@ namespace Uotep
                     {
                         HfRegistro.Value = string.Empty;
                         HfId.Value = string.Empty;
+                        errorMessage.InnerText = "Inserimento effettuato correttamente";
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
                         btNewIns.Visible = true;
                     }
                 }
                 else
                 {
+                    errorMessage.InnerText = "Seleziona Oggetto";
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Seleziona Oggetto" + "'); $('#errorModal').modal('show');", true);
                 }
+               
             }
             catch (Exception ex)
             {
@@ -230,8 +233,8 @@ namespace Uotep
             txtDataArrivo.Text = String.Empty;
             txtDataScadenza.Text = String.Empty;
             txtDataUscita.Text = String.Empty;
-
-
+            txtRichiedente.Text = string.Empty;
+            txtPratica.Text = string.Empty;
             txtAnno.Text = string.Empty;
             DdlEsito.ClearSelection();
             txtMotivazione.Text = string.Empty;
@@ -241,6 +244,9 @@ namespace Uotep
             rd241_90.Checked = false;
             rd33_2013.Checked = false;
             rbControInteressatiSi.Checked = false;
+            rdCopiaVisione.Checked = false;
+            rdRicCopia.Checked = false;
+            rdRicVisione.Checked = false;
             CaricaDLL();
 
         }

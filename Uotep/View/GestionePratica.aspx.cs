@@ -50,7 +50,7 @@ namespace Uotep
             if (!IsPostBack)
             {
                 if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper() ||
-                    ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper())
+                    ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.urp.ToString().ToUpper())
                 {
                     btSalva.Enabled = false;
                     btModifica.Enabled = false;

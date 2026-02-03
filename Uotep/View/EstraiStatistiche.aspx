@@ -43,6 +43,7 @@
                 <div style="margin-top: -90px!important">
                     <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
                     <p class="text-center lead">ESTRAZIONE STATISTICHE</p>
+                    <p class="text-center lead">Inserendo solo l'anno di riferimento si estraggono gli obiettivi raggiunti</p>
                 </div>
 
                 <div class="container">
@@ -64,7 +65,7 @@
                     </div>
                 </div>
 
-                <!-- Bottone Salva -->
+                <!-- Bottoni -->
                 <div class="col-md-4 ">
                     <div class="form-group">
 
@@ -80,26 +81,11 @@
 
     <%-- il seguente style serve per i bordi azzurri --%>
     <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -10px;
-        }
+        
 
        
 
-        .GridViewRow {
-            background-color: white;
-        }
-
-        /* Stile per la riga alternata (azzurro chiaro) */
-        .GridViewAlternatingRow {
-            background-color: #E6F3FF; /* Un azzurro molto chiaro */
-            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-        }
-
+      
         .table-layout-fixed {
             table-layout: fixed;
             width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
@@ -302,6 +288,7 @@
                 <asp:BoundField DataField="rapp_censimento_all_pubb" HeaderText="Cens. All. Pubb." ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Justify" />
                 <asp:BoundField DataField="rapp_contr_occ_abitativo" HeaderText="Occ. Uso Abit" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Justify" />
                 <asp:BoundField DataField="rapp_contr_occ_no_abitativo" HeaderText="Occ. Uso Non Abit" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Justify" />
+                <asp:BoundField DataField="rapp_NumcontrNatoDaAcc" HeaderText="Acc. Rich. Da Altri" ItemStyle-HorizontalAlign="Right" HeaderStyle-HorizontalAlign="Justify" />
             </Columns>
         </asp:GridView>
 
@@ -325,7 +312,7 @@
                 <asp:BoundField DataField="cens_allogg_pubb" HeaderText="Cens.m All. Pubb." ItemStyle-HorizontalAlign="Right" />
                 <asp:BoundField DataField="occ_prop_com_abit" HeaderText="Occ. Uso Abit" ItemStyle-HorizontalAlign="Right" />
                 <asp:BoundField DataField="occ_prop_com_no_abit" HeaderText="Occ. Uso Non Abit" ItemStyle-HorizontalAlign="Right" />
-
+                <asp:BoundField DataField="contr_nati_da_accer_richiesti" HeaderText="Acc. Rich. Da Altri" ItemStyle-HorizontalAlign="Right" />
 
             </Columns>
         </asp:GridView>

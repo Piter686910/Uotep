@@ -15,6 +15,7 @@ namespace Uotep
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
+        String Ruolo = String.Empty;
         Principale p = new Principale(); public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
 
         protected void Page_Load(object sender, EventArgs e)
@@ -22,9 +23,24 @@ namespace Uotep
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
-
+                Ruolo = Session["ruolo"].ToString();
+                btOKDup.Visible = true;
+                if (Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper())
+                {
+                    btDuplica.Visible = false;
+                }
+                else
+                    btDuplica.Visible = true;
             }
-            Session["PaginaChiamante"] = "~/View/Visualizza.aspx";
+            else
+            {
+                btOKDup.Visible = false; // non visualizzo ok per non confondere l'utente perchè in questo caso non serve il button ok
+                TextMessage.InnerText = Enumerate.MsgOutput.SScaduta.GetDescription();
+                //TextMessage.InnerHtml = "style=""";
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
+            }
+
+                Session["PaginaChiamante"] = "~/View/Visualizza.aspx";
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -67,6 +83,10 @@ namespace Uotep
             if (txtProtGen.Text != string.Empty)
             {
                 pratica = mn.getListProtGen(txtProtGen.Text);
+                if (pratica.Rows.Count==0)
+                {
+                    pratica = mn.getListProtGenInDecretazione(txtProtGen.Text);
+                }
             }
             if (txtPratica.Text != string.Empty)
             {
@@ -166,7 +186,7 @@ namespace Uotep
                         dataInserimento = values[2]; // DataInserimento
                         sigla = values[3];  // sigla
                         HidPratica.Value = values[4]; // id
-
+                       
 
                         //// Ora puoi usare questi valori per aggiornare i tuoi controlli
                         //p.nrProtocollo = System.Convert.ToInt32(protocollo);
@@ -804,6 +824,48 @@ namespace Uotep
         protected void btModifica_Click(object sender, EventArgs e)
         {
             string url = VirtualPathUtility.ToAbsolute("~/View/Modifica.aspx");
+            Response.Redirect(url, false);
+        }
+
+        protected void btDuplica_Click(object sender, EventArgs e)
+        {
+            btOKDup.Enabled = true;
+            TextMessage.InnerText = "Sei sicuro di voler duplicare il carico corrente?";
+            //TextMessage.InnerHtml = "style=""";
+            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
+
+        }
+
+        protected void btOKDup_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            String carico= txtProt.Text.Split('-')[0].Trim();
+            String sigla = txtProt.Text.Split('-')[1].Trim();
+            
+            Boolean resp = mn.DuplicaCarico(carico,sigla, Convert.ToInt32( HidPratica.Value));
+            if (resp)
+            {
+                TextMessage.InnerText = "Carico " + carico + " duplicato";
+                //TextMessage.InnerHtml = "style=""";
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
+                btOKDup.Enabled = false;
+                
+            }
+            else
+            {
+                TextMessage.InnerText = "Errore " + carico + " duplicato";
+                //TextMessage.InnerHtml = "style=""";
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
+            }
+            HidPratica.Value = string.Empty;
+            Pulisci();
+        }
+
+        protected void btChiudiMsgModal_Click(object sender, EventArgs e)
+        {
+            Session.Remove("ListPratiche");
+            Session.Remove("ListRicerca");
+            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);
         }
     }

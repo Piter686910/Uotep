@@ -41,6 +41,9 @@ textarea {
 .GridViewRow {
     background-color: white;
 }
+.uppercase-text {
+    text-transform: uppercase;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

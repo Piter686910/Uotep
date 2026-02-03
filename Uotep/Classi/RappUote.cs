@@ -70,6 +70,12 @@ namespace Uotep.Classi
         public Boolean notifica_no_ag = false;
         public Int32 numero_controlli_cant_seq = 0;
         public Boolean giro_controlli = false;
-
+        //I- mod 31/01/2026 scheda int
+        public Boolean accRichiesti = false;
+        public Int32 numAccRichiesti  = 0;
+        public Boolean verbOccCensimento = false;
+        public Boolean contrNatoDaAcc = false;
+        public Int32 NumcontrNatoDaAcc = 0;
+        //F- mod 31/01/2026 scheda int
     }
 }

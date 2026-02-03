@@ -110,3 +110,9 @@ function formattaData(input) {
         input.value = numeri;
     }
 }
+function PulisciSeSbagliato(txt) {
+    if (/\D/.test(txt.value)) {
+        txt.value = "";
+        // alert("Inserire solo numeri.");
+    }
+}

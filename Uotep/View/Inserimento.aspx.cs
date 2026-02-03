@@ -190,7 +190,7 @@ namespace Uotep
                     {
                         if (String.IsNullOrEmpty(Session["user"].ToString()))
                         {
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Sessione scaduta, effettuare login" + "'); $('#errorModal').modal('show');", true);
+                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
                             Response.Redirect(url, false);
