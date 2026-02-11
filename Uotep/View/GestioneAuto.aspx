@@ -22,26 +22,7 @@
             $('#ModalAvvertenze').modal('hide');
         }
     </script>
-    <%-- il seguente style serve per i bordi azzurri --%>
-    <style>
-       
-
-        .table-layout-fixed {
-            table-layout: fixed;
-            width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
-        }
-
-            /* Opzionale: assicura che il testo troppo lungo non rompa il layout */
-            .table-layout-fixed td,
-            .table-layout-fixed th {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-
-       
-    </style>
+    
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
@@ -49,7 +30,7 @@
             <p class="text-center lead">GESTIONE CARTE CARBURANTE</p>
 
             <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
-                <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Enabled="false" />
+                <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Enabled="false" autofocus=""/>
             </div>
             <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
                 <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Enabled="false" />

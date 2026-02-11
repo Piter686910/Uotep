@@ -20,7 +20,13 @@
         function HideErrorMessage() {
             $('#errorModal').modal('hide');
         }
-
+        function ShowMsgMessage(message) {
+            $('#MsgModal').modal('show');
+        }
+        // Nasconde il popup
+        function HideMsgMessage() {
+            $('#MsgModal').modal('hide');
+        }
         function showModal() {
             $('#ModalDataScadenza').modal('show');
         }
@@ -97,13 +103,13 @@
                         </span>
                         <label style="font-weight: bold; margin-right: 15px; margin-left: 150px">Oggetto:</label>
                         <span style="margin-right: 20px;">
-                            <asp:RadioButton ID="rdCopiaVisione" runat="server" GroupName="AreaGroup" Text=" Copia/Visione " />
+                            <asp:RadioButton ID="rdCopiaVisione" runat="server" GroupName="AreaGroup1" Text=" Copia/Visione " />
                         </span>
                         <span>
-                            <asp:RadioButton ID="rdRicCopia" runat="server" GroupName="AreaGroup" Text=" Rich. Copia " />
+                            <asp:RadioButton ID="rdRicCopia" runat="server" GroupName="AreaGroup1" Text=" Rich. Copia " />
                         </span>
                         <span>
-                            <asp:RadioButton ID="rdRicVisione" runat="server" GroupName="AreaGroup" Text=" Rich. Visione " />
+                            <asp:RadioButton ID="rdRicVisione" runat="server" GroupName="AreaGroup1" Text=" Rich. Visione " />
                         </span>
 
                     </div>
@@ -208,10 +214,10 @@
             </div>
         </div>
     </div>
-     <asp:HiddenField ID="HfDataArrivo" runat="server" />
+    <asp:HiddenField ID="HfDataArrivo" runat="server" />
     <asp:HiddenField ID="HfDataScadenza" runat="server" />
     <asp:HiddenField ID="HfDataUscita" runat="server" />
-     <asp:HiddenField ID="HfFiltroEsito" runat="server" />
+    <asp:HiddenField ID="HfFiltroEsito" runat="server" />
     <asp:HiddenField ID="HfNewDataScadenza" runat="server" />
     <asp:HiddenField ID="HfRegistro" runat="server" />
     <asp:HiddenField ID="HfId" runat="server" />
@@ -271,7 +277,7 @@
 
                             <%--<asp:BoundField DataField="esito" HeaderText="Esito" ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Left" />--%>
 
-                            <asp:TemplateField  ItemStyle-Width="80px">
+                            <asp:TemplateField ItemStyle-Width="80px">
                                 <HeaderTemplate>
                                     Esito
                                        <br />
@@ -369,49 +375,101 @@
                 <!-- GridView Registro -->
                 <div id="Div1" runat="server" class="form-group" style="padding-left: -50px">
 
-                    <asp:GridView ID="gvRegistro" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                        OnRowDataBound="gvRegistro_RowDataBound" OnRowCommand="gvRegistro_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvRegistro_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                    <asp:GridView ID="gvRegistro" runat="server"
+                        AutoGenerateColumns="False"
+                        CssClass="table table-bordered"
+                        AllowPaging="true"
+                        PageSize="10"
+                        DataKeyNames="id_registro"
+                        OnRowDataBound="gvRegistro_RowDataBound"
+                        OnPageIndexChanging="gvRegistro_PageIndexChanging"
+                        OnRowEditing="gvRegistro_RowEditing"
+                        OnRowCancelingEdit="gvRegistro_RowCancelingEdit"
+                        OnRowDeleting="gvRegistro_RowDeleting"
+                        OnRowUpdating="gvRegistro_RowUpdating"
+                        RowStyle-CssClass="GridViewRow"
                         AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+
                         <Columns>
-                            <asp:BoundField DataField="id_registro" HeaderText="id" Visible="false" />
-                            <asp:BoundField DataField="oggetto" HeaderText="Oggetto" ItemStyle-Width="40px" />
+                            <asp:BoundField DataField="id_registro" HeaderText="id" Visible="false" ReadOnly="true" />
 
+                            <%-- ESEMPIO CAMPO EDITABILE: OGGETTO --%>
+                            <asp:TemplateField HeaderText="Oggetto" ItemStyle-Width="150px">
+                                <ItemTemplate>
+                                    <%# Eval("oggetto") %>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtOggetto" runat="server" Text='<%# Bind("oggetto") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="dataPresentRichiesta" ItemStyle-Width="50px">
-                                <HeaderTemplate>
-                                    DATA PRESENTAZIONE RICHIESTA
-    <br />
-                                </HeaderTemplate>
+                            <%-- ESEMPIO CAMPO DATA EDITABILE --%>
+                            <asp:TemplateField HeaderText="Data Presentazione" ItemStyle-Width="100px">
                                 <ItemTemplate>
                                     <%# FormatMyDate(Eval("dataPresentRichiesta", "{0:dd/MM/yyyy}") )%>
                                 </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtDataPres" runat="server" Text='<%# Bind("dataPresentRichiesta", "{0:dd/MM/yyyy}") %>' CssClass="form-control input-sm" placeholder="gg/mm/yyyy"></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+
+                            <%--<asp:BoundField DataField="nrPgTrasmissioneRichiesto" HeaderText="Nr PG Trasm." ItemStyle-Width="40px" ReadOnly="true" />--%>
+                            <asp:TemplateField HeaderText="Nr PG Trasm.">
+                                <ItemTemplate><%# Eval("nrPgTrasmissioneRichiesto") %></ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtPgTrasmissioneRichiesto" runat="server" Text='<%# Bind("nrPgTrasmissioneRichiesto") %>' CssClass="form-control input-sm" Width="80px"></asp:TextBox>
+                                </EditItemTemplate>
                             </asp:TemplateField>
 
 
-                            <asp:BoundField DataField="nrPgTrasmissioneRichiesto" HeaderText="NUMERO PG TRASMISSIONE RICHIESTA DA PARTE DELL'URP" ItemStyle-Width="40px" ItemStyle-HorizontalAlign="Center" />
-                            <asp:BoundField DataField="uffDetentore" HeaderText="UFFICIO DETENTORE" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="60px" />
+                            <asp:TemplateField HeaderText="Ufficio Detentore">
+                                <ItemTemplate><%# Eval("uffDetentore") %></ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtUffDetentore" runat="server" Text='<%# Bind("uffDetentore") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="C. Interessati" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                            <%-- ESEMPIO CHECKBOX PER SI/NO --%>
+                            <asp:TemplateField HeaderText="C. Interessati" ItemStyle-Width="40px" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
                                     <%# Eval("controInteressati").ToString() == "True" ? "Si" : "No" %>
                                 </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:CheckBox ID="chkControInteressati" runat="server" Checked='<%# Bind("controInteressati") %>' />
+                                </EditItemTemplate>
                             </asp:TemplateField>
-                            <asp:BoundField DataField="esito" HeaderText="Esito" ItemStyle-Width="80px" ItemStyle-HorizontalAlign="Left" />
-                            <asp:BoundField DataField="motivazione" HeaderText="Motivazione" ItemStyle-HorizontalAlign="Left" ItemStyle-Width="60px" />
 
-                            <asp:BoundField DataField="nrPgTrasmissioneRiscontro" HeaderText="NUMERO PG TRASMISSIONE RISCONTRO ALL'URP" ItemStyle-Wrap="true" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
+                            <asp:TemplateField HeaderText="Esito">
+                                <ItemTemplate><%# Eval("esito") %></ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtEsito" runat="server" Text='<%# Bind("esito") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="dataConclProcedimento" ItemStyle-Width="50px">
-                                <HeaderTemplate>
-                                    DATA CONCLUSIONE PROCEDIMENTO
-                                <br />
-                                </HeaderTemplate>
+                            <%-- COLONNA COMANDI (MODIFICA / SALVA / ANNULLA) --%>
+                            <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="80px">
                                 <ItemTemplate>
-                                    <%# FormatMyDate(Eval("dataConclProcedimento", "{0:dd/MM/yyyy}") )%>
+                                    <!-- Il pulsante per entrare in modifica deve avere CommandName="Edit" -->
+                                    <asp:Button ID="btnModifica" runat="server" Text="Mod." CommandName="Edit" CssClass="btn btn-warning btn-sm" />
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <!-- Pulsanti visibili quando sei in modifica -->
+                                    <asp:Button ID="btnSalva" runat="server" Text="Salva" CommandName="Update" CssClass="btn btn-primary btn-sm" ValidationGroup="EditVG" />
+                                    <asp:Button ID="btnAnnulla" runat="server" Text="X" CommandName="Cancel" CssClass="btn btn-secondary btn-sm" />
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+
+                            <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20px">
+                                <ItemTemplate>
+                                    <asp:Button ID="btnElimina" runat="server" Text="Del." CommandName="Delete" CommandArgument='<%# Eval("id_registro") %>' CssClass="btn btn-danger btn-sm" />
+                                    <%-- OnClientClick="return confirm('Sei sicuro di voler eliminare questa riga?');" --%>
+
                                 </ItemTemplate>
                             </asp:TemplateField>
 
                         </Columns>
+
+                        <%-- ... (TUA PAGER SETTINGS RIMANE UGUALE) ... --%>
                         <PagerSettings Mode="NumericFirstLast" Position="Top" />
                         <PagerStyle HorizontalAlign="Center" />
                         <PagerTemplate>
@@ -438,66 +496,90 @@
                                 <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
                             </div>
                         </PagerTemplate>
+
                     </asp:GridView>
+
                     <div class="modal-footer">
-                        <asp:Button ID="btnExportExcel" runat="server" class="btn btn-secondary" Text="📊 Esporta Excel" OnClick="btnExportExcel_Click" />
-                        <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <!-- Popup Modale inserimento data scadenza -->
-    <div class="modal fade" id="ModalDataScadenza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 20%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel4">Inserisci La Nuova Data Scadenza</h5>
-
-                </div>
-                <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
-                    <div class="form-group mb-3">
-                        <label for="txtdataScadenzaPopup">Data Scadenza</label>
-                        <asp:TextBox ID="txtdataScadenzaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
+                        <asp:Button ID="Button1" runat="server" class="btn btn-secondary" Text="📊 Esporta Excel" OnClick="btnExportExcel_Click" />
+                        <asp:Button ID="Button3" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <!-- Bottone per avviare chiousura decretazione -->
-                    <asp:Button ID="ModalChiudiDataScadenza" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDataScadenza_Click" />
-                </div>
+
             </div>
         </div>
-    </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <%--role="document">--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
-                </div>
-                <div class="modal-body">
 
-                    <div class="form-group">
-
-                        <p id="errorMessage" runat="server" style="color: red"></p>
+        <!-- Popup Modale inserimento data scadenza -->
+        <div class="modal fade" id="ModalDataScadenza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 20%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel4">Inserisci La Nuova Data Scadenza</h5>
 
                     </div>
+                    <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
+                        <div class="form-group mb-3">
+                            <label for="txtdataScadenzaPopup">Data Scadenza</label>
+                            <asp:TextBox ID="txtdataScadenzaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
+                        </div>
+                    </div>
 
-                </div>
-                <div class="modal-footer">
-
-                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare chiousura decretazione -->
+                        <asp:Button ID="ModalChiudiDataScadenza" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDataScadenza_Click"  />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <%-- popup errori --%>
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <%--role="document">--%>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
+                    </div>
+                    <div class="modal-body">
 
+                        <div class="form-group">
 
+                            <p id="errorMessage" runat="server" style="color: red"></p>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%-- popup messaggi --%>
+        <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
+            <div class="modal-dialog"
+                role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
+
+                    </div>
+                    <div class="modal-body">
+                        <!-- Campi di input per la ricerca -->
+                        <div class="form-group">
+
+                            <p id="TextMessage" runat="server" style="color: red"></p>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
+                        <asp:Button ID="btOKCan" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKCan_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
 </asp:Content>

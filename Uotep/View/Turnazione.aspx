@@ -516,7 +516,7 @@
                             </asp:DropDownList>
                         </div>
                         <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">
-                            <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control"></asp:TextBox>
+                            <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" autofocus=""></asp:TextBox>
 
                         </div>
                         <div class="col-md-3" style="margin-bottom: 10px; margin-top: 40px; padding-left: 2em">

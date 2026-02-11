@@ -454,48 +454,13 @@
             }
         }
     </script>
-    <style>
-        .GridViewRow {
-            background-color: white;
-        }
 
-        /* Stile per la riga alternata (azzurro chiaro) */
-        .GridViewAlternatingRow {
-            background-color: #E6F3FF; /* Un azzurro molto chiaro */
-            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-        }
-
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -30px;
-        }
-
-        .uppercase-text {
-            text-transform: uppercase;
-        }
-
-        .gridview-autofit .colonna-stretta {
-            white-space: nowrap;
-            width: 1%;
-            /* Opzionale: aggiungi un po' di padding per la leggibilità */
-            padding: 8px 10px;
-        }
-
-        .gridview-autofit .colonna-descrizione {
-            min-width: 250px; /* Non sarà mai più stretta di 100px */
-            max-width: 500px;
-            /* Se il testo è più lungo, andrà a capo */
-            /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
-        }
-    </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>
 
+             <asp:HiddenField ID="HfButtonProv" runat="server" />
 
             <!-- Contenitore per centrare -->
 
@@ -527,7 +492,7 @@
         <%-- < SEZIONE PANNELLI RICERCA --%>
         <div id="DivRicerca" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
             <!-- Righe di input  -->
-            <div class="col-md-4 custom-border">
+            <div class="col-md-4 ">
                 <%-- DIV RICERCA PROTOCOLLO --%>
                 <div id="DivProtocollo" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
 
@@ -808,34 +773,46 @@
 
                 <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
                 <div class="row custom-border">
-                    <div class="col-md-4">
-                        <div class="form-group mb-3" style="margin-left: -25px">
+                    <div class="col-md-3" style="margin-left: -25px">
+                        <div class="form-group mb-3">
                             <label for="txtDataEsito">Data Esito</label>
-                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control mb-3 data-auto" ClientIDMode="Static" />
+                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" />
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group mb-3">
+                    <div class="col-md-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtEsito">Esito</label>
 
+
+                            <asp:TextBox ID="txtEsito" runat="server" AutoPostBack="false" onkeyup="filterDropdownEsito()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                            <div id="suggestionsListEsito" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                <asp:HiddenField ID="HfEsito" runat="server" />
+                            </div>
+                            <asp:DropDownList ID="DdlEsito" runat="server" CssClass="form-control" Style="display: none" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="DdlAccertatori">Accertatori</label>
+                            <%--<asp:TextBox ID="txtAccertatori" runat="server" MaxLength="30" CssClass="form-control mb-3" />--%>
+                            <asp:DropDownList ID="DdlAccertatori" runat="server" CssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="margin-left: -40px">
+                        <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <asp:TextBox ID="txtEsito" runat="server" AutoPostBack="false" onkeyup="filterDropdownEsito()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                <div id="suggestionsListEsito" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                    <asp:HiddenField ID="HfEsito" runat="server" />
-                                </div>
-                                <asp:DropDownList ID="DdlEsito" runat="server" CssClass="form-control" Style="display: none" />
+                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="btAggiungi_Click" ToolTip="Aggiungi" />
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3" style="max-width:230px">
                         <div class="form-group mb-3">
-                            <label for="txtAccertatori">Accertatori</label>
-                            <asp:TextBox ID="txtAccertatori" runat="server" MaxLength="30" CssClass="form-control mb-3" />
-
+                            <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control"></asp:ListBox>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
 
                 <div id="divAg" runat="server" style="display: none;">
@@ -1005,7 +982,7 @@
                                 <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>
-                                 <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
                                 <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <HeaderTemplate>
                                         Accertatori
@@ -1101,7 +1078,7 @@
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
 
-                        <p id="errorAvvertenze" style="color: red"></p>
+                        <p id="errorAvvertenze"  style="color: red"></p>
 
                     </div>
                 </div>
@@ -1112,30 +1089,7 @@
             </div>
         </div>
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <%-- Modale ModalDecretazione --%>
     <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">

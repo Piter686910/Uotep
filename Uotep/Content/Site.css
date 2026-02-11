@@ -44,6 +44,55 @@ textarea {
 .uppercase-text {
     text-transform: uppercase;
 }
+/* Colori custom per Header Modale */
+.bg-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-radius: 5px 5px 0 0;
+}
+
+.bg-danger {
+    background-color: #f2dede;
+    color: #a94442;
+    border-radius: 5px 5px 0 0;
+}
+
+.bg-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+    border-radius: 5px 5px 0 0;
+}
+
+.bg-info {
+    background-color: #d9edf7;
+    color: #31708f;
+    border-radius: 5px 5px 0 0;
+}
+.table-layout-fixed {
+    table-layout: fixed;
+    width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
+}
+
+    /* Opzionale: assicura che il testo troppo lungo non rompa il layout */
+    .table-layout-fixed td,
+    .table-layout-fixed th {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+.gridview-autofit .colonna-stretta {
+    white-space: nowrap;
+    width: 1%;
+    /* Opzionale: aggiungi un po' di padding per la leggibilità */
+    padding: 8px 10px;
+}
+
+.gridview-autofit .colonna-descrizione {
+    min-width: 250px; /* Non sarà mai più stretta di 100px */
+    max-width: 500px;
+    /* Se il testo è più lungo, andrà a capo */
+    /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

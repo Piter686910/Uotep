@@ -70,8 +70,9 @@ namespace Uotep
         {
             try
             {
+                string msg = string.Empty;
                 Manager mn = new Manager();
-                System.Data.DataTable CaricaOperatori = mn.getListOperatore();
+                System.Data.DataTable CaricaOperatori = mn.getListOperatore(out msg);
                 DdlOperatore.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 DdlOperatore.DataTextField = "Nominativo"; // Il campo visibile
                 //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione

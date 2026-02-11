@@ -26,7 +26,7 @@
                         <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <asp:Label ID="Label6" runat="server">Fascicolo/Cartellina</asp:Label>
-                                <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" />
+                                <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus=""/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtFascicolo" ValidationGroup="bt" ErrorMessage="Inserire numero fascicolo" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 

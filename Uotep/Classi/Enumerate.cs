@@ -63,8 +63,23 @@ namespace Uotep.Classi
             [Description("modifica non effettuata, controllare il log.")]
             ErrorLog = 6,
             [Description("modifica effettuata correttamente.")]
-            ModificaCorretta = 7
-
+            ModificaCorretta = 7,
+            [Description("E' possibile inserire max 3 accertatori.")]
+            Maxaccertatori = 8,
+            [Description("Pratica non trovata.")]
+            PraticaNotFound = 9,
+            [Description("Inserimento effettuato correttamente.")]
+            InsOk = 10,
+            [Description("chiusura non effettuata, controllare il log.")]
+            CloseKO = 11,
+            [Description("chiusura effettuata correttamente.")]
+            CloseOK = 12,
+            [Description("Nessuna scheda associata questa statistica.")]
+            NoStatistiche = 13,
+            [Description("Registro Modificato.")]
+            UpdRegistroOk = 14,
+            [Description("Errore update Registro Modificato.")]
+            UpdRegistroKo = 15
         }
         public enum Sigla
         {

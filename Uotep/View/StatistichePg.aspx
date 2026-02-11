@@ -25,7 +25,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtMM">Mese</label>
-                                <asp:TextBox ID="txtMM" runat="server" CssClass="form-control" Width="110px" />
+                                <asp:TextBox ID="txtMM" runat="server" CssClass="form-control" Width="110px" autofocus=""/>
                                 <asp:RequiredFieldValidator ID="rqMM" runat="server" ControlToValidate="txtMM" ErrorMessage="inserire il mese" ValidationGroup="bt" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 

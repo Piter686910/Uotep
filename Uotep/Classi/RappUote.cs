@@ -76,6 +76,7 @@ namespace Uotep.Classi
         public Boolean verbOccCensimento = false;
         public Boolean contrNatoDaAcc = false;
         public Int32 NumcontrNatoDaAcc = 0;
+        public Int32 NumNotificheNoAg = 0;
         //F- mod 31/01/2026 scheda int
     }
 }

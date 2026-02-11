@@ -364,6 +364,8 @@
                             <div id="divNotificaTp" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
+                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumNotificheNoAg" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
 
 

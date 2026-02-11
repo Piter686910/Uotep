@@ -19,6 +19,7 @@ namespace Uotep
         String Area = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Manager mn = new Manager();
+        string msg = string.Empty;  
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -289,6 +290,18 @@ namespace Uotep
                 rap.quartiere = DdlQuartiere.SelectedItem.Text.ToUpper();
                 rap.dataInserimento = DateTime.Now;
                 //I- mod 31/01/2026 scheda int
+                if (ckNotificaTp.Checked)
+                {
+                    if (!string.IsNullOrEmpty(txtNumNotificheNoAg.Text))
+
+                        rap.NumNotificheNoAg = Convert.ToInt32(txtNumNotificheNoAg.Text);
+
+                    else
+                        rap.NumNotificheNoAg = 0;
+                }
+
+
+               
                 rap.accRichiesti = ckAccRichiesti.Checked;
                 if (ckAccRichiesti.Checked)
                 {
@@ -413,7 +426,7 @@ namespace Uotep
             try
             {
 
-
+                
                 txtPratica.Text = string.Empty;
                 txtIndirizzo.Text = string.Empty;
                 TxtDataIntervento.Text = string.Empty;
@@ -473,6 +486,7 @@ namespace Uotep
                 txtNumAccRichiesti.Text = string.Empty;
                 txtNumContrNatoDaAccert.Text = string.Empty;
                 ckVerbaleOccCens.Checked = false;
+                txtNumNotificheNoAg.Text = string.Empty;
                 //F- mod 31/01/2026 scheda int
             }
             catch (Exception ex)
@@ -541,6 +555,15 @@ namespace Uotep
                 }
             }
             //I- mod 31/01/2026 scheda int
+            if (ckNotificaTp.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumNotificheNoAg.Text))
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero notifiche no AG." + "'); $('#errorModal').modal('show');", true);
+
+                    ret = false;
+                }
+            }
             if (ckAccRichiesti.Checked == true)
             {
                 if (String.IsNullOrEmpty(txtNumAccRichiesti.Text))
@@ -588,7 +611,7 @@ namespace Uotep
             {
                 // Simula il recupero del quartiere dal database o da una logica interna.
                 Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo);
+                DataTable quartiere = mn.getQuartiere(indirizzo,out msg);
 
                 if (quartiere.Rows.Count > 0)
                 {
@@ -615,7 +638,7 @@ namespace Uotep
             try
             {
 
-                DataTable CaricaOperatori = mn.getListOperatore();
+                DataTable CaricaOperatori = mn.getListOperatore(out msg);
                 DdlPattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 DdlPattuglia.DataTextField = "Nominativo"; // Il campo visibile
                 //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
@@ -632,7 +655,7 @@ namespace Uotep
                 ddlCapopattuglia.DataBind();
                 ddlCapopattuglia.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP(out msg);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "id";

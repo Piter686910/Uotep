@@ -13,7 +13,7 @@ namespace Uotep
     {
         String Vuser = String.Empty;
         String ruolo = String.Empty;
-       
+       string msg = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -35,7 +35,7 @@ namespace Uotep
             if (!IsPostBack)
             {
                 Manager mn = new Manager();
-                DataTable CaricaOperatori = mn.getListOperatore();
+                DataTable CaricaOperatori = mn.getListOperatore(out  msg);
                 DdlPersonale.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 DdlPersonale.DataTextField = "Nominativo"; // Il campo visibile
                 DdlPersonale.Items.Insert(0, new ListItem("", "0"));

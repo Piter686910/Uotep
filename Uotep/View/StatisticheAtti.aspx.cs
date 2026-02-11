@@ -95,7 +95,7 @@ namespace Uotep
             }
             if (resp)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Dati  inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Dati  inseriti correttamente ." + "'); $('#errorModal').modal('show');", true);
                 Pulisci();
             }
         }

@@ -53,7 +53,7 @@
                             <div class="form-group text-center mt-4" style="text-align: left !important">
                                 <asp:Label ID="Label3" runat="server" Text="Numero Fascicolo" CssClass="form-label d-block mb-2"></asp:Label>
                                 <%--<label for="txPratica">Numero Fascicolo</label>--%>
-                                <asp:TextBox ID="txtNrFascicolo" runat="server" CssClass="form-control form-control-sm w-50 larghezzaText" />
+                                <asp:TextBox ID="txtNrFascicolo" runat="server" CssClass="form-control form-control-sm w-50 larghezzaText" autofocus=""/>
                                 <asp:RequiredFieldValidator ID="RqFascicolo" runat="server" ControlToValidate="txtNrFascicolo" ErrorMessage="Inserire il numero fascicolo" ForeColor="Red" ValidationGroup="bt">
 
                                 </asp:RequiredFieldValidator>

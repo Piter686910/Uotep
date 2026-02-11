@@ -72,11 +72,11 @@
                 <%-- DIV RICERCA Carico --%>
                 <div id="DivProtocollo" runat="server" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="lblm" runat="server" Text="Nr Protocollo" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="lblm" runat="server" Text="Nr Carico" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtNProtocollo" ErrorMessage="Inserire numero pratica" ForeColor="Red" ValidationGroup="bt">
 
                     </asp:RequiredFieldValidator>
-                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" autofocus=""/>
+                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Carico" autofocus=""/>
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
@@ -315,9 +315,9 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="txtAccertatori">Accertatori</label>
-                            <asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />
-
+                            <label for="ListAccertatori">Accertatori</label>
+                            <%--<asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />--%>
+                             <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Enabled="false" BackColor="LightGray" Rows="3"></asp:ListBox>
                         </div>
 
                     </div>
@@ -418,13 +418,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
             </div>
             <div class="row">
                 <div class="col-12 text-center">
@@ -520,7 +513,9 @@
                                         Filtro
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <%# Eval("Accertatori") %>
+                                        <%# Eval("Accertatori")   %>
+                                         <%# Eval("Accertatori2")   %>
+                                         <%# Eval("Accertatori3")   %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
@@ -571,7 +566,12 @@
                             </PagerTemplate>
 
                         </asp:GridView>
-
+<div class="modal-footer">
+    <!-- Bottone per avviare la ricerca -->
+    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+    <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa"/>
+</div>
                     </div>
                 </div>
                 <asp:HiddenField ID="HidPratica" runat="server" />
@@ -581,15 +581,11 @@
                 <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
                 <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
+                
             </div>
         </div>
     </div>
-     <%-- popup errori --%>
+     <%-- popup messaggi --%>
  <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
      <div class="modal-dialog"
          role="document">
@@ -615,29 +611,6 @@
      </div>
  </div>
 
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
 </asp:Content>

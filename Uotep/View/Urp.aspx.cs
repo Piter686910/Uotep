@@ -24,6 +24,7 @@ namespace Uotep
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         public String Filename = ConfigurationManager.AppSettings["CartellaUrp"];
+        string msg = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -41,6 +42,36 @@ namespace Uotep
                 Response.Redirect(url);
 
             }
+
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+            {
+                Manager mn = new Manager();
+                Boolean resp = mn.DelRegistroById(System.Convert.ToInt32(Request.QueryString["id"]));
+                if (resp)
+                {
+                    DataTable dt = mn.GetListRegistroUrp();
+                    if (dt.Rows.Count > 0)
+                    {
+                        gvRegistro.DataSource = dt;
+                        gvRegistro.DataBind();
+                    }
+                    else
+                    {
+                        gvRegistro.DataSource = null;
+                        gvRegistro.DataBind();
+                    }
+                    // Esce dalla modalità modifica
+                    gvRegistro.EditIndex = -1;
+
+                    // Lancia script per pulire URL
+                    string script = "window.history.replaceState(null, null, window.location.pathname);";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "PulisciUrl", script, true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaRegistro').modal('show');", true);
+                }
+                // Esce dalla modalità modifica
+                //gvRegistro.EditIndex = -1;
+
+            }
             //     CaricaDLL();
             if (!IsPostBack)
             {
@@ -54,7 +85,7 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
-
+                //  btRegistro_Click(sender, e);
             }
 
         }
@@ -70,16 +101,7 @@ namespace Uotep
 
 
         }
-        //public Boolean ControlloCampiObbligatori()
-        //{
-        //    Boolean ret = true;
-        //    if (String.IsNullOrEmpty(txtProdPenNr.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
-        //    {
-        //        return false;
-        //    }
 
-        //    return ret;
-        //}
         protected Boolean Verifica()
         {
             Boolean resp = true;
@@ -204,17 +226,35 @@ namespace Uotep
                     {
                         HfRegistro.Value = string.Empty;
                         HfId.Value = string.Empty;
-                        errorMessage.InnerText = "Inserimento effettuato correttamente";
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+                        //errorMessage.InnerText = "Inserimento effettuato correttamente";
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+                        SiteMaster myMaster = this.Master as SiteMaster;
+
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+
+
+                        }
                         btNewIns.Visible = true;
                     }
                 }
                 else
                 {
-                    errorMessage.InnerText = "Seleziona Oggetto";
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Seleziona Oggetto" + "'); $('#errorModal').modal('show');", true);
+                    //errorMessage.InnerText = "Seleziona Oggetto";
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Seleziona Oggetto" + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Seleziona Oggetto", "warning");
+
+
+                    }
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -256,7 +296,7 @@ namespace Uotep
             try
             {
                 Manager mn = new Manager();
-                DataTable RicercaEsito = mn.getListRicercaEsitoUrp();
+                DataTable RicercaEsito = mn.getListRicercaEsitoUrp(out msg);
                 DdlEsito.DataSource = RicercaEsito; // Imposta il DataSource della DropDownList
                 DdlEsito.DataTextField = "Descrizione"; // Il campo visibile
                 DdlEsito.DataValueField = "ID_esito"; // Il valore associato a ogni opzione
@@ -387,7 +427,7 @@ namespace Uotep
                 {
 
                     Manager mn = new Manager();
-                    DataTable RicercaEsito = mn.getListRicercaEsitoUrp();
+                    DataTable RicercaEsito = mn.getListRicercaEsitoUrp(out msg);
 
                     ddlFiltro.DataSource = RicercaEsito;
                     ddlFiltro.DataTextField = "Descrizione";
@@ -599,11 +639,33 @@ namespace Uotep
 
         protected void DdlEsito_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DdlEsito.SelectedItem.Text == "Differimento" || DdlEsito.SelectedItem.Text == "Differimento Ulteriore")
-            {
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataScadenza').modal('show');", true);
-            }
 
+            if (!rdCopiaVisione.Checked && !rdRicCopia.Checked && !rdRicVisione.Checked)
+            {
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", "Seleziona Oggetto", "warning");
+                   // DdlEsito.SelectedItem.Text = DdlEsito.SelectedItem.Text;
+                    DdlEsito.ClearSelection();
+                }
+
+            }
+            else
+            {
+
+
+
+                if (DdlEsito.SelectedItem.Text == "Differimento" || DdlEsito.SelectedItem.Text == "Differimento Ulteriore")
+                {
+                    //string script = "$('#ModalDataScadenza').appendTo('body').modal('show');";
+                    string script = "$('#ModalDataScadenza').appendTo('form:first').modal('show');";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ApriModalLocale", script, true);
+                    //  ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataScadenza').modal('show');", true);
+                }
+            }
         }
 
 
@@ -638,6 +700,24 @@ namespace Uotep
 
         protected void gvRegistro_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            Manager mn = new Manager();
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                string selectedValue = e.CommandArgument.ToString();
+                string[] ar = null;
+                // Imposta il valore nel TextBox
+                //txtSelectedValue.Text = selectedValue;
+                ar = selectedValue.Split('|');
+                HfId.Value = ar[0];
+
+
+                DataTable dt = mn.GetRegistroById(System.Convert.ToInt32(ar[0]));
+                if (dt.Rows.Count > 0)
+                {
+                    FillScheda(dt);
+                }
+            }
 
         }
 
@@ -665,7 +745,7 @@ namespace Uotep
                 // 1. RECUPERA DATI
                 Manager mn = new Manager();
                 // 1. Recupera i dati dal DB (tabella registro)
-                DataTable listaRegistro = mn.GetListRegistro();
+                DataTable listaRegistro = mn.GetListRegistro(out msg);
 
                 if (listaRegistro.Rows.Count == 0)
                 {
@@ -741,7 +821,7 @@ namespace Uotep
                     {
                         filterExpression = $"{filterColumn} = ('{filterValue.Replace("'", "''")}')";
                     }
-                    else if (filterColumn == "dataArrivo" || filterColumn == "dataScadenza"|| filterColumn == "dataUscita")
+                    else if (filterColumn == "dataArrivo" || filterColumn == "dataScadenza" || filterColumn == "dataUscita")
                     {
                         filterExpression = $"{filterColumn} IN ('{filterValue.Replace("'", "''")}')";
                     }
@@ -936,5 +1016,173 @@ namespace Uotep
             gvScadenziario.DataBind();
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaScadenziario').modal('show');", true);
         }
+
+        protected void gvRegistro_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            // Imposta l'indice della riga in modalità modifica
+            gvRegistro.EditIndex = e.NewEditIndex;
+
+            // Ricarica i dati per mostrare le TextBox
+            btRegistro_Click(sender, e);
+
+        }
+        protected void gvRegistro_RowDeleting(object sender, GridViewCancelEditEventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean resp = mn.DelRegistroById(System.Convert.ToInt32(HfId.Value));
+            if (resp)
+            {
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + "Registro eliminato correttamente" + "'); $('#MsgModal').modal('show');", true);
+                //btOKDup.Enabled = false;
+                //btBack_Click(sender, e);
+                // Esce dalla modalità modifica
+                gvRegistro.EditIndex = -1;
+                btRegistro_Click(sender, e);
+            }
+            // Esce dalla modalità modifica
+            gvRegistro.EditIndex = -1;
+            btRegistro_Click(sender, e);
+        }
+
+        ////////////////////////////////////////
+
+        // 1. EVENTO SCATTATO QUANDO PREMI "MOD."
+
+
+        // 2. EVENTO SCATTATO QUANDO PREMI "ANNULLA" (X)
+        protected void gvRegistro_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Esce dalla modalità modifica
+            gvRegistro.EditIndex = -1;
+            btRegistro_Click(sender, e);
+        }
+
+        // 3. EVENTO SCATTATO QUANDO PREMI "SALVA"
+        protected void gvRegistro_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            try
+            {
+                // A. Recupera l'ID del record (da DataKeyNames)
+                int idRegistro = Convert.ToInt32(gvRegistro.DataKeys[e.RowIndex].Value);
+
+                // B. Recupera i nuovi valori inseriti nelle TextBox
+                // Devi cercare i controlli usando l'ID che hai dato nell'EditItemTemplate
+                GridViewRow row = gvRegistro.Rows[e.RowIndex];
+                UrpRegistro reg = new UrpRegistro();
+                TextBox txtOggetto = (TextBox)row.FindControl("txtOggetto");
+                TextBox txtDataPres = (TextBox)row.FindControl("txtDataPres");
+                TextBox txtPgTrasmissioneRichiesto = (TextBox)row.FindControl("txtPgTrasmissioneRichiesto");
+                TextBox txtUffDetentore = (TextBox)row.FindControl("txtUffDetentore");
+                CheckBox chkContro = (CheckBox)row.FindControl("chkControInteressati");
+                TextBox txtEsito = (TextBox)row.FindControl("txtEsito");
+
+                reg.controInteressati = chkContro.Checked;
+                reg.oggetto = txtOggetto.Text;
+                reg.dataPresentRichiesta = Convert.ToDateTime(txtDataPres.Text);
+                reg.nrPgTrasmissioneRichiesto = txtPgTrasmissioneRichiesto.Text;
+                reg.uffDetentore = txtUffDetentore.Text;
+                reg.esito = txtEsito.Text;
+                // reg.idRegistro = idRegistro;
+
+
+                Manager mn = new Manager();
+                Boolean resp = mn.UpdateRegistroById(idRegistro, reg);
+                if (resp)
+                {
+                    //richiama popup dalla site master
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        // myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroOk.GetDescription(), "success");
+                        gvRegistro.EditIndex = -1;
+                        btRegistro_Click(sender, e);
+                    }
+                }
+                // Messaggio di successo (se usi il popup della master page)
+                // Master.MostraMessaggio("Successo", "Dati aggiornati correttamente", "success");
+            }
+            catch (Exception ex)
+            {
+                // Gestione Errore
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroKo.GetDescription(), "danger");
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in gvRegistro_RowUpdating urp.cs ");
+                        sw.Close();
+                    }
+
+                }
+            }
+
+        }
+
+        protected void btChiudiMsgModal_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('MsgModal')); modal.hide();", true);
+            Session.Remove("ListRicercaFiltro");
+            Session.Remove("ListScadenziario");
+            //string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+            //Response.Redirect(url, false);
+        }
+
+        protected void gvRegistro_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            try
+            {
+                // 1. Recupera l'ID del record dalla collezione DataKeys usando l'indice della riga
+                // e.RowIndex è l'indice della riga che hai cliccato
+                int idDaCancellare = Convert.ToInt32(gvRegistro.DataKeys[e.RowIndex].Value);
+
+                // Costruisco l'URL dove l'utente verrà mandato se clicca "Prosegui"
+                string urlAzione = ResolveUrl("~/View/URP.aspx?id=" + idDaCancellare);
+
+
+                // Richiamo la Master Page
+                SiteMaster myMaster = this.Master as SiteMaster;
+                if (myMaster != null)
+                {
+                    myMaster.MostraConferma(
+                        "Attenzione",
+                        "Sei sicuro di voler eliminare definitivamente questa pratica?",
+                        urlAzione
+                    );
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // Gestione errore
+                // SiteMaster master = this.Master as SiteMaster;
+                // master.MostraMessaggio("Errore", "Impossibile eliminare: " + ex.Message, "danger");
+            }
+
+        }
+
+
+        protected void btOKCan_Click(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            Boolean resp = mn.DelRegistroById(System.Convert.ToInt32(HfId.Value));
+            if (resp)
+            {
+                gvRegistro.EditIndex = -1;
+                btRegistro_Click(sender, e);
+            }
+        }
+
     }
 }

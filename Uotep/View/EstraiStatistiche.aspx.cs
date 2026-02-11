@@ -1,4 +1,5 @@
 ﻿using AjaxControlToolkit;
+using AjaxControlToolkit.HtmlEditor.Popups;
 using iText.Forms;
 using iText.Forms.Fields;
 using iText.IO.Font.Constants;
@@ -46,7 +47,7 @@ namespace Uotep
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
-
+        string paginaChiamante = "~/View/EstraiStatistiche.aspx";
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -68,7 +69,7 @@ namespace Uotep
             {
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+                // ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
 
 
             }
@@ -81,7 +82,10 @@ namespace Uotep
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+            //azzero i dati della gridview e chiudo il popup e imposto a 0 la pagina della gridview per le nuove ricerche
+            GVRicercaScheda.DataSource = null;
+            GVRicercaScheda.DataBind();
+            GVRicercaScheda.PageIndex = 0;
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
 
         }
@@ -91,34 +95,10 @@ namespace Uotep
         protected void FillScheda(DataTable stat)
         {
             Manager mn = new Manager();
+            string msg = string.Empty;
             int anno = System.Convert.ToInt32(txtAnno.Text.Trim());
             int number = 0;
-            // txtRelazioni.Text = stat.Rows[0].ItemArray[3].ToString();
-            //TxtPonteggi.Text = stat.Rows[0].ItemArray[4].ToString();
-            //txtDPI.Text = stat.Rows[0].ItemArray[5].ToString();
-            //txtEspostiEvasi.Text = stat.Rows[0].ItemArray[7].ToString();
-            //txtRipristino.Text = stat.Rows[0].ItemArray[8].ToString();
-            //txtControlliScia.Text = stat.Rows[0].ItemArray[9].ToString();
-            //txtCNR.Text = stat.Rows[0].ItemArray[11].ToString();
-            //txtAnnotazioni.Text = stat.Rows[0].ItemArray[12].ToString();
-            //txtRiapposizioneSigilli.Text = stat.Rows[0].ItemArray[15].ToString();
-            //txtSequestri.Text = stat.Rows[0].ItemArray[14].ToString();
-            //txtNotifiche.Text = stat.Rows[0].ItemArray[13].ToString();
-            //txtDelegheEsitate.Text = stat.Rows[0].ItemArray[17].ToString();
-            //txtConvalide.Text = stat.Rows[0].ItemArray[21].ToString();
-            //txtViolazioneSigilli.Text = stat.Rows[0].ItemArray[23].ToString();
-            // txtDissequestri.Text = stat.Rows[0].ItemArray[24].ToString();
-            //txtDissequestriTemp.Text = stat.Rows[0].ItemArray[25].ToString();
-            //txtRimozioneSigilli.Text = stat.Rows[0].ItemArray[26].ToString();
-            //txtControlliDLGS.Text = stat.Rows[0].ItemArray[27].ToString();
-            //txtViol_amm_reg_com.Text = stat.Rows[0].ItemArray[32].ToString();
-            // txtControlliCant.Text = stat.Rows[0].ItemArray[30].ToString();
-            //txtCensimentoAllPubb.Text = stat.Rows[0].ItemArray[33].ToString();
-            //txtSgomberiAbus.Text = stat.Rows[0].ItemArray[36].ToString();
-            //txtSgomberiImmobili.Text = stat.Rows[0].ItemArray[37].ToString();
-            // txtNotificheNoAg.Text = stat.Rows[0].ItemArray[38].ToString();
-            //txtOccupAbusivaAbit.Text = stat.Rows[0].ItemArray[34].ToString();
-            //txtOccupAbusivaNoAbit.Text = stat.Rows[0].ItemArray[35].ToString();
+
 
             txtRelazioni.Text = mn.GetNumRelazione(txtMese.Text.Trim(), anno);
 
@@ -126,7 +106,20 @@ namespace Uotep
 
             txtDPI.Text = mn.GetNumDpi(txtMese.Text.Trim(), anno);
             //prelevo il numero degli esposti ricevuti
-            number = mn.GetEspostiRicevute(txtMese.Text.Trim(), anno);
+            number = mn.GetEspostiRicevute(txtMese.Text.Trim(), anno, out msg);
+            if (!String.IsNullOrWhiteSpace(msg))
+            {
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine(msg + @" - Errore estrai statistiche riga 137 ");
+                    sw.Close();
+                }
+                Session["MessaggioErrore"] = msg;
+                Session["PaginaChiamante"] = paginaChiamante;
+                string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+                Response.Redirect(url + msg);
+            }
 
             txtEspostiRicevuti.Text = Convert.ToString(number);
             number = 0;
@@ -141,7 +134,7 @@ namespace Uotep
             txtAnnotazioni.Text = mn.GetNumAnnotazioni(txtMese.Text.Trim(), anno);
 
             txtNotifiche.Text = mn.GetNumNotifiche(txtMese.Text.Trim(), anno);
-            txtSequestri.Text = mn.GetNumSequestri(txtMese.Text.Trim(), anno);
+
 
             txtRiapposizioneSigilli.Text = mn.GetNumRiappSigilli(txtMese.Text.Trim(), anno);
 
@@ -151,6 +144,13 @@ namespace Uotep
             //
 
             txtDelegheEsitate.Text = mn.GetNumDelegheEsitate(txtMese.Text.Trim(), anno);
+            //SiteMaster myMaster = this.Master as SiteMaster;
+
+            //if (myMaster != null)
+            //{
+            //    // 2. Chiamo il metodo pubblico
+            //    myMaster.MostraMessaggio("ATTENZIONE", txtDelegheEsitate.Text, "warning");
+            //}
             txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
 
@@ -162,6 +162,7 @@ namespace Uotep
             txtDissequestri.Text = mn.GetNumDissequestri(txtMese.Text.Trim(), anno);
 
             txtDissequestriTemp.Text = mn.GetNumDisseqTemp(txtMese.Text.Trim(), anno);
+            txtSequestri.Text = mn.GetNumSequestri(txtMese.Text.Trim(), anno);//num verbali sequestri
 
             txtRimozioneSigilli.Text = mn.GetNumRimozSigilli(txtMese.Text.Trim(), anno);
 
@@ -178,7 +179,7 @@ namespace Uotep
             txtSgomberiAbus.Text = mn.GetNumSgomberiAbus(txtMese.Text.Trim(), anno);
             txtSgomberiImmobili.Text = mn.GetNumSgomberiImmobili(txtMese.Text.Trim(), anno);
             txtNotificheNoAg.Text = mn.GetNumNotificheNoAg(txtMese.Text.Trim(), anno);
-
+            txtAccertAltriEnti.Text = mn.GetNumAccertAltriEnti(txtMese.Text.Trim(), anno);
         }
 
 
@@ -297,7 +298,7 @@ namespace Uotep
                 e.Row.Cells[8].Text = totalNumcontrNatoDaAcc.ToString();
                 e.Row.Cells[8].HorizontalAlign = HorizontalAlign.Right;
                 e.Row.Cells[8].Font.Bold = true;
-              
+
             }
         }
 
@@ -306,6 +307,100 @@ namespace Uotep
 
         }
 
-        
+        protected void BtnInfo_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            string parametro = btn.CommandArgument;
+            Manager mn = new Manager();
+            DataTable schede = mn.GetSchedeInfo(parametro, txtMese.Text, txtAnno.Text);
+
+            if (schede.Rows.Count > 0)
+            {
+                GVRicercaScheda.DataSource = schede;
+                GVRicercaScheda.DataBind();
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+            }
+            else
+            {
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.NoStatistiche.GetDescription(), "warning");
+                }
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
+
+            }
+        }
+
+        protected void GVRicercaScheda_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id_rapp_scheda").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+                if (GVRicercaScheda.TopPagerRow != null)
+                {
+                    // Trova il controllo Label all'interno del PagerTemplate
+                    Label lblPageInfo = (Label)GVRicercaScheda.TopPagerRow.FindControl("lblPageInfo");
+                    if (lblPageInfo != null)
+                    {
+                        // Calcola e imposta il testo
+                        int currentPage = GVRicercaScheda.PageIndex + 1;
+                        int totalPages = GVRicercaScheda.PageCount;
+                        lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                    }
+                }
+
+            }
+        }
+
+        protected void GVRicercaScheda_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+        protected void RicaricaGrid()
+        {
+            Manager mn = new Manager();
+            DataTable dt = new DataTable();
+            int anno = System.Convert.ToInt32(txtAnno.Text.Trim());
+            if (!String.IsNullOrEmpty(txtMese.Text.Trim()))
+
+
+                dt = mn.GetSchedeInfo("ControlliCant", txtMese.Text.Trim(), txtAnno.Text.Trim());
+
+            if (dt.Rows.Count > 0)
+            {
+                GVRicercaScheda.DataSource = dt;
+                GVRicercaScheda.DataBind();
+            }
+
+
+        }
+        protected void GVRicercaScheda_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            GVRicercaScheda.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
+            RicaricaGrid();
+
+
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+
+        }
     }
 }

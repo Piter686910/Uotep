@@ -8,6 +8,7 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Interop;
 using Uotep.Classi;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static Uotep.Classi.Enumerate;
@@ -22,6 +23,7 @@ namespace Uotep
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Boolean okPopup = false;
+        string msg = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
             //if (Session["PaginaChiamante"] != null)
@@ -578,7 +580,7 @@ namespace Uotep
             {
                 // Simula il recupero del quartiere dal database o da una logica interna.
                 Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo);
+                DataTable quartiere = mn.getQuartiere(indirizzo,out  msg);
 
                 if (quartiere.Rows.Count > 0)
                 {
@@ -600,18 +602,18 @@ namespace Uotep
             try
             {
                 Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiere();
+                DataTable RicercaQuartiere = mn.getListQuartiere(out msg);
                 DdlQuartiereI.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiereI.DataTextField = "Quartiere"; // Il campo visibile
                 DdlTipoAttoI.DataValueField = "id_quartiere";
                 DdlQuartiereI.DataBind();
 
-                DataTable RicercaIndirizzo = mn.getListIndirizzo();
+                DataTable RicercaIndirizzo = mn.getListIndirizzo(out msg);
                 DdlIndirizzoI.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzoI.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlIndirizzoI.DataBind();
 
-                DataTable RicercaTipoAtto = mn.getListTipologiaAbuso();
+                DataTable RicercaTipoAtto = mn.getListTipologiaAbuso(out msg);
                 DdlTipoAttoI.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAttoI.DataTextField = "Tipologia"; // Il campo visibile
                 DdlTipoAttoI.DataValueField = "id"; // Il valore associato a ogni opzione
@@ -621,13 +623,13 @@ namespace Uotep
 
 
 
-                DataTable RicercaGiudice = mn.getListGiudice();
+                DataTable RicercaGiudice = mn.getListGiudice(out msg);
                 DdlGiudiceI.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
                 DdlGiudiceI.DataTextField = "Giudice"; // Il campo visibile
                 DdlGiudiceI.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
                 DdlGiudiceI.DataBind();
 
-                DataTable RicercaInviati = mn.getListInviati();
+                DataTable RicercaInviati = mn.getListInviati(out msg);
                 DdlInviatiI.DataSource = RicercaInviati; // Imposta il DataSource //della DropDownList
                 DdlInviatiI.DataTextField = "Inviata"; // Il campo visibile
                 DdlInviatiI.DataValueField = "id_inviata"; // Il valore associato a ogni opzione

@@ -7,6 +7,7 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Interop;
 using Uote;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
@@ -21,11 +22,13 @@ namespace Uotep
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-
+        string msg = string.Empty;
+        string pagchiamante = "~/View/Inserimento.aspx";
+        Routine r = new Routine();
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+            Session["PaginaChiamante"] = pagchiamante;
 
             if (Session["user"] != null)
             {
@@ -190,7 +193,15 @@ namespace Uotep
                     {
                         if (String.IsNullOrEmpty(Session["user"].ToString()))
                         {
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                            //richiama popup dalla site master
+                            SiteMaster myMaster = this.Master as SiteMaster;
+
+                            if (myMaster != null)
+                            {
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                            }
+                            //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
                             Response.Redirect(url, false);
@@ -428,8 +439,15 @@ namespace Uotep
                         //ricalcolo il protocollo
                         Routine prot = new Routine();
                         txtProt.Text = prot.GetProtocollo();
+                        //richiama popup dalla site master
+                        SiteMaster myMaster = this.Master as SiteMaster;
 
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text , "danger");
+                        }
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }
                     else
                     {
@@ -456,7 +474,7 @@ namespace Uotep
                 // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+                Session["PaginaChiamante"] = pagchiamante;
 
                 //Response.Redirect("~/Contact.aspx");
 
@@ -564,7 +582,19 @@ namespace Uotep
         //popup quartiere
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
+
+            string script = "$('#ModalQuartiere').modal('show');";
+
+            // 2. Aggiungi il focus con un ritardo di 500ms (tempo dell'animazione)
+            // Sostituisci 'txtNome' con l'ID (Statico) o ClientID della tua textbox
+            script += " setTimeout(function(){ document.getElementById('" + txtIndirizzoQuartiere.ClientID + "').focus(); }, 500);";
+
+            // 3. Esegui
+            ScriptManager.RegisterStartupScript(this, GetType(), "ApriEFocus", script, true);
+
+
+
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
         }
         //protected void chiudipopup_Click(object sender, EventArgs e)
         //{
@@ -588,7 +618,7 @@ namespace Uotep
             {
                 // Simula il recupero del quartiere dal database o da una logica interna.
                 Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo);
+                DataTable quartiere = mn.getQuartiere(indirizzo, out msg);
 
                 if (quartiere.Rows.Count > 0)
                 {
@@ -606,22 +636,30 @@ namespace Uotep
         {
             try
             {
+                Routine r = new Routine();
+                String msg = string.Empty;
                 Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiere();
+                DataTable RicercaQuartiere = mn.getListQuartiere(out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg,pagchiamante);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
                 // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaIndirizzo = mn.getListIndirizzo();
+                DataTable RicercaIndirizzo = mn.getListIndirizzo(out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
                 DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
                 DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlIndirizzo.DataBind();
                 // DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaTipoAtto = mn.getListTipologia();
+                DataTable RicercaTipoAtto = mn.getListTipologia(out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
@@ -631,7 +669,9 @@ namespace Uotep
 
                 // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaProvenienza = mn.getListProvenienza();
+                DataTable RicercaProvenienza = mn.getListProvenienza(out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
                 DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
                 DdlProvenienza.DataTextField = "Provenienza"; // Il campo visibile
                 DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
@@ -639,7 +679,9 @@ namespace Uotep
                 DdlProvenienza.DataBind();
                 //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaGiudice = mn.getListGiudice();
+                DataTable RicercaGiudice = mn.getListGiudice(out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
                 DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
                 DdlGiudice.DataTextField = "Giudice"; // Il campo visibile
                 DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
@@ -647,8 +689,10 @@ namespace Uotep
                 DdlGiudice.DataBind();
                 //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-               DataTable RicercaProvvAg = mn.getListProvvAg(Enumerate.Sigla.AG.ToString());
-               // DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedItem.Text);
+               DataTable RicercaProvvAg = mn.getListProvvAg(Enumerate.Sigla.AG.ToString(), out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg,pagchiamante);
+                // DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedItem.Text);
                 DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
                 DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
                 DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
@@ -681,7 +725,7 @@ namespace Uotep
                 // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+                Session["PaginaChiamante"] = pagchiamante;
                 //  Response.Redirect("~/Contact.aspx");
 
             }
@@ -725,7 +769,14 @@ namespace Uotep
             {
                 HfGiudice.Value = string.Empty;
                 txtGiudice.Text = string.Empty;
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                }
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "" + "'); $('#errorModal').modal('show');", true);
 
             }
         }
@@ -738,7 +789,14 @@ namespace Uotep
             {
                 HfTipoProv.Value = string.Empty;
                 txtTipoProv.Text = string.Empty;
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                }
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
             }
         }
@@ -752,7 +810,14 @@ namespace Uotep
             {
                 HfProvenienza.Value = string.Empty;
                 txtProvenienza.Text = string.Empty;
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                }
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
             }
         }
@@ -870,7 +935,7 @@ namespace Uotep
         {
             try
             {
-                Session["PaginaChiamante"] = "~/View/Inserimento.aspx";
+                Session["PaginaChiamante"] = pagchiamante;
                 Manager mn = new Manager();
                 Decretazione decr = new Decretazione();
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
@@ -883,11 +948,25 @@ namespace Uotep
                 Boolean ins = mn.InsDecretazione(decr);
                 if (!ins)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
                     Pulisci();
                 }
             }
@@ -909,7 +988,7 @@ namespace Uotep
                 //Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                Session["PaginaChiamante"] = pagchiamante;
                 //                Response.Redirect("~/Contact.aspx");
 
             }
@@ -1063,11 +1142,25 @@ namespace Uotep
                 Boolean upd = mn.UpdDecretazioneChiusura(decr);
                 if (!upd)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseKO.GetDescription(), "danger");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "success");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
                 }
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
@@ -1089,7 +1182,7 @@ namespace Uotep
                 // Response.Redirect("~/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
-                Session["PaginaChiamante"] = "~/View/Modifica.aspx";
+                Session["PaginaChiamante"] = pagchiamante;
                 // Response.Redirect("~/Contact.aspx");
 
             }

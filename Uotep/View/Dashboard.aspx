@@ -23,7 +23,7 @@
                             <!-- Etichetta Matricola e Campo -->
                             <div class="form-group text-center" style="text-align: left !important">
                                 <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control"></asp:TextBox>
+                                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control" autofocus=""></asp:TextBox>
                             </div>
                         </div>
                         <!-- Etichetta Profilo e Campo -->
@@ -103,7 +103,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3" style="text-align: left !important">
                         <asp:Label ID="Label3" runat="server" Text="Matricola" CssClass="form-label d-block mb-2"></asp:Label>
-                        <asp:TextBox ID="txtResetMatricola" runat="server" ToolTip="matricola" TabIndex="6" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtResetMatricola" runat="server" ToolTip="matricola" TabIndex="6" CssClass="form-control" autofocus=""></asp:TextBox>
                     </div>
                 </div>
                 <div class="col-md-6" style="margin-top: 20px!important">

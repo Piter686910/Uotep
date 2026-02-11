@@ -163,7 +163,7 @@
                     <asp:Label ID="Label2" runat="server" Text="Quartiere" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:TextBox ID="txtQuartiere" runat="server" CssClass="form-control" placeholder="Quartiere" />
                     <asp:Label ID="Label6" runat="server" Text="Cartellina" CssClass="form-label d-block mb-2"></asp:Label>
-                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" placeholder="Cartellina" />
+                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" placeholder="Cartellina" autofocus=""/>
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -173,7 +173,7 @@
 
                     <asp:Label ID="Label11" runat="server" Text="Oggetto" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtOggetto" runat="server" CssClass="form-control" placeholder="Oggetto" />
+                    <asp:TextBox ID="txtOggetto" runat="server" CssClass="form-control" placeholder="Oggetto" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -185,7 +185,7 @@
 
                     <asp:Label ID="Label4" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" placeholder="Nota" />
+                    <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" placeholder="Nota" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -196,7 +196,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="BU" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="BU Alloggio" />
+                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="BU Alloggio" autofocus=""/>
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -206,7 +206,7 @@
 
                     <asp:Label ID="Label1" runat="server" Text="Destinatario" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDestinatario" runat="server" CssClass="form-control" placeholder="Destinatario" />
+                    <asp:TextBox ID="txtDestinatario" runat="server" CssClass="form-control" placeholder="Destinatario" autofocus="" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -216,7 +216,7 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" />
+                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -227,7 +227,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Intestatario" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" />
+                    <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -238,7 +238,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Edificio" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtBuEdificio" runat="server" CssClass="form-control" placeholder="BU Edificio" />
+                    <asp:TextBox ID="txtBuEdificio" runat="server" CssClass="form-control" placeholder="BU Edificio" autofocus=""/>
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />

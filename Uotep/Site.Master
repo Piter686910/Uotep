@@ -72,11 +72,12 @@
                     background-position: center center;
                     background-size: contain; /* O 'cover' se vuoi riempire tutto */
                     /* QUI REGOLI LA TRASPARENZA (0.1 = molto chiaro, 1 = normale) */
-                    opacity: 0.65;
+                    opacity: 0.1;
                     z-index: -1; /* Lo manda dietro al testo */
                 }
         </style>
         <asp:ScriptManager runat="server">
+
             <Scripts>
 
                 <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
@@ -254,7 +255,87 @@
                 <p style="font: bold; font-style: italic">&copy; <%: DateTime.Now.Year %> - Powered by </p>
             </footer>
         </div>
+        <%-- popup errori --%>
+        <div class="modal fade" id="SiteModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog"
+                role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="modalHeaderColor" runat="server">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="ModalLabel">
+                            <asp:Label ID="lblModalTitolo" runat="server" Text="Avviso"></asp:Label>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Campi di input per la ricerca -->
+                        <div class="form-group">
 
+                            <p id="TxtMessage" runat="server" style="color: red"></p>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <asp:Button ID="btChiudiPopUp" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiPopUp_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal di CONFERMA (con tasto OK) -->
+        <div class="modal fade" id="ModalConferma" tabindex="-1" role="dialog" aria-labelledby="LabelConferma" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header bg-warning">
+                        <!-- Giallo per attenzione -->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="LabelConferma">
+                            <asp:Label ID="lblTitoloConferma" runat="server" Text="Conferma Operazione"></asp:Label>
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <asp:Label ID="lblTestoConferma" runat="server" Text="Sei sicuro?"></asp:Label>
+
+                        <!-- Campo nascosto per salvare l'URL dove andare se dice SI -->
+                        <input type="hidden" id="hdnUrlDestinazione" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
+
+                        <!-- Tasto che scatena l'azione -->
+                        <button type="button" class="btn btn-primary" onclick="EseguiRedirect()">Prosegui</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCRIPT JAVASCRIPT PER GESTIRE IL REDIRECT -->
+        <script type="text/javascript">
+            // Funzione chiamata dal C# per aprire il modale e settare l'URL
+            function ApriModalConferma(titolo, messaggio, url) {
+                // Imposta i testi (opzionale via JS, ma lo facciamo via C# solitamente)
+                // Ma l'URL deve essere passato a JS
+                $('#hdnUrlDestinazione').val(url);
+
+                // Apre il modale
+                $('#ModalConferma').modal('show');
+            }
+
+            // Funzione chiamata dal tasto "Prosegui"
+            function EseguiRedirect() {
+                var url = $('#hdnUrlDestinazione').val();
+                if (url) {
+                    window.location.href = url; // Reindirizza l'utente
+                }
+            }
+
+        </script>
     </form>
     <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'></script>
 </body>

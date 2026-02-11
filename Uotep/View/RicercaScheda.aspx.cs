@@ -23,6 +23,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Interop;
 using Uotep.Classi;
 using static System.Windows.Forms.AxHost;
 using static Uotep.Classi.Enumerate;
@@ -39,6 +40,7 @@ namespace Uotep
         Manager mn = new Manager();
         String profilo = string.Empty;
         String ruolo = string.Empty;
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -52,6 +54,23 @@ namespace Uotep
 
             if (!IsPostBack)
             {
+                string idRicevuto = Request.QueryString["idscheda"];
+
+                if (!string.IsNullOrEmpty(idRicevuto))
+                {
+                    
+                    DataTable scheda = mn.GetSchedaById(idRicevuto);
+                    if (scheda.Rows.Count > 0)
+                    {
+                        CaricaDLL();
+                        FillScheda(scheda);
+                        btModificaScheda.Enabled = false;
+                        SetControlsEnabled(divDettagli, false);
+                        SetControlsEnabled(divTesta, false);
+                    }
+                    return;
+
+                }
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -60,8 +79,15 @@ namespace Uotep
 
                 // Assegna il valore decodificato al Literal
                 ProtocolloLiteral.Text = decodedText;
-                //   ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
+                //effettua autofocus sul popup modale
+                string script = "$('#ModalRicerca').modal('show');";
+                // 2. Aggiungi il focus con un ritardo di 500ms (tempo dell'animazione)
+                // Sostituisci 'txtNome' con l'ID (Statico) o ClientID della tua textbox
+                script += " setTimeout(function(){ document.getElementById('" + txtModPratica.ClientID + "').focus(); }, 500);";
+
+                // 3. Esegui
+                ScriptManager.RegisterStartupScript(this, GetType(), "ApriEFocus", script, true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#ModalRicerca').modal('show');", true);
 
                 Session["popApertoRicercaScheda"] = "si";
                 SetControlsEnabled(divDettagli, false);
@@ -155,12 +181,12 @@ namespace Uotep
                 txtPratica.Text = numeroP;
                 txtNominativo.Text = nominativo;
                 //txtPattuglia.Text = pattuglia;
-                string[] columns = pattuglia.Split('/');
+                //string[] columns = pattuglia.Split('/');
 
-                for (int i = 0; i < columns.Length; i++)
-                {
-                    LPattugliaCompleta.Items.Add(columns[i]); // Colonne successive
-                }
+                //for (int i = 0; i < columns.Length; i++)
+                //{
+                //    LPattugliaCompleta.Items.Add(columns[i]); // Colonne successive
+                //}
                 CaricaDLL();
                 Manager mn = new Manager();
                 //                DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
@@ -178,91 +204,98 @@ namespace Uotep
 
         protected void FillScheda(DataTable rap)
         {
-            txtNominativo.Text = rap.Rows[0].ItemArray[3].ToString();
-            txtIndirizzo.Text = rap.Rows[0].ItemArray[4].ToString();
-            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[2].ToString()))
+            txtNominativo.Text = rap.Rows[0]["rapp_nominativo"].ToString();
+            txtPratica.Text = rap.Rows[0]["rapp_numero_pratica"].ToString();
+            txtIndirizzo.Text = rap.Rows[0]["rapp_indirizzo"].ToString();
+            if (!string.IsNullOrEmpty(rap.Rows[0]["rapp_data"].ToString()))
             {
-                DateTime dataIntervento = System.Convert.ToDateTime(rap.Rows[0].ItemArray[2].ToString()); // Recupera la data dal DataTable
+                DateTime dataIntervento = System.Convert.ToDateTime(rap.Rows[0]["rapp_data"].ToString()); // Recupera la data dal DataTable
                 TxtDataIntervento.Text = dataIntervento.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
                                                                                 //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
             }
 
-            ckDelega.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[6]);
-            ckResa.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[7]);
-            ckSegnalazione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[8]);
-            ckEsposto.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[9]);
+            ckDelega.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_delegaAG"]);
+            ckResa.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_resa"]);
+            ckSegnalazione.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_segnalazione"]);
+            ckEsposto.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_esposto"]);
 
-            if (String.IsNullOrEmpty(rap.Rows[0].ItemArray[10].ToString()))
+            if (String.IsNullOrEmpty(rap.Rows[0]["rapp_numEsposti"].ToString()))
             {
                 txt_numEspostiSegn.Text = "0";
             }
             else
             {
-                txt_numEspostiSegn.Text = rap.Rows[0].ItemArray[10].ToString();
+                txt_numEspostiSegn.Text = rap.Rows[0]["rapp_numEsposti"].ToString();
             }
-            ckNotifica.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[11]);
-            ckIniziativa.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[12]);
-            ckCdr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[13]);
+            ckNotifica.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_notifica"]);
+            ckIniziativa.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_iniziativa"]);
+            ckCdr.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_comandante"]);
             //ckCoordinatore.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[14]);
-            ckRelazione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[15]);
-            ckCnr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[16]);
-            ckAnnotazionePG.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[17]);
-            ckVerbaleSeq.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[18]);
-            ckEsitoDelega.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[19]);
-            ckContestazioneAmm.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[20]);
-            ckConvalida.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[21]);
-            ckDisseqDefinitivo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[22]);
-            ckDisseqTemp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[23]);
-            ckRimozione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[24]);
-            ckRiapposizione.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[25]);
-            ckViolazioneSigilli.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[26]);
-            ckControlliSCIA.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[27]);
-            ckAccertAvvenutoRipr.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[28]);
-            rdTotale.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[29]);
-            rdParziale.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[30]);
-            ckViolazioneBeniCult.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[31]);
-            ckContrSuoloPubblico.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[32]);
-            ckControlliLavoriEdiliSenzaProt.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[33]);
-            ckControlloDaEsposti.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[35]);
-            ckControlliCant.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[34]);
-            ckControlliDaSegnalazioni.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[36]);
-            CkAttivita.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[37]);
+            ckRelazione.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_relazione"]);
+            ckCnr.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_cnr"]);
+            ckAnnotazionePG.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_annotazionePG"]);
+            ckVerbaleSeq.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_verbale_seq"]);
+            ckEsitoDelega.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_esito_delega"]);
+            ckContestazioneAmm.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contestaz_amm"]);
+            ckConvalida.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_convalida"]);
+            ckDisseqDefinitivo.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_disseq_def"]);
+            ckDisseqTemp.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_disseq_temp"]);
+            ckRimozione.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_disseq_temp_Rim"]);
+            ckRiapposizione.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_disseq_temp_Riapp"]);
+            ckViolazioneSigilli.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_violazione_sigilli"]);
+            ckControlliSCIA.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_controlliScia"]);
+            ckAccertAvvenutoRipr.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_accert_avvenuto"]);
+            rdTotale.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_totale"]);
+            rdParziale.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_parziale"]);
+            ckViolazioneBeniCult.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_violazioneBeniCult"]);
+            ckContrSuoloPubblico.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_cantiere_suolo_pubb"]);
+            ckControlliLavoriEdiliSenzaProt.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_lavori_edili"]);
+            ckControlloDaEsposti.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_da_esposti"]);
+            ckControlliCant.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_cantieri_seq"]);
+            ckControlliDaSegnalazioni.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_da_segn"]);
+            CkAttivita.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_attivita_interna"]);
 
-            txtNote.Text = rap.Rows[0].ItemArray[38].ToString();
+            txtNote.Text = rap.Rows[0]["rapp_nota"].ToString();
 
-            if (!string.IsNullOrEmpty(rap.Rows[0].ItemArray[39].ToString()))
+            if (!string.IsNullOrEmpty(rap.Rows[0]["rapp_data_consegna_intervento"].ToString()))
             {
-                DateTime dataConsegna = System.Convert.ToDateTime(rap.Rows[0].ItemArray[39].ToString()); // Recupera la data dal DataTable
+                DateTime dataConsegna = System.Convert.ToDateTime(rap.Rows[0]["rapp_data_consegna_intervento"].ToString()); // Recupera la data dal DataTable
                 txtDataConsegna.Text = dataConsegna.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
 
 
                 // txtDataConsegna.Text = rap.Rows[0].ItemArray[39].ToString();
             }
             //txtCapoPattuglia.Text = rap.Rows[0].ItemArray[39].ToString();
-            if (!String.IsNullOrEmpty(rap.Rows[0].ItemArray[40].ToString()))
+            string[] columns = rap.Rows[0]["rapp_pattuglia"].ToString().Split('/');
+            for (int i = 0; i < columns.Length; i++)
             {
-                ddlCapopattuglia.SelectedItem.Text = rap.Rows[0].ItemArray[40].ToString();
+                LPattugliaCompleta.Items.Add(columns[i]); // Colonne successive
+            }
+           
+            if (!String.IsNullOrEmpty(rap.Rows[0]["rapp_capopattuglia"].ToString()))
+            {
+                ddlCapopattuglia.SelectedItem.Text = rap.Rows[0]["rapp_capopattuglia"].ToString();
             }
             else
                 ddlCapopattuglia.ClearSelection();
-            rdUote.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[41]);
-            rdUotp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[42]);
-            rdCon.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[44]);
-            rdSenza.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[45]);
-            rdNonAvvenuto.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[47]);
-            ckCensimentoAllPubb.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[48]);
-            ckControlliOccupazioneAbus.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[49]);
+           // rdUote.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[41]);
+            //rdUotp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[42]);
+            rdCon.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_con_protezioni"]);
+            rdSenza.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_senza_protezioni"]);
+            rdNonAvvenuto.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_non_avvenuto"]);
+            ckCensimentoAllPubb.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_censimento_all_pubb"]);
+            ckControlliOccupazioneAbus.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_occupazione_abus"]);
 
-            ckAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[50]);
-            ckNonAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[51]);
+            ckAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_occ_abitativo"]);
+            ckNonAbitativo.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_contr_occ_no_abitativo"]);
 
-            ckSgomberi.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[52]);
-            CkSgombAbusiva.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[53]);
-            CkSgombImmobili.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[54]);
-            ckNotificaTp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[55]);
+            ckSgomberi.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_sgomberi"]);
+            CkSgombAbusiva.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_sgomberi_abus"]);
+            CkSgombImmobili.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_sgomberi_immobili"]);
+            ckNotificaTp.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_notifica_no_ag"]);
             //txtQuartiere.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
-            DdlQuartiereIns.SelectedItem.Text = rap.Rows[0].ItemArray[56].ToString().ToUpper();
-            txtNumCensimento.Text = rap.Rows[0].ItemArray[57].ToString();
+            DdlQuartiereIns.SelectedItem.Text = rap.Rows[0]["rapp_quartiere"].ToString().ToUpper();
+            txtNumCensimento.Text = rap.Rows[0]["rapp_num_censimento_all_pubb"].ToString();
             //I- mod 31/01/2026 scheda int
             if (rap.Rows[0]["rapp_accRichiesti"] != DBNull.Value)
             {
@@ -313,7 +346,12 @@ namespace Uotep
             else
 
                 txtNumContrNatoDaAccert.Text = "0";
+            if (rap.Rows[0]["rapp_NumNotificheNoAg"] != DBNull.Value)
 
+                txtNumNotificheNoAg.Text = rap.Rows[0]["rapp_NumNotificheNoAg"].ToString();
+            else
+
+                txtNumNotificheNoAg.Text = "0";
             //F- mod 31/01/2026 scheda int
         }
 
@@ -372,7 +410,15 @@ namespace Uotep
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
+                    //richiama popup dalla site master
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
 
                 }
 
@@ -391,7 +437,15 @@ namespace Uotep
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
+                    //richiama popup dalla site master
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
 
                 }
             }
@@ -449,9 +503,18 @@ namespace Uotep
         private Boolean Convalida()
         {
             Boolean ret = true;
+            SiteMaster myMaster = this.Master as SiteMaster;
             if (String.IsNullOrEmpty(LPattugliaCompleta.ToString()))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserire la pattuglia." + "'); $('#errorModal').modal('show');", true);
+                // richiama il popup di errore nella site page master
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", "Inserire la pattuglia.", "warning");
+
+
+                }
 
                 ret = false;
                 return ret;
@@ -466,14 +529,26 @@ namespace Uotep
             {
                 if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Totale o Parziale o Non Avvenuto ." + "'); $('#errorModal').modal('show');", true);
+                    // richiama il popup di errore nella site page master
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare Totale o Parziale o Non Avvenuto.", "warning");
+                    }
 
                     ret = false;
                 }
             }
             if (ckControlliLavoriEdiliSenzaProt.Checked && (rdCon.Checked == false && rdSenza.Checked == false))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare Con o Senza." + "'); $('#errorModal').modal('show');", true);
+                // richiama il popup di errore nella site page master
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", "Selezionare Con o Senza.", "warning");
+                }
 
                 ret = false;
             }
@@ -481,7 +556,12 @@ namespace Uotep
             {
                 if (CkSgombAbusiva.Checked == false && CkSgombImmobili.Checked == false)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di sgombero." + "'); $('#errorModal').modal('show');", true);
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare una tipologia di sgombero.", "warning");
+                    }
 
                     ret = false;
                 }
@@ -490,18 +570,42 @@ namespace Uotep
             {
                 if (ckAbitativo.Checked == false && ckNonAbitativo.Checked == false)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Selezionare una tipologia di occupazione." + "'); $('#errorModal').modal('show');", true);
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare una tipologia di occupazione.", "warning");
+                    }
 
                     ret = false;
                 }
             }
 
             //I- mod 31/01/2026 scheda int
+            if (ckNotificaTp.Checked == true)
+            {
+                if (String.IsNullOrEmpty(txtNumNotificheNoAg.Text))
+                {
+                    // richiama il popup di errore nella site page master
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero notifiche no AG.", "warning");
+                    }
+
+                    ret = false;
+                }
+            }
             if (ckAccRichiesti.Checked == true)
             {
                 if (String.IsNullOrEmpty(txtNumAccRichiesti.Text))
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero accertamenti." + "'); $('#errorModal').modal('show');", true);
+                    // richiama il popup di errore nella site page master
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero accertamenti.", "warning");
+                    }
 
                     ret = false;
                 }
@@ -510,7 +614,12 @@ namespace Uotep
             {
                 if (String.IsNullOrEmpty(txtNumContrNatoDaAccert.Text))
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire numero controlli noto/i da accertamenti." + "'); $('#errorModal').modal('show');", true);
+                    // richiama il popup di errore nella site page master
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero controlli noto/i da accertamenti.", "warning");
+                    }
 
                     ret = false;
                 }
@@ -525,6 +634,7 @@ namespace Uotep
             Statistiche stat = new Statistiche();
             DataTable scheda = mn.GetSchedaById(HfIdScheda.Value);
             string mese = string.Empty;
+            SiteMaster myMaster = this.Master as SiteMaster;
             int anno = 0;
             if (scheda.Rows.Count > 0)
             {
@@ -1163,18 +1273,34 @@ namespace Uotep
                                 {
                                     rap.NumcontrNatoDaAcc = 0;
                                 }
+                                if (ckNotificaTp.Checked)
+                                {
+                                    if (!string.IsNullOrEmpty(txtNumNotificheNoAg.Text))
 
+                                        rap.NumNotificheNoAg = Convert.ToInt32(txtNumNotificheNoAg.Text);
+
+                                    else
+                                        rap.NumNotificheNoAg = 0;
+                                }
                                 //F- mod 31/01/2026 scheda int
                                 VerificaStatistiche(stat, list);
 
                                 resp = mn.InsRappUote(rap, stat, out idN);
                                 if (!resp)
                                 {
-                                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                                    // richiama il popup di errore nella site page master
+                                    if (myMaster != null)
+                                    {
+                                        // 2. Chiamo il metodo pubblico
+                                        myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica scheda non riuscito, controllare il log.", "danger");
+
+
+                                    }
                                 }
                                 else
                                 {
                                     HfIdScheda.Value = idN.ToString();
+
                                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#MsgStampa').text('" + "Inserimento scheda effettuato. Vuoi stampare?" + "'); $('#PopStampa').modal('show');", true);
 
                                     Pulisci();
@@ -1184,13 +1310,30 @@ namespace Uotep
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile modificare la scheda del mese precedente." + "'); $('#errorModal').modal('show');", true);
+                        // richiama il popup di errore nella site page master
+
+
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
+
+
+                        }
 
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Non è possibile modificare la scheda dell'anno precedente." + "'); $('#errorModal').modal('show');", true);
+                    // richiama il popup di errore nella site page master
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
+
+
+                    }
+
                 }
             }
         }
@@ -1399,8 +1542,8 @@ namespace Uotep
         {
             try
             {
-
-                DataTable CaricaOperatori = mn.getListOperatore();
+                string msg = string.Empty;
+                DataTable CaricaOperatori = mn.getListOperatore(out msg);
                 DdlPattuglia.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
                 DdlPattuglia.DataTextField = "Nominativo"; // Il campo visibile
                                                            //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
@@ -1414,7 +1557,7 @@ namespace Uotep
                 ddlCapopattuglia.Items.Insert(0, new System.Web.UI.WebControls.ListItem("", "0"));
                 ddlCapopattuglia.DataBind();
 
-                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP(out msg);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "id";
@@ -1507,6 +1650,7 @@ namespace Uotep
             txtNumAccRichiesti.Text = string.Empty;
             txtNumContrNatoDaAccert.Text = string.Empty;
             ckVerbaleOccCens.Checked = false;
+            txtNumNotificheNoAg.Text = string.Empty;
             //F- mod 31/01/2026 scheda int
         }
 

@@ -455,7 +455,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
-                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" />
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus=""/>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
 
                             </asp:RequiredFieldValidator>
@@ -649,7 +649,7 @@
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
                         <label for="txtIndirizzoQuartiere">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
+                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" ClientIDMode="Static" placeholder="Campo obbligatorio" autofocus=""/>
 
                     </div>
 
@@ -709,31 +709,7 @@
         </div>
 
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <%--role="document">--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-
-                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
-                </div>
-            </div>
-        </div>
-    </div>
+   
     <%-- popup avvertenze --%>
     <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"

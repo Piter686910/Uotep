@@ -65,8 +65,9 @@ namespace Uotep
         {
             try
             {
+                string msg = string.Empty;
                 Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP(out msg);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "id";
@@ -370,12 +371,12 @@ namespace Uotep
         {
             DataTable dt = new DataTable();
             dt = mn.getGestionePraticaByFascicolo(p.fascicolo.Trim());
-            if (dt.Rows.Count > 0)
-            {
-                GVRicercaFascicolo.DataSource = dt;
-                GVRicercaFascicolo.DataBind();
+            //if (dt.Rows.Count > 0)
+            // {
+            GVRicercaFascicolo.DataSource = dt;
+            GVRicercaFascicolo.DataBind();
 
-            }
+            //  }
         }
 
         protected void GVRicercaFascicolo_RowDeleting(object sender, GridViewDeleteEventArgs e)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using DocumentFormat.OpenXml.Math;
+using Microsoft.Ajax.Utilities;
 using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using System;
 using System.Collections.Generic;
@@ -309,8 +310,62 @@ namespace Uotep
             Response.Redirect(url, false);
             //Response.Redirect(/Default.aspx"), false);
         }
+        // Metodo per mostrare il popup. 
+        // tipoMessaggio può essere: "info", "success", "warning", "danger" (colori Bootstrap)
+        public void MostraMessaggio(string titolo, string messaggio, string tipoMessaggio = "info")
+        {
+            // 1. Imposta i testi
+            lblModalTitolo.Text = titolo;
+            TxtMessage.InnerText = messaggio;
 
+            // 2. Imposta il colore dell'header in base al tipo
+            string classeColore = "modal-header"; // Classe base
+            switch (tipoMessaggio.ToLower())
+            {
+                case "success":
+                    classeColore += " bg-success"; // Verde
+                    break;
+                case "danger":
+                case "error":
+                    classeColore += " bg-danger"; // Rosso
+                    break;
+                case "warning":
+                    classeColore += " bg-warning"; // Giallo/Arancio
+                    break;
+                default:
+                    classeColore += " bg-info"; // Azzurro (Info)
+                    break;
+            }
 
+            // Assegna la classe al div header
+            modalHeaderColor.Attributes["class"] = classeColore;
+
+            // 3. Lancia lo script per aprire il modale
+            string script = "$('#SiteModal').modal('show');";
+
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ApriModalMaster", script, true);
+        }
+
+        public void MostraConferma(string titolo, string messaggio, string urlDiDestinazione)
+        {
+            // 1. Imposta i testi nel modale
+            lblTitoloConferma.Text = titolo;
+            lblTestoConferma.Text = messaggio;
+
+            // 2. Prepara lo script JS chiamando la funzione che abbiamo scritto sopra
+            // Passiamo Titolo, Messaggio e URL al JavaScript
+            string script = $"ApriModalConferma('{titolo}', '{messaggio}', '{urlDiDestinazione}');";
+
+            // 3. Esegue lo script
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "OpenConfModal", script, true);
+        }
+        protected void btChiudiPopUp_Click(object sender, EventArgs e)
+        {
+            //string script = "$('#SiteModal').modal('hide');";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "ApriModalMaster", "", false);
+        }
+
+        
     }
 
 

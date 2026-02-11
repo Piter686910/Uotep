@@ -72,6 +72,16 @@ namespace Uotep
                 stat.mese = txtMM.Text.Trim();
                 stat.anno = anno;
                 resp = mn.InsStatPg(exist, stat);
+                if (resp)
+                {
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                    }
+                }
             }
             else
             {
@@ -80,6 +90,16 @@ namespace Uotep
                 stat.mese = txtMM.Text.Trim();
                 stat.anno = anno;
                 resp = mn.InsStatPg(exist, stat);
+                if (resp)
+                {
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    }
+                }
             }
         }
     }

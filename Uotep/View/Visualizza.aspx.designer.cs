@@ -663,13 +663,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataDataEvasa;
 
         /// <summary>
-        /// Controllo txtAccertatori.
+        /// Controllo ListAccertatori.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAccertatori;
+        protected global::System.Web.UI.WebControls.ListBox ListAccertatori;
 
         /// <summary>
         /// Controllo divAg.
@@ -762,6 +762,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.GridView gvPopup;
 
         /// <summary>
+        /// Controllo btChiudi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btChiudi;
+
+        /// <summary>
+        /// Controllo btBack.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btBack;
+
+        /// <summary>
         /// Controllo HidPratica.
         /// </summary>
         /// <remarks>
@@ -816,15 +834,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroSigla;
 
         /// <summary>
-        /// Controllo btChiudi.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btChiudi;
-
-        /// <summary>
         /// Controllo TextMessage.
         /// </summary>
         /// <remarks>
@@ -850,14 +859,5 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btOKDup;
-
-        /// <summary>
-        /// Controllo Button2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
     }
 }

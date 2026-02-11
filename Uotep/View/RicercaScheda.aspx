@@ -256,6 +256,7 @@
                             <div id="divNotificaTp" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
+                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
                             </div>
                         </div>
 
@@ -551,31 +552,7 @@ Servizi e Amministrazioni</label>
             </div>
         </div>
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudi_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+   
     <%-- popup stampa scheda --%>
     <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-modal="true">
         <div class="modal-dialog"

@@ -36,7 +36,7 @@ namespace Uotep
                 ProtocolloLiteral.Text = decodedText;
 
 
-                CaricaDLL();
+                //CaricaDLL();
                 DivDettagli.Visible = false;
                 DivRicerca.Visible = false;
 
@@ -73,75 +73,75 @@ namespace Uotep
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
-            Manager mn = new Manager();
-            //DataTable pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+            //Manager mn = new Manager();
+            ////DataTable pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
 
 
-            DataTable pratica = new DataTable();
-            if (!string.IsNullOrEmpty(txtNProtocollo.Text))
-            {
-                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
-            }
-            if (!string.IsNullOrEmpty(txtProcPenale.Text))
-            {
-                pratica = mn.getListProcedimento(txtProcPenale.Text);
-            }
+            //DataTable pratica = new DataTable();
+            //if (!string.IsNullOrEmpty(txtNProtocollo.Text))
+            //{
+            //    pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtProcPenale.Text))
+            //{
+            //    pratica = mn.getListProcedimento(txtProcPenale.Text);
+            //}
 
-            if (!string.IsNullOrEmpty(txtDataDa.Text))
-            {
-                pratica = mn.getListEvasaAg(txtDataDa.Text, txtDataA.Text);
-            }
-            if (!string.IsNullOrEmpty(txtProtGen.Text))
-            {
-                pratica = mn.getListProtGen(txtProtGen.Text);
-            }
-            if (!string.IsNullOrEmpty(txtPraticaR.Text))
-            {
-                pratica = mn.getListPratica(txtPraticaR.Text);
-            }
-            if (!string.IsNullOrEmpty(txtRicGiudice.Text))
-            {
-                pratica = mn.getListGiudice(txtRicGiudice.Text);
-            }
-            if (!string.IsNullOrEmpty(txtRicProvenienza.Text))
-            {
-                pratica = mn.getListProvenienza(txtRicProvenienza.Text);
-            }
-            if (!string.IsNullOrEmpty(txtRicNominativo.Text))
-            {
-                pratica = mn.getListNominativo(txtRicNominativo.Text);
-            }
-            if (!string.IsNullOrEmpty(txtRicAccertatori.Text))
-            {
-                pratica = mn.getListAccertatori(txtRicAccertatori.Text);
-            }
-            if (!string.IsNullOrEmpty(txtRicIndirizzo.Text))
-            {
-                pratica = mn.getListIndirizzo(txtRicIndirizzo.Text);
-            }
-            if (!string.IsNullOrEmpty(txtDataDa.Text))
-            {
-                pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text);
-            }
-
-
-
-            if (pratica.Rows.Count > 0)
-            {
-                apripopupPratica_Click(sender, e);
-                gvPopupProtocolli.DataSource = pratica;
-                gvPopupProtocolli.DataBind();
+            //if (!string.IsNullOrEmpty(txtDataDa.Text))
+            //{
+            //    pratica = mn.getListEvasaAg(txtDataDa.Text, txtDataA.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtProtGen.Text))
+            //{
+            //    pratica = mn.getListProtGen(txtProtGen.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtPraticaR.Text))
+            //{
+            //    pratica = mn.getListPratica(txtPraticaR.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtRicGiudice.Text))
+            //{
+            //    pratica = mn.getListGiudice(txtRicGiudice.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtRicProvenienza.Text))
+            //{
+            //    pratica = mn.getListProvenienza(txtRicProvenienza.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtRicNominativo.Text))
+            //{
+            //   // pratica = mn.getListNominativo(txtRicNominativo.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtRicAccertatori.Text))
+            //{
+            //    pratica = mn.getListAccertatori(txtRicAccertatori.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtRicIndirizzo.Text))
+            //{
+            //    pratica = mn.getListIndirizzo(txtRicIndirizzo.Text);
+            //}
+            //if (!string.IsNullOrEmpty(txtDataDa.Text))
+            //{
+            //    pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text);
+            //}
 
 
-            }
-            else
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
-            }
-            //DivGrid.Visible = true;
-            //DivDettagli.Visible = true;
-            //DivRicerca.Visible = false;
-            Pulisci();
+
+            //if (pratica.Rows.Count > 0)
+            //{
+            //    apripopupPratica_Click(sender, e);
+            //    gvPopupProtocolli.DataSource = pratica;
+            //    gvPopupProtocolli.DataBind();
+
+
+            //}
+            //else
+            //{
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
+            //}
+            ////DivGrid.Visible = true;
+            ////DivDettagli.Visible = true;
+            ////DivRicerca.Visible = false;
+            //Pulisci();
         }
         public void Convalida()
         {
@@ -416,63 +416,63 @@ namespace Uotep
         }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
-            string indirizzo = string.Empty;
+            //string indirizzo = string.Empty;
 
 
-            //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
-            indirizzo = txtIndirizzoRic.Text.Trim();
+            ////ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + "inserire un indirizzo" + "');", true);
+            //indirizzo = txtIndirizzoRic.Text.Trim();
 
 
-            //string specie = txtSpecie.Text.Trim();
+            ////string specie = txtSpecie.Text.Trim();
 
-            if (!string.IsNullOrEmpty(indirizzo))
-            {
-                // Simula il recupero del quartiere dal database o da una logica interna.
-                Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo);
-
-                if (quartiere.Rows.Count > 0)
-                {
-                    gvPopup.DataSource = quartiere;
-                    gvPopup.DataBind();
-
-                    //DdlQuartiere.Text = quartiere.Rows[0].ItemArray[0].ToString();
-                    //txtIndirizzo.Text = string.Empty;
-                    //txtSpecie.Text = string.Empty;
-                    //lblQuartiere.Text = $"Quartiere: {quartiere.Rows[0].ItemArray[0]}";
-                }
-                else
-                {
-                    //lblQuartiere.Text = "Quartiere non trovato.";
-                }
-            }
-            else
-            {
-                //lblQuartiere.Text = "Inserisci un indirizzo valido.";
-            }
-
-            // Mantieni il popup aperto dopo l'interazione lato server.
-            //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
-
-
-            //DataTable Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, TxtPassw.Text);
-            //if (bUser == "admin")
+            //if (!string.IsNullOrEmpty(indirizzo))
             //{
-            //    Response.Redirect("pagina_amministratore.aspx?user=" + Vuser + "&numord=" + VNumOrd + "", false);
-            //    return;
+            //    // Simula il recupero del quartiere dal database o da una logica interna.
+            //    Manager mn = new Manager();
+            //    DataTable quartiere = mn.getQuartiere(indirizzo);
+
+            //    if (quartiere.Rows.Count > 0)
+            //    {
+            //        gvPopup.DataSource = quartiere;
+            //        gvPopup.DataBind();
+
+            //        //DdlQuartiere.Text = quartiere.Rows[0].ItemArray[0].ToString();
+            //        //txtIndirizzo.Text = string.Empty;
+            //        //txtSpecie.Text = string.Empty;
+            //        //lblQuartiere.Text = $"Quartiere: {quartiere.Rows[0].ItemArray[0]}";
+            //    }
+            //    else
+            //    {
+            //        //lblQuartiere.Text = "Quartiere non trovato.";
+            //    }
+            //}
+            //else
+            //{
+            //    //lblQuartiere.Text = "Inserisci un indirizzo valido.";
             //}
 
-            //if (Ricerca.Rows.Count > 0)
-            //{
-            //    var Rapportino = new Rapportino();
+            //// Mantieni il popup aperto dopo l'interazione lato server.
+            ////ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
 
 
-            //    Rapportino.mat = txt_Operatore.Text;
+            ////DataTable Ricerca = mn.getUserByUserPassw(TxtMatricola.Text, TxtPassw.Text);
+            ////if (bUser == "admin")
+            ////{
+            ////    Response.Redirect("pagina_amministratore.aspx?user=" + Vuser + "&numord=" + VNumOrd + "", false);
+            ////    return;
+            ////}
 
-            //    Rapportino.Show();
-            //    this.Close(); ;
-            //}
+            ////if (Ricerca.Rows.Count > 0)
+            ////{
+            ////    var Rapportino = new Rapportino();
+
+
+            ////    Rapportino.mat = txt_Operatore.Text;
+
+            ////    Rapportino.Show();
+            ////    this.Close(); ;
+            ////}
 
         }
 
@@ -555,89 +555,89 @@ namespace Uotep
             }
         }
 
-        private void CaricaDLL()
-        {
-            try
-            {
+        //private void CaricaDLL()
+        //{
+        //    try
+        //    {
 
 
-                Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiere();
-                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
-                DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
-                DdlQuartiere.DataBind();
-                // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        Manager mn = new Manager();
+        //        DataTable RicercaQuartiere = mn.getListQuartiere();
+        //        DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+        //        DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+        //        DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
+        //        DdlQuartiere.DataBind();
+        //        // DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaIndirizzo = mn.getListIndirizzo();
-                DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
-                DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
-                                                               //      DdlIndirizzo.DataValueField = "ID_quartiere";
-                DdlIndirizzo.DataBind();
-                //       DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DataTable RicercaIndirizzo = mn.getListIndirizzo();
+        //        DdlIndirizzo.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
+        //        DdlIndirizzo.DataTextField = "SpecieToponimo"; // Il campo visibile
+        //                                                       //      DdlIndirizzo.DataValueField = "ID_quartiere";
+        //        DdlIndirizzo.DataBind();
+        //        //       DdlIndirizzo.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaTipoAtto = mn.getListTipologia();
-                DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
-                DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
-                DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
-                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
-                DdlTipoAtto.DataBind();
-                //     DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DataTable RicercaTipoAtto = mn.getListTipologia();
+        //        DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
+        //        DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
+        //        DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
+        //        DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
+        //        DdlTipoAtto.DataBind();
+        //        //     DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaProvenienza = mn.getListProvenienza();
-                DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
-                DdlProvenienza.DataTextField = "Provenienza"; // Il campo visibile
-                DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
+        //        DataTable RicercaProvenienza = mn.getListProvenienza();
+        //        DdlProvenienza.DataSource = RicercaProvenienza; // Imposta il DataSource della DropDownList
+        //        DdlProvenienza.DataTextField = "Provenienza"; // Il campo visibile
+        //        DdlProvenienza.DataValueField = "id_provenienza"; // Il valore associato a ogni opzione
 
-                DdlProvenienza.DataBind();
-                //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DdlProvenienza.DataBind();
+        //        //   DdlProvenienza.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaGiudice = mn.getListGiudice();
-                DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
-                DdlGiudice.DataTextField = "Giudice"; // Il campo visibile
-                DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
+        //        DataTable RicercaGiudice = mn.getListGiudice();
+        //        DdlGiudice.DataSource = RicercaGiudice; // Imposta il DataSource della DropDownList
+        //        DdlGiudice.DataTextField = "Giudice"; // Il campo visibile
+        //        DdlGiudice.DataValueField = "ID_giudice"; // Il valore associato a ogni opzione
 
-                DdlGiudice.DataBind();
-                // DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DdlGiudice.DataBind();
+        //        // DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
 
-                DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
-                DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
-                DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
-                DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
+        //        DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedValue.ToString());
+        //        DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
+        //        DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
+        //        DdlTipoProvvAg.DataValueField = "id_tipo_nota_ag"; // Il valore associato a ogni opzione
 
-                DdlTipoProvvAg.DataBind();
-                //DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DdlTipoProvvAg.DataBind();
+        //        //DdlTipoProvvAg.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable Scaturito = mn.getListScaturito();
-                DdlScaturito.DataSource = Scaturito; // Imposta il DataSource della DropDownList
-                DdlScaturito.DataTextField = "Scaturito"; // Il campo visibile
-                DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
+        //        DataTable Scaturito = mn.getListScaturito();
+        //        DdlScaturito.DataSource = Scaturito; // Imposta il DataSource della DropDownList
+        //        DdlScaturito.DataTextField = "Scaturito"; // Il campo visibile
+        //        DdlScaturito.DataValueField = "Id_scaturito"; // Il valore associato a ogni opzione
 
-                DdlScaturito.DataBind();
-                //       DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //        DdlScaturito.DataBind();
+        //        //       DdlScaturito.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-                DataTable RicercaInviati = mn.getListInviati();
-                DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
-                DdlInviati.DataTextField = "Inviata"; // Il campo visibile
-                DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
-                DdlInviati.DataBind();
-                //DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
-            }
-            catch (Exception ex)
-            {
-                if (!File.Exists(LogFile))
-                {
-                    using (StreamWriter sw = File.CreateText(LogFile)) { }
-                }
+        //        DataTable RicercaInviati = mn.getListInviati();
+        //        DdlInviati.DataSource = RicercaInviati; // Imposta il DataSource della DropDownList
+        //        DdlInviati.DataTextField = "Inviata"; // Il campo visibile
+        //        DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
+        //        DdlInviati.DataBind();
+        //        //DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (!File.Exists(LogFile))
+        //        {
+        //            using (StreamWriter sw = File.CreateText(LogFile)) { }
+        //        }
 
-                using (StreamWriter sw = File.AppendText(LogFile))
-                {
-                    sw.WriteLine(ex.Message + @" - Errore in carica ddl modificariservata.cs ");
-                    sw.Close();
-                }
-            }
-        }
+        //        using (StreamWriter sw = File.AppendText(LogFile))
+        //        {
+        //            sw.WriteLine(ex.Message + @" - Errore in carica ddl modificariservata.cs ");
+        //            sw.Close();
+        //        }
+        //    }
+        //}
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -908,7 +908,7 @@ namespace Uotep
             txtDataInvio.Text = String.Empty;
             CkEvasa.Checked = false;
 
-            CaricaDLL();
+            //CaricaDLL();
 
         }
         protected void btInsProvenienza_Click(object sender, EventArgs e)

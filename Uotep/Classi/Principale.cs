@@ -37,5 +37,8 @@ namespace Uotep.Classi
         public String ulterioreTipoAtto = string.Empty;
         public String bu = string.Empty;
         public String codiceEdificio = string.Empty;
+        public String accertatori2 = string.Empty;
+        public String accertatori3 = string.Empty;
+
     }
 }

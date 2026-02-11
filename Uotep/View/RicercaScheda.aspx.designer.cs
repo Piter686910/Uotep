@@ -285,6 +285,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckNotificaTp;
 
         /// <summary>
+        /// Controllo txtNumNotificheNoAg.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumNotificheNoAg;
+
+        /// <summary>
         /// Controllo ckResa.
         /// </summary>
         /// <remarks>
@@ -823,15 +832,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btChiudi;
-
-        /// <summary>
-        /// Controllo Button2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
 
         /// <summary>
         /// Controllo btPopStampa.

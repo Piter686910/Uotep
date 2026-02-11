@@ -326,8 +326,9 @@ namespace Uotep
         {
             try
             {
+                string msg = string.Empty;
                 Manager mn = new Manager();
-                DataTable RicercaQuartiere = mn.getListQuartiereTP();
+                DataTable RicercaQuartiere = mn.getListQuartiereTP(out msg);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "id";

@@ -21,14 +21,23 @@ using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Configuration;
 using Paragraph = iText.Layout.Element.Paragraph;
 using Table = iText.Layout.Element.Table;
+using System.Runtime.Remoting.Contexts;
+
 
 namespace Uotep.Classi
 {
     public class Routine
     {
-
+        public void Reindirizzamento(string msg,string pagchiamante)
+        {
+            HttpContext.Current.Session["MessaggioErrore"] = msg;
+            HttpContext.Current.Session["PaginaChiamante"] = pagchiamante;
+            string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+            HttpContext.Current.Response.Redirect(url + msg);
+        }
         public string GetProtocollo()
         {
             string txt = string.Empty;
@@ -507,7 +516,7 @@ namespace Uotep.Classi
 
                             document.Add(new Paragraph($"Num. accertam: {schede.Rows[0]["rapp_numAccRichiesti"]}").SetFixedPosition(startX_270, 475, 200));
 
-                          //  startY -= lineHeight; // Move to the next line
+                            //  startY -= lineHeight; // Move to the next line
 
 
 
@@ -535,7 +544,7 @@ namespace Uotep.Classi
                             //    descriptionParagraph.SetFixedPosition(startX_70, startY_Coord, 200);
                             //    document.Add(descriptionParagraph);
                             //}
-                           // startY -= lineHeight; // Move to the next line
+                            // startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione
                             float x1 = 65;
                             float y1 = startY;
@@ -1527,7 +1536,7 @@ namespace Uotep.Classi
                 string titoloPrincipale = "REGISTRO DELLE RICHIESTE DI ACCESSO DOCUMENTALE\r\n(ART. 22 LEGGE 241/1990)\r\n " + semestre + " " + DateTime.Now.Year;
                 var cellaTitolo = worksheet.Cell(1, 1);
                 cellaTitolo.Value = titoloPrincipale;
-                
+
                 // Unisco le celle dalla colonna 1 fino all'ultima colonna occupata dai dati
                 worksheet.Range(1, 1, 1, listaDati.Columns.Count).Merge();
 
@@ -1536,11 +1545,11 @@ namespace Uotep.Classi
                 stileTitolo.Font.Bold = true;
                 stileTitolo.Font.FontSize = 14;
                 stileTitolo.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                stileTitolo.Fill.BackgroundColor = XLColor.Orange; 
+                stileTitolo.Fill.BackgroundColor = XLColor.Orange;
 
 
                 // Stile riga intestazione
-                var stileRigaIntest = worksheet.Range(2,1,2, listaDati.Columns.Count).Style;
+                var stileRigaIntest = worksheet.Range(2, 1, 2, listaDati.Columns.Count).Style;
                 stileRigaIntest.Font.Bold = true;
                 stileRigaIntest.Font.FontSize = 12;
                 stileRigaIntest.Font.FontColor = XLColor.Black;
@@ -1563,7 +1572,7 @@ namespace Uotep.Classi
                 worksheet.Row(2).Style.Alignment.WrapText = true;
                 // Rieseguo l'autofit sulla riga 2 per adattare l'altezza al testo a capo
                 worksheet.Row(2).AdjustToContents();
-                
+
                 worksheet.Row(1).Height = 60;
                 worksheet.Row(1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                 worksheet.Row(1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -2106,6 +2115,13 @@ namespace Uotep.Classi
                 }
             }
         }
-
+        public void PagError(String msg, string Session)
+        {
+            HttpContext.Current.Session["MessaggioErrore"] = msg;
+            HttpContext.Current.Session["PaginaChiamante"] = Session;
+            string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
+            HttpContext.Current.Response.Redirect(url + msg);
+        }
     }
+
 }

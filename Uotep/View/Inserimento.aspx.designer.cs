@@ -465,15 +465,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button Button4;
 
         /// <summary>
-        /// Controllo btClose.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btClose;
-
-        /// <summary>
         /// Controllo btChiudiAvvertenze.
         /// </summary>
         /// <remarks>

@@ -321,7 +321,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtDataInserimento">Data Inserimento</label>
-                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
+                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" autofocus=""/>
                     </div>
                     <div class="form-group mb-3">
                         <label for="txtDataInizioAttivita">Data Inizio Attività</label>

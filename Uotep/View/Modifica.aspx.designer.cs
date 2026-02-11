@@ -24,6 +24,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Literal ProtocolloLiteral;
 
         /// <summary>
+        /// Controllo HfButtonProv.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfButtonProv;
+
+        /// <summary>
         /// Controllo pnlButton.
         /// </summary>
         /// <remarks>
@@ -825,13 +834,40 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlEsito;
 
         /// <summary>
-        /// Controllo txtAccertatori.
+        /// Controllo DdlAccertatori.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAccertatori;
+        protected global::System.Web.UI.WebControls.DropDownList DdlAccertatori;
+
+        /// <summary>
+        /// Controllo btAggiungi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btAggiungi;
+
+        /// <summary>
+        /// Controllo btElimina.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btElimina;
+
+        /// <summary>
+        /// Controllo ListAccertatori.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox ListAccertatori;
 
         /// <summary>
         /// Controllo divAg.
@@ -1057,15 +1093,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btChiudiAvvertenze;
-
-        /// <summary>
-        /// Controllo Button2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
 
         /// <summary>
         /// Controllo DivDecretazione.

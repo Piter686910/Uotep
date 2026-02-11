@@ -27,9 +27,12 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
+using System.Web;
 using System.Web.Services;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using System.Windows.Interop;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static System.Windows.Forms.AxHost;
 using static Uote.test;
 using static Uotep.Classi.Enumerate;
@@ -44,6 +47,7 @@ namespace Uotep.Classi
         public String ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
         public String ConnStringTp = ConfigurationManager.ConnectionStrings["ConnStringTp"].ToString();
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        public string msg = string.Empty;
         //delete
         public Boolean DeleteTran(String numero_pratica)
         {
@@ -209,6 +213,34 @@ namespace Uotep.Classi
                 return resp;
             }
         }
+        public Boolean DelRegistroById(int id)
+        {
+            string sql = string.Empty;
+          string   Del_Registro = "delete  FROM RegistroUrp where id_registro = " + id;
+            Boolean resp = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+                try
+                {
+
+                    command.CommandText = Del_Registro;
+                    //testoSql = "Registro";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn.Close();
+                return resp;
+            }
+        }
         /// <summary>
         /// cancella i file con flag cancella a true
         /// </summary>
@@ -285,8 +317,7 @@ namespace Uotep.Classi
             //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -299,7 +330,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -313,7 +344,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -325,66 +356,66 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
         }
-        public DataTable getListGiudice()
+        public DataTable getListGiudice(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM Giudice order by Giudice";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListProvenienza()
+        public DataTable getListProvenienza(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM Provenienza order by Provenienza";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListTipologiaAbuso()
+        public DataTable getListTipologiaAbuso(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM TipologiaAbuso order by tipologia";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListTipologia()
+        public DataTable getListTipologia(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM Tipologia order by tipo_nota";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListScaturito()
+        public DataTable getListScaturito(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM Scaturito order by scaturito";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListRicercaEsitoUrp()
+        public DataTable getListRicercaEsitoUrp(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM EsitoUrp order by descrizione";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListQuartiere()
+        public DataTable getListQuartiere(out string msg)
         {
             DataTable tb = new DataTable();
             // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
@@ -392,29 +423,26 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListQuartiereTP()
+        public DataTable getListQuartiereTP(out string msg)
         {
             DataTable tb = new DataTable();
             // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
             string sql = "SELECT id, quartiere FROM Quartiere ORDER BY quartiere";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getQuartiere(string indirizzo)
+        public DataTable getQuartiere(string indirizzo, out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT  * FROM Quart where toponimo like '%" + indirizzo.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
-
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable MaxNPr(string anno)
@@ -467,8 +495,7 @@ namespace Uotep.Classi
             string sql = "SELECT anno as anno,quartina as quartina,gennaio as gennaio,febbraio as febbraio, marzo as marzo, aprile as aprile, maggio as maggio, giugno as giugno, luglio as luglio, agosto as agosto, settembre as settembre, ottobre as ottobre, novembre as novembre,dicembre as dicembre FROM quartina where anno = " + anno;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -482,8 +509,7 @@ namespace Uotep.Classi
             string sql = "SELECT nominativo FROM operatore where matricola = '" + matricola.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -497,21 +523,32 @@ namespace Uotep.Classi
             string sql = "SELECT matricola FROM operatore where nominativo = '" + nominativo.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListOperatore()
+        public DataTable getListOperatore(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT nominativo FROM operatore where nominativo <> '' order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable GetListRegistro()
+        /// <summary>
+        /// ricerca solo gli accertatori
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getListAccertatori(out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' order by nominativo ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetListRegistro(out string msg)
         {
             DataTable dt = new DataTable();
 
@@ -521,7 +558,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return dt = FillTable(sql, conn);
+                return dt = FillTable(sql, conn, out msg);
             }
 
         }
@@ -626,7 +663,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getListDipendentiById(int id)
@@ -637,7 +674,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public Boolean getTipoProv(string tipo)
@@ -663,39 +700,36 @@ namespace Uotep.Classi
             }
 
         }
-        public DataTable getListProvvAg(String sigla)
+        public DataTable getListProvvAg(String sigla, out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM TipoNotaAG where sigla = '" + sigla + "' order by tipologia";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListInviati()
+        public DataTable getListInviati(out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM inviati order by inviata";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
         /// cerca indirizzo nella tabella quartiere
         /// </summary>
         /// <returns></returns>
-        public DataTable getListIndirizzo()
+        public DataTable getListIndirizzo(out string msg)
         {
             DataTable tb = new DataTable();
             // string sql = "SELECT specie,toponimo  FROM Quart order by toponimo";
             string sql = "SELECT ISNULL(Specie, '') + ' ' + ISNULL(toponimo, '') AS SpecieToponimo FROM  Quart";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -705,14 +739,13 @@ namespace Uotep.Classi
         /// <param name="protocollo"></param>
         /// <param name="anno"></param>
         /// <returns></returns>
-        public DataTable getListPrototocollo(string protocollo, string anno)
+        public DataTable getListPrototocollo(string protocollo, string anno, out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -727,8 +760,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM decretazione where decr_pratica = '" + pratica + "' and decr_idPratica = '" + idPratica + "' order by decr_data desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -737,14 +769,13 @@ namespace Uotep.Classi
         /// <param name="procedimento"></param>
 
         /// <returns></returns>
-        public DataTable getListProcedimento(string procedimento)
+        public DataTable getListProcedimento(string procedimento, out string msg)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM Principale where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -753,7 +784,7 @@ namespace Uotep.Classi
         /// <param name="datada"></param>
         ///  /// <param name="dataa"></param>
         /// <returns></returns>
-        public DataTable getListEvasaAg(string datada, string dataa)
+        public DataTable getListEvasaAg(string datada, string dataa, out string msg)
         {
             DataTable tb = new DataTable();
 
@@ -763,8 +794,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -772,7 +802,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="protgen"></param>
         /// <returns></returns>
-        public DataTable getListProtGen(string protgen)
+        public DataTable getListProtGen(string protgen, out string msg)
         {
             DataTable tb = new DataTable();
 
@@ -781,24 +811,22 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListProtGenInDecretazione(string protgen)
+        public DataTable getListProtGenInDecretazione(string protgen, out string msg)
         {
             DataTable tb = new DataTable();
 
             string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa" +
                             ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area" +
-                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id where "+
+                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
-           // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
+            // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -806,15 +834,14 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="giudice"></param>
         /// <returns></returns>
-        public DataTable getListGiudice(string giudice)
+        public DataTable getListGiudice(string giudice, out string msg)
         {
             DataTable tb = new DataTable();
 
             string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -830,8 +857,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM statistiche where mese = '" + mese.ToUpper() + "' and anno =" + anno;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
-
+                return tb = FillTable(sql, conn, out msg);
             }
 
         }
@@ -957,15 +983,14 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="provenienza"></param>
         /// <returns></returns>
-        public DataTable getListProvenienza(string provenienza)
+        public DataTable getListProvenienza(string provenienza, out string msg)
         {
             DataTable tb = new DataTable();
 
             string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -973,15 +998,14 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="nominativo"></param>
         /// <returns></returns>
-        public DataTable getListNominativo(string nominativo)
+        public DataTable getListNominativo(string nominativo, out string msg)
         {
             DataTable tb = new DataTable();
 
             string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -990,15 +1014,14 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="indirizzo"></param>
         /// <returns></returns>
-        public DataTable getListIndirizzo(string indirizzo)
+        public DataTable getListIndirizzo(string indirizzo, out string msg)
         {
             DataTable tb = new DataTable();
 
             string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1006,7 +1029,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="dataarrivo"></param>
         /// <returns></returns>
-        public DataTable getListDataArrivo(string dataArrivoDa, string dataArrivoA)
+        public DataTable getListDataArrivo(string dataArrivoDa, string dataArrivoA, out string msg)
         {
             DataTable tb = new DataTable();
             DateTime dtda = System.Convert.ToDateTime(dataArrivoDa);
@@ -1016,8 +1039,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1025,18 +1047,22 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="accertatori"></param>
         /// <returns></returns>
-        public DataTable getListAccertatori(string accertatori)
+        public DataTable getListAccertatori(string accertatori, out string msg)
         {
             DataTable tb = new DataTable();
-
-            string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            string valoreCerca = accertatori.Replace("'", "''").Replace("*", "%");
+            string sql = "SELECT * FROM Principale WHERE (" +
+                        "Accertatore1 LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatore2 LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatore3 LIKE '" + valoreCerca + "%') " +
+                        "ORDER BY dataarrivo DESC";
+            // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListPratica(string nominativo, string indirizzo, string accertatori)
+        public DataTable getListPratica(string nominativo, string indirizzo, string accertatori, out string msg)
         {
             DataTable tb = new DataTable();
             string sql = string.Empty;
@@ -1048,8 +1074,7 @@ namespace Uotep.Classi
                 sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1057,7 +1082,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="pratica"></param>
         /// <returns></returns>
-        public DataTable getListPratica(string pratica)
+        public DataTable getListPratica(string pratica, out string msg)
         {
             DataTable tb = new DataTable();
 
@@ -1066,8 +1091,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable GetFileByOperatore(string matricola)
@@ -1080,8 +1104,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         //public DataTable GetTurnoMensile(string mese, int anno)
@@ -1164,11 +1187,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                // conn.Open();
-                //  SqlCommand command = conn.CreateCommand();
-
-                return tb = FillTable(sql, conn);
-
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -1182,7 +1201,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
 
-                tb = FillTable(sql, conn);
+                tb = FillTable(sql, conn, out msg);
                 if (tb.Rows.Count > 0)
                     progressivo = Convert.ToInt32(tb.Rows[0]["progressivo"].ToString());
                 else
@@ -1210,8 +1229,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -1261,8 +1279,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -1277,8 +1294,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPraticaArchivioUoteById(int id)
@@ -1291,8 +1307,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1415,8 +1430,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -1430,8 +1444,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getAttivitaAdmin(string area, Boolean val)
@@ -1444,8 +1457,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1462,8 +1474,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable GetScadenziarioById(int id)
@@ -1476,8 +1487,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable GetListRegistroUrp()
@@ -1490,8 +1500,19 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetRegistroById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
 
-                return tb = FillTable(sql, conn);
+
+            sql = "SELECT * FROM RegistroUrp where id_registro = " + id;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable GetListScadenziarioUrpEsitoVuoto(string filterValue)
@@ -1500,12 +1521,11 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
-            sql = "SELECT * FROM ScadenziarioUrp where esito='"+ filterValue + "'" ;
+            sql = "SELECT * FROM ScadenziarioUrp where esito='" + filterValue + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable GetListScadenziarioUrp()
@@ -1518,8 +1538,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getListAuto(string mese, int anno)
@@ -1532,8 +1551,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getAutoBySigla(string sigla)
@@ -1546,8 +1564,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getAttivita(string area, Boolean val)
@@ -1560,8 +1577,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1587,8 +1603,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
@@ -1606,8 +1621,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -1625,7 +1639,7 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPraticaArchivioUotp(string[] pratica, string oggetto, string bu, string nota, string destinatario, string indirizzo, string intestatario, string edificio)
@@ -1661,8 +1675,7 @@ namespace Uotep.Classi
                 sql = "SELECT * FROM Archiviotp  WHERE cognome like '%" + intestatario.Replace("'", "''").Replace("*", "%") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPraticaArchivioUote(string[] pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
@@ -1711,8 +1724,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPraticaId(Int32 protocollo, DateTime data, string sigla, Int32 id)
@@ -1721,8 +1733,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'" + " and id = " + id;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPratica(Int32 protocollo, DateTime data, string sigla)
@@ -1731,8 +1742,7 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         public DataTable getPraticaModificaRiservata(string protocollo, string anno)
@@ -1741,29 +1751,36 @@ namespace Uotep.Classi
             string sql = "SELECT * FROM Principale where Nr_Protocollo = '" + protocollo + "' and anno = '" + anno + "'";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
         }
 
 
-        private DataTable FillTable(String sql, SqlConnection conn)
+        private DataTable FillTable(String sql, SqlConnection conn, out string msg)
         {
-
             DataTable table = new DataTable();
-            //SqlConnection conn = new SqlConnection(ConnString);
-            //conn.Open();
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            msg = string.Empty;
+            try
             {
-                cmd.CommandTimeout = 120;
-                SqlDataAdapter da;
-                DataSet ds;
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.CommandTimeout = 240;
+                    SqlDataAdapter da;
+                    DataSet ds;
 
-                da = new SqlDataAdapter(sql, conn);
-                ds = new DataSet();
-                da.Fill(ds);
+                    da = new SqlDataAdapter(sql, conn);
+                    ds = new DataSet();
+                    da.Fill(ds);
 
-                table = ds.Tables[0];
+                    table = ds.Tables[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                conn.Close();
+                conn.Dispose();
+                return table;
             }
             conn.Close();
             conn.Dispose();
@@ -3292,6 +3309,7 @@ namespace Uotep.Classi
                         " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
 
+
                     }
 
                     sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
@@ -3440,10 +3458,10 @@ namespace Uotep.Classi
                      "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
                      "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
                      "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
-                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc)" +                                                                                     
-               " Values('" + rapp.pratica + "','" +                                                                 
+                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc,rapp_NumNotificheNoAg)" +
+               " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +                                                                              
-                 @rapp.data + "','" +                                                                               
+                 @rapp.data + "','" +
                  @rapp.nominativo.Replace("'", "''") + "','" +
                  @rapp.indirizzo.Replace("'", "''") + "','" +
                  @rapp.pattuglia.Replace("'", "''") + "','" +
@@ -3487,8 +3505,9 @@ namespace Uotep.Classi
                  @rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
                  @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
                  //I- mod 31/01/2026 scheda int
-                 "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" + 
-                 @rapp.contrNatoDaAcc + "','" + @rapp.NumcontrNatoDaAcc + "'" +
+                 "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
+                 @rapp.contrNatoDaAcc + "'," + @rapp.NumcontrNatoDaAcc + "," +
+                 @rapp.NumNotificheNoAg + "" +
                  //F- mod 31/01/2026 scheda int
                  "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
@@ -3703,6 +3722,105 @@ namespace Uotep.Classi
 
         }
         //FINE INSERIMENTO
+        public DataTable GetSchedeInfo(string boxChiamante, string mese, string anno)
+        {
+            string sql = string.Empty;
+            //  trasformo stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DataTable tb = new DataTable();
+            switch (boxChiamante)
+            {
+                case "EspostiEvasi":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_esposto='true'";
+                    break;
+                case "Relazioni":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_relazione='true'";
+                    break;
+                case "Ponteggi":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_cantiere_suolo_pubb='true'";
+                    break;
+                case "DPI":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_lavori_edili='true'";
+                    break;
+                case "SCIA":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_controlliScia='true'";
+                    break;
+                case "Annotazioni":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_annotazionePG='true'";
+                    break;
+                case "Notifiche":
+                    sql = "SELECT * FROM rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_notifica='true'";
+                    break;
+                case "NotificheNoAG":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_notifica_no_ag='true'";
+                    break;
+                case "Sequestri":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_verbale_seq='true'";
+                    break;
+                case "RiappSigilli":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_disseq_temp_Riapp='true'";
+                    break;
+                case "DelegheEsitate":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_esito_delega='true'";
+                    break;
+                case "Convalide":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_convalida='true'";
+                    break;
+                case "ViolazioneSigilli":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_violazione_sigilli='true'";
+                    break;
+                case "DissequestriTemp":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_disseq_temp='true'";
+                    break;
+                case "Dissequestri":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_disseq_def='true'";
+                    break;
+                case "RimozioneSigilli":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_disseq_temp_Rim='true'";
+                    break;
+                case "ControlliDLGS":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_violazioneBeniCult='true'";
+                    break;
+                case "ControlliCant":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_cantieri_seq='true' or rapp_giro_cantieri='true'";
+                    break;
+                case "ViolAmmRegCom":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contestaz_amm='true'";
+                    break;
+                case "CensimentoAllPubb":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_censimento_all_pubb='true'";
+                    break;
+                case "OccupAbusivaAbit":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_occ_abitativo='true'";
+                    break;
+                case "OccupAbusivaNoAbit":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_occ_no_abitativo='true'";
+                    break;
+                case "SgomberiAbus":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and txtSgomberiAbus='true'";
+                    break;
+                case "SgomberiImmobili":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_sgomberi_immobili='true'";
+                    break;
+                case "AccertAltriEnti":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contrNatoDaAcc='true'";
+                    break;
+                case "CNR":
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_cnr='true'";
+                    break;
+                default:
+                    break;
+            }
+
+            
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
+            }
+
+
+        }
         public DataTable GetSchedeBy(string numPratica, string pattuglia, string dataI, Boolean attivita, int id, string quartiere)
         {
             string sql = string.Empty;
@@ -3752,7 +3870,8 @@ namespace Uotep.Classi
             }
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -3788,7 +3907,8 @@ namespace Uotep.Classi
             //}
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -3801,7 +3921,8 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
             }
         }
         /// <summary>
@@ -3818,7 +3939,8 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -3859,7 +3981,8 @@ namespace Uotep.Classi
             //     " ORDER BY DATEPART(month, rapp_data_consegna_intervento)";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                string msg = string.Empty;
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -3874,7 +3997,7 @@ namespace Uotep.Classi
         {
             string sql = string.Empty;
 
-            //  trasformio stringa mese in numero;
+            //  trasformo stringa mese in numero;
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
@@ -4837,7 +4960,7 @@ namespace Uotep.Classi
             }
 
         }
-        public string GetNumNotificheNoAg(string mese, int anno)
+        public string GetNumAccertAltriEnti(string mese, int anno)
         {
             string sql = string.Empty;
 
@@ -4845,7 +4968,8 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(rapp_notifica_no_ag) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_notifica_no_ag='true'";
+            sql = "SELECT SUM(TRY_CAST(rapp_numcontrNatoDaAcc AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "'";
+
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -4867,7 +4991,50 @@ namespace Uotep.Classi
 
                     using (StreamWriter sw = File.AppendText(LogFile))
                     {
-                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore GetNumAccertAltriEnti ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumNotificheNoAg(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformo stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            // sql = "SELECT count(rapp_notifica_no_ag) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_notifica_no_ag='true'";
+            sql = "SELECT SUM(TRY_CAST(rapp_NumNotificheNoAg AS DECIMAL(18, 0))) AS SommaTotale FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "'";
+
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - GetNumNotificheNoAg ");
                         sw.Close();
                     }
 
@@ -5067,34 +5234,54 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = '" + DelegaIndagine + "' AND (provenienza like '%PROCURA%' or provenienza like 'corte di app%' or provenienza like 'tribunale%')  AND datacarico LIKE '" + anno + "-" + meseS + "%'";
-
-                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+                sql = "SELECT count(tipoProvvedimentoAg) FROM principale where  TIPOPROVVEDIMENTOAG = '" + DelegaIndagine + "' AND dataarrivo LIKE '" + anno + "-" + meseS + "%'";
+                string msg = string.Empty;
+                return number = Convert.ToInt32(FillTable(sql, conn, out msg).Rows[0][0]);
             }
 
         }
-        public int GetEspostiRicevute(string mese, int anno)
+        public int GetEspostiRicevute(string mese, int anno, out string msg)
         {
             int number = 0;
             string sql = string.Empty;
             DataTable tb = new DataTable();
             String meseN = string.Empty;
-            //trasforma il mese in numero   
 
+            msg = string.Empty;
             Manager mn = new Manager();
+            //trasforma il mese in numero  
             string meseS = mn.GetNumeroMeseByText(mese);
             Tipologie esp = Tipologie.EspostoSegnalazione;
             string Esposti = esp.GetDescription();
 
-            //using (SqlConnection conn = new SqlConnection(ConnString))
-            //{
-            //    meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
-            //}
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(Tipologia_atto) FROM principale where Tipologia_atto = '" + Esposti + "' AND datacarico LIKE '" + anno + "-" + meseS + "%'";
+                sql = "SELECT count(Tipologia_atto) FROM principale " +
+                    "WHERE Tipologia_atto = '" + Esposti + "' " +
+                    "AND YEAR(dataarrivo) = " + anno + " " +
+                    "AND MONTH(dataarrivo) = " + meseS;
+                try
+                {
+                    // Esegue la query
+                    // Nota: presumo che FillTable apra la connessione se chiusa
+                    DataTable dt = FillTable(sql, conn, out msg);
 
-                return number = Convert.ToInt32(FillTable(sql, conn).Rows[0][0]);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        // Gestione DBNull: Se il conteggio è nullo restituisce 0
+                        object result = dt.Rows[0][0];
+                        return (result == DBNull.Value) ? 0 : Convert.ToInt32(result);
+                    }
+                    return 0;
+                }
+                catch (Exception ex)
+                {
+                    // 3. ASSEGNAZIONE OBBLIGATORIA DI MSG NEL CATCH
+                    msg = "Errore durante il conteggio esposti: " + ex.Message;
+                    return 0;
+                }
+
+
             }
 
         }
@@ -5112,10 +5299,10 @@ namespace Uotep.Classi
             string meseS = @"DECLARE @NomeMese NVARCHAR(20) SET @NomeMese ='" + mese + "' SELECT FORMAT(MONTH(CAST(@NomeMese +' 1, 2000' AS DATETIME)), 'D2') AS NumeroMese";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                meseN = Convert.ToString(FillTable(meseS, conn).Rows[0][0]);
+                meseN = Convert.ToString(FillTable(meseS, conn, out msg).Rows[0][0]);
             }
-            using (SqlConnection conn = new SqlConnection(ConnString))
-                return meseN;
+
+            return meseN;
 
         }
         /// <summary>
@@ -5132,7 +5319,7 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                return tb = FillTable(sql, conn);
+                return tb = FillTable(sql, conn, out msg);
             }
 
 
@@ -5752,7 +5939,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean DuplicaCarico(string carico,string sigla, int id)
+        public Boolean DuplicaCarico(string carico, string sigla, int id)
         {
             bool resp = true;
             string sql_principale = String.Empty;
@@ -5762,7 +5949,7 @@ namespace Uotep.Classi
        "DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, Matricola, DataInserimento, Macro_area, UlterioreTipoAtto, BU, CodiceEdificio) " +
       "SELECT[Nr_Protocollo] ,[Sigla],[DataArrivo],[Provenienza],[Tipologia_atto],[Giudice],[TipoProvvedimentoAG],[ProcedimentoPen],[Nominativo],[Indirizzo],[via],[Evasa],[EvasaData],[Inviata],[DataInvio],[Scaturito]" +
       ",[Accertatori],[DataCarico],[nr_Pratica],[Quartiere],[Note],[Anno],[Giorno],[Rif_Prot_Gen],[Matricola],[DataInserimento],[Macro_area],[UlterioreTipoAtto],[BU],[CodiceEdificio] " +
-      "FROM principale where Id = "+ id;
+      "FROM principale where Id = " + id;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
@@ -6008,6 +6195,8 @@ namespace Uotep.Classi
             return resp;
 
         }
+       
+
         public Boolean UpdApriDecretazione(string carico, string anno)
         {
             bool resp = true;
@@ -6100,6 +6289,65 @@ namespace Uotep.Classi
                 resp = false;
             }
 
+            return resp;
+
+        }
+        public Boolean UpdateRegistroById(int id, UrpRegistro reg)
+        {
+            bool resp = true;
+            string sql = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+                sql = "update RegistroUrp set oggetto = '" + reg.oggetto.Replace("'", "''") + "', dataPresentRichiesta= '" + reg.dataPresentRichiesta + "', nrPgTrasmissioneRichiesto= '" + reg.nrPgTrasmissioneRichiesto.Replace("'", "''") +
+                   "', uffDetentore= '" + reg.uffDetentore.Replace("'", "''") + "', controInteressati= '" + reg.controInteressati + "', esito = '" + reg.esito.Replace("'", "''") + "', motivazione= '" + reg.motivazione.Replace("'", "''") +
+                   "', nrPgTrasmissioneRiscontro = '" + reg.nrPgTrasmissioneRiscontro.Replace("'", "''") + "', dataConclProcedimento = '" + reg.dataConclProcedimento + "'" +
+                    " where id_registro = '" + id + "'";
+
+
+
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql;
+                        testoSql = "RegistroUrp";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("numero registro:" + id + ",data :" + reg.dataPresentRichiesta + ", " + ex.Message + @" - Errore in update  RegistroUrp");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
             return resp;
 
         }
@@ -6320,7 +6568,8 @@ namespace Uotep.Classi
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") +
-                    "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "'" +
+                    "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";

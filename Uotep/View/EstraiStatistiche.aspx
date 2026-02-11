@@ -51,13 +51,15 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtMese">Mese</label>
-                                <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Width="110px" />
+                                <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Width="110px" autofocus="" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtAnno">Anno</label>
                                 <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Width="110px" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtAnno" ValidationGroup="bt" ErrorMessage="Inserire anno" ForeColor="Red">
+                                </asp:RequiredFieldValidator>
                             </div>
                         </div>
 
@@ -77,28 +79,6 @@
 
     </div>
 
-
-
-    <%-- il seguente style serve per i bordi azzurri --%>
-    <style>
-        
-
-       
-
-      
-        .table-layout-fixed {
-            table-layout: fixed;
-            width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
-        }
-
-            /* Opzionale: assicura che il testo troppo lungo non rompa il layout */
-            .table-layout-fixed td,
-            .table-layout-fixed th {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-    </style>
     <%-- panel dei dettagli --%>
     <div class="panel panel-default">
         <div id="divDettagli" runat="server" visible="false">
@@ -110,148 +90,647 @@
                 <div class="container">
 
                     <div class="tab-content">
-
+                        <p style="font-weight: bold;">Fonte intervento</p>
                         <div class="row custom-border">
-                            <div class="col-md-6 ">
-                                <div class="form-group mb-3">
-                                    <label for="txtRelazioni">Relazioni</label>
-                                    <asp:TextBox ID="txtRelazioni" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="TxtPonteggi">Ponteggi</label>
-                                    <asp:TextBox ID="TxtPonteggi" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtDPI">DPI</label>
-                                    <asp:TextBox ID="txtDPI" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtEspostiRicevuti">Esposti Ricevuti</label>
-                                    <asp:TextBox ID="txtEspostiRicevuti" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtCNR">CNR</label>
-                                    <asp:TextBox ID="txtCNR" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtAnnotazioni">Annotazioni</label>
-                                    <asp:TextBox ID="txtAnnotazioni" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtDelegheEsitate">Deleghe Esitate</label>
-                                    <asp:TextBox ID="txtDelegheEsitate" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtViol_amm_reg_com">Viol. Amm. Reg. Comunali</label>
-                                    <asp:TextBox ID="txtViol_amm_reg_com" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtInterrogatori">Interrogatori</label>
-                                    <asp:TextBox ID="txtInterrogatori" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtConvalide">Convalide</label>
-                                    <asp:TextBox ID="txtConvalide" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtViolazioneSigilli">Violazione Sigilli</label>
-                                    <asp:TextBox ID="txtViolazioneSigilli" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtDissequestriTemp">Dissequestri Temp.</label>
-                                    <asp:TextBox ID="txtDissequestriTemp" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtRimozioneSigilli">Rimozione Sigilli</label>
-                                    <asp:TextBox ID="txtRimozioneSigilli" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtOccupAbusivaAbit">Occupazione abusiva abitativa</label>
-                                    <asp:TextBox ID="txtOccupAbusivaAbit" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtOccupAbusivaNoAbit">Occupazione abusiva non abitativa</label>
-                                    <asp:TextBox ID="txtOccupAbusivaNoAbit" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtCensimentoAllPubb">Censimento nuclei familiari alloggi pubb.</label>
-                                    <asp:TextBox ID="txtCensimentoAllPubb" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="txtEspostiEvasi">Esposti Evasi</label>
-                                    <asp:TextBox ID="txtEspostiEvasi" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtRipristino">Ripr. Tot. Parz.</label>
-                                    <asp:TextBox ID="txtRipristino" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtControlliScia">Controlli Scia</label>
-                                    <asp:TextBox ID="txtControlliScia" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtControlliCant">Controlli C/Ri Giornalieri</label>
-                                    <asp:TextBox ID="txtControlliCant" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtNotifiche">Notifiche</label>
-                                    <asp:TextBox ID="txtNotifiche" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtNotificheNoAg">Notifiche Non AG</label>
-                                    <asp:TextBox ID="txtNotificheNoAg" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtSequestri">Sequestri</label>
-                                    <asp:TextBox ID="txtSequestri" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtRiapposizioneSigilli">Riapposizione Sigilli</label>
-                                    <asp:TextBox ID="txtRiapposizioneSigilli" runat="server" CssClass="form-control larghezzaText" />
-                                </div>
+                            <div class="col-md-3">
                                 <div class="form-group mb-3">
                                     <label for="txtDelegheRicevute">Deleghe Ricevute</label>
                                     <asp:TextBox ID="txtDelegheRicevute" runat="server" CssClass="form-control larghezzaText" />
                                 </div>
                                 <div class="form-group mb-3">
+                                    <label for="txtEspostiRicevuti">Esposti Ricevuti</label>
+                                    <asp:TextBox ID="txtEspostiRicevuti" runat="server" CssClass="form-control larghezzaText" />
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtDelegheEsitate">
+                                                Deleghe Esitate
+
+                                                <asp:LinkButton ID="LinkButton9" runat="server"
+                                                    CommandArgument="DelegheEsitate"
+                                                    OnClick="BtnInfo_Click"
+                                                    CausesValidation="false"
+                                                    CssClass="text-info"
+                                                    Style="margin-left: 5px;">
+                                             <i class="fa fa-info-circle">ⓘ</i>
+                                                </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtDelegheEsitate" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Esposti Evasi
+                                
+                                <asp:LinkButton ID="BtnInfoEsposti" runat="server"
+                                    CommandArgument="EspostiEvasi"
+                                    OnClick="BtnInfo_Click"
+                                    CausesValidation="false"
+                                    CssClass="text-info"
+                                    Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtEspostiEvasi" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtNotifiche">
+                                                Notifiche
+
+                                        <asp:LinkButton ID="LinkButton5" runat="server"
+                                            CommandArgument="Notifiche"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtNotifiche" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtNotificheNoAg">
+                                                Notifiche Non AG
+
+                                        <asp:LinkButton ID="LinkButton6" runat="server"
+                                            CommandArgument="NotificheNoAG"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtNotificheNoAg" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtAccertAltriEnti">
+                                                Num Contr. Accert. altri enti
+
+                                       <asp:LinkButton ID="LinkButton23" runat="server"
+                                           CommandArgument="AccertAltriEnti"
+                                           OnClick="BtnInfo_Click"
+                                           CausesValidation="false"
+                                           CssClass="text-info"
+                                           Style="margin-left: 5px;">
+                                   <i class="fa fa-info-circle">ⓘ</i>
+                                       </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtAccertAltriEnti" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <p style="font-weight: bold;">Atti Redatti</p>
+                        <div class="row custom-border">
+                            <div class="col-md-3 ">
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Relazioni
+
+                                                <asp:LinkButton ID="BtnInfoRelazioni" runat="server"
+                                                    CommandArgument="Relazioni"
+                                                    OnClick="BtnInfo_Click"
+                                                    CausesValidation="false"
+                                                    CssClass="text-info"
+                                                    Style="margin-left: 5px;">
+                                            <i class="fa fa-info-circle">ⓘ</i>
+                                                </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtRelazioni" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtCNR">
+                                                CNR
+
+                                    <asp:LinkButton ID="LinkButton24" runat="server"
+                                        CommandArgument="CNR"
+                                        OnClick="BtnInfo_Click"
+                                        CausesValidation="false"
+                                        CssClass="text-info"
+                                        Style="margin-left: 5px;">
+                                <i class="fa fa-info-circle">ⓘ</i>
+                                    </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtCNR" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Controlli Scia
+
+                                        <asp:LinkButton ID="LinkButton3" runat="server"
+                                            CommandArgument="SCIA"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtControlliScia" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
                                     <label for="txtDenunceUff">Denunce Uff</label>
                                     <asp:TextBox ID="txtDenunceUff" runat="server" CssClass="form-control larghezzaText" />
                                 </div>
+                            </div>
+
+                            <div class="col-md-3 ">
                                 <div class="form-group mb-3">
-                                    <label for="txtDemolizioni">Demolizioni</label>
-                                    <asp:TextBox ID="txtDemolizioni" runat="server" CssClass="form-control larghezzaText" />
+
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtConvalide">
+                                                Convalide
+
+                                        <asp:LinkButton ID="LinkButton10" runat="server"
+                                            CommandArgument="Convalide"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtConvalide" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="txtDissequestri">Dissequestri</label>
-                                    <asp:TextBox ID="txtDissequestri" runat="server" CssClass="form-control larghezzaText" />
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Annotazioni
+
+                                        <asp:LinkButton ID="LinkButton4" runat="server"
+                                            CommandArgument="Annotazioni"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtAnnotazioni" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="txtInterrogatori">Interrogatori</label>
+                                    <asp:TextBox ID="txtInterrogatori" runat="server" CssClass="form-control larghezzaText" />
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="txtControlliDLGS">Controlli D.LGS 42/04</label>
-                                    <asp:TextBox ID="txtControlliDLGS" runat="server" CssClass="form-control larghezzaText  " />
+                                    <label for="txtRipristino">Ripr. Tot. Parz.</label>
+                                    <asp:TextBox ID="txtRipristino" runat="server" CssClass="form-control larghezzaText" />
+                                </div>
+                            </div>
+                            <div class="col-md-3 ">
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Sequestri
+
+                                    <asp:LinkButton ID="LinkButton7" runat="server"
+                                        CommandArgument="Sequestri"
+                                        OnClick="BtnInfo_Click"
+                                        CausesValidation="false"
+                                        CssClass="text-info"
+                                        Style="margin-left: 5px;">
+                                <i class="fa fa-info-circle">ⓘ</i>
+                                    </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtSequestri" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+
+                                </div>
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtDissequestriTemp">
+                                                Dissequestri Temp.
+
+                                            <asp:LinkButton ID="LinkButton12" runat="server"
+                                                CommandArgument="DissequestriTemp"
+                                                OnClick="BtnInfo_Click"
+                                                CausesValidation="false"
+                                                CssClass="text-info"
+                                                Style="margin-left: 5px;">
+                                        <i class="fa fa-info-circle">ⓘ</i>
+                                            </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtDissequestriTemp" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="txtSgomberiAbus">Sgomberi occup. abusiva</label>
-                                    <asp:TextBox ID="txtSgomberiAbus" runat="server" CssClass="form-control larghezzaText  " />
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtRiapposizioneSigilli">
+                                                Riapposizione Sigilli
+
+                                    <asp:LinkButton ID="LinkButton8" runat="server"
+                                        CommandArgument="RiappSigilli"
+                                        OnClick="BtnInfo_Click"
+                                        CausesValidation="false"
+                                        CssClass="text-info"
+                                        Style="margin-left: 5px;">
+                                <i class="fa fa-info-circle">ⓘ</i>
+                                    </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtRiapposizioneSigilli" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 ">
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtViolazioneSigilli">
+                                                Violazione Sigilli
+
+                                        <asp:LinkButton ID="LinkButton11" runat="server"
+                                            CommandArgument="ViolazioneSigilli"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtViolazioneSigilli" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="txtSgomberiImmobili">Sgomberi occup. immobili/aree</label>
-                                    <asp:TextBox ID="txtSgomberiImmobili" runat="server" CssClass="form-control larghezzaText  " />
+                                    <label for="txtRimozioneSigilli"></label>
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtRimozioneSigilli">
+                                                Rimozione Sigilli
+
+                                            <asp:LinkButton ID="LinkButton14" runat="server"
+                                                CommandArgument="RimozioneSigilli"
+                                                OnClick="BtnInfo_Click"
+                                                CausesValidation="false"
+                                                CssClass="text-info"
+                                                Style="margin-left: 5px;">
+                                        <i class="fa fa-info-circle">ⓘ</i>
+                                            </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtRimozioneSigilli" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+                                        <div class="form-group mb-3">
+                                            <label for="txtDissequestri">
+                                                Dissequestri
+
+                                        <asp:LinkButton ID="LinkButton13" runat="server"
+                                            CommandArgument="Dissequestri"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtDissequestri" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
                                 </div>
 
                             </div>
                         </div>
 
 
+
+                        <p style="font-weight: bold;">Controlli e Ordinanze</p>
+                        <div class="row custom-border">
+                            <div class="col-md-3 ">
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                Ponteggi
+
+                                        <asp:LinkButton ID="LinkButton1" runat="server"
+                                            CommandArgument="Ponteggi"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="TxtPonteggi" runat="server" CssClass="form-control larghezzaText" />
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtEspostiEvasi">
+                                                DPI
+
+                                        <asp:LinkButton ID="LinkButton2" runat="server"
+                                            CommandArgument="DPI"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtDPI" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtViol_amm_reg_com">
+                                                Viol. Amm. Reg. Comunali
+
+                                    <asp:LinkButton ID="LinkButton17" runat="server"
+                                        CommandArgument="ViolAmmRegCom"
+                                        OnClick="BtnInfo_Click"
+                                        CausesValidation="false"
+                                        CssClass="text-info"
+                                        Style="margin-left: 5px;">
+                                <i class="fa fa-info-circle">ⓘ</i>
+                                    </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtViol_amm_reg_com" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                            </div>
+                            <div class="col-md-3 ">
+
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtOccupAbusivaAbit">
+                                                Occup. abusiva abitativa
+
+                                        <asp:LinkButton ID="LinkButton19" runat="server"
+                                            CommandArgument="OccupAbusivaAbit"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtOccupAbusivaAbit" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtOccupAbusivaNoAbit">
+                                                Occup. abusiva non abitativa
+
+                                            <asp:LinkButton ID="LinkButton20" runat="server"
+                                                CommandArgument="OccupAbusivaNoAbit"
+                                                OnClick="BtnInfo_Click"
+                                                CausesValidation="false"
+                                                CssClass="text-info"
+                                                Style="margin-left: 5px;">
+                                        <i class="fa fa-info-circle">ⓘ</i>
+                                            </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtOccupAbusivaNoAbit" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtCensimentoAllPubb">
+                                                Cens. nuclei fam. alloggi pubb.
+
+                                        <asp:LinkButton ID="LinkButton18" runat="server"
+                                            CommandArgument="CensimentoAllPubb"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtCensimentoAllPubb" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+
+
+                                <div class="form-group mb-3">
+
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtControlliCant">
+                                                Controlli C/Ri Giornalieri
+
+                                            <asp:LinkButton ID="LinkButton16" runat="server"
+                                                CommandArgument="ControlliCant"
+                                                OnClick="BtnInfo_Click"
+                                                CausesValidation="false"
+                                                CssClass="text-info"
+                                                Style="margin-left: 5px;">
+                                        <i class="fa fa-info-circle">ⓘ</i>
+                                            </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtControlliCant" runat="server" CssClass="form-control larghezzaText" />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+
+                                <div class="form-group mb-3">
+                                    <label for="txtDemolizioni">Demolizioni</label>
+                                    <asp:TextBox ID="txtDemolizioni" runat="server" CssClass="form-control larghezzaText" />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtControlliDLGS">
+                                                Controlli D.LGS 42/04
+
+                                        <asp:LinkButton ID="LinkButton15" runat="server"
+                                            CommandArgument="ControlliDLGS"
+                                            OnClick="BtnInfo_Click"
+                                            CausesValidation="false"
+                                            CssClass="text-info"
+                                            Style="margin-left: 5px;">
+                                    <i class="fa fa-info-circle">ⓘ</i>
+                                        </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtControlliDLGS" runat="server" CssClass="form-control larghezzaText  " />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtSgomberiAbus">
+                                                Sgomberi occup. abusiva
+
+                                       <asp:LinkButton ID="LinkButton21" runat="server"
+                                           CommandArgument="SgomberiAbus"
+                                           OnClick="BtnInfo_Click"
+                                           CausesValidation="false"
+                                           CssClass="text-info"
+                                           Style="margin-left: 5px;">
+                                   <i class="fa fa-info-circle">ⓘ</i>
+                                       </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtSgomberiAbus" runat="server" CssClass="form-control larghezzaText  " />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <contenttemplate>
+
+                                        <div class="form-group mb-3">
+                                            <label for="txtSgomberiAbus">
+                                                Sgomberi occup. immobili/aree
+
+                                       <asp:LinkButton ID="LinkButton22" runat="server"
+                                           CommandArgument="SgomberiImmobili"
+                                           OnClick="BtnInfo_Click"
+                                           CausesValidation="false"
+                                           CssClass="text-info"
+                                           Style="margin-left: 5px;">
+                                   <i class="fa fa-info-circle">ⓘ</i>
+                                       </asp:LinkButton>
+                                            </label>
+                                            <asp:TextBox ID="txtSgomberiImmobili" runat="server" CssClass="form-control larghezzaText  " />
+
+                                        </div>
+                                    </contenttemplate>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
-
         </div>
+
+    </div>
     <%-- Griglia statistiche annuali--%>
     <%--<div id="DivAnnuale" runat="server" class="form-group">
             <asp:GridView ID="GvStatAnnuale" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered"
@@ -318,32 +797,89 @@
         </asp:GridView>
 
     </div>
-    </div>
-
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
+    <%-- Modale ricerca scheda --%>
+    <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+                    <h5 class="modal-title" id="modalLabel2">Schede contenenti il dato richiesto</h5>
 
                 </div>
                 <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
 
-                        <p id="errorMessage" style="color: red"></p>
+                    <div class="form-group">
+                        <!-- GridView nel popup -->
+                        <asp:GridView ID="GVRicercaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                            OnRowDataBound="GVRicercaScheda_RowDataBound" OnRowCommand="GVRicercaScheda_RowCommand" AllowPaging="true" PageSize="2" OnPageIndexChanging="GVRicercaScheda_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                            <Columns>
+                                <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" />
+                                <asp:BoundField DataField="rapp_numero_pratica" HeaderText="Numero Pratica" />
+                                <asp:BoundField DataField="rapp_nominativo" HeaderText="Nominativo" />
+                                <asp:BoundField DataField="rapp_pattuglia" HeaderText="Pattuglia" />
+                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <%--<asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%#  Eval("id_rapp_scheda")   %>' CssClass="btn btn-success btn-sm" />--%>
+
+                                        <asp:HyperLink ID="lnkScheda" runat="server"
+                                            NavigateUrl='<%# Eval("id_rapp_scheda", "~/View/RicercaScheda.aspx?idscheda={0}") %>'
+                                            Target="_blank">
+                                            <asp:Image ID="imgApri" runat="server"
+                                                ImageUrl="~/FileComuni/lente.png"
+                                                Width="20px" Height="20px"
+                                                AlternateText="Apri" />
+
+                                        </asp:HyperLink>
+
+
+
+
+
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                            <PagerStyle HorizontalAlign="Center" />
+
+                            <PagerTemplate>
+                                <table width="100%">
+                                    <tr>
+                                        <td style="width: 50%; text-align: left;">
+                                            <asp:Label ID="lblPageInfo" runat="server" />
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <div style="padding: 5px;">
+                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                    <span style="margin: 0 10px;">Pagina:
+             
+                                    </span>
+
+                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                </div>
+                            </PagerTemplate>
+
+                        </asp:GridView>
 
                     </div>
-
                 </div>
+                <asp:HiddenField ID="HfIdScheda" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>
     </div>
+
+
 
 </asp:Content>

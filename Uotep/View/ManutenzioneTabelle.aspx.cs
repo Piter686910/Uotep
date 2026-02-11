@@ -11,6 +11,7 @@ namespace Uotep
     {
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
+        string msg = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -60,7 +61,7 @@ namespace Uotep
             DataTable giudice = new DataTable();
             if (!string.IsNullOrEmpty(txtGiudice.Text))
             {
-                giudice = mn.getListGiudice();
+                giudice = mn.getListGiudice(out  msg);
             }
             //if (giudice.Rows.Count > 0)
             //{
