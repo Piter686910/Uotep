@@ -1132,6 +1132,10 @@ namespace Uotep
         {
             GVDecretazione.DataSource = null;
             GVDecretazione.DataBind();
+            txtNotaDecretazione.Text = String.Empty;
+            txtDecretante.Text = String.Empty;
+            txtDecretato.Text = String.Empty;
+            txtDataDecretazione.Text = String.Empty;
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
             // Pulisci();
         }

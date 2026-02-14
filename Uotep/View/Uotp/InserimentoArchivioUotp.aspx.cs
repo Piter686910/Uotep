@@ -21,8 +21,8 @@ namespace Uotep
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-        
-        String status = String.Empty;   
+
+        String status = String.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
             //if (Session["PaginaChiamante"] != null)
@@ -89,7 +89,7 @@ namespace Uotep
 
         }
 
-       
+
         protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -154,9 +154,9 @@ namespace Uotep
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
-            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
-            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
-            txtOggettoTp2.Text =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper();
+            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper();
+            txtOggettoTp2.Text = arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtOggettoTp2.ToolTip = arc.Rows[0].ItemArray[20].ToString().ToUpper();
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
@@ -178,13 +178,13 @@ namespace Uotep
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
         }
-      
+
 
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
-              
+
                 Manager mn = new Manager();
 
                 ArchivioUotp arch = new ArchivioUotp();
@@ -200,7 +200,7 @@ namespace Uotep
                 arch.arch_dataInserimento = txtDataInserimentoTp.Text;
                 arch.arch_oggetto = txtOggettoTp.Text.ToUpper();
                 if (!String.IsNullOrEmpty(txtOggettoTp2.Text))
-                
+
                     arch.arch_oggetto2 = txtOggettoTp2.Text.ToUpper();
                 else
                     arch.arch_oggetto2 = string.Empty;
@@ -211,36 +211,64 @@ namespace Uotep
                 // arch.arch_dataProtProcura = txtDataProtProc.Text;
                 arch.arch_indirizzo = TxtIndirizzoTp.Text;
                 arch.arch_cognome = txtCognomeTp.Text.ToUpper();
-
+                SiteMaster myMaster = this.Master as SiteMaster;
                 Boolean ins = false;
-
+                string msg = string.Empty;
 
                 if (HfStato.Value == "M")
                 {
                     ins = mn.UpdPraticaArchivioUotp(arch);
-                    
+
                 }
                 else
-                    ins = mn.SavePraticaArchivioUotp(arch);
+                    ins = mn.SavePraticaArchivioUotp(arch, out msg);
 
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    if (msg == "DUPLICATO")
+                    {
 
+                        int cartellina = txtCartellinaTp.Text != string.Empty ? Convert.ToInt32(txtCartellinaTp.Text) : 0;
+                        cartellina++;
+                        txtCartellinaTp.Text = cartellina.ToString();
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + cartellina, "danger");
+                        }
 
-//                Boolean ins = mn.SavePraticaArchivioUotp(arch);
+                        return;
+
+                    }
+                }
+
+                //                Boolean ins = mn.SavePraticaArchivioUotp(arch);
                 if (!ins)
                 {
-                    errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
 
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                    }
                 }
                 else
                 {
+                    string testoMsg = string.Empty;
                     if (HfStato.Value == "M")
 
-                        errorMessage.InnerText = "Pratica " + arch.arch_cartellina + " modificata correttamente .";
+                        testoMsg = "Pratica " + arch.arch_cartellina + " modificata correttamente .";
 
                     else
-                        errorMessage.InnerText = "Pratica " + arch.arch_cartellina + " inserita correttamente .";
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + errorMessage.InnerText + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                        testoMsg = "Pratica " + arch.arch_cartellina + " inserita correttamente .";
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", testoMsg, "success");
+                    }
+
+
                     HfStato.Value = string.Empty;
                     Session["POP"] = "si";
                     Session.Remove("ListRicerca");
@@ -281,6 +309,7 @@ namespace Uotep
             txtDataInserimentoTp.Text = DateTime.Now.Date.ToShortDateString();
             //  txtDataProtGen.Text = String.Empty;
             //  txtDataProtProc.Text = String.Empty;
+            TxtIndirizzoTp.Text = string.Empty;
             txtDestinatarioTp.Text = String.Empty;
             txtNotaTp.Text = String.Empty;
             txtOggettoTp.Text = String.Empty;
@@ -299,10 +328,7 @@ namespace Uotep
         {
             // ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
         }
-        protected void apripopuperrorModal_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
-        }
+
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
@@ -317,11 +343,7 @@ namespace Uotep
             HfFiltroIndirizzo.Value = string.Empty;
 
         }
-        protected void chiudipopupErrore_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
 
-        }
         private void CaricaDLL()
         {
             try

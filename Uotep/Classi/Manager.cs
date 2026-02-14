@@ -216,7 +216,7 @@ namespace Uotep.Classi
         public Boolean DelRegistroById(int id)
         {
             string sql = string.Empty;
-          string   Del_Registro = "delete  FROM RegistroUrp where id_registro = " + id;
+            string Del_Registro = "delete  FROM RegistroUrp where id_registro = " + id;
             Boolean resp = false;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -2440,9 +2440,6 @@ namespace Uotep.Classi
         scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "') " +
     "END";
 
-
-
-
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -3812,7 +3809,7 @@ namespace Uotep.Classi
                     break;
             }
 
-            
+
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 string msg = string.Empty;
@@ -5397,95 +5394,127 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="arch"></param>
         /// <returns></returns>
-        public Boolean SavePraticaArchivioUotp(ArchivioUotp arch)
+        public Boolean SavePraticaArchivioUotp(ArchivioUotp arch, out string msg)
         {
             bool resp = true;
+            msg = string.Empty;
             string sql_pratica = String.Empty;
             string sql_cartellina = String.Empty;
             string sql_Verificacartellina = String.Empty;
             string testoSql = string.Empty;
 
-            sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome,codice_edificio)" +
-               " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
-               @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
-               @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "','" +
-               @arch.arch_edificio.Replace("'", "''") + "')";
+            //sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome,codice_edificio)" +
+            //   " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
+            //   @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
+            //   @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "','" +
+            //   @arch.arch_edificio.Replace("'", "''") + "')";
 
-            sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
-            sql_Verificacartellina = "select * from  ProgCartelline where progressivo = " + @arch.arch_cartellina + " and quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            //sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            //sql_Verificacartellina = "select * from  ProgCartelline where progressivo = " + @arch.arch_cartellina + " and quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
 
 
+            string sql =
+    // 1. CONTROLLO PRELIMINARE: IL PROGRESSIVO ESISTE GIÀ?
+    "IF EXISTS (SELECT 1 FROM ProgCartelline WHERE progressivo = " + @arch.arch_cartellina + " AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%') " +
+    "BEGIN " +
+        "SELECT 'DUPLICATO'; " +
+    "END " +
+    "ELSE " +
+    "BEGIN " +
+        // 2. SE NON ESISTE, TENTA L'AGGIORNAMENTO
+        "UPDATE ProgCartelline SET progressivo = " + @arch.arch_cartellina +
+        " WHERE quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%'; " +
+
+        // 3. CONTROLLA SE L'AGGIORNAMENTO HA TROVATO IL QUARTIERE
+        "IF @@ROWCOUNT > 0 " +
+        "BEGIN " +
+            // HA TROVATO LA RIGA: Esegue l'inserimento
+            "INSERT INTO Archiviotp (Num_Prot, ProtGen, data1, data_Arrivo, Protocollo_Procura, del, codice, cartellina, note, oggetto1, destinatario1, quartiere, via, cognome, codice_edificio) " +
+            "VALUES ('" + @arch.arch_Num_Prot + "','" +
+                          @arch.arch_ProtGen + "','" +
+                          @arch.arch_dataInserimento + "','" + // FIX DATA
+                          @arch.arch_dataArrivo  + "','" +      // FIX DATA
+                          @arch.arch_Protocollo_Procura + "','" +
+                          @arch.arch_dataProtProcura  + "','" + // FIX DATA
+                          @arch.arch_codice + "','" +
+                          @arch.arch_cartellina + "','" +
+                          @arch.arch_note.Replace("'", "''") + "','" +
+                          @arch.arch_oggetto.Replace("'", "''") + "','" +
+                          @arch.arch_destinatario.Replace("'", "''") + "','" +
+                          @arch.arch_quartiere.Replace("'", "''") + "','" +
+                          @arch.arch_indirizzo.Replace("'", "''") + "','" +
+                          @arch.arch_cognome.Replace("'", "''") + "','" +
+                          @arch.arch_edificio.Replace("'", "''") + "'); " +
+
+            // Restituisce Successo
+            "SELECT 'OK'; " +
+        "END " +
+        "ELSE " +
+        "BEGIN " +
+            // L'UPDATE HA MODIFICATO 0 RIGHE (Quartiere errato o inesistente)
+            "SELECT 'ERRORE_QUARTIERE'; " +
+        "END " +
+    "END;";
 
             // 1. Il blocco 'using' gestisce già la chiusura e il dispose della connessione.
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-                conn.Open();
-
-                // 2. Anche la transazione va messa in un 'using' per garantirne il dispose.
-                using (SqlTransaction tran = conn.BeginTransaction("trans"))
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    // 3. Crea il comando una sola volta e associalo alla connessione e alla transazione.
-                    using (SqlCommand command = conn.CreateCommand())
+                    try
                     {
-                        command.Transaction = tran;
+                        conn.Open();
 
-                        try
+                        // USIAMO ExecuteScalar INVECE DI ExecuteNonQuery
+                        // Questo ci permette di leggere la stringa 'OK' o 'DUPLICATO' restituita dalla SQL
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null)
                         {
-                            // PRIMA OPERAZIONE: Inserimento in archiviotp
-                            command.CommandText = sql_pratica;
-                            int res = command.ExecuteNonQuery();
+                            string rispostaSql = result.ToString();
 
-                            if (res > 0)
+                            if (rispostaSql == "OK")
                             {
-                                // SECONDA OPERAZIONE: Verifica se la cartellina esiste
-                                command.CommandText = sql_Verificacartellina; 
-
-                                // Riempiamo la DataTable usando il comando e la transazione esistenti.
-                                // Questo evita qualsiasi conflitto sulla connessione.
-                                DataTable tb = new DataTable();
-                                using (SqlDataAdapter adapter = new SqlDataAdapter(command))
-                                {
-                                    adapter.Fill(tb);
-                                }
-
-                                // Se non ci sono righe, la cartellina non esiste, quindi la inseriamo.
-                                if (tb.Rows.Count == 0)
-                                {
-                                    // TERZA OPERAZIONE: Inserimento della cartellina
-                                    command.CommandText = sql_cartellina;
-                                    command.ExecuteNonQuery();
-                                }
-
-                                // Se tutto è andato bene, conferma la transazione
-                                tran.Commit();
+                                // Caso successo: Update e Insert eseguiti
                                 resp = true;
+                                msg = "Inserimento e aggiornamento completati con successo.";
+                            }
+                            else if (rispostaSql == "DUPLICATO")
+                            {
+                                // Caso duplicato: Non ha fatto nulla
+                                resp = false;
+                                msg = "DUPLICATO";
                             }
                             else
                             {
-                                // Se il primo inserimento non ha modificato righe, annulla tutto.
-                                tran.Rollback();
+                                // Caso imprevisto
                                 resp = false;
+                                msg = "Risposta imprevista dal database.";
                             }
                         }
-                        catch (Exception)
-                        {
-                            // Se si verifica QUALSIASI errore, annulla la transazione.
-                            // Il blocco 'using' si occuperà del dispose.
-                            tran.Rollback();
-                            resp = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        resp = false;
+                        msg = "Errore di sistema: " + ex.Message;
 
-                            // Log dell'errore (il tuo codice di logging va bene)
+                        // Gestione Log Errori
+                        try
+                        {
                             if (!File.Exists(LogFile))
                             {
                                 using (StreamWriter sw = File.CreateText(LogFile)) { }
                             }
 
-
+                            using (StreamWriter sw = File.AppendText(LogFile))
+                            {
+                                sw.WriteLine(DateTime.Now + " - InserimentoArchivioUotp: " + ex.Message);
+                            }
                         }
-                    } // 'using' fa il Dispose del SqlCommand
-                } // 'using' fa il Dispose della SqlTransaction
-            } // 'using' fa il Close e il Dispose della SqlConnection
-
+                        catch { /* Ignora errori di log per non bloccare tutto */ }
+                    }
+                }
+            }
             return resp;
         }
         /// <summary>
@@ -6195,7 +6224,7 @@ namespace Uotep.Classi
             return resp;
 
         }
-       
+
 
         public Boolean UpdApriDecretazione(string carico, string anno)
         {

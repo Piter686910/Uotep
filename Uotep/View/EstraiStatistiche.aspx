@@ -810,7 +810,7 @@
                     <div class="form-group">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaScheda" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="GVRicercaScheda_RowDataBound" OnRowCommand="GVRicercaScheda_RowCommand" AllowPaging="true" PageSize="2" OnPageIndexChanging="GVRicercaScheda_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                            OnRowDataBound="GVRicercaScheda_RowDataBound" OnRowCommand="GVRicercaScheda_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaScheda_PageIndexChanging" RowStyle-CssClass="GridViewRow"
                             AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                             <Columns>
                                 <asp:BoundField DataField="id_rapp_scheda" HeaderText="ID" />

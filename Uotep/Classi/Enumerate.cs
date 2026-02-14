@@ -60,7 +60,7 @@ namespace Uotep.Classi
             PwNoSave = 4,
             [Description("Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old")]
             PwResetOk = 5,
-            [Description("modifica non effettuata, controllare il log.")]
+            [Description("inserimento/modifica non effettuata, controllare il log.")]
             ErrorLog = 6,
             [Description("modifica effettuata correttamente.")]
             ModificaCorretta = 7,
@@ -79,7 +79,9 @@ namespace Uotep.Classi
             [Description("Registro Modificato.")]
             UpdRegistroOk = 14,
             [Description("Errore update Registro Modificato.")]
-            UpdRegistroKo = 15
+            UpdRegistroKo = 15,
+            [Description("Pratica già esistente il nuovo numero è")]
+            DupPratica = 16
         }
         public enum Sigla
         {
