@@ -5438,7 +5438,7 @@ namespace Uotep.Classi
                             if (res > 0)
                             {
                                 // SECONDA OPERAZIONE: Verifica se la cartellina esiste
-                                command.CommandText = sql_Verificacartellina; // Cambia solo il testo del comando
+                                command.CommandText = sql_Verificacartellina; 
 
                                 // Riempiamo la DataTable usando il comando e la transazione esistenti.
                                 // Questo evita qualsiasi conflitto sulla connessione.
@@ -6567,7 +6567,7 @@ namespace Uotep.Classi
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
-                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") +
+                    "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
                     "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
