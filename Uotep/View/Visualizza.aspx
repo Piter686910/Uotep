@@ -423,7 +423,7 @@
                 <div class="col-12 text-center">
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
-                     <asp:Button ID="btDuplica" Text="Duplica" runat="server" OnClick="btDuplica_Click" ToolTip="Duplica" CssClass="btn btn-primary mt-3" />
+                     <%--<asp:Button ID="btDuplica" Text="Duplica" runat="server" OnClick="btDuplica_Click" ToolTip="Duplica" CssClass="btn btn-primary mt-3" />--%>
 
                 </div>
             </div>
@@ -526,7 +526,7 @@
                                         <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="Matricola" HeaderText="Matricola" Visible="false" />
+                                <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px"/>
                                 <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
                                 <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>

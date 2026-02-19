@@ -742,7 +742,8 @@ namespace Uotep.Classi
         public DataTable getListPrototocollo(string protocollo, string anno, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola WHERE P.Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
+            //"SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -772,7 +773,8 @@ namespace Uotep.Classi
         public DataTable getListProcedimento(string procedimento, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            //"SELECT * FROM Principale where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -790,8 +792,9 @@ namespace Uotep.Classi
 
             DateTime dtda = System.Convert.ToDateTime(datada);
             DateTime dta = System.Convert.ToDateTime(dataa);
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
-            string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            //string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -807,8 +810,9 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
 
-            string sql = "SELECT * FROM Principale where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            //string sql = "SELECT * FROM Principale where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -837,8 +841,9 @@ namespace Uotep.Classi
         public DataTable getListGiudice(string giudice, out string msg)
         {
             DataTable tb = new DataTable();
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
 
-            string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
+            //   string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -986,8 +991,8 @@ namespace Uotep.Classi
         public DataTable getListProvenienza(string provenienza, out string msg)
         {
             DataTable tb = new DataTable();
-
-            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+//            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1002,7 +1007,12 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            // string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore " +
+              "FROM Principale P " +
+              "LEFT JOIN operatore S ON P.matricola = S.matricola " +
+              "WHERE P.nominativo LIKE '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' " +
+              "ORDER BY P.dataarrivo DESC";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1017,8 +1027,8 @@ namespace Uotep.Classi
         public DataTable getListIndirizzo(string indirizzo, out string msg)
         {
             DataTable tb = new DataTable();
-
-            string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            //string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1035,7 +1045,8 @@ namespace Uotep.Classi
             DateTime dtda = System.Convert.ToDateTime(dataArrivoDa);
             DateTime dta = System.Convert.ToDateTime(dataArrivoA);
 
-            string sql = "SELECT * FROM Principale where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            //string sql = "SELECT * FROM Principale where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1051,11 +1062,21 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string valoreCerca = accertatori.Replace("'", "''").Replace("*", "%");
-            string sql = "SELECT * FROM Principale WHERE (" +
-                        "Accertatore1 LIKE '" + valoreCerca + "%' OR " +
-                        "Accertatore2 LIKE '" + valoreCerca + "%' OR " +
-                        "Accertatore3 LIKE '" + valoreCerca + "%') " +
+            //string sql = "SELECT * FROM Principale WHERE (" +
+            //            "Accertatori LIKE '" + valoreCerca + "%' OR " +
+            //            "Accertatori2 LIKE '" + valoreCerca + "%' OR " +
+            //            "Accertatori3 LIKE '" + valoreCerca + "%') " +
+            //            "ORDER BY dataarrivo DESC";
+
+
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola WHERE (" +
+                        "Accertatori LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatori2 LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatori3 LIKE '" + valoreCerca + "%') " +
                         "ORDER BY dataarrivo DESC";
+
+
+
             // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1087,8 +1108,9 @@ namespace Uotep.Classi
             DataTable tb = new DataTable();
 
 
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where nr_pratica = '" + pratica + "' order by dataarrivo desc";
 
-            string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
+            //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -5433,9 +5455,9 @@ namespace Uotep.Classi
             "VALUES ('" + @arch.arch_Num_Prot + "','" +
                           @arch.arch_ProtGen + "','" +
                           @arch.arch_dataInserimento + "','" + // FIX DATA
-                          @arch.arch_dataArrivo  + "','" +      // FIX DATA
+                          @arch.arch_dataArrivo + "','" +      // FIX DATA
                           @arch.arch_Protocollo_Procura + "','" +
-                          @arch.arch_dataProtProcura  + "','" + // FIX DATA
+                          @arch.arch_dataProtProcura + "','" + // FIX DATA
                           @arch.arch_codice + "','" +
                           @arch.arch_cartellina + "','" +
                           @arch.arch_note.Replace("'", "''") + "','" +
@@ -5530,19 +5552,75 @@ namespace Uotep.Classi
             string testoSql = string.Empty;
             int res1 = 0;
             object a = null;
+
             try
             {
+                if (String.IsNullOrEmpty(p.matricola))
+                {
+                    idN = -2;
+                    return false;
+                }
+                sql_pratica =
+    // 1. CONTROLLO ESISTENZA
+    // Verifica se esiste già una riga con lo stesso Protocollo e lo stesso Anno
+    "IF NOT EXISTS (SELECT 1 FROM principale WHERE nr_protocollo = '" + @p.nrProtocollo + "' AND Anno = '" + @p.anno + "') " +
+    "BEGIN " +
+        // 2. SE NON ESISTE -> ESEGUI INSERT
+        "INSERT INTO principale (" +
+            "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+            "Nominativo, Indirizzo, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, " +
+            "Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, macro_area, UlterioreTipoAtto, bu, codiceEdificio" +
+        ") " +
+        "VALUES ('" +
+            @p.nrProtocollo + "','" +
+            @p.sigla.Replace("'", "''") + "','" +
+            @p.dataArrivo + "','" +
+            @p.provenienza.Replace("'", "''") + "','" +
+            @p.tipologia_atto.Replace("'", "''") + "','" +
+            @p.giudice.Replace("'", "''") + "','" +
+            @p.tipoProvvedimentoAG.Replace("'", "''") + "','" +
+            @p.procedimentoPen + "','" +
+            @p.nominativo.Replace("'", "''") + "','" +
+            @p.indirizzo.Replace("'", "''") + "','" +
+            @p.evasa + "','" +
+            @p.evasaData + "','" +
+            @p.inviata.Replace("'", "''") + "','" +
+            @p.dataInvio + "','" +
+            @p.scaturito.Replace("'", "''") + "','" +
+            @p.accertatori.Replace("'", "''") + "','" +
+            @p.dataCarico + "','" +
+            @p.nr_Pratica + "','" +
+            @p.quartiere.Replace("'", "''") + "','" +
+            @p.note.Replace("'", "''") + "','" +
+            @p.anno + "','" +
+            @p.giorno + "','" +
+            @p.rif_Prot_Gen + "','" +
+            @p.matricola + "','" +
+            @p.data_ins_pratica + "','" +
+            @p.macro_area.Replace("'", "''") + "','" +
+            @p.ulterioreTipoAtto.Replace("'", "''") + "','" +
+            @p.bu.Replace("'", "''") + "','" +
+            @p.codiceEdificio.Replace("'", "''") +
+        "'); " +
 
-                sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
-                    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, " +
-                    "macro_area,UlterioreTipoAtto,bu,codiceEdificio)" +
-                   " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
-                   "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
-                   @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
-                   @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
-                   @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" +
-                   @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +
-                   "'); SELECT SCOPE_IDENTITY();";
+        // RESTITUISCE IL NUOVO ID GENERATO
+        "SELECT SCOPE_IDENTITY(); " +
+    "END " +
+    "ELSE " +
+    "BEGIN " +
+        // 3. SE ESISTE GIÀ -> RESTITUISCE -1
+        "SELECT -1; " +
+    "END";
+                //sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
+                //    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, " +
+                //    "macro_area,UlterioreTipoAtto,bu,codiceEdificio)" +
+                //   " Values('" + @p.nrProtocollo + "','" + @p.sigla.Replace("'", "''") + "','" + @p.dataArrivo + "','" + @p.provenienza.Replace("'", "''") + "','" + @p.tipologia_atto.Replace("'", "''") +
+                //   "','" + @p.giudice.Replace("'", "''") + "','" + @p.tipoProvvedimentoAG.Replace("'", "''") + "','" + @p.procedimentoPen + "','" +
+                //   @p.nominativo.Replace("'", "''") + "','" + @p.indirizzo.Replace("'", "''") + "','" + @p.evasa + "','" + @p.evasaData + "','" + @p.inviata.Replace("'", "''") + "','" +
+                //   @p.dataInvio + "','" + @p.scaturito.Replace("'", "''") + "','" + @p.accertatori.Replace("'", "''") + "','" + @p.dataCarico + "','" + @p.nr_Pratica + "','" +
+                //   @p.quartiere.Replace("'", "''") + "','" + @p.note.Replace("'", "''") + "','" + @p.anno + "','" + @p.giorno + "','" + @p.rif_Prot_Gen + "','" + @p.matricola + "','" + @p.data_ins_pratica + "','" +
+                //   @p.macro_area.Replace("'", "''") + "','" + @p.ulterioreTipoAtto.Replace("'", "''") + "','" + @p.bu.Replace("'", "''") + "','" + @p.codiceEdificio.Replace("'", "''") +
+                //   "'); SELECT SCOPE_IDENTITY();";
                 if (exist)
                 {
                     sql_Statistiche = "update statistiche set deleghe_ricevute = +" + stat.deleghe_ricevute + ", esposti_ricevuti = + " + stat.esposti_ricevuti +
@@ -5577,47 +5655,55 @@ namespace Uotep.Classi
 
                     try
                     {
-                        string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and anno = '" + p.anno + "'";
+                        //string sql = "select * from principale where Nr_Protocollo= '" + p.nrProtocollo + "' and anno = '" + p.anno + "'";
 
-                        SqlDataAdapter da;
-                        DataSet ds;
+                        //SqlDataAdapter da;
+                        //DataSet ds;
 
-                        da = new SqlDataAdapter(sql, conn);
-                        da.SelectCommand.Transaction = tran;
-                        ds = new DataSet();
-                        da.Fill(ds);
-                        if (ds.Tables[0].Rows.Count > 0)
+                        //da = new SqlDataAdapter(sql, conn);
+                        //da.SelectCommand.Transaction = tran;
+                        //ds = new DataSet();
+                        //da.Fill(ds);
+                        //if (ds.Tables[0].Rows.Count > 0)
+                        //{
+
+                        //    return false;
+                        //}
+                        //else
+                        //{
+
+
+                        command.CommandText = sql_pratica;
+                        testoSql = "Principale";
+                        //int res = command.ExecuteNonQuery();
+                        //a = command.ExecuteScalar();
+                        object result = command.ExecuteScalar();
+                        command.CommandText = sql_Statistiche;
+
+                        res1 = command.ExecuteNonQuery();
+                        decimal nuovoId = Convert.ToDecimal(result);
+                        if (nuovoId == -1)
                         {
+                            // IL RECORD ESISTEVA GIÀ
+                            tran.Rollback();
+                            tran.Dispose();
+                            resp = false;
 
-                            return false;
                         }
+                        //   idN = Convert.ToInt32(a);
+                        if (res1 > 0)
+                        {
+                            tran.Commit();
+                            tran.Dispose();
+                            resp = true;
+                        }
+
                         else
                         {
-
-
-                            command.CommandText = sql_pratica;
-                            testoSql = "Principale";
-                            //int res = command.ExecuteNonQuery();
-                            a = command.ExecuteScalar();
-
-                            command.CommandText = sql_Statistiche;
-
-                            res1 = command.ExecuteNonQuery();
-
-                            idN = Convert.ToInt32(a);
-                            if (res1 > 0)
-                            {
-                                tran.Commit();
-                                tran.Dispose();
-                                resp = true;
-                            }
-
-                            else
-                            {
-                                tran.Rollback();
-                                resp = false;
-                            }
+                            tran.Rollback();
+                            resp = false;
                         }
+                        // }
                     }
 
                     catch (Exception ex)
@@ -6584,15 +6670,21 @@ namespace Uotep.Classi
             return resp;
 
         }
-        public Boolean UpdPratica(Principale p, string oldMat, int ID, DateTime olddate)
+        public Boolean UpdPratica(Principale p, string oldMat, int ID, DateTime olddate, string user)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
             string testoSql = string.Empty;
-
+            int res1 = 0;
+            if (String.IsNullOrWhiteSpace(user))
+            {
+                return false;
+            }
             try
             {
-                sql_pratica = "update principale set Sigla= '" + @p.sigla + "', Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") + "',via ='" + @p.via.Replace("'", "''") + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") + "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
+                sql_pratica = "update principale set Sigla= '" + @p.sigla + "', Nominativo = '" + @p.nominativo.Replace("'", "''") + "',Indirizzo = '" + @p.indirizzo.Replace("'", "''") +
+                    "',via ='" + @p.via.Replace("'", "''") + "',Inviata = '" + @p.inviata.Replace("'", "''") + "',DataInvio = '" + @p.dataInvio + "',Scaturito = '" + @p.scaturito.Replace("'", "''") +
+                    "',accertatori =  '" + @p.accertatori.Replace("'", "''") +
                     "',DataCarico = '" + @p.dataCarico + "',Quartiere = '" + @p.quartiere.Replace("'", "''") + "',nr_Pratica = '" + @p.nr_Pratica + "', giudice = '" + @p.giudice.Replace("'", "''") + "', ProcedimentoPen = '" + @p.procedimentoPen.Replace("'", "''") +
                     "',matricola = '" + @p.matricola + "',DataInserimento = '" + @p.data_ins_pratica + "',macro_area = '" + @p.macro_area.Replace("'", "''") + "',Rif_Prot_Gen = '" + @p.rif_Prot_Gen.Replace("'", "''") +
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
@@ -6603,22 +6695,51 @@ namespace Uotep.Classi
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
 
-
+                string sql_storico =
+ "INSERT INTO principalestorico (" +
+ "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+ "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3) " +
+ "SELECT " +
+ "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+ "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3 " +
+ "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
                     SqlCommand command = conn.CreateCommand();
-
+                    SqlTransaction tran;
+                    tran = conn.BeginTransaction("trans");
+                    command.Transaction = tran;
                     try
                     {
+
                         command.CommandText = sql_pratica;
-                        testoSql = "Principale";
+
                         int res = command.ExecuteNonQuery();
+                        if (res > 0)
+                        {
+                            command.Parameters.AddWithValue("@MatricolaOperatore", user); // aggiungo la matricola di chi esegue la modifica 
+                            command.CommandText = sql_storico;
+                            res1 = command.ExecuteNonQuery();
+                            if (res1 > 0)
+                            {
+                                tran.Commit();
+                                tran.Dispose();
+                                resp = true;
+                            }
+                            else
+                            {
+                                tran.Rollback();
+                                resp = false;
+                            }
+
+                        }
                     }
 
                     catch (Exception ex)
                     {
-
                         if (!File.Exists(LogFile))
                         {
                             using (StreamWriter sw = File.CreateText(LogFile)) { }
@@ -6626,18 +6747,51 @@ namespace Uotep.Classi
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("matricola:" + p.matricola + ",data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in update dati ");
+                            sw.WriteLine("matricola:" + p.matricola + ",data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in salva pratica transaction ");
                             sw.Close();
+                            resp = false;
                         }
+                        tran.Rollback();
 
                         resp = false;
-
-
                     }
                     conn.Close();
-                    conn.Dispose();
                     return resp;
                 }
+                //using (SqlConnection conn = new SqlConnection(ConnString))
+                //{
+                //    conn.Open();
+                //    SqlCommand command = conn.CreateCommand();
+
+                //    try
+                //    {
+                //        command.CommandText = sql_pratica;
+                //        testoSql = "Principale";
+                //        int res = command.ExecuteNonQuery();
+                //    }
+
+                //    catch (Exception ex)
+                //    {
+
+                //        if (!File.Exists(LogFile))
+                //        {
+                //            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                //        }
+
+                //        using (StreamWriter sw = File.AppendText(LogFile))
+                //        {
+                //            sw.WriteLine("matricola:" + p.matricola + ",data ins:" + p.data_ins_pratica + ", " + ex.Message + @" - Errore in update dati ");
+                //            sw.Close();
+                //        }
+
+                //        resp = false;
+
+
+                //    }
+                //    conn.Close();
+                //    conn.Dispose();
+                //    return resp;
+                //}
             }
             catch (Exception)
             {

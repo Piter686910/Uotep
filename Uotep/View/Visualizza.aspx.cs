@@ -27,12 +27,12 @@ namespace Uotep
                 Vuser = Session["user"].ToString();
                 Ruolo = Session["ruolo"].ToString();
                 btOKDup.Visible = true;
-                if (Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper())
-                {
-                    btDuplica.Visible = false;
-                }
-                else
-                    btDuplica.Visible = true;
+                //if (Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper())
+                //{
+                //    btDuplica.Visible = false;
+                //}
+                //else
+                //    btDuplica.Visible = true;
             }
             else
             {

@@ -42,15 +42,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlSigla;
 
         /// <summary>
-        /// Controllo suggestionsListTipoAtto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsListTipoAtto;
-
-        /// <summary>
         /// Controllo HfTipoAtto.
         /// </summary>
         /// <remarks>

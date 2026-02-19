@@ -175,12 +175,29 @@ namespace Uotep
             //        //    }
             //    }
             //}
+           
             return resp;
         }
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (String.IsNullOrWhiteSpace(Vuser))
+                {
+                    
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    }
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
+                    Response.Redirect(url, false);
+                    return;
+
+                }
                 Boolean verifica = Verifica();
                 if (!verifica)
                 {
@@ -189,24 +206,23 @@ namespace Uotep
                 }
                 else
                 {
-                    if (Session["user"] != null)
-                    {
-                        if (String.IsNullOrEmpty(Session["user"].ToString()))
-                        {
-                            //richiama popup dalla site master
-                            SiteMaster myMaster = this.Master as SiteMaster;
+                    //if (Session["user"] != null)
+                    //{
+                    //    if (String.IsNullOrEmpty(Session["user"].ToString()))
+                    //    {
+                    //        //richiama popup dalla site master
 
-                            if (myMaster != null)
-                            {
-                                // 2. Chiamo il metodo pubblico
-                                myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
-                            }
-                            //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                    //        if (myMaster != null)
+                    //        {
+                    //            // 2. Chiamo il metodo pubblico
+                    //            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    //        }
+                    //        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
-                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
-                            Response.Redirect(url, false);
-                        }
-                    }
+                    //        string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
+                    //        Response.Redirect(url, false);
+                    //    }
+                    //}
                     // int protocollo = 0;
                     //Boolean obbligo = ControlloCampiObbligatori();
                     //if (obbligo)
@@ -433,6 +449,19 @@ namespace Uotep
                     stat.anno = DateTime.Now.Year;
                     Int32 idN = 0;
                     Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
+
+                    if (idN == -2)
+                    {
+
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                        }
+                        string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true"); //segnalo alla pagina di default che la user è vuota
+                        Response.Redirect(url, false);
+                        return;
+                    }
                     Hid.Value = System.Convert.ToString(idN);
                     if (!ins)
                     {
@@ -440,12 +469,11 @@ namespace Uotep
                         Routine prot = new Routine();
                         txtProt.Text = prot.GetProtocollo();
                         //richiama popup dalla site master
-                        SiteMaster myMaster = this.Master as SiteMaster;
 
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text , "danger");
+                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text , "danger");
                         }
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }

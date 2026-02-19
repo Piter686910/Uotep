@@ -13,9 +13,9 @@
             $('#ModalDataEvasa').modal('hide');
 
         }
-        function ShowErrorMessage(message) {
-            $('#errorModal').modal('show');
-        }
+        //function ShowErrorMessage(message) {
+        //    $('#errorModal').modal('show');
+        //}
         //function openPopup() {
         //    document.getElementById("popupModal").style.display = "block";
         //    document.getElementById("overlay").style.display = "block";
@@ -776,7 +776,7 @@
                     <div class="col-md-3" style="margin-left: -25px">
                         <div class="form-group mb-3">
                             <label for="txtDataEsito">Data Esito</label>
-                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" />
+                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" DataFormatString="{0:dd/MM/yyyy}"/>
                         </div>
                     </div>
 
@@ -802,8 +802,8 @@
                     <div class="col-md-1" style="margin-left: -40px">
                         <div class="col-md-3">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="btAggiungi_Click" ToolTip="Aggiungi" />
-                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" />
+                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="btAggiungi_Click" ToolTip="Aggiungi" BackColor="White" />
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" BackColor="White"/>
                             </div>
                         </div>
                     </div>

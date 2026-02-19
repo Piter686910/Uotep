@@ -339,10 +339,10 @@ namespace Uotep
                 p.procedimentoPen = txtProdPenNr.Text;
                 p.matricola = Hmatricola.Value;
                 p.data_ins_pratica = DateTime.Now.ToLocalTime();
-                DateTime o = System.Convert.ToDateTime(HolDate.Value);
+                DateTime oldDate = System.Convert.ToDateTime(HolDate.Value);
 
 
-                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Vuser);
+                Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, oldDate, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Vuser);
 
                 //Boolean ins = mn.SavePraticaTrans(p, Holdmat.Value, o, HoldProtocollo.Value, System.Convert.ToInt32(HidPratica.Value), Session["user"].ToString());
                 if (!ins)

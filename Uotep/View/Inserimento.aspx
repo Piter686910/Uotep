@@ -38,6 +38,129 @@
         function hideModal() {
             $('#ModalAvvertenze').modal('hide');
         }
+
+        ///////////////
+        var allOptions = [];
+
+        // Funzione per caricare i dati (chiamata solo quando serve)
+        function caricaOpzioni() {
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+        
+        if (!ddl) {
+            console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
+            return;
+        }
+
+        var options = ddl.options;
+        allOptions = []; // Resetta
+
+        for (var i = 0; i < options.length; i++) {
+            // Carica tutto tranne i valori vuoti
+            if (options[i].value !== "" && options[i].value !== "0") {
+                allOptions.push({ text: options[i].text, value: options[i].value });
+            }
+        }
+        console.log("Opzioni caricate in memoria: " + allOptions.length);
+    }
+
+    // Carica i dati appena la pagina è pronta
+    document.addEventListener("DOMContentLoaded", caricaOpzioni);
+
+    // Funzione Filtro
+    function filterAndHighlight(e) {
+        var input = document.getElementById("txtSearch");
+        var listDiv = document.getElementById("suggestionsListTipoAtto");
+        var filter = input.value.toUpperCase();
+
+        // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+        if (allOptions.length === 0) {
+            caricaOpzioni();
+        }
+
+        // Tasto INVIO (13)
+        if (e.keyCode === 13) {
+            var activeItem = listDiv.querySelector(".active");
+            if (activeItem) {
+                // Simula il click
+                activeItem.click();
+                e.preventDefault(); // Ferma il postback del form se presente
+            }
+            return;
+        }
+
+        listDiv.innerHTML = "";
+
+        // Se input vuoto, nascondi
+        if (filter.length === 0) {
+            listDiv.style.display = "none";
+            return;
+        }
+
+        var foundCount = 0;
+
+        for (var i = 0; i < allOptions.length; i++) {
+            var item = allOptions[i];
+
+            // LOGICA DI FILTRO (Contiene il testo?)
+            if (item.text.toUpperCase().indexOf(filter) > -1) {
+                
+                var div = document.createElement("div");
+                div.className = "suggestion-item";
+                div.innerText = item.text;
+                
+                // Usiamo attributi data- per passare il valore
+                div.setAttribute("data-val", item.value);
+
+                // Evidenzia il primo risultato
+                if (foundCount === 0) {
+                    div.classList.add("active");
+                }
+
+                // Click Mouse
+                div.onclick = function () {
+                    seleziona(this.innerText, this.getAttribute("data-val"));
+                };
+
+                listDiv.appendChild(div);
+                foundCount++;
+            }
+        }
+
+        console.log("Risultati trovati: " + foundCount);
+
+        if (foundCount > 0) {
+            listDiv.style.display = "block";
+        } else {
+            listDiv.style.display = "none";
+        }
+    }
+
+    function seleziona(text, value) {
+        console.log("Selezionato: " + text + " (ID: " + value + ")");
+        
+        var input = document.getElementById("txtSearch");
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+        var listDiv = document.getElementById("suggestionsListTipoAtto");
+
+            input.value = text;
+            if (ddl) ddl.value = value;
+            listDiv.style.display = "none";
+        }
+
+        // Chiudi se clicchi fuori
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== 'txtSearch') {
+                document.getElementById("suggestionsListTipoAtto").style.display = "none";
+            }
+        });
+
+
+        //////////////
+
+
+
+
+
         //giudice
         function filterDropdownGiudice() {
             var input, filter, dropdown, options, i, txtValue;
@@ -198,7 +321,7 @@
             }
         }
         //tipo atto
-        function filterDropdownTipoAtto() {
+      <%--  function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("DdlTipoAtto");
             filter = input.value.toUpperCase();
@@ -236,7 +359,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
         //Inviata
         <%--function filterDropdownInviata() {
             var input, filter, dropdown, options, i, txtValue;
@@ -386,13 +509,29 @@
     </script>
     <%-- il seguente style serve per i bordi azzurri --%>
     <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            /*margin-left: -30px;*/
-        }
+      #suggestionsList {
+    display: none;             /* Nascosto all'inizio */
+    position: absolute;        /* Galleggia sopra gli altri */
+    background-color: white;   /* FONDAMENTALE: Sfondo bianco */
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    z-index: 9999;             /* Sopra tutto */
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Ombra per vederlo meglio */
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    color: black;              /* Testo nero */
+}
+
+.suggestion-item:hover, .suggestion-item.active {
+    background-color: #007bff; /* Blu quando selezionato */
+    color: white;
+}
     </style>
 
     <div class="jumbotron">
@@ -420,14 +559,27 @@
                             </asp:DropDownList>
 
                         </div>
-                        <div class="form-group mb-3" style="margin-left: -25px">
+                        <div class="form-group mb-3 " style="margin-left: -25px">
                             <label for="DdlTipoAtto">Tipologia Atto</label>
                             <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
-                            <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                            <%--<div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                
                             </div>
-                            <%--<asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />--%>
-                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />--%>
+                            <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                            <input type="text" id="txtSearch" class="form-control"
+                                placeholder="Cerca..."
+                                onkeyup="filterAndHighlight(event)" 
+                                
+                                autocomplete="off" />
+
+                            <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" Style="display: none;"></asp:DropDownList>
+                            <div id="suggestionsListTipoAtto"></div>
+                            <!-- 3. LISTA VISIVA (Finta Dropdown) -->
+                            <div id="dropdownList" class="dropdown-content">
+                                <!-- Verrà riempita da Javascript -->
+                            </div>
                             <label for="txtTipoAtto">Ulteriore Atto</label>
                             <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" MaxLength="100" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         </div>
@@ -455,7 +607,7 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
-                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus=""/>
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" />
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
 
                             </asp:RequiredFieldValidator>
@@ -524,7 +676,7 @@
                                 <asp:ListItem Text="MA2"> </asp:ListItem>
                                 <asp:ListItem Text="MA3"> </asp:ListItem>
                                 <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
-                                 <asp:ListItem Text="PG"> </asp:ListItem>
+                                <asp:ListItem Text="PG"> </asp:ListItem>
                                 <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
                                 <asp:ListItem Text="URP"> </asp:ListItem>
                             </asp:DropDownList>
@@ -649,7 +801,7 @@
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
                         <label for="txtIndirizzoQuartiere">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" ClientIDMode="Static" placeholder="Campo obbligatorio" autofocus=""/>
+                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" ClientIDMode="Static" placeholder="Campo obbligatorio" autofocus="" />
 
                     </div>
 
@@ -709,7 +861,7 @@
         </div>
 
     </div>
-   
+
     <%-- popup avvertenze --%>
     <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"
@@ -894,7 +1046,7 @@
             // mostrare/nascondere
             if (ddl.value === 'AG') {
                 divag.style.display = 'block';
-                
+
             } else {
                 divag.style.display = 'none';
             }

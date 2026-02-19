@@ -169,8 +169,8 @@
                         </div>
                         <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text="👤➕ >>" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" ValidationGroup="bottoni" />
-                                <asp:Button ID="btElimina" runat="server" Text="👤➖ <<" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" ValidationGroup="bottoni" />
+                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" ValidationGroup="bottoni" BackColor="White"/>
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" ValidationGroup="bottoni" BackColor="White"/>
                             </div>
                         </div>
                         <!-- Colonna 4 -->

@@ -136,6 +136,20 @@ namespace Uotep
             //}
             txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
             txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
+            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+            {
+                //converte la data 01-01-1900 in SPACE
+                DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0]["EvasaData"].ToString()); // Recupera la data dal DataTable
+                if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                {
+                    TxtDataEsito.Text = string.Empty; // Metti una stringa vuota
+                }
+                else
+                {
+                    TxtDataEsito.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                }
+            }
+           
             //if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
             //{
             //    //txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
@@ -324,13 +338,26 @@ namespace Uotep
             {
                 resp = false;
             }
-
+            
             return resp;
         }
         protected void Salva_Click(object sender, EventArgs e)
         {
             try
             {
+                if (String.IsNullOrWhiteSpace(Vuser))
+                {
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    }
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true"); //segnalo alla pagina di default che la user è vuota
+                    Response.Redirect(url, false);
+                    return;
+                }
                 Boolean resp = Convalida();
                 Manager mn = new Manager();
                 if (!resp)
@@ -340,16 +367,16 @@ namespace Uotep
                 }
                 else
                 {
-                    if (Session["user"] != null)
-                    {
-                        if (String.IsNullOrEmpty(Session["user"].ToString()))
-                        {
-                            ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                    //if (Session["user"] != null)
+                    //{
+                    //    if (String.IsNullOrEmpty(Session["user"].ToString()))
+                    //    {
+                    //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
-                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
-                            Response.Redirect(url, false);
-                        }
-                    }
+                    //        string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                    //        Response.Redirect(url, false);
+                    //    }
+                    //}
                     Principale p = new Principale();
 
                     p.sigla = DdlSigla.SelectedItem.Text;
@@ -518,11 +545,16 @@ namespace Uotep
                     }
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
-                    //
-                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat,Vuser);
                     if (!ins)
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ErrorLog.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                       // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ErrorLog.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("INFORMAZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                        }
                     }
                     else
                     {
@@ -531,7 +563,7 @@ namespace Uotep
                         {
 
                             HfButtonProv.Value = string.Empty;
-                            SiteMaster myMaster = this.Master as SiteMaster;
+                            
 
                             if (myMaster != null)
                             {
@@ -1059,8 +1091,13 @@ namespace Uotep
                 {
                     if (Hfdecretazione.Value == "True")
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "la Modifica non può essere effettuata pratica chiusa." + "'); $('#errorModal').modal('show');", true);
-
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "la Modifica non può essere effettuata pratica chiusa." + "'); $('#errorModal').modal('show');", true);
+                        SiteMaster myMaster = this.Master as SiteMaster;
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaChiusa.GetDescription(), "warning");
+                        }
 
                     }
                     else
@@ -1160,6 +1197,7 @@ namespace Uotep
         protected void btNProtocollo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProtocollo.Visible = true;
             DivRicerca.Visible = true;
 
@@ -1168,6 +1206,7 @@ namespace Uotep
         protected void btProcPenale_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProcPenale.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1175,6 +1214,7 @@ namespace Uotep
         protected void btProtGen_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProtGen.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1182,6 +1222,7 @@ namespace Uotep
         protected void btEvaseAg_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivEvasaAg.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1189,6 +1230,7 @@ namespace Uotep
         protected void btNpratica_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivPratica.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1196,6 +1238,7 @@ namespace Uotep
         protected void btGiudice_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivGiudice.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1203,6 +1246,7 @@ namespace Uotep
         protected void btProvenienza_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivRicerca.Visible = true;
             DivProvenienza.Visible = true;
         }
@@ -1210,6 +1254,7 @@ namespace Uotep
         protected void btNominativo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivNominativo.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1217,6 +1262,7 @@ namespace Uotep
         protected void btDataArrivo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivDataArrivo.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1224,6 +1270,7 @@ namespace Uotep
         protected void btAccertatori_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivAccertatori.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1231,6 +1278,7 @@ namespace Uotep
         protected void btIndirizzo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
         }
@@ -1293,15 +1341,26 @@ namespace Uotep
                 decr.decretato = txtDecretato.Text.ToUpper();
                 decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
-
+                SiteMaster myMaster = this.Master as SiteMaster;
                 Boolean ins = mn.InsDecretazione(decr);
                 if (!ins)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                   //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                  
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                    }
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
                     Pulisci();
                     CaricaDLL();
                     Session.Remove("ListRicerca");
@@ -1559,15 +1618,25 @@ namespace Uotep
 
                 Manager mn = new Manager();
                 Boolean upd = mn.UpdDecretazioneChiusura(decr);
+                SiteMaster myMaster = this.Master as SiteMaster;
                 if (!upd)
                 {
-
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseKO.GetDescription(), "danger");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
                 else
                 {
                     Pulisci();
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "danger");
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
                 }
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);

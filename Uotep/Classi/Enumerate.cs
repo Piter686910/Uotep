@@ -49,13 +49,10 @@ namespace Uotep.Classi
         {
             [Description("Sessione Scaduta, effettuare Login.")]
             SScaduta = 1,
-
             [Description("Nome utente o password errati.")]
             UserWrong = 2,
-
             [Description("La matricola ineserita è inesistente.")]
             NoUser = 3,
-
             [Description("password non salvata.")]
             PwNoSave = 4,
             [Description("Password resettata. La nuova password temporanea è la tua matricola + old. Esempio: 9999old")]
@@ -81,7 +78,9 @@ namespace Uotep.Classi
             [Description("Errore update Registro Modificato.")]
             UpdRegistroKo = 15,
             [Description("Pratica già esistente il nuovo numero è")]
-            DupPratica = 16
+            DupPratica = 16,
+            [Description("la Modifica non può essere effettuata pratica chiusa.")]
+            PraticaChiusa = 17
         }
         public enum Sigla
         {
