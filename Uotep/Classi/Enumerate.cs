@@ -80,7 +80,9 @@ namespace Uotep.Classi
             [Description("Pratica già esistente il nuovo numero è")]
             DupPratica = 16,
             [Description("la Modifica non può essere effettuata pratica chiusa.")]
-            PraticaChiusa = 17
+            PraticaChiusa = 17,
+            [Description("Selezinare un valore valido.")]
+            SelKo = 18
         }
         public enum Sigla
         {

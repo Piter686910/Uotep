@@ -25,9 +25,24 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtMM">Mese</label>
-                                <asp:TextBox ID="txtMM" runat="server" CssClass="form-control" Width="110px" autofocus=""/>
-                                <asp:RequiredFieldValidator ID="rqMM" runat="server" ControlToValidate="txtMM" ErrorMessage="inserire il mese" ValidationGroup="bt" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
+                               <%-- <asp:TextBox ID="txtMM" runat="server" CssClass="form-control" Width="110px" autofocus="" />--%>
+                                <asp:DropDownList ID="ddlMese" runat="server" CssClass="form-control">
+                                    <asp:ListItem Value="0">Seleziona mese</asp:ListItem>
+                                    <asp:ListItem Value="1">Gennaio</asp:ListItem>
+                                    <asp:ListItem Value="2">Febbraio</asp:ListItem>
+                                    <asp:ListItem Value="3">Marzo</asp:ListItem>
+                                    <asp:ListItem Value="4">Aprile</asp:ListItem>
+                                    <asp:ListItem Value="5">Maggio</asp:ListItem>
+                                    <asp:ListItem Value="6">Giugno</asp:ListItem>
+                                    <asp:ListItem Value="7">Luglio</asp:ListItem>
+                                    <asp:ListItem Value="8">Agosto</asp:ListItem>
+                                    <asp:ListItem Value="9">Settembre</asp:ListItem>
+                                    <asp:ListItem Value="10">Ottobre</asp:ListItem>
+                                    <asp:ListItem Value="11">Novembre</asp:ListItem>
+                                    <asp:ListItem Value="12">Dicembre</asp:ListItem>
+                                </asp:DropDownList>
+                               <%-- <asp:RequiredFieldValidator ID="rqMM" runat="server" ControlToValidate="txtMM" ErrorMessage="inserire il mese" ValidationGroup="bt" ForeColor="Red">
+                                </asp:RequiredFieldValidator>--%>
 
                             </div>
                         </div>
@@ -75,8 +90,6 @@
             margin: 5px 0; /* Spazio esterno */
             margin-left: -10px;
         }
-
-       
     </style>
 
 

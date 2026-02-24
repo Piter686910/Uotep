@@ -15,6 +15,7 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -542,7 +543,7 @@ namespace Uotep.Classi
         public DataTable getListAccertatori(out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' order by nominativo ";
+            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "' order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -992,7 +993,7 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola  where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
-//            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            //            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -5424,119 +5425,194 @@ namespace Uotep.Classi
             string sql_cartellina = String.Empty;
             string sql_Verificacartellina = String.Empty;
             string testoSql = string.Empty;
+            int NCartella = 0;
+            int @max = 0;
+            sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome,codice_edificio)" +
+               " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
+               @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
+               @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "','" +
+               @arch.arch_edificio.Replace("'", "''") + "')";
 
-            //sql_pratica = "insert into Archiviotp (Num_Prot,ProtGen,data1,data_Arrivo,Protocollo_Procura,del,codice,cartellina,note,oggetto1,destinatario1,quartiere,via,cognome,codice_edificio)" +
-            //   " Values('" + @arch.arch_Num_Prot + "','" + @arch.arch_ProtGen + "','" + @arch.arch_dataInserimento + "','" + @arch.arch_dataArrivo + "','" + @arch.arch_Protocollo_Procura + "','" +
-            //   @arch.arch_dataProtProcura + "','" + @arch.arch_codice + "','" + @arch.arch_cartellina + "','" + @arch.arch_note.Replace("'", "''") + "','" + @arch.arch_oggetto.Replace("'", "''") + "','" +
-            //   @arch.arch_destinatario.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" + @arch.arch_cognome.Replace("'", "''") + "','" +
-            //   @arch.arch_edificio.Replace("'", "''") + "')";
-
-            //sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
-            //sql_Verificacartellina = "select * from  ProgCartelline where progressivo = " + @arch.arch_cartellina + " and quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
-
-
-            string sql =
-    // 1. CONTROLLO PRELIMINARE: IL PROGRESSIVO ESISTE GIÀ?
-    "IF EXISTS (SELECT 1 FROM ProgCartelline WHERE progressivo = " + @arch.arch_cartellina + " AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%') " +
-    "BEGIN " +
-        "SELECT 'DUPLICATO'; " +
-    "END " +
-    "ELSE " +
-    "BEGIN " +
-        // 2. SE NON ESISTE, TENTA L'AGGIORNAMENTO
-        "UPDATE ProgCartelline SET progressivo = " + @arch.arch_cartellina +
-        " WHERE quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%'; " +
-
-        // 3. CONTROLLA SE L'AGGIORNAMENTO HA TROVATO IL QUARTIERE
-        "IF @@ROWCOUNT > 0 " +
-        "BEGIN " +
-            // HA TROVATO LA RIGA: Esegue l'inserimento
-            "INSERT INTO Archiviotp (Num_Prot, ProtGen, data1, data_Arrivo, Protocollo_Procura, del, codice, cartellina, note, oggetto1, destinatario1, quartiere, via, cognome, codice_edificio) " +
-            "VALUES ('" + @arch.arch_Num_Prot + "','" +
-                          @arch.arch_ProtGen + "','" +
-                          @arch.arch_dataInserimento + "','" + // FIX DATA
-                          @arch.arch_dataArrivo + "','" +      // FIX DATA
-                          @arch.arch_Protocollo_Procura + "','" +
-                          @arch.arch_dataProtProcura + "','" + // FIX DATA
-                          @arch.arch_codice + "','" +
-                          @arch.arch_cartellina + "','" +
-                          @arch.arch_note.Replace("'", "''") + "','" +
-                          @arch.arch_oggetto.Replace("'", "''") + "','" +
-                          @arch.arch_destinatario.Replace("'", "''") + "','" +
-                          @arch.arch_quartiere.Replace("'", "''") + "','" +
-                          @arch.arch_indirizzo.Replace("'", "''") + "','" +
-                          @arch.arch_cognome.Replace("'", "''") + "','" +
-                          @arch.arch_edificio.Replace("'", "''") + "'); " +
-
-            // Restituisce Successo
-            "SELECT 'OK'; " +
-        "END " +
-        "ELSE " +
-        "BEGIN " +
-            // L'UPDATE HA MODIFICATO 0 RIGHE (Quartiere errato o inesistente)
-            "SELECT 'ERRORE_QUARTIERE'; " +
-        "END " +
-    "END;";
-
-            // 1. Il blocco 'using' gestisce già la chiusura e il dispose della connessione.
+            sql_cartellina = "update ProgCartelline set progressivo = " + @arch.arch_cartellina + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            sql_Verificacartellina = "select progressivo from  ProgCartelline where progressivo = " + @arch.arch_cartellina + " and quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            // sql_Verificacartellina = "select Max(progressivo) as n from  ProgCartelline where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            int res = 0;
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                conn.Open();
+
+                // 2. Inizio la transazione per le modifiche e insert
+                using (SqlTransaction tran = conn.BeginTransaction())
                 {
-                    try
+                    using (SqlCommand command = conn.CreateCommand())
                     {
-                        conn.Open();
+                        command.Transaction = tran;
 
-                        // USIAMO ExecuteScalar INVECE DI ExecuteNonQuery
-                        // Questo ci permette di leggere la stringa 'OK' o 'DUPLICATO' restituita dalla SQL
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null)
+                        try
                         {
-                            string rispostaSql = result.ToString();
-
-                            if (rispostaSql == "OK")
+                            command.CommandText = sql_Verificacartellina;
+                            object result = command.ExecuteScalar();
+                            if (Convert.ToInt32(result) == Convert.ToInt32( arch.arch_cartellina))
                             {
-                                // Caso successo: Update e Insert eseguiti
-                                resp = true;
-                                msg = "Inserimento e aggiornamento completati con successo.";
-                            }
-                            else if (rispostaSql == "DUPLICATO")
-                            {
-                                // Caso duplicato: Non ha fatto nulla
-                                resp = false;
+                                res = -1; // La cartellina esiste già, non procedere con l'update e l'insert
                                 msg = "DUPLICATO";
                             }
                             else
                             {
-                                // Caso imprevisto
+                                res = 1;
+                            }
+                            // res = command.ExecuteNonQuery();
+                            if (res > 0)
+                            {
+                                command.CommandText = sql_pratica;
+
+
+                                res = command.ExecuteNonQuery();
+                                if (res > 0)
+                                {
+                                    command.CommandText = sql_cartellina;
+                                    res = command.ExecuteNonQuery();
+                                    if (res > 0)
+                                    {
+
+                                        tran.Commit();
+                                        resp = true;
+                                    }
+                                    else
+                                    {
+                                        tran.Rollback();
+                                        resp = false;
+                                    }
+                                }
+                                else
+                                {
+                                    // Se la cartellina non esiste, esegui il rollback e imposta la risposta a false
+                                    tran.Rollback();
+                                    resp = false;
+                                }
+
+
+
+                            }
+
+                            else
+                            {
+                                // Se l'UPDATE fallisce, esegui il rollback e imposta la risposta a false
+                                tran.Rollback();
                                 resp = false;
-                                msg = "Risposta imprevista dal database.";
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        resp = false;
-                        msg = "Errore di sistema: " + ex.Message;
-
-                        // Gestione Log Errori
-                        try
+                        catch (Exception)
                         {
-                            if (!File.Exists(LogFile))
-                            {
-                                using (StreamWriter sw = File.CreateText(LogFile)) { }
-                            }
-
-                            using (StreamWriter sw = File.AppendText(LogFile))
-                            {
-                                sw.WriteLine(DateTime.Now + " - InserimentoArchivioUotp: " + ex.Message);
-                            }
+                            tran.Rollback();
+                            //ScriviLog(ex.Message); // Gestione log
+                            resp = false;
                         }
-                        catch { /* Ignora errori di log per non bloccare tutto */ }
                     }
                 }
             }
+            //        string sql =
+            //// 1. CONTROLLO PRELIMINARE: IL PROGRESSIVO ESISTE GIÀ?
+            //"IF EXISTS (SELECT 1 FROM ProgCartelline WHERE progressivo = " + @arch.arch_cartellina + " AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%') " +
+            //"BEGIN " +
+            //    "SELECT 'DUPLICATO'; " +
+            //"END " +
+            //"ELSE " +
+            //"BEGIN " +
+            //    // 2. SE NON ESISTE, TENTA L'AGGIORNAMENTO
+            //    "UPDATE ProgCartelline SET progressivo = " + @arch.arch_cartellina +
+            //    " WHERE quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%'; " +
+
+            //    // 3. CONTROLLA SE L'AGGIORNAMENTO HA TROVATO IL QUARTIERE
+            //    "IF @@ROWCOUNT > 0 " +
+            //    "BEGIN " +
+            //        // HA TROVATO LA RIGA: Esegue l'inserimento
+            //        "INSERT INTO Archiviotp (Num_Prot, ProtGen, data1, data_Arrivo, Protocollo_Procura, del, codice, cartellina, note, oggetto1, destinatario1, quartiere, via, cognome, codice_edificio) " +
+            //        "VALUES ('" + @arch.arch_Num_Prot + "','" +
+            //                      @arch.arch_ProtGen + "','" +
+            //                      @arch.arch_dataInserimento + "','" + // FIX DATA
+            //                      @arch.arch_dataArrivo + "','" +      // FIX DATA
+            //                      @arch.arch_Protocollo_Procura + "','" +
+            //                      @arch.arch_dataProtProcura + "','" + // FIX DATA
+            //                      @arch.arch_codice + "','" +
+            //                      @arch.arch_cartellina + "','" +
+            //                      @arch.arch_note.Replace("'", "''") + "','" +
+            //                      @arch.arch_oggetto.Replace("'", "''") + "','" +
+            //                      @arch.arch_destinatario.Replace("'", "''") + "','" +
+            //                      @arch.arch_quartiere.Replace("'", "''") + "','" +
+            //                      @arch.arch_indirizzo.Replace("'", "''") + "','" +
+            //                      @arch.arch_cognome.Replace("'", "''") + "','" +
+            //                      @arch.arch_edificio.Replace("'", "''") + "'); " +
+
+            //        // Restituisce Successo
+            //        "SELECT 'OK'; " +
+            //    "END " +
+            //    "ELSE " +
+            //    "BEGIN " +
+            //        // L'UPDATE HA MODIFICATO 0 RIGHE (Quartiere errato o inesistente)
+            //        "SELECT 'ERRORE_QUARTIERE'; " +
+            //    "END " +
+            //"END;";
+
+            // 1. Il blocco 'using' gestisce già la chiusura e il dispose della connessione.
+            //using (SqlConnection conn = new SqlConnection(ConnStringTp))
+            //{
+            //    using (SqlCommand cmd = new SqlCommand(sql, conn))
+            //    {
+            //        try
+            //        {
+            //            conn.Open();
+
+            //            // USIAMO ExecuteScalar INVECE DI ExecuteNonQuery
+            //            // Questo ci permette di leggere la stringa 'OK' o 'DUPLICATO' restituita dalla SQL
+            //            object result = cmd.ExecuteScalar();
+
+            //            if (result != null)
+            //            {
+            //                string rispostaSql = result.ToString();
+
+            //                if (rispostaSql == "OK")
+            //                {
+            //                    // Caso successo: Update e Insert eseguiti
+            //                    resp = true;
+            //                    msg = "Inserimento e aggiornamento completati con successo.";
+            //                }
+            //                else if (rispostaSql == "DUPLICATO")
+            //                {
+            //                    // Caso duplicato: Non ha fatto nulla
+            //                    resp = false;
+            //                    msg = "DUPLICATO";
+            //                }
+            //                else
+            //                {
+            //                    // Caso imprevisto
+            //                    resp = false;
+            //                    msg = "Risposta imprevista dal database.";
+            //                }
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            resp = false;
+            //            msg = "Errore di sistema: " + ex.Message;
+
+            //            // Gestione Log Errori
+            //            try
+            //            {
+            //                if (!File.Exists(LogFile))
+            //                {
+            //                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+            //                }
+
+            //                using (StreamWriter sw = File.AppendText(LogFile))
+            //                {
+            //                    sw.WriteLine(DateTime.Now + " - InserimentoArchivioUotp: " + ex.Message);
+            //                }
+            //            }
+            //            catch { /* Ignora errori di log per non bloccare tutto */ }
+            //        }
+            //    }
+            //}
             return resp;
         }
         /// <summary>
@@ -5695,6 +5771,7 @@ namespace Uotep.Classi
                         {
                             tran.Commit();
                             tran.Dispose();
+                            idN = Convert.ToInt32(result); 
                             resp = true;
                         }
 
@@ -5725,6 +5802,7 @@ namespace Uotep.Classi
                     }
                     conn.Close();
                     conn.Dispose();
+                   
                     return resp;
                 }
 

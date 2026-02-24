@@ -3,6 +3,7 @@ body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
+
 .larghezzaText70 {
     width: 70px !important; /* Usa !important per sicurezza */
     padding-left: 2px !important; /* Riduci lo spazio a sinistra */
@@ -30,6 +31,7 @@ textarea {
     margin: 5px 0; /* Spazio esterno */
     margin-left: -10px;
 }
+
 .larghezzaText {
     width: 110px;
 }
@@ -38,9 +40,11 @@ textarea {
     background-color: #E6F3FF; /* Un azzurro molto chiaro */
     /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
 }
+
 .GridViewRow {
     background-color: white;
 }
+
 .uppercase-text {
     text-transform: uppercase;
 }
@@ -68,6 +72,7 @@ textarea {
     color: #31708f;
     border-radius: 5px 5px 0 0;
 }
+
 .table-layout-fixed {
     table-layout: fixed;
     width: 100%; /* Assicura che la tabella occupi il 100% del suo contenitore */
@@ -80,6 +85,7 @@ textarea {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
 .gridview-autofit .colonna-stretta {
     white-space: nowrap;
     width: 1%;
@@ -93,6 +99,30 @@ textarea {
     /* Se il testo è più lungo, andrà a capo */
     /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
 }
+
+#suggestionsList {
+    display: none; /* Nascosto all'inizio */
+    position: absolute; /* Galleggia sopra gli altri */
+    background-color: white; /* FONDAMENTALE: Sfondo bianco */
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    z-index: 9999; /* Sopra tutto */
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Ombra per vederlo meglio */
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    color: black; /* Testo nero */
+}
+
+.suggestion-item:hover, .suggestion-item.active {
+        background-color: #007bff; /* Blu quando selezionato */
+        color: white;
+    }
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

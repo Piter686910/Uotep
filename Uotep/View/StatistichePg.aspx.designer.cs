@@ -24,22 +24,13 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divStat;
 
         /// <summary>
-        /// Controllo txtMM.
+        /// Controllo ddlMese.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMM;
-
-        /// <summary>
-        /// Controllo rqMM.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rqMM;
+        protected global::System.Web.UI.WebControls.DropDownList ddlMese;
 
         /// <summary>
         /// Controllo txtYYYY.

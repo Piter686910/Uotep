@@ -373,7 +373,7 @@
             return false;
         }--%>
         //tipo atto
-        function filterDropdownTipoAtto() {
+<%--        function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("DdlTipoAtto");
             filter = input.value.toUpperCase();
@@ -411,7 +411,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
         //tipo provvedimento
         function filterDropdownTipoProv() {
             var input, filter, dropdown, options, i, txtValue;
@@ -454,13 +454,19 @@
             }
         }
     </script>
-
+    <style>
+        .suggestion-item:hover, .suggestion-item.active {
+            background-color: #007bff; /* Blu quando selezionato */
+            color: white;
+        }
+}
+    </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>
 
-             <asp:HiddenField ID="HfButtonProv" runat="server" />
+            <asp:HiddenField ID="HfButtonProv" runat="server" />
 
             <!-- Contenitore per centrare -->
 
@@ -655,11 +661,23 @@
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="DdlTipoAtto">Tipologia Atto</label>
                             <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
-                            <div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                            <%--<div id="suggestionsListTipoAtto" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+    
+</div>
+<asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />--%>
+                            <asp:HiddenField ID="HfTipoAtto" runat="server" />
+                            <input type="text" id="txtSearchAtto" runat="server" class="form-control"
+                                placeholder="cerca..."
+                                onkeyup="filterAndHighlight(event)"
+                                autocomplete="off" />
+
+                            <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
+                            <asp:DropDownList ID="DdlTipoAtto" runat="server" Style="display: none;"></asp:DropDownList>
+                           <ul  id="suggestionsListTipoAtto"></ul>
+                            <!-- 3. LISTA VISIVA (Finta Dropdown) -->
+                            <div id="dropdownList" class="dropdown-content">
+                                <!-- Verrà riempita da Javascript -->
                             </div>
-                            <%--<asp:Button ID="btSalvaTipoAtto" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoAtto_Click" Visible="false" />--%>
-                            <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />
                             <label for="txtTipoAtto">Ulteriore Atto</label>
                             <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" MaxLength="100" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         </div>
@@ -776,7 +794,7 @@
                     <div class="col-md-3" style="margin-left: -25px">
                         <div class="form-group mb-3">
                             <label for="txtDataEsito">Data Esito</label>
-                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" DataFormatString="{0:dd/MM/yyyy}"/>
+                            <asp:TextBox ID="TxtDataEsito" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" DataFormatString="{0:dd/MM/yyyy}" />
                         </div>
                     </div>
 
@@ -803,11 +821,11 @@
                         <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="btAggiungi_Click" ToolTip="Aggiungi" BackColor="White" />
-                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" BackColor="White"/>
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" BackColor="White" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3" style="max-width:230px">
+                    <div class="col-md-3" style="max-width: 230px">
                         <div class="form-group mb-3">
                             <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control"></asp:ListBox>
                         </div>
@@ -1078,7 +1096,7 @@
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
 
-                        <p id="errorAvvertenze"  style="color: red"></p>
+                        <p id="errorAvvertenze" style="color: red"></p>
 
                     </div>
                 </div>
@@ -1089,7 +1107,7 @@
             </div>
         </div>
     </div>
-    
+
     <%-- Modale ModalDecretazione --%>
     <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 100%">
@@ -1235,7 +1253,7 @@
                 <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
                     <div class="form-group mb-3">
                         <label for="txtdataEvasaPopup">Data Evasa</label>
-                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
+                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control data-auto" autofocus=""></asp:TextBox>
                     </div>
                 </div>
 
@@ -1246,6 +1264,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
         // Funzione per gestire la visibilità
         function gestisciVisibilita() {
@@ -1281,5 +1300,124 @@
         if (ddl) {
             ddl.onchange = gestisciVisibilita;
         }
+        ///////////////
+        var allOptions = [];
+
+        // Funzione per caricare i dati (chiamata solo quando serve)
+        function caricaOpzioni() {
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+
+            if (!ddl) {
+                console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
+                return;
+            }
+
+            var options = ddl.options;
+            allOptions = []; // Resetta
+
+            for (var i = 0; i < options.length; i++) {
+                // Carica tutto tranne i valori vuoti
+                if (options[i].value !== "" && options[i].value !== "0") {
+                    allOptions.push({ text: options[i].text, value: options[i].value });
+                }
+            }
+            console.log("Opzioni caricate in memoria: " + allOptions.length);
+        }
+
+        // Carica i dati appena la pagina è pronta
+        document.addEventListener("DOMContentLoaded", caricaOpzioni);
+
+        // Funzione Filtro
+        function filterAndHighlight(e) {
+            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
+            //var input = '<%= txtSearchAtto.ClientID %>';
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
+            //var filter = input.value.toUpperCase();
+            var filter = (input.value || "").toUpperCase();
+
+            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+            if (allOptions.length === 0) {
+                caricaOpzioni();
+            }
+
+            // Tasto INVIO (13)
+            if (e.keyCode === 13) {
+                var activeItem = listDiv.querySelector(".active");
+                if (activeItem) {
+                    // Simula il click
+                    activeItem.click();
+                    e.preventDefault(); // Ferma il postback del form se presente
+                }
+                return;
+            }
+
+            listDiv.innerHTML = "";
+
+            // Se input vuoto, nascondi
+            if (filter.length === 0) {
+                listDiv.style.display = "none";
+                return;
+            }
+
+            var foundCount = 0;
+
+            for (var i = 0; i < allOptions.length; i++) {
+                var item = allOptions[i];
+
+                // LOGICA DI FILTRO (Contiene il testo?)
+                if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+                    var div = document.createElement("div");
+                    div.className = "suggestion-item";
+                    div.innerText = item.text;
+
+                    // Usiamo attributi data- per passare il valore
+                    div.setAttribute("data-val", item.value);
+
+                    // Evidenzia il primo risultato
+                    if (foundCount === 0) {
+                        div.classList.add("active");
+                    }
+
+                    // Click Mouse
+                    div.onclick = function () {
+                        seleziona(this.innerText, this.getAttribute("data-val"));
+                    };
+
+                    listDiv.appendChild(div);
+                    foundCount++;
+                }
+            }
+
+            console.log("Risultati trovati: " + foundCount);
+
+            if (foundCount > 0) {
+                listDiv.style.display = "block";
+            } else {
+                listDiv.style.display = "none";
+            }
+        }
+
+        function seleziona(text, value) {
+            console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
+
+            input.value = text;
+            if (ddl) ddl.value = value;
+            listDiv.style.display = "none";
+        }
+
+        // Chiudi se clicchi fuori
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
+                document.getElementById("suggestionsListTipoAtto").style.display = "none";
+            }
+        });
+
+
+        //////////////
     </script>
 </asp:Content>

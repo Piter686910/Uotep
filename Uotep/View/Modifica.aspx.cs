@@ -45,6 +45,9 @@ namespace Uotep
                 {
                     // 2. Chiamo il metodo pubblico
                     myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true"); //segnalo alla pagina di default che la user è vuota
+                    Response.Redirect(url, false);
+                    return;
                 }
 
             }
@@ -107,7 +110,8 @@ namespace Uotep
             txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
             txtTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
             txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
-            DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+           // DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtSearchAtto.Value = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
             DdlTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
@@ -1634,7 +1638,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "success");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 

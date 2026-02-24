@@ -36,7 +36,7 @@ namespace Uotep.Classi
             HttpContext.Current.Session["MessaggioErrore"] = msg;
             HttpContext.Current.Session["PaginaChiamante"] = pagchiamante;
             string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
-            HttpContext.Current.Response.Redirect(url + msg);
+            HttpContext.Current.Response.Redirect(url + msg.Replace("\r\n"," ").ToString());
         }
         public string GetProtocollo()
         {

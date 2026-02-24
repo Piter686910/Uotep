@@ -507,26 +507,9 @@
         });--%>
 
     </script>
-    <%-- il seguente style serve per i bordi azzurri --%>
+    
     <style>
-      #suggestionsList {
-    display: none;             /* Nascosto all'inizio */
-    position: absolute;        /* Galleggia sopra gli altri */
-    background-color: white;   /* FONDAMENTALE: Sfondo bianco */
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    z-index: 9999;             /* Sopra tutto */
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Ombra per vederlo meglio */
-}
 
-.suggestion-item {
-    padding: 8px 12px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
-    color: black;              /* Testo nero */
-}
 
 .suggestion-item:hover, .suggestion-item.active {
     background-color: #007bff; /* Blu quando selezionato */

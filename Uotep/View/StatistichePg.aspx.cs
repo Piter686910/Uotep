@@ -57,50 +57,65 @@ namespace Uotep
             Boolean exist = false;
             Boolean resp = false;
             Statistiche stat = new Statistiche();
+            SiteMaster myMaster = this.Master as SiteMaster;
             DataTable dt = new DataTable();
             int anno = System.Convert.ToInt32(txtYYYY.Text.Trim());
             int interrogatori = System.Convert.ToInt32(txtInterrogatorio.Text.Trim());
-           
-            
-            dt = mn.getStatisticaByMeseAnno(txtMM.Text.Trim(), anno);
-           
-            if (dt.Rows.Count > 0)
+            switch (ddlMese.SelectedItem.Text)
             {
-                exist = true; //eseguo update del campo interrogatori
-                interrogatori += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
-                stat.interrogazioni = interrogatori;
-                stat.mese = txtMM.Text.Trim();
-                stat.anno = anno;
-                resp = mn.InsStatPg(exist, stat);
-                if (resp)
-                {
-                    SiteMaster myMaster = this.Master as SiteMaster;
+                case "Seleziona mese":
+                   
 
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SelKo.GetDescription(), "warning");
                     }
-                }
-            }
-            else
-            {
-                //non esiste il nuovo mese anno quindi inserisco un nuovo record
-                stat.interrogazioni = interrogatori;
-                stat.mese = txtMM.Text.Trim();
-                stat.anno = anno;
-                resp = mn.InsStatPg(exist, stat);
-                if (resp)
-                {
-                    SiteMaster myMaster = this.Master as SiteMaster;
+                    break;
+                default:
+                    dt = mn.getStatisticaByMeseAnno(ddlMese.SelectedItem.Text, anno);
 
-                    if (myMaster != null)
+                    if (dt.Rows.Count > 0)
                     {
-                        // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                        exist = true; //eseguo update del campo interrogatori
+                        interrogatori += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
+                        stat.interrogazioni = interrogatori;
+                        stat.mese = ddlMese.SelectedItem.Text;
+                        stat.anno = anno;
+                        resp = mn.InsStatPg(exist, stat);
+                        if (resp)
+                        {
+                          
+
+                            if (myMaster != null)
+                            {
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                            }
+                        }
                     }
-                }
+                    else
+                    {
+                        //non esiste il nuovo mese anno quindi inserisco un nuovo record
+                        stat.interrogazioni = interrogatori;
+                        stat.mese = ddlMese.SelectedItem.Text;
+                        stat.anno = anno;
+                        resp = mn.InsStatPg(exist, stat);
+                        if (resp)
+                        {
+                            
+
+                            if (myMaster != null)
+                            {
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                            }
+                        }
+                    }
+                    break;
             }
+
+           
         }
     }
 }
