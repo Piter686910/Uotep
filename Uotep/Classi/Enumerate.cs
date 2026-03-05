@@ -75,14 +75,18 @@ namespace Uotep.Classi
             NoStatistiche = 13,
             [Description("Registro Modificato.")]
             UpdRegistroOk = 14,
-            [Description("Errore update Registro Modificato.")]
+            [Description("Errore update Registro.")]
             UpdRegistroKo = 15,
             [Description("Pratica già esistente il nuovo numero è")]
             DupPratica = 16,
             [Description("la Modifica non può essere effettuata pratica chiusa.")]
             PraticaChiusa = 17,
-            [Description("Selezinare un valore valido.")]
-            SelKo = 18
+            [Description("Selezionare un valore valido.")]
+            SelKo = 18,
+            [Description("Errore update Interrogatorio.")]
+            UpdInterrogatorioKo = 19,
+            [Description("Vuoi salvare anche la pratica?")]
+            SavePratica = 20
         }
         public enum Sigla
         {

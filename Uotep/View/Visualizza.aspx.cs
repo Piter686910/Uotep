@@ -18,18 +18,21 @@ namespace Uotep
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
+        String Profilo = String.Empty;
         Principale p = new Principale(); public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         string paginaChiamante = "~/View/Visualizza.aspx";
         protected void Page_Load(object sender, EventArgs e)
         {
+            Session["PaginaChiamante"] = paginaChiamante;
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
                 Ruolo = Session["ruolo"].ToString();
+                Profilo = Session["profilo"].ToString();
                 btOKDup.Visible = true;
-                //if (Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper())
+                if (Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
                 //{
-                //    btDuplica.Visible = false;
+                    btModifica.Visible = false;
                 //}
                 //else
                 //    btDuplica.Visible = true;
@@ -46,10 +49,13 @@ namespace Uotep
                 {
                     // 2. Chiamo il metodo pubblico
                     myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
+                    Response.Redirect(url, false);
+                    return;
                 }
             }
 
-            Session["PaginaChiamante"] = paginaChiamante;
+            
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -77,7 +83,13 @@ namespace Uotep
         {
             String msg = string.Empty;
             Manager mn = new Manager();
+            Boolean validazione = false;
             DataTable pratica = new DataTable();
+            if (txtRicPraticaVal.Text != string.Empty && txtRicAnnoVal.Text != string.Empty)
+            {
+                pratica = mn.getListPraticheVal(txtRicPraticaVal.Text, txtRicAnnoVal.Text, out msg);
+                validazione = true;
+            }
             if (txtNProtocollo.Text != string.Empty && txtAnnoRicerca.Text != string.Empty)
             {
                 pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
@@ -132,11 +144,23 @@ namespace Uotep
             {
                 // Salva datatable pratica  nella Sessione
                 Session["ListPratiche"] = pratica;
-                gvPopup.DataSource = pratica;
-                gvPopup.DataBind();
-
-                DivGrid.Visible = true;
-                string a = pratica.Rows[0].ItemArray[1].ToString();
+                //gvPopup.DataSource = pratica;
+                //gvPopup.DataBind();
+                if (validazione)
+                {
+                    GVPratica.DataSource = pratica;
+                    GVPratica.DataBind();
+                    DivGridVal.Visible = true;
+                }
+                else
+                {
+                    gvPopup.DataSource = pratica;
+                    gvPopup.DataBind();
+                    DivGrid.Visible = true;
+                    DivGridVal.Visible = false;
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+                }
+                    string a = pratica.Rows[0].ItemArray[1].ToString();
                 //DataTable decretazione = new DataTable();
 
                 //decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
@@ -149,7 +173,7 @@ namespace Uotep
                 //else
                 //    divDecretazione.Visible = false;
 
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+               
             }
             else
             {
@@ -316,7 +340,13 @@ namespace Uotep
                             }
                             //F- mod 02/02/2026 accertatori in lista
 
-
+                            //I- mod 02/06/2026 numero esposti
+                            if (!String.IsNullOrEmpty(pratica.Rows[0]["NumProtRicStessoCarico"].ToString()))
+                            {
+                                txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString();
+                            }
+                           
+                            //F- mod 02/06/2026 numero esposti
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
                             {
@@ -393,7 +423,8 @@ namespace Uotep
             //date per div evasa
             txtDataDa.Text = String.Empty;
             txtDataA.Text = String.Empty;
-            //
+            txtRicAnnoVal.Text = string.Empty;
+            txtRicPraticaVal.Text = string.Empty;
             txtProtGen.Text = String.Empty;
             txtPratica.Text = String.Empty;
             txtRicProvenienza.Text = String.Empty;
@@ -449,48 +480,61 @@ namespace Uotep
         protected void btNProtocollo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProtocollo.Visible = true;
         }
 
         protected void btProcPenale_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProcPenale.Visible = true;
         }
 
         protected void btEvaseAg_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivEvasaAg.Visible = true;
         }
 
         protected void btProtGen_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProtGen.Visible = true;
         }
 
         protected void btNpratica_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivPratica.Visible = true;
         }
-
+        protected void btValidaPratica_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            Pulisci();
+            DivValidazione.Visible = true;
+        }
         protected void btGiudice_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivGiudice.Visible = true;
         }
 
         protected void btProvenienza_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivProvenienza.Visible = true;
         }
 
         protected void btNominativo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivNominativo.Visible = true;
         }
 
@@ -498,6 +542,7 @@ namespace Uotep
         {
 
             NascondiDiv();
+            Pulisci();
             DivAccertatori.Visible = true;
 
         }
@@ -505,11 +550,13 @@ namespace Uotep
         protected void btIndirizzo_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivIndirizzo.Visible = true;
         }
         protected void btDataCarico_Click(object sender, EventArgs e)
         {
             NascondiDiv();
+            Pulisci();
             DivDataArrivo.Visible = true;
         }
         public void NascondiDiv()
@@ -527,6 +574,8 @@ namespace Uotep
             DivIndirizzo.Visible = false;
             DivDataArrivo.Visible = false;
             DivDettagli.Visible = false;
+            DivValidazione.Visible = false;
+            DivGridVal.Visible = false;
             Session.Remove("ListPratiche");
             Session.Remove("ListRicerca");
         }
@@ -962,5 +1011,50 @@ namespace Uotep
             gvPopup.DataBind();
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
+
+
+        protected void GVPratica_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            // Verifichiamo che la riga sia una riga di dati 
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Recuperiamo il valore del campo "evasa" dal data item
+                
+                bool isEvasa = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "evasa"));
+
+                if (!isEvasa)
+                {
+                    // Opzione A: Colore diretto tramite codice
+                    e.Row.BackColor = System.Drawing.Color.LightCoral;
+
+                    // Opzione B (Consigliata): Aggiungi una classe CSS per avere più controllo
+                 //  e.Row.CssClass += " riga-non-evasa";
+                }
+            }
+        }
+
+        protected void GVPratica_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
+
+        protected void GVPratica_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+
+        }
+
+        protected void btValidazione_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btDecreta_Click(object sender, EventArgs e)
+        {
+            Session["decr"] = "true";//segnalo che provengo da visualizza
+            string url = VirtualPathUtility.ToAbsolute("~/View/Modifica.aspx");
+            Response.Redirect(url, false);
+        }
+
+       
     }
 }

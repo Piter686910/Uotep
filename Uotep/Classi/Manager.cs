@@ -2,6 +2,7 @@ using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.CustomXmlSchemaReferences;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
@@ -211,6 +212,34 @@ namespace Uotep.Classi
                     resp = false;
                 }
                 conn1.Close();
+                return resp;
+            }
+        }
+        public Boolean DelInterrogatorioById(int id)
+        {
+            string sql = string.Empty;
+            string Del_Interrogatori = "delete  FROM Interrogatori where id = " + id;
+            Boolean resp = false;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+                try
+                {
+
+                    command.CommandText = Del_Interrogatori;
+                    //testoSql = "Registro";
+                    int res = command.ExecuteNonQuery();
+                    if (res > 0)
+                        resp = true;
+                }
+
+                catch (Exception)
+                {
+                    resp = false;
+                }
+                conn.Close();
                 return resp;
             }
         }
@@ -733,7 +762,18 @@ namespace Uotep.Classi
                 return tb = FillTable(sql, conn, out msg);
             }
         }
+        public DataTable getListPraticheVal(string pratica, string anno, out string msg)
+        {
+            DataTable tb = new DataTable();
 
+
+            string sql = "SELECT id,nr_Pratica ,nr_protocollo, evasa,anno FROM [principale] WHERE Anno ='" + anno + "' and nr_Pratica = '" + pratica +
+                                     "' GROUP BY nr_Pratica ,nr_protocollo,evasa,anno,id HAVING COUNT(Nr_Protocollo) >= 1 ORDER BY Nr_Protocollo DESC";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
         /// <summary>
         /// ricerca per protocollo
         /// </summary>
@@ -1079,6 +1119,18 @@ namespace Uotep.Classi
 
 
             // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+
+        public DataTable getListInterrogatori(Interrogatorio interr)
+        {
+            DataTable tb = new DataTable();
+
+
+            string sql = "SELECT * FROM interrogatori WHERE mese = '" + interr.Mese + "' and anno=" + interr.Anno + " ORDER BY DataInterrogatorio DESC";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1724,6 +1776,12 @@ namespace Uotep.Classi
                         if (!String.IsNullOrEmpty(pratica[1]))
                             sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
                         break;
+                        //case "PraticaVal":
+                        //    if (!String.IsNullOrEmpty(pratica[1]))
+                        //        // sql = "SELECT * FROM principale where nr_Pratica = '" + pratica[1].Replace("'", "''") + "' and anno= '" + pratica[2] + "'";
+                        //        sql = "SELECT id,nr_Pratica ,nr_protocollo, evasa,anno FROM [DB_ArchivioPratiche].[dbo].[principale] WHERE Anno ='" + pratica[2] + "' and nr_Pratica = '" + pratica[1] +
+                        //                 "' GROUP BY nr_Pratica ,nr_protocollo,evasa,anno,id HAVING COUNT(Nr_Protocollo) >= 1 ORDER BY Nr_Protocollo DESC";
+                        //    break;
                 }
             }
 
@@ -2587,7 +2645,80 @@ namespace Uotep.Classi
             return resp;
 
         }
+        /// <summary>
+        /// inserisce un interrogatorio 
+        /// </summary>
+        /// <param name="interr"></param>
+        /// <returns></returns>
+        public Boolean InsInterrogatorio(Interrogatorio interr)
+        {
+            bool resp = true;
+            string sql_interrogatorio = String.Empty;
+            string sql_update = String.Empty;
+            // int res1 = 0;
+            string testoSql = string.Empty;
 
+            try
+            {
+                sql_interrogatorio = "insert into interrogatori (ProcPenale, DataInterrogatorio,Npratica, Nominativo1,Nominativo2,Nominativo3,Nominativo4,DataInserimento,Matricola,mese,anno)" +
+                   " Values('" + interr.ProcPenale.Replace("'", "") + "','" + interr.DataInterrogatorio + "','" + interr.Npratica + "','" + interr.Nominativo1.Replace("'", "''") +
+                   "','" + interr.Nominativo2.Replace("'", "''") + "','" + interr.Nominativo3.Replace("'", "''") + "','" + interr.Nominativo4.Replace("'", "''") +
+                   "','" + interr.DataInserimento + "','" + interr.Matricola + "','" + interr.Mese + "'," + interr.Anno + ")";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+
+                    SqlCommand command = conn.CreateCommand();
+
+
+
+                    try
+                    {
+                        command.CommandText = sql_interrogatorio;
+                        testoSql = "Interrogatorio";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Interrogatorio:" + interr.ProcPenale.Trim() + ", " + ex.Message + @" - Errore in inserimento tabella Interrogatorio ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+
+
+
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
         public Boolean InsScadenziarioRegistro(UrpScadenziario scadenziario, int id, String HfRegistro, UrpRegistro registro, String newScadenza)
         {
             bool resp = true;
@@ -3077,7 +3208,7 @@ namespace Uotep.Classi
             }
 
         }
-        public Boolean InsStatPg(Boolean exist, Statistiche stat)
+        public Boolean InsStatPg(Boolean exist, Statistiche stat, Interrogatorio interr)
         {
             bool resp = true;
 
@@ -3087,13 +3218,13 @@ namespace Uotep.Classi
             {
                 conn.Open();
 
-
+                SqlTransaction transaction = null;
                 SqlCommand command = conn.CreateCommand();
-
+                transaction = conn.BeginTransaction("trans");
+                command.Transaction = transaction;
 
                 try
                 {
-
                     if (!exist)
 
                         sql_Statistiche = "insert into statistiche (mese,anno,relazioni,ponteggi,dpi,esposti_ricevuti,esposti_evasi,ripristino_tot_par,controlli_scia,contr_cant_daily,cnr,annotazioni,notifiche" +
@@ -3108,7 +3239,6 @@ namespace Uotep.Classi
                           stat.controlli_42_04 + "," + stat.contr_cant_suolo_pubb + "," + stat.contr_lavori_edili + "," + stat.contr_cant + "," + stat.contr_nato_da_esposti + "," + stat.viol_amm_reg_com + "," +
                           stat.censimentoAllPubb + "," + stat.Abitativo + "," + stat.NonAbitativo + "," + stat.Sgomberi_abus + "," + stat.Sgomberi_immobili + "," + stat.NotificaTp + ")";
 
-
                     else
                     {
                         sql_Statistiche = "update statistiche set interrogazioni = " + stat.interrogazioni +
@@ -3117,11 +3247,25 @@ namespace Uotep.Classi
                         " where mese = '" + @stat.mese + "' and anno = " + stat.anno;
 
                     }
-
+                    int esito = 0;
                     command.CommandText = sql_Statistiche;
-                    command.ExecuteNonQuery();
+                    esito = command.ExecuteNonQuery();
 
-                    resp = true;
+                    if (esito > 0)
+                    {
+                        resp = InsInterrogatorio(interr);
+                    }
+                    if (resp == false)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                    else
+                    {
+                        transaction.Commit();
+                        resp = true;
+                    }
+
                 }
 
 
@@ -3170,7 +3314,7 @@ namespace Uotep.Classi
 
                 transaction = conn.BeginTransaction("trans");
                 command.Transaction = transaction;
-                //idN = -1;
+
 
                 try
                 {
@@ -4865,7 +5009,7 @@ namespace Uotep.Classi
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT Sum(rapp_num_censimento_all_pubb) as n FROM rappuote where rapp_data_consegna_intervento between'" + @dataInizio.ToShortDateString() + "' AND '" + @dataFine.ToShortDateString() + "' and rapp_censimento_all_pubb='true'";
+            sql = "SELECT Sum(rapp_num_censimento_all_pubb) as n FROM rappuote where rapp_data_consegna_intervento between'" + @dataInizio.ToShortDateString() + "' AND '" + @dataFine.ToShortDateString() + "'";
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -5276,10 +5420,18 @@ namespace Uotep.Classi
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
-                sql = "SELECT count(Tipologia_atto) FROM principale " +
+                //sql = "SELECT count(Tipologia_atto) FROM principale " +
+                //    "WHERE Tipologia_atto = '" + Esposti + "' " +
+                //    "AND YEAR(dataarrivo) = " + anno + " " +
+                //    "AND MONTH(dataarrivo) = " + meseS;
+
+
+
+                sql = "SELECT sum(NumProtRicStessoCarico) FROM principale " +
                     "WHERE Tipologia_atto = '" + Esposti + "' " +
                     "AND YEAR(dataarrivo) = " + anno + " " +
                     "AND MONTH(dataarrivo) = " + meseS;
+
                 try
                 {
                     // Esegue la query
@@ -5452,7 +5604,7 @@ namespace Uotep.Classi
                         {
                             command.CommandText = sql_Verificacartellina;
                             object result = command.ExecuteScalar();
-                            if (Convert.ToInt32(result) == Convert.ToInt32( arch.arch_cartellina))
+                            if (Convert.ToInt32(result) == Convert.ToInt32(arch.arch_cartellina))
                             {
                                 res = -1; // La cartellina esiste già, non procedere con l'update e l'insert
                                 msg = "DUPLICATO";
@@ -5620,7 +5772,7 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public Boolean SavePratica(Principale p, Int32 id, Statistiche stat, Boolean exist, out Int32 idN)
+        public Boolean InsCarico(Principale p, Int32 id, Statistiche stat, Boolean exist, out Int32 idN)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -5645,7 +5797,9 @@ namespace Uotep.Classi
         "INSERT INTO principale (" +
             "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
             "Nominativo, Indirizzo, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, " +
-            "Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, macro_area, UlterioreTipoAtto, bu, codiceEdificio" +
+            "Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, macro_area, UlterioreTipoAtto, bu, codiceEdificio," +
+            "NumProtRicStessoCarico" +
+
         ") " +
         "VALUES ('" +
             @p.nrProtocollo + "','" +
@@ -5676,8 +5830,9 @@ namespace Uotep.Classi
             @p.macro_area.Replace("'", "''") + "','" +
             @p.ulterioreTipoAtto.Replace("'", "''") + "','" +
             @p.bu.Replace("'", "''") + "','" +
-            @p.codiceEdificio.Replace("'", "''") +
-        "'); " +
+            @p.codiceEdificio.Replace("'", "''") + "'," +
+            @p.NumProtRicStessoCarico +
+        "); " +
 
         // RESTITUISCE IL NUOVO ID GENERATO
         "SELECT SCOPE_IDENTITY(); " +
@@ -5754,32 +5909,51 @@ namespace Uotep.Classi
                         //int res = command.ExecuteNonQuery();
                         //a = command.ExecuteScalar();
                         object result = command.ExecuteScalar();
-                        command.CommandText = sql_Statistiche;
 
-                        res1 = command.ExecuteNonQuery();
                         decimal nuovoId = Convert.ToDecimal(result);
                         if (nuovoId == -1)
                         {
                             // IL RECORD ESISTEVA GIÀ
                             tran.Rollback();
                             tran.Dispose();
-                            resp = false;
+                            return false;
+
+                        }
+                        else
+                        {
+                            command.CommandText = sql_Statistiche;
+
+                            res1 = command.ExecuteNonQuery();
+                            if (res1 > 0)
+                            {
+                                tran.Commit();
+                                tran.Dispose();
+                                idN = Convert.ToInt32(result);
+                                resp = true;
+                            }
+                            else
+                            {
+                                tran.Rollback();
+                                tran.Dispose();
+                                return false;
+                            }
+
 
                         }
                         //   idN = Convert.ToInt32(a);
-                        if (res1 > 0)
-                        {
-                            tran.Commit();
-                            tran.Dispose();
-                            idN = Convert.ToInt32(result); 
-                            resp = true;
-                        }
+                        //if (res1 > 0)
+                        //{
+                        //    tran.Commit();
+                        //    tran.Dispose();
+                        //    idN = Convert.ToInt32(result);
+                        //    resp = true;
+                        //}
 
-                        else
-                        {
-                            tran.Rollback();
-                            resp = false;
-                        }
+                        //else
+                        //{
+                        //    tran.Rollback();
+                        //    resp = false;
+                        //}
                         // }
                     }
 
@@ -5802,7 +5976,7 @@ namespace Uotep.Classi
                     }
                     conn.Close();
                     conn.Dispose();
-                   
+
                     return resp;
                 }
 
@@ -6544,7 +6718,62 @@ namespace Uotep.Classi
             return resp;
 
         }
+        public Boolean UpdateInterrogatorioId(int id, Interrogatorio interr)
+        {
+            bool resp = true;
+            string sql = String.Empty;
+            string testoSql = string.Empty;
 
+            try
+            {
+                sql = "update interrogatori set Npratica = '" + interr.Npratica.Replace("'", "''") + "', ProcPenale= '" + interr.ProcPenale.Replace("'", "''") + "', DataInterrogatorio= '" + interr.DataInterrogatorio +
+                   "', Nominativo1= '" + interr.Nominativo1.Replace("'", "''") + "', Nominativo2= '" + interr.Nominativo2.Replace("'", "''") + "', Nominativo3 = '" + interr.Nominativo3.Replace("'", "''") + "', Nominativo4= '" +
+                   interr.Nominativo4.Replace("'", "''") + "' where id = '" + id + "'";
+
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql;
+                        testoSql = "interrogatori";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("numero id:" + id + ",Pratica :" + interr.Npratica.Trim() + ", " + ex.Message + @" - Errore in update  interrogatori");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
         public Boolean UpdScheda(RappUote rapp)
         {
             bool resp = true;
@@ -6768,7 +6997,7 @@ namespace Uotep.Classi
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -6777,11 +7006,11 @@ namespace Uotep.Classi
  "INSERT INTO principalestorico (" +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3) " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico) " +
  "SELECT " +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3 " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico " +
  "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -6878,6 +7107,16 @@ namespace Uotep.Classi
             return resp;
 
         }
+        /// <summary>
+        /// metodo per modifica riservata
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="oldMat"></param>
+        /// <param name="olddate"></param>
+        /// <param name="oldProtocollo"></param>
+        /// <param name="idPratica"></param>
+        /// <param name="operatore"></param>
+        /// <returns></returns>
         public Boolean SavePraticaTrans(Principale p, string oldMat, DateTime olddate, string oldProtocollo, Int32 idPratica, string operatore)
         {
             bool resp = true;

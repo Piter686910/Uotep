@@ -31,8 +31,10 @@ namespace Uotep
                 {
                     // 2. Chiamo il metodo pubblico
                     myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
-                   
-                  
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                    Response.Redirect(url, false);
+                    return;
+
                 }
 
                 Session.Abandon();

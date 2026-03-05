@@ -39,6 +39,7 @@ namespace Uotep.Classi
         public String codiceEdificio = string.Empty;
         public String accertatori2 = string.Empty;
         public String accertatori3 = string.Empty;
-
+        public Int32 NumProtRicStessoCarico = 0;
+        public Boolean validato;
     }
 }

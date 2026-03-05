@@ -46,6 +46,7 @@ namespace Uotep
             if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
             {
                 Manager mn = new Manager();
+               
                 Boolean resp = mn.DelRegistroById(System.Convert.ToInt32(Request.QueryString["id"]));
                 if (resp)
                 {
@@ -550,6 +551,7 @@ namespace Uotep
                 gvScadenziario.DataSource = null;
                 gvScadenziario.DataBind();
             }
+            Pulisci(); 
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaScadenziario').modal('show');", true);
 
         }
@@ -599,6 +601,7 @@ namespace Uotep
             {
                 DateTime data = Convert.ToDateTime(dt.Rows[0]["dataScadenza"]);
                 txtDataScadenza.Text = (data == DateTime.MinValue) ? string.Empty : data.ToString("dd/MM/yyyy");
+                txtDataScadenza.Text = FormatMyDate(txtDataScadenza.Text);
 
             }
             if (dt.Rows[0]["dataArrivo"] != DBNull.Value)
@@ -609,8 +612,8 @@ namespace Uotep
             if (dt.Rows[0]["dataUscita"] != DBNull.Value)
             {
 
-                DateTime data = Convert.ToDateTime(dt.Rows[0]["dataUscita"]);
-                txtDataUscita.Text = (data == DateTime.MinValue) ? string.Empty : data.ToString("dd/MM/yyyy");
+                txtDataUscita.Text = (Convert.ToDateTime(dt.Rows[0]["dataUscita"]) == DateTime.MinValue) ? "   " : Convert.ToDateTime(dt.Rows[0]["dataUscita"]).ToString("dd/MM/yyyy");
+                txtDataUscita.Text= FormatMyDate(txtDataUscita.Text); // sostituisce data minima in spazio
             }
 
             if (dt.Rows[0]["ric24190"] != DBNull.Value)

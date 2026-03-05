@@ -170,7 +170,8 @@ namespace Uotep
                                 // Mostra voci per utenti standard
                                 // menuHome.Visible = true;
                                 menuArchivio.Visible = true;
-                                menuCoordinamentoAtti.Visible = false;
+                                menuCoordinamentoAtti.Visible = true;
+                                RicercaAtti.Visible = true;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = false;
                                 menuAmministratore.Visible = false;
@@ -182,7 +183,7 @@ namespace Uotep
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.V.ToString()))
 
                                 {
-
+                                   
                                     InserimentoArchivioUote.Visible = false;
                                     InserimentoArchivioUotp.Visible = false;
                                 }
@@ -342,7 +343,7 @@ namespace Uotep
 
             // 3. Lancia lo script per aprire il modale
             string script = "$('#SiteModal').modal('show');";
-
+            hfMasterParam.Value = "fatto";
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ApriModalMaster", script, true);
         }
 
@@ -361,6 +362,7 @@ namespace Uotep
         }
         protected void btChiudiPopUp_Click(object sender, EventArgs e)
         {
+            hfMasterParam.Value = "fatto";
             //string script = "$('#SiteModal').modal('hide');";
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ApriModalMaster", "", false);
         }

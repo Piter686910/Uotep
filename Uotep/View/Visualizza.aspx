@@ -2,7 +2,16 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        .header-center {
+            text-align: center !important;
+        }
 
+        .grid-fissa {
+            table-layout: fixed;
+            width: auto !important;
+        }
+    </style>
     <script>
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
@@ -20,7 +29,7 @@
         function hideMsgModal() {
             $('#MsgModal').modal('hide');
         }
-        
+
         // Mostra il popup ricerca
         function showModal() {
             $('#ModalRicerca').modal('show');
@@ -31,7 +40,7 @@
             $('#ModalRicerca').modal('hide');
         }
     </script>
-   
+
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
@@ -49,6 +58,9 @@
                         <asp:Button ID="btProtGen" runat="server" OnClick="btProtGen_Click" Text="Rif. Prot. Gen." ToolTip="Ricerca Protocollo Generale" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btEvaseAg" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+
+                        <asp:Button ID="btValidaPratica" runat="server" OnClick="btValidaPratica_Click" Text="Validazione pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+
 
                     </p>
                     <p>
@@ -76,7 +88,7 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtNProtocollo" ErrorMessage="Inserire numero pratica" ForeColor="Red" ValidationGroup="bt">
 
                     </asp:RequiredFieldValidator>
-                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Carico" autofocus=""/>
+                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Carico" autofocus="" />
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
@@ -93,7 +105,7 @@
 
                     <asp:Label ID="Label2" runat="server" Text="Nr Procediemnto Penale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" autofocus=""/>
+                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" autofocus="" />
 
 
 
@@ -106,7 +118,7 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Data Inizio Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" autofocus=""/>
+                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" autofocus="" />
 
                     <asp:Label ID="Label4" runat="server" Text="Data Fine Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -121,7 +133,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="Rif. Protocollo Generale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." autofocus=""/>
+                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -132,7 +144,21 @@
 
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus=""/>
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus="" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+                <%-- DIV Validazione --%>
+                <div id="DivValidazione" runat="server" visible="false" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label14" runat="server" Text="Pratica" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicPraticaVal" runat="server" CssClass="form-control" placeholder="Pratica da validare" autofocus="" />
+                    <asp:Label ID="Label15" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtRicAnnoVal" runat="server" CssClass="form-control" placeholder="Anno" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -143,7 +169,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Giudice" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus=""/>
+                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -154,7 +180,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Provenienza" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus=""/>
+                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -165,7 +191,7 @@
 
                     <asp:Label ID="Label9" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" autofocus=""/>
+                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -176,7 +202,7 @@
 
                     <asp:Label ID="Label10" runat="server" Text="Accertatori" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" autofocus=""/>
+                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -187,7 +213,7 @@
 
                     <asp:Label ID="Label11" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
+                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -250,6 +276,11 @@
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
                             <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control mb-3" Enabled="false" />
+
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="txtNumProtRicStessoCarico">Numeri prot. gen. per ogni carico</label>
+                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" Enabled="false" />
 
                         </div>
                     </div>
@@ -317,7 +348,7 @@
                         <div class="form-group mb-3">
                             <label for="ListAccertatori">Accertatori</label>
                             <%--<asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />--%>
-                             <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Enabled="false" BackColor="LightGray" Rows="3"></asp:ListBox>
+                            <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Enabled="false" BackColor="LightGray" Rows="3"></asp:ListBox>
                         </div>
 
                     </div>
@@ -423,11 +454,76 @@
                 <div class="col-12 text-center">
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
-                     <%--<asp:Button ID="btDuplica" Text="Duplica" runat="server" OnClick="btDuplica_Click" ToolTip="Duplica" CssClass="btn btn-primary mt-3" />--%>
-
+                    <asp:Button ID="btDecreta" Text="Decreta" runat="server" OnClick="btDecreta_Click" ToolTip="Decreta" CssClass="btn btn-primary mt-3" />
                 </div>
             </div>
         </div>
+    </div>
+    <%-- GRIGLIA VALIDAZIONE--%>
+    <div id="DivGridVal" runat="server" visible="false" class="row " style="margin-left: 140px">
+        <%--<div class="form-group">--%>
+        <!-- GridView nel popup -->
+        <asp:GridView ID="GVPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered  grid-fissa"
+            OnRowDataBound="GVPratica_RowDataBound" OnRowCommand="GVPratica_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVPratica_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+
+            <Columns>
+                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="190px" HeaderStyle-Width="190px" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="header-center" />
+                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="190px" HeaderStyle-Width="190px" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="header-center" />
+                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-Width="190px" HeaderStyle-Width="190px" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="header-center" />
+
+                <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="190px" HeaderStyle-Width="190px" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="header-center">
+                    <ItemTemplate>
+                        <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <%--                   <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                           <ItemTemplate>
+                               <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                   CommandName="Select"
+                                   CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("ID")  %>'
+                                   CssClass="btn btn-success btn-sm" />
+                           </ItemTemplate>
+                       </asp:TemplateField>--%>
+            </Columns>
+            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+            <PagerStyle HorizontalAlign="Center" />
+            <PagerTemplate>
+                <table width="100%">
+                    <tr>
+                        <td style="width: 50%; text-align: left;">
+                            <asp:Label ID="lblPageInfo" runat="server" />
+                        </td>
+
+                    </tr>
+                </table>
+
+                <div style="padding: 5px;">
+                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                    <span style="margin: 0 10px;">Pagina:
+      
+                    </span>
+
+                    <%-- Contenitore per i link numerici delle pagine --%>
+                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                </div>
+            </PagerTemplate>
+
+        </asp:GridView>
+        <div style="margin-left: 300px">
+            <!-- Bottone per avviare la ricerca -->
+            <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+            <%--<asp:Button ID="btchiudiGriglia" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />--%>
+            <asp:Button ID="btValidazione" runat="server" class="btn btn-primary mt-3" Text="Convalida" OnClick="btValidazione_Click" ToolTip="Esegue la validazione della pratica" />
+        </div>
+        <%--</div>--%>
     </div>
     <%-- Modale ricerca fascicolo --%>
     <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -514,8 +610,8 @@
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("Accertatori")   %>
-                                         <%# Eval("Accertatori2")   %>
-                                         <%# Eval("Accertatori3")   %>
+                                        <%# Eval("Accertatori2")   %>
+                                        <%# Eval("Accertatori3")   %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
@@ -526,7 +622,7 @@
                                         <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px"/>
+                                <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px" />
                                 <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
                                 <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
@@ -566,12 +662,12 @@
                             </PagerTemplate>
 
                         </asp:GridView>
-<div class="modal-footer">
-    <!-- Bottone per avviare la ricerca -->
-    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-    <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa"/>
-</div>
+                        <div class="modal-footer">
+                            <!-- Bottone per avviare la ricerca -->
+                            <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                            <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                            <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
+                        </div>
                     </div>
                 </div>
                 <asp:HiddenField ID="HidPratica" runat="server" />
@@ -581,36 +677,37 @@
                 <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
                 <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
-                
+
             </div>
         </div>
     </div>
-     <%-- popup messaggi --%>
- <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
-     <div class="modal-dialog"
-         role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
 
-             </div>
-             <div class="modal-body">
-                 <!-- Campi di input per la ricerca -->
-                 <div class="form-group">
+    <%-- popup messaggi --%>
+    <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
 
-                     <p id="TextMessage" runat="server" style="color: red"></p>
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
 
-                 </div>
-             </div>
-             <div class="modal-footer">
-                 <!-- Bottone per avviare la ricerca -->
-                 <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
-                  <asp:Button ID="btOKDup" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKDup_Click" />
-             </div>
-         </div>
-     </div>
- </div>
+                        <p id="TextMessage" runat="server" style="color: red"></p>
 
-    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
+                    <asp:Button ID="btOKDup" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKDup_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </asp:Content>

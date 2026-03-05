@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -11,7 +13,6 @@ using System.Windows.Interop;
 using Uote;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
-
 
 
 namespace Uotep
@@ -43,7 +44,7 @@ namespace Uotep
 
                 //                Response.Redirect("Default.aspx?user=true");
             }
-  //          CaricaDLL();
+            //          CaricaDLL();
             if (!IsPostBack)
             {
 
@@ -175,7 +176,7 @@ namespace Uotep
             //        //    }
             //    }
             //}
-           
+
             return resp;
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -186,7 +187,7 @@ namespace Uotep
 
                 if (String.IsNullOrWhiteSpace(Vuser))
                 {
-                    
+
 
                     if (myMaster != null)
                     {
@@ -229,6 +230,7 @@ namespace Uotep
                     //{
                     Principale p = new Principale();
                     p.anno = annoCorr;
+                    
                     DateTime giorno = DateTime.Now;
                     p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
 
@@ -285,19 +287,33 @@ namespace Uotep
                         p.provenienza = txtProvenienza.Text;
                     }
 
-                    if (String.IsNullOrEmpty(DdlTipoAtto.SelectedItem.Text))
+                    //if (String.IsNullOrEmpty(DdlTipoAtto.SelectedItem.Text))
+                    //{
+
+                    //    p.tipologia_atto = String.Empty;
+                    //}
+                    //else
+                    //{
+                    //    Boolean resp = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
+                    //    if (!resp)
+                    //    {
+                    //        HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
+                    //    }
+                    //    p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                    //}
+                    if (String.IsNullOrEmpty(txtSearchAtto.Value))
                     {
 
                         p.tipologia_atto = String.Empty;
                     }
                     else
                     {
-                        Boolean resp = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
-                        if (!resp)
+                        Boolean resp1 = mn.getTipoAtto(txtSearchAtto.Value);
+                        if (!resp1)
                         {
-                            HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
+                            HfTipoAtto.Value = txtSearchAtto.Value;
                         }
-                        p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                        p.tipologia_atto = txtSearchAtto.Value;
                     }
                     if (!String.IsNullOrEmpty(txtTipoAtto.Text))
                         p.ulterioreTipoAtto = txtTipoAtto.Text;
@@ -343,7 +359,7 @@ namespace Uotep
                         //p.quartiere = lblQuartiere.Text;
                     }
 
-                    p.rif_Prot_Gen = txtRifProtGen.Text;
+
 
 
                     // p.note = txtNote.Text;
@@ -384,6 +400,16 @@ namespace Uotep
                     //p.matricola = Vuser;
                     p.matricola = Vuser;
                     p.data_ins_pratica = DateTime.Now.ToLocalTime();
+                    //I- mod 02/06/2026 numero esposti
+                    p.NumProtRicStessoCarico = string.IsNullOrWhiteSpace(txtNumProtRicStessoCarico.Text) ? 0 : Convert.ToInt32(txtNumProtRicStessoCarico.Text);
+                    //sostituisco tutto ciò che è diverso da "/" e numeri con ";"
+                    // La regex [^0-9/] significa: 
+                    // ^ = "tutto ciò che NON è"
+                    // 0-9 = numeri
+                    // / = il carattere slash
+                    p.rif_Prot_Gen = Regex.Replace(txtRifProtGen.Text, @"[^0-9/]", ";");
+
+                    //F- mod 02/06/2026 numero esposti
                     Statistiche stat = new Statistiche();
                     DataTable dtStat = new DataTable();
                     DateTime ora = DateTime.Now;
@@ -448,7 +474,7 @@ namespace Uotep
                     stat.mese = mese;
                     stat.anno = DateTime.Now.Year;
                     Int32 idN = 0;
-                    Boolean ins = mn.SavePratica(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
+                    Boolean ins = mn.InsCarico(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
 
                     if (idN == -2)
                     {
@@ -473,7 +499,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text , "danger");
+                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text, "danger");
                         }
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }
@@ -524,7 +550,7 @@ namespace Uotep
             {
                 txtTipoProv.Text = string.Empty;
             }
-
+            txtNumProtRicStessoCarico.Text = string.Empty;
             txtQuartiere.Text = string.Empty;
             //if (String.IsNullOrEmpty(HfInviata.Value))
             //{
@@ -669,7 +695,7 @@ namespace Uotep
                 Manager mn = new Manager();
                 DataTable RicercaQuartiere = mn.getListQuartiere(out msg);
                 if (!String.IsNullOrWhiteSpace(msg))
-                    r.Reindirizzamento(msg,pagchiamante);
+                    r.Reindirizzamento(msg, pagchiamante);
                 DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
                 DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
                 DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
@@ -691,9 +717,9 @@ namespace Uotep
                 DdlTipoAtto.DataSource = RicercaTipoAtto; // Imposta il DataSource della DropDownList
                 DdlTipoAtto.DataTextField = "Tipo_Nota"; // Il campo visibile
                 DdlTipoAtto.DataValueField = "id_tipo_nota"; // Il valore associato a ogni opzione
-                
+
                 DdlTipoAtto.DataBind();
-               DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
+                DdlTipoAtto.Items.Insert(0, new ListItem("", "0"));
 
                 // DdlTipoAtto.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
@@ -717,9 +743,9 @@ namespace Uotep
                 DdlGiudice.DataBind();
                 //DdlGiudice.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
-               DataTable RicercaProvvAg = mn.getListProvvAg(Enumerate.Sigla.AG.ToString(), out msg);
+                DataTable RicercaProvvAg = mn.getListProvvAg(Enumerate.Sigla.AG.ToString(), out msg);
                 if (!String.IsNullOrWhiteSpace(msg))
-                    r.Reindirizzamento(msg,pagchiamante);
+                    r.Reindirizzamento(msg, pagchiamante);
                 // DataTable RicercaProvvAg = mn.getListProvvAg(DdlSigla.SelectedItem.Text);
                 DdlTipoProvvAg.DataSource = RicercaProvvAg; // Imposta il DataSource della DropDownList
                 DdlTipoProvvAg.DataTextField = "Tipologia"; // Il campo visibile
@@ -1217,6 +1243,11 @@ namespace Uotep
 
         }
 
-        
+        protected void txtRifProtGen_TextChanged(object sender, EventArgs e)
+        {
+           //txtNumProtRicStessoCarico.Text=  Regex.Replace(txtRifProtGen.Text, @"[^0-9/]", ";");
+           // int conteggioPuntoEVirgola = txtRifProtGen.Text.Count(c => c == ';');
+
+        }
     }
 }

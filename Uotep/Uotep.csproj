@@ -390,6 +390,7 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classi\Interrogatorio.cs" />
     <Compile Include="Classi\UrpRegistro.cs" />
     <Compile Include="Classi\UrpScadenziario.cs" />
     <Compile Include="Classi\SchedaDipendenteClass.cs" />

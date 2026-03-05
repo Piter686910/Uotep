@@ -45,102 +45,102 @@
         // Funzione per caricare i dati (chiamata solo quando serve)
         function caricaOpzioni() {
             var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-        
-        if (!ddl) {
-            console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
-            return;
-        }
 
-        var options = ddl.options;
-        allOptions = []; // Resetta
-
-        for (var i = 0; i < options.length; i++) {
-            // Carica tutto tranne i valori vuoti
-            if (options[i].value !== "" && options[i].value !== "0") {
-                allOptions.push({ text: options[i].text, value: options[i].value });
+            if (!ddl) {
+                console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
+                return;
             }
-        }
-        console.log("Opzioni caricate in memoria: " + allOptions.length);
-    }
 
-    // Carica i dati appena la pagina è pronta
-    document.addEventListener("DOMContentLoaded", caricaOpzioni);
+            var options = ddl.options;
+            allOptions = []; // Resetta
 
-    // Funzione Filtro
-    function filterAndHighlight(e) {
-        var input = document.getElementById("txtSearch");
-        var listDiv = document.getElementById("suggestionsListTipoAtto");
-        var filter = input.value.toUpperCase();
-
-        // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-        if (allOptions.length === 0) {
-            caricaOpzioni();
-        }
-
-        // Tasto INVIO (13)
-        if (e.keyCode === 13) {
-            var activeItem = listDiv.querySelector(".active");
-            if (activeItem) {
-                // Simula il click
-                activeItem.click();
-                e.preventDefault(); // Ferma il postback del form se presente
-            }
-            return;
-        }
-
-        listDiv.innerHTML = "";
-
-        // Se input vuoto, nascondi
-        if (filter.length === 0) {
-            listDiv.style.display = "none";
-            return;
-        }
-
-        var foundCount = 0;
-
-        for (var i = 0; i < allOptions.length; i++) {
-            var item = allOptions[i];
-
-            // LOGICA DI FILTRO (Contiene il testo?)
-            if (item.text.toUpperCase().indexOf(filter) > -1) {
-                
-                var div = document.createElement("div");
-                div.className = "suggestion-item";
-                div.innerText = item.text;
-                
-                // Usiamo attributi data- per passare il valore
-                div.setAttribute("data-val", item.value);
-
-                // Evidenzia il primo risultato
-                if (foundCount === 0) {
-                    div.classList.add("active");
+            for (var i = 0; i < options.length; i++) {
+                // Carica tutto tranne i valori vuoti
+                if (options[i].value !== "" && options[i].value !== "0") {
+                    allOptions.push({ text: options[i].text, value: options[i].value });
                 }
+            }
+            console.log("Opzioni caricate in memoria: " + allOptions.length);
+        }
 
-                // Click Mouse
-                div.onclick = function () {
-                    seleziona(this.innerText, this.getAttribute("data-val"));
-                };
+        // Carica i dati appena la pagina è pronta
+        document.addEventListener("DOMContentLoaded", caricaOpzioni);
 
-                listDiv.appendChild(div);
-                foundCount++;
+        // Funzione Filtro
+        function filterAndHighlight(e) {
+            var input = document.getElementById("txtSearch");
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
+            var filter = input.value.toUpperCase();
+
+            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+            if (allOptions.length === 0) {
+                caricaOpzioni();
+            }
+
+            // Tasto INVIO (13)
+            if (e.keyCode === 13) {
+                var activeItem = listDiv.querySelector(".active");
+                if (activeItem) {
+                    // Simula il click
+                    activeItem.click();
+                    e.preventDefault(); // Ferma il postback del form se presente
+                }
+                return;
+            }
+
+            listDiv.innerHTML = "";
+
+            // Se input vuoto, nascondi
+            if (filter.length === 0) {
+                listDiv.style.display = "none";
+                return;
+            }
+
+            var foundCount = 0;
+
+            for (var i = 0; i < allOptions.length; i++) {
+                var item = allOptions[i];
+
+                // LOGICA DI FILTRO (Contiene il testo?)
+                if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+                    var div = document.createElement("div");
+                    div.className = "suggestion-item";
+                    div.innerText = item.text;
+
+                    // Usiamo attributi data- per passare il valore
+                    div.setAttribute("data-val", item.value);
+
+                    // Evidenzia il primo risultato
+                    if (foundCount === 0) {
+                        div.classList.add("active");
+                    }
+
+                    // Click Mouse
+                    div.onclick = function () {
+                        seleziona(this.innerText, this.getAttribute("data-val"));
+                    };
+
+                    listDiv.appendChild(div);
+                    foundCount++;
+                }
+            }
+
+            console.log("Risultati trovati: " + foundCount);
+
+            if (foundCount > 0) {
+                listDiv.style.display = "block";
+            } else {
+                listDiv.style.display = "none";
             }
         }
 
-        console.log("Risultati trovati: " + foundCount);
+        function seleziona(text, value) {
+            console.log("Selezionato: " + text + " (ID: " + value + ")");
 
-        if (foundCount > 0) {
-            listDiv.style.display = "block";
-        } else {
-            listDiv.style.display = "none";
-        }
-    }
-
-    function seleziona(text, value) {
-        console.log("Selezionato: " + text + " (ID: " + value + ")");
-        
-        var input = document.getElementById("txtSearch");
+            var input = document.getElementById("txtSearch");
             var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-        var listDiv = document.getElementById("suggestionsListTipoAtto");
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
 
             input.value = text;
             if (ddl) ddl.value = value;
@@ -507,14 +507,12 @@
         });--%>
 
     </script>
-    
+
     <style>
-
-
-.suggestion-item:hover, .suggestion-item.active {
-    background-color: #007bff; /* Blu quando selezionato */
-    color: white;
-}
+        .suggestion-item:hover, .suggestion-item.active {
+            background-color: #007bff; /* Blu quando selezionato */
+            color: white;
+        }
     </style>
 
     <div class="jumbotron">
@@ -527,6 +525,7 @@
 
             <div class="tab-content">
                 <p style="font-weight: bold; font-size: medium">Dati Generali</p>
+
                 <div class="row custom-border">
                     <div class="col-md-4 ">
                         <div class="form-group mb-3" style="margin-left: -25px; margin-top: 30px">
@@ -550,10 +549,9 @@
                             </div>
                             <asp:DropDownList ID="DdlTipoAtto" runat="server" CssClass="form-control" />--%>
                             <asp:HiddenField ID="HfTipoAtto" runat="server" />
-                            <input type="text" id="txtSearch" class="form-control"
+                            <input type="text" id="txtSearchAtto" runat="server" class="form-control"
                                 placeholder="Cerca..."
-                                onkeyup="filterAndHighlight(event)" 
-                                
+                                onkeyup="filterAndHighlight(event)"
                                 autocomplete="off" />
 
                             <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
@@ -566,9 +564,21 @@
                             <label for="txtTipoAtto">Ulteriore Atto</label>
                             <asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" MaxLength="100" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                         </div>
-
-
-                    </div>
+                        <%-- //I- mod 02/06/2026 numero esposti. --%>
+                                <div class="form-group mb-3 " style="margin-left: -25px">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Inserire numero di prot. per lo stesso carico "
+                                        ValidationExpression="\d{1,3}" ValidationGroup="bt" ForeColor="Red">
+                                    </asp:RequiredFieldValidator>
+                                </div>
+                                <div class="form-group mb-3" style="margin-left: -25px">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="* Inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+                                    </asp:RequiredFieldValidator>
+                                </div>
+                                <div class="form-group mb-3 " style="margin-left: -25px">
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
+                                </div>
+                            </div>
+                    <%-- //F- mod 02/06/2026 numero esposti. --%>
                     <div class="col-md-4">
 
                         <div class="form-group mb-3">
@@ -590,15 +600,18 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
-                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red">
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" OnTextChanged="txtRifProtGen_TextChanged"/>
 
-                            </asp:RequiredFieldValidator>
+                        </div>
+                        <div class="form-group mb-3" >
+                            <label for="txtNumProtRicStessoCarico">Numeri protocollo</label>
+                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3" Text="1"/>
 
                         </div>
 
                     </div>
                 </div>
+
                 <p style="font-weight: bold; font-size: medium">Dati Relativi Alla Pratica</p>
 
                 <div class="row custom-border">
@@ -661,6 +674,7 @@
                                 <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
                                 <asp:ListItem Text="PG"> </asp:ListItem>
                                 <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
+                                <asp:ListItem Text="UFFICIO TRASMISSIONI"> </asp:ListItem>
                                 <asp:ListItem Text="URP"> </asp:ListItem>
                             </asp:DropDownList>
                         </div>

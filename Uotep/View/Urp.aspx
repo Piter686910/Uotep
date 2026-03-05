@@ -149,7 +149,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="txtDataUscita">Data Uscita</label>
-                            <asp:TextBox ID="txtDataUscita" runat="server" CssClass="form-control data-auto" placeholder="gg/mm/yyyy" />
+                            <asp:TextBox ID="txtDataUscita" runat="server" CssClass="form-control data-auto" placeholder="gg/mm/yyyy"  />
                         </div>
                     </div>
 
@@ -463,7 +463,6 @@
                                 <ItemTemplate>
                                     <asp:Button ID="btnElimina" runat="server" Text="Del." CommandName="Delete" CommandArgument='<%# Eval("id_registro") %>' CssClass="btn btn-danger btn-sm" />
                                     <%-- OnClientClick="return confirm('Sei sicuro di voler eliminare questa riga?');" --%>
-
                                 </ItemTemplate>
                             </asp:TemplateField>
 
@@ -508,78 +507,78 @@
 
             </div>
         </div>
+    </div>
 
+    <!-- Popup Modale inserimento data scadenza -->
+    <div class="modal fade" id="ModalDataScadenza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 20%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel4">Inserisci La Nuova Data Scadenza</h5>
 
-        <!-- Popup Modale inserimento data scadenza -->
-        <div class="modal fade" id="ModalDataScadenza" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="width: 20%">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel4">Inserisci La Nuova Data Scadenza</h5>
-
+                </div>
+                <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
+                    <div class="form-group mb-3">
+                        <label for="txtdataScadenzaPopup">Data Scadenza</label>
+                        <asp:TextBox ID="txtdataScadenzaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                     </div>
-                    <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
-                        <div class="form-group mb-3">
-                            <label for="txtdataScadenzaPopup">Data Scadenza</label>
-                            <asp:TextBox ID="txtdataScadenzaPopup" runat="server" CssClass="form-control data-auto"></asp:TextBox>
-                        </div>
-                    </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <!-- Bottone per avviare chiousura decretazione -->
-                        <asp:Button ID="ModalChiudiDataScadenza" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDataScadenza_Click"  />
-                    </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare chiousura decretazione -->
+                    <asp:Button ID="ModalChiudiDataScadenza" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDataScadenza_Click" />
                 </div>
             </div>
         </div>
-        <%-- popup errori --%>
-        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <%--role="document">--%>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+    </div>
+    <%-- popup errori --%>
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <%--role="document">--%>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
+
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <p id="errorMessage" runat="server" style="color: red"></p>
 
                     </div>
-                    <div class="modal-body">
 
-                        <div class="form-group">
+                </div>
+                <div class="modal-footer">
 
-                            <p id="errorMessage" runat="server" style="color: red"></p>
-
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-
-                        <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
-                    </div>
+                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
                 </div>
             </div>
         </div>
-        <%-- popup messaggi --%>
-        <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
-            <div class="modal-dialog"
-                role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
+    </div>
+    <%-- popup messaggi --%>
+    <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
+        <div class="modal-dialog"
+            role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
+
+                </div>
+                <div class="modal-body">
+                    <!-- Campi di input per la ricerca -->
+                    <div class="form-group">
+
+                        <p id="TextMessage" runat="server" style="color: red"></p>
 
                     </div>
-                    <div class="modal-body">
-                        <!-- Campi di input per la ricerca -->
-                        <div class="form-group">
-
-                            <p id="TextMessage" runat="server" style="color: red"></p>
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <!-- Bottone per avviare la ricerca -->
-                        <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
-                        <asp:Button ID="btOKCan" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKCan_Click" />
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Bottone per avviare la ricerca -->
+                    <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
+                    <asp:Button ID="btOKCan" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKCan_Click" />
                 </div>
             </div>
         </div>
+    </div>
 </asp:Content>

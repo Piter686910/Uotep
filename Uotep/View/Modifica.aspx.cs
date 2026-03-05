@@ -27,15 +27,38 @@ namespace Uotep
         string msg = string.Empty;
         string pagchiamante = "~/View/Modifica.aspx";
         Routine r = new Routine();
+        string Isdecr = string.Empty;//variabile per identificare se la chiamata alla pagina è avvenuta da visualizza, se è true è stata chiamata da visualizza e deve aprire il popup di decretazione con i campi valorizzati,
+                                     //se è false è stata chiamata da visualizza e deve aprire la scheda con i campi valorizzati
         protected void Page_Load(object sender, EventArgs e)
         {
+            //verifica se ho ricevuto evento dal popup presente in sitemaster
+            HiddenField hf = (HiddenField)Master.FindControl("hfMasterParam");
+            if (hf != null && !string.IsNullOrEmpty(hf.Value))
+            {
+                string valoreRicevuto = hf.Value;
 
+
+
+
+                Pulisci();
+                CaricaDLL();
+                Session.Remove("ListRicerca");
+                Session.Remove("ListPratiche");
+                Session.Remove("decr");
+                Isdecr = String.Empty;
+                string url = VirtualPathUtility.ToAbsolute("~/View/Modifica.aspx");
+                Response.Redirect(url, false);
+            }
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
                 profilo = Session["profilo"].ToString();
                 ruolo = Session["ruolo"].ToString();
+                if (Session["decr"] != null)
+                    Isdecr = Session["decr"].ToString();
+                else Isdecr = "false";
             }
+
             else
             {
                 // Se l'utente non è autenticato, reindirizza alla pagina di login
@@ -68,23 +91,75 @@ namespace Uotep
                 CaricaDLL();
                 if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
                 {
+                    if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                        btChiudiDecretazione.Visible = true;
+                    else
+                    { 
+                        //btChiudiDecretazione.Visible = false;
                     btSalva.Visible = false;
                     btCercaQuartiere.Visible = false;
                     btChiudiDecretazione.Visible = false;
-
+                    }
                 }
                 if (Session["ListRicerca"] != null)
                 {
                     DataTable pratica = (DataTable)Session["ListRicerca"];
-                    if (pratica.Rows.Count > 0)
+                    //I- mod 31/01/2026 decretazione da pag visualizza
+                    if (Isdecr == "true")
                     {
-                        Hid.Value = pratica.Rows[0].ItemArray[0].ToString();
-                        DivDettagli.Visible = true;
-                        CaricaDLL();
-                        FillScheda(pratica);
-                        Session.Remove("ListRicerca");
+                        txtPraticaDecr.Text = pratica.Rows[0]["Nr_Protocollo"].ToString();
+                        Hid.Value = pratica.Rows[0]["id"].ToString();
+                        txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                        Manager mn = new Manager();
+                        DataTable decretazione = new DataTable();
+                        if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
+                        {
+                            decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
+                            if (decretazione.Rows.Count > 0)
+                            {
+                                GVDecretazione.DataSource = decretazione;
+                                GVDecretazione.DataBind();
+                                Hfdecretazione.Value = decretazione.Rows[0]["decr_chiuso"].ToString();
+                                if (Hfdecretazione.Value == "True")
+                                {
+                                    //btAggiungiDecretazione.Enabled = false;
+                                    //btChiudiDecretazione.Enabled = false;
+                                    SiteMaster myMaster = this.Master as SiteMaster;
+                                    if (myMaster != null)
+                                    {
+                                        // 2. Chiamo il metodo pubblico
+                                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaChiusa.GetDescription(), "danger");
+                                        string url = VirtualPathUtility.ToAbsolute("~/View/Visualizza.aspx");
+                                        Response.Redirect(url, false);
+                                        return;
+                                    }
+                                }
+
+                            }
+                        }
+                        DataTable operatore = mn.getNominativoOperatore(Vuser);
+                        if (operatore.Rows.Count > 0)
+                        {
+                            if (!String.IsNullOrEmpty(operatore.Rows[0]["nominativo"].ToString()))
+                                txtDecretante.Text = operatore.Rows[0]["nominativo"].ToString().ToUpper();
+                        }
+
+                        apripopupDecretazione_Click(sender, e);
+                        //F- mod 31/01/2026 decretazione da pag visualizza
+                    }
+                    else
+                    {
+                        if (pratica.Rows.Count > 0)
+                        {
+                            Hid.Value = pratica.Rows[0].ItemArray[0].ToString();
+                            DivDettagli.Visible = true;
+                            CaricaDLL();
+                            FillScheda(pratica);
+                            Session.Remove("ListRicerca");
+                        }
                     }
                 }
+
 
 
             }
@@ -110,9 +185,9 @@ namespace Uotep
             txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
             txtTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
             txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
-           // DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-            txtSearchAtto.Value = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-            DdlTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            // DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+            txtSearchAtto.Value = pratica.Rows[0]["Tipologia_atto"].ToString().ToUpper();
+            DdlTipoAtto.ToolTip = pratica.Rows[0]["Tipologia_atto"].ToString().ToUpper();
             txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
             TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
             TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
@@ -124,7 +199,14 @@ namespace Uotep
             txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
             txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper() + " " + pratica.Rows[0].ItemArray[11].ToString().ToUpper();
             txtIndirizzo.ToolTip = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
+            //I- mod 02/06/2026 numero esposti
+            if (!String.IsNullOrEmpty(pratica.Rows[0]["NumProtRicStessoCarico"].ToString()))
+            {
+                txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString().ToUpper();
 
+            }
+
+            //F- mod 02/06/2026 numero esposti
             //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
             //{
             //    //converte la data 01-01-1900 in SPACE
@@ -140,7 +222,9 @@ namespace Uotep
             //}
             txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
             txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-            if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+            //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
+            if (!String.IsNullOrEmpty(pratica.Rows[0]["EvasaData"].ToString()))
+
             {
                 //converte la data 01-01-1900 in SPACE
                 DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0]["EvasaData"].ToString()); // Recupera la data dal DataTable
@@ -153,7 +237,7 @@ namespace Uotep
                     TxtDataEsito.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
                 }
             }
-           
+
             //if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
             //{
             //    //txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
@@ -342,7 +426,7 @@ namespace Uotep
             {
                 resp = false;
             }
-            
+
             return resp;
         }
         protected void Salva_Click(object sender, EventArgs e)
@@ -416,20 +500,34 @@ namespace Uotep
                         //p.quartiere = lblQuartiere.Text;
                     }
                     p.provenienza = txtProvenienza.Text;
-                    if (DdlTipoAtto.SelectedItem.Text == "")
+                    if (String.IsNullOrEmpty(txtSearchAtto.Value))
                     {
 
                         p.tipologia_atto = String.Empty;
                     }
                     else
                     {
-                        Boolean resp1 = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
+                        Boolean resp1 = mn.getTipoAtto(txtSearchAtto.Value);
                         if (!resp1)
                         {
-                            HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
+                            HfTipoAtto.Value = txtSearchAtto.Value;
                         }
-                        p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                        p.tipologia_atto = txtSearchAtto.Value;
                     }
+                    //if (DdlTipoAtto.SelectedItem.Text == "")
+                    //{
+
+                    //    p.tipologia_atto = String.Empty;
+                    //}
+                    //else
+                    //{
+                    //    Boolean resp1 = mn.getTipoAtto(DdlTipoAtto.SelectedItem.Text);
+                    //    if (!resp1)
+                    //    {
+                    //        HfTipoAtto.Value = DdlTipoAtto.SelectedItem.Text;
+                    //    }
+                    //    p.tipologia_atto = DdlTipoAtto.SelectedItem.Text;
+                    // }
                     if (!String.IsNullOrEmpty(txtTipoAtto.Text))
                         p.ulterioreTipoAtto = txtTipoAtto.Text;
                     p.rif_Prot_Gen = txtRifProtGen.Text;
@@ -450,6 +548,10 @@ namespace Uotep
 
                     // p.note = txtNote.Text;
                     // p.evasa = ck.Checked;
+                    //I- mod 02/06/2026 numero esposti
+                    p.NumProtRicStessoCarico = string.IsNullOrWhiteSpace(txtNumProtRicStessoCarico.Text) ? 0 : Convert.ToInt32(txtNumProtRicStessoCarico.Text);
+
+                    //F- mod 02/06/2026 numero esposti
                     if (!string.IsNullOrEmpty(TxtDataEsito.Text))
                     {
                         p.evasaData = System.Convert.ToDateTime(TxtDataEsito.Text).ToShortDateString();
@@ -550,10 +652,10 @@ namespace Uotep
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
                     SiteMaster myMaster = this.Master as SiteMaster;
-                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat,Vuser);
+                    Boolean ins = mn.UpdPratica(p, Holdmat.Value, ID, dat, Vuser);
                     if (!ins)
                     {
-                       // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ErrorLog.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                        // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.ErrorLog.GetDescription() + "'); $('#errorModal').modal('show');", true);
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
@@ -567,7 +669,7 @@ namespace Uotep
                         {
 
                             HfButtonProv.Value = string.Empty;
-                            
+
 
                             if (myMaster != null)
                             {
@@ -654,6 +756,7 @@ namespace Uotep
             List<string> accertatoriList = new List<string>();
             DdlSigla.Items.Clear();
             ListAccertatori.Items.Clear();
+
         }
 
         protected void NuovaRicerca_Click(object sender, EventArgs e)
@@ -663,13 +766,105 @@ namespace Uotep
             DivGrid.Visible = false;
             txtAnnoRicerca.Text = String.Empty;
             txPratica.Text = String.Empty;
+            Hfdecretazione.Value = string.Empty;
+
+        }
+        protected void RicercaPerModifica(object sender, EventArgs e)
+        {
+
+            string msg = string.Empty;
+            Manager mn = new Manager();
+
+            DataTable pratica = new DataTable();
+            if (!string.IsNullOrEmpty(txtNProtocollo.Text))
+            {
+                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtProcPenale.Text))
+            {
+                pratica = mn.getListProcedimento(txtProcPenale.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+
+            if (!string.IsNullOrEmpty(txtDataDa.Text))
+            {
+                pratica = mn.getListEvasaAg(txtDataDa.Text, txtDataA.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtProtGen.Text))
+            {
+                pratica = mn.getListProtGen(txtProtGen.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtPratica.Text))
+            {
+                pratica = mn.getListPratica(txtPratica.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtRicGiudice.Text))
+            {
+                pratica = mn.getListGiudice(txtRicGiudice.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtRicProvenienza.Text))
+            {
+                pratica = mn.getListProvenienza(txtRicProvenienza.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtRicNominativo.Text))
+            {
+                pratica = mn.getListNominativo(txtRicNominativo.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtRicAccertatori.Text))
+            {
+                pratica = mn.getListAccertatori(txtRicAccertatori.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtRicIndirizzo.Text))
+            {
+                pratica = mn.getListIndirizzo(txtRicIndirizzo.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+            if (!string.IsNullOrEmpty(txtDataDa.Text))
+            {
+                pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text, out msg);
+                if (!String.IsNullOrWhiteSpace(msg))
+
+                    r.Reindirizzamento(msg, pagchiamante);
+            }
+
+            if (pratica.Rows.Count > 0)
+            {
+                // Salva datatable pratica  nella Sessione
+                // Session["ListPratiche"] = pratica;
+
+                GVDecretazione.DataSource = pratica;
+                GVDecretazione.DataBind();
+                //DivDettagli.Visible = true;
+                //DivRicerca.Visible = false;
+                // DivGrid.Visible = true;
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+            }
         }
         protected void Ricerca_Click(object sender, EventArgs e)
         {
 
             string msg = string.Empty;
             Manager mn = new Manager();
-            ;
+
             DataTable pratica = new DataTable();
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
             {
@@ -863,8 +1058,9 @@ namespace Uotep
 
                         txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                         txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
-                        DdlTipoAtto.SelectedItem.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-                        DdlTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
+                        txtSearchAtto.Value = pratica.Rows[0]["Tipologia_atto"].ToString().ToUpper();
+                        DdlTipoAtto.SelectedItem.Text = pratica.Rows[0]["Tipologia_atto"].ToString().ToUpper();
+                        DdlTipoAtto.ToolTip = pratica.Rows[0]["Tipologia_atto"].ToString().ToUpper();
                         txtTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
                         txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
                         txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString();
@@ -1058,27 +1254,62 @@ namespace Uotep
         //gridview per decretazione
         protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //if (e.Row.RowType == DataControlRowType.DataRow)
-            //{
-            //    // Ottieni il valore della colonna "ID"
-            //    string id = DataBinder.Eval(e.Row.DataItem, "decr_id").ToString();
 
-            //    // Aggiungi l'attributo per il doppio clic
-            //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
-            //    e.Row.Style["cursor"] = "pointer";
-            //}
-            if (GVDecretazione.TopPagerRow != null && GVDecretazione.TopPagerRow.Visible)
+
+
+            if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                // Trova il controllo Label all'interno del PagerTemplate
-                Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
-                if (lblPageInfo != null)
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "decr_id").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+
+                if (GVDecretazione.TopPagerRow != null)
                 {
-                    // Calcola e imposta il testo
-                    int currentPage = GVDecretazione.PageIndex + 1;
-                    int totalPages = GVDecretazione.PageCount;
-                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                    // Trova il controllo Label all'interno del PagerTemplate
+                    Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
+                    if (lblPageInfo != null)
+                    {
+                        // Calcola e imposta il testo
+                        int currentPage = GVDecretazione.PageIndex + 1;
+                        int totalPages = GVDecretazione.PageCount;
+                        lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                    }
                 }
+
+
             }
+
+
+            //// Ottieni il valore della colonna "ID"
+            //string id = DataBinder.Eval(e.Row.DataItem, "decr_id").ToString();
+
+            //// Aggiungi l'attributo per il doppio clic
+            //e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            //e.Row.Style["cursor"] = "pointer";
+            ////if (e.Row.RowType == DataControlRowType.DataRow)
+            ////{
+            ////    // Ottieni il valore della colonna "ID"
+            ////    string id = DataBinder.Eval(e.Row.DataItem, "decr_id").ToString();
+
+            ////    // Aggiungi l'attributo per il doppio clic
+            ////    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+            ////    e.Row.Style["cursor"] = "pointer";
+            ////}
+            //if (GVDecretazione.TopPagerRow != null && GVDecretazione.TopPagerRow.Visible)
+            //{
+            //    // Trova il controllo Label all'interno del PagerTemplate
+            //    Label lblPageInfo = (Label)GVDecretazione.TopPagerRow.FindControl("lblPageInfo");
+            //    if (lblPageInfo != null)
+            //    {
+            //        // Calcola e imposta il testo
+            //        int currentPage = GVDecretazione.PageIndex + 1;
+            //        int totalPages = GVDecretazione.PageCount;
+            //        lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+            //    }
+            //}
         }
         protected void GVDecretazione_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -1153,7 +1384,123 @@ namespace Uotep
                 }
             }
         }
+        protected void GVDecretazione_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            switch (e.NewPageIndex)
+            {
+                case -1:
+                    e.NewPageIndex = 0;
+                    break;
+                default:
+                    break;
+            }
 
+
+            GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Decretazione_Click(sender, e);
+
+        }
+        protected void GVDecretazione_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Esce dalla modalità modifica
+            GVDecretazione.EditIndex = -1;
+            // Ricarica i dati per mostrare le TextBox
+            Decretazione_Click(sender, e);
+        }
+
+        protected void GVDecretazione_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            GVDecretazione.EditIndex = e.NewEditIndex;
+            Session.Remove("decr");
+            Isdecr = "edit";
+            // Ricarica i dati per mostrare le TextBox
+            Decretazione_Click(sender, e);
+            //Ricerca_Click(sender, e);
+        }
+
+        protected void GVDecretazione_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            try
+            {
+                Isdecr = "edit";
+                // A. Recupera l'ID del record (da DataKeyNames)
+                int idDecretazione = Convert.ToInt32(GVDecretazione.DataKeys[e.RowIndex].Value);
+
+                // B. Recupera i nuovi valori inseriti nelle TextBox
+                // Devi cercare i controlli usando l'ID che hai dato nell'EditItemTemplate
+                GridViewRow row = GVDecretazione.Rows[e.RowIndex];
+                Manager mn = new Manager();
+                Decretazione decr = new Decretazione();
+                // TextBox txtDecretanteMod = (TextBox)row.FindControl("txtDecretanteMod");
+                TextBox txtDataMod = (TextBox)row.FindControl("txtDataMod");
+                TextBox txtDecretatoMod = (TextBox)row.FindControl("txtDecretatoMod");
+                TextBox txtNotaMod = (TextBox)row.FindControl("txtNotaMod");
+
+
+
+
+
+                decr.data = string.IsNullOrWhiteSpace(txtDataMod.Text.Trim()) ? DateTime.MinValue : System.Convert.ToDateTime(txtDataMod.Text);
+                // decr.data = System.Convert.ToDateTime(txtDataMod.Text);
+                decr.id = idDecretazione;
+
+                decr.decretato = string.IsNullOrWhiteSpace(txtDecretatoMod.Text.Trim()) ? string.Empty : txtDecretatoMod.Text.Trim();
+                decr.nota = string.IsNullOrWhiteSpace(txtNotaMod.Text.Trim()) ? string.Empty : txtNotaMod.Text.Trim();
+                Boolean resp = mn.UpdDecretazione(decr);
+                if (resp)
+                {
+                    //richiama popup dalla site master
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        // myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroOk.GetDescription(), "success");
+                        GVDecretazione.EditIndex = -1;
+                        Decretazione_Click(sender, e);
+                    }
+                }
+                //Decretazione_Click(sender, e);
+
+                //if (resp)
+                //{
+                //    //richiama popup dalla site master
+                //    SiteMaster myMaster = this.Master as SiteMaster;
+
+                //    if (myMaster != null)
+                //    {
+                //        // 2. Chiamo il metodo pubblico
+                //        // myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroOk.GetDescription(), "success");
+                //        GVDecretazione.EditIndex = -1;
+                //        Ricerca_Click(sender, e);
+                //    }
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                // Gestione Errore
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "danger");
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in gvInterrogatori_RowUpdating statistichepg.cs ");
+                        sw.Close();
+                    }
+
+                }
+            }
+        }
         protected void apripopup_Click(object sender, EventArgs e)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalQuartiere').modal('show');", true);
@@ -1177,6 +1524,18 @@ namespace Uotep
             txtDecretante.Text = String.Empty;
             txtDecretato.Text = String.Empty;
             txtDataDecretazione.Text = String.Empty;
+            Hfdecretazione.Value = string.Empty;
+            Session.Remove("decr");
+            Isdecr = "false";
+            if (!String.IsNullOrWhiteSpace(Isdecr))
+            {
+
+                string url = VirtualPathUtility.ToAbsolute("~/View/Visualizza.aspx");
+                Response.Redirect(url, false);
+            }
+
+
+
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
             // Pulisci();
         }
@@ -1196,6 +1555,7 @@ namespace Uotep
             DivDettagli.Visible = false;
             Session.Remove("ListPratiche");
             // Session.Remove("ListRicerca");
+            Hfdecretazione.Value = string.Empty;
         }
 
         protected void btNProtocollo_Click(object sender, EventArgs e)
@@ -1286,22 +1646,7 @@ namespace Uotep
             DivIndirizzo.Visible = true;
             DivRicerca.Visible = true;
         }
-        protected void GVDecretazione_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            switch (e.NewPageIndex)
-            {
-                case -1:
-                    e.NewPageIndex = 0;
-                    break;
-                default:
-                    break;
-            }
 
-
-            GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            Decretazione_Click(sender, e);
-
-        }
         protected void gvPopupD_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             switch (e.NewPageIndex)
@@ -1349,8 +1694,8 @@ namespace Uotep
                 Boolean ins = mn.InsDecretazione(decr);
                 if (!ins)
                 {
-                   //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
-                  
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
+
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
@@ -1365,10 +1710,25 @@ namespace Uotep
                         myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
-                    Pulisci();
-                    CaricaDLL();
-                    Session.Remove("ListRicerca");
-                    Session.Remove("ListPratiche");
+
+
+                    //HiddenField hf = (HiddenField)Master.FindControl("hfMasterParam");
+                    //if (hf != null && !string.IsNullOrEmpty(hf.Value))
+                    //{
+                    //    string valoreRicevuto = hf.Value;
+
+
+
+
+                    //    Pulisci();
+                    //    CaricaDLL();
+                    //    Session.Remove("ListRicerca");
+                    //    Session.Remove("ListPratiche");
+                    //    Session.Remove("decr");
+                    //    Isdecr = String.Empty;
+                    //    string url = VirtualPathUtility.ToAbsolute("~/View/Modifica.aspx");
+                    //    Response.Redirect(url, false);
+                    //}
                 }
             }
             catch (Exception ex)
@@ -1387,7 +1747,7 @@ namespace Uotep
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 string msg = ex.Message.Replace("\r", "").Replace("\n", " ");
-                
+
                 Response.Redirect(url + msg);
                 //Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
@@ -1398,57 +1758,66 @@ namespace Uotep
         protected void Decretazione_Click(object sender, EventArgs e)
         {
             HfButtonProv.Value = "Decretazione";
-            Salva_Click(sender, e);
-            txtPraticaDecr.Text = txtProt.Text;
-            txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
-
-            Manager mn = new Manager();
-            DataTable operatore = mn.getNominativoOperatore(Vuser);
-            if (operatore.Rows.Count > 0)
+            //I- 04/03/2026 decretazione 
+            if (Isdecr == "false")
             {
-                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
-                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
-            }
-
-            DataTable decretazione = new DataTable();
-            if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
-            {
-                decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
-            }
-            if (decretazione.Rows.Count > 0)
-            {
-
-                GVDecretazione.DataSource = decretazione;
-                GVDecretazione.DataBind();
-                Hfdecretazione.Value = decretazione.Rows[0].ItemArray[8].ToString();
-                if (Hfdecretazione.Value == "True")
-                {
-                    btAggiungiDecretazione.Enabled = false;
-                    btChiudiDecretazione.Enabled = false;
-                }
-                else
-
-                {
-                    if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
-                    {
-
-                        btSalva.Visible = false;
-                        btCercaQuartiere.Visible = false;
-                        if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
-                            btChiudiDecretazione.Visible = true;
-                        else
-                            btChiudiDecretazione.Visible = false;
-                    }
-                    else
-                        btChiudiDecretazione.Visible = true;
-                    //    btAggiungiDecretazione.Enabled = true;
-                    //    btChiudiDecretazione.Enabled = true;
-                }
+                MostraMsg("ATTENZIONE", Enumerate.MsgOutput.SavePratica.GetDescription(), "warning"); // aspetta la risposta del popup prima di procedere con la decretazione
 
             }
-            //  else
-            // btChiudiDecretazione.Visible = false;
-            apripopupDecretazione_Click(sender, e);
+            else
+                eseguiDecrtazione(sender, e);
+            //F- 04/03/2026 decretazione 
+            // Salva_Click(sender, e);
+            //txtPraticaDecr.Text = txtProt.Text;
+            //txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+            //Manager mn = new Manager();
+            //DataTable operatore = mn.getNominativoOperatore(Vuser);
+            //if (operatore.Rows.Count > 0)
+            //{
+            //    if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+            //        txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            //}
+
+            //DataTable decretazione = new DataTable();
+            //if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
+            //{
+            //    decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
+            //}
+            //if (decretazione.Rows.Count > 0)
+            //{
+
+            //    GVDecretazione.DataSource = decretazione;
+            //    GVDecretazione.DataBind();
+            //    Hfdecretazione.Value = decretazione.Rows[0].ItemArray[8].ToString();
+            //    if (Hfdecretazione.Value == "True")
+            //    {
+            //        btAggiungiDecretazione.Enabled = false;
+            //        btChiudiDecretazione.Enabled = false;
+            //    }
+            //    else
+
+            //    {
+            //        if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+            //        {
+
+            //            btSalva.Visible = false;
+            //            btCercaQuartiere.Visible = false;
+            //            if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+            //                btChiudiDecretazione.Visible = true;
+            //            else
+            //                btChiudiDecretazione.Visible = false;
+            //        }
+            //        else
+            //            btChiudiDecretazione.Visible = true;
+            //        //    btAggiungiDecretazione.Enabled = true;
+            //        //    btChiudiDecretazione.Enabled = true;
+            //    }
+
+            //}
+            ////  else
+            //// btChiudiDecretazione.Visible = false;
+            // apripopupDecretazione_Click(sender, e);
         }
 
         protected void btChiudiDecretazione_Click(object sender, EventArgs e)
@@ -1826,6 +2195,102 @@ namespace Uotep
         {
             if (ListAccertatori.SelectedItem != null)
                 ListAccertatori.Items.Remove(ListAccertatori.SelectedItem);
+        }
+
+        protected void BtConferma_Click(object sender, EventArgs e)
+        {
+            Salva_Click(sender, e);
+            eseguiDecrtazione(sender, e);
+        }
+
+        protected void BtNo_Click(object sender, EventArgs e)
+        {
+            eseguiDecrtazione(sender, e);
+        }
+        protected void eseguiDecrtazione(object sender, EventArgs e)
+        {
+            txtPraticaDecr.Text = (string.IsNullOrEmpty(txtPraticaDecr.Text)) ? txtProt.Text : txtPraticaDecr.Text;
+            //txtPraticaDecr.Text = txtProt.Text;
+            txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+
+            Manager mn = new Manager();
+            DataTable operatore = mn.getNominativoOperatore(Vuser);
+            if (operatore.Rows.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            }
+
+            DataTable decretazione = new DataTable();
+            if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
+            {
+                decretazione = mn.getListDecretazione(txtPraticaDecr.Text, Hid.Value);
+            }
+            if (decretazione.Rows.Count > 0)
+            {
+
+                GVDecretazione.DataSource = decretazione;
+                GVDecretazione.DataBind();
+                Hfdecretazione.Value = decretazione.Rows[0].ItemArray[8].ToString();
+                if (Hfdecretazione.Value == "True")
+                {
+                    btAggiungiDecretazione.Enabled = false;
+                    btChiudiDecretazione.Enabled = false;
+                }
+                else
+
+                {
+                    if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+                    {
+
+                        btSalva.Visible = false;
+                        btCercaQuartiere.Visible = false;
+                        if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                            btChiudiDecretazione.Visible = true;
+                        else
+                            btChiudiDecretazione.Visible = false;
+                    }
+                    else
+                        btChiudiDecretazione.Visible = true;
+
+                }
+
+            }
+
+            apripopupDecretazione_Click(sender, e);
+        }
+        public void MostraMsg(string titolo, string messaggio, string tipoMessaggio = "info")
+        {
+            // 1. Imposta i testi
+            lblModalTitolo.Text = titolo;
+            TxtMessage.InnerText = messaggio;
+
+            // 2. Imposta il colore dell'header in base al tipo
+            string classeColore = "modal-header"; // Classe base
+            switch (tipoMessaggio.ToLower())
+            {
+                case "success":
+                    classeColore += " bg-success"; // Verde
+                    break;
+                case "danger":
+                case "error":
+                    classeColore += " bg-danger"; // Rosso
+                    break;
+                case "warning":
+                    classeColore += " bg-warning"; // Giallo/Arancio
+                    break;
+                default:
+                    classeColore += " bg-info"; // Azzurro (Info)
+                    break;
+            }
+
+            // Assegna la classe al div header
+            modalHeaderColor.Attributes["class"] = classeColore;
+
+            // 3. Lancia lo script per aprire il modale
+            string script = "$('#ModalRichiestaSalva').modal('show');";
+
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalRichiestaSalva", script, true);
         }
     }
 }

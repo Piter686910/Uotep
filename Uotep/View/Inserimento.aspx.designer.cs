@@ -51,6 +51,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfTipoAtto;
 
         /// <summary>
+        /// Controllo txtSearchAtto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtSearchAtto;
+
+        /// <summary>
         /// Controllo DdlTipoAtto.
         /// </summary>
         /// <remarks>
@@ -67,6 +76,33 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtTipoAtto;
+
+        /// <summary>
+        /// Controllo RequiredFieldValidator2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+
+        /// <summary>
+        /// Controllo RequiredFieldValidator1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+
+        /// <summary>
+        /// Controllo RegularExpressionValidator6.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator6;
 
         /// <summary>
         /// Controllo txtDataInsCarico.
@@ -123,13 +159,13 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtRifProtGen;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator1.
+        /// Controllo txtNumProtRicStessoCarico.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.TextBox txtNumProtRicStessoCarico;
 
         /// <summary>
         /// Controllo txtIndirizzo.

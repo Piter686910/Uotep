@@ -337,6 +337,7 @@
             }
 
         </script>
+        <asp:HiddenField ID="hfMasterParam" runat="server" ClientIDMode="Static" />
     </form>
     <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'></script>
 </body>

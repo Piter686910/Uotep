@@ -31,9 +31,14 @@ textarea {
     margin: 5px 0; /* Spazio esterno */
     margin-left: -10px;
 }
-
+.header-center {
+    text-align: center !important;
+}
 .larghezzaText {
     width: 110px;
+}
+.larghezzaText180 {
+    width: 180px;
 }
 /* Stile per la riga alternata (azzurro chiaro) */
 .GridViewAlternatingRow {
