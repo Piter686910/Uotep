@@ -537,9 +537,11 @@ namespace Uotep
         private void Pulisci()
         {
             Convalida();
+            txtSearchAtto.Value = string.Empty;
             txtProt.Text = String.Empty;
             txtDataDecretazione.Text = String.Empty;
-            txtDecretato.Text = String.Empty;
+          //  txtDecretato.Text = String.Empty;
+          txtSearchOperatore.Value = string.Empty;
             txtNotaDecretazione.Text = String.Empty;
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
@@ -760,6 +762,13 @@ namespace Uotep
                 //DdlInviati.DataValueField = "id_inviata"; // Il valore associato a ogni opzione
                 //DdlInviati.DataBind();
                 // DdlInviati.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                System.Data.DataTable CaricaOperatoriDecretazione = mn.getListOperatore(out msg);
+                ddlOperatore.DataSource = CaricaOperatoriDecretazione; // Imposta il DataSource della DropDownList
+                ddlOperatore.DataTextField = "Nominativo"; // Il campo visibile
+                //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
+                ddlOperatore.Items.Insert(0, new ListItem("", "0"));
+                ddlOperatore.DataBind();
+                ddlOperatore.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
             }
             catch (Exception ex)
             {
@@ -995,7 +1004,7 @@ namespace Uotep
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text;
-                decr.decretato = txtDecretato.Text.ToUpper();
+                decr.decretato = txtSearchOperatore.Value.ToUpper();
                 decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
 

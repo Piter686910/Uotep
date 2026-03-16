@@ -221,27 +221,28 @@ namespace Uotep
 
                 }
                 else
+                {
                     ins = mn.SavePraticaArchivioUotp(arch, out msg);
 
-                if (!string.IsNullOrEmpty(msg))
-                {
-                    if (msg == "DUPLICATO")
+                    if (!string.IsNullOrEmpty(msg))
                     {
-
-                        int cartellina = txtCartellinaTp.Text != string.Empty ? Convert.ToInt32(txtCartellinaTp.Text) : 0;
-                        cartellina++;
-                        txtCartellinaTp.Text = cartellina.ToString();
-                        if (myMaster != null)
+                        if (msg == "DUPLICATO")
                         {
-                            // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + cartellina, "danger");
+
+                            int cartellina = txtCartellinaTp.Text != string.Empty ? Convert.ToInt32(txtCartellinaTp.Text) : 0;
+                            cartellina++;
+                            txtCartellinaTp.Text = cartellina.ToString();
+                            if (myMaster != null)
+                            {
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("ATTENZIONE", txtCartellinaTp.Text + ":" + Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + cartellina, "danger");
+                            }
+
+                            return;
+
                         }
-
-                        return;
-
                     }
                 }
-
                 //                Boolean ins = mn.SavePraticaArchivioUotp(arch);
                 if (!ins)
                 {
@@ -249,7 +250,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("ATTENZIONE", msg + ": " + Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
                     }
                 }
                 else

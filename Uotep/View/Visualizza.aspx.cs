@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -92,7 +93,7 @@ namespace Uotep
             }
             if (txtNProtocollo.Text != string.Empty && txtAnnoRicerca.Text != string.Empty)
             {
-                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
+                pratica = mn.getListPrototocollo(Vuser,txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
             }
             if (txtProcPenale.Text != string.Empty)
             {
@@ -369,7 +370,7 @@ namespace Uotep
                             //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                             //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                            txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+                            txtRifProtGen.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Gen"].ToString(), @"[^0-9/]", ";");  //pratica.Rows[0].ItemArray[24].ToString();
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
                             {
                                 txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();

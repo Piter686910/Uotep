@@ -39,6 +39,7 @@
         function hideModal() {
             $('#ModalRicerca').modal('hide');
         }
+
     </script>
 
     <div class="jumbotron">
@@ -616,7 +617,7 @@
                                 </asp:TemplateField>
 
 
-                                <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+                                <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center"/>
                                 <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>

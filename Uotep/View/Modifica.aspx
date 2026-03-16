@@ -1138,13 +1138,32 @@
                                 <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="txtDecretante">Decretante</label>
+                                <label for="txtDecretante">Decretante</label>\
                                 <asp:TextBox ID="txtDecretante" runat="server" CssClass="form-control mb-3"></asp:TextBox>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDecretato">Decretato</label>
-                                <asp:TextBox ID="txtDecretato" runat="server" CssClass="form-control mb-3"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RfDecretato" runat="server" ControlToValidate="txtDecretato" ValidationGroup="btDecretazione" ErrorMessage="Inserire decretato" ForeColor="Red">
+                                <%--<asp:TextBox ID="txtDecretato" runat="server" CssClass="form-control mb-3"></asp:TextBox>--%>
+
+
+                                <input type="text" id="txtSearchOperatore" runat="server" class="form-control"  
+                                    placeholder="cerca..."
+                                    onkeyup="filterAndHighlightOp(event)"
+                                    
+                                    autocomplete="off" />
+
+                                <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
+                                <asp:DropDownList ID="ddlOperatore" runat="server" Style="display: none"></asp:DropDownList>
+                                <ul id="suggestionsListoperatore"></ul>
+                                <!-- 3. LISTA VISIVA (Finta Dropdown) -->
+                                <div id="dropdownList1" class="dropdown-content" >
+                                    <!-- Verrà riempita da Javascript -->
+                                </div>
+
+
+
+
+                                 <asp:RequiredFieldValidator ID="RfDecretato" runat="server" ControlToValidate="txtSearchOperatore" ValidationGroup="btDecretazione" ErrorMessage="Inserire decretato" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
                             </div>
                             <div class="form-group mb-3">
@@ -1357,7 +1376,7 @@
                     <div id="Div1" runat="server" class="row" style="margin-left: 30px!important">
                         <div class="form-group mb-3">
 
-                             <p id="TxtMessage" runat="server" style="color: red"></p>
+                            <p id="TxtMessage" runat="server" style="color: red"></p>
                         </div>
                     </div>
                 </div>
@@ -1431,18 +1450,132 @@
 
         // Carica i dati appena la pagina è pronta
         document.addEventListener("DOMContentLoaded", caricaOpzioni);
-
         // Funzione Filtro
         function filterAndHighlight(e) {
             var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
-            //var input = '<%= txtSearchAtto.ClientID %>';
+    //var input = '<%= txtSearchAtto.ClientID %>';
+    var listDiv = document.getElementById("suggestionsListTipoAtto");
+    //var filter = input.value.toUpperCase();
+    var filter = (input.value || "").toUpperCase();
+
+    // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+    if (allOptions.length === 0) {
+        caricaOpzioni();
+    }
+
+    // Tasto INVIO (13)
+    if (e.keyCode === 13) {
+        var activeItem = listDiv.querySelector(".active");
+        if (activeItem) {
+            // Simula il click
+            activeItem.click();
+            e.preventDefault(); // Ferma il postback del form se presente
+        }
+        return;
+    }
+
+    listDiv.innerHTML = "";
+
+    // Se input vuoto, nascondi
+    if (filter.length === 0) {
+        listDiv.style.display = "none";
+        return;
+    }
+
+    var foundCount = 0;
+
+    for (var i = 0; i < allOptions.length; i++) {
+        var item = allOptions[i];
+
+        // LOGICA DI FILTRO (Contiene il testo?)
+        if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+            var div = document.createElement("div");
+            div.className = "suggestion-item";
+            div.innerText = item.text;
+
+            // Usiamo attributi data- per passare il valore
+            div.setAttribute("data-val", item.value);
+
+            // Evidenzia il primo risultato
+            if (foundCount === 0) {
+                div.classList.add("active");
+            }
+
+            // Click Mouse
+            div.onclick = function () {
+                seleziona(this.innerText, this.getAttribute("data-val"));
+            };
+
+            listDiv.appendChild(div);
+            foundCount++;
+        }
+    }
+
+    console.log("Risultati trovati: " + foundCount);
+
+    if (foundCount > 0) {
+        listDiv.style.display = "block";
+    } else {
+        listDiv.style.display = "none";
+    }
+}
+        // Funzione Filtro
+        
+
+        function seleziona(text, value) {
+            console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
             var listDiv = document.getElementById("suggestionsListTipoAtto");
+
+            input.value = text;
+            if (ddl) ddl.value = value;
+            listDiv.style.display = "none";
+        }
+
+        // Chiudi se clicchi fuori
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
+                document.getElementById("suggestionsListTipoAtto").style.display = "none";
+            }
+        });
+
+        // Funzione per caricare i dati (chiamata solo quando serve)
+        function caricaOpzioniOperatore() {
+            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+
+     if (!ddl) {
+         console.error("Errore: DropDownList 'ddlOperatore' non trovata!");
+         return;
+     }
+
+     var options = ddl.options;
+     allOptions = []; // Resetta
+
+     for (var i = 0; i < options.length; i++) {
+         // Carica tutto tranne i valori vuoti
+         if (options[i].value !== "" && options[i].value !== "0") {
+             allOptions.push({ text: options[i].text, value: options[i].value });
+         }
+     }
+     console.log("Opzioni caricate in memoria: " + allOptions.length);
+        }
+
+        // Carica i dati appena la pagina è pronta
+        document.addEventListener("DOMContentLoaded", caricaOpzioniOperatore);
+
+        function filterAndHighlightOp(e) {
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            //var input = '<%= txtSearchOperatore.ClientID %>';
+            var listDiv = document.getElementById("suggestionsListoperatore");
             //var filter = input.value.toUpperCase();
             var filter = (input.value || "").toUpperCase();
 
             // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
             if (allOptions.length === 0) {
-                caricaOpzioni();
+                caricaOpzioniOperatore();
             }
 
             // Tasto INVIO (13)
@@ -1486,7 +1619,7 @@
 
                     // Click Mouse
                     div.onclick = function () {
-                        seleziona(this.innerText, this.getAttribute("data-val"));
+                        selezionaOperatore(this.innerText, this.getAttribute("data-val"));  
                     };
 
                     listDiv.appendChild(div);
@@ -1502,13 +1635,12 @@
                 listDiv.style.display = "none";
             }
         }
-
-        function seleziona(text, value) {
+        function selezionaOperatore(text, value) {
             console.log("Selezionato: " + text + " (ID: " + value + ")");
 
-            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListTipoAtto");
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+             var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+            var listDiv = document.getElementById("suggestionsListoperatore");
 
             input.value = text;
             if (ddl) ddl.value = value;
@@ -1517,11 +1649,9 @@
 
         // Chiudi se clicchi fuori
         document.addEventListener('click', function (e) {
-            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
-                document.getElementById("suggestionsListTipoAtto").style.display = "none";
-            }
-        });
-
+            if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
+                suggestionsListoperatore     }
+ });
         //////////////
     </script>
 </asp:Content>

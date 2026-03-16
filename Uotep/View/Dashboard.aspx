@@ -111,16 +111,59 @@
                         <asp:Button Text="Reset" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
                         <asp:Button Text="Elimina" runat="server" OnClick="Elimina_Click" ToolTip="Elimina Utente" CssClass="btn btn-primary px-4" />
 
+
                     </div>
                 </div>
             </div>
+            <div id="divCheck" runat="server" class="col-md-10 mx-auto" visible="false" style="float: none;">
+                <div class="row justify-content-center">
+                    <div class="col-md-3">
+                        <div class="form-group mb-3 text-start">
+                            <asp:Label ID="Label9" runat="server" Text="Pratica" CssClass="form-label fw-bold"></asp:Label>
+                            <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group mb-3 text-start">
+                            <asp:Label ID="Label10" runat="server" Text="Anno" CssClass="form-label fw-bold"></asp:Label>
+                            <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end mb-3">
+                        <asp:Button Text="Cerca" runat="server" OnClick="Cerca_Click" CssClass="btn btn-primary w-100" />
+                    </div>
+                </div>
 
-            <!-- Pulsante Login -->
-            <div class="form-group text-center mt-4">
-                <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-                <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" ToolTip="Nuovo Utente" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="table-responsive" style=" padding: 10px; background: #fff;">
+                            <asp:GridView ID="GVcheck" runat="server" AutoGenerateColumns="true"
+                                CssClass="table table-bordered table-hover compact-grid"
+                                OnRowDataBound="GVcheck_RowDataBound"
+                                OnRowCommand="GVcheck_RowCommand"
+                                AllowPaging="true" PageSize="30"
+                                OnPageIndexChanging="GVcheck_PageIndexChanging"
+                                AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                                Style="width: 100% !important; table-layout: fixed; margin: 0 auto;">
 
+                                <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                <PagerStyle HorizontalAlign="Center" />
+                                <PagerTemplate>
+                                </PagerTemplate>
+                            </asp:GridView>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <!-- Pulsante Login -->
+        <div class="form-group text-center mt-4">
+            <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+            <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" ToolTip="Nuovo Utente" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
+            <asp:Button Text="Check" runat="server" OnClick="Check_Click" ToolTip="Check tabella" CssClass="btn btn-primary px-4" />
+
+        </div>
+
         </div>
     </asp:Panel>
 

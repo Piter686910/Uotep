@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -129,8 +130,8 @@ namespace Uotep
                                     {
                                         // 2. Chiamo il metodo pubblico
                                         myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaChiusa.GetDescription(), "danger");
-                                        string url = VirtualPathUtility.ToAbsolute("~/View/Visualizza.aspx");
-                                        Response.Redirect(url, false);
+                                        //string url = VirtualPathUtility.ToAbsolute("~/View/Visualizza.aspx");
+                                        //Response.Redirect(url, false);
                                         return;
                                     }
                                 }
@@ -283,7 +284,7 @@ namespace Uotep
             //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
             txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
             //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-            txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+            txtRifProtGen.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Gen"].ToString(), @"[^0-9/]", ";");
             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
             {
                 DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
@@ -308,6 +309,14 @@ namespace Uotep
                 //DdlQuartiere.DataValueField = "ID_quartiere"; // Il valore associato a ogni opzione
                 DdlQuartiere.DataBind();
                 //DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
+                
+                System.Data.DataTable CaricaOperatoriDecretazione = mn.getListOperatore(out msg);
+                ddlOperatore.DataSource = CaricaOperatoriDecretazione; // Imposta il DataSource della DropDownList
+                ddlOperatore.DataTextField = "Nominativo"; // Il campo visibile
+                //DdlPattuglia.DataValueField = "Id"; // Il valore associato a ogni opzione
+                ddlOperatore.Items.Insert(0, new ListItem("", "0"));
+                ddlOperatore.DataBind();
+                ddlOperatore.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo(out msg);
                 if (!String.IsNullOrWhiteSpace(msg))
@@ -734,7 +743,8 @@ namespace Uotep
             txtDatArrivoDa.Text = String.Empty;
             txtNotaDecretazione.Text = String.Empty;
             txtDecretante.Text = String.Empty;
-            txtDecretato.Text = String.Empty;
+            //txtDecretato.Text = String.Empty;
+            txtSearchOperatore.Value = String.Empty; 
             txtDataDecretazione.Text = String.Empty;
             TxtDataEsito.Text = String.Empty;
             txPratica.Text = String.Empty;
@@ -778,7 +788,7 @@ namespace Uotep
             DataTable pratica = new DataTable();
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
             {
-                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
+                pratica = mn.getListPrototocollo(Vuser, txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
                 if (!String.IsNullOrWhiteSpace(msg))
                     r.Reindirizzamento(msg, pagchiamante);
             }
@@ -868,7 +878,7 @@ namespace Uotep
             DataTable pratica = new DataTable();
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
             {
-                pratica = mn.getListPrototocollo(txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
+                pratica = mn.getListPrototocollo(Vuser, txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
                 if (!String.IsNullOrWhiteSpace(msg))
                     r.Reindirizzamento(msg, pagchiamante);
             }
@@ -1161,6 +1171,13 @@ namespace Uotep
                         {
                             ListAccertatori.Items.Add(pratica.Rows[0]["accertatori3"].ToString());
                         }
+                        //I- mod 02/06/2026 numero esposti
+                        if (!String.IsNullOrEmpty(pratica.Rows[0]["NumProtRicStessoCarico"].ToString()))
+                        {
+                            txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString().ToUpper();
+
+                        }
+                        //F- mod 02/06/2026 numero esposti
                         //F- mod 31/01/2026 scheda int
                         //if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                         //{
@@ -1173,7 +1190,8 @@ namespace Uotep
                         //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                         txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
                         //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                        txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+                        //txtRifProtGen.Text = pratica.Rows[0].ItemArray[24].ToString();
+                        txtRifProtGen.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Gen"].ToString(), @"[^0-9/]", ";");
                         txtBU.Text = pratica.Rows[0].ItemArray[29].ToString();
                         txtCodEdificio.Text = pratica.Rows[0].ItemArray[30].ToString();
 
@@ -1340,7 +1358,7 @@ namespace Uotep
 
 
                         Int32 idDecr = System.Convert.ToInt32(values[0]);    // Protocollo
-                        txtDecretato.Text = values[1];     // Matricola
+                        txtSearchOperatore.Value = values[1];     // Matricola
                         txtDataDecretazione.Text = values[2]; // DataInserimento
                         txtNotaDecretazione.Text = values[3]; // sigla
 
@@ -1374,7 +1392,7 @@ namespace Uotep
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                     decr.id = idDecr;
 
-                    decr.decretato = txtDecretato.Text;
+                    decr.decretato = txtSearchOperatore.Value;
                     decr.nota = txtNotaDecretazione.Text;
                     Boolean resp = mn.UpdDecretazione(decr);
                     Decretazione_Click(sender, e);
@@ -1522,7 +1540,7 @@ namespace Uotep
             GVDecretazione.DataBind();
             txtNotaDecretazione.Text = String.Empty;
             txtDecretante.Text = String.Empty;
-            txtDecretato.Text = String.Empty;
+            txtSearchOperatore.Value = String.Empty;
             txtDataDecretazione.Text = String.Empty;
             Hfdecretazione.Value = string.Empty;
             Session.Remove("decr");
@@ -1687,7 +1705,7 @@ namespace Uotep
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text;
-                decr.decretato = txtDecretato.Text.ToUpper();
+                decr.decretato = txtSearchOperatore.Value.ToUpper();
                 decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
                 SiteMaster myMaster = this.Master as SiteMaster;
@@ -1975,7 +1993,7 @@ namespace Uotep
                 decr.idPratica = System.Convert.ToInt32(Hid.Value);
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text.ToUpper();
-                decr.decretato = txtDecretato.Text.ToUpper();
+                decr.decretato = txtSearchOperatore.Value.ToUpper();
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
                 if (!String.IsNullOrEmpty(txtDataDecretazione.Text))
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
