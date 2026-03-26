@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
@@ -43,7 +44,7 @@ namespace Uotep
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
                         userLog.Visible = true;
-                       // LiHelp.Visible = true;
+                        // LiHelp.Visible = true;
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
                             case "coordinamentopg":
@@ -183,7 +184,7 @@ namespace Uotep
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.V.ToString()))
 
                                 {
-                                   
+
                                     InserimentoArchivioUote.Visible = false;
                                     InserimentoArchivioUotp.Visible = false;
                                 }
@@ -281,7 +282,13 @@ namespace Uotep
                     //    lblMsg.Text = "Matricola assente";
                 }
                 //else
-                //    lblMsg.Text = "Utente non loggato";
+                //{
+                //    // Se la sessione è vuota e non siamo sulla pagina di login, rimanda al login
+                //    if (Session["user"] == null && !Request.Url.AbsolutePath.EndsWith("Default.aspx"))
+                //    {
+                //        Response.Redirect("~/View/Default.aspx");
+                //    }
+              //  }
 
             }
         }
@@ -307,6 +314,9 @@ namespace Uotep
             Session.Remove("ListScadenziario");
             Session.Remove("ListRicercaFiltro");
             Session.Abandon();
+            //I 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
+            FormsAuthentication.SignOut();
+            //F 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);
             //Response.Redirect(/Default.aspx"), false);

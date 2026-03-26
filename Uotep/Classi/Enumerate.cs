@@ -86,7 +86,11 @@ namespace Uotep.Classi
             [Description("Errore update Interrogatorio.")]
             UpdInterrogatorioKo = 19,
             [Description("Vuoi salvare anche la pratica?")]
-            SavePratica = 20
+            SavePratica = 20,
+            //I 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
+            [Description("Errore di sicurezza: Connessione non criptata. Impossibile procedere con il login.")]
+            ConnectNotSure = 21,
+            //F 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
         }
         public enum Sigla
         {

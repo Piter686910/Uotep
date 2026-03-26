@@ -56,10 +56,30 @@ namespace Uotep
                 }
             }
         }
-
-
+        //I 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
+        private bool IsConnectionSecure()
+        {
+            // Verifica se la richiesta è HTTPS
+            // Nota: IsLocal permette di testare in locale senza HTTPS se necessario
+            return Request.IsSecureConnection || Request.IsLocal;
+        }
+        //F 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
         protected void trova_Click(object sender, EventArgs e)
         {
+            //I 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
+            if (!IsConnectionSecure())
+            {
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ConnectNotSure.GetDescription(), "danger");
+                }
+                return;
+            }
+            //F 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
             String Vpassw = "";
             Vuser = TxtMatricola.Text.ToUpper();
             Hmatricola.Value = TxtMatricola.Text.ToUpper();
@@ -82,6 +102,9 @@ namespace Uotep
                     //verifico la correttezza della password criptata
                     string hashedPasswordSalvataNelDatabase = Ricerca.Rows[0].ItemArray[1].ToString();
                     bool isMatch = BCrypt.Net.BCrypt.Verify(Vpassw, hashedPasswordSalvataNelDatabase);
+                    //I 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
+                    Vpassw = string.Empty;
+                    //F 26/06/2024: Aggiunta verifica connessione sicura (HTTPS) prima di procedere con l'autenticazione
                     if (isMatch)
                     {
                         Boolean modifico = System.Convert.ToBoolean(Ricerca.Rows[0].ItemArray[7]);
@@ -106,12 +129,14 @@ namespace Uotep
                     {
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
                         Session.Abandon();
+                        FormsAuthentication.SignOut();
                     }
                 }
                 else
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.NoUser.GetDescription() + "'); $('#errorModal').modal('show');", true);
                     Session.Abandon();
+                    FormsAuthentication.SignOut();
                 }
 
             }
@@ -119,6 +144,7 @@ namespace Uotep
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
                 Session.Abandon();
+                FormsAuthentication.SignOut();
             }
 
         }
