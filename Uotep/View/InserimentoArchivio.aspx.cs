@@ -56,7 +56,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+              //  ProtocolloLiteral.Text = decodedText;
                 if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
                 {
                     btSalva.Visible = false;
@@ -120,7 +120,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     apripopupPratica_Click(sender, e);
-
+                    GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -148,7 +148,19 @@ namespace Uotep
             okPopup = true;
 
         }
-        protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
+        protected void GVRicercaPratica_DataBound(object sender, EventArgs e)
+        {
+            GridView gv = (GridView)sender;
+            if (gv.PageCount > 0)
+            {
+                lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+            }
+            else
+            {
+                lblInfoPagine.Text = "Nessun record trovato";
+            }
+        }
+        protected void GVRicercaPratica_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
@@ -172,7 +184,7 @@ namespace Uotep
                 }
             }
         }
-        protected void gvPopup_RowCommandP(object sender, GridViewCommandEventArgs e)
+        protected void GVRicercaPratica_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Select")
             {
@@ -200,7 +212,7 @@ namespace Uotep
                 }
                 Session.Remove("ListRicerca");
                 // Chiudi il popup
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
             }
         }
         protected void FillScheda(DataTable arc)
@@ -552,13 +564,40 @@ namespace Uotep
         }
         protected void apripopup_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalQuartiere').modal('show');", true);
         }
+        protected void btChiudi_Click(object sender, EventArgs e)
+        {
 
+            string script = @"
+    var modalElement = document.getElementById('myModalQuartiere');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
+            gvPopup.DataSource = null;
+            gvPopup.DataBind();
+            txtIndirizzoQuartiere.Text = string.Empty;
+        }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
+           
+            //adegua chiusura popup bootstrap 5
+            string script = @"
+    var modalElement = document.getElementById('myModal');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
+
             Session.Remove("ListRicerca");
             HfFiltroNote.Value = string.Empty;
             HfFiltroIndirizzo.Value = string.Empty;
@@ -566,8 +605,17 @@ namespace Uotep
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-
+           // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+            string script = @"
+    var modalElement = document.getElementById('errorModal');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
         }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
@@ -593,7 +641,7 @@ namespace Uotep
 
             // Mantieni il popup aperto dopo l'interazione lato server.
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "showPopup", "openPopup();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModalQ();", true);
         }
         // (Riusa la funzione GetOriginalData dal mio esempio precedente o la tua logica di recupero dati)
 
@@ -671,7 +719,10 @@ namespace Uotep
                 // Imposta il valore nel TextBox
                 txtQuartiere.Text = selectedValue;
                 // Chiudi il popup
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModalQ();", true);
+                gvPopup.DataSource = null;
+                gvPopup.DataBind();
+                txtIndirizzoQuartiere.Text = string.Empty;
             }
         }
 
@@ -815,6 +866,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     //   apripopupPratica_Click(sender, e);
+                    GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -871,5 +923,7 @@ namespace Uotep
             PopulateGridView(columnName, HfFiltroResponsabile.Value); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
+
+  
     }
 }

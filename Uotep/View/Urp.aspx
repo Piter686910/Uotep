@@ -80,8 +80,11 @@
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">GESTIONE PRATICHE URP</p>
+            <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <p class="text-center lead">GESTIONE PRATICHE URP</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>GESTIONE PRATICHE URP</h1>
+            </div>
         </div>
         <div class="container">
 
@@ -149,7 +152,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="txtDataUscita">Data Uscita</label>
-                            <asp:TextBox ID="txtDataUscita" runat="server" CssClass="form-control data-auto" placeholder="gg/mm/yyyy"  />
+                            <asp:TextBox ID="txtDataUscita" runat="server" CssClass="form-control data-auto" placeholder="gg/mm/yyyy" />
                         </div>
                     </div>
 

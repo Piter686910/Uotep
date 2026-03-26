@@ -42,23 +42,15 @@
                 /* padding-right: 5px; */
             }
 
-        /* Stile per rendere i bottoni stessa altezza e larghezza */
-        .uniform-button {
-            width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
-            height: 45px !important; /* Esempio: Altezza fissa per i bottoni */
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            text-align: center !important;
-            white-space: normal !important;
-            word-break: break-word !important;
-            margin-left: 10px !important;
-        }
+        
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">RICERCA UNA PRATICA</p>
+           <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
+
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA UNA PRATICA IN ARCHIVIO EDILIZIA</h1>
+            </div>
             <!-- Contenitore per centrare -->
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
@@ -122,7 +114,7 @@
 
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus=""/>
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus="" />
                     <asp:CheckBox ID="ckStorico" runat="server" CssClass="form-check-input" />
                     <label class="form-check-label ms-2" for="ckStorico">Storico</label>
                     <asp:CheckBox ID="ckDoppioni" runat="server" CssClass="form-check-input" Checked="true" />
@@ -137,7 +129,7 @@
 
                     <asp:Label ID="Label11" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
+                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -148,7 +140,7 @@
 
                     <asp:Label ID="Label9" runat="server" Text="Responsabile" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" placeholder="Responsabile" autofocus=""/>
+                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" placeholder="Responsabile" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -159,7 +151,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Sezione" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtSez" runat="server" CssClass="form-control" placeholder="Sezione" autofocus=""/>
+                    <asp:TextBox ID="txtSez" runat="server" CssClass="form-control" placeholder="Sezione" autofocus="" />
                     <asp:Label ID="Label1" runat="server" Text="Foglio" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtFoglio" runat="server" CssClass="form-control" placeholder="Foglio" />
@@ -181,7 +173,7 @@
 
                     <asp:Label ID="Label4" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicNota" runat="server" CssClass="form-control" placeholder="Nota" autofocus=""/>
+                    <asp:TextBox ID="txtRicNota" runat="server" CssClass="form-control" placeholder="Nota" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -192,7 +184,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" placeholder="Anno" autofocus=""/>
+                    <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" placeholder="Anno" autofocus="" />
                     <asp:Label ID="Label8" runat="server" Text="Mese" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" placeholder="Numero del Mese" />
@@ -274,7 +266,7 @@
                         <label class="form-check-label ms-2" for="CkPropBeniCult">Prop. Beni Cult.</label>
                     </div>
 
-                    
+
                     <div style="margin-right: 10px;">
                         <%--                        <!- Nessun margin-right per l'ultimo gruppo ->--%>
                         <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />

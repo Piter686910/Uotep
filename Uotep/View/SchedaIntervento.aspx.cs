@@ -39,7 +39,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+                //ProtocolloLiteral.Text = decodedText;
                 TxtDataIntervento.Attributes["placeholder"] = "gg/mm/aaaa";
                 if (Area == "uote")
                 {

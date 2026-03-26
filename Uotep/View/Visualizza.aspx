@@ -3,10 +3,6 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
-        .header-center {
-            text-align: center !important;
-        }
-
         .grid-fissa {
             table-layout: fixed;
             width: auto !important;
@@ -44,9 +40,11 @@
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">Ricerca Atti</p>
-
+            <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
+            <%--<p class="text-center lead">Ricerca Atti</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA ATTI</h1>
+            </div>
             <!-- Contenitore per centrare -->
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
@@ -280,7 +278,7 @@
 
                         </div>
                         <div class="form-group mb-3">
-                            <label for="txtNumProtRicStessoCarico">Numeri prot. gen. per ogni carico</label>
+                            <label for="txtNumProtRicStessoCarico">Numeri protocollo</label>
                             <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" Enabled="false" />
 
                         </div>
@@ -326,32 +324,29 @@
                 <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
                 <div class="row custom-border">
                     <div class="col-md-4">
-                        <div class="form-group mb-3" style="margin-left: -25px">
+                        <div class="form-group mb-3">
                             <label for="txtEsito">Esito</label>
-                            <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control mb-3" Enabled="false" />
-
+                            <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control" Enabled="false" />
                         </div>
 
-                        <div class="form-group mb-3" style="margin-left: -25px; margin-top: 30px">
-                            <label class="form-check-label ms-2" for="CkEvasa">Trasmesso</label>
+                        <div class="form-group mb-3 d-flex align-items-center" style="margin-top: 25px;">
                             <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
-
+                            <label class="form-check-label ms-2 mb-0" for="CkEvasa">Trasmesso</label>
                         </div>
-
                     </div>
+
                     <div class="col-md-4">
                         <div class="form-group mb-3">
-                            <label for="txtDataDataEvasa" class="form-label">Data Esito</label>
-                            <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control mb-3 data-auto" Enabled="false" />
-
+                            <label for="txtDataDataEvasa">Data Esito</label>
+                            <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control data-auto" Enabled="false" />
                         </div>
+                    </div>
 
+                    <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="ListAccertatori">Accertatori</label>
-                            <%--<asp:TextBox ID="txtAccertatori" runat="server" CssClass="form-control mb-3" Enabled="false" TextMode="MultiLine" Rows="2" Style="width: 100%; max-width: 600px;" />--%>
-                            <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Enabled="false" BackColor="LightGray" Rows="3"></asp:ListBox>
+                            <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Enabled="false" BackColor="#e9ecef" Rows="3"></asp:ListBox>
                         </div>
-
                     </div>
                 </div>
                 <div id="divAg" runat="server" visible="false">
@@ -456,6 +451,7 @@
                     <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
                     <asp:Button ID="btDecreta" Text="Decreta" runat="server" OnClick="btDecreta_Click" ToolTip="Decreta" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="BtDuplica" Text="Duplica" runat="server" OnClick="BtDuplica_Click1" ToolTip="Copia il contenuto in un nuovo carico" CssClass="btn btn-primary mt-3" />
                 </div>
             </div>
         </div>
@@ -528,146 +524,157 @@
     </div>
     <%-- Modale ricerca fascicolo --%>
     <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 100%">
+        <div class="modal-dialog modal-xl" style="width: 100%">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
 
                 </div>
-                <div id="DivGrid" runat="server" visible="false" class="row">
-                    <div class="form-group">
-                        <!-- GridView nel popup -->
-                        <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopup_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                <div class="modal-body">
+                    <div id="DivGrid" runat="server" visible="false" class="section-box">
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                            <div class="small text-muted">
+                                <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <!-- GridView nel popup -->
+                            <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False"
+                                CssClass="table table-bordered table-hover"
+                                OnRowDataBound="gvPopup_RowDataBound"
+                                OnRowCommand="gvPopup_RowCommand"
+                                OnDataBound="gvPopup_DataBound"
+                                AllowPaging="true" PageSize="10"
+                                OnPageIndexChanging="gvPopup_PageIndexChanging"
+                                RowStyle-CssClass="GridViewRow"
+                                AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                                PagerSettings-Position="Top"
+                                PagerSettings-Mode="NextPreviousFirstLast"
+                                PagerSettings-FirstPageText="&laquo; Prima"
+                                PagerSettings-LastPageText="Ultima &raquo;"
+                                PagerSettings-NextPageText="Succ. &rsaquo;"
+                                PagerSettings-PreviousPageText="&lsaquo; Prec.">
 
-                            <Columns>
-                                <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" />
+                                <Columns>
+                                    <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                    <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                    <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="10px" />
 
 
-                                <asp:TemplateField HeaderText="Sigla" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="20px">
-                                    <HeaderTemplate>
-                                        Sigla
+                                    <asp:TemplateField HeaderText="Sigla" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="10px">
+                                        <HeaderTemplate>
+                                            Sigla
                                           <br />
-                                        <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" Width="40px"></asp:TextBox>
-                                        Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("Sigla") %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                            <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <%# Eval("Sigla") %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
+                                    <%--<asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />--%>
+                                    <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                        <HeaderTemplate>
+                                            N. Pratica
+                                               <br />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                           
+                                            <asp:HyperLink ID="lnkScheda" runat="server"
+                                                NavigateUrl='<%# String.Format("~/View/GestionePratica.aspx?idscheda={0}&nrPratica={1}", Eval("ID"), Eval("nr_Pratica")) %>'
+                                                Target="_blank"
+                                                Text='<%# Eval("nr_Pratica") %>' />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                    <HeaderTemplate>
-                                        Nominativo
+                                    <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                        <HeaderTemplate>
+                                            Nominativo
                                           <br />
-                                        <asp:TextBox ID="txtFilterNominativo" runat="server" OnTextChanged="txtFilterNominativo_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("Nominativo") %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                            <asp:TextBox ID="txtFilterNominativo" runat="server" OnTextChanged="txtFilterNominativo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <%# Eval("Nominativo") %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
 
 
-                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                    <HeaderTemplate>
-                                        Indirizzo
+                                    <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                        <HeaderTemplate>
+                                            Indirizzo
                                           <br />
-                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("indirizzo") %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                            <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
 
-                                <%--                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <%# Eval("indirizzo") %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+                                    <%--                                <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>--%>
-                                <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-                                <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
+                                    <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+                                    <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
 
-                                <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>
-                                <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>
-                                <%--<asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                    <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                        <ItemStyle CssClass="uppercase-text" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                        <ItemStyle CssClass="uppercase-text" />
+                                    </asp:BoundField>
+                                    <%--<asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
                                     <ItemStyle CssClass="uppercase-text" />
                                 </asp:BoundField>--%>
-                                <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="70px">
-                                    <HeaderTemplate>
-                                        Accertatori
+                                    <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="70px">
+                                        <HeaderTemplate>
+                                            Accertatori
                                           <br />
-                                        <asp:TextBox ID="txtFilterAccertatori" runat="server" OnTextChanged="txtFilterAccertatori_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("Accertatori")   %>
-                                        <%# Eval("Accertatori2")   %>
-                                        <%# Eval("Accertatori3")   %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                            <asp:TextBox ID="txtFilterAccertatori" runat="server" OnTextChanged="txtFilterAccertatori_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
 
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <%# Eval("Accertatori")   %>
+                                            <%# Eval("Accertatori2")   %>
+                                            <%# Eval("Accertatori3")   %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center"/>
-                                <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px" />
-                                <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
-                                <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
-                                            CommandName="Select"
-                                            CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
-                                            CssClass="btn btn-success btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                            <PagerStyle HorizontalAlign="Center" />
-                            <PagerTemplate>
-                                <table width="100%">
-                                    <tr>
-                                        <td style="width: 50%; text-align: left;">
-                                            <asp:Label ID="lblPageInfo" runat="server" />
-                                        </td>
+                                    <asp:TemplateField HeaderText="Prot. Generale" ItemStyle-Width="60px" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <div style="word-break: break-all; width: 100px;">
+                                                <%# Eval("Rif_Prot_Gen") %>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                    </tr>
-                                </table>
+                                    <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px" />
+                                    <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
+                                    <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                                CommandName="Select"
+                                                CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
+                                                CssClass="btn btn-success btn-sm" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
 
-                                <div style="padding: 5px;">
-                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
-
-                                    <span style="margin: 0 10px;">Pagina:
-               
-                                    </span>
-
-                                    <%-- Contenitore per i link numerici delle pagine --%>
-                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
-
-                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
-                                </div>
-                            </PagerTemplate>
-
-                        </asp:GridView>
-                        <div class="modal-footer">
-                            <!-- Bottone per avviare la ricerca -->
-                            <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-                            <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                            <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
+                                <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                            </asp:GridView>
+                            <div class="modal-footer">
+                                <!-- Bottone per avviare la ricerca -->
+                                <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                                <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
+                            </div>
                         </div>
                     </div>
                 </div>

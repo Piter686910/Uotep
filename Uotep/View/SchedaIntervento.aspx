@@ -145,11 +145,14 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
-        
+
     </script>
 
     <div class="panel panel-default">
-        <div class="form-group mb-3"></div>
+
+        <div class="dashboard-header">
+            <h1><span class="glyphicon glyphicon-cog"></span>COMPILAZIONE SCHEDA INTERVENTO</h1>
+        </div>
         <div class="panel-heading">
             <h3 class="panel-title" style="font-weight: bold;">Intervento</h3>
         </div>
@@ -190,118 +193,95 @@
 
         <div class="panel-body" id="divTesta" runat="server">
             <div class="jumbotron">
-                <div style="margin-top: -50px!important">
+                <%-- <div style="margin-top: -50px!important">
                     <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-                    <p class="text-center lead">COMPILAZIONE SCHEDA INTERVENTO</p>
-                </div>
+                </div>--%>
 
-                <div class="container">
-                    <div class="row">
-                        <!-- Colonna 1 -->
+                <div class="container-fluid p-3">
+
+                    <div class="row align-items-end mb-4">
                         <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <label for="txtPratica">Nr Pratica/Cartellina</label>
-                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus=""/>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label for="txtIndirizzo">Indirizzo</label>
-                                <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" />
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="ddlCapopattuglia">Capo Pattuglia</label>
-                                <div class="input-group">
-                                    <asp:DropDownList ID="ddlCapopattuglia" runat="server" CssClass="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="txtNote">Note</label>
-                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" MaxLength="100" />
+                            <div class="form-group">
+                                <label for="txtPratica" class="fw-bold">Nr Pratica/Cartellina</label>
+                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus="" />
                             </div>
                         </div>
-
-                        <!-- Colonna 2 -->
-                        <div class="col-md-3 d-flex flex-column justify-content-center">
-                            <div class="form-group mb-3">
-                                <label for="TxtDataIntervento">Data Intervento</label>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="TxtDataIntervento" class="fw-bold">Data Intervento</label>
                                 <asp:TextBox ID="TxtDataIntervento" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
-                                <asp:RegularExpressionValidator
-                                    ID="RegularExpressionValidator1"
-                                    runat="server"
-                                    ControlToValidate="TxtDataIntervento"
-                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                    ErrorMessage="la data deve essere dd/mm/aaaa"
-                                    ForeColor="Red"
-                                    ValidationGroup="bt"
-                                    Display="Static">
-                                </asp:RegularExpressionValidator>
-                            </div>
-
-                            <div class="form-group mb-3" style="margin-top: -10px!important">
-                                <label for="txtDataConsegna">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
-
-                                <asp:RegularExpressionValidator
-                                    ID="RegularExpressionValidator2"
-                                    runat="server"
-                                    ControlToValidate="txtDataConsegna"
-                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                    ErrorMessage="la data deve essere dd/mm/aaaa"
-                                    ForeColor="Red"
-                                    ValidationGroup="bt"
-                                    Display="Static">
-                                </asp:RegularExpressionValidator>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label for="DdlPattuglia">Pattuglia</label>
-                                <div class="input-group">
-                                    <asp:DropDownList ID="DdlPattuglia" runat="server" CssClass="form-control" />
-                                </div>
-                            </div>
-
-                            <!-- Colonna 3 -->
-                        </div>
-                        <div class="col-md-1" style="margin-top: 220px!important">
-                            <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" BackColor="White"/>
-                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" BackColor="White"/>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtDataIntervento" ValidationGroup="bt" ErrorMessage="Inserire data intervento" ForeColor="Red" Display="Dynamic" />
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="TxtDataIntervento" ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$" ErrorMessage="Formato dd/mm/aaaa" ForeColor="Red" ValidationGroup="bt" Display="Dynamic" />
                             </div>
                         </div>
-                        <!-- Colonna 4 -->
                         <div class="col-md-3">
-
-
-
-                            <div class="form-group mb-3">
-                                <label for="txtNominativo">Nominativo</label>
+                            <div class="form-group">
+                                <label for="txtDataConsegna" class="fw-bold">Data Consegna</label>
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red" Display="Dynamic" />
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txtDataConsegna" ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$" ErrorMessage="Formato dd/mm/aaaa" ForeColor="Red" ValidationGroup="bt" Display="Dynamic" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtNominativo" class="fw-bold">Nominativo</label>
                                 <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                             </div>
-                            <div id="divQuartiere" runat="server" class="form-check mb-2" style="display: none;">
-                                <label for="txtQuartiereTp">Quartiere</label>
-                                <%--<asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>--%>
-                                <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                </div>
-                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
-
-                            </div>
-
-
-
-
-
-                            <div class="form-group mb-3" style="margin-top: 80px!important">
-                                <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control"></asp:ListBox>
-                            </div>
-
                         </div>
                     </div>
 
+                    <div class="row align-items-end mb-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtIndirizzo" class="fw-bold">Indirizzo</label>
+                                <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div id="divQuartiere" runat="server" class="form-group" style="display: none;">
+                                <label for="DdlQuartiere" class="fw-bold">Quartiere</label>
+                                <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;"></div>
+                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
+                            </div>
 
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtNote" class="fw-bold">Note</label>
+                                <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" MaxLength="100" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label for="ddlCapopattuglia" class="fw-bold">Capo Pattuglia</label>
+                                <asp:DropDownList ID="ddlCapopattuglia" runat="server" CssClass="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+
+                            <div class="form-group">
+                                <label for="DdlPattuglia" class="fw-bold">Pattuglia</label>
+                                <asp:DropDownList ID="DdlPattuglia" runat="server" CssClass="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 text-center">
+                            <div class="form-group">
+                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-success w-100 mb-2" OnClick="Aggiungi_Click" ToolTip="Aggiungi" />
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-danger w-100" OnClick="btElimina_Click" ToolTip="Elimina" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="fw-bold text-muted small">Lista Pattuglia Completa</label>
+                                <asp:ListBox ID="LPattugliaCompleta" runat="server" CssClass="form-control" Rows="4"></asp:ListBox>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Bottone Salva -->
@@ -364,7 +344,7 @@
                             <div id="divNotificaTp" runat="server" class="form-check mb-2" style="display: none;">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
-                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)" />
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumNotificheNoAg" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
 
@@ -378,7 +358,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Quanti Esposti evasi</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass=" larghezzaText70" MaxLength="2" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass=" larghezzaText70" MaxLength="2" onchange="PulisciSeSbagliato(this)" />
                                 <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,2}"></asp:RegularExpressionValidator>
                             </div>
                             <div class="form-check mb-2">
@@ -399,7 +379,7 @@
                                 <asp:CheckBox ID="ckAccRichiesti" runat="server" CssClass="form-check-input" />
 
                                 <label class="form-check-label" for="ckAccRichiesti">Accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti, Servizi e Amministrazioni nel n. </label>
-                                <asp:TextBox ID="txtNumAccRichiesti" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumAccRichiesti" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)" />
                                 <label class="form-check-label" for="ckAccRichiesti">
                                     (se riferiti a più protocolli indicare numero. Questa voce comprenderà gli sgomberi amministrativi, le
 notifiche non A.G., gli interventi in supporto ad altre UU.OO. e FF.PP., supporto ai C.T.U., Servizi
@@ -552,7 +532,7 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                             <div id="divCensimento" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
-                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" />
                                 <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
@@ -560,7 +540,7 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                             <div id="divContrNatoDaAccert" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckContrNatoDaAccert" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="txtNumContrNatoDaAccert">Controllo/i nel nr. </label>
-                                <asp:TextBox ID="txtNumContrNatoDaAccert" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumContrNatoDaAccert" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" />
                                 <label class="form-check-label" for="txtNumContrNatoDaAccert">
                                     nato/i da accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti,
 Servizi e Amministrazioni</label>

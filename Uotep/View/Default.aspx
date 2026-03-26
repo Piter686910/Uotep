@@ -2,93 +2,151 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <script>
-
-        function ShowErrorMessage(message) {
-            $('#errorModal').modal('show');
-        }
-        // Nasconde il popup
-        function HideErrorMessage() {
-            $('#errorModal').modal('hide');
-        }
-    </script>
     <style>
-        .centered-panel {
-            position: absolute;
-            top: 50%;
-            left: 17%;
-            transform: translate(-50%, -50%);
+        /* Sfondo professionale e font */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Contenitore per centrare la card */
+        .main-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Card in stile moderno */
+        .login-card {
+            background: #ffffff;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             width: 100%;
-            max-width: 400px; /* Limita la larghezza del form */
+            max-width: 400px;
+            overflow: hidden;
+
+        }
+
+        .card-header-gradient {
+            background: linear-gradient(135deg, #0062cc 0%, #004085 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .card-header-gradient h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .card-body-custom {
+            padding: 30px;
+
+        }
+
+        /* Input personalizzati */
+        .form-control-custom {
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-control-custom:focus {
+            border-color: #0062cc;
+            box-shadow: 0 0 0 0.2rem rgba(0,98,204,0.15);
+        }
+
+        /* Pulsanti */
+        .btn-custom {
+            border-radius: 6px;
+            padding: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-1px);
+        }
+
+        .reset-link-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .reset-link-container a {
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .reset-link-container a:hover {
+            color: #0062cc;
+            text-decoration: underline;
         }
     </style>
-    <%-- <div class="jumbotron">
-        <h1>ARCHIVIO PRATICHE U.O.T.E.P</h1>
 
-        <p class="lead"></p>
-    </div>--%>
-    <%-- LOGIN --%>
-    <asp:Panel ID="pnlLogin" runat="server" CssClass="centered-panel">
-        <div class="card shadow p-4">
-            <div cssclass="form-label text-start d-block mb-2">
-                <h2>Accesso</h2>
+    <script>
+        function ShowErrorMessage(message) {
+            $('#errorMessage').text(message);
+            $('#errorModal').modal('show');
+        }
+    </script>
+
+    <div class="main-wrapper">
+        <asp:Panel ID="pnlLogin" runat="server" CssClass="login-card">
+            <div class="card-header-gradient">
+                <h2>U.O.T.E.P.</h2>
+                <small style="opacity: 0.8;">Area Riservata - Accesso</small>
             </div>
 
-            <!-- Etichetta Matricola e Campo -->
-            <div class="form-group">
-                <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label text-start d-block mb-2"></asp:Label>
-                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control1"></asp:TextBox>
-                <asp:HiddenField ID="Hmatricola" runat="server" />
-            </div>
-
-            <!-- Etichetta Password e Campo -->
-            <div class="form-group mt-3">
-                <asp:Label ID="Label1" runat="server" Text="Password" CssClass="form-label text-start d-block mb-2"></asp:Label>
-                <asp:TextBox ID="TxtPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control1"></asp:TextBox>
-            </div>
-
-            <!-- Etichetta nuova password -->
-            <div id="DivNewPassw" runat="server" class="form-group mt-3" visible="false">
-                <asp:Label ID="Label2" runat="server" Text="Nuova Password" CssClass="form-label text-start d-block mb-2 text-danger"></asp:Label>
-                <asp:TextBox ID="txtNewPassw" runat="server" ToolTip="password" MaxLength="8" TextMode="Password" TabIndex="2" CssClass="form-control1"></asp:TextBox>
-            </div>
-
-            <!-- Pulsanti -->
-            <div class="col-md-6 " style="margin-left:-10px">
-                <asp:Button ID="btLogin" Text="Entra" runat="server" OnClick="trova_Click" ToolTip="Login" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-
-                <%--<asp:Button ID="btResetPassw" Text="Reset Password" runat="server" OnClick="btResetPassw_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />--%>
-                <asp:Button ID="btsave" Text="Save" runat="server" OnClick="SalvaPassw_Click" ToolTip="Salva password" CssClass="btn btn-primary px-4" Visible="false" />
-            </div>
-        <div class="col-md-6 " style="margin-left:-50px">
-            <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" Text="Reset Password" Font-Bold="true" Font-Underline="true" runat="server"> </asp:LinkButton>
-        </div>
-        </div>
-    </asp:Panel>
-
-
-
-
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
+            <div class="card-body-custom" >
+                <div class="mb-3">
+                    <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label fw-bold"></asp:Label>
+                    <asp:TextBox ID="TxtMatricola" runat="server" CssClass="form-control form-control-custom" placeholder="Inserisci matricola" TabIndex="1"></asp:TextBox>
+                    <asp:HiddenField ID="Hmatricola" runat="server" />
                 </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
 
-                        <p id="errorMessage" style="color: red"></p>
+                <div class="mb-3">
+                    <asp:Label ID="Label1" runat="server" Text="Password" CssClass="form-label fw-bold"></asp:Label>
+                    <asp:TextBox ID="TxtPassw" runat="server" TextMode="Password" CssClass="form-control form-control-custom" placeholder="••••••••" TabIndex="2"></asp:TextBox>
+                </div>
 
-                    </div>
+                <div id="DivNewPassw" runat="server" class="mb-3 p-3 bg-light border border-info rounded" visible="false">
+                    <asp:Label ID="Label2" runat="server" Text="Nuova Password" CssClass="form-label fw-bold text-info"></asp:Label>
+                    <asp:TextBox ID="txtNewPassw" runat="server" TextMode="Password" CssClass="form-control form-control-custom border-info" ></asp:TextBox>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <asp:Button ID="btLogin" Text="Accedi" runat="server" OnClick="trova_Click" CssClass="btn btn-primary btn-custom" />
+                    <asp:Button ID="btsave" Text="Salva Nuova Password" runat="server" OnClick="SalvaPassw_Click" CssClass="btn btn-success btn-custom" Visible="false" />
+                </div>
+
+                <div class="reset-link-container">
+                    <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" runat="server">Dimenticato la password? Reset</asp:LinkButton>
+                </div>
+            </div>
+        </asp:Panel>
+    </div>
+
+    <%-- Modal Errori --%>
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">ATTENZIONE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p id="errorMessage" class="text-danger fw-bold mb-0"></p>
                 </div>
                 <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btChiudiPop" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiPop_Click" />
+                    <asp:Button ID="btChiudiPop" runat="server" CssClass="btn btn-secondary w-100" Text="Ho capito" OnClick="btChiudiPop_Click" />
                 </div>
             </div>
         </div>

@@ -20,11 +20,13 @@
         }
     </style>
     <div class="jumbotron">
-        <div class="text-center lead">
+        <div style="margin-top: -50px!important">
 
- <h2>CRUSCOTTO GESTIONE TABELLE</h2>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>MANUTENZIONE TABELLE</h1>
+            </div>
         </div>
-       
+
         <%--<p class="lead">In questa pagina è possibile inserire nuovi elementi nelle seguenti tabelle</p>--%>
     </div>
     <%-- --%>
@@ -54,7 +56,7 @@
 
     <asp:Panel ID="pnlGestTabelle" runat="server" CssClass="text-center">
         <div id="DivTabelle" runat="server" class="row d-flex justify-content-center align-items-center vh-100" style="height: 300px; margin-left: 400px!important">
-            <div id="divMesDecretazione" runat="server" style="margin-left:-450px" visible="false">
+            <div id="divMesDecretazione" runat="server" style="margin-left: -450px" visible="false">
                 <p class="lead">In questa pagina è possibile riaprire una decretazione chiusa</p>
             </div>
             <!-- Righe di input  -->
@@ -64,7 +66,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus=""/>
+                    <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button ID="btInserisci" Text="Inserisci" runat="server" OnClick="btInserisci_Click" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -97,7 +99,7 @@
 
                     <asp:Label ID="Label10" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtScaturito" runat="server" CssClass="form-control" placeholder="Scaturito" autofocus=""/>
+                    <asp:TextBox ID="txtScaturito" runat="server" CssClass="form-control" placeholder="Scaturito" autofocus="" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -109,7 +111,7 @@
 
                     <asp:Label ID="Label13" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus=""/>
+                    <asp:TextBox ID="txtProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -121,7 +123,7 @@
 
                     <asp:Label ID="Label14" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtTipologia" runat="server" CssClass="form-control" placeholder="Tipologia" autofocus=""/>
+                    <asp:TextBox ID="txtTipologia" runat="server" CssClass="form-control" placeholder="Tipologia" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -133,7 +135,7 @@
 
                     <asp:Label ID="Label1" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtTipoAbuso" runat="server" CssClass="form-control" placeholder="Tipologia Abuso" autofocus=""/>
+                    <asp:TextBox ID="txtTipoAbuso" runat="server" CssClass="form-control" placeholder="Tipologia Abuso" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -146,7 +148,7 @@
 
                     <asp:Label ID="Label18" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtInviati" runat="server" CssClass="form-control" placeholder="Inviata" autofocus=""/>
+                    <asp:TextBox ID="txtInviati" runat="server" CssClass="form-control" placeholder="Inviata" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -158,7 +160,7 @@
 
                     <asp:Label ID="Label20" runat="server" Text="Inserisci nuovo elemento" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtTipologiaNotaAg" runat="server" CssClass="form-control" placeholder="Tipologia Nota Ag" autofocus=""/>
+                    <asp:TextBox ID="txtTipologiaNotaAg" runat="server" CssClass="form-control" placeholder="Tipologia Nota Ag" autofocus="" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Inserisci" OnClick="btInserisci_Click" runat="server" ToolTip="Inserisci" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -170,7 +172,7 @@
 
                     <asp:Label ID="Label2" runat="server" Text="Inserisci il numero carico" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtCarico" runat="server" CssClass="form-control" placeholder="Numero carico" autofocus=""/>
+                    <asp:TextBox ID="txtCarico" runat="server" CssClass="form-control" placeholder="Numero carico" autofocus="" />
                     <asp:Label ID="Label3" runat="server" Text="Inserisci l'anno del carico" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:TextBox ID="txtAnnoCarico" runat="server" CssClass="form-control" placeholder="Anno carico" MaxLength="4" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">

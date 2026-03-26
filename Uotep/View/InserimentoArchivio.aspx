@@ -38,9 +38,6 @@
         });
     </script>
     <script>
-        
-
-
 
 
         function ShowErrorMessage(message) {
@@ -50,13 +47,13 @@
             $('#errorModal').modal('hide');
         }
         // Mostra il popup
-        function showModal() {
-            $('#myModal').modal('show');
+        function showModalQ() {
+            $('#myModalQuartiere').modal('show');
         }
 
         // Nasconde il popup
-        function hideModal() {
-            $('#myModal').modal('hide');
+        function hideModalQ() {
+            $('#myModalQuartiere').modal('hide');
         }
 
         function showModal() {
@@ -277,186 +274,193 @@
         }
 
     </script>
-        <style>
-        
 
-        .uppercase-text {
-            text-transform: uppercase;
-}
-         .GridViewRow {
-     background-color: white;
- }
-
- /* Stile per la riga alternata (azzurro chiaro) */
- .GridViewAlternatingRow {
-     background-color: #E6F3FF; /* Un azzurro molto chiaro */
-     /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
- }
-
-        
-
-    </style>
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>
+            <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>INSERIMENTO PRATICA IN ARCHIVIO EDILIZIA</h1>
+            </div>
         </div>
-
-        <div class="container">
-            <div class="row align-items-start">
-                <!-- Colonna Sinistra -->
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label for="txtPratica">Nr Pratica</label>
-                        <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control1" ForeColor="Red" Font-Bold="true" />
-                        <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkBis">Bis</label>
-                        <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkTris">Tris</label>
-                        <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkQuater">Quater</label>
+        <div class="panel panel-default">
+            <div class="panel-body">
 
 
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtDataInserimento">Data Inserimento</label>
-                        <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" autofocus=""/>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtDataInizioAttivita">Data Inizio Attività</label>
-                        <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator2"
-                            runat="server"
-                            ControlToValidate="txtDataInizioAttivita"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
+                <div class="container">
+                    <div class="tab-content">
+                        <div class="row  custom-border">
 
-                    </div>
+                            <div class="col-md-3">
 
-                    <!-- Indirizzo e TextBox sulla stessa riga -->
-                    <div class="form-group mb-3">
-                        <label for="DdlIndirizzo">Indirizzo</label>
-                        <div class="row">
-                            <!-- DropDownList occupa metà spazio -->
-                            <div class="col-md-6">
-                                <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                <div id="suggestionsListI" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                </div>
-
-                                <asp:DropDownList ID="DdlIndirizzoI" runat="server" CssClass="form-control" Style="display: none" />
+                                <label for="txtPratica">Nr Pratica</label>
+                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" autofocus="" />
+                                <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkBis">Bis</label>
+                                <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkTris">Tris</label>
+                                <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkQuater">Quater</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="txtDataInserimento">Data Inserimento</label>
+                                <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
                             </div>
 
+
+                            <div class="col-md-3">
+                                <label for="txtDataInizioAttivita">Data Inizio Attività</label>
+                                <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" />
+                                <asp:RegularExpressionValidator
+                                    ID="RegularExpressionValidator2"
+                                    runat="server"
+                                    ControlToValidate="txtDataInizioAttivita"
+                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                                    ErrorMessage="la data deve essere dd/mm/aaaa"
+                                    ForeColor="Red"
+                                    ValidationGroup="bt"
+                                    Display="Static">
+
+
+                                </asp:RegularExpressionValidator>
+                            </div>
                         </div>
+                        <div class="row  custom-border">
+                            <div class="col-md-4">
 
-                    </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtResponsabile">Responsabile</label>
+                                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+                                    <asp:RequiredFieldValidator ID="rqResponsabile" runat="server" ControlToValidate="txtResponsabile" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
+                                    </asp:RequiredFieldValidator>
 
-                    <div class="form-group mb-3">
-                        <label for="txtQuartiere">Quartiere</label>
-                        <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListQ" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="txtQuartiere">Quartiere</label>
+                                    <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListQ" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+                                    <asp:DropDownList ID="DdlQuartiereI" runat="server" CssClass="form-control" Style="display: none" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="txtNatoA">Nato A</label>
+                                    <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
+
+                                </div>
+                                <!-- Indirizzo e TextBox sulla stessa riga -->
+                                <div class="form-group mb-3" style="margin-top: 35px">
+                                    <label for="DdlIndirizzo">Indirizzo</label>
+
+                                    <!-- DropDownList occupa metà spazio -->
+
+                                    <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListI" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+
+                                    <asp:DropDownList ID="DdlIndirizzoI" runat="server" CssClass="form-control" Style="display: none" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group mb-3">
+                                    <label for="txtDataNascita">Data Nascita</label>
+
+                                    <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control data-auto"></asp:TextBox>
+
+                                </div>
+
+
+                                <div class="form-group mb-3" style="margin-top: 35px">
+                                    <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
+                                    <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control data-auto" />
+                                    <asp:RegularExpressionValidator
+                                        ID="RegularExpressionValidator1"
+                                        runat="server"
+                                        ControlToValidate="txtDataUltimoIntervento"
+                                        ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                                        ErrorMessage="la data deve essere dd/mm/aaaa"
+                                        ForeColor="Red"
+                                        ValidationGroup="bt"
+                                        Display="Static">
+                                    </asp:RegularExpressionValidator>
+
+                                </div>
+
+                            </div>
                         </div>
-                        <asp:DropDownList ID="DdlQuartiereI" runat="server" CssClass="form-control" Style="display: none" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtSezione">Dati Catastali N.C.E.U.</label>
-                        <div class="form-group mb-3">
-                            <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 80px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
-                            <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
-                            <asp:TextBox ID="TxtParticella" runat="server" MaxLength="5" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part.lla"></asp:TextBox>
-                            <asp:TextBox ID="TxtSub" runat="server" Style="width: 150px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub" ClientIDMode="Static"></asp:TextBox>
+                        <%-- dati catastali --%>
+                        <div class="row  custom-border">
+                            <div class="col-md-6">
 
+                                <div class="form-group mb-3">
+                                    <label for="txtSezione">Dati Catastali N.C.E.U.</label>
+                                    <div class="form-group mb-3">
+                                        <asp:TextBox ID="txtSezione" runat="server" MaxLength="3" Style="width: 80px; display: inline-block !important;" CssClass="form-control" placeholder="Sezione"></asp:TextBox>
+                                        <asp:TextBox ID="TxtFoglio" runat="server" MaxLength="4" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
+                                        <asp:TextBox ID="TxtParticella" runat="server" MaxLength="5" Style="width: 80px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part.lla"></asp:TextBox>
+                                        <asp:TextBox ID="TxtSub" runat="server" Style="width: 150px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Sub" ClientIDMode="Static"></asp:TextBox>
+
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtSezione">Dati Catastali N.C.T.</label>
+                                    <div class="form-group mb-3">
+                                        <asp:TextBox ID="txtFoglioNct" runat="server" MaxLength="3" Style="width: 100px; display: inline-block !important;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
+                                        <asp:TextBox ID="txtParticellaNct" runat="server" MaxLength="4" Style="width: 100px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part."></asp:TextBox>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row  custom-border">
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label for="txtNote">Note</label>
+                                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <label for="DdlTipoAttoI">Tipologia Abuso</label>
+                                    <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
+                                    <%--<div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                        </div>--%>
+                                    <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtGiudice">Giudice</label>
+                                    <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()"  ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+
+                                    <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+
+                                    <label for="txtInCarico" class="form-label">In Carico</label>
+                                    <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()"  ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+                                    <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group mb-3">
-                        <label for="txtSezione">Dati Catastali N.C.T.</label>
-                        <div class="form-group mb-3">
-                            <asp:TextBox ID="txtFoglioNct" runat="server" MaxLength="3" Style="width: 100px; display: inline-block !important;" CssClass="form-control" placeholder="Foglio"></asp:TextBox>
-                            <asp:TextBox ID="txtParticellaNct" runat="server" MaxLength="4" Style="width: 100px; display: inline-block !important; margin-left: 5px;" CssClass="form-control" placeholder="Part."></asp:TextBox>
-
-                        </div>
-                    </div>
-
-
-                    <div class="col-12 ">
-                        <div class="form-group mb-3">
-                            <label for="txtNote">Note</label>
-                            <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
-                        </div>
-                    </div>
-
                 </div>
 
                 <!-- Colonna Destra -->
                 <div class="col-md-6">
-
-                    <div class="form-group mb-3">
-                        <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
-                        <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control data-auto" />
-                        <asp:RegularExpressionValidator
-                            ID="RegularExpressionValidator1"
-                            runat="server"
-                            ControlToValidate="txtDataUltimoIntervento"
-                            ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                            ErrorMessage="la data deve essere dd/mm/aaaa"
-                            ForeColor="Red"
-                            ValidationGroup="bt"
-                            Display="Static">
-                        </asp:RegularExpressionValidator>
-
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtResponsabile">Responsabile</label>
-                        <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
-                        <asp:RequiredFieldValidator ID="rqResponsabile" runat="server" ControlToValidate="txtResponsabile" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
-                        </asp:RequiredFieldValidator>
-
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtDataNascita">Data Nascita</label>
-
-                        <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control data-auto"></asp:TextBox>
-
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="txtNatoA">Nato A</label>
-                        <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
-
-
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="DdlTipoAttoI">Tipologia Abuso</label>
-                        <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
-                        <%--<div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>--%>
-                        <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="txtGiudice">Giudice</label>
-                        <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
-
-                        <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
-                    </div>
-
-                    <div class="form-group mb-3">
-
-                        <label for="txtInCarico" class="form-label">In Carico</label>
-                        <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" Style="width: 250px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                        <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>
-                        <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
-
-                    </div>
-
-
                 </div>
 
             </div>
@@ -540,9 +544,11 @@
             </div>
         </div>
     </div>
+    </div>
+    </div>
 
     <!-- Modale Bootstrap quartiere -->
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="myModalQuartiere" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -580,121 +586,110 @@
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
-                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudi_Click" />
                 </div>
             </div>
         </div>
     </div>
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 100%">
+        <div class="modal-dialog modal-xl" style="width: 100%">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
-
+                    <%--<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>--%>
                 </div>
+
                 <div class="modal-body">
+                    <div id="DivGridPop" runat="server" class="section-box">
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                            <div class="small text-muted">
+                                <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False"
+                                CssClass="table table-bordered table-hover"
+                                OnRowDataBound="GVRicercaPratica_RowDataBound"
+                                OnRowCommand="GVRicercaPratica_RowCommand"
+                                OnDataBound="GVRicercaPratica_DataBound"
+                                AllowPaging="true" PageSize="10"
+                                OnPageIndexChanging="GVRicercaPratica_PageIndexChanging"
+                                RowStyle-CssClass="GridViewRow"
+                                AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                                PagerSettings-Position="Top"
+                                PagerSettings-Mode="NextPreviousFirstLast"
+                                PagerSettings-FirstPageText="&laquo; Prima"
+                                PagerSettings-LastPageText="Ultima &raquo;"
+                                PagerSettings-NextPageText="Succ. &rsaquo;"
+                                PagerSettings-PreviousPageText="&lsaquo; Prec.">
 
-                    <div class="form-group">
-                        <!-- GridView nel popup -->
-                        <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-                    AlternatingRowStyle-CssClass="GridViewAlternatingRow">
-                            <Columns>
-                                <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
-                                <asp:BoundField DataField="arch_numPratica" HeaderText="Numero Pratica" />
-                                <asp:BoundField DataField="arch_doppione" HeaderText="Doppione" />
+                                <Columns>
+                                    <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
+                                    <asp:BoundField DataField="arch_numPratica" HeaderText="N° Pratica" ItemStyle-Font-Bold="true" />
+                                    <asp:BoundField DataField="arch_doppione" HeaderText="Dopp." ItemStyle-HorizontalAlign="Center" />
 
-                                <asp:TemplateField HeaderText="Responsabile" ItemStyle-CssClass="uppercase-text">
-                                    <HeaderTemplate>
-                                        Responsabile
-                                       <br />
-                                        <asp:TextBox ID="txtFilterResponsabile" runat="server" OnTextChanged="txtFilterResponsabile_TextChanged" AutoPostBack="True"  ></asp:TextBox> Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("arch_responsabile") %>
-                                         
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Responsabile">
+                                        <HeaderTemplate>
+                                            Responsabile<br />
+                                            <asp:TextBox ID="txtFilterResponsabile" runat="server" OnTextChanged="txtFilterResponsabile_TextChanged"
+                                                AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <span class="uppercase-text"><%# Eval("arch_responsabile") %></span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <%--<asp:BoundField DataField="arch_responsabile" HeaderText="Responsabile" />--%>
-                                <%--<asp:BoundField DataField="arch_indirizzo" HeaderText="Indirizzo" />--%>
+                                    <asp:TemplateField HeaderText="Indirizzo">
+                                        <HeaderTemplate>
+                                            Indirizzo<br />
+                                            <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged"
+                                                AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <span class="uppercase-text"><%# Eval("arch_indirizzo") %></span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
+                                    <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
 
+                                    <asp:TemplateField HeaderText="Note">
+                                        <HeaderTemplate>
+                                            Note<br />
+                                            <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged"
+                                                AutoPostBack="True" CssClass="form-control form-control-sm " placeholder="Filtra..." />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <span class="small uppercase-text"><%# Eval("arch_note") %></span>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
 
-                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text">
-                                    <HeaderTemplate>
-                                        Indirizzo
-                                        <br />
-                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True"></asp:TextBox> Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("arch_indirizzo") %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
+                                    <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Mod." DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
+                                    <asp:BoundField DataField="arch_matricola" HeaderText="Matr." />
 
+                                    <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                                CommandName="Select"
+                                                CommandArgument='<%# Eval("id_Archivio") + ";" + Eval("arch_numPratica") %>'
+                                                CssClass="btn btn-success btn-sm" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
 
-
-
-                                <asp:BoundField DataField="arch_dataIns" HeaderText="Anno/Mese" DataFormatString="{0:yyyy/MM}" HtmlEncode="false" />
-                                <%--<asp:BoundField DataField="arch_note" HeaderText="Nota" />--%>
-                                <asp:TemplateField HeaderText="Note" ItemStyle-CssClass="uppercase-text">
-                                    <HeaderTemplate>
-                                        Note
-                                        <br />
-                                        <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True"></asp:TextBox> Filtro
-                                    </HeaderTemplate>
-                                    <ItemTemplate>
-                                        <%# Eval("arch_note") %>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField DataField="arch_datault_intervento" HeaderText="Ultima Modifica" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="false" />
-                                <asp:BoundField DataField="arch_matricola" HeaderText="Matricola" />
-                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Button ID="btnSelect" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("id_Archivio") + ";" + Eval("arch_numPratica")   %>' CssClass="btn btn-success btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                            <PagerStyle HorizontalAlign="Center" />
-                            <PagerTemplate>
-                                <table width="100%">
-                                    <tr>
-                                        <td style="width: 50%; text-align: left;">
-                                            <asp:Label ID="lblPageInfo" runat="server" />
-                                        </td>
-
-                                    </tr>
-                                </table>
-                                <div style="padding: 5px;">
-                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
-
-                                    <span style="margin: 0 10px;">Pagina:
-               
-                                    </span>
-
-                                    <%-- Contenitore per i link numerici delle pagine --%>
-                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
-
-                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
-                                </div>
-                            </PagerTemplate>
-
-                        </asp:GridView>
-
+                                <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                            </asp:GridView>
+                        </div>
                     </div>
                 </div>
+
                 <asp:HiddenField ID="HfStato" runat="server" />
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
                 <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
                 <asp:HiddenField ID="HfFiltroResponsabile" runat="server" />
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+
+                <div class="modal-footer bg-light">
+                    <asp:Button ID="btChiudi" runat="server" CssClass="btn btn-secondary" Text="Esci" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>

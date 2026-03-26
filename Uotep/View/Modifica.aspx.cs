@@ -1531,7 +1531,18 @@ namespace Uotep
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            //adegua chiusura popup bootstrap 5
+            string script = @"
+    var modalElement = document.getElementById('ModalRicerca');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
             //Pulisci();
         }
         protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
@@ -1554,7 +1565,18 @@ namespace Uotep
 
 
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
+           // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
+            //adegua chiusura popup bootstrap 5
+            string script = @"
+    var modalElement = document.getElementById('ModalDecretazione');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
             // Pulisci();
         }
         protected void NascondiDiv()
@@ -2030,7 +2052,18 @@ namespace Uotep
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 
                 }
-                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
+         //       ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDataEvasa')); modal.hide();", true);
+                //adegua chiusura popup bootstrap 5
+                string script = @"
+    var modalElement = document.getElementById('ModalDataEvasa');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
             }
             catch (Exception ex)
             {
@@ -2159,7 +2192,18 @@ namespace Uotep
 
         protected void btChiudiAvvertenze_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
+            //adegua chiusura popup bootstrap 5
+            string script = @"
+    var modalElement = document.getElementById('ModalAvvertenze');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
 
         }
 

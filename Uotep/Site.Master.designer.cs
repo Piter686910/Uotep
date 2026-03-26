@@ -267,15 +267,6 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor TurnoMensile;
 
         /// <summary>
-        /// Controllo menuManTabelle.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuManTabelle;
-
-        /// <summary>
         /// Controllo menuSegreteria.
         /// </summary>
         /// <remarks>
@@ -303,6 +294,15 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlAnchor PG;
 
         /// <summary>
+        /// Controllo menuManTabelle.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuManTabelle;
+
+        /// <summary>
         /// Controllo Urp.
         /// </summary>
         /// <remarks>
@@ -310,15 +310,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor Urp;
-
-        /// <summary>
-        /// Controllo LiHelp.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl LiHelp;
 
         /// <summary>
         /// Controllo helpLink.

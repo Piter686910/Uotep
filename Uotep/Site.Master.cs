@@ -43,7 +43,7 @@ namespace Uotep
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
                         userLog.Visible = true;
-                        LiHelp.Visible = true;
+                       // LiHelp.Visible = true;
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
                             case "coordinamentopg":

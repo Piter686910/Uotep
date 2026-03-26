@@ -1,194 +1,150 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="Uotep._Dashboard" %>
-
+﻿<%@ Page Title="Dashboard Amministratore" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="Uotep._Dashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <script>
+   
 
+    <script>
         function ShowErrorMessage(message) {
+            document.getElementById('errorMessage').innerText = message;
             $('#errorModal').modal('show');
         }
-
     </script>
-    <div class="jumbotron">
-        <h1>DASHBOARD AMMINISTRATORE</h1>
-        <p class="lead"></p>
-    </div>
-    <%-- LOGIN --%>
-    <asp:Panel ID="pnlGestUtenti" runat="server" CssClass="text-center">
-        <div class="row d-flex justify-content-center align-items-center vh-100">
-            <div class="container">
-                <div class="row">
-                    <div id="divNewUtente" runat="server" class="col-md-6" visible="false">
-                        <div class="form-group mb-3">
-                            <!-- Etichetta Matricola e Campo -->
-                            <div class="form-group text-center" style="text-align: left !important">
-                                <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="TxtMatricola" runat="server" ToolTip="matricola" TabIndex="1" CssClass="form-control" autofocus=""></asp:TextBox>
-                            </div>
-                        </div>
-                        <!-- Etichetta Profilo e Campo -->
-                        <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label1" runat="server" Text="Profilo" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="TxtProfilo" runat="server" ToolTip="Profilo" TabIndex="2" CssClass="form-control"></asp:TextBox>
-                            </div>
-                        </div>
 
-                        <!-- Etichetta area -->
+    <div class="container-fluid mt-4">
+        <div class="dashboard-header">
+            <h1><span class="glyphicon glyphicon-cog"></span>DASHBOARD AMMINISTRATORE</h1>
+        </div>
+
+        <asp:Panel ID="pnlGestUtenti" runat="server">
+
+            <div class="row">
+                <div id="divNewUtente" runat="server" visible="false" class="col-md-6">
+                    <div class="section-box">
+                        <h4 class="mb-4" style="color: #337ab7; font-weight: bold;">Dati Operatore</h4>
                         <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label2" runat="server" Text="Area" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="txtArea" runat="server" ToolTip="area appartenenza" TabIndex="3" CssClass="form-control"></asp:TextBox>
-                            </div>
+                            <asp:Label ID="lblm" runat="server" Text="Matricola" />
+                            <asp:TextBox ID="TxtMatricola" runat="server" CssClass="form-control" />
                         </div>
-                        <!-- Etichetta macroarea -->
                         <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label4" runat="server" Text="Macro Area" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="txtMacroArea" runat="server" ToolTip="Macro Area" TabIndex="4" CssClass="form-control"></asp:TextBox>
-                            </div>
+                            <asp:Label ID="Label1" runat="server" Text="Profilo" />
+                            <asp:TextBox ID="TxtProfilo" runat="server" CssClass="form-control" />
                         </div>
-                        <!-- Etichetta nominativo -->
                         <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label7" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="txtNominativo" runat="server" ToolTip="nominativo" TabIndex="5" CssClass="form-control"></asp:TextBox>
-                            </div>
+                            <asp:Label ID="Label2" runat="server" Text="Area" />
+                            <asp:TextBox ID="txtArea" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <asp:Label ID="Label4" runat="server" Text="Macro Area" />
+                            <asp:TextBox ID="txtMacroArea" runat="server" CssClass="form-control" />
+                        </div>
+                        <div class="form-group mb-3">
+                            <asp:Label ID="Label7" runat="server" Text="Nominativo" />
+                            <asp:TextBox ID="txtNominativo" runat="server" CssClass="form-control" />
                         </div>
                     </div>
+                </div>
 
-                    <!-- Colonna Destra -->
-                    <div id="divDestra" runat="server" visible="false" class="col-md-6">
-                        <!-- Etichetta nota -->
+                <div id="divDestra" runat="server" visible="false" class="col-md-6">
+                    <div class="section-box">
+                        <h4 class="mb-4" style="color: #337ab7; font-weight: bold;">Configurazione Ruolo</h4>
                         <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label5" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:TextBox ID="TxtNota" runat="server" ToolTip="Nota" TextMode="MultiLine" Rows="4" TabIndex="6" CssClass="form-control"></asp:TextBox>
-                            </div>
-                        </div>
-                        <!-- Etichetta ruolo -->
-                        <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label6" runat="server" Text="Ruolo" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:DropDownList ID="DdlRuolo" runat="server" CssClass="form-control">
-                                    <asp:ListItem Text="admin"> </asp:ListItem>
-                                    <asp:ListItem Text="accertatori"> </asp:ListItem>
-                                    <asp:ListItem Text="archivio"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamentoatti"> </asp:ListItem>
-                                    <asp:ListItem Text="coordinamentopg"> </asp:ListItem>
-                                    <asp:ListItem Text="Fureria"> </asp:ListItem>
-                                    <asp:ListItem Text="PG"> </asp:ListItem>
-                                    <%--<asp:ListItem Text="MasterAG"> </asp:ListItem>--%>
-                                    <%--<asp:ListItem Text="segreteria"> </asp:ListItem>--%>
-                                    <asp:ListItem Text="superAdmin"> </asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
+                            <asp:Label ID="Label5" runat="server" Text="Nota" />
+                            <asp:TextBox ID="TxtNota" runat="server" TextMode="MultiLine" Rows="4" CssClass="form-control" />
                         </div>
                         <div class="form-group mb-3">
-                            <div class="form-group text-center mt-4" style="text-align: left !important">
-                                <asp:Label ID="Label8" runat="server" Text="Elenco Personale" CssClass="form-label d-block mb-2"></asp:Label>
-                                <asp:DropDownList ID="DdlPersonale" runat="server" CssClass="form-control" />
-                            </div>
+                            <asp:Label ID="Label6" runat="server" Text="Ruolo" />
+                            <asp:DropDownList ID="DdlRuolo" runat="server" CssClass="form-control">
+                                <asp:ListItem Text="admin" />
+                                <asp:ListItem Text="accertatori" />
+                                <asp:ListItem Text="archivio" />
+                                <asp:ListItem Text="coordinamentoatti" />
+                                <asp:ListItem Text="coordinamentopg" />
+                                <asp:ListItem Text="Fureria" />
+                                <asp:ListItem Text="PG" />
+                                <asp:ListItem Text="superAdmin" />
+                            </asp:DropDownList>
                         </div>
-                        <div class="col-md-6" style="margin-top: 20px!important">
-                            <div class="form-group mb-3">
-                                <asp:Button Text="OK" runat="server" OnClick="InsOpetratore_Click" ToolTip="Inserisci" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-                            </div>
+                        <div class="form-group mb-4">
+                            <asp:Label ID="Label8" runat="server" Text="Elenco Personale" />
+                            <asp:DropDownList ID="DdlPersonale" runat="server" CssClass="form-control" />
                         </div>
+                        <asp:Button Text="SALVA OPERATORE" runat="server" OnClick="InsOpetratore_Click" CssClass="btn btn-primary w-100" />
                     </div>
                 </div>
             </div>
-            <div id="divReset" runat="server" class="col-md-4" visible="false">
-                <!-- Etichetta Matricola e Campo -->
-                <div class="col-md-6">
-                    <div class="form-group mb-3" style="text-align: left !important">
-                        <asp:Label ID="Label3" runat="server" Text="Matricola" CssClass="form-label d-block mb-2"></asp:Label>
-                        <asp:TextBox ID="txtResetMatricola" runat="server" ToolTip="matricola" TabIndex="6" CssClass="form-control" autofocus=""></asp:TextBox>
+
+            <div id="divCheck" runat="server" visible="false" class="section-box">
+                <div class="row d-flex align-items-end">
+                    <div class="col-md-4">
+                        <div class="form-group mb-0">
+                            <asp:Label ID="Label9" runat="server" Text="Numero Pratica" />
+                            <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-0">
+                            <asp:Label ID="Label10" runat="server" Text="Anno" />
+                            <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-0">
+                            <asp:Button Text="AVVIA RICERCA" runat="server" OnClick="Cerca_Click" CssClass="btn btn-primary w-100 btn-allineato" />
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6" style="margin-top: 20px!important">
-                    <div class="form-group mb-3">
-                        <asp:Button Text="Reset" runat="server" OnClick="ModificaP_Click" ToolTip="Reset" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-                        <asp:Button Text="Elimina" runat="server" OnClick="Elimina_Click" ToolTip="Elimina Utente" CssClass="btn btn-primary px-4" />
 
-
-                    </div>
+                <div class="table-responsive mt-4">
+                    <asp:GridView ID="GVcheck" runat="server"
+                        CssClass="table table-bordered table-hover compact-grid"
+                        OnRowDataBound="GVcheck_RowDataBound"
+                        OnRowCommand="GVcheck_RowCommand"
+                        AllowPaging="true" PageSize="10"
+                        OnPageIndexChanging="GVcheck_PageIndexChanging"
+                        RowStyle-CssClass="GridViewRow"
+                        AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                        <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                    </asp:GridView>
                 </div>
             </div>
-            <div id="divCheck" runat="server" class="col-md-10 mx-auto" visible="false" style="float: none;">
+
+            <div id="divReset" runat="server" visible="false" class="section-box text-center">
                 <div class="row justify-content-center">
-                    <div class="col-md-3">
-                        <div class="form-group mb-3 text-start">
-                            <asp:Label ID="Label9" runat="server" Text="Pratica" CssClass="form-label fw-bold"></asp:Label>
-                            <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control"></asp:TextBox>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group mb-3 text-start">
-                            <asp:Label ID="Label10" runat="server" Text="Anno" CssClass="form-label fw-bold"></asp:Label>
-                            <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control"></asp:TextBox>
-                        </div>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end mb-3">
-                        <asp:Button Text="Cerca" runat="server" OnClick="Cerca_Click" CssClass="btn btn-primary w-100" />
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="table-responsive" style=" padding: 10px; background: #fff;">
-                            <asp:GridView ID="GVcheck" runat="server" AutoGenerateColumns="true"
-                                CssClass="table table-bordered table-hover compact-grid"
-                                OnRowDataBound="GVcheck_RowDataBound"
-                                OnRowCommand="GVcheck_RowCommand"
-                                AllowPaging="true" PageSize="30"
-                                OnPageIndexChanging="GVcheck_PageIndexChanging"
-                                AlternatingRowStyle-CssClass="GridViewAlternatingRow"
-                                Style="width: 100% !important; table-layout: fixed; margin: 0 auto;">
-
-                                <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                                <PagerStyle HorizontalAlign="Center" />
-                                <PagerTemplate>
-                                </PagerTemplate>
-                            </asp:GridView>
+                    <div class="col-md-4">
+                        <asp:Label ID="Label3" runat="server" Text="Matricola per Reset" CssClass="fw-bold" />
+                        <asp:TextBox ID="txtResetMatricola" runat="server" CssClass="form-control mt-2" />
+                        <div class="mt-3">
+                            <asp:Button Text="RESET PASSWORD" runat="server" OnClick="ModificaP_Click" CssClass="btn btn-warning px-4" />
+                            <asp:Button Text="ELIMINA UTENTE" runat="server" OnClick="Elimina_Click" CssClass="btn btn-danger px-4" />
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Pulsante Login -->
-        <div class="form-group text-center mt-4">
-            <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" ToolTip="Reset Password" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-            <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" ToolTip="Nuovo Utente" CssClass="btn btn-primary px-4" OnLoginError="Login1_LoginError" />
-            <asp:Button Text="Check" runat="server" OnClick="Check_Click" ToolTip="Check tabella" CssClass="btn btn-primary px-4" />
 
-        </div>
+            <div class="form-group text-center mt-4 mb-5">
+                <asp:Button Text="Reset Password" runat="server" OnClick="Reset_Click" CssClass="btn btn-primary mx-2" />
+                <asp:Button Text="Nuovo Utente" runat="server" OnClick="NuovoUt_Click" CssClass="btn btn-primary mx-2" />
+                <asp:Button Text="Verifica Accessi" runat="server" OnClick="Check_Click" CssClass="btn btn-primary mx-2" />
+            </div>
 
-        </div>
-    </asp:Panel>
+        </asp:Panel>
+    </div>
 
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
+    <%-- Popup Errori --%>
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">ATTENZIONE</h5>
                 </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
+                <div class="modal-body text-center">
+                    <p id="errorMessage" class="lead"></p>
                 </div>
                 <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                 </div>
             </div>
         </div>
     </div>
+     
 </asp:Content>

@@ -76,7 +76,7 @@
                 suggestionsListDiv.style.display = "none";
             }
         }
-        
+
         // Mostra il popup
         function showModal() {
             $('#myModal').modal('show');
@@ -108,24 +108,15 @@
 
 
     </script>
-    <style>
-        .uppercase-text {
-            text-transform: uppercase;
-        }
 
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -30px;
-        }
-    </style>
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>
+            <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>INSERISCI UNA NUOVA PRATICA IN ARCHIVIO PATRIMONIO</h1>
+            </div>
         </div>
 
         <div class="panel panel-default">

@@ -1,344 +1,315 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Uotep.SiteMaster" %>
 
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="it">
 <head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - Applicazione ASP.NET</title>
+    <title><%: Page.Title %> - U.O.T.E.P.</title>
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
-
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
+    <style>
+        body {
+            padding-top: 70px;
+            background-color: #f8f9fa;
+        }
 
+        /* Navbar con gradiente professionale */
+        .navbar-custom {
+    min-height: 65px;
+    background-color: #337ab7 !important;
+}
+
+            .navbar-custom .navbar-nav > li > a {
+                color: #ffffff !important;
+                font-weight: 600; /* Rende il testo più leggibile */
+                text-transform: uppercase;
+                font-size: 1.3rem; /* Aumentato da 0.85rem a 1.1rem */
+                letter-spacing: 0.8px; /* Spaziatura tra lettere migliorata */
+                padding-top: 20px !important; /* Più spazio verticale */
+                padding-bottom: 20px !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+                transition: 0.3s;
+            }
+
+                .navbar-custom .navbar-nav > li > a:hover {
+                    background: rgba(255,255,255,0.1) !important;
+                }
+
+        /* Sottomenu a comparsa laterale */
+        .dropdown-submenu {
+            position: relative;
+        }
+
+            .dropdown-submenu > .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -1px;
+                border-radius: 4px;
+            }
+        /* Ingrandimento voci dei sottomenu (dropdown) */
+        .dropdown-menu > li > a {
+            font-size: 1.4rem; /* Ingrandito anche il testo del dropdown */
+            padding: 10px 20px; /* Più spazio per il click/tap */
+            font-weight: 500;
+        }
+        /* Ingrandimento sottomenu laterali */
+.dropdown-submenu > a {
+    font-size: 1.4rem !important;
+}
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+            background-color:yellow;
+        }
+
+        .dropdown-submenu > a:after {
+            content: "\25B6";
+            float: right;
+            margin-left: 10px;
+            font-size: 0.7em;
+            opacity: 0.7;
+        }
+
+        /* Watermark Logo */
+        .sfondo-personalizzato {
+            position: relative;
+            min-height: 95vh;
+        }
+
+            .sfondo-personalizzato::before {
+                content: "";
+                position: fixed;
+                top: 55%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 50%;
+                height: 50%;
+                background-image: url('<%= ResolveUrl("~/FileComuni/Logo2.jpeg") %>');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                opacity: 0.04;
+                z-index: -1;
+                pointer-events: none;
+            }
+
+        .user-log-pill {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        #wordViewerFrame {
+            width: 100%;
+            height: 750px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        /* Log Utente più visibile */
+.user-log-pill {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 20px;
+    margin-top: 12px;
+    font-size: 1rem;            /* Ingrandito nome utente */
+    font-weight: bold;
+}
+    </style>
 </head>
 <body>
     <form runat="server">
-        <style>
-            .dropdown-submenu {
-                position: relative;
-            }
-
-                .dropdown-submenu > .dropdown-menu {
-                    top: 0;
-                    left: 100%;
-                    margin-top: -6px;
-                }
-
-                .dropdown-submenu:hover > .dropdown-menu {
-                    display: block;
-                }
-
-                .dropdown-submenu > a:after {
-                    content: "▸"; /* O una freccia diversa */
-                    float: right;
-                    margin-right: -10px;
-                }
-            /* Stile per nascondere il contenitore del viewer all'inizio */
-            #viewerContainer {
-                display: none;
-                margin-top: 20px;
-                border: 1px solid #ccc;
-            }
-
-            #wordViewerFrame {
-                width: 100%;
-                height: 750px;
-                border: none;
-            }
-            /* Questo CSS vale solo per questa pagina */
-            .sfondo-personalizzato {
-                position: relative;
-                min-height: 80vh; /* Assicura altezza sufficiente */
-                overflow: hidden; /* Evita sbordature */
-            }
-
-                .sfondo-personalizzato::before {
-                    content: "";
-                    position: absolute;
-                    top: 13px;
-                    left: 5px;
-                    width: 91%;
-                    height: 91%;
-                    /* Inserisci qui il percorso della tua immagine caricata nel progetto */
-                    background-image: url('<%= ResolveUrl("~/FileComuni/Logo2.jpeg") %>');
-                    background-repeat: no-repeat;
-                    background-position: center center;
-                    background-size: contain; /* O 'cover' se vuoi riempire tutto */
-                    /* QUI REGOLI LA TRASPARENZA (0.1 = molto chiaro, 1 = normale) */
-                    opacity: 0.1;
-                    z-index: -1; /* Lo manda dietro al testo */
-                }
-        </style>
         <asp:ScriptManager runat="server">
-
             <Scripts>
-
-                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
                 <asp:ScriptReference Name="MsAjaxBundle" />
-                <%--<asp:ScriptReference Name="jquery" />--%>
                 <asp:ScriptReference Path="~/Scripts/jquery-3.7.1.js" />
                 <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Path="~/Scripts/bootstrap.bundle.min.js" />
                 <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
                 <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top " style="background-color: #337ab7 !important">
-            <div class="container">
+        <nav class="navbar navbar-inverse navbar-fixed-top navbar-custom">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                     </button>
-                    <%--<a class="navbar-brand" runat="server" href="~/">Nome applicazione</a>--%>
+                    <a class="navbar-brand" href="~/View/Default.aspx" runat="server" style="color: white !important; font-weight: bold;">U.O.T.E.P. System</a>
                 </div>
-                <div class="navbar-collapse collapse" style="font-weight: bold !important">
-                    <ul class="nav navbar-nav">
-                        <li><%--<a id="menuAttivita" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Attivita">Attività</a>--%></li>
 
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
 
                         <li id="menuAmministratore" runat="server" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" class="dropdown-toggle" data-toggle="dropdown">Dashboard<span class="caret"></span></a>
-
-                            <!-- Questo <ul> è il menu di secondo livello per UOTE -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dashboard <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="menuAttivita" runat="server" visible="false" href="~/View/Attivita">Attività</a></li>
-                                <li><%--<a id="Amministratore" runat="server" visible="false" ref="~/View/Dashboard">Dashboard</a>--%></li>
                                 <li><a id="Amministratore" runat="server" visible="false" href="~/View/Dashboard">Dashboard</a></li>
                                 <li><a id="SchedaCarburante" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                                 <li><a id="Turnazione" runat="server" visible="false" href="~/View/Turnazione">Turnazione</a></li>
                             </ul>
                         </li>
 
-                        <%--                        <li runat="server" id="menuAmministratore" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/Dashboard">Dashboard</a></li>--%>
-                        <li><a id="Attivita" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Attivita">Attività</a></li>
+                        <li><a id="Attivita" runat="server" visible="false" href="~/View/Attivita">Attività</a></li>
 
-
-                        <!-- Elemento principale del menu a tendina "Archivio" -->
-                        <li runat="server" id="menuArchivio" visible="false" class="dropdown">
-
-                            <!-- Questo è il link che apre il primo livello del menu -->
-                            <a runat="server" style="color: #ffffff !important" class="dropdown-toggle" data-toggle="dropdown">Archivio<span class="caret"></span></a>
-
-                            <!-- Questo <ul> contiene il primo livello del menu (le due sezioni UOTE e UOTP) -->
+                        <li id="menuArchivio" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Archivio <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-
-                                <!-- ### INIZIO SOTTOMENU ARCHIVIO UOTE ### -->
                                 <li id="subMenuUOTE" runat="server" visible="false" class="dropdown-submenu">
                                     <a href="#">Archivio UOTE</a>
-                                    <!-- Questo <ul> è il menu di secondo livello per UOTE -->
                                     <ul class="dropdown-menu">
                                         <li><a id="InserimentoArchivioUote" runat="server" visible="false" href="~/View/InserimentoArchivio">Inserimento Pratica</a></li>
                                         <li><a id="RicercaArchivioUote" runat="server" visible="false" href="~/View/RicercaArchivio">Ricerca Pratica</a></li>
-
                                     </ul>
                                 </li>
-                                <!-- ### FINE SOTTOMENU ARCHIVIO UOTE ### -->
-
-                                <!-- ### INIZIO SOTTOMENU ARCHIVIO UOTP ### -->
                                 <li id="subMenuUOTP" runat="server" visible="false" class="dropdown-submenu">
                                     <a href="#">Archivio UOTP</a>
-                                    <!-- Questo <ul> è il menu di secondo livello per UOTP -->
                                     <ul class="dropdown-menu">
                                         <li><a id="InserimentoArchivioUotp" runat="server" visible="false" href="~/View/Uotp/InserimentoArchivioUotp">Inserimento Pratica TP</a></li>
                                         <li><a id="RicercaArchivioUotp" runat="server" visible="false" href="~/View/Uotp/RicercaArchivioUotp">Ricerca Pratica TP</a></li>
-                                        <%--<li><a id="GestionePraticaUotp" runat="server" visible="false" href="~/View/Uotp/GestionePratica">Gestione Pratica TP</a></li>--%>
                                     </ul>
                                 </li>
+                                <li class="divider"></li>
                                 <li><a id="GestionePraticaUote" runat="server" visible="false" href="~/View/GestionePratica">Gestione Pratica</a></li>
                                 <li><a id="StatisticheAtti" runat="server" visible="false" href="~/View/StatisticheAtti">Statistiche</a></li>
-                                <!-- ### FINE SOTTOMENU ARCHIVIO UOTP ### -->
-
                             </ul>
                         </li>
 
-                        <li runat="server" id="menuCoordinamentoAtti" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti<span class="caret"></span></a>
+                        <li id="menuCoordinamentoAtti" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Coordinamento Atti <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="InserimentoAtti" runat="server" visible="false" href="~/View/Inserimento">Inserimento Atti</a></li>
-                                <%--<li><a id="ModificaAtti" runat="server" visible="false" href="~/View/Modifica">Modifica Atti</a></li>--%>
-                                <%--<li><a id="ModificaRiservata" runat="server" visible="false" href="~/View/ModificaRiservata">Modifica Riservata</a></li>--%>
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
-
-
                             </ul>
                         </li>
 
-
-                        <li runat="server" id="menuAccertatori" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" href="~/View/SchedaIntervento" class="dropdown-toggle" data-toggle="dropdown">Scheda Intervento<span class="caret"></span></a>
+                        <li id="menuAccertatori" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scheda Intervento <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="Decretazione" runat="server" visible="false" href="~/View/Modifica">Decretazione</a></li>
-
                                 <li><a id="menuNuovaScheda" runat="server" visible="false" href="~/View/SchedaIntervento">Nuova Scheda</a></li>
                                 <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
                                 <li><a id="mnGestioneAuto" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                                 <li><a id="EstraiStatistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
-
-
                             </ul>
                         </li>
-                        <%-- FURERIA --%>
-                        <li runat="server" id="menuFureria" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" href="~/View/Turnazione" class="dropdown-toggle" data-toggle="dropdown">Fureria<span class="caret"></span></a>
+
+                        <li id="menuFureria" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fureria <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a id="FSchedaDipendente" runat="server" visible="false" href="~/View/SchedaDipendente">SchedaDipendente</a></li>
-                                <li><a id="AccTrunoMensile" runat="server" visible="false" href="~/View/Turnazione">Turnazione Mensile</a></li>
+                                <li><a id="FSchedaDipendente" runat="server" visible="false" href="~/View/SchedaDipendente">Scheda Dipendente</a></li>
+                                <li><a id="AccTrunoMensile" runat="server" visible="false" href="~/View/Turnazione">Turnazione Mensile Acc.</a></li>
                                 <li><a id="TurnoMensile" runat="server" visible="false" href="~/View/Turnazione">Turnazione Mensile</a></li>
-
                             </ul>
                         </li>
-                        <%-- manutenzione tabelle --%>
-                        <li runat="server" id="menuManTabelle" style="color: #ffffff !important" visible="false"><a runat="server" style="color: #ffffff !important" href="~/View/ManutenzioneTabelle">Manutenzione Tabelle</a></li>
 
-                        <li runat="server" id="menuSegreteria" visible="false" class="dropdown">
-                            <a runat="server" style="color: #ffffff !important" href="~/View/Segreteria" class="dropdown-toggle" data-toggle="dropdown">Ufficio PG <span class="caret"></span></a>
+                        <li id="menuSegreteria" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ufficio PG <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="StatistichePg" runat="server" visible="false" href="~/View/StatistichePg">Statistiche</a></li>
                                 <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
-
                             </ul>
                         </li>
-                        <li><a id="Urp" runat="server" visible="false" style="color: #ffffff !important" href="~/View/Urp">Urp</a></li>
 
-                        <li runat="server" id="LiHelp">
-                            <asp:HyperLink
-                                ID="helpLink"
-                                runat="server"
-                                NavigateUrl="~/FileComuni/Manualeutenteuotep.pdf"
-                                Target="_blank"
-                                Style="color: #ffffff !important">
-         Manuale Utente 
-                            </asp:HyperLink>
+                        <li id="menuManTabelle" runat="server" visible="false"><a href="~/View/ManutenzioneTabelle" runat="server">Tabelle</a></li>
+                        <li><a id="Urp" runat="server" visible="false" href="~/View/Urp">Urp</a></li>
 
+                        <li>
+                            <asp:HyperLink ID="helpLink" runat="server" NavigateUrl="~/FileComuni/Manualeutenteuotep.pdf" Target="_blank">Manuale</asp:HyperLink>
                         </li>
 
-                        <li runat="server" id="menuEsci" visible="false">
-                            <asp:LinkButton ID="lnkLogout" runat="server" ValidationGroup="bottoni" OnClick="Esci_Click" Style="color: #ffffff !important">ESCI</asp:LinkButton>
+                        <li id="menuEsci" runat="server" visible="false">
+                            <asp:LinkButton ID="lnkLogout" runat="server" OnClick="Esci_Click" CssClass="text-danger fw-bold">ESCI</asp:LinkButton>
                         </li>
-
-
                     </ul>
-                    <div id="viewerContainer">
-                        <iframe id="wordViewerFrame" src=""></iframe>
-                    </div>
-                </div>
 
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 15px;">
+                        <li id="userLog" runat="server" visible="false">
+                            <div class="user-log-pill">
+                                <span class="glyphicon glyphicon-user"></span>&nbsp;
+                                <asp:Label ID="lblUser" runat="server" />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div runat="server" id="userLog" visible="false">
-                <asp:Label ID="lblUser" runat="server" Style="color: #ffffff !important" />
-            </div>
-        </div>
+        </nav>
 
         <div class="container body-content sfondo-personalizzato">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <asp:Label ID="lblMsg" runat="server" BackColor="Red"></asp:Label>
-                <p style="font: bold; font-style: italic">&copy; <%: DateTime.Now.Year %> - Powered by </p>
+            <div id="viewerContainer" style="display: none; margin-bottom: 20px;">
+                <iframe id="wordViewerFrame" src=""></iframe>
+            </div>
+
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+
+            <footer class="text-center" style="margin-top: 40px; padding: 20px; border-top: 1px solid #eee;">
+                <asp:Label ID="lblMsg" runat="server" CssClass="label label-danger" Style="display: block; margin-bottom: 10px;"></asp:Label>
+                <p>&copy; <%: DateTime.Now.Year %> - <strong>U.O.T.E.P.</strong> | Powered by P.A.</p>
             </footer>
         </div>
-        <%-- popup errori --%>
-        <div class="modal fade" id="SiteModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-            <div class="modal-dialog"
-                role="document">
+
+        <div class="modal fade" id="SiteModal" tabindex="-1">
+            <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header" id="modalHeaderColor" runat="server">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="ModalLabel">
-                            <asp:Label ID="lblModalTitolo" runat="server" Text="Avviso"></asp:Label>
-                        </h4>
+                    <div id="modalHeaderColor" runat="server" class="modal-header">
+                        <h4 class="modal-title">
+                            <asp:Label ID="lblModalTitolo" runat="server" Text="Avviso" /></h4>
                     </div>
-                    <div class="modal-body">
-                        <!-- Campi di input per la ricerca -->
-                        <div class="form-group">
-
-                            <p id="TxtMessage" runat="server" style="color: red"></p>
-
-                        </div>
+                    <div class="modal-body text-center">
+                        <p id="TxtMessage" runat="server" class="lead"></p>
                     </div>
                     <div class="modal-footer">
-                        <!-- Bottone per avviare la ricerca -->
-                        <asp:Button ID="btChiudiPopUp" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiPopUp_Click" />
+                        <asp:Button ID="btChiudiPopUp" runat="server" CssClass="btn btn-default" Text="Chiudi" OnClick="btChiudiPopUp_Click" />
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal di CONFERMA (con tasto OK) -->
-        <div class="modal fade" id="ModalConferma" tabindex="-1" role="dialog" aria-labelledby="LabelConferma" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+
+        <div class="modal fade" id="ModalConferma" tabindex="-1">
+            <div class="modal-dialog">
                 <div class="modal-content">
-
                     <div class="modal-header bg-warning">
-                        <!-- Giallo per attenzione -->
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="LabelConferma">
-                            <asp:Label ID="lblTitoloConferma" runat="server" Text="Conferma Operazione"></asp:Label>
-                        </h4>
+                        <h4 class="modal-title">
+                            <asp:Label ID="lblTitoloConferma" runat="server" Text="Conferma" /></h4>
                     </div>
-
                     <div class="modal-body">
-                        <asp:Label ID="lblTestoConferma" runat="server" Text="Sei sicuro?"></asp:Label>
-
-                        <!-- Campo nascosto per salvare l'URL dove andare se dice SI -->
+                        <asp:Label ID="lblTestoConferma" runat="server" Text="Procedere con l'operazione?" />
                         <input type="hidden" id="hdnUrlDestinazione" />
                     </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
-
-                        <!-- Tasto che scatena l'azione -->
                         <button type="button" class="btn btn-primary" onclick="EseguiRedirect()">Prosegui</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SCRIPT JAVASCRIPT PER GESTIRE IL REDIRECT -->
         <script type="text/javascript">
-            // Funzione chiamata dal C# per aprire il modale e settare l'URL
             function ApriModalConferma(titolo, messaggio, url) {
-                // Imposta i testi (opzionale via JS, ma lo facciamo via C# solitamente)
-                // Ma l'URL deve essere passato a JS
                 $('#hdnUrlDestinazione').val(url);
-
-                // Apre il modale
                 $('#ModalConferma').modal('show');
             }
-
-            // Funzione chiamata dal tasto "Prosegui"
             function EseguiRedirect() {
                 var url = $('#hdnUrlDestinazione').val();
-                if (url) {
-                    window.location.href = url; // Reindirizza l'utente
-                }
+                if (url) { window.location.href = url; }
             }
-
         </script>
         <asp:HiddenField ID="hfMasterParam" runat="server" ClientIDMode="Static" />
     </form>
-    <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'></script>
+     <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'>
+
+     </script>
+
 </body>
 </html>

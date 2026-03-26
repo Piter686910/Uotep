@@ -55,7 +55,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+                // ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
                 //if (ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
                 //{
@@ -75,7 +75,53 @@ namespace Uotep
                 txtProt.Text = prot.GetProtocollo();
 
                 txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
+                if (Session["ListRicerca"] != null)
+                {
+                    DataTable pratica = (DataTable)Session["ListRicerca"];
+                    txtSearchAtto.Value = pratica.Rows[0]["Tipologia_atto"].ToString();
+                    DdlSigla.SelectedValue = pratica.Rows[0]["Sigla"].ToString();
+                    txtRifProtGen.Text = pratica.Rows[0]["Rif_Prot_Gen"].ToString();
+                    txtTipoAtto.Text = pratica.Rows[0]["UlterioreTipoAtto"].ToString();
+                    txtProvenienza.Text = pratica.Rows[0]["Provenienza"].ToString();
+                    txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString();
+                    txtIndirizzo.Text = pratica.Rows[0]["Indirizzo"].ToString();
+                    txtQuartiere.Text = pratica.Rows[0]["Quartiere"].ToString();
+                    txtNominativo.Text = pratica.Rows[0]["Nominativo"].ToString();
+                    txPratica.Text = pratica.Rows[0]["nr_Pratica"].ToString();
+                    if (!string.IsNullOrWhiteSpace(pratica.Rows[0]["DataCarico"].ToString()))
+                    {
 
+
+                        DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0]["DataCarico"].ToString()); // Recupera la data dal DataTable
+                        if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                        {
+                            txtDataCarico.Text = ""; // Metti una stringa vuota
+                        }
+                        else
+                        {
+                            txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                        }
+                    }
+                    DdlMacroArea.SelectedItem.Text = pratica.Rows[0]["Macro_area"].ToString();
+                    txtGiudice.Text = pratica.Rows[0]["Giudice"].ToString();
+                    txtProdPenNr.Text = pratica.Rows[0]["ProcedimentoPen"].ToString();
+
+                    DdlTipoProvvAg.SelectedItem.Text = pratica.Rows[0]["TipoProvvedimentoAG"].ToString();
+                    txtBU.Text = pratica.Rows[0]["BU"].ToString();
+
+                    txtGiudice.Text = pratica.Rows[0]["Giudice"].ToString();
+                    txtCodEdificio.Text = pratica.Rows[0]["CodiceEdificio"].ToString();
+                    if (pratica.Rows[0]["Sigla"].ToString() == "AG")
+                    {
+                        divAg.Visible = true;
+                    }
+                    if (DdlSigla.SelectedItem.Text == "TP")
+                    {
+                        divbu.Visible = true;
+                        divcd.Visible = true;
+                    }
+                    Session.Remove("ListRicerca");
+                }
             }
 
         }
@@ -230,7 +276,7 @@ namespace Uotep
                     //{
                     Principale p = new Principale();
                     p.anno = annoCorr;
-                    
+
                     DateTime giorno = DateTime.Now;
                     p.giorno = giorno.ToString("dddd", new CultureInfo("it-IT"));
 
@@ -540,8 +586,8 @@ namespace Uotep
             txtSearchAtto.Value = string.Empty;
             txtProt.Text = String.Empty;
             txtDataDecretazione.Text = String.Empty;
-          //  txtDecretato.Text = String.Empty;
-          txtSearchOperatore.Value = string.Empty;
+            //  txtDecretato.Text = String.Empty;
+            txtSearchOperatore.Value = string.Empty;
             txtNotaDecretazione.Text = String.Empty;
             if (String.IsNullOrEmpty(HfGiudice.Value))
             {
@@ -1254,8 +1300,8 @@ namespace Uotep
 
         protected void txtRifProtGen_TextChanged(object sender, EventArgs e)
         {
-           //txtNumProtRicStessoCarico.Text=  Regex.Replace(txtRifProtGen.Text, @"[^0-9/]", ";");
-           // int conteggioPuntoEVirgola = txtRifProtGen.Text.Count(c => c == ';');
+            //txtNumProtRicStessoCarico.Text=  Regex.Replace(txtRifProtGen.Text, @"[^0-9/]", ";");
+            // int conteggioPuntoEVirgola = txtRifProtGen.Text.Count(c => c == ';');
 
         }
     }

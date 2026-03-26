@@ -94,8 +94,11 @@
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">RICERCA UNA PRATICA</p>
+            <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <p class="text-center lead">RICERCA UNA PRATICA</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA UNA PRATICA IN ARCHIVIO PATRIMONIO</h1>
+            </div>
             <!-- Contenitore per centrare -->
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
@@ -163,7 +166,7 @@
                     <asp:Label ID="Label2" runat="server" Text="Quartiere" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:TextBox ID="txtQuartiere" runat="server" CssClass="form-control" placeholder="Quartiere" />
                     <asp:Label ID="Label6" runat="server" Text="Cartellina" CssClass="form-label d-block mb-2"></asp:Label>
-                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" placeholder="Cartellina" autofocus=""/>
+                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" placeholder="Cartellina" autofocus="" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -185,7 +188,7 @@
 
                     <asp:Label ID="Label4" runat="server" Text="Nota" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" placeholder="Nota" autofocus=""/>
+                    <asp:TextBox ID="txtNota" runat="server" CssClass="form-control" placeholder="Nota" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -196,7 +199,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="BU" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="BU Alloggio" autofocus=""/>
+                    <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" placeholder="BU Alloggio" autofocus="" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -216,7 +219,7 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
+                    <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -227,7 +230,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Intestatario" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" autofocus=""/>
+                    <asp:TextBox ID="txtIntestatario" runat="server" CssClass="form-control" placeholder="Intestatario" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -238,7 +241,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Edificio" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtBuEdificio" runat="server" CssClass="form-control" placeholder="BU Edificio" autofocus=""/>
+                    <asp:TextBox ID="txtBuEdificio" runat="server" CssClass="form-control" placeholder="BU Edificio" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -366,19 +369,33 @@
 
     <%-- Modale ricerca pratica --%>
     <div class="modal fade" id="ModalPratica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 100%">
+        <div class="modal-dialog modal-xl" style="width: 100%">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-dark text-white">
                     <h5 class="modal-title" id="modalLabel10">Ricerca Pratica</h5>
 
                 </div>
                 <div class="modal-body">
-
-                    <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                        <div class="small text-muted">
+                            <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                        </div>
+                    </div>
+                     <div class="table-responsive">
                         <!-- GridView nel popup -->
-                        <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="gvPopup_RowCommandP" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVRicercaPratica_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                        <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-hover"
+                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="GVRicercaPratica_RowCommand" AllowPaging="true" PageSize="10"
+                            OnPageIndexChanging="GVRicercaPratica_PageIndexChanging"
+                            OnDataBound="GVRicercaPratica_DataBound"
+                            RowStyle-CssClass="GridViewRow"
+                            AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                            PagerSettings-Position="Top"
+                            PagerSettings-Mode="NextPreviousFirstLast"
+                            PagerSettings-FirstPageText="&laquo; Prima"
+                            PagerSettings-LastPageText="Ultima &raquo;"
+                            PagerSettings-NextPageText="Succ. &rsaquo;"
+                            PagerSettings-PreviousPageText="&lsaquo; Prec.">
+
                             <Columns>
                                 <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
                                 <asp:BoundField DataField="Cartellina" HeaderText="Cart." HeaderStyle-CssClass="wrap-text" />
@@ -387,8 +404,8 @@
                                     <HeaderTemplate>
                                         Oggetto
                                     <br />
-                                        <asp:TextBox ID="txtFilterOggetto" runat="server" OnTextChanged="txtFilterOggetto_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
+                                        <asp:TextBox ID="txtFilterOggetto" runat="server" OnTextChanged="txtFilterOggetto_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("oggetto1") %>
@@ -402,8 +419,8 @@
                                     <HeaderTemplate>
                                         Note
                                      <br />
-                                        <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
+                                        <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("note") %>
@@ -414,8 +431,8 @@
                                     <HeaderTemplate>
                                         Cognome
          <br />
-                                        <asp:TextBox ID="txtFilterCognome" runat="server" OnTextChanged="txtFilterCognome_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
+                                        <asp:TextBox ID="txtFilterCognome" runat="server" OnTextChanged="txtFilterCognome_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("Cognome") %>
@@ -425,8 +442,8 @@
                                     <HeaderTemplate>
                                         Destinatario
                                          <br />
-                                        <asp:TextBox ID="txtFilterDestinatario" runat="server" OnTextChanged="txtFilterDestinatario_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                        Filtro
+                                        <asp:TextBox ID="txtFilterDestinatario" runat="server" OnTextChanged="txtFilterDestinatario_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
                                     </HeaderTemplate>
                                     <ItemTemplate>
                                         <%# Eval("destinatario1") %>
@@ -440,33 +457,8 @@
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>
-                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                            <PagerStyle HorizontalAlign="Center" />
-                            <PagerTemplate>
-                                <table width="100%">
-                                    <tr>
-                                        <td style="width: 50%; text-align: left;">
-                                            <asp:Label ID="lblPageInfo" runat="server" />
-                                        </td>
 
-                                    </tr>
-                                </table>
-                                <div style="padding: 5px;">
-                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
-
-                                    <span style="margin: 0 10px;">Pagina:
-            
-                                    </span>
-
-                                    <%-- Contenitore per i link numerici delle pagine --%>
-                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
-
-                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
-                                </div>
-                            </PagerTemplate>
-
+                            <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
                         </asp:GridView>
 
                     </div>

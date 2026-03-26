@@ -55,7 +55,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+                //ProtocolloLiteral.Text = decodedText;
                 CaricaDLL();
                 txtMese.Text = DateTime.Now.ToString("MMMM").ToUpper();
                 txtAnno.Text = DateTime.Now.ToString("yyyy");

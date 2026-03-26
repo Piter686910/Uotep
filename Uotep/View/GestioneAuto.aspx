@@ -1,343 +1,243 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="GestioneAuto.aspx.cs" Inherits="Uotep.GestioneAuto" %>
 
-
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
+    <style>
+        .larghezzaText {
+            width: 100%;
+            font-size: 0.9rem !important;
+            padding: 5px !important;
+            color: #333;
+        }
+    </style>
+
     <script>
-        // Mostra il popup 
         function ShowErrorMessage(message) {
+            $('#errorMessage').text(message);
             $('#errorModal').modal('show');
         }
-        // Nasconde il popup
         function HideErrorMessage() {
             $('#errorModal').modal('hide');
         }
-
-        // Mostra il popup 
-        function ShowErrorMessage(message) {
+        function ShowAvvertenze(message) {
+            $('#txtAvvertenze').text(message);
             $('#ModalAvvertenze').modal('show');
         }
-        // Nasconde il popup
-        function HideErrorMessage() {
-            $('#ModalAvvertenze').modal('hide');
-        }
     </script>
-    
 
-    <div class="jumbotron">
-        <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">GESTIONE CARTE CARBURANTE</p>
-
-            <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
-                <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Enabled="false" autofocus=""/>
-            </div>
-            <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
-                <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Enabled="false" />
-            </div>
-            <div class="col-md-4 " style="margin-bottom: 10px; margin-top: 20px; padding-left: 2em">
-                <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
-                <asp:Button ID="btCerca" Text="Cerca" runat="server" OnClick="btCerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                <asp:Button ID="btStampa" Text="Stampa" runat="server" OnClick="btStampa_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-
-
-
-            </div>
+    <div class="container-fluid mt-4">
+        <div class="dashboard-header">
+            <h1><span class="glyphicon glyphicon-cog"></span>GESTIONE CARTE CARBURANTE</h1>
         </div>
 
-
-
-        <div class="container">
-
-            <div class="tab-content">
-
-                <div class="row custom-border" id="divInserimento" runat="server">
-                    <div class="col-md-4 ">
-                        <div class="form-group mb-3" style="margin-left: -25px;">
-                            <label for="DdlSigla">Sigla</label>
-                            <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged1" AutoPostBack="true">
-                            </asp:DropDownList>
-
-                        </div>
-                        <div class="form-group mb-3" style="margin-left: -25px;">
-                            <label for="txtAutista">Autista</label>
-                            <asp:TextBox ID="txtAutista" runat="server" CssClass="form-control" />
-
-                        </div>
+        <div class="section-box">
+            <div class="row d-flex align-items-end">
+                <div class="col-md-2">
+                    <div class="form-group mb-0">
+                        <label>Mese</label>
+                        <asp:TextBox ID="txtMese" runat="server" CssClass="form-control" Enabled="false" />
                     </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group mb-3">
-                            <label for="txtTarga">Targa</label>
-                            <asp:TextBox ID="txtTarga" runat="server" CssClass="form-control" Font-Bold="true" />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="TxtData">Data</label>
-                            <asp:TextBox ID="TxtData" runat="server" CssClass="form-control data-auto" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtData" ValidationGroup="bt" ErrorMessage="Inserire data" ForeColor="Red">
-                            </asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator
-                                ID="RegularExpressionValidator1"
-                                runat="server"
-                                ControlToValidate="TxtData"
-                                ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                ErrorMessage="la data deve essere dd/mm/aaaa"
-                                ForeColor="Red"
-                                ValidationGroup="bt"
-                                Display="Static">
-                            </asp:RegularExpressionValidator>
-                        </div>
-
-
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group mb-3">
-                            <label for="DdlCarburante">Tipo Carburante</label>
-
-                            <asp:DropDownList ID="DdlCarburante" runat="server" CssClass="form-control">
-                                <asp:ListItem Text="Benzina"> </asp:ListItem>
-                                <asp:ListItem Text="Diesel"> </asp:ListItem>
-                            </asp:DropDownList>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group mb-3">
-                            <label for="txtStan">Ora</label>
-                            <asp:TextBox ID="txtOra" runat="server" CssClass="form-control" />
-                            <asp:RegularExpressionValidator
-                                ID="RegexOra"
-                                runat="server"
-                                ControlToValidate="txtOra"
-                                ValidationExpression="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
-                                ErrorMessage="Formato ora non valido (usa HH:MM)."
-                                ForeColor="Red"
-                                ValidationGroup="bt" />
-                        </div>
-
-
-
-
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group mb-3" style="margin-left: -25px;">
-                            <label for="txtStan">Stan</label>
-                            <asp:TextBox ID="txtStan" runat="server" CssClass="form-control" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtStan" ValidationGroup="bt" ErrorMessage="Inserire Stan" ForeColor="Red">
-                            </asp:RequiredFieldValidator>
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group mb-3">
-                            <label for="txtLitri">Litri</label>
-                            <asp:TextBox ID="txtLitri" runat="server" CssClass="form-control" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtLitri" ValidationGroup="bt" ErrorMessage="Inserire Litri" ForeColor="Red">
-                            </asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator
-                                ID="RegularExpressionValidator2"
-                                runat="server"
-                                ControlToValidate="txtLitri"
-                                ValidationExpression="^\s*([0-9]{1,3}(\.([0-9]{3}))*|([0-9]+))(\,[0-9]{1,2})?\s*$"
-                                ErrorMessage="Formato Litri. Usa la virgola per i decimali (es: 10,01)."
-                                ForeColor="Red"
-                                ValidationGroup="bt" />
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group mb-3">
-                            <label for="txtEuro">Euro</label>
-                            <asp:TextBox ID="txtEuro" runat="server" CssClass="form-control" />
-                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtEuro" ValidationGroup="bt" ErrorMessage="Inserire Euro" ForeColor="Red">
-                            </asp:RequiredFieldValidator>
-                            <asp:RegularExpressionValidator
-                                ID="RegexEuro"
-                                runat="server"
-                                ControlToValidate="txtEuro"
-                                ValidationExpression="^\s*([0-9]{1,3}(\.([0-9]{3}))*|([0-9]+))(\,[0-9]{1,2})?\s*$"
-                                ErrorMessage="Formato Euro non valido. Usa la virgola per i decimali (es: 1.234,56)."
-                                ForeColor="Red"
-                                ValidationGroup="bt" />
-                        </div>
-
-                    </div>
-                    <div class="col-md-4">
-
-                        <div class="form-group mb-3" style="margin-left: -25px;">
-                            <label for="txtStan">Indirizzo Distributore</label>
-                            <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" />
-
-                        </div>
-
-                    </div>
-
                 </div>
+                <div class="col-md-2">
 
-
-
-
-
+                    <div class="form-group mb-0">
+                        <label>Anno</label>
+                        <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Enabled="false" />
+                    </div>
+                </div>
+                <div class="col-md-8 text-right">
+                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary ml-2" ValidationGroup="bt" />
+                    <asp:Button ID="btCerca" Text="Cerca" runat="server" OnClick="btCerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary ml-2" />
+                    <asp:Button ID="btStampa" Text="Stampa" runat="server" OnClick="btStampa_Click" ToolTip="Stampa" CssClass="btn btn-primary ml-2" />
+                </div>
             </div>
-
-            <asp:HiddenField ID="Hfuser" runat="server" />
-            <asp:HiddenField ID="HfFiltroData" runat="server" />
-            <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
         </div>
 
-    </div>
-    <!-- GridView  -->
-    <div id="DivGrid" runat="server" class="form-group" style="padding-left: -50px">
-
-        <%--CssClass="table table-bordered table-layout-fixed" colonne larghezza fisse--%>
-        <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-            OnRowDataBound="gvDett_RowDataBound" OnRowCommand="gvDett_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvDett_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
-            <Columns>
-                <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                <%--<asp:BoundField DataField="sigla" HeaderText="Sigla" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />--%>
-
-                <asp:TemplateField HeaderText="Sigla" ItemStyle-Width="50px">
-                    <HeaderTemplate>
-                        sigla
-                          <br />
-                        <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" CssClass="larghezzaText"></asp:TextBox>
-                        Filtro
-                    </HeaderTemplate>
-                    <ItemTemplate>
-                        <%# Eval("sigla") %>
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:BoundField DataField="targa" HeaderText="Targa" ItemStyle-Width="40px" />
-                <asp:BoundField DataField="stan" HeaderText="STAN" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
-
-                <asp:TemplateField HeaderText="Data" ItemStyle-Width="50px">
-                    <HeaderTemplate>
-                        data
-                          <br />
-                        <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True" CssClass="larghezzaText"></asp:TextBox>
-                        Filtro
-                    </HeaderTemplate>
-                    <ItemTemplate>
-                        <%# Eval("data", "{0:dd/MM/yyyy}") %>
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="Ora" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Left">
-                    <ItemTemplate>
-                        <asp:Label ID="lblOra" runat="server"
-                            Text='<%# Eval("ora") != null ? Eval("ora").ToString().Substring(0, 5) : "" %>'>
-                        </asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-
-
-                <asp:BoundField DataField="litri" HeaderText="Litri" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Left" />
-                <asp:BoundField DataField="tipocarburante" HeaderText="Carburante" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center" />
-                <asp:BoundField DataField="euro" HeaderText="Euro" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Left" />
-                <asp:BoundField DataField="indirizzo" HeaderText="Indirizzo" ItemStyle-Width="100%" />
-                <asp:BoundField DataField="autista" HeaderText="Autista" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-                <asp:BoundField DataField="matricola" HeaderText="Resp." ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-                <asp:TemplateField HeaderText="Verificato" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                    <ItemTemplate>
-                        <%# Eval("verificato").ToString() == "True" ? "Si" : "No" %>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                    <ItemTemplate>
-                        <asp:Button ID="btnSelect" runat="server" Text="OK"
-                            CommandName="Select"
-                            CommandArgument='<%# Eval("id")  + "|" + Eval("targa") + "|" + Eval("data")+ "|" + Eval("autista")%>'
-                            CssClass="btn btn-success btn-sm" />
-                    </ItemTemplate>
-                </asp:TemplateField>
-            </Columns>
-            <PagerSettings Mode="NumericFirstLast" Position="Top" />
-            <PagerStyle HorizontalAlign="Center" />
-            <PagerTemplate>
-                <table width="100%">
-                    <tr>
-                        <td style="width: 50%; text-align: left;">
-                            <asp:Label ID="lblPageInfo" runat="server" />
-                        </td>
-
-                    </tr>
-                </table>
-                <div style="padding: 5px;">
-                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
-
-                    <span style="margin: 0 10px;">Pagina:
-               
-                    </span>
-
-                    <%-- Contenitore per i link numerici delle pagine --%>
-                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
-
-                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+        <div class="section-box" id="divInserimento" runat="server">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="DdlSigla">Sigla</label>
+                        <asp:DropDownList ID="DdlSigla" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlSigla_SelectedIndexChanged1" AutoPostBack="true" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txtAutista">Autista</label>
+                        <asp:TextBox ID="txtAutista" runat="server" CssClass="form-control" />
+                    </div>
                 </div>
-            </PagerTemplate>
-        </asp:GridView>
 
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="txtTarga">Targa</label>
+                        <asp:TextBox ID="txtTarga" runat="server" CssClass="form-control" Font-Bold="true" />
+                    </div>
+                    <div class="form-group">
+                        <label for="TxtData">Data</label>
+                        <asp:TextBox ID="TxtData" runat="server" CssClass="form-control data-auto" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="TxtData" ValidationGroup="bt" ErrorMessage="Inserire data" ForeColor="Red" />
+                        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="TxtData" ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$" ErrorMessage="Usa dd/mm/aaaa" ForeColor="Red" ValidationGroup="bt" Display="Dynamic" />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="DdlCarburante">Tipo Carburante</label>
+                        <asp:DropDownList ID="DdlCarburante" runat="server" CssClass="form-control">
+                            <asp:ListItem Text="Benzina" />
+                            <asp:ListItem Text="Diesel" />
+                        </asp:DropDownList>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtOra">Ora</label>
+                        <asp:TextBox ID="txtOra" runat="server" CssClass="form-control" placeholder="HH:MM" />
+                        <asp:RegularExpressionValidator ID="RegexOra" runat="server" ControlToValidate="txtOra" ValidationExpression="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" ErrorMessage="Formato non valido" ForeColor="Red" ValidationGroup="bt" Display="Dynamic" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Stan</label>
+                        <asp:TextBox ID="txtStan" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtStan" ValidationGroup="bt" ErrorMessage="Inserire Stan" ForeColor="Red" Display="Dynamic" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Litri</label>
+                        <asp:TextBox ID="txtLitri" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtLitri" ValidationGroup="bt" ErrorMessage="Inserire Litri" ForeColor="Red" Display="Dynamic" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Euro</label>
+                        <asp:TextBox ID="txtEuro" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtEuro" ValidationGroup="bt" ErrorMessage="Inserire Euro" ForeColor="Red" Display="Dynamic" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Indirizzo Distributore</label>
+                        <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="DivGrid" runat="server" class="section-box">
+            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                <div class="small text-muted">
+                    <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10"></asp:Label>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False"
+                    CssClass="table table-bordered table-hover"
+                    OnRowDataBound="gvDett_RowDataBound" OnRowCommand="gvDett_RowCommand"
+                    AllowPaging="true" PageSize="10" OnPageIndexChanging="gvDett_PageIndexChanging"
+                    RowStyle-CssClass="GridViewRow"
+                    AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                    PagerSettings-Position="Top"
+                    PagerSettings-Mode="NextPreviousFirstLast"
+                    PagerSettings-FirstPageText="&laquo; Prima"
+                    PagerSettings-LastPageText="Ultima &raquo;"
+                    PagerSettings-NextPageText="Succ. &rsaquo;"
+                    PagerSettings-PreviousPageText="&lsaquo; Prec.">
+
+                    <Columns>
+                        <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
+
+                        <asp:TemplateField HeaderText="Sigla">
+                            <HeaderTemplate>
+                                Sigla<br />
+                                <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("sigla") %></ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:BoundField DataField="targa" HeaderText="Targa" />
+                        <asp:BoundField DataField="stan" HeaderText="STAN" ItemStyle-HorizontalAlign="Center" />
+
+                        <asp:TemplateField HeaderText="Data">
+                            <HeaderTemplate>
+                                Data<br />
+                                <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("data", "{0:dd/MM/yyyy}") %></ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Ora">
+                            <ItemTemplate>
+                                '<%# Eval("ora") != null ? Eval("ora").ToString().Substring(0, 5) : "" %>'
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:BoundField DataField="litri" HeaderText="Litri" />
+                        <asp:BoundField DataField="euro" HeaderText="Euro" />
+                        <asp:BoundField DataField="indirizzo" HeaderText="Indirizzo" />
+
+                        <asp:TemplateField HeaderText="Verificato" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <span>
+                                    <%# Eval("verificato").ToString() == "True" ? "SÌ" : "NO" %>
+                                </span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <asp:Button ID="btnSelect" runat="server" Text="OK"
+                                    CommandName="Select"
+                                    CommandArgument='<%# Eval("id") + "|" + Eval("targa") + "|" + Eval("data") + "|" + Eval("autista") %>'
+                                    CssClass="btn btn-success btn-sm" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+
+                    <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                </asp:GridView>
+            </div>
+        </div>
+
+        <asp:HiddenField ID="Hfuser" runat="server" />
+        <asp:HiddenField ID="HfFiltroData" runat="server" />
+        <asp:HiddenField ID="HfFiltroSigla" runat="server" />
 
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
-            <%--role="document">--%>
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">ATTENZIONE</h5>
                 </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-
+                <div class="modal-body text-center">
+                    <p id="errorMessage" style="color: red; font-size: 1.2rem; font-weight: bold;"></p>
                 </div>
                 <div class="modal-footer">
-
-                    <asp:Button ID="btClose" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="HideErrorMessage()" />
+                    <button type="button" class="btn btn-secondary" onclick="HideErrorMessage()">Chiudi</button>
                 </div>
             </div>
         </div>
     </div>
-    <%-- popup avvertenze --%>
-    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
+
+    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
-
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">AVVISO</h5>
                 </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="txtAvvertenze" style="color: red"></p>
-
-                    </div>
+                <div class="modal-body text-center">
+                    <p id="txtAvvertenze" style="color: #856404; font-size: 1.2rem; font-weight: bold;"></p>
                 </div>
                 <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
                     <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
                 </div>
             </div>
         </div>
     </div>
-
 
 </asp:Content>

@@ -275,6 +275,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="FileComuni\lente.png" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\Utility.js" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />

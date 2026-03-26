@@ -32,7 +32,7 @@ namespace Uotep
                 Profilo = Session["profilo"].ToString();
                 btOKDup.Visible = true;
                 if (Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
-                //{
+                    //{
                     btModifica.Visible = false;
                 //}
                 //else
@@ -56,7 +56,7 @@ namespace Uotep
                 }
             }
 
-            
+
             // Legge il valore dal Web.config
             string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -64,7 +64,7 @@ namespace Uotep
             string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
             // Assegna il valore decodificato al Literal
-            ProtocolloLiteral.Text = decodedText;
+           // ProtocolloLiteral.Text = decodedText;
             //int protocollo = 0;
             if (!IsPostBack)
             {
@@ -93,7 +93,7 @@ namespace Uotep
             }
             if (txtNProtocollo.Text != string.Empty && txtAnnoRicerca.Text != string.Empty)
             {
-                pratica = mn.getListPrototocollo(Vuser,txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
+                pratica = mn.getListPrototocollo(Vuser, txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
             }
             if (txtProcPenale.Text != string.Empty)
             {
@@ -105,7 +105,7 @@ namespace Uotep
             }
             if (txtProtGen.Text != string.Empty)
             {
-                pratica = mn.getListProtGen(txtProtGen.Text,out msg);
+                pratica = mn.getListProtGen(txtProtGen.Text, out msg);
                 if (pratica.Rows.Count == 0)
                 {
                     pratica = mn.getListProtGenInDecretazione(txtProtGen.Text, out msg);
@@ -125,8 +125,8 @@ namespace Uotep
             }
             if (txtRicNominativo.Text != string.Empty)
             {
-                pratica = mn.getListNominativo(txtRicNominativo.Text, out  msg);
-                
+                pratica = mn.getListNominativo(txtRicNominativo.Text, out msg);
+
 
             }
             if (txtRicAccertatori.Text != string.Empty)
@@ -149,19 +149,21 @@ namespace Uotep
                 //gvPopup.DataBind();
                 if (validazione)
                 {
+                    GVPratica.PageIndex = 0;
                     GVPratica.DataSource = pratica;
                     GVPratica.DataBind();
                     DivGridVal.Visible = true;
                 }
                 else
                 {
+          //          gvPopup.PageIndex = 0;
                     gvPopup.DataSource = pratica;
                     gvPopup.DataBind();
                     DivGrid.Visible = true;
                     DivGridVal.Visible = false;
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
                 }
-                    string a = pratica.Rows[0].ItemArray[1].ToString();
+                string a = pratica.Rows[0].ItemArray[1].ToString();
                 //DataTable decretazione = new DataTable();
 
                 //decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
@@ -174,13 +176,13 @@ namespace Uotep
                 //else
                 //    divDecretazione.Visible = false;
 
-               
+
             }
             else
             {
                 if (!String.IsNullOrWhiteSpace(msg))
                 {
-                    
+
                     Routine R = new Routine();
                     R.PagError(msg, paginaChiamante);
                 }
@@ -196,18 +198,30 @@ namespace Uotep
                         myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
                     }
                 }
-                  // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non presente in database." + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non presente in database." + "'); $('#errorModal').modal('show');", true);
             }
 
         }
-        protected void chiudipopup_Click(object sender, EventArgs e)
+        protected void  chiudipopup_Click(object sender, EventArgs e)
         {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+
+            //  ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
+            //adegua chiusura popup bootstrap 5
+            string script = @"
+    var modalElement = document.getElementById('ModalRicerca');
+    if (modalElement) {
+        var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(modalElement);
+        }
+        modalInstance.hide();
+    }";
+            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
             Pulisci();
             Session.Remove("ListPratiche");
             Session.Remove("ListRicerca");
+            gvPopup.PageIndex = 0;
+
         }
 
         protected void apripopup_Click(object sender, EventArgs e)
@@ -346,7 +360,7 @@ namespace Uotep
                             {
                                 txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString();
                             }
-                           
+
                             //F- mod 02/06/2026 numero esposti
 
                             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
@@ -1020,7 +1034,7 @@ namespace Uotep
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Recuperiamo il valore del campo "evasa" dal data item
-                
+
                 bool isEvasa = Convert.ToBoolean(DataBinder.Eval(e.Row.DataItem, "evasa"));
 
                 if (!isEvasa)
@@ -1029,7 +1043,7 @@ namespace Uotep
                     e.Row.BackColor = System.Drawing.Color.LightCoral;
 
                     // Opzione B (Consigliata): Aggiungi una classe CSS per avere più controllo
-                 //  e.Row.CssClass += " riga-non-evasa";
+                    //  e.Row.CssClass += " riga-non-evasa";
                 }
             }
         }
@@ -1056,6 +1070,43 @@ namespace Uotep
             Response.Redirect(url, false);
         }
 
-       
+        protected void gvPopup_DataBound(object sender, EventArgs e)
+        {
+            GridView gv = (GridView)sender;
+            if (gv.PageCount > 0)
+            {
+                lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+            }
+            else
+            {
+                lblInfoPagine.Text = "Nessun record trovato";
+            }
+        }
+
+        //protected void lnkPratica_Click(object sender, EventArgs e)
+        //{
+        //    LinkButton btn = (LinkButton)sender;
+        //    string argument = btn.CommandArgument;
+
+        //    if (!string.IsNullOrEmpty(argument))
+        //    {
+        //        // Divido la stringa in base al separatore '|'
+        //        string[] parts = argument.Split('|');
+        //        string idScheda = parts[0];
+        //        string nrPratica = parts[1];
+
+        //        // Costruisco l'URL e reindirizzo
+        //        string url = $"~/View/GestionePratica.aspx?idscheda={idScheda}&nrPratica={nrPratica}";
+
+        //        // Se hai usato OnClientClick per il _blank, questo redirect avverrà nella nuova tab
+        //        Response.Redirect(ResolveUrl(url));
+        //    }
+        //}
+
+        protected void BtDuplica_Click1(object sender, EventArgs e)
+        {
+            string url = VirtualPathUtility.ToAbsolute("~/View/Inserimento.aspx");
+            Response.Redirect(url, false);
+        }
     }
 }

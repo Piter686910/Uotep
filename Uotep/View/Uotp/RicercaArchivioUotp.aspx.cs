@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using AjaxControlToolkit.HtmlEditor.Popups;
+using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using iText.StyledXmlParser.Jsoup.Nodes;
@@ -48,7 +49,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+               // ProtocolloLiteral.Text = decodedText;
             }
 
         }
@@ -206,6 +207,7 @@ namespace Uotep
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
             Pulisci();
+            GVRicercaPratica.PageIndex = 0;
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {
@@ -479,6 +481,18 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
+        //protected void gvPopup_DataBound(object sender, EventArgs e)
+        //{
+        //    GridView gv = (GridView)sender;
+        //    if (gv.PageCount > 0)
+        //    {
+        //        lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+        //    }
+        //    else
+        //    {
+        //        lblInfoPagine.Text = "Nessun record trovato";
+        //    }
+        //}
         protected void gvPopup_RowDataBoundP(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -664,6 +678,51 @@ namespace Uotep
             Response.Redirect(url, false);
         }
 
+        protected void GVRicercaPratica_DataBound(object sender, EventArgs e)
+        {
+            GridView gv = (GridView)sender;
+            if (gv.PageCount > 0)
+            {
+                lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+            }
+            else
+            {
+                lblInfoPagine.Text = "Nessun record trovato";
+            }
+        }
 
+        protected void GVRicercaPratica_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Select")
+            {
+                // Ottieni il valore dell'ID dalla CommandArgument
+                //string selectedValue = e.CommandArgument.ToString();
+
+
+                string[] args = e.CommandArgument.ToString().Split(';');
+                int idP = System.Convert.ToInt32(args[0]);
+                string Npratica = args[1];
+
+
+                // Imposta il valore nel TextBox
+                //txtSelectedValue.Text = selectedValue;
+                // txtPratN.Text = Npratica;
+
+                Manager mn = new Manager();
+                //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
+
+                DataTable pratica = mn.getPraticaArchivioUotpById(idP);
+                if (pratica.Rows.Count > 0)
+                {
+                    FillScheda(pratica);
+                    DivRicerca.Visible = false;
+                    pnDettagli.Visible = true;
+                    Pulisci();
+                }
+                Session.Remove("ListRicerca");
+                // Chiudi il popup
+                ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
+            }
+        }
     }
 }

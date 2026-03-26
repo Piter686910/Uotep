@@ -57,7 +57,10 @@ namespace Uotep
                     BtEstraiTabella.Visible = false;
                 }
                 CaricaDLL();
-
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["nrPratica"]))
+                {
+                    txtFascicolo.Text = Request.QueryString["nrPratica"].ToString();
+                }
             }
 
         }

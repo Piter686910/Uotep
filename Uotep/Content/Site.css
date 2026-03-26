@@ -4,12 +4,6 @@ body {
     padding-bottom: 20px;
 }
 
-.larghezzaText70 {
-    width: 70px !important; /* Usa !important per sicurezza */
-    padding-left: 2px !important; /* Riduci lo spazio a sinistra */
-    padding-right: 2px !important; /* Riduci lo spazio a destra */
-    text-align: center; /* Opzionale: centra il numero */
-}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -31,15 +25,69 @@ textarea {
     margin: 5px 0; /* Spazio esterno */
     margin-left: -10px;
 }
+/* Stile testata */
+.dashboard-header {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+    border-left: 5px solid #337ab7;
+}
+
+    .dashboard-header h1 {
+        color: #337ab7;
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
 .header-center {
     text-align: center !important;
 }
+
+.header-title {
+    color: #337ab7;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 15px;
+}
+
 .larghezzaText {
     width: 110px;
 }
 .larghezzaText180 {
     width: 180px;
 }
+
+.larghezzaText70 {
+    width: 70px !important; /* Usa !important per sicurezza */
+    padding-left: 2px !important; /* Riduci lo spazio a sinistra */
+    padding-right: 2px !important; /* Riduci lo spazio a destra */
+    text-align: center; /* Opzionale: centra il numero */
+}
+
+/* GridView / Tabella moderna */
+.compact-grid {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: none !important;
+}
+
+    .compact-grid th {
+        background-color: #337ab7 !important;
+        color: white !important;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        padding: 12px !important;
+        text-align: center;
+    }
+
+    .compact-grid td {
+        padding: 10px !important;
+        vertical-align: middle !important;
+    }
 /* Stile per la riga alternata (azzurro chiaro) */
 .GridViewAlternatingRow {
     background-color: #E6F3FF; /* Un azzurro molto chiaro */
@@ -50,9 +98,81 @@ textarea {
     background-color: white;
 }
 
+.gridview-autofit .colonna-stretta {
+    white-space: nowrap;
+    width: 1%;
+    /* Opzionale: aggiungi un po' di padding per la leggibilità */
+    padding: 8px 10px;
+}
+
+.gridview-autofit .colonna-descrizione {
+    min-width: 250px; /* Non sarà mai più stretta di 100px */
+    max-width: 500px;
+    /* Se il testo è più lungo, andrà a capo */
+    /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
+}
+
+.grid-header-blue th {
+    background-color: #1a5c96 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px !important;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Stile per i filtri dentro l'header */
+.grid-header-blue .form-control-sm {
+    border-radius: 3px;
+    border: 1px solid #ffffff;
+    margin-top: 5px;
+}
+
 .uppercase-text {
     text-transform: uppercase;
 }
+/* Allineamento pulsante con i TextBox */
+.btn-allineato {
+    height: 55px; /* Deve corrispondere all'altezza totale dei TextBox ingranditi */
+    margin-top: 28px; /* Spazio equivalente all'altezza della Label + Margine */
+    font-size: 1.1rem !important;
+}
+
+/* Assicurati che la riga usi Flexbox se usi Bootstrap 4 o 5 */
+.d-flex.align-items-end {
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Pulsanti bianco Istituzionale */
+.btn-primary-white {
+    background-color: white !important;
+    border-color: #2e6da4 !important;
+    font-weight: 200;
+    padding: 10px 25px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    text-align:center;
+    width:50%;
+}
+/* Pulsanti Blu Istituzionale */
+.btn-primary {
+    background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+
+    .btn-primary:hover {
+        background-color: red !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 /* Colori custom per Header Modale */
 .bg-success {
     background-color: #dff0d8;
@@ -77,6 +197,74 @@ textarea {
     color: #31708f;
     border-radius: 5px 5px 0 0;
 }
+.cell-wrap {
+    word-break: break-all !important; /* Spezza la parola se non ci sono spazi */
+    white-space: normal !important; /* Permette l'andata a capo */
+    min-width: 50px; 
+}
+/* Reset della tabella di paginazione ASP.NET per Bootstrap 5 */
+.pagination-ys table {
+    display: flex !important;
+    justify-content: center; /* Centra i bottoni */
+    border-collapse: separate;
+    margin: 20px auto !important;
+    padding: 0;
+}
+
+.pagination-ys td {
+    border: none !important;
+    padding: 0 !important;
+}
+
+.pagination-ys a, .pagination-ys span {
+    display: block;
+    padding: 8px 14px;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #1a5c96; /* Blu testata */
+    font-size: 14px;
+    margin-left: -1px; /* Sovrappone i bordi come in Bootstrap */
+}
+
+/* Pagina corrente (quella blu) */
+.pagination-ys span {
+    background-color: #1a5c96 !important;
+    color: white !important;
+    border-color: #1a5c96 !important;
+    cursor: default;
+}
+
+.pagination-ys a:hover {
+    background-color: #e9ecef;
+    color: #0a365d;
+}
+
+/* Arrotonda il primo e l'ultimo bottone */
+.pagination-ys tr td:first-child a,
+.pagination-ys tr td:first-child span {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination-ys tr td:last-child a,
+.pagination-ys tr td:last-child span {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* --- GridView --- */
+.table {
+    font-size: 1.2rem;
+    background: white;
+}
+
+    .table th {
+        background-color: #337ab7 !important;
+        color: white !important;
+        padding: 15px !important;
+        border: none !important;
+    }
 
 .table-layout-fixed {
     table-layout: fixed;
@@ -91,18 +279,38 @@ textarea {
         white-space: nowrap;
     }
 
-.gridview-autofit .colonna-stretta {
-    white-space: nowrap;
-    width: 1%;
-    /* Opzionale: aggiungi un po' di padding per la leggibilità */
-    padding: 8px 10px;
+/* Questa classe forza l'andata a capo millimetrica */
+.text-wrap {
+    word-break: break-all !important;
+    white-space: normal !important;
+    display: block;
+    width: 60px; /* 30px è troppo stretto per un protocollo, meglio 60px o 80px */
+}
+.form-row-table {
+    font-size: 1.5rem !important; /* <--- AUMENTA QUESTO VALORE (es. da 1 a 1.3) */
 }
 
-.gridview-autofit .colonna-descrizione {
-    min-width: 250px; /* Non sarà mai più stretta di 100px */
-    max-width: 500px;
-    /* Se il testo è più lungo, andrà a capo */
-    /* Non usiamo nowrap qui, vogliamo che vada a capo se necessario */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 12px 15px; /* Ho aumentato un po' il padding per dare spazio al testo */
+    height: auto;
+    font-size: 1.3rem !important; /* <--- AUMENTA QUESTO VALORE (es. da 1 a 1.3) */
+    font-weight: 500; /* Opzionale: rende il testo leggermente più spesso */
+    transition: all 0.2s;
+}
+
+    .form-control:focus {
+        border-color: #337ab7;
+        box-shadow: 0 0 0 3px rgba(51, 122, 183, 0.2);
+    }
+/* Form styling */
+.form-group label {
+    font-weight: 600;
+    color: #555;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    display: block;
 }
 
 #suggestionsList {
@@ -116,6 +324,14 @@ textarea {
     z-index: 9999; /* Sopra tutto */
     box-shadow: 0px 4px 8px rgba(0,0,0,0.2); /* Ombra per vederlo meglio */
 }
+/* --- Sezioni Bianche (Box) --- */
+.section-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
 
 .suggestion-item {
     padding: 8px 12px;
@@ -124,10 +340,22 @@ textarea {
     color: black; /* Testo nero */
 }
 
-.suggestion-item:hover, .suggestion-item.active {
+    .suggestion-item:hover, .suggestion-item.active {
         background-color: #007bff; /* Blu quando selezionato */
         color: white;
     }
+/* Stile per rendere i bottoni stessa altezza e larghezza */
+.uniform-button {
+    width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
+    height: 55px !important; /* Esempio: Altezza fissa per i bottoni */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    margin-left: 10px !important;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

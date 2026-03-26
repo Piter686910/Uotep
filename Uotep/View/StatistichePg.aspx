@@ -18,7 +18,10 @@
             <div class="jumbotron">
                 <div style="margin-top: -90px!important">
                     <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
-                    <p class="text-center lead">INSERISCI STATISTICHE</p>
+                    <%--<p class="text-center lead">INSERISCI STATISTICHE</p>--%>
+                    <div class="dashboard-header">
+                        <h1><span class="glyphicon glyphicon-cog"></span>INSERISCI INTERROGATORI</h1>
+                    </div>
                 </div>
 
                 <div class="container">
@@ -119,7 +122,7 @@
                 <div class="col-md-4 ">
                     <div class="form-group">
                         <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="💾 Inserisci" CssClass="btn btn-primary" OnClick="btInserisci_Click" />
-                        <asp:Button ID="btCerca" runat="server"  Text="📂 Ricerca" CssClass="btn btn-primary" OnClick="btCerca_Click" />
+                        <asp:Button ID="btCerca" runat="server" Text="📂 Ricerca" CssClass="btn btn-primary" OnClick="btCerca_Click" />
                     </div>
                 </div>
             </div>
