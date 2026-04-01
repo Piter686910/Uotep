@@ -40,6 +40,7 @@ namespace Uotep
                 DdlPersonale.DataTextField = "Nominativo"; // Il campo visibile
                 DdlPersonale.Items.Insert(0, new ListItem("", "0"));
                 DdlPersonale.DataBind();
+                CaricaListOperatori();
             }
         }
 
@@ -51,23 +52,38 @@ namespace Uotep
             divCheck.Visible = false;
             GVcheck.Visible = false;
         }
-        protected void ModificaP_Click(object sender, EventArgs e)
-        {
-            //cripto la passowrd
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(txtResetMatricola.Text + "old", 13);
-            Manager mn = new Manager();
-            Boolean upd = mn.ResetPassw(passwordHash, txtResetMatricola.Text);
-            if (upd)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password resettata." + "'); $('#errorModal').modal('show');", true);
+        //protected void ModificaP_Click(object sender, EventArgs e)
+        //{
+        //    SiteMaster myMaster = this.Master as SiteMaster;
+        //    //cripto la passowrd
+        //    string passwordHash = BCrypt.Net.BCrypt.HashPassword(txtResetMatricola.Text + "old", 13);
+        //    Manager mn = new Manager();
+        //    Boolean upd = mn.ResetPassw(passwordHash, txtResetMatricola.Text);
+        //    if (upd)
+        //    {
 
-            }
-            else
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password non resettata." + "'); $('#errorModal').modal('show');", true);
+        //        //I 26/03/2026 - aggiunta variabile per abilitazione operatore
+        //        if (myMaster != null)
+        //        {
+        //            // 2. Chiamo il metodo pubblico
+        //            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
 
-            }
-        }
+
+        //        }
+
+        //    }
+        //    else
+        //    {
+
+        //        if (myMaster != null)
+        //        {
+        //            // 2. Chiamo il metodo pubblico
+        //            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+
+        //        }
+        //        //F 26/03/2026 - aggiunta variabile per abilitazione operatore
+        //    }
+        //}
         protected void InsOpetratore_Click(object sender, EventArgs e)
         {
             Operatore op = new Operatore();
@@ -82,6 +98,7 @@ namespace Uotep
             op.area = txtArea.Text.ToLower();
             op.macroarea = txtMacroArea.Text;
             op.nominativo = txtNominativo.Text;
+            op.abilitato = true;
             Manager mn = new Manager();
             Boolean ins = mn.InsOperatore(op);
             if (ins)
@@ -101,7 +118,7 @@ namespace Uotep
             txtPratica.Text = string.Empty;
             GVcheck.DataSource = null;
             GVcheck.DataBind();
-            GVcheck.DataBind();
+          //  GVcheck.DataBind();
         }
         protected void NuovoUt_Click(object sender, EventArgs e)
         {
@@ -110,7 +127,20 @@ namespace Uotep
             divReset.Visible = false;
             divCheck.Visible = false;
             GVcheck.Visible = false;
+            divRepeater.Visible = false;
             pulisci();
+
+        }
+        protected void Lista_Click(object sender, EventArgs e)
+        {
+            divNewUtente.Visible = false;
+            divDestra.Visible = false;
+            divReset.Visible = false;
+            divCheck.Visible = false;
+            GVcheck.Visible = false;
+            divRepeater.Visible = true;
+            pulisci();
+            CaricaListOperatori();
 
         }
         protected void Login1_LoginError(object sender, EventArgs e)
@@ -149,6 +179,7 @@ namespace Uotep
             divNewUtente.Visible = false;
             divDestra.Visible = false;
             divReset.Visible = false;
+            divRepeater.Visible = false;
             GVcheck.Visible = true;
         }
 
@@ -213,5 +244,171 @@ namespace Uotep
         {
 
         }
+        //I 26/03/2026 - aggiunta variabile per abilitazione operatore
+        protected void btnDisabilita_Click(object sender, EventArgs e)
+        {
+            // Trasformo il "sender" (chi ha scatenato l'evento) nel controllo LinkButton
+            LinkButton btn = (LinkButton)sender;
+
+            // Recupero il valore del CommandArgument
+            string argument = btn.CommandArgument;
+            if (!string.IsNullOrEmpty(argument))
+            {
+                // Divido la stringa usando il separatore scelto
+                string[] ar = argument.Split('|');
+
+                if (ar.Length == 2)
+                {
+                    string matricola = ar[0]; // "M123"
+                    string abil = ar[1]; // "Mario Rossi"
+                    Boolean abilitato = System.Convert.ToBoolean(abil);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    Manager mn = new Manager();
+                    Boolean resp = mn.UpdAbilitaOperatore(matricola, abilitato);
+                    if (resp)
+                    {
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                            CaricaListOperatori();
+                        }
+
+                    }
+                }
+            }
+        }
+        protected void rptOperatori_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            PlaceHolder phView = (PlaceHolder)e.Item.FindControl("phView");
+            PlaceHolder phEdit = (PlaceHolder)e.Item.FindControl("phEdit");
+
+            switch (e.CommandName)
+            {
+                case "Edit":
+                    phView.Visible = false;
+                    phEdit.Visible = true;
+                    break;
+
+                case "Cancel":
+                    phView.Visible = true;
+                    phEdit.Visible = false;
+                    break;
+
+                case "Update":
+                    string matricola = e.CommandArgument.ToString();
+                    string ruolo = ((TextBox)e.Item.FindControl("txtRuolo")).Text;
+                    string profilo = ((TextBox)e.Item.FindControl("txtProfilo")).Text;
+                    string macroArea = ((TextBox)e.Item.FindControl("txtMacroArea")).Text;
+
+                    // Esegui il salvataggio sul tuo DB
+                    Manager mn = new Manager();
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    Boolean resp = mn.UpdOperatore(matricola, ruolo, profilo, macroArea);
+                    if (resp)
+                    {
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                        }
+
+                    }
+                    else
+                    {
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                        }
+                    }
+                    // Torna in visualizzazione e ricarica i dati
+                    phView.Visible = true;
+                    phEdit.Visible = false;
+                    CaricaListOperatori();
+                    //CaricaDati(); // Funzione che rifà il DataBind
+                    break;
+            }
+        }
+
+
+        protected void ModificaPass_Click(object sender, EventArgs e)
+        {
+            SiteMaster myMaster = this.Master as SiteMaster;
+            
+
+            Manager mn = new Manager();
+
+            // Trasformo il "sender" (chi ha scatenato l'evento) nel controllo LinkButton
+            LinkButton btn = (LinkButton)sender;
+
+            // Recupero il valore del CommandArgument
+            string matricola = btn.CommandArgument;
+            if (!string.IsNullOrEmpty(matricola))
+            {
+
+                Boolean resp = mn.ResetPassw(BCrypt.Net.BCrypt.HashPassword(matricola + "old", 13), matricola);
+                if (resp)
+                {
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PwResetOk.GetDescription(), "success");
+                        //CaricaListOperatori();
+                    }
+
+                }
+            }
+        }
+        private void CaricaListOperatori()
+        {
+            //
+            Manager mn = new Manager();
+            DataTable CaricaListOperatori = mn.getListOperatoreCompleta(out msg);
+            rptOperatori.DataSource = CaricaListOperatori;
+            rptOperatori.DataBind();
+        }
+        protected void EliminaMatricola_Click(object sender, EventArgs e)
+        {
+
+            SiteMaster myMaster = this.Master as SiteMaster;
+            Manager mn = new Manager();
+
+            // Trasformo il "sender" (chi ha scatenato l'evento) nel controllo LinkButton
+            LinkButton btn = (LinkButton)sender;
+
+            // Recupero il valore del CommandArgument
+            string matricola = btn.CommandArgument;
+            if (!string.IsNullOrEmpty(matricola))
+            {
+
+                Boolean del = mn.DeleteMatricola(matricola);
+                if (del)
+                {
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.Delok.GetDescription(), "success");
+                        //CaricaListOperatori();
+                    }
+
+                }
+            }
+
+
+
+
+            
+           
+            //if (del)
+            //{
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola cancellata." + "'); $('#errorModal').modal('show');", true);
+
+            //}
+            //else
+            //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola non trovata." + "'); $('#errorModal').modal('show');", true);
+        }
+        //F 26/03/2026 - aggiunta variabile per abilitazione operatore
+
     }
 }

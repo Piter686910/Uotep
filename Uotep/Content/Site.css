@@ -66,8 +66,7 @@ textarea {
     padding-right: 2px !important; /* Riduci lo spazio a destra */
     text-align: center; /* Opzionale: centra il numero */
 }
-
-/* GridView / Tabella moderna */
+    /* GridView / Tabella moderna */
 .compact-grid {
     border-radius: 8px;
     overflow: hidden;

@@ -267,6 +267,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtResetMatricola;
 
         /// <summary>
+        /// Controllo divRepeater.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divRepeater;
+
+        /// <summary>
+        /// Controllo rptOperatori.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptOperatori;
+
+        /// <summary>
         /// Controllo Button2.
         /// </summary>
         /// <remarks>

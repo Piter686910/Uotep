@@ -27,7 +27,6 @@
             width: 100%;
             max-width: 400px;
             overflow: hidden;
-
         }
 
         .card-header-gradient {
@@ -37,16 +36,15 @@
             text-align: center;
         }
 
-        .card-header-gradient h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
+            .card-header-gradient h2 {
+                margin: 0;
+                font-size: 1.5rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+            }
 
         .card-body-custom {
             padding: 30px;
-
         }
 
         /* Input personalizzati */
@@ -57,10 +55,10 @@
             transition: all 0.3s;
         }
 
-        .form-control-custom:focus {
-            border-color: #0062cc;
-            box-shadow: 0 0 0 0.2rem rgba(0,98,204,0.15);
-        }
+            .form-control-custom:focus {
+                border-color: #0062cc;
+                box-shadow: 0 0 0 0.2rem rgba(0,98,204,0.15);
+            }
 
         /* Pulsanti */
         .btn-custom {
@@ -70,24 +68,40 @@
             transition: transform 0.2s;
         }
 
-        .btn-custom:hover {
-            transform: translateY(-1px);
-        }
+            .btn-custom:hover {
+                transform: translateY(-1px);
+            }
 
         .reset-link-container {
             text-align: center;
             margin-top: 15px;
         }
 
-        .reset-link-container a {
-            color: #6c757d;
-            font-size: 0.9rem;
-            text-decoration: none;
+            .reset-link-container a {
+                color: #6c757d;
+                font-size: 0.9rem;
+                text-decoration: none;
+            }
+
+                .reset-link-container a:hover {
+                    color: #0062cc;
+                    text-decoration: underline;
+                }
+
+        /* Forza la visibilità dell'occhio sopra il textbox */
+        #togglePassword {
+            right: 15px !important;
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
-        .reset-link-container a:hover {
-            color: #0062cc;
-            text-decoration: underline;
+        /* Assicurati che il contenitore non tagli l'icona */
+        .position-relative {
+            overflow: visible !important;
         }
     </style>
 
@@ -96,6 +110,29 @@
             $('#errorMessage').text(message);
             $('#errorModal').modal('show');
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            // Funzione generica per mostrare/nascondere
+            function setupToggle(buttonId, fieldId, iconId) {
+                const btn = document.getElementById(buttonId);
+                const field = document.getElementById(fieldId);
+                const icon = document.getElementById(iconId);
+
+                if (btn && field) {
+                    btn.addEventListener('click', function () {
+                        const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+                        field.setAttribute('type', type);
+                        icon.classList.toggle('bi-eye');
+                        icon.classList.toggle('bi-eye-slash');
+                    });
+                }
+            }
+
+            // Configura password attuale
+            setupToggle('btnToggle', '<%= TxtPassw.ClientID %>', 'eyeIcon');
+
+            // Configura nuova password (se presente nel DOM)
+            setupToggle('btnToggleNew', '<%= txtNewPassw.ClientID %>', 'eyeIconNew');
+        });
     </script>
 
     <div class="main-wrapper">
@@ -105,21 +142,39 @@
                 <small style="opacity: 0.8;">Area Riservata - Accesso</small>
             </div>
 
-            <div class="card-body-custom" >
+            <div class="card-body-custom">
                 <div class="mb-3">
                     <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label fw-bold"></asp:Label>
                     <asp:TextBox ID="TxtMatricola" runat="server" CssClass="form-control form-control-custom" placeholder="Inserisci matricola" TabIndex="1"></asp:TextBox>
                     <asp:HiddenField ID="Hmatricola" runat="server" />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3" style="display: inline-block;width:280px"">
                     <asp:Label ID="Label1" runat="server" Text="Password" CssClass="form-label fw-bold"></asp:Label>
-                    <asp:TextBox ID="TxtPassw" runat="server" TextMode="Password" CssClass="form-control form-control-custom" placeholder="••••••••" TabIndex="2"></asp:TextBox>
-                </div>
 
+                    <div class="position-relative" style="max-width: 100%;">
+                        <asp:TextBox ID="TxtPassw" runat="server" TextMode="Password"
+                            CssClass="form-control pe-5" placeholder="••••••••" TabIndex="2"></asp:TextBox>
+
+
+
+                    </div>
+                </div>
+                <div style="display: inline-block;margin-left:1px" class="mb-3">
+                    <span class="input-group-text bg-white border-info-subtle" id="btnToggle" style="cursor: pointer; border-left: none;">
+                        <i class="bi bi-eye text-secondary" id="eyeIcon"></i>
+                    </span>
+                </div>
                 <div id="DivNewPassw" runat="server" class="mb-3 p-3 bg-light border border-info rounded" visible="false">
                     <asp:Label ID="Label2" runat="server" Text="Nuova Password" CssClass="form-label fw-bold text-info"></asp:Label>
-                    <asp:TextBox ID="txtNewPassw" runat="server" TextMode="Password" CssClass="form-control form-control-custom border-info" ></asp:TextBox>
+                    <div class="input-group">
+                        <asp:TextBox ID="txtNewPassw" runat="server" TextMode="Password"
+                            CssClass="form-control form-control-custom border-info"
+                            Style="border-right: none;"></asp:TextBox>
+                        <span class="input-group-text bg-white border-info" id="btnToggleNew" style="cursor: pointer; border-left: none;">
+                            <i class="bi bi-eye text-info" id="eyeIconNew"></i>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="d-grid gap-2 mt-4">

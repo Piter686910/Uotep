@@ -30,7 +30,6 @@ namespace Uotep
 
             if (!IsPostBack)
             {
-
                 if (Session["user"] != null)
                 {
                     string Vuser = Session["user"].ToString();
@@ -285,7 +284,7 @@ namespace Uotep
 
             }
         }
-
+        
         protected void Esci_Click(object sender, EventArgs e)
         {
             Session.Remove("user");

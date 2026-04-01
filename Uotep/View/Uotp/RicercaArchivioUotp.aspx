@@ -2,7 +2,40 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+        <style>
+    /* 1. Forza il font su tutta la tabella (Header e Celle) */
+    #<%= GVRicercaPratica.ClientID %>, 
+    #<%= GVRicercaPratica.ClientID %> th, 
+    #<%= GVRicercaPratica.ClientID %> td {
+        font-size: 1.405rem !important; /* Questo è circa un fs-5/fs-6 abbondante */
+        padding: 10px 8px !important;
+    }
 
+    /* 2. Stile specifico per l'Header (Titoli e Filtri) */
+    #<%= GVRicercaPratica.ClientID %> th {
+        background-color: #337ab7 !important; /* Grigio scuro Bootstrap */
+        color: white !important;
+        vertical-align: top !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+    }
+
+    /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
+    #<%= GVRicercaPratica.ClientID %> th input[type="text"] {
+        font-size: 1rem !important;
+        margin-top: 5px;
+        font-weight: normal;
+        text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
+    }
+
+    /* 4. Ingrandisce il pulsante 'Seleziona' e i link */
+    #<%= GVRicercaPratica.ClientID %> .btn-sm {
+        font-size: 1.2rem !important;
+        padding: 5px 15px !important;
+    }
+
+    
+</style>
     <script>
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');

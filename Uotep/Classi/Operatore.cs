@@ -20,5 +20,8 @@ namespace Uotep.Classi
         public Boolean reset;
         public String pwstandard = string.Empty;
         public String nominativo = string.Empty;
+        //I 26/03/2026 - aggiunta variabile per abilitazione operatore
+        public Boolean abilitato;
+        //F 26/03/2026 - aggiunta variabile per abilitazione operatore
     }
 }

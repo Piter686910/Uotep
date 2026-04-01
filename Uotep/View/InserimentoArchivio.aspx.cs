@@ -120,7 +120,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     apripopupPratica_Click(sender, e);
-                    GVRicercaPratica.PageIndex = 0;
+                   // GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -601,7 +601,7 @@ namespace Uotep
             Session.Remove("ListRicerca");
             HfFiltroNote.Value = string.Empty;
             HfFiltroIndirizzo.Value = string.Empty;
-
+            GVRicercaPratica.PageIndex = 0;
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {
@@ -866,7 +866,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     //   apripopupPratica_Click(sender, e);
-                    GVRicercaPratica.PageIndex = 0;
+                   // GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica

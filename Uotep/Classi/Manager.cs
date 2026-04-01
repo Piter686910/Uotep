@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Forms.Form.Element;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
+using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.CodeDom;
@@ -562,6 +563,15 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT nominativo FROM operatore where nominativo <> '' order by nominativo ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable getListOperatoreCompleta(out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM operatore where nominativo <> '' order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -3180,9 +3190,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
             try
             {
-                sql_pratica = "insert into operatore (matricola, passw, profilo,nota, area, macroarea,ruolo, reset, pwstandard,nominativo)" +
+                sql_pratica = "insert into operatore (matricola, passw, profilo,nota, area, macroarea,ruolo, reset, pwstandard,nominativo,abilitato)" +
                    " Values('" + @op.matricola + "','" + @op.passw.Replace("'", "''") + "','" + @op.profilo + "','" + @op.nota.Replace("'", "''") + "','" + @op.area.Replace("'", "''") +
-                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "')";
+                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "','" +  op.abilitato  + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -6669,7 +6679,127 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
         }
 
+        //I 26/03/2026 - aggiunta variabile per abilitazione operatore
+        public Boolean UpdOperatore(string matricola, string ruolo, string profilo, string macroArea)
+        {
+            bool resp = true;
 
+            
+            string sql_Upd = String.Empty;
+
+            int res = 0;
+            try
+            {
+                sql_Upd = "update operatore set ruolo= '" + @ruolo.Replace("'", "''").Trim() + "', " +
+                    "profilo ='" + profilo .Replace("'", "''").Trim() + "', " +
+                    "macroarea = '" + macroArea.Replace("'", "''").Trim() + "' " +
+                     " where matricola = '" + matricola.Trim() + "'";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_Upd;
+                        
+                        res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Matricola:" + matricola + ", profilo:" + profilo + ", macroarea= " + macroArea + ": " + ex.Message + @" - Errore in update operatore");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                // ScriviLog(ex.Message);
+                resp = false;
+            }
+
+            return resp;
+
+        }
+
+        public Boolean UpdAbilitaOperatore(string matricola, Boolean abilitato)
+        {
+            bool resp = true;
+
+
+            string sql_Upd = String.Empty;
+
+            int res = 0;
+            try
+            {
+                sql_Upd = "update operatore set abilitato= '" + !abilitato + "' " +
+                     " where matricola = '" + matricola.Trim() + "'";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_Upd;
+
+                        res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Matricola:" + matricola + ": " + ex.Message + @" - Errore in update operatore abilitazione");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                // ScriviLog(ex.Message);
+                resp = false;
+            }
+
+            return resp;
+
+        }
+        //F 26/03/2026 - aggiunta variabile per abilitazione operatore
         public Boolean UpdApriDecretazione(string carico, string anno)
         {
             bool resp = true;

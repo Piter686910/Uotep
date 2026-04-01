@@ -20,10 +20,10 @@ namespace Uotep
         {
             String categoria = Request.QueryString["user"];
 
-           
+
             if (categoria == "true")
             {
-               // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.SScaduta.GetDescription() + "'); $('#errorModal').modal('show');", true);
 
                 SiteMaster myMaster = this.Master as SiteMaster;
 
@@ -71,54 +71,113 @@ namespace Uotep
 
             //prendo la password registrata in db per la verifica
             DataTable RicercaP = mn.getPass(TxtMatricola.Text.ToUpper());
+
+
             if (RicercaP.Rows.Count > 0)
             {
+
                 //esiste matricola e passw
                 string pwDB = RicercaP.Rows[0].ItemArray[0].ToString();
                 //verifico correttezza passw inserita
                 Ricerca = mn.getUserByUserPassw(TxtMatricola.Text.ToUpper(), pwDB);
                 if (Ricerca.Rows.Count > 0)
                 {
+                    //I 26/03/2026 - aggiunta variabile per abilitazione operatore
+                    //verifico se abilitato a loggare
+                    Boolean abilitato = System.Convert.ToBoolean(Ricerca.Rows[0]["abilitato"]);
+                    if (abilitato == false)
+                    {
+                        SiteMaster myMaster = this.Master as SiteMaster;
+
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                            Session.Abandon();
+                            return;
+                        }
+                    }
+                    Boolean modifico = System.Convert.ToBoolean(Ricerca.Rows[0]["reset"]);
+                    if (modifico == false)
+                    {
+                        DivNewPassw.Visible = true;
+                        btsave.Visible = true;
+                        btLogin.Visible = false;
+                        TxtPassw.Enabled = false;
+                        return;
+                    }
+
+
+                    //F 26/03/2026 - aggiunta variabile per abilitazione operatore
                     //verifico la correttezza della password criptata
                     string hashedPasswordSalvataNelDatabase = Ricerca.Rows[0].ItemArray[1].ToString();
                     bool isMatch = BCrypt.Net.BCrypt.Verify(Vpassw, hashedPasswordSalvataNelDatabase);
                     if (isMatch)
                     {
-                        Boolean modifico = System.Convert.ToBoolean(Ricerca.Rows[0].ItemArray[7]);
-                        if (modifico == false)
-                        {
-                            DivNewPassw.Visible = true;
-                            btsave.Visible = true;
-                            btLogin.Visible = false;
-                            TxtPassw.Enabled = false;
-                        }
-                        else
-                        {
+                        //Boolean modifico = System.Convert.ToBoolean(Ricerca.Rows[0].ItemArray[7]);
+                        //if (modifico == false)
+                        //{
+                        //    DivNewPassw.Visible = true;
+                        //    btsave.Visible = true;
+                        //    btLogin.Visible = false;
+                        //    TxtPassw.Enabled = false;
+                        //}
+                       // else
+                      //  {
                             //salvo la matricola
                             Session["user"] = Vuser;
 
                             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
                             Response.Redirect(url, false);
                             //Response.Redirect("~/View/Default.aspx");
-                        }
+                      //  }
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
-                        Session.Abandon();
+                        SiteMaster myMaster = this.Master as SiteMaster;
+
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
+                            Session.Abandon();
+                            return;
+                        }
+
+
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
+
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.NoUser.GetDescription() + "'); $('#errorModal').modal('show');", true);
-                    Session.Abandon();
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.NoUser.GetDescription(), "danger");
+                        Session.Abandon();
+                        return;
+                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.NoUser.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                    //Session.Abandon();
                 }
 
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
-                Session.Abandon();
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
+                    Session.Abandon();
+                    return;
+                }
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.UserWrong.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                //Session.Abandon();
             }
 
         }
