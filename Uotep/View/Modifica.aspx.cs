@@ -86,7 +86,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+               // ProtocolloLiteral.Text = decodedText;
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();

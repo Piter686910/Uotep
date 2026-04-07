@@ -3590,7 +3590,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                      "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
                      "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
                      "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumNotificheNoAg," +
-                     "rapp_NumcontrNatoDaAcc)" +
+                     "rapp_NumcontrNatoDaAcc,rapp_NumAbusiAbitatSi,rapp_NumAbusiAbitatNo,rapp_NumAbusiNoAbitatSi,rapp_NumAbusiNoAbitatNo,rapp_print)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +
                  @rapp.data + "','" +
@@ -3638,7 +3638,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                  @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
                  //I- mod 31/01/2026 scheda int
                  "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
-                 @rapp.contrNatoDaAcc + "'," + @rapp.NumNotificheNoAg + ",'"+ @rapp.NumcontrNatoDaAcc + "'" +
+                 @rapp.contrNatoDaAcc + "'," + @rapp.NumNotificheNoAg + ",'"+ @rapp.NumcontrNatoDaAcc + "'," + @rapp.NumAbusiAbitatSi + "," + @rapp.NumAbusiAbitatNo + ","  +
+                 @rapp.NumAbusiNoAbitatSi + "," + @rapp.NumAbusiNoAbitatNo +",'" + @rapp.print + "' " +
                  //F- mod 31/01/2026 scheda int
                  "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
@@ -3728,7 +3729,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                      "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
                      "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
                      "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
-                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc,rapp_NumNotificheNoAg)" +
+                     "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc," +
+                     "rapp_NumcontrNatoDaAcc,rapp_NumNotificheNoAg,rapp_NumAbusiAbitatSi,rapp_NumAbusiAbitatNo,rapp_NumAbusiNoAbitatSi,rapp_NumAbusiNoAbitatNo,rapp_print)" +
                " Values('" + rapp.pratica + "','" +
                  //@rapp.ora + "','" +                                                                              
                  @rapp.data + "','" +
@@ -3777,7 +3779,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
                  //I- mod 31/01/2026 scheda int
                  "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
                  @rapp.contrNatoDaAcc + "'," + @rapp.NumcontrNatoDaAcc + "," +
-                 @rapp.NumNotificheNoAg + "" +
+                 @rapp.NumNotificheNoAg + "," + @rapp.NumAbusiAbitatSi + "," + @rapp.NumAbusiAbitatNo + "," +
+                 @rapp.NumAbusiNoAbitatSi + "," + @rapp.NumAbusiNoAbitatNo + ",'" + @rapp.print + "' " +
+
                  //F- mod 31/01/2026 scheda int
                  "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
@@ -7090,6 +7094,62 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
+        //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+        public Boolean UpdRappUoteStampa(int id)
+        {
+            bool resp = true;
+            string sql_scheda = String.Empty;
+            string testoSql = string.Empty;
+
+            try
+            {
+
+                sql_scheda = "update RappUote set rapp_print= 'True'  where id_rapp_scheda = " + id;
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+
+                    try
+                    {
+                        command.CommandText = sql_scheda;
+                        testoSql = "RappUOTE";
+                        int res = command.ExecuteNonQuery();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("id scheda:" + id + ex.Message + @" - Errore in update rappuote ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
+        //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
         /// <summary>
         /// imposta flag cancellazione
         /// </summary>

@@ -526,8 +526,13 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
+                                <asp:TextBox ID="txtNumAbusiAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" placeholder="Abusi" />
+                                <asp:TextBox ID="txtNumAbusiAbitatNo" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" placeholder="No Abusi" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
+                                  <asp:TextBox ID="txtNumAbusiNoAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" placeholder="Abusi" />
+                                 <asp:TextBox ID="txtNumAbusiNoAbitatNo" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" placeholder="No Abusi" />
                                 <label class="form-check-label">]</label>
+                                
                             </div>
                             <div id="divCensimento" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />

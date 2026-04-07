@@ -70,7 +70,7 @@ namespace Uotep
             String MeseCorrente = DateTime.Now.ToString("MMMM");
             String AnnoCorrente = DateTime.Now.ToString("yyyy");
             Manager mn = new Manager();
-            continua = Convalida();
+            //continua = Convalida();
             if (continua)
             {
                 RappUote rap = new RappUote();
@@ -327,6 +327,14 @@ namespace Uotep
 
 
                 //F- mod 31/01/2026 scheda int
+                //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+                rap.NumAbusiAbitatSi = !String.IsNullOrEmpty(txtNumAbusiAbitatSi.Text) ? Convert.ToInt32(txtNumAbusiAbitatSi.Text) : 0;
+                rap.NumAbusiAbitatNo = !String.IsNullOrEmpty(txtNumAbusiAbitatNo.Text) ? Convert.ToInt32(txtNumAbusiAbitatNo.Text) : 0;
+                rap.NumAbusiNoAbitatSi= !String.IsNullOrEmpty(txtNumAbusiNoAbitatSi.Text) ? Convert.ToInt32(txtNumAbusiNoAbitatSi.Text) : 0;
+                rap.NumAbusiNoAbitatNo = !String.IsNullOrEmpty(txtNumAbusiNoAbitatNo.Text) ? Convert.ToInt32(txtNumAbusiNoAbitatNo.Text) : 0;
+                rap.print = false;
+
+                //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
                 stat.mese = MeseCorrente;
                 stat.anno = System.Convert.ToInt16(AnnoCorrente);
                 string txt = string.Empty;
@@ -520,7 +528,15 @@ namespace Uotep
 
                 ret = false;
             }
-
+            if (!ckEsposto.Checked && !String.IsNullOrEmpty(txt_numEspostiSegn.Text))
+            {
+                int num = System.Convert.ToInt32(txt_numEspostiSegn.Text);
+                if (num>0)
+                
+                    ckEsposto.Checked = true;
+                
+                
+            }
             if (ckAccertAvvenutoRipr.Checked == true)
             {
                 if (rdTotale.Checked == false && rdParziale.Checked == false && rdNonAvvenuto.Checked == false)
@@ -836,6 +852,9 @@ namespace Uotep
         protected void btPopStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
+            //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+            mn.UpdRappUoteStampa(id);
+            //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
             DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id, null);
 
             Routine stampa = new Routine();

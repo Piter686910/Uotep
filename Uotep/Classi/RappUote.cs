@@ -78,5 +78,12 @@ namespace Uotep.Classi
         public Int32 NumcontrNatoDaAcc = 0;
         public Int32 NumNotificheNoAg = 0;
         //F- mod 31/01/2026 scheda int
+        //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+        public Int32 NumAbusiAbitatSi = 0;
+        public Int32 NumAbusiAbitatNo = 0;
+        public Int32 NumAbusiNoAbitatSi = 0;
+        public Int32 NumAbusiNoAbitatNo = 0;
+        public Boolean print= false;
+        //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
     }
 }

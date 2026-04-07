@@ -40,233 +40,7 @@
         }
 
         ///////////////
-        var allOptionsTipoAtto = [];
 
-        // Funzione per caricare i dati (chiamata solo quando serve)
-        function caricaOpzioni() {
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-
-            if (!ddl) {
-                console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
-                return;
-            }
-
-            var options = ddl.options;
-            allOptionsTipoAtto = []; // Resetta
-
-            for (var i = 0; i < options.length; i++) {
-                // Carica tutto tranne i valori vuoti
-                if (options[i].value !== "" && options[i].value !== "0") {
-                    allOptionsTipoAtto.push({ text: options[i].text, value: options[i].value });
-                }
-            }
-            console.log("Opzioni caricate in memoria atti: " + allOptionsTipoAtto.length);
-        }
-
-        // Carica i dati appena la pagina è pronta
-        document.addEventListener("DOMContentLoaded", caricaOpzioni);
-
-        // Funzione Filtro
-        function filterAndHighlight(e) {
-            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
-     //var input = '<%= txtSearchAtto.ClientID %>';
-            var listDiv = document.getElementById("suggestionsListTipoAtto");
-            //var filter = input.value.toUpperCase();
-            var filter = (input.value || "").toUpperCase();
-
-            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-            if (allOptionsTipoAtto.length === 0) {
-                caricaOpzioni();
-            }
-
-            // Tasto INVIO (13)
-            if (e.keyCode === 13) {
-                var activeItem = listDiv.querySelector(".active");
-                if (activeItem) {
-                    // Simula il click
-                    activeItem.click();
-                    e.preventDefault(); // Ferma il postback del form se presente
-                }
-                return;
-            }
-
-            listDiv.innerHTML = "";
-
-            // Se input vuoto, nascondi
-            if (filter.length === 0) {
-                listDiv.style.display = "none";
-                return;
-            }
-
-            var foundCount = 0;
-
-            for (var i = 0; i < allOptionsTipoAtto.length; i++) {
-                var item = allOptionsTipoAtto[i];
-
-                // LOGICA DI FILTRO (Contiene il testo?)
-                if (item.text.toUpperCase().indexOf(filter) > -1) {
-
-                    var div = document.createElement("div");
-                    div.className = "suggestion-item";
-                    div.innerText = item.text;
-
-                    // Usiamo attributi data- per passare il valore
-                    div.setAttribute("data-val", item.value);
-
-                    // Evidenzia il primo risultato
-                    if (foundCount === 0) {
-                        div.classList.add("active");
-                    }
-
-                    // Click Mouse
-                    div.onclick = function () {
-                        seleziona(this.innerText, this.getAttribute("data-val"));
-                    };
-
-                    listDiv.appendChild(div);
-                    foundCount++;
-                }
-            }
-
-            console.log("Risultati trovati: " + foundCount);
-
-            if (foundCount > 0) {
-                listDiv.style.display = "block";
-            } else {
-                listDiv.style.display = "none";
-            }
-        }
-
-        function seleziona(text, value) {
-            console.log("Selezionato: " + text + " (ID: " + value + ")");
-
-            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListTipoAtto");
-
-            input.value = text;
-            if (ddl) ddl.value = value;
-            listDiv.style.display = "none";
-        }
-
-        // Chiudi se clicchi fuori
-        document.addEventListener('click', function (e) {
-            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
-                document.getElementById("suggestionsListTipoAtto").style.display = "none";
-            }
-        });
-
-        // Funzione per caricare i dati (chiamata solo quando serve)
-        function caricaOpzioniOperatore() {
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
-
-            if (!ddl) {
-                console.error("Errore: DropDownList 'ddlOperatore' non trovata!");
-                return;
-            }
-
-            var options = ddl.options;
-            allOptions = []; // Resetta
-
-            for (var i = 0; i < options.length; i++) {
-                // Carica tutto tranne i valori vuoti
-                if (options[i].value !== "" && options[i].value !== "0") {
-                    allOptions.push({ text: options[i].text, value: options[i].value });
-                }
-            }
-            console.log("Opzioni caricate in memoria: " + allOptions.length);
-        }
-
-        // Carica i dati appena la pagina è pronta
-        document.addEventListener("DOMContentLoaded", caricaOpzioniOperatore);
-
-        function filterAndHighlightOp(e) {
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-           //var input = '<%= txtSearchOperatore.ClientID %>';
-            var listDiv = document.getElementById("suggestionsListoperatore");
-            //var filter = input.value.toUpperCase();
-            var filter = (input.value || "").toUpperCase();
-
-            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-            if (allOptions.length === 0) {
-                caricaOpzioniOperatore();
-            }
-
-            // Tasto INVIO (13)
-            if (e.keyCode === 13) {
-                var activeItem = listDiv.querySelector(".active");
-                if (activeItem) {
-                    // Simula il click
-                    activeItem.click();
-                    e.preventDefault(); // Ferma il postback del form se presente
-                }
-                return;
-            }
-
-            listDiv.innerHTML = "";
-
-            // Se input vuoto, nascondi
-            if (filter.length === 0) {
-                listDiv.style.display = "none";
-                return;
-            }
-
-            var foundCount = 0;
-
-            for (var i = 0; i < allOptions.length; i++) {
-                var item = allOptions[i];
-
-                // LOGICA DI FILTRO (Contiene il testo?)
-                if (item.text.toUpperCase().indexOf(filter) > -1) {
-
-                    var div = document.createElement("div");
-                    div.className = "suggestion-item";
-                    div.innerText = item.text;
-
-                    // Usiamo attributi data- per passare il valore
-                    div.setAttribute("data-val", item.value);
-
-                    // Evidenzia il primo risultato
-                    if (foundCount === 0) {
-                        div.classList.add("active");
-                    }
-
-                    // Click Mouse
-                    div.onclick = function () {
-                        selezionaOperatore(this.innerText, this.getAttribute("data-val"));
-                    };
-
-                    listDiv.appendChild(div);
-                    foundCount++;
-                }
-            }
-
-            console.log("Risultati trovati: " + foundCount);
-
-            if (foundCount > 0) {
-                listDiv.style.display = "block";
-            } else {
-                listDiv.style.display = "none";
-            }
-        }
-        function selezionaOperatore(text, value) {
-            console.log("Selezionato: " + text + " (ID: " + value + ")");
-
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListoperatore");
-
-            input.value = text;
-            if (ddl) ddl.value = value;
-            listDiv.style.display = "none";
-        }
-
-        // Chiudi se clicchi fuori
-        document.addEventListener('click', function (e) {
-            if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
-                suggestionsListoperatore
-            }
-        });
 
 
         //////////////
@@ -665,7 +439,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
-                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" OnTextChanged="txtRifProtGen_TextChanged" />
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" onkeyup="contaPuntiVirgola();" ClientIDMode="Static" />
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="* Inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
                         </div>
                     </div>
@@ -704,7 +478,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtNumProtRicStessoCarico">Numeri protocollo</label>
-                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3" Text="1" />
+                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3"  ClientIDMode="Static" />
 
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Inserire numero prot." ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
                             <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
@@ -1180,5 +954,258 @@
         if (ddl) {
             ddl.onchange = gestisciVisibilita;
         }
+        /////
+        var allOptionsTipoAtto = [];
+
+        // Funzione per caricare i dati (chiamata solo quando serve)
+        function caricaOpzioni() {
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+
+            if (!ddl) {
+                console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
+                return;
+            }
+
+            var options = ddl.options;
+            allOptionsTipoAtto = []; // Resetta
+
+            for (var i = 0; i < options.length; i++) {
+                // Carica tutto tranne i valori vuoti
+                if (options[i].value !== "" && options[i].value !== "0") {
+                    allOptionsTipoAtto.push({ text: options[i].text, value: options[i].value });
+                }
+            }
+            console.log("Opzioni caricate in memoria atti: " + allOptionsTipoAtto.length);
+        }
+
+        // Carica i dati appena la pagina è pronta
+        document.addEventListener("DOMContentLoaded", caricaOpzioni);
+
+        // Funzione Filtro
+        function filterAndHighlight(e) {
+            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
+
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
+            //var filter = input.value.toUpperCase();
+            var filter = (input.value || "").toUpperCase();
+
+            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+            if (allOptionsTipoAtto.length === 0) {
+                caricaOpzioni();
+            }
+
+            // Tasto INVIO (13)
+            if (e.keyCode === 13) {
+                var activeItem = listDiv.querySelector(".active");
+                if (activeItem) {
+                    // Simula il click
+                    activeItem.click();
+                    e.preventDefault(); // Ferma il postback del form se presente
+                }
+                return;
+            }
+
+            listDiv.innerHTML = "";
+
+            // Se input vuoto, nascondi
+            if (filter.length === 0) {
+                listDiv.style.display = "none";
+                return;
+            }
+
+            var foundCount = 0;
+
+            for (var i = 0; i < allOptionsTipoAtto.length; i++) {
+                var item = allOptionsTipoAtto[i];
+
+                // LOGICA DI FILTRO (Contiene il testo?)
+                if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+                    var div = document.createElement("div");
+                    div.className = "suggestion-item";
+                    div.innerText = item.text;
+
+                    // Usiamo attributi data- per passare il valore
+                    div.setAttribute("data-val", item.value);
+
+                    // Evidenzia il primo risultato
+                    if (foundCount === 0) {
+                        div.classList.add("active");
+                    }
+
+                    // Click Mouse
+                    div.onclick = function () {
+                        seleziona(this.innerText, this.getAttribute("data-val"));
+                    };
+
+                    listDiv.appendChild(div);
+                    foundCount++;
+                }
+            }
+
+            console.log("Risultati trovati: " + foundCount);
+
+            if (foundCount > 0) {
+                listDiv.style.display = "block";
+            } else {
+                listDiv.style.display = "none";
+            }
+        }
+
+        function seleziona(text, value) {
+            console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+            var listDiv = document.getElementById("suggestionsListTipoAtto");
+
+            input.value = text;
+            if (ddl) ddl.value = value;
+            listDiv.style.display = "none";
+        }
+
+        // Chiudi se clicchi fuori
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
+                document.getElementById("suggestionsListTipoAtto").style.display = "none";
+            }
+        });
+             
+        // Funzione per caricare i dati (chiamata solo quando serve)
+        function caricaOpzioniOperatore() {
+            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+
+            if (!ddl) {
+                console.error("Errore: DropDownList 'ddlOperatore' non trovata!");
+                return;
+            }
+
+            var options = ddl.options;
+            allOptions = []; // Resetta
+
+            for (var i = 0; i < options.length; i++) {
+                // Carica tutto tranne i valori vuoti
+                if (options[i].value !== "" && options[i].value !== "0") {
+                    allOptions.push({ text: options[i].text, value: options[i].value });
+                }
+            }
+            console.log("Opzioni caricate in memoria: " + allOptions.length);
+        }
+
+        // Carica i dati appena la pagina è pronta
+        document.addEventListener("DOMContentLoaded", caricaOpzioniOperatore);
+
+        function filterAndHighlightOp(e) {
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+     
+            var listDiv = document.getElementById("suggestionsListoperatore");
+            //var filter = input.value.toUpperCase();
+            var filter = (input.value || "").toUpperCase();
+
+            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+            if (allOptions.length === 0) {
+                caricaOpzioniOperatore();
+            }
+
+            // Tasto INVIO (13)
+            if (e.keyCode === 13) {
+                var activeItem = listDiv.querySelector(".active");
+                if (activeItem) {
+                    // Simula il click
+                    activeItem.click();
+                    e.preventDefault(); // Ferma il postback del form se presente
+                }
+                return;
+            }
+
+            listDiv.innerHTML = "";
+
+            // Se input vuoto, nascondi
+            if (filter.length === 0) {
+                listDiv.style.display = "none";
+                return;
+            }
+
+            var foundCount = 0;
+
+            for (var i = 0; i < allOptions.length; i++) {
+                var item = allOptions[i];
+
+                // LOGICA DI FILTRO (Contiene il testo?)
+                if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+                    var div = document.createElement("div");
+                    div.className = "suggestion-item";
+                    div.innerText = item.text;
+
+                    // Usiamo attributi data- per passare il valore
+                    div.setAttribute("data-val", item.value);
+
+                    // Evidenzia il primo risultato
+                    if (foundCount === 0) {
+                        div.classList.add("active");
+                    }
+
+                    // Click Mouse
+                    div.onclick = function () {
+                        selezionaOperatore(this.innerText, this.getAttribute("data-val"));
+                    };
+
+                    listDiv.appendChild(div);
+                    foundCount++;
+                }
+            }
+
+            console.log("Risultati trovati: " + foundCount);
+
+            if (foundCount > 0) {
+                listDiv.style.display = "block";
+            } else {
+                listDiv.style.display = "none";
+            }
+        }
+        function selezionaOperatore(text, value) {
+            console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+            var listDiv = document.getElementById("suggestionsListoperatore");
+
+            input.value = text;
+            if (ddl) ddl.value = value;
+            listDiv.style.display = "none";
+        }
+
+        // Chiudi se clicchi fuori
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
+                suggestionsListoperatore
+            }
+        });
+        function contaPuntiVirgola() {
+            var sorgente = document.getElementById('<%= txtRifProtGen.ClientID %>');
+            var destinazione = document.getElementById('<%= txtNumProtRicStessoCarico.ClientID %>');
+
+            if (sorgente && destinazione) {
+                var testo = sorgente.value.trim();
+
+                // Se il campo è vuoto, il conteggio è 0
+                if (testo === "") {
+                    destinazione.value = 0;
+                } else {
+                    // Dividiamo per ";"
+                    // Esempio: "A;B" -> ["A", "B"] -> lunghezza 2
+                    // Esempio: "A"   -> ["A"]      -> lunghezza 1
+                    var parti = testo.split(";");
+
+                    // Opzionale: filtriamo eventuali spazi vuoti se l'utente mette ;; per errore
+                    // var conteggio = parti.filter(function(x) { return x.trim() !== "" }).length;
+
+                    var conteggio = parti.length;
+                    destinazione.value = conteggio;
+                }
+            }
+        }
+        ////
     </script>
 </asp:Content>

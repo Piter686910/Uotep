@@ -58,7 +58,7 @@ namespace Uotep
 
                 if (!string.IsNullOrEmpty(idRicevuto))
                 {
-                    
+
                     DataTable scheda = mn.GetSchedaById(idRicevuto);
                     if (scheda.Rows.Count > 0)
                     {
@@ -271,14 +271,14 @@ namespace Uotep
             {
                 LPattugliaCompleta.Items.Add(columns[i]); // Colonne successive
             }
-           
+
             if (!String.IsNullOrEmpty(rap.Rows[0]["rapp_capopattuglia"].ToString()))
             {
                 ddlCapopattuglia.SelectedItem.Text = rap.Rows[0]["rapp_capopattuglia"].ToString();
             }
             else
                 ddlCapopattuglia.ClearSelection();
-           // rdUote.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[41]);
+            // rdUote.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[41]);
             //rdUotp.Checked = System.Convert.ToBoolean(rap.Rows[0].ItemArray[42]);
             rdCon.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_con_protezioni"]);
             rdSenza.Checked = System.Convert.ToBoolean(rap.Rows[0]["rapp_senza_protezioni"]);
@@ -353,6 +353,13 @@ namespace Uotep
 
                 txtNumNotificheNoAg.Text = "0";
             //F- mod 31/01/2026 scheda int
+
+            //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+            txtNumAbusiAbitatSi.Text = rap.Rows[0]["rapp_NumAbusiAbitatSi"].ToString();
+            txtNumAbusiAbitatNo.Text = rap.Rows[0]["rapp_NumAbusiAbitatNo"].ToString();
+            txtNumAbusiNoAbitatSi.Text = rap.Rows[0]["rapp_NumAbusiNoAbitatSi"].ToString();
+            txtNumAbusiNoAbitatNo.Text = rap.Rows[0]["rapp_NumAbusiNoAbitatNo"].ToString();
+            //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
         }
 
         protected void btA_Click(object sender, EventArgs e)
@@ -524,6 +531,13 @@ namespace Uotep
                 ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Se hai selezionato esposti è necessario inserire il numero di esposti." + "'); $('#errorModal').modal('show');", true);
 
                 ret = false;
+            }
+            if (!ckEsposto.Checked && !String.IsNullOrEmpty(txt_numEspostiSegn.Text))
+            {
+                int num = System.Convert.ToInt32(txt_numEspostiSegn.Text);
+                if (num > 0)
+
+                    ckEsposto.Checked = true;
             }
             if (ckAccertAvvenutoRipr.Checked == true)
             {
@@ -1533,10 +1547,14 @@ namespace Uotep
         protected void btPopStampa_Click(object sender, EventArgs e)
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
+            //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+            mn.UpdRappUoteStampa(id);
+            //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
             DataTable schede = mn.GetSchedeBy(null, null, null, CkAttivita.Checked, id, null);
 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);
+
         }
         private void CaricaDLL()
         {
@@ -1658,9 +1676,12 @@ namespace Uotep
         {
             int id = System.Convert.ToInt32(HfIdScheda.Value);
             DataTable schede = mn.GetSchedeBy(null, null, null, ckModAttivitaInterna.Checked, id, null);
-
+            //I- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
+            mn.UpdRappUoteStampa(id);
+            //F- mod 01/04/2026 scheda int aggiunto print e numeri abusi 
             Routine stampa = new Routine();
             stampa.CreaPdf(schede);
+
 
         }
         protected void btChiudi_Click(object sender, EventArgs e)

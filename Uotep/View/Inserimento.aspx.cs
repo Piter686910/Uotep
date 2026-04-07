@@ -1298,11 +1298,6 @@ namespace Uotep
 
         }
 
-        protected void txtRifProtGen_TextChanged(object sender, EventArgs e)
-        {
-            //txtNumProtRicStessoCarico.Text=  Regex.Replace(txtRifProtGen.Text, @"[^0-9/]", ";");
-            // int conteggioPuntoEVirgola = txtRifProtGen.Text.Count(c => c == ';');
-
-        }
+        
     }
 }

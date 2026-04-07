@@ -663,6 +663,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.CheckBox ckAbitativo;
 
         /// <summary>
+        /// Controllo txtNumAbusiAbitatSi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumAbusiAbitatSi;
+
+        /// <summary>
+        /// Controllo txtNumAbusiAbitatNo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumAbusiAbitatNo;
+
+        /// <summary>
         /// Controllo ckNonAbitativo.
         /// </summary>
         /// <remarks>
@@ -670,6 +688,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox ckNonAbitativo;
+
+        /// <summary>
+        /// Controllo txtNumAbusiNoAbitatSi.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumAbusiNoAbitatSi;
+
+        /// <summary>
+        /// Controllo txtNumAbusiNoAbitatNo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNumAbusiNoAbitatNo;
 
         /// <summary>
         /// Controllo divCensimento.
