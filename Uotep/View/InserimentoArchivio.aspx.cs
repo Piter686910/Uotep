@@ -582,6 +582,7 @@ namespace Uotep
             gvPopup.DataSource = null;
             gvPopup.DataBind();
             txtIndirizzoQuartiere.Text = string.Empty;
+            
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
@@ -602,6 +603,8 @@ namespace Uotep
             HfFiltroNote.Value = string.Empty;
             HfFiltroIndirizzo.Value = string.Empty;
             GVRicercaPratica.PageIndex = 0;
+            string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
+            Response.Redirect(url);
         }
         protected void chiudipopupErrore_Click(object sender, EventArgs e)
         {

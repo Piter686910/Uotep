@@ -235,7 +235,7 @@ namespace Uotep
                             if (myMaster != null)
                             {
                                 // 2. Chiamo il metodo pubblico
-                                myMaster.MostraMessaggio("ATTENZIONE", txtCartellinaTp.Text + ":" + Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + cartellina, "danger");
+                                myMaster.MostraMessaggio("?? ATTENZIONE", txtCartellinaTp.Text + ":" + Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + cartellina, "danger");
                             }
 
                             return;
@@ -250,7 +250,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", msg + ": " + Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("?? ATTENZIONE", msg + ": " + Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
                     }
                 }
                 else

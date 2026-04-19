@@ -2,40 +2,29 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
-    <script>
-        function ShowErrorMessage(message) {
-            $('#errorModal').modal('show');
-        }
-       
-    </script>
-
-    <div class="panel panel-default">
-        <div class="form-group mb-3"></div>
-
-        <div class="panel-body" id="divStat" runat="server">
+ 
             <div class="jumbotron">
-                <div style="margin-top: -90px!important">
-                    <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
-                    <p class="text-center lead">GESTIONE PRATICHE</p>
+                <div style="margin-top: -50px!important">
+                    <div class="dashboard-header">
+                        <h1><span class="fa-solid fa-gear fa-spin"></span> GESTIONE PRATICHE</h1>
+                    </div>
                 </div>
-
                 <div class="container">
                     <div class="row">
                         <!-- Colonna 1 -->
                         <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <asp:Label ID="Label6" runat="server">Fascicolo/Cartellina</asp:Label>
-                                <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus=""/>
+                                <asp:TextBox ID="txtFascicolo" runat="server" CssClass="form-control" Font-Bold="true" ForeColor="Red" autofocus="" />
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtFascicolo" ValidationGroup="bt" ErrorMessage="Inserire numero fascicolo" ForeColor="Red">
                                 </asp:RequiredFieldValidator>
 
                             </div>
                             <div class="form-group mb-3">
-                                <asp:Label ID="Label9" runat="server" >Quartiere</asp:Label>
+                                <asp:Label ID="Label9" runat="server">Quartiere</asp:Label>
                                 <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                 </div>
-                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control"  />
+                                <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
                             </div>
                             <div class="form-group mb-3">
                                 <asp:Label ID="Label5" runat="server">Assegnato</asp:Label>
@@ -133,7 +122,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+      
         <div class="form-group">
             <asp:GridView ID="GVRicercaFascicolo" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
                 OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand" OnRowDeleting="GVRicercaFascicolo_RowDeleting">
@@ -172,22 +161,9 @@
             </asp:GridView>
 
         </div>
-    </div>
+   
     <asp:HiddenField ID="HfIdFascicolo" runat="server" />
 
-
-    <%-- il seguente style serve per i bordi azzurri --%>
-    <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -10px;
-        }
-
-        
-    </style>
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog"

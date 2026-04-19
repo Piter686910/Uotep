@@ -89,7 +89,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+                //ProtocolloLiteral.Text = decodedText;
                 txtAnno.Text = System.Convert.ToInt32(DateTime.Now.Year).ToString();
                 if (ruolo != "fureria" && ruolo !="admin")
                 {

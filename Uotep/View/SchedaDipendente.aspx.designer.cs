@@ -42,15 +42,6 @@ namespace Uotep
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTesta;
 
         /// <summary>
-        /// Controllo ProtocolloLiteral.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ProtocolloLiteral;
-
-        /// <summary>
         /// Controllo RequiredFieldValidator2.
         /// </summary>
         /// <remarks>
@@ -159,6 +150,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtGruppoRep;
 
         /// <summary>
+        /// Controllo txtGruppoQ.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGruppoQ;
+
+        /// <summary>
+        /// Controllo txtTurnoPref.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTurnoPref;
+
+        /// <summary>
         /// Controllo rdQ1.
         /// </summary>
         /// <remarks>
@@ -193,24 +202,6 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rdQ4;
-
-        /// <summary>
-        /// Controllo txtGruppoQ.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtGruppoQ;
-
-        /// <summary>
-        /// Controllo txtTurnoPref.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTurnoPref;
 
         /// <summary>
         /// Controllo ckArmato.

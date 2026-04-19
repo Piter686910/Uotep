@@ -115,7 +115,7 @@
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>INSERISCI UNA NUOVA PRATICA IN ARCHIVIO PATRIMONIO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERISCI UNA NUOVA PRATICA IN ARCHIVIO PATRIMONIO</h1>
             </div>
         </div>
 

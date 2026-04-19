@@ -3,36 +3,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
-    /* 1. Forza il font su tutta la tabella (Header e Celle) */
-    #<%= GVRicercaPratica.ClientID %>, 
-    #<%= GVRicercaPratica.ClientID %> th, 
-    #<%= GVRicercaPratica.ClientID %> td {
-        font-size: 1.405rem !important; /* Questo è circa un fs-5/fs-6 abbondante */
-        padding: 10px 8px !important;
-    }
-
-    /* 2. Stile specifico per l'Header (Titoli e Filtri) */
-    #<%= GVRicercaPratica.ClientID %> th {
-        background-color: #337ab7 !important; /* Grigio scuro Bootstrap */
-        color: white !important;
-        vertical-align: top !important;
-        font-weight: 600 !important;
-        text-transform: uppercase;
-    }
-
-    /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
-    #<%= GVRicercaPratica.ClientID %> th input[type="text"] {
-        font-size: 1rem !important;
-        margin-top: 5px;
-        font-weight: normal;
-        text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
-    }
-
-    /* 4. Ingrandisce il pulsante 'Seleziona' e i link */
-    #<%= GVRicercaPratica.ClientID %> .btn-sm {
-        font-size: 1.2rem !important;
-        padding: 5px 15px !important;
-    }
+   
 
     
 </style>
@@ -315,7 +286,7 @@
             <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>INSERIMENTO PRATICA IN ARCHIVIO EDILIZIA</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERIMENTO PRATICA IN ARCHIVIO EDILIZIA</h1>
             </div>
         </div>
         <div class="panel panel-default">
@@ -454,117 +425,114 @@
                             </div>
                         </div>
                         <div class="row  custom-border">
-                            <div class="col-md-3">
+                            <div class="col-md-12" style="display: inline-block">
                                 <div class="form-group mb-3">
                                     <label for="txtNote">Note</label>
-                                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" />
+                                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="5" Style="margin-left: -10px; width: 100%; max-width: 980px;" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label for="DdlTipoAttoI">Tipologia Abuso</label>
-                                    <%--<asp:TextBox ID="txtTipoAtto" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoAtto()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>--%>
-                                    <%--<div id="suggestionsListTA" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                        </div>--%>
+
                                     <asp:DropDownList ID="DdlTipoAttoI" runat="server" CssClass="form-control" />
                                 </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group mb-3">
                                     <label for="txtGiudice">Giudice</label>
-                                    <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()"  ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <asp:TextBox ID="txtGiudice" runat="server" AutoPostBack="false" onkeyup="filterDropdownGiudice()" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                                     <div id="suggestionsListG" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
 
                                     <asp:DropDownList ID="DdlGiudiceI" runat="server" Style="display: none;" CssClass="form-control" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group mb-3">
 
                                     <label for="txtInCarico" class="form-label">In Carico</label>
-                                    <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()"  ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <asp:TextBox ID="txtInCarico" runat="server" AutoPostBack="false" onkeyup="filterDropdownInviata()" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
                                     <div id="suggestionsListInCarico" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
                                     <asp:DropDownList ID="DdlInviatiI" runat="server" CssClass="form-control" Style="display: none" />
 
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
-                </div>
-
-                <!-- Colonna Destra -->
-                <div class="col-md-6">
-                </div>
-
-            </div>
-            <div class="row ">
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-group">
-                        <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="Ck1089">1089</label>
-                    </div>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-group">
-                        <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-group">
-                        <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-group">
-                        <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row ">
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Privata</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Comunale</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Beni Cult.</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkEvasa">Prop. Altri Enti</label>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                    <div class="form-check">
-                        <asp:CheckBox ID="CkBeniConfiscati" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label ms-2" for="CkBeniConfiscati">Beni Confiscati</label>
-                    </div>
-                </div>
 
 
+
+                    <div class="row  custom-border">
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="Ck1089" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="Ck1089">1089</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkSuoloPubblico" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkSuoloPubblico">Suolo Pubblico</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkVincoli" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkVincoli">Vincoli</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkDemolita" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkDemolita">Demolita</label>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkPropPriv" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkEvasa">Prop. Privata</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkPropComunale" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkEvasa">Prop. Comunale</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkPropBeniCult" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkEvasa">Prop. Beni Cult.</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkPropAltri" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkEvasa">Prop. Altri Enti</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="form-check">
+                                <asp:CheckBox ID="CkBeniConfiscati" runat="server" CssClass="form-check-input" />
+                                <label class="form-check-label ms-2" for="CkBeniConfiscati">Beni Confiscati</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
             </div>
             <asp:HiddenField ID="hdnConfermaUtente" runat="server" Value="false" />
             <div class="row">
@@ -578,8 +546,7 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
+
 
     <!-- Modale Bootstrap quartiere -->
     <div class="modal fade" id="myModalQuartiere" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">

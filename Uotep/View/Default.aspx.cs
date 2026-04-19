@@ -30,7 +30,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
                     Response.Redirect(url, false);
                     return;
@@ -92,7 +92,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
                             Session.Abandon();
                             return;
                         }
@@ -139,7 +139,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
                             Session.Abandon();
                             return;
                         }
@@ -156,7 +156,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.NoUser.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.NoUser.GetDescription(), "danger");
                         Session.Abandon();
                         return;
                     }
@@ -172,7 +172,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserWrong.GetDescription(), "danger");
                     Session.Abandon();
                     return;
                 }

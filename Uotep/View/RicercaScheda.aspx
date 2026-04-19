@@ -28,7 +28,7 @@
         function hideModalS() {
             $('#PopStampa').modal('hide');
         }
-        
+
         // Funzione per aggiungere testo a un TextBox
         function appendToTextBox(TextPattugliaCompleta, DdlPattuglia) {
             // Ottieni il TextBox tramite il suo ID
@@ -93,7 +93,9 @@
     <div class="panel panel-default">
         <div class="form-group mb-3"></div>
         <div class="panel-heading">
-            <h3 class="panel-title" style="font-weight: bold;">Intervento</h3>
+            <div class="dashboard-header">
+                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA SCHEDA INTERVENTO</h1>
+            </div>
         </div>
         <!-- Colonna sinistra -->
         <div class="col-md-3 form-check">
@@ -114,8 +116,8 @@
         <div class="panel-body" id="divTesta" runat="server">
             <div class="jumbotron">
                 <div style="margin-top: -50px!important">
-                    <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-                    <p class="text-center lead">COMPILAZIONE SCHEDA INTERVENTO</p>
+                    <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+                    <p class="text-center lead">COMPILAZIONE SCHEDA INTERVENTO</p>--%>
                 </div>
 
                 <div class="container">
@@ -169,8 +171,8 @@
                         </div>
                         <div class="col-md-1" style="margin-top: 220px!important">
                             <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" ValidationGroup="bottoni" BackColor="White"/>
-                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" ValidationGroup="bottoni" BackColor="White"/>
+                                <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-primary me-3" OnClick="Aggiungi_Click" ToolTip="Aggiungi" ValidationGroup="bottoni" BackColor="White" />
+                                <asp:Button ID="btElimina" runat="server" Text="➖" CssClass="btn btn-primary me-3" OnClick="btElimina_Click" ToolTip="Elimina" ValidationGroup="bottoni" BackColor="White" />
                             </div>
                         </div>
                         <!-- Colonna 4 -->
@@ -256,7 +258,7 @@
                             <div id="divNotificaTp" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckNotificaTp" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckNotificaTp">Notifica Non AG</label>
-                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumNotificheNoAg" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)" />
                             </div>
                         </div>
 
@@ -269,7 +271,7 @@
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckEsposto" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckEsposto">Quanti Esposti evasi</label>
-                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="larghezzaText70" MaxLength="2" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txt_numEspostiSegn" runat="server" CssClass="larghezzaText70" MaxLength="2" onchange="PulisciSeSbagliato(this)" />
                                 <asp:RegularExpressionValidator ID="REx" runat="server" ControlToValidate="txt_numEspostiSegn" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,2}"></asp:RegularExpressionValidator>
                             </div>
                             <div class="form-check mb-2">
@@ -288,7 +290,7 @@
                                 <asp:CheckBox ID="ckAccRichiesti" runat="server" CssClass="form-check-input" />
 
                                 <label class="form-check-label" for="ckAccRichiesti">Accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti, Servizi e Amministrazioni nel n. </label>
-                                <asp:TextBox ID="txtNumAccRichiesti" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumAccRichiesti" runat="server" CssClass=" larghezzaText70" MaxLength="3" onchange="PulisciSeSbagliato(this)" />
                                 <label class="form-check-label" for="ckAccRichiesti">
                                     (se riferiti a più protocolli indicare numero. Questa voce comprenderà gli sgomberi amministrativi, le
 notifiche non A.G., gli interventi in supporto ad altre UU.OO. e FF.PP., supporto ai C.T.U., Servizi
@@ -433,17 +435,17 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                                 <asp:CheckBox ID="ckControlliOccupazioneAbus" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckControlliOccupazioneAbus">Controlli occupazione abusiva imm. propr. comunale [</label>
                                 <asp:CheckBox ID="ckAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Abitativo" />
-                                <asp:TextBox ID="txtNumAbusiAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70"  />
+                                <asp:TextBox ID="txtNumAbusiAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70" />
                                 <asp:TextBox ID="txtNumAbusiAbitatNo" runat="server" MaxLength="3" CssClass=" larghezzaText70" />
                                 <asp:CheckBox ID="ckNonAbitativo" runat="server" GroupName="ProtezioniGroup" Text="Non Abitativo" />
-                                 <asp:TextBox ID="txtNumAbusiNoAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70"  />
-                                <asp:TextBox ID="txtNumAbusiNoAbitatNo" runat="server" MaxLength="3" CssClass=" larghezzaText70"  />
+                                <asp:TextBox ID="txtNumAbusiNoAbitatSi" runat="server" MaxLength="3" CssClass=" larghezzaText70" />
+                                <asp:TextBox ID="txtNumAbusiNoAbitatNo" runat="server" MaxLength="3" CssClass=" larghezzaText70" />
                                 <label class="form-check-label">]</label>
                             </div>
                             <div id="divCensimento" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckCensimentoAllPubb" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="ckCensimentoAllPubb">Censimento nuclei c/o alloggi pubb.</label>
-                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" CssClass="larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumCensimento" runat="server" MaxLength="3" CssClass="larghezzaText70" onchange="PulisciSeSbagliato(this)" />
                                 <%--                                <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{2}"></asp:RegularExpressionValidator>--%>
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" ControlToValidate="txtNumCensimento" ErrorMessage="Solo valori numerici" ForeColor="Red" ValidationExpression="\d{1,3}"></asp:RegularExpressionValidator>
                             </div>
@@ -451,7 +453,7 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                             <div id="divContrNatoDaAccert" runat="server" class="form-check mb-2">
                                 <asp:CheckBox ID="ckContrNatoDaAccert" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label" for="txtNumContrNatoDaAccert">Controllo/i nel nr. </label>
-                                <asp:TextBox ID="txtNumContrNatoDaAccert" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)"/>
+                                <asp:TextBox ID="txtNumContrNatoDaAccert" runat="server" MaxLength="3" CssClass=" larghezzaText70" onchange="PulisciSeSbagliato(this)" />
                                 <label class="form-check-label" for="txtNumContrNatoDaAccert">
                                     nato/i da accertamenti richiesti da altre UU.OO., Forze di Polizia, Enti,
 Servizi e Amministrazioni</label>
@@ -482,7 +484,7 @@ Servizi e Amministrazioni</label>
                     <!-- Campi di input per la ricerca -->
                     <div class="form-group">
                         <label for="txtModPratica">Nr. Pratica/Cartellina:</label>
-                        <asp:TextBox ID="txtModPratica" runat="server" CssClass="form-control" placeholder="Numero Pratica" autofocus=""/>
+                        <asp:TextBox ID="txtModPratica" runat="server" CssClass="form-control" placeholder="Numero Pratica" autofocus="" />
 
                     </div>
                     <div class="form-group">
@@ -556,7 +558,7 @@ Servizi e Amministrazioni</label>
             </div>
         </div>
     </div>
-   
+
     <%-- popup stampa scheda --%>
     <div class="modal fade" id="PopStampa" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-modal="true">
         <div class="modal-dialog"

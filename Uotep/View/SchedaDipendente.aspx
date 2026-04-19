@@ -8,7 +8,7 @@
             $('#errorModal').modal('show');
         }
 
-       
+
 
         // Funzione per aggiungere testo a un TextBox
         function appendToTextBox(TextPattugliaCompleta, DdlPattuglia) {
@@ -63,9 +63,15 @@
     </script>
 
     <div class="panel panel-default">
-        <div class="form-group mb-3"></div>
+        <div style="margin-top: 0px!important">
+            <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+         <p class="text-center lead"> GESTIONE SCHEDA PERSONALE UOTEP</p>--%>
+            <div class="dashboard-header">
+                <h1><span class="fa-solid fa-gear fa-spin"></span> GESTIONE SCHEDA PERSONALE UOTEP</h1>
+            </div>
+        </div>
         <div class="panel-heading">
-            <h3 class="panel-title" style="font-weight: bold;">Anagrafica</h3>
+            <h3 class="panel-title"><strong>Anagrafica</strong> </h3>
         </div>
         <div class="row">
 
@@ -79,29 +85,9 @@
         </div>
 
 
-        <%-- <asp:RegularExpressionValidator
-            Font-Bold="true"
-            ID="revData"
-            ForeColor="Red"
-            runat="server"
-            ControlToValidate="TxtDataIntervento"
-            ErrorMessage="Controllare il formato delle date, deve essere gg/mm/aaaa."
-            ValidationExpression="^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/((19|20)\d\d)$"></asp:RegularExpressionValidator>
-        <asp:RegularExpressionValidator
-            Font-Bold="true"
-            ID="RegularExpressionValidator1"
-            ForeColor="Red"
-            runat="server"
-            ControlToValidate="TxtDataConsegna"
-            ErrorMessage="Controllare il formato delle date, deve essere gg/mm/aaaa."
-            ValidationExpression="^([0-2][0-9]|(3)[0-1])/(0[1-9]|1[0-2])/((19|20)\d\d)$"></asp:RegularExpressionValidator>--%>
-
         <div class="panel-body" id="divTesta" runat="server">
             <div class="jumbotron">
-                <div style="margin-top: -50px!important">
-                    <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-                    <p class="text-center lead">GESTIONE SCHEDA PERSONALE UOTEP</p>
-                </div>
+
 
                 <div class="container">
                     <div class="row">
@@ -184,69 +170,66 @@
 
     <%-- il seguente style serve per i bordi azzurri --%>
     <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -2px;
+        .spaced-radio label {
+            margin-left: 10px; /* Regola lo spazio qui */
         }
 
-        .larghezzaText {
-            width: 50px;
+        .larghezzaText70 {
+            width: 70px;
         }
     </style>
     <%-- panel dei dettagli --%>
     <div class="panel panel-default" id="divDettagli" runat="server">
         <div class="panel-heading">
-            <h3 class="panel-title" style="font-weight: bold;">Dettagli Aggiuntivi</h3>
+            <h3 class="panel-title"><strong>Aggiuntivi </strong></h3>
         </div>
         <div class="panel-body ">
             <div class="container-fluid ">
 
                 <div class="row custom-border">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group mb-2" style="display: flex; align-items: center; gap: 5px;">
                             <label for="txtGruppoRep" style="margin-bottom: 0; white-space: nowrap;">Gruppo Rep.</label>
-                            <asp:TextBox ID="txtGruppoRep" runat="server" CssClass="form-control larghezzaText" />
+                            <asp:TextBox ID="txtGruppoRep" runat="server" CssClass="form-control larghezzaText70" />
                         </div>
                     </div>
 
 
-                    <div class="col-md-3">
-                        <!-- Allargato leggermente a col-md-4 per evitare a capo -->
-                        <!-- HEADER BOX 3: Altezza forzata identica alla colonna 2 -->
-                        <div class="form-group mb-2">
-                            <%--<asp:CheckBox ID="ckQuartina" runat="server" CssClass="form-check-input" />--%>
-                            <label class="form-check-label" style="margin-right: 5px;" for="ckQuartina">Quartina [</label>
-                            <span style="white-space: nowrap;">
-                                <asp:RadioButton ID="rdQ1" runat="server" GroupName="AccertamentoGroup" Text="I" />
-                                <asp:RadioButton ID="rdQ2" runat="server" GroupName="AccertamentoGroup" Text="II" />
-                                <asp:RadioButton ID="rdQ3" runat="server" GroupName="AccertamentoGroup" Text="III" />
-                                <asp:RadioButton ID="rdQ4" runat="server" GroupName="AccertamentoGroup" Text="IV" />
-                            </span>
-                            <label class="form-check-label">]</label>
-                        </div>
 
-
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-check mb-2" style="min-height: 30px;">
+                    <div class="col-md-4">
+                        <div class="form-check mb-2" style="min-height: 30px">
                             <!-- TEXTBOX 3 -->
                             <div class="form-group mb-2" style="display: flex; align-items: center; gap: 5px;">
                                 <label for="txtGruppoQ" style="margin-bottom: 0; white-space: nowrap; text-align: right;">Gruppo Q.</label>
-                                <asp:TextBox ID="txtGruppoQ" runat="server" CssClass="form-control larghezzaText" />
+                                <asp:TextBox ID="txtGruppoQ" runat="server" CssClass="form-control larghezzaText70" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-check mb-2" style="min-height: 30px;">
                             <!-- TEXTBOX 3 -->
                             <div class="form-group mb-2" style="display: flex; align-items: center; gap: 5px;">
                                 <label for="txtTurnoPref" style="margin-bottom: 0; white-space: nowrap; text-align: right;">Turno Pref.</label>
-                                <asp:TextBox ID="txtTurnoPref" runat="server" CssClass="form-control" />
+                                <asp:TextBox ID="txtTurnoPref" runat="server" CssClass="form-control larghezzaText70" />
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-4 ">
+                        <!-- Allargato leggermente a col-md-4 per evitare a capo -->
+                        <!-- HEADER BOX 3: Altezza forzata identica alla colonna 2 -->
+                        <div class="form-check mb-2">
+                            <%--<asp:CheckBox ID="ckQuartina" runat="server" CssClass="form-check-input" />--%>
+                            <label class="form-check-label" style="margin-right: 5px;" for="ckQuartina">Quartina [</label>
+                            <span style="white-space: nowrap;">
+                                <asp:RadioButton ID="rdQ1" runat="server" GroupName="AccertamentoGroup" Text="I" CssClass="spaced-radio" />&nbsp
+                                <asp:RadioButton ID="rdQ2" runat="server" GroupName="AccertamentoGroup" Text="II" CssClass="spaced-radio" />&nbsp
+                                <asp:RadioButton ID="rdQ3" runat="server" GroupName="AccertamentoGroup" Text="III" CssClass="spaced-radio" />&nbsp
+                                <asp:RadioButton ID="rdQ4" runat="server" GroupName="AccertamentoGroup" Text="IV" CssClass="spaced-radio" />
+                            </span>
+                            <label class="form-check-label">]</label>
+
+                        </div>
+
                     </div>
                 </div>
                 <%-- row 2 --%>
@@ -302,7 +285,7 @@
     <div class="row">
         <div class="col-6">
             <asp:Button ID="btSalva" runat="server" ValidationGroup="bt" Text="💾 Salva Scheda" CssClass="btn btn-primary me-3" OnClick="Salva_Click" />
-            <asp:Button ID="btCerca" runat="server" Text="📂 Ricerca da DB" CssClass="btn btn-primary" OnClick="btCerca_Click" />
+            <asp:Button ID="btCerca" runat="server" Text="📂 Ricerca da DB" CssClass="btn btn-primary" OnClick="btCerca_Click"  />
         </div>
         <%--<div class="col-6">
                         <asp:Button ID="btStampa" runat="server" ValidationGroup="bt" Text="Stampa" CssClass="btn btn-primary me-3" OnClick="btStampa_Click" />

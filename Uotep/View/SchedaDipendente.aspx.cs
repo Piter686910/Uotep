@@ -38,7 +38,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+               // ProtocolloLiteral.Text = decodedText;
                 TxtDataAssunzione.Attributes["placeholder"] = "gg/mm/aaaa";
                 txtDataProssimaSorveglianza.Attributes["placeholder"] = "gg/mm/aaaa";
                 //CaricaDLL();
@@ -102,17 +102,30 @@ namespace Uotep
             scheda.l53 = ckArt53.Checked;
             scheda.GruppoQuartina = txtGruppoQ.Text.ToUpper().Trim();
             Boolean resp = mn.InsSchedaDipendente(scheda);
-
+ SiteMaster myMaster = this.Master as SiteMaster;
             if (!resp)
             {
-                errorMessage.InnerText = "Inserimento della scheda non riuscito";
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                //errorMessage.InnerText = "Inserimento della scheda non riuscito";
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della scheda non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+               
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+
+                }
             }
             else
             {
-                errorMessage.InnerText = "Inserimento scheda effettuato";
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento scheda effettuato." + "'); $('#errorModal').modal('show');", true);
+                //errorMessage.InnerText = "Inserimento scheda effettuato";
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento scheda effettuato." + "'); $('#errorModal').modal('show');", true);
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
 
+                }
                 Pulisci();
 
             }
@@ -214,8 +227,15 @@ namespace Uotep
             DataTable dt = new DataTable();
             if (String.IsNullOrEmpty(txtMatricola.Text) && string.IsNullOrEmpty(txtNominativo.Text.ToUpper()))
             {
-                errorMessage.InnerText = @"⚠️ Inserire Matricola o Nominativo.";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+                //errorMessage.InnerText = @"⚠️ Inserire Matricola o Nominativo.";
+                //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.FiledRegìquired.GetDescription(), "warning");
+                    return;
+                }
             }
             else
                 dt = mn.getSchedaDip(txtMatricola.Text.Trim(), txtNominativo.Text.ToUpper().Trim());
@@ -276,8 +296,16 @@ namespace Uotep
             }
             else
             {
-                errorMessage.InnerText = @"⚠️ Nessun record trovato.";
-                ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+                //errorMessage.InnerText = @"⚠️ Nessun record trovato.";
+                //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.Notfound.GetDescription(), "warning");
+
+                }
             }
         }
 

@@ -24,9 +24,10 @@
             /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
         }
     </style>
-    <div class="jumbotron" style="text-align-last: center">
-        <h1>Pratiche Assegnate</h1>
-        <p class="lead"></p>
+    <div class="jumbotron"  >
+        <div class="dashboard-header">
+            <h1><span class="fa-solid fa-gear fa-spin"></span> PRATICHE ASSEGNATE</h1>
+        </div>
     </div>
     <%-- attività per copoarea --%>
     <asp:Panel ID="pnlAttivita" runat="server" CssClass="text-center">
@@ -95,7 +96,7 @@
                 </asp:GridView>
 
 
-                 <label id="lbl1" runat="server" visible="false" class="form-check-label ms-3 mt-3 text-left" for="GVMC1">MACRO AREA 1</label>
+                <label id="lbl1" runat="server" visible="false" class="form-check-label ms-3 mt-3 text-left" for="GVMC1">MACRO AREA 1</label>
                 <asp:GridView ID="GVMC1" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered" Visible="false"
                     OnRowDataBound="GVMC1_RowDataBound" OnRowCommand="GVMC1_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVMC1_PageIndexChanging" RowStyle-CssClass="GridViewRow"
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow">
@@ -198,7 +199,7 @@
 
                 </asp:GridView>
 
-                <label id="lbl3" runat="server"  visible="false" class="form-check-label ms-3 mt-3 text-left" for="GVMC1">MACRO AREA 3</label>
+                <label id="lbl3" runat="server" visible="false" class="form-check-label ms-3 mt-3 text-left" for="GVMC1">MACRO AREA 3</label>
 
                 <asp:GridView ID="GVMC3" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered" Visible="false"
                     OnRowDataBound="GVMC3_RowDataBound" OnRowCommand="GVMC3_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="GVMC3_PageIndexChanging" RowStyle-CssClass="GridViewRow"
@@ -256,9 +257,9 @@
         </div>
     </asp:Panel>
     <asp:HiddenField ID="HfFiltroMA1" runat="server" />
-     <asp:HiddenField ID="HfFiltroMA2" runat="server" />
-     <asp:HiddenField ID="HfFiltroMA3" runat="server" />
-     <asp:HiddenField ID="HfProvenienzaBt" runat="server" />
+    <asp:HiddenField ID="HfFiltroMA2" runat="server" />
+    <asp:HiddenField ID="HfFiltroMA3" runat="server" />
+    <asp:HiddenField ID="HfProvenienzaBt" runat="server" />
 
     <%-- popup errori --%>
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">

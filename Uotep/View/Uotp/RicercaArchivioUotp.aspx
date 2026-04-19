@@ -2,135 +2,51 @@
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-        <style>
-    /* 1. Forza il font su tutta la tabella (Header e Celle) */
-    #<%= GVRicercaPratica.ClientID %>, 
-    #<%= GVRicercaPratica.ClientID %> th, 
-    #<%= GVRicercaPratica.ClientID %> td {
-        font-size: 1.405rem !important; /* Questo è circa un fs-5/fs-6 abbondante */
-        padding: 10px 8px !important;
-    }
-
-    /* 2. Stile specifico per l'Header (Titoli e Filtri) */
-    #<%= GVRicercaPratica.ClientID %> th {
-        background-color: #337ab7 !important; /* Grigio scuro Bootstrap */
-        color: white !important;
-        vertical-align: top !important;
-        font-weight: 600 !important;
-        text-transform: uppercase;
-    }
-
-    /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
-    #<%= GVRicercaPratica.ClientID %> th input[type="text"] {
-        font-size: 1rem !important;
-        margin-top: 5px;
-        font-weight: normal;
-        text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
-    }
-
-    /* 4. Ingrandisce il pulsante 'Seleziona' e i link */
-    #<%= GVRicercaPratica.ClientID %> .btn-sm {
-        font-size: 1.2rem !important;
-        padding: 5px 15px !important;
-    }
-
-    
-</style>
-    <script>
-        function ShowErrorMessage(message) {
-            $('#errorModal').modal('show');
-        }
-
-        // Mostra il popup
-        function showModal() {
-            $('#myModal').modal('show');
-        }
-
-        // Nasconde il popup
-        function hideModal() {
-            $('#myModal').modal('hide');
-        }
 
 
-    </script>
     <style>
-        .GridViewRow {
-            background-color: white;
-        }
-
-        /* Stile per la riga alternata (azzurro chiaro) */
-        .GridViewAlternatingRow {
-            background-color: #E6F3FF; /* Un azzurro molto chiaro */
-            /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
-        }
-
-        .uppercase-text {
-            text-transform: uppercase;
-        }
-
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -30px;
-        }
-
-        .wrap-text {
-            max-width: 10px;
-            /* Proprietà standard per andare a capo */
-            white-space: normal !important;
-            /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
-            word-wrap: break-word !important;
-            /* o in alternativa: word-break: break-all !important; */
-        }
+        /*.wrap-text {
+            max-width: 10px;*/
+        /* Proprietà standard per andare a capo */
+        /*white-space: normal !important;*/
+        /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
+        /*word-wrap: break-word !important;*/
+        /* o in alternativa: word-break: break-all !important; */
+        /*}
 
         .wrap-text-40 {
-            max-width: 40px;
-            /* Proprietà standard per andare a capo */
-            white-space: normal !important;
-            /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
-        }
+            max-width: 40px;*/
+        /* Proprietà standard per andare a capo */
+        /*white-space: normal !important;*/
+        /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
+        /*}*/
         /* Stile per centrare orizzontalmente un elemento a blocco come una tabella */
-        .center-table {
-            margin-left: auto;
-            margin-right: auto;
-            /* In breve: margin: 0 auto; */
-            /* Opzionale: potresti voler collassare i bordi se li usi */
-            /* border-collapse: collapse; */
-            /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
-            /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
-        }
+                .center-table {
+    margin-left: auto;
+    margin-right: auto;
+    /* In breve: margin: 0 auto; */
+    /* Opzionale: potresti voler collassare i bordi se li usi */
+    /* border-collapse: collapse; */
+    /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
+    /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
+}
 
-            /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
-            /* Aggiunge padding a tutte le celle della tabella con classe center-table */
-            .center-table td {
-                padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
-                padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
-                /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
-                /* padding-left: 5px; */
-                /* padding-right: 5px; */
-            }
-
-        /* Stile per rendere i bottoni stessa altezza e larghezza */
-        .uniform-button {
-            width: 180px !important; /* Esempio: Larghezza fissa per i bottoni */
-            height: 45px !important; /* Esempio: Altezza fissa per i bottoni */
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            text-align: center !important;
-            white-space: normal !important;
-            word-break: break-word !important;
-            margin-left: 10px !important;
-        }
+    /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
+    /* Aggiunge padding a tutte le celle della tabella con classe center-table */
+    .center-table td {
+        padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
+        padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
+        /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
+        /* padding-left: 5px; */
+        /* padding-right: 5px; */
+    }
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">RICERCA UNA PRATICA</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA UNA PRATICA IN ARCHIVIO PATRIMONIO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA UNA PRATICA IN ARCHIVIO PATRIMONIO</h1>
             </div>
             <!-- Contenitore per centrare -->
 
@@ -143,7 +59,7 @@
                 <div class="d-flex justify-content-center mt-4">
                     <%-- Inizio Tabella per i Pulsanti --%>
                     <table class="center-table">
-                        <%-- <--- AGGIUNGI class="center-table" QUI --%>
+                        
                         <tr>
                             <%-- Prima riga: 4 pulsanti --%>
                             <td>
@@ -414,7 +330,7 @@
                             <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
                         </div>
                     </div>
-                     <div class="table-responsive">
+                    <div class="table-responsive">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-hover"
                             OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="GVRicercaPratica_RowCommand" AllowPaging="true" PageSize="10"
@@ -509,29 +425,5 @@
             </div>
         </div>
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <%--role="document">--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
 
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-
-                        <p id="errorMessage" style="color: red"></p>
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupErrore_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
 </asp:Content>

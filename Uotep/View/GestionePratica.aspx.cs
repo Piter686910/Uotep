@@ -92,10 +92,7 @@ namespace Uotep
                 }
             }
         }
-        protected void apripopup_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
-        }
+    
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
@@ -163,7 +160,15 @@ namespace Uotep
                 //}
                 if (resp)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                   // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                     
+                    }
                     Pulisci();
                     getPratica(pratica);
                 }
@@ -314,8 +319,16 @@ namespace Uotep
             string dtS = string.Empty;
             if (String.IsNullOrEmpty(txtFascicolo.Text))
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire il Fascicolo." + "'); $('#errorModal').modal('show');", true);
+               // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire il Fascicolo." + "'); $('#errorModal').modal('show');", true);
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
 
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InserireFascicolo.GetDescription(), "warning");
+                   
+                }
             }
             else
             {
@@ -341,7 +354,15 @@ namespace Uotep
 
                 if (resp)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                   // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                        
+                    }
                     //Pulisci();
                     getPratica(pratica);
 
@@ -374,12 +395,23 @@ namespace Uotep
         {
             DataTable dt = new DataTable();
             dt = mn.getGestionePraticaByFascicolo(p.fascicolo.Trim());
-            //if (dt.Rows.Count > 0)
-            // {
+            if (dt.Rows.Count > 0)
+             {
             GVRicercaFascicolo.DataSource = dt;
             GVRicercaFascicolo.DataBind();
 
-            //  }
+              }
+            else
+            {
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                    return;
+                }
+            }
         }
 
         protected void GVRicercaFascicolo_RowDeleting(object sender, GridViewDeleteEventArgs e)

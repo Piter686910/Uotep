@@ -234,7 +234,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
 
 
                         }
@@ -250,7 +250,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Seleziona Oggetto", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Seleziona Oggetto", "warning");
 
 
                     }
@@ -650,7 +650,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", "Seleziona Oggetto", "warning");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Seleziona Oggetto", "warning");
                    // DdlEsito.SelectedItem.Text = DdlEsito.SelectedItem.Text;
                     DdlEsito.ClearSelection();
                 }
@@ -1115,7 +1115,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroKo.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UpdRegistroKo.GetDescription(), "danger");
                     if (!File.Exists(LogFile))
                     {
                         using (StreamWriter sw = File.CreateText(LogFile)) { }

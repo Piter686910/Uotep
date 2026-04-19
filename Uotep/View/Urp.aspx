@@ -83,7 +83,7 @@
             <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">GESTIONE PRATICHE URP</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>GESTIONE PRATICHE URP</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> GESTIONE PRATICHE URP</h1>
             </div>
         </div>
         <div class="container">

@@ -45,7 +45,7 @@
                     <%--<p class="text-center lead">ESTRAZIONE STATISTICHE</p>
                     <p class="text-center lead">Inserendo solo l'anno di riferimento si estraggono gli obiettivi raggiunti</p>--%>
                     <div class="dashboard-header">
-                        <h1><span class="glyphicon glyphicon-cog"></span>ESTRAZIONE STATISTICHE</h1>
+                        <h1><span class="fa-solid fa-gear fa-spin"></span> ESTRAZIONE STATISTICHE</h1>
                          <H2 class="text-center lead">Inserendo solo l'anno di riferimento si estraggono gli obiettivi raggiunti</H2>
                     </div>
                 </div>

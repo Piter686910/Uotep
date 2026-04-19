@@ -78,7 +78,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-                ProtocolloLiteral.Text = decodedText;
+              //  ProtocolloLiteral.Text = decodedText;
                 //effettua autofocus sul popup modale
                 string script = "$('#ModalRicerca').modal('show');";
                 // 2. Aggiungi il focus con un ritardo di 500ms (tempo dell'animazione)
@@ -423,7 +423,8 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                        return;
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
 
@@ -450,7 +451,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica non trovata." + "'); $('#errorModal').modal('show');", true);
 
@@ -518,7 +519,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", "Inserire la pattuglia.", "warning");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserire la pattuglia.", "warning");
 
 
                 }
@@ -548,7 +549,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare Totale o Parziale o Non Avvenuto.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Selezionare Totale o Parziale o Non Avvenuto.", "warning");
                     }
 
                     ret = false;
@@ -561,7 +562,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", "Selezionare Con o Senza.", "warning");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Selezionare Con o Senza.", "warning");
                 }
 
                 ret = false;
@@ -574,7 +575,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare una tipologia di sgombero.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Selezionare una tipologia di sgombero.", "warning");
                     }
 
                     ret = false;
@@ -588,7 +589,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Selezionare una tipologia di occupazione.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Selezionare una tipologia di occupazione.", "warning");
                     }
 
                     ret = false;
@@ -604,7 +605,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero notifiche no AG.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserire numero notifiche no AG.", "warning");
                     }
 
                     ret = false;
@@ -618,7 +619,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero accertamenti.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserire numero accertamenti.", "warning");
                     }
 
                     ret = false;
@@ -632,7 +633,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Inserire numero controlli noto/i da accertamenti.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserire numero controlli noto/i da accertamenti.", "warning");
                     }
 
                     ret = false;
@@ -1306,7 +1307,7 @@ namespace Uotep
                                     if (myMaster != null)
                                     {
                                         // 2. Chiamo il metodo pubblico
-                                        myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica scheda non riuscito, controllare il log.", "danger");
+                                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserimento della pratica scheda non riuscito, controllare il log.", "danger");
 
 
                                     }
@@ -1330,7 +1331,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
 
 
                         }
@@ -1343,7 +1344,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
 
 
                     }

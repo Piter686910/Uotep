@@ -10,7 +10,25 @@ body {
     padding-left: 15px;
     padding-right: 15px;
 }
+.center-table {
+    margin-left: auto;
+    margin-right: auto;
+    /* In breve: margin: 0 auto; */
+    /* Opzionale: potresti voler collassare i bordi se li usi */
+    /* border-collapse: collapse; */
+    /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
+    /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
+}
 
+    /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
+    /* Aggiunge padding a tutte le celle della tabella con classe center-table */
+.center-table td {
+        padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
+        padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
+        /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
+        /* padding-left: 5px; */
+        /* padding-right: 5px; */
+}
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
@@ -52,7 +70,9 @@ textarea {
     letter-spacing: 1px;
     margin-top: 15px;
 }
-
+.larghezzaText50 {
+    width: 50px;
+}
 .larghezzaText {
     width: 110px;
 }
@@ -126,6 +146,38 @@ textarea {
     border: 1px solid #ffffff;
     margin-top: 5px;
 }
+/*
+
+ /* 1. Forza il font su tutta la tabella (Header e Celle) */
+#<%= GVRicercaPratica.ClientID % >,
+#<%= GVRicercaPratica.ClientID % > th,
+#<%= GVRicercaPratica.ClientID % > td {
+    font-size: 1.405rem !important; /* Questo è circa un fs-5/fs-6 abbondante */
+    padding: 10px 8px !important;
+}
+
+    /* 2. Stile specifico per l'Header (Titoli e Filtri) */
+    #<%= GVRicercaPratica.ClientID % > th {
+        background-color: #337ab7 !important; /* Grigio scuro Bootstrap */
+        color: white !important;
+        vertical-align: top !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+    }
+
+        /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
+        #<%= GVRicercaPratica.ClientID % > th input[type="text"] {
+            font-size: 1.4rem !important;
+            margin-top: 5px;
+            font-weight: normal;
+            text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
+        }
+
+    /* 4. Ingrandisce il pulsante 'Seleziona' e i link */
+    #<%= GVRicercaPratica.ClientID % > .btn-sm {
+        font-size: 1.2rem !important;
+        padding: 5px 15px !important;
+    }
 
 .uppercase-text {
     text-transform: uppercase;
@@ -331,7 +383,9 @@ textarea {
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     margin-bottom: 30px;
 }
-
+.spaced-radio label {
+    margin-left: 10px; /* Regola lo spazio qui */
+}
 .suggestion-item {
     padding: 8px 12px;
     cursor: pointer;
@@ -354,6 +408,21 @@ textarea {
     white-space: normal !important;
     word-break: break-word !important;
     margin-left: 10px !important;
+}
+.wrap-text {
+    max-width: 10px;
+    /* Proprietà standard per andare a capo */
+    white-space: normal !important;
+    /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
+    word-wrap: break-word !important;
+    /* o in alternativa: word-break: break-all !important; */
+}
+
+.wrap-text-40 {
+    max-width: 40px;
+    /* Proprietà standard per andare a capo */
+    white-space: normal !important;
+    /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
 }
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

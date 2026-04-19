@@ -401,7 +401,7 @@
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>INSERISCI NUOVO CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERISCI NUOVO CARICO</h1>
             </div>
         </div>
 
@@ -539,6 +539,8 @@
                             <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
                             <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
                                 <asp:ListItem Text=""> </asp:ListItem>
+                                <asp:ListItem Text=""> </asp:ListItem>
+                                <asp:ListItem Text="ARCHIVIO"> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>
                                 <asp:ListItem Text="CDR"> </asp:ListItem>
                                 <asp:ListItem Text="FURERIA"> </asp:ListItem>

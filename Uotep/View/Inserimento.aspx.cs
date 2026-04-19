@@ -238,7 +238,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
                     }
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
                     Response.Redirect(url, false);
@@ -528,7 +528,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
                         }
                         string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true"); //segnalo alla pagina di default che la user è vuota
                         Response.Redirect(url, false);
@@ -545,7 +545,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text, "danger");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text, "danger");
                         }
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }
@@ -883,7 +883,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                 }
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "" + "'); $('#errorModal').modal('show');", true);
 
@@ -903,7 +903,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                 }
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
@@ -924,7 +924,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                 }
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
@@ -1062,7 +1062,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento non effettuato, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
@@ -1073,7 +1073,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                        myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "inserimento effettuato correttamente." + "'); $('#errorModal').modal('show');", true);
                     Pulisci();
@@ -1211,6 +1211,7 @@ namespace Uotep
         protected void Decreta_Click(object sender, EventArgs e)
         {
             txtPraticaDecr.Text = txtProt.Text;
+            txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
             Manager mn = new Manager();
             DataTable operatore = mn.getNominativoOperatore(Vuser);
             if (operatore.Rows.Count > 0)
@@ -1256,7 +1257,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseKO.GetDescription(), "danger");
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.CloseKO.GetDescription(), "danger");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura non effettuata, controllare il log." + "'); $('#errorModal').modal('show');", true);
                 }
@@ -1267,7 +1268,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "success");
+                        myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.CloseOK.GetDescription(), "success");
                     }
                     //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "chiusura effettuata correttamente." + "'); $('#errorModal').modal('show');", true);
 

@@ -27,7 +27,7 @@
 
     /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
     #<%= DivGrid.ClientID %> th input[type="text"] {
-        font-size: 1rem !important;
+        font-size: 1.4rem !important;
         margin-top: 5px;
         font-weight: normal;
         text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
@@ -76,7 +76,7 @@
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <%--<p class="text-center lead">Ricerca Atti</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA ATTI</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA ATTI</h1>
             </div>
             <!-- Contenitore per centrare -->
 

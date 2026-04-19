@@ -128,7 +128,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SelKo.GetDescription(), "warning");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SelKo.GetDescription(), "warning");
                         }
                         break;
                     default:
@@ -160,7 +160,7 @@ namespace Uotep
                                 if (myMaster != null)
                                 {
                                     // 2. Chiamo il metodo pubblico
-                                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "success");
+                                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "success");
                                 }
                             }
                         }
@@ -178,7 +178,7 @@ namespace Uotep
                                 if (myMaster != null)
                                 {
                                     // 2. Chiamo il metodo pubblico
-                                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                                 }
                             }
                         }
@@ -195,7 +195,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true"); //segnalo alla pagina di default che la user è vuota
                     Response.Redirect(url, false);
                     return;
@@ -395,7 +395,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "danger");
                     if (!File.Exists(LogFile))
                     {
                         using (StreamWriter sw = File.CreateText(LogFile)) { }

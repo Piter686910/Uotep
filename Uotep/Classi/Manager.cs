@@ -49,6 +49,7 @@ namespace Uotep.Classi
 
         //public String ConnString = ConfigurationManager.AppSettings["ConnString"];
         public String ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
+       
         public String path = ConfigurationManager.AppSettings["PathSqlAudit"];
         public String ConnStringTp = ConfigurationManager.ConnectionStrings["ConnStringTp"].ToString();
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
@@ -344,15 +345,43 @@ namespace Uotep.Classi
         //get
         public DataTable getPass(String user)
         {
-
-            DataTable tb = new DataTable();
-            string sql = "SELECT passw FROM Operatore where Matricola= '" + user + "'";
-            //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            try
             {
-                return tb = FillTable(sql, conn, out msg);
+                DataTable tb = new DataTable();
+                string sql = "SELECT passw FROM Operatore where Matricola= '" + user + "'";
+                //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
+               
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                     tb = FillTable(sql, conn, out msg);
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("connessione:" + ConnString + " out;" +msg);
+                        sw.Close();
+                    }
+                    return tb;
+                }
             }
 
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine("matricola:" + user + ", " + ex.Message + @" getpass" + "; " + ConnString);
+                    sw.Close();
+                }
+                return null;
+            }
 
         }
         public DataTable GetRuolo(String user)
@@ -370,16 +399,31 @@ namespace Uotep.Classi
         }
         public DataTable getUserByUserPassw(String user, string pasw)
         {
-
-            DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Operatore where Matricola= '" + user + "' and passw = '" + pasw + "'";
-            //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            try
             {
+                DataTable tb = new DataTable();
+                string sql = "SELECT * FROM Operatore where Matricola= '" + user + "' and passw = '" + pasw + "'";
+                //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
 
-                return tb = FillTable(sql, conn, out msg);
+                    return tb = FillTable(sql, conn, out msg);
+                }
             }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
 
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine("matricola:" + user + ", " + ex.Message + @" getUserByUserPassw" + "; " + ConnString);
+                    sw.Close();
+                }
+                return null;
+            }
 
         }
         public DataTable getUserRules(String user)
@@ -757,7 +801,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     // Aggiungi i parametri all'oggetto cmd
                     cmd.Parameters.AddWithValue("@prot", "%Nr_Protocollo = " + pratica + "%");
                     cmd.Parameters.AddWithValue("@anno", "%anno = '" + anno + "'%");
-                   // cmd.Parameters.AddWithValue("@path", "%path = '" + path.Trim() + "'%");
+                    // cmd.Parameters.AddWithValue("@path", "%path = '" + path.Trim() + "'%");
                     cmd.Parameters.Add("@path", SqlDbType.NVarChar, 4000).Value = @path;
                     // Timeout alto (essenziale per i file di audit)
                     cmd.CommandTimeout = 120;
@@ -1855,7 +1899,18 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 sql = "SELECT * FROM Archiviotp  WHERE cognome like '%" + intestatario.Replace("'", "''").Replace("*", "%") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-                return tb = FillTable(sql, conn, out msg);
+                 tb = FillTable(sql, conn, out msg);
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                }
+
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine("connessione:" + ConnString + " out;" + msg);
+                    sw.Close();
+                }
+                return tb;
             }
         }
         public DataTable getPraticaArchivioUote(string[] pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
@@ -3192,7 +3247,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             {
                 sql_pratica = "insert into operatore (matricola, passw, profilo,nota, area, macroarea,ruolo, reset, pwstandard,nominativo,abilitato)" +
                    " Values('" + @op.matricola + "','" + @op.passw.Replace("'", "''") + "','" + @op.profilo + "','" + @op.nota.Replace("'", "''") + "','" + @op.area.Replace("'", "''") +
-                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "','" +  op.abilitato  + "')";
+                   "','" + @op.macroarea.Replace("'", "''") + "','" + @op.ruolo.Replace("'", "''") + "','" + @op.reset + "','" + @op.pwstandard + "','" + @op.nominativo.Replace("'", "''") + "','" + op.abilitato + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -3638,8 +3693,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                  @rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
                  //I- mod 31/01/2026 scheda int
                  "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
-                 @rapp.contrNatoDaAcc + "'," + @rapp.NumNotificheNoAg + ",'"+ @rapp.NumcontrNatoDaAcc + "'," + @rapp.NumAbusiAbitatSi + "," + @rapp.NumAbusiAbitatNo + ","  +
-                 @rapp.NumAbusiNoAbitatSi + "," + @rapp.NumAbusiNoAbitatNo +",'" + @rapp.print + "' " +
+                 @rapp.contrNatoDaAcc + "'," + @rapp.NumNotificheNoAg + ",'" + @rapp.NumcontrNatoDaAcc + "'," + @rapp.NumAbusiAbitatSi + "," + @rapp.NumAbusiAbitatNo + "," +
+                 @rapp.NumAbusiNoAbitatSi + "," + @rapp.NumAbusiNoAbitatNo + ",'" + @rapp.print + "' " +
                  //F- mod 31/01/2026 scheda int
                  "); SELECT SCOPE_IDENTITY();";
                     command.CommandText = sql_insRap;
@@ -6688,14 +6743,14 @@ ORDER BY LOGS.[Data Accesso] DESC";
         {
             bool resp = true;
 
-            
+
             string sql_Upd = String.Empty;
 
             int res = 0;
             try
             {
                 sql_Upd = "update operatore set ruolo= '" + @ruolo.Replace("'", "''").Trim() + "', " +
-                    "profilo ='" + profilo .Replace("'", "''").Trim() + "', " +
+                    "profilo ='" + profilo.Replace("'", "''").Trim() + "', " +
                     "macroarea = '" + macroArea.Replace("'", "''").Trim() + "' " +
                      " where matricola = '" + matricola.Trim() + "'";
 
@@ -6708,7 +6763,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     try
                     {
                         command.CommandText = sql_Upd;
-                        
+
                         res = command.ExecuteNonQuery();
                     }
 

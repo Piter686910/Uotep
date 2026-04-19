@@ -190,7 +190,17 @@ namespace Uotep
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
                 }
                 else
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                { 
+//                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                        
+                    }
+                }
             }
             else
             {
@@ -209,13 +219,7 @@ namespace Uotep
             Pulisci();
             GVRicercaPratica.PageIndex = 0;
         }
-        protected void chiudipopupErrore_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-
-        }
-
+       
 
 
         protected void btDestinatario_Click(object sender, EventArgs e)

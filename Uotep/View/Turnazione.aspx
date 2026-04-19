@@ -485,8 +485,9 @@
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-            <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
-            <p class="text-center lead">TURNAZIONE PER IL MESE DI</p>
+            <div class="dashboard-header">
+                <h1><span class="fa-solid fa-gear fa-spin"></span> TURNAZIONE PER IL MESE DI</h1>
+            </div>
         </div>
 
         <%-- MODIFICA: Utilizza container-fluid per occupare l'intera larghezza disponibile e rimuovi il margine negativo --%>
@@ -554,7 +555,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <p id="errorMessage" runat="server" style="color: red;font-size:14px"></p>
+                                        <p id="errorMessage" runat="server" style="color: red; font-size: 14px"></p>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

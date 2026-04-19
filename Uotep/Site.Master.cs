@@ -200,6 +200,7 @@ namespace Uotep
 
                                 break;
                             case "admin":
+                           
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
@@ -216,7 +217,13 @@ namespace Uotep
                                 StatistichePg.Visible = true;
                                 PG.Visible = true;
                                 StatisticheAtti.Visible = true;
-                                Turnazione.Visible = true;
+
+
+                                menuFureria.Visible = true;
+                                TurnoMensile.Visible = true;
+                                FSchedaDipendente.Visible = true;
+
+
                                 //A1.Visible = true;
 
                                 //*

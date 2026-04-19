@@ -49,7 +49,7 @@
            <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
 
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>RICERCA UNA PRATICA IN ARCHIVIO EDILIZIA</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA UNA PRATICA IN ARCHIVIO EDILIZIA</h1>
             </div>
             <!-- Contenitore per centrare -->
 

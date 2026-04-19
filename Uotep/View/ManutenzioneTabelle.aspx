@@ -23,7 +23,7 @@
         <div style="margin-top: -50px!important">
 
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>MANUTENZIONE TABELLE</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> MANUTENZIONE TABELLE</h1>
             </div>
         </div>
 

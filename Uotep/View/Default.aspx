@@ -121,8 +121,8 @@
                     btn.addEventListener('click', function () {
                         const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
                         field.setAttribute('type', type);
-                        icon.classList.toggle('bi-eye');
-                        icon.classList.toggle('bi-eye-slash');
+                        icon.classList.toggle('fa-eye');
+                        icon.classList.toggle('fa-eye-slash');
                     });
                 }
             }
@@ -143,13 +143,18 @@
             </div>
 
             <div class="card-body-custom">
-                <div class="mb-3">
+                <div class="mb-3" style="display: inline-block; width: 280px">
                     <asp:Label ID="lblm" runat="server" Text="Matricola" CssClass="form-label fw-bold"></asp:Label>
                     <asp:TextBox ID="TxtMatricola" runat="server" CssClass="form-control form-control-custom" placeholder="Inserisci matricola" TabIndex="1"></asp:TextBox>
                     <asp:HiddenField ID="Hmatricola" runat="server" />
-                </div>
 
-                <div class="mb-3" style="display: inline-block;width:280px"">
+                </div>
+                <div style="display: inline-block; margin-left: 1px" class="mb-3">
+                    <span class="input-group-text bg-white border-info-subtle"  style="cursor: pointer; border-left: none;">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                </div>
+                <div class="mb-3" style="display: inline-block; width: 280px">
                     <asp:Label ID="Label1" runat="server" Text="Password" CssClass="form-label fw-bold"></asp:Label>
 
                     <div class="position-relative" style="max-width: 100%;">
@@ -160,9 +165,10 @@
 
                     </div>
                 </div>
-                <div style="display: inline-block;margin-left:1px" class="mb-3">
-                    <span class="input-group-text bg-white border-info-subtle" id="btnToggle" style="cursor: pointer; border-left: none;">
-                        <i class="bi bi-eye text-secondary" id="eyeIcon"></i>
+
+                <div style="display: inline-block; margin-left: 1px" class="mb-3">
+                    <span class="input-group-text bg-black border-info-subtle" id="btnToggle" style="cursor: pointer; border-left: none;">
+                        <i class="fa-solid fa-eye text-secondary" id="eyeIcon"></i>
                     </span>
                 </div>
                 <div id="DivNewPassw" runat="server" class="mb-3 p-3 bg-light border border-info rounded" visible="false">

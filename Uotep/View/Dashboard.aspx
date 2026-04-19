@@ -12,7 +12,7 @@
 
     <div class="container-fluid mt-4">
         <div class="dashboard-header">
-            <h1><span class="glyphicon glyphicon-cog"></span>DASHBOARD AMMINISTRATORE</h1>
+            <h1><span class="fa-solid fa-gear fa-spin"></span> DASHBOARD AMMINISTRATORE</h1>
         </div>
 
         <asp:Panel ID="pnlGestUtenti" runat="server">

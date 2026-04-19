@@ -464,7 +464,7 @@
           <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>--%>
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>MODIFICA CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> MODIFICA CARICO</h1>
             </div>
             <asp:HiddenField ID="HfButtonProv" runat="server" />
 

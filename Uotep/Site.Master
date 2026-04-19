@@ -4,6 +4,7 @@
 <html lang="it">
 <head runat="server">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %> - U.O.T.E.P.</title>
@@ -238,7 +239,7 @@
                     <ul class="nav navbar-nav navbar-right" style="margin-right: 15px;">
                         <li id="userLog" runat="server" visible="false">
                             <div class="user-log-pill">
-                                <span class="glyphicon glyphicon-user"></span>&nbsp;
+                                <span class="fa-solid fa-user"></span>&nbsp;
                                 <asp:Label ID="lblUser" runat="server" />
                             </div>
                         </li>

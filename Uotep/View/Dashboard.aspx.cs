@@ -270,7 +270,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
                             CaricaListOperatori();
                         }
 
@@ -310,7 +310,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                            myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
                         }
 
                     }
@@ -319,7 +319,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
                         }
                     }
                     // Torna in visualizzazione e ricarica i dati
@@ -353,7 +353,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.PwResetOk.GetDescription(), "success");
+                        myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.PwResetOk.GetDescription(), "success");
                         //CaricaListOperatori();
                     }
 
@@ -388,7 +388,7 @@ namespace Uotep
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
-                        myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.Delok.GetDescription(), "success");
+                        myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.Delok.GetDescription(), "success");
                         //CaricaListOperatori();
                     }
 

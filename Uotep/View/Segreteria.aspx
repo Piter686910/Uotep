@@ -26,7 +26,7 @@
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <div class="dashboard-header">
-                <h1><span class="glyphicon glyphicon-cog"></span>CARICAMENTO FILE</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> CARICAMENTO FILE</h1>
             </div>
         </div>
 

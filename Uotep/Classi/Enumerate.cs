@@ -94,8 +94,14 @@ namespace Uotep.Classi
             //I 26/03/2024:  utente disabilitato
             [Description("Utente non abilitato")]
             UserDisable = 22,
-            [Description("Cancellazione avvenuita con successo.")]
+            [Description("Cancellazione avvenuta con successo.")]
             Delok = 23,
+            [Description("Inserire il Fascicolo.")]
+            InserireFascicolo = 24,
+            [Description("Nessuna Corrispondenza trovata.")]
+            Notfound = 25,
+            [Description("Inserire Matricola o Nominativo.")]
+            FiledRegìquired = 26
             //F 26/03/2024:  utente disabilitato
             //F 26/03/2024:  utente disabilitato
         }
