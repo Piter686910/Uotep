@@ -3,13 +3,6 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 
-    <script>
-        function ShowErrorMessage(message) {
-            document.getElementById('errorMessage').innerText = message;
-            $('#errorModal').modal('show');
-        }
-    </script>
-
     <div class="container-fluid mt-4">
         <div class="dashboard-header">
             <h1><span class="fa-solid fa-gear fa-spin"></span> DASHBOARD AMMINISTRATORE</h1>
@@ -229,21 +222,6 @@
         </asp:Panel>
     </div>
 
-    <%-- Popup Errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">ATTENZIONE</h5>
-                </div>
-                <div class="modal-body text-center">
-                    <p id="errorMessage" class="lead"></p>
-                </div>
-                <div class="modal-footer">
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+  
 
 </asp:Content>

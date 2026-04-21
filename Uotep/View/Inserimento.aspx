@@ -712,8 +712,8 @@
     <div class="modal fade" id="ModalRicDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel1">Inserimento Carico</h5>
+               <div id="modalHeaderColor" runat="server" class="modal-header">
+                    <h4 class="modal-title" id="modalLabel1">✅ Inserimento Carico</h4>
 
                 </div>
                 <div class="modal-body">

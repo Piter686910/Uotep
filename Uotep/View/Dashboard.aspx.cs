@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.IO;
 using System.Runtime.Caching;
 using System.Web;
 using System.Web.UI;
@@ -101,15 +102,29 @@ namespace Uotep
             op.abilitato = true;
             Manager mn = new Manager();
             Boolean ins = mn.InsOperatore(op);
+            SiteMaster myMaster = this.Master as SiteMaster;
             if (ins)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Operatore inserito correttamente." + "'); $('#errorModal').modal('show');", true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Operatore inserito correttamente." + "'); $('#errorModal').modal('show');", true);
+
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+
+                }
 
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Operatore non inserito." + "'); $('#errorModal').modal('show');", true);
+                //   ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Operatore non inserito." + "'); $('#errorModal').modal('show');", true);
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "success");
 
+                }
             }
         }
         public void pulisci()
@@ -118,7 +133,7 @@ namespace Uotep
             txtPratica.Text = string.Empty;
             GVcheck.DataSource = null;
             GVcheck.DataBind();
-          //  GVcheck.DataBind();
+            //  GVcheck.DataBind();
         }
         protected void NuovoUt_Click(object sender, EventArgs e)
         {
@@ -143,34 +158,33 @@ namespace Uotep
             CaricaListOperatori();
 
         }
-        protected void Login1_LoginError(object sender, EventArgs e)
-        {
-
-            // Mostra il modale con uno script
-            ScriptManager.RegisterStartupScript(this, GetType(), "showModal", "$('#errorModal').modal('show');", true);
-        }
-        protected void apripopup_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
-        }
-        protected void chiudipopup_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
-
-        }
-
+       
         protected void Elimina_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             Boolean del = mn.DeleteMatricola(txtResetMatricola.Text);
+            SiteMaster myMaster = this.Master as SiteMaster;
             if (del)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola cancellata." + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola cancellata." + "'); $('#errorModal').modal('show');", true);
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.Delok.GetDescription(), "success");
+                }
 
             }
             else
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola non trovata." + "'); $('#errorModal').modal('show');", true);
+            // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola non trovata." + "'); $('#errorModal').modal('show');", true);
+            {
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️  ATTENZIONE", Enumerate.MsgOutput.Notfound.GetDescription(), "warning");
+                }
+            }
         }
 
         protected void Check_Click(object sender, EventArgs e)
@@ -335,7 +349,7 @@ namespace Uotep
         protected void ModificaPass_Click(object sender, EventArgs e)
         {
             SiteMaster myMaster = this.Master as SiteMaster;
-            
+
 
             Manager mn = new Manager();
 
@@ -398,8 +412,8 @@ namespace Uotep
 
 
 
-            
-           
+
+
             //if (del)
             //{
             //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola cancellata." + "'); $('#errorModal').modal('show');", true);
