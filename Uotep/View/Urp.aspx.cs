@@ -346,30 +346,7 @@ namespace Uotep
             //btSalva.Visible = true;
         }
 
-        /// <summary>
-        /// funzione che inserisce spaces al posto del min data value
-        /// </summary>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        protected string FormatMyDate(object dateValue)
-        {
-            if (dateValue == null || dateValue == DBNull.Value)
-            {
-                return "";
-            }
-
-            DateTime date;
-            if (DateTime.TryParse(dateValue.ToString(), out date))
-            {
-                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
-                {
-                    return ""; // O " " se vuoi uno spazio fisico
-                }
-                return date.ToString("dd/MM/yyyy");
-            }
-            return ""; // Gestione di valori non validi
-        }
-
+       
         protected void gvScadenziario_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Select")
@@ -601,7 +578,7 @@ namespace Uotep
             {
                 DateTime data = Convert.ToDateTime(dt.Rows[0]["dataScadenza"]);
                 txtDataScadenza.Text = (data == DateTime.MinValue) ? string.Empty : data.ToString("dd/MM/yyyy");
-                txtDataScadenza.Text = FormatMyDate(txtDataScadenza.Text);
+                txtDataScadenza.Text = Routine.FormatMyDate(txtDataScadenza.Text);
 
             }
             if (dt.Rows[0]["dataArrivo"] != DBNull.Value)
@@ -613,7 +590,7 @@ namespace Uotep
             {
 
                 txtDataUscita.Text = (Convert.ToDateTime(dt.Rows[0]["dataUscita"]) == DateTime.MinValue) ? "   " : Convert.ToDateTime(dt.Rows[0]["dataUscita"]).ToString("dd/MM/yyyy");
-                txtDataUscita.Text= FormatMyDate(txtDataUscita.Text); // sostituisce data minima in spazio
+                txtDataUscita.Text= Routine.FormatMyDate(txtDataUscita.Text); // sostituisce data minima in spazio
             }
 
             if (dt.Rows[0]["ric24190"] != DBNull.Value)

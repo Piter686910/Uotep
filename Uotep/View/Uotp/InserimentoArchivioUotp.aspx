@@ -378,6 +378,7 @@
                     </div>
                 </div>
                 <asp:HiddenField ID="HfStato" runat="server" />
+                  <asp:HiddenField ID="HfId" runat="server" />
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
                 <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
                 <asp:HiddenField ID="HfFiltroResponsabile" runat="server" />

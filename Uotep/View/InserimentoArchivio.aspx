@@ -695,31 +695,7 @@
             </div>
         </div>
     </div>
-    <%-- popup errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <%--role="document">--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-
-                        <p id="errorMessage" runat="server" style="color: red"></p>
-
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-
-                    <asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupErrore_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
     <!-- Modale per conferma inserimento -->
     <div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">

@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Visualizza.aspx.cs" Inherits="Uotep.Visualizza" %>
-
+<%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -391,6 +391,12 @@
                                 <label for="txtGiudice">Giudice</label>
                                 <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" Enabled="false" />
                             </div>
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtDataDelega">Data Delega</label>
+                                <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto" Enabled="false"></asp:TextBox>
+
+                            </div>
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
@@ -398,6 +404,11 @@
                                 <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" Enabled="false" />
 
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="txtGgDelega">Termine gg. delega</label>
+                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false"  Enabled="false"  CssClass="form-control" ></asp:TextBox>
+                            </div>
+
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3" style="margin-left: -25px">
@@ -405,6 +416,7 @@
                                 <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" Enabled="false" />
 
                             </div>
+
                         </div>
 
                     </div>
@@ -440,7 +452,7 @@
 
                                         <asp:TemplateField HeaderText="Data Chiusura">
                                             <ItemTemplate>
-                                                <%# FormatMyDate(Eval("decr_dataChiusura")) %>
+                                                <%# Routine.FormatMyDate(Eval("decr_dataChiusura")) %>
                                             </ItemTemplate>
                                         </asp:TemplateField>
 
@@ -724,7 +736,7 @@
     </div>
 
     <%-- popup messaggi --%>
-    <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
+    <%--<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
         <div class="modal-dialog"
             role="document">
             <div class="modal-content">
@@ -747,7 +759,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
 
 
 

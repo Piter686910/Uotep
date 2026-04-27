@@ -30,7 +30,7 @@ namespace Uotep
         {
 
             Session["PaginaChiamante"] = pagchiamante;
-
+            string duplica = Request.QueryString["dup"];
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -75,7 +75,7 @@ namespace Uotep
                 txtProt.Text = prot.GetProtocollo();
 
                 txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
-                if (Session["ListRicerca"] != null)
+                if (Session["ListRicerca"] != null && duplica=="y")
                 {
                     DataTable pratica = (DataTable)Session["ListRicerca"];
                     txtSearchAtto.Value = pratica.Rows[0]["Tipologia_atto"].ToString();
@@ -120,8 +120,17 @@ namespace Uotep
                         divbu.Visible = true;
                         divcd.Visible = true;
                     }
-                    Session.Remove("ListRicerca");
+                    //I 23/04/2026 controllo deleghe
+                    if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
+                    {
+                    txtDataDelega.Text = Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
+
+                    }
+                    txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
+                    //F 23/04/2026 controllo deleghe
+                    
                 }
+                Session.Remove("ListRicerca");
             }
 
         }
@@ -131,8 +140,8 @@ namespace Uotep
             if (!String.IsNullOrEmpty(HfGiudice.Value))
                 btSalvaGiudice.Visible = true;
 
-            if (!String.IsNullOrEmpty(HfTipoProv.Value))
-                btSalvaTipoProvv.Visible = true;
+            //if (!String.IsNullOrEmpty(HfTipoProv.Value))
+            //    btSalvaTipoProvv.Visible = true;
 
             //if (!String.IsNullOrEmpty(HfProvenienza.Value))
             //    btSalvaProvenienza.Visible = true;
@@ -517,6 +526,12 @@ namespace Uotep
                         p.codiceEdificio = txtCodEdificio.Text;
 
                     }
+                    //I 23/04/2026 controllo deleghe
+                    p.dataDelega= string.IsNullOrWhiteSpace(txtDataDelega.Text) ? DateTime.MinValue.ToShortDateString() : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
+                    
+                    p.ggDelega= string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
+                    
+                    //F 23/04/2026 controllo deleghe
                     stat.mese = mese;
                     stat.anno = DateTime.Now.Year;
                     Int32 idN = 0;
@@ -551,8 +566,9 @@ namespace Uotep
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione? ." + "'); $('#ModalRicDecretazione').modal('show');", true);
-
+                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione?" + "'); $('#ModalRicDecretazione').modal('show');", true);
+                        modalLabel1.CssClass = " bg-success"; // Verde
+                        
                         //Pulisci();
                         btNewIns.Visible = true;
                         btSalva.Visible = false;
@@ -632,54 +648,57 @@ namespace Uotep
             txtCodEdificio.Text = String.Empty;
             // CkEvasa.Checked = false;
             CaricaDLL();
-
+            //I 23/04/2026 controllo deleghe
+            txtDataDelega.Text= String.Empty;
+            txtGgDelega.Text = String.Empty;
+            //F 23/04/2026 controllo deleghe
         }
         //popup giudice
-        protected void apripopupGiudice_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
-        }
-        //tipo prov
-        protected void apripopupTipoProv_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
-        }
+        //protected void apripopupGiudice_Click(object sender, EventArgs e)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalGiudice').modal('show');", true);
+        //}
+        ////tipo prov
+        //protected void apripopupTipoProv_Click(object sender, EventArgs e)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModaTipoProv').modal('show');", true);
+        //}
 
-        protected void chiudipopupTipoAtto_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalTipoAtto')); modal.hide();", true);
+        //protected void chiudipopupTipoAtto_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalTipoAtto')); modal.hide();", true);
 
-        }
-        protected void chiudipopupTipoProv_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModaTipoProv')); modal.hide();", true);
+        //}
+        //protected void chiudipopupTipoProv_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModaTipoProv')); modal.hide();", true);
 
-        }
-        protected void chiudipopupInviata_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalInviata')); modal.hide();", true);
+        //}
+        //protected void chiudipopupInviata_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalInviata')); modal.hide();", true);
 
-        }
-        protected void chiudipopupGiudice_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalGiudice')); modal.hide();", true);
+        //}
+        //protected void chiudipopupGiudice_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalGiudice')); modal.hide();", true);
 
-        }
+        //}
         //popup provenienza
-        protected void apripopupProvenienza_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalProvenienza').modal('show');", true);
-        }
-        protected void chiudipopupProvenienza_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalProvenienza')); modal.hide();", true);
+        //protected void apripopupProvenienza_Click(object sender, EventArgs e)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModalProvenienza').modal('show');", true);
+        //}
+        //protected void chiudipopupProvenienza_Click(object sender, EventArgs e)
+        //{
+        //    //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModalProvenienza')); modal.hide();", true);
 
-        }
+        //}
 
         //popup quartiere
         protected void apripopup_Click(object sender, EventArgs e)
@@ -890,46 +909,46 @@ namespace Uotep
             }
         }
 
-        protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
-        {
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
-            if (ins)
-            {
-                HfTipoProv.Value = string.Empty;
-                txtTipoProv.Text = string.Empty;
-                SiteMaster myMaster = this.Master as SiteMaster;
+        //protected void btSalvaTipoProvv_Click(object sender, EventArgs e)
+        //{
+        //    Manager mn = new Manager();
+        //    Boolean ins = mn.InserisciTipologiaNotaAg(HfTipoProv.Value);
+        //    if (ins)
+        //    {
+        //        HfTipoProv.Value = string.Empty;
+        //        txtTipoProv.Text = string.Empty;
+        //        SiteMaster myMaster = this.Master as SiteMaster;
 
-                if (myMaster != null)
-                {
-                    // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
-                }
-                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+        //        if (myMaster != null)
+        //        {
+        //            // 2. Chiamo il metodo pubblico
+        //            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+        //        }
+        //        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
-            }
-        }
+        //    }
+        //}
 
-        protected void btSalvaProvenienza_Click(object sender, EventArgs e)
-        {
+        //protected void btSalvaProvenienza_Click(object sender, EventArgs e)
+        //{
 
-            Manager mn = new Manager();
-            Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
-            if (ins)
-            {
-                HfProvenienza.Value = string.Empty;
-                txtProvenienza.Text = string.Empty;
-                SiteMaster myMaster = this.Master as SiteMaster;
+        //    Manager mn = new Manager();
+        //    Boolean ins = mn.InserisciProvenienza(HfProvenienza.Value);
+        //    if (ins)
+        //    {
+        //        HfProvenienza.Value = string.Empty;
+        //        txtProvenienza.Text = string.Empty;
+        //        SiteMaster myMaster = this.Master as SiteMaster;
 
-                if (myMaster != null)
-                {
-                    // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
-                }
-                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
+        //        if (myMaster != null)
+        //        {
+        //            // 2. Chiamo il metodo pubblico
+        //            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+        //        }
+        //        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento effettuato correttamente" + "'); $('#errorModal').modal('show');", true);
 
-            }
-        }
+        //    }
+        //}
 
 
         //protected void btSalvaTipoAtto_Click(object sender, EventArgs e)
@@ -1112,29 +1131,7 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
             // Pulisci();
         }
-        /// <summary>
-        /// funzione che inserisce spaces al posto del min data value
-        /// </summary>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        protected string FormatMyDate(object dateValue)
-        {
-            if (dateValue == null || dateValue == DBNull.Value)
-            {
-                return "";
-            }
-
-            DateTime date;
-            if (DateTime.TryParse(dateValue.ToString(), out date))
-            {
-                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
-                {
-                    return ""; // O " " se vuoi uno spazio fisico
-                }
-                return date.ToString("dd/MM/yyyy");
-            }
-            return ""; // Gestione di valori non validi
-        }
+       
         //gridview per decretazione
         protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
         {

@@ -24,6 +24,7 @@ namespace Uotep
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         Boolean okPopup = false;
         string msg = string.Empty;
+        public string messaggioPopup { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             //if (Session["PaginaChiamante"] != null)
@@ -56,7 +57,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-              //  ProtocolloLiteral.Text = decodedText;
+                //  ProtocolloLiteral.Text = decodedText;
                 if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
                 {
                     btSalva.Visible = false;
@@ -120,7 +121,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     apripopupPratica_Click(sender, e);
-                   // GVRicercaPratica.PageIndex = 0;
+                    // GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -132,7 +133,7 @@ namespace Uotep
                     //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
                     string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
                     Response.Redirect(url, false);
-                    
+
                     //Response.Redirect("~/View/RicercaArchivio.aspx");
                 }
             }
@@ -288,7 +289,7 @@ namespace Uotep
             CkPropComunale.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[26]);
             CkPropBeniCult.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[27]);
             CkPropAltri.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[28]);
-            
+
 
             if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[29].ToString()))
                 txtFoglioNct.Text = arc.Rows[0].ItemArray[29].ToString();
@@ -329,11 +330,11 @@ namespace Uotep
                         // **2. Registra JavaScript per mostrare il popup (se necessario)**
                         if (Session["POP"].ToString() == "si")
                         {
-
+                            // Mostra il modale Bootstrap con conferma
                             string script = $@"
             function showConfirmModal() {{
                 document.getElementById('modalMessaggioBody').innerText = 'stai modificando un pratica già esistente, confermi?'; 
-                $('#confermaModal').modal('show'); // Mostra il modale Bootstrap (jQuery required)
+                $('#confermaModal').modal('show'); 
             }}
             window.onload = function() {{ showConfirmModal(); }};
         ";
@@ -380,7 +381,7 @@ namespace Uotep
                         arch.arch_numPratica = txtPratica.Text;
                         if (CkBis.Checked && CkTris.Checked && CkQuater.Checked)
                         {
-                            errorMessage.InnerText = @"Non è possibile selezionare BIS, TRIS E QUATER CONTEMPORANEAMENTE.";
+                            messaggioPopup = @"Non è possibile selezionare BIS, TRIS E QUATER contemporaneamente.";
                             apripopuperrorModal_Click(sender, e);
 
                         }
@@ -458,21 +459,35 @@ namespace Uotep
 
 
                             Boolean ins = mn.SavePraticaArchivioUote(arch);
+                            SiteMaster myMaster = this.Master as SiteMaster;
                             if (!ins)
                             {
-                                errorMessage.InnerText = "Inserimento della pratica non riuscito, controllare il log.";
+                                //messaggioPopup = "Inserimento della pratica non riuscito, controllare il log.";
 
-                                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, controllare il log." + "'); $('#errorModal').modal('show');", true);
+                                if (myMaster != null)
+                                {
+                                    // 2. Chiamo il metodo pubblico
+                                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+
+                                }
                             }
                             else
                             {
                                 if (HfStato.Value == "Mod")
 
-                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " " + Enumerate.MsgOutput.ModificaCorretta.GetDescription();
+                                    messaggioPopup = "Pratica " + arch.arch_numPratica + " " + Enumerate.MsgOutput.ModificaCorretta.GetDescription();
 
                                 else
-                                    errorMessage.InnerText = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
-                                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                                    messaggioPopup     = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
+                                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
+                                if (myMaster != null)
+                                {
+                                    // 2. Chiamo il metodo pubblico
+                                    myMaster.MostraMessaggio("✅ ATTENZIONE", messaggioPopup, "success");
+
+                                }
+
                                 HfStato.Value = string.Empty;
                                 Session["POP"] = "si";
                                 Session.Remove("ListRicerca");
@@ -484,7 +499,7 @@ namespace Uotep
                     else
                     {
                         // Mostra il modale con uno script
-                        errorMessage.InnerText = @"E' necessario inserire alcuni dati per salvare la pratica.";
+                        messaggioPopup = @"E' necessario inserire alcuni dati per salvare la pratica.";
                         apripopuperrorModal_Click(sender, e);
                         // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' necessario inserire alcuni dati per salvare la pratica." + "'); $('#errorModal').modal('show');", true);
                     }
@@ -504,11 +519,11 @@ namespace Uotep
                 }
                 string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
                 Response.Redirect(url + ex.Message);
-               // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
+                // Response.Redirect("/Contact.aspx?errore=" + ex.Message);
 
                 Session["MessaggioErrore"] = ex.Message;
                 Session["PaginaChiamante"] = "~/View/InserimentoArchivio.aspx";
-               // Response.Redirect("~/Contact.aspx");
+                // Response.Redirect("~/Contact.aspx");
 
             }
         }
@@ -560,7 +575,15 @@ namespace Uotep
         }
         protected void apripopuperrorModal_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+            //ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#errorModal').modal('show');", true);
+            SiteMaster myMaster = this.Master as SiteMaster;
+
+            if (myMaster != null)
+            {
+                // 2. Chiamo il metodo pubblico
+                myMaster.MostraMessaggio("⚠️ ATTENZIONE", messaggioPopup, "danger");
+
+            }
         }
         protected void apripopup_Click(object sender, EventArgs e)
         {
@@ -582,11 +605,11 @@ namespace Uotep
             gvPopup.DataSource = null;
             gvPopup.DataBind();
             txtIndirizzoQuartiere.Text = string.Empty;
-            
+
         }
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
-           
+
             //adegua chiusura popup bootstrap 5
             string script = @"
     var modalElement = document.getElementById('myModal');
@@ -606,20 +629,20 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
             Response.Redirect(url);
         }
-        protected void chiudipopupErrore_Click(object sender, EventArgs e)
-        {
-           // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-            string script = @"
-    var modalElement = document.getElementById('errorModal');
-    if (modalElement) {
-        var modalInstance = bootstrap.Modal.getInstance(modalElement);
-        if (!modalInstance) {
-            modalInstance = new bootstrap.Modal(modalElement);
-        }
-        modalInstance.hide();
-    }";
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
-        }
+    //    protected void chiudipopupErrore_Click(object sender, EventArgs e)
+    //    {
+    //        // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+    //        string script = @"
+    //var modalElement = document.getElementById('errorModal');
+    //if (modalElement) {
+    //    var modalInstance = bootstrap.Modal.getInstance(modalElement);
+    //    if (!modalInstance) {
+    //        modalInstance = new bootstrap.Modal(modalElement);
+    //    }
+    //    modalInstance.hide();
+    //}";
+    //        ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
+    //    }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
             string indirizzo = string.Empty;
@@ -631,7 +654,7 @@ namespace Uotep
             {
                 // Simula il recupero del quartiere dal database o da una logica interna.
                 Manager mn = new Manager();
-                DataTable quartiere = mn.getQuartiere(indirizzo,out  msg);
+                DataTable quartiere = mn.getQuartiere(indirizzo, out msg);
 
                 if (quartiere.Rows.Count > 0)
                 {
@@ -822,10 +845,10 @@ namespace Uotep
                 }
                 GVRicercaPratica.DataBind();
             }
-            catch (Exception )
+            catch (Exception)
             {
                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "E' probabile che l'indirizzo non sia presente in archivio" + "'); $('#errorModal').modal('show');", true);
-               // throw;
+                // throw;
             }
         }
 
@@ -869,7 +892,7 @@ namespace Uotep
                 if (arc.Rows.Count > 0)
                 {
                     //   apripopupPratica_Click(sender, e);
-                   // GVRicercaPratica.PageIndex = 0;
+                    // GVRicercaPratica.PageIndex = 0;
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
                     //segnalo he sono in modifica prartica
@@ -888,7 +911,7 @@ namespace Uotep
         // esecuzione del filtro ulteriore sulla colonna indirizzo
         protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
         {
-           
+
             TextBox txtFilter = (TextBox)sender;
             string filterValue = txtFilter.Text.Trim();
             HfFiltroIndirizzo.Value = filterValue;
@@ -927,6 +950,6 @@ namespace Uotep
             apripopupPratica_Click(sender, e);
         }
 
-  
+
     }
 }

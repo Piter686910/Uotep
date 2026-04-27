@@ -30,6 +30,7 @@ namespace Uotep
             //    Session.Remove("PaginaChiamante");
 
             HfStato.Value = Request.QueryString["status"];
+            HfId.Value = Request.QueryString["id"];
             Session["PaginaChiamante"] = "~/View/Uotp/InserimentoArchivio.aspx";
             if (Session["user"] != null)
             {
@@ -217,7 +218,7 @@ namespace Uotep
 
                 if (HfStato.Value == "M")
                 {
-                    ins = mn.UpdPraticaArchivioUotp(arch);
+                    ins = mn.UpdPraticaArchivioUotp(arch, Convert.ToInt32(HfId.Value));
 
                 }
                 else

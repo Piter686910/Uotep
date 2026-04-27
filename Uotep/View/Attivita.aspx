@@ -24,9 +24,9 @@
             /* background-color: #F0F8FF;  Un altro azzurro molto chiaro (AliceBlue) */
         }
     </style>
-    <div class="jumbotron"  >
+    <div class="jumbotron">
         <div class="dashboard-header">
-            <h1><span class="fa-solid fa-gear fa-spin"></span> PRATICHE ASSEGNATE</h1>
+            <h1><span class="fa-solid fa-gear fa-spin"></span>PRATICHE ASSEGNATE</h1>
         </div>
     </div>
     <%-- attività per copoarea --%>
@@ -37,6 +37,7 @@
 
                     <asp:Button ID="btAttivitaInCarico" Text="Attività In Carico" runat="server" OnClick="btAttivitaInCarico_Click" ToolTip="Attività In Carico" CssClass="btn btn-primary px-4" />
                     <asp:Button ID="btAttivitaConcluse" Text="Attività Concluse" runat="server" OnClick="btAttivitaConcluse_Click" ToolTip="Attività Concluse" CssClass="btn btn-primary px-4" />
+                    <asp:Button ID="BtScadenziario" Text="Scadenziario" runat="server" OnClick="BtScadenziario_Click" ToolTip="Scadenziario" CssClass="btn btn-primary px-4" />
 
 
                 </div>
@@ -102,7 +103,22 @@
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                     <Columns>
                         <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                        <asp:BoundField DataField="nr_protocollo" HeaderText="Pratica/Cart." HeaderStyle-CssClass="wrap-text" />
+                        <%-- <asp:BoundField DataField="nr_protocollo" HeaderText="Nr. Carico" HeaderStyle-CssClass="wrap-text" />--%>
+                        <asp:TemplateField HeaderText="Nr. Carico" ItemStyle-Wrap="true">
+                            <HeaderTemplate>
+                                Nr. Carico
+                                <br />
+                            </HeaderTemplate>
+                            <ItemTemplate>
+
+                                <asp:HyperLink ID="lnkScheda" runat="server"
+                                    NavigateUrl='<%# String.Format("~/View/Visualizza.aspx?idscheda={0}&Nr_Protocollo={1}&Anno={2}", Eval("ID"), Eval("Nr_Protocollo"), Eval("Anno")) %>'
+                                    Target="_blank"
+                                    Text='<%# Eval("nr_protocollo") %>' />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField="anno" HeaderText="Anno" HeaderStyle-CssClass="wrap-text" />
+                        <asp:BoundField DataField="nr_pratica" HeaderText="Pratica" HeaderStyle-CssClass="wrap-text" />
                         <asp:BoundField DataField="quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
                         <asp:BoundField DataField="decr_decretato" HeaderText="Assegnato" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
 
@@ -153,7 +169,22 @@
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                     <Columns>
                         <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                        <asp:BoundField DataField="nr_protocollo" HeaderText="Pratica/Cart." HeaderStyle-CssClass="wrap-text" />
+                        <%-- <asp:BoundField DataField="nr_protocollo" HeaderText="Nr. Carico" HeaderStyle-CssClass="wrap-text" />--%>
+                        <asp:TemplateField HeaderText="Nr. Carico" ItemStyle-Wrap="true">
+                            <HeaderTemplate>
+                                Nr. Carico
+                                <br />
+                            </HeaderTemplate>
+                            <ItemTemplate>
+
+                                <asp:HyperLink ID="lnkScheda" runat="server"
+                                    NavigateUrl='<%# String.Format("~/View/Visualizza.aspx?idscheda={0}&Nr_Protocollo={1}&Anno={2}", Eval("ID"), Eval("Nr_Protocollo"), Eval("Anno")) %>'
+                                    Target="_blank"
+                                    Text='<%# Eval("nr_protocollo") %>' />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField="anno" HeaderText="Anno" HeaderStyle-CssClass="wrap-text" />
+                        <asp:BoundField DataField="nr_pratica" HeaderText="Pratica" HeaderStyle-CssClass="wrap-text" />
                         <asp:BoundField DataField="quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
                         <asp:BoundField DataField="decr_decretato" HeaderText="Assegnato" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
 
@@ -206,7 +237,22 @@
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow">
                     <Columns>
                         <asp:BoundField DataField="id" HeaderText="ID" Visible="false" />
-                        <asp:BoundField DataField="nr_protocollo" HeaderText="Pratica/Cart." HeaderStyle-CssClass="wrap-text" />
+                        <%-- <asp:BoundField DataField="nr_protocollo" HeaderText="Nr. Carico" HeaderStyle-CssClass="wrap-text" />--%>
+                        <asp:TemplateField HeaderText="Nr. Carico" ItemStyle-Wrap="true">
+                            <HeaderTemplate>
+                                Nr. Carico
+                                <br />
+                            </HeaderTemplate>
+                            <ItemTemplate>
+
+                                <asp:HyperLink ID="lnkScheda" runat="server"
+                                    NavigateUrl='<%# String.Format("~/View/Visualizza.aspx?idscheda={0}&Nr_Protocollo={1}&Anno={2}", Eval("ID"), Eval("Nr_Protocollo"), Eval("Anno")) %>'
+                                    Target="_blank"
+                                    Text='<%# Eval("nr_protocollo") %>' />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField="anno" HeaderText="Anno" HeaderStyle-CssClass="wrap-text" />
+                        <asp:BoundField DataField="nr_pratica" HeaderText="Pratica" HeaderStyle-CssClass="wrap-text" />
                         <asp:BoundField DataField="quartiere" HeaderText="Quartiere" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
                         <asp:BoundField DataField="decr_decretato" HeaderText="Assegnato" HeaderStyle-CssClass="wrap-text-40" ItemStyle-CssClass="uppercase-text" />
 

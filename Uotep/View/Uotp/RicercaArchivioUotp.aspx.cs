@@ -29,6 +29,7 @@ namespace Uotep
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
+       
         protected void Page_Load(object sender, EventArgs e)
         {
             Session["PaginaChiamante"] = "~/View/uotp/RicercaArchivio.aspx";
@@ -462,6 +463,7 @@ namespace Uotep
 
                 string[] args = e.CommandArgument.ToString().Split(';');
                 int idP = System.Convert.ToInt32(args[0]);
+                HfId.Value = args[0];
                 string Npratica = args[1];
 
 
@@ -678,7 +680,7 @@ namespace Uotep
         protected void btModifica_Click(object sender, EventArgs e)
         {
 
-            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx?status=M");
+            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx?status=M&id=" + HfId.Value);
             Response.Redirect(url, false);
         }
 
@@ -704,7 +706,8 @@ namespace Uotep
 
 
                 string[] args = e.CommandArgument.ToString().Split(';');
-                int idP = System.Convert.ToInt32(args[0]);
+               int idP = System.Convert.ToInt32(args[0]);
+                HfId.Value= args[0];
                 string Npratica = args[1];
 
 

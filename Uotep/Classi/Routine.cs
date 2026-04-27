@@ -1475,6 +1475,29 @@ namespace Uotep.Classi
 
         }
         /// <summary>
+        /// funzione che inserisce spaces al posto del min data value
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
+        public static string FormatMyDate(object dateValue)
+        {
+            if (dateValue == null || dateValue == DBNull.Value)
+            {
+                return "";
+            }
+
+            DateTime date;
+            if (DateTime.TryParse(dateValue.ToString(), out date))
+            {
+                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
+                {
+                    return ""; // O " " se vuoi uno spazio fisico
+                }
+                return date.ToString("dd/MM/yyyy");
+            }
+            return ""; // Gestione di valori non validi
+        }
+        /// <summary>
         /// estrae la tabella Registro e la esporta in un file Excel
         /// </summary>
         /// <param name="listaDati"></param>

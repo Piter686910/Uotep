@@ -81,7 +81,7 @@ namespace Uotep
         protected void btAttivitaInCarico_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
-            if (area == "A")
+            if (area == "A") //admin visualizza tutte le attività, altrimenti visualizza solo quelle dell'area di competenza
             {
                 PopulateGridView(mn, false);
 
@@ -99,7 +99,7 @@ namespace Uotep
         protected void btAttivitaConcluse_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
-            if (area == "A")
+            if (area == "A") //admin visualizza tutte le attività, altrimenti visualizza solo quelle dell'area di competenza
             {
                 PopulateGridView(mn, true);
 
@@ -516,6 +516,16 @@ namespace Uotep
             //    // Chiudi il popup
             //    ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             //}
+        }
+
+        protected void BtScadenziario_Click(object sender, EventArgs e)
+        {
+
+            // Effettua il cast alla  classe MasterPage 
+            var masterPage = (SiteMaster)this.Master;
+
+            // chiamo il metodo pubblico
+            masterPage.CaricaListDelegheScadenza();
         }
     }
 }

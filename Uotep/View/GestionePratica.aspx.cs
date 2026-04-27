@@ -195,29 +195,7 @@ namespace Uotep
                 //Response.Redirect("~/Contact.aspx");
             }
         }
-        /// <summary>
-        /// funzione che inserisce spaces al posto del min data value
-        /// </summary>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        protected string FormatMyDate(object dateValue)
-        {
-            if (dateValue == null || dateValue == DBNull.Value)
-            {
-                return "";
-            }
-
-            DateTime date;
-            if (DateTime.TryParse(dateValue.ToString(), out date))
-            {
-                if (date == DateTime.MinValue)
-                {
-                    return ""; // O " " se vuoi uno spazio fisico
-                }
-                return date.ToString("dd/MM/yyyy");
-            }
-            return ""; // Gestione di valori non validi
-        }
+      
         private void Pulisci()
         {
             // txtFascicolo.Text = string.Empty;

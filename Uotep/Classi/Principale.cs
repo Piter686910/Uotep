@@ -41,5 +41,9 @@ namespace Uotep.Classi
         public String accertatori3 = string.Empty;
         public Int32 NumProtRicStessoCarico = 0;
         public Boolean validato;
+        //I 23/04/2026 controllo deleghe
+        public String dataDelega = string.Empty;
+        public int ggDelega = 0;
+        //F 23/04/2026 controllo deleghe
     }
 }

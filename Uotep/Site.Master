@@ -1,5 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Uotep.SiteMaster" %>
-
+<%@ Import Namespace="Uotep.Classi" %>
 <!DOCTYPE html>
 <html lang="it">
 <head runat="server">
@@ -16,6 +16,33 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
     <style>
+        /* Inserisci questo nella Site.Master o nel file .css */
+        .modal-custom-wide {
+            width: 95% !important;
+            max-width: 95% !important; /* Forza la larghezza massima */
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+
+        @media (min-width: 1200px) {
+            .modal-custom-wide {
+                width: 90% !important;
+                max-width: 1600px !important; /* Limite massimo per schermi enormi */
+            }
+        }
+
+        .modal-custom-wide .modal-body {
+            /* Imposta un'altezza minima per 15 righe per evitare rimpicciolimenti durante il cambio pagina */
+            min-height: 650px;
+            padding-top: 0;
+        }
+
+        /* Mantieni l'header della tabella fisso se il modal diventa troppo lungo */
+        .table-responsive {
+            max-height: 70vh; /* Il contenuto scorre internamente se supera il 70% dell'altezza schermo */
+            overflow-y: auto;
+        }
+
         body {
             padding-top: 70px;
             background-color: #f8f9fa;
@@ -23,9 +50,9 @@
 
         /* Navbar con gradiente professionale */
         .navbar-custom {
-    min-height: 65px;
-    background-color: #337ab7 !important;
-}
+            min-height: 65px;
+            background-color: #337ab7 !important;
+        }
 
             .navbar-custom .navbar-nav > li > a {
                 color: #ffffff !important;
@@ -62,12 +89,13 @@
             font-weight: 500;
         }
         /* Ingrandimento sottomenu laterali */
-.dropdown-submenu > a {
-    font-size: 1.4rem !important;
-}
+        .dropdown-submenu > a {
+            font-size: 1.4rem !important;
+        }
+
         .dropdown-submenu:hover > .dropdown-menu {
             display: block;
-            background-color:yellow;
+            background-color: yellow;
         }
 
         .dropdown-submenu > a:after {
@@ -117,15 +145,15 @@
             border-radius: 8px;
         }
         /* Log Utente più visibile */
-.user-log-pill {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    padding: 8px 18px;
-    border-radius: 20px;
-    margin-top: 12px;
-    font-size: 1rem;            /* Ingrandito nome utente */
-    font-weight: bold;
-}
+        .user-log-pill {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            margin-top: 12px;
+            font-size: 1rem; /* Ingrandito nome utente */
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -157,7 +185,7 @@
                             <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown">Dashboard <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="menuAttivita" runat="server" visible="false" href="~/View/Attivita">Attività</a></li>
-                                <li><a id="Amministratore" runat="server" visible="false"  href="~/View/Dashboard">Dashboard</a></li>
+                                <li><a id="Amministratore" runat="server" visible="false" href="~/View/Dashboard">Dashboard</a></li>
                                 <li><a id="SchedaCarburante" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                                 <li><a id="Turnazione" runat="server" visible="false" href="~/View/Turnazione">Turnazione</a></li>
                             </ul>
@@ -195,6 +223,8 @@
                                 <li><a id="RicercaAtti" runat="server" visible="false" href="~/View/Visualizza">Ricerca Atti</a></li>
                             </ul>
                         </li>
+
+                        <li><a id="menuScadenziario" runat="server" onserverclick="menuScadenziario_ServerClick" visible="false">Scadenziario</a></li>
 
                         <li id="menuAccertatori" runat="server" visible="false" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scheda Intervento <span class="caret"></span></a>
@@ -260,7 +290,7 @@
                 <p>&copy; <%: DateTime.Now.Year %> - <strong>U.O.T.E.P.</strong> | Powered by P.A.</p>
             </footer>
         </div>
-
+        <%-- area popup --%>
         <div class="modal fade" id="SiteModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -296,6 +326,144 @@
                 </div>
             </div>
         </div>
+        <%-- Modal scadenze deleghe --%>
+        <div class="modal fade" id="DelegheScadenza" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-custom-wide">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">SCADENZIARIO</h5>
+                        <%--<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>--%>
+                    </div>
+                    <%--<div style="padding-left: 1em">
+                        <asp:Label ID="Label10" runat="server" Text="Num. giorni alla scadenza" CssClass="form-label d-block mb-2"></asp:Label>
+                        <asp:TextBox ID="txtGiorniScad" runat="server" CssClass="form-control larghezzaText70" AutoPostBack="True" placeholder="num. gg" MaxLength="3" OnTextChanged="txtGiorniScad_TextChanged"> </asp:TextBox>
+                    </div>--%>
+
+                    <div class="modal-body p-4 ">
+                        <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
+                            <div class="dashboard-header">
+                                <h1><span class="fa-solid fa-gear fa-spin"></span> DELEGHE AG IN SCADENZA</h1>
+                            </div>
+                            <asp:LinkButton ID="btnPrecedente" runat="server" CssClass="btn btn-outline-primary btn-sm" OnClick="btnPrecedente_Click">
+                                 <i class="bi bi-chevron-left"></i> Precedente
+                            </asp:LinkButton>
+
+                            <span class="fw-bold text-muted">Pagina
+                                <asp:Label ID="lblPaginaCorrente" runat="server" Text="1"></asp:Label>
+                                di
+                                <asp:Label ID="lblTotalePagine" runat="server" Text="1"></asp:Label>
+                            </span>
+
+                            <asp:LinkButton ID="btnSuccessivo" runat="server" CssClass="btn btn-outline-primary btn-sm" OnClick="btnSuccessivo_Click">
+        Successivo <i class="bi bi-chevron-right"></i>
+                            </asp:LinkButton>
+                        </div>
+                        <%-- Repeater deleghe in scadenza --%>
+                        <div id="divRepeater" runat="server" class="table-responsive shadow-sm rounded">
+                            <asp:Repeater ID="rptDelegheScadenza" runat="server" OnItemDataBound="rptDelegheScadenza_ItemDataBound">
+                                <HeaderTemplate>
+                                    <table class="table table-hover table-striped align-middle mb-0 bg-white">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th runat="server" scope="col" visible="false">Termine giorni</th>
+                                                <th scope="col">N. Carico</th>
+                                                <th scope="col">Anno</th>
+                                             <th scope="col" style="white-space: nowrap;">
+                                                 <span style="display: inline-block; vertical-align: bottom;">Macro Area</span>
+                                                 <asp:TextBox ID="txtFiltroMacroArea" runat="server"
+                                                     CssClass="form-control form-control-sm larghezzaText70"
+                                                     Style="display: inline-block; vertical-align: middle; margin-left: 5px;"
+                                                     placeholder="Filtra..."
+                                                     AutoPostBack="True"
+                                                     OnTextChanged="txtFiltroMacroArea_TextChanged">
+                                                 </asp:TextBox>
+                                             </th>
+                                                <th scope="col">N. Pratica</th>
+                                                <%--<th scope="col" style="width: 10%;">Sigla</th>--%>
+                                                <th scope="col">Proc. Penale</th>
+                                                <th scope="col">Data Scadenza</th>
+                                                <th scope="col" class="text-center">N. gg alla scadenza</th>
+   
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                </HeaderTemplate>
+
+                                <ItemTemplate>
+                                    <tr>
+                                        <td visible="false" runat="server">
+                                            <asp:Literal ID="litGiorniRimanenti" runat="server" Text='<%# Eval("GgDelega") %>'></asp:Literal>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi  fs-5 me-2 text-primary"></i>
+
+                                                <span class="fw-semibold">
+                                                    <%--<asp:LinkButton ID="lnkProtocollo" runat="server" OnClick="lnkProtocollo_Click"><%# Eval("Nr_Protocollo") %> </asp:LinkButton>--%>
+
+                                                    <itemtemplate>
+                                                        <asp:HyperLink ID="lnkScheda" runat="server"
+                                                            NavigateUrl='<%# String.Format("~/View/Visualizza.aspx?idscheda={0}&Nr_Protocollo={1}&Anno={2}", Eval("ID"), Eval("Nr_Protocollo"), Eval("Anno")) %>'
+                                                            Target="_blank"
+                                                            Text='<%# Eval("Nr_Protocollo") %>'>
+                                                        </asp:HyperLink>
+
+                                                    </itemtemplate>
+
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span><%# Eval("Anno") %></span>
+                                        </td>
+                                        <td>
+                                            <span><%# Eval("Macro_area") %></span>
+                                        </td>
+
+                                        <td>
+                                            <span><%# Eval("Nr_Pratica") %></span>
+                                        </td>
+
+
+                                        <td>
+                                            <span><%# Eval("ProcedimentoPen") %></span>
+                                        </td>
+                                        <%--                                        <td style="text-align: left !important;">
+                                            <div class="d-flex align-items-center" style="justify-content: flex-start !important;">
+                                                <i class="bi bi-person-circle fs-5 me-2 text-primary"></i>
+                                                <span class="fw-semibold"><%# Eval("Nominativo") %></span>
+                                            </div>
+                                        </td>--%>
+                                        <td>
+                                            <span style="color:orangered"><%# Routine.FormatMyDate(Eval("DataDelega")) %> </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                <asp:Literal ID="litGGScadenza" runat="server"></asp:Literal></span>
+                                        </td>
+                                    </tr>
+                                </ItemTemplate>
+
+                                <FooterTemplate>
+                                    </tbody>
+                            </table>
+                                    <asp:PlaceHolder ID="phEmpty" runat="server" Visible='<%# rptDelegheScadenza.Items.Count == 0 %>'>
+                                        <div class="p-4 text-center border-top">
+                                            <i class="bi bi-info-circle text-muted fs-2"></i>
+                                            <p class="text-muted mt-2">Nessun dato trovato.</p>
+                                        </div>
+                                    </asp:PlaceHolder>
+                                </FooterTemplate>
+                            </asp:Repeater>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btChiudiPop" runat="server" CssClass="btn btn-secondary w-100" Text="Chiudi" OnClick="btChiudiPop_Click" />
+                        <asp:Button ID="btBack" runat="server" CssClass="btn btn-secondary w-100" Text="Azzera filtro" OnClick="btBack_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script type="text/javascript">
             function ApriModalConferma(titolo, messaggio, url) {
@@ -309,9 +477,9 @@
         </script>
         <asp:HiddenField ID="hfMasterParam" runat="server" ClientIDMode="Static" />
     </form>
-     <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'>
+    <script src='<%= ResolveUrl("~/Scripts/Utility.js") %>'>
 
-     </script>
+    </script>
 
 </body>
 </html>

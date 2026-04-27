@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Math;
+﻿using AjaxControlToolkit.HtmlEditor.Popups;
+using DocumentFormat.OpenXml.Math;
 using Microsoft.Ajax.Utilities;
 using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using System;
@@ -25,6 +26,11 @@ namespace Uotep
         String user = string.Empty;
         String Profilo = string.Empty;
         String ruolo = string.Empty;
+        public int PaginaIndice
+        {
+            get { return ViewState["PaginaIndice"] != null ? (int)ViewState["PaginaIndice"] : 0; }
+            set { ViewState["PaginaIndice"] = value; }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -42,7 +48,7 @@ namespace Uotep
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
                         userLog.Visible = true;
-                       // LiHelp.Visible = true;
+                        // LiHelp.Visible = true;
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
                             case "coordinamentopg":
@@ -88,6 +94,10 @@ namespace Uotep
                                 // menuHome.Visible = true;
                                 PG.Visible = true;
                                 GestionePraticaUote.Visible = true;
+                                //if (Session["profilo"].ToString().Contains("R"))
+                                //{
+                                //    menuScadenziario.Visible = true;
+                                //}
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.accertatore.GetHashCode().ToStringInvariant()))
                                 {
                                     menuNuovaScheda.Visible = true;
@@ -182,7 +192,7 @@ namespace Uotep
                                 if (Session["profilo"].ToString().Contains(Enumerate.Profilo.V.ToString()))
 
                                 {
-                                   
+
                                     InserimentoArchivioUote.Visible = false;
                                     InserimentoArchivioUotp.Visible = false;
                                 }
@@ -200,7 +210,7 @@ namespace Uotep
 
                                 break;
                             case "admin":
-                           
+
                                 // Mostra voci per utenti standard
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
@@ -218,6 +228,7 @@ namespace Uotep
                                 PG.Visible = true;
                                 StatisticheAtti.Visible = true;
 
+                                //menuScadenziario.Visible = true;
 
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
@@ -291,7 +302,7 @@ namespace Uotep
 
             }
         }
-        
+
         protected void Esci_Click(object sender, EventArgs e)
         {
             Session.Remove("user");
@@ -316,6 +327,77 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);
             //Response.Redirect(/Default.aspx"), false);
+        }
+        public void CaricaListDelegheScadenza()
+        {
+            //
+            string msg = string.Empty;
+            Manager mn = new Manager();
+            //int giorni = string.IsNullOrWhiteSpace(txtGiorniScad.Text) ? 60 : Convert.ToInt32(txtGiorniScad.Text);
+            DataTable CaricaListDelegheScadenza = mn.getListDelegheInScadenza(Session["MacroArea"].ToString(), Session["user"].ToString(), out msg);
+
+
+            string filtroTesto = "";
+
+            // Specifichiamo System.Web.UI.Control e System.Web.UI.WebControls.TextBox
+            var headerTextBox = rptDelegheScadenza.Controls
+                .Cast<System.Web.UI.Control>()
+                .Select(c => c.FindControl("txtFiltroMacroArea"))
+                .FirstOrDefault(c => c != null) as System.Web.UI.WebControls.TextBox;
+
+            filtroTesto = headerTextBox?.Text ?? "";
+
+
+            // 3. Applica il filtro se è stato scritto qualcosa
+             if (!string.IsNullOrEmpty(filtroTesto))
+            {
+                DataView dv = CaricaListDelegheScadenza.DefaultView;
+                dv.RowFilter = string.Format("Macro_area LIKE '%{0}%'", filtroTesto.Replace("'", "''"));
+                CaricaListDelegheScadenza = dv.ToTable();
+            }
+           
+                // paginazione
+                PagedDataSource pds = new PagedDataSource();
+            pds.DataSource = CaricaListDelegheScadenza.DefaultView;
+            pds.AllowPaging = true;
+            pds.PageSize = 15; // Quanti record vuoi per pagina?
+            pds.CurrentPageIndex = PaginaIndice;
+
+            // Gestione visibilità pulsanti
+            btnPrecedente.Enabled = !pds.IsFirstPage;
+            btnSuccessivo.Enabled = !pds.IsLastPage;
+
+            // Aggiornamento Label contatore
+            lblPaginaCorrente.Text = (PaginaIndice + 1).ToString();
+            lblTotalePagine.Text = pds.PageCount.ToString();
+            ///////////
+            rptDelegheScadenza.DataSource = pds;
+            rptDelegheScadenza.DataBind();
+
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('show');", true);
+
+        }
+        protected void btnPrecedente_Click(object sender, EventArgs e)
+        {
+            PaginaIndice -= 1;
+            CaricaListDelegheScadenza();
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('show');", true);
+        }
+
+        protected void btnSuccessivo_Click(object sender, EventArgs e)
+        {
+            PaginaIndice += 1;
+            CaricaListDelegheScadenza();
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('show');", true);
+        }
+        //protected void txtGiorniScad_TextChanged(object sender, EventArgs e)
+        //{
+        //    CaricaListDelegheScadenza();
+        //}
+        protected void btChiudiPop_Click(object sender, EventArgs e)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('hide');", true);
         }
         // Metodo per mostrare il popup. 
         // tipoMessaggio può essere: "info", "success", "warning", "danger" (colori Bootstrap)
@@ -373,7 +455,72 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ApriModalMaster", "", false);
         }
 
-        
+        protected void menuScadenziario_ServerClick(object sender, EventArgs e)
+        {
+            // txtGiorniScad.Text = string.Empty;
+            CaricaListDelegheScadenza();
+        }
+
+        protected void txtFiltroMacroArea_TextChanged(object sender, EventArgs e)
+        {
+            PaginaIndice = 0;
+            CaricaListDelegheScadenza();
+        }
+
+        protected void lnkProtocollo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void rptDelegheScadenza_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                // 1. Recuperiamo i dati della riga corrente
+                var row = (DataRowView)e.Item.DataItem;
+                System.Web.UI.WebControls.Literal litGiorni = (System.Web.UI.WebControls.Literal)e.Item.FindControl("litGGScadenza");
+
+                System.Web.UI.WebControls.Literal litGiorniRimanenti = (System.Web.UI.WebControls.Literal)e.Item.FindControl("litGiorniRimanenti");
+                //giorni di scadenza della delega , si trova in una colonna del repeater non visibile
+                int giorniDisposizione = Convert.ToInt32(litGiorniRimanenti.Text);
+
+                if (litGiorni != null && row["DataDelega"] != DBNull.Value)
+                {
+                    // 2. Parametri del calcolo
+                    DateTime dataCarico = Convert.ToDateTime(row["DataDelega"]);
+
+                    // 3. Calcolo la Data di Scadenza (Data delega + giorni a disposizione)
+                    DateTime dataScadenza = dataCarico.AddDays(giorniDisposizione);
+
+                    // 4. Calcolo la differenza con la data di oggi (solo parte data, senza ore)
+                    TimeSpan differenza = dataScadenza.Date - DateTime.Now.Date;
+                    int giorniMancanti = differenza.Days;
+
+                    // 5. Formattazione dell'output con un tocco di colore (opzionale)
+                    if (giorniMancanti < 0)
+                    {
+                        // Scaduta
+                        litGiorni.Text = $"<span class='text-danger fw-bold'>SCADUTA ({Math.Abs(giorniMancanti)} gg fa)</span>";
+                    }
+                    else if (giorniMancanti == 0)
+                    {
+                        // Scade oggi
+                        litGiorni.Text = "<span class='text-warning fw-bold'>SCADE OGGI</span>";
+                    }
+                    else
+                    {
+                        // Ancora in tempo
+                        litGiorni.Text = $"<span class='text-success fw-bold'>MANCANO {giorniMancanti} gg</span>";
+                    }
+                }
+
+            }
+        }
+
+        protected void btBack_Click(object sender, EventArgs e)
+        {
+            CaricaListDelegheScadenza();
+        }
     }
 
 

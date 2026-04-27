@@ -3,6 +3,23 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
+        /* Forza il modal a occupare il 95% della larghezza dello schermo */
+        @media (min-width: 1200px) {
+            .modal-custom-wide {
+                max-width: 95% !important;
+                width: 95% !important;
+            }
+        }
+
+        /* Rimuove il padding interno per dare più spazio alla tabella */
+        .modal-body {
+            padding: 10px !important;
+        }
+
+        /* Evita che la tabella vada a capo, mantenendo i dati su una riga */
+        .table {
+            white-space: nowrap;
+        }
         /* Sfondo professionale e font */
         body {
             background-color: #f0f2f5;
@@ -150,7 +167,7 @@
 
                 </div>
                 <div style="display: inline-block; margin-left: 1px" class="mb-3">
-                    <span class="input-group-text bg-white border-info-subtle"  style="cursor: pointer; border-left: none;">
+                    <span class="input-group-text bg-white border-info-subtle" style="cursor: pointer; border-left: none;">
                         <i class="fa-solid fa-user"></i>
                     </span>
                 </div>
@@ -192,24 +209,9 @@
                     <asp:LinkButton ID="lkreset" OnClick="lkreset_Click" runat="server">Dimenticato la password? Reset</asp:LinkButton>
                 </div>
             </div>
+
         </asp:Panel>
     </div>
 
-    <%-- Modal Errori --%>
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">ATTENZIONE</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4 text-center">
-                    <p id="errorMessage" class="text-danger fw-bold mb-0"></p>
-                </div>
-                <div class="modal-footer">
-                    <asp:Button ID="btChiudiPop" runat="server" CssClass="btn btn-secondary w-100" Text="Ho capito" OnClick="btChiudiPop_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
+   
 </asp:Content>

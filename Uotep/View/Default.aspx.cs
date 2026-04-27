@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Security;
 using System.Web.UI;
+using System.Windows.Interop;
 using Uotep.Classi;
 using static Uotep.Classi.Enumerate;
 
@@ -33,11 +34,12 @@ namespace Uotep
                     myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.SScaduta.GetDescription(), "danger");
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
                     Response.Redirect(url, false);
+                    Session.Abandon();
                     return;
 
                 }
 
-                Session.Abandon();
+
 
             }
             if (Session["user"] != null)
@@ -54,9 +56,37 @@ namespace Uotep
                     pnlLogin.Visible = false;
 
                 }
-            }
-        }
+                //al page load carica il popup delle scadenze
+                //if (!IsPostBack)
+                //{
+                //    if (Session["profilo"].ToString().Contains("R"))
+                //    {
+                //        // Effettua il cast alla  classe MasterPage 
+                //        var masterPage = (SiteMaster)this.Master;
 
+                //        // chiamo il metodo pubblico
+                //        masterPage.CaricaListDelegheScadenza();
+
+                //    }
+                       
+                //}
+            }
+            
+
+        }
+        //private void CaricaListDelegheScadenza()
+        //{
+        //    //
+        //    string msg = string.Empty;
+        //    Manager mn = new Manager();
+        //    int giorni= string.IsNullOrWhiteSpace(txtGiorniScad.Text) ? 60 : Convert.ToInt32(txtGiorniScad.Text);
+        //    DataTable CaricaListDelegheScadenza = mn.getListDelegheInScadenza(Session["MacroArea"].ToString(), Session["user"].ToString(), giorni, out msg);
+            
+        //    rptDelegheScadenza.DataSource = CaricaListDelegheScadenza;
+        //    rptDelegheScadenza.DataBind();
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('show');", true);
+
+        //}
 
         protected void trova_Click(object sender, EventArgs e)
         {
@@ -122,15 +152,15 @@ namespace Uotep
                         //    btLogin.Visible = false;
                         //    TxtPassw.Enabled = false;
                         //}
-                       // else
-                      //  {
-                            //salvo la matricola
-                            Session["user"] = Vuser;
+                        // else
+                        //  {
+                        //salvo la matricola
+                        Session["user"] = Vuser;
 
-                            string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
-                            Response.Redirect(url, false);
-                            //Response.Redirect("~/View/Default.aspx");
-                      //  }
+                        string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                        Response.Redirect(url, false);
+                        //Response.Redirect("~/View/Default.aspx");
+                        //  }
                     }
                     else
                     {
@@ -181,16 +211,8 @@ namespace Uotep
             }
 
         }
-        protected void chiudipopup_Click(object sender, EventArgs e)
-        {
-            //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
 
-        }
-        protected void apripopup_Click(object sender, EventArgs e)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#myModal').modal('show');", true);
-        }
+
         protected void SalvaPassw_Click(object sender, EventArgs e)
         {
 
@@ -209,8 +231,19 @@ namespace Uotep
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwNoSave.GetDescription() + "'); $('#errorModal').modal('show');", true);
-                Session.Abandon();
+                //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwNoSave.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                SiteMaster myMaster = this.Master as SiteMaster;
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PwNoSave.GetDescription(), "danger");
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                    Response.Redirect(url, false);
+                    Session.Abandon();
+                    return;
+
+                }
+
             }
 
         }
@@ -221,18 +254,35 @@ namespace Uotep
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(TxtMatricola.Text.ToUpper() + "old", 13);
             Manager mn = new Manager();
             Boolean upd = mn.ResetPassw(passwordHash, TxtMatricola.Text.ToUpper());
+            SiteMaster myMaster = this.Master as SiteMaster;
             if (upd)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwResetOk.GetDescription() + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + Enumerate.MsgOutput.PwResetOk.GetDescription() + "'); $('#errorModal').modal('show');", true);
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.PwResetOk.GetDescription(), "success");
+
+
+
+                }
 
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password non resettata." + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Password non resettata." + "'); $('#errorModal').modal('show');", true);
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PwNoSave.GetDescription(), "danger");
+
+
+                }
 
             }
         }
-
 
         protected void btChiudiPop_Click(object sender, EventArgs e)
         {
@@ -240,6 +290,20 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=false");
             Response.Redirect(url);
             //Response.Redirect("Default.aspx?user=false");
+        }
+
+        //protected void btChiudiPop_Click(object sender, EventArgs e)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#DelegheScadenza').modal('hide');", true);
+        //}
+
+        protected void txtGiorniScad_TextChanged(object sender, EventArgs e)
+        {
+            // Effettua il cast alla  classe MasterPage 
+            var masterPage = (SiteMaster)this.Master;
+
+            // chiamo il metodo pubblico
+            masterPage.CaricaListDelegheScadenza();
         }
     }
 }

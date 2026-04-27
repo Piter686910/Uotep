@@ -293,6 +293,13 @@ namespace Uotep
 
             txtBU.Text = pratica.Rows[0].ItemArray[29].ToString().ToUpper();
             txtCodEdificio.Text = pratica.Rows[0].ItemArray[30].ToString().ToUpper();
+            //I 23/04/2026 controllo deleghe
+            if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
+                txtDataDelega.Text = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
+
+            txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
+            //F 23/04/2026 controllo deleghe
+
 
         }
         private void CaricaDLL()
@@ -658,6 +665,13 @@ namespace Uotep
                             break;
 
                     }
+                    //I 23/04/2026 controllo deleghe
+                    p.dataDelega = string.IsNullOrWhiteSpace(txtDataDelega.Text) ? DateTime.MinValue.ToShortDateString() : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
+
+                    p.ggDelega = string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
+
+                    //F 23/04/2026 controllo deleghe
+
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
                     SiteMaster myMaster = this.Master as SiteMaster;
@@ -1039,7 +1053,8 @@ namespace Uotep
                     HolDate.Value = dataInserimento;
                     //p.data_ins_pratica = System.Convert.ToDateTime(dataInserimento).ToLongDateString();
                     Manager mn = new Manager();
-                    DataTable pratica = mn.getPraticaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(Hid.Value));
+                    DataTable pratica = mn.getPraticaProtocolloDataSiglaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(Hid.Value));
+
                     if (pratica.Rows.Count > 0)
                     {
                         CaricaDLL();
@@ -1979,29 +1994,7 @@ namespace Uotep
             return pratica;
             // return dt;
         }
-        /// <summary>
-        /// funzione che inserisce spaces al posto del min data value
-        /// </summary>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        protected string FormatMyDate(object dateValue)
-        {
-            if (dateValue == null || dateValue == DBNull.Value)
-            {
-                return "";
-            }
-
-            DateTime date;
-            if (DateTime.TryParse(dateValue.ToString(), out date))
-            {
-                if (date == new DateTime(1900, 1, 1) || date == new DateTime(1, 1, 1))
-                {
-                    return ""; // O " " se vuoi uno spazio fisico
-                }
-                return date.ToString("dd/MM/yyyy");
-            }
-            return ""; // Gestione di valori non validi
-        }
+       
         /// <summary>
         /// CHIUSURA DECRETAZIONE
         /// </summary>

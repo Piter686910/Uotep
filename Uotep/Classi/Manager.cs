@@ -49,7 +49,7 @@ namespace Uotep.Classi
 
         //public String ConnString = ConfigurationManager.AppSettings["ConnString"];
         public String ConnString = ConfigurationManager.ConnectionStrings["ConnString"].ToString();
-       
+
         public String path = ConfigurationManager.AppSettings["PathSqlAudit"];
         public String ConnStringTp = ConfigurationManager.ConnectionStrings["ConnStringTp"].ToString();
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
@@ -350,10 +350,10 @@ namespace Uotep.Classi
                 DataTable tb = new DataTable();
                 string sql = "SELECT passw FROM Operatore where Matricola= '" + user + "'";
                 //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
-               
+
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
-                     tb = FillTable(sql, conn, out msg);
+                    tb = FillTable(sql, conn, out msg);
                     if (!File.Exists(LogFile))
                     {
                         using (StreamWriter sw = File.CreateText(LogFile)) { }
@@ -361,7 +361,7 @@ namespace Uotep.Classi
 
                     using (StreamWriter sw = File.AppendText(LogFile))
                     {
-                        sw.WriteLine("connessione:" + ConnString + " out;" +msg);
+                        sw.WriteLine("connessione:" + ConnString + " out;" + msg);
                         sw.Close();
                     }
                     return tb;
@@ -616,6 +616,28 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM operatore where nominativo <> '' order by nominativo ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        /// <summary>
+        /// estrae le deleghe in scadenza per area e operatore, con filtro giorni per data carico (es. gg = 30 => deleghe caricate da più di 30 giorni e non ancora evase)
+        /// </summary>
+        /// <param name="Area"></param>
+        /// <param name="Matricola"></param>
+        /// <param name="gg"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public DataTable getListDelegheInScadenza(string Area, string Matricola, out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = string.Empty;
+            if (Area == "A")
+                sql = "SELECT * FROM principale where sigla='AG' and evasa='false' AND macro_area IN ('MA1', 'MA2', 'MA3') and ggdelega>0  order by datacarico asc ";
+            else
+                sql = "SELECT * FROM principale where sigla='AG' and macro_area = '" + Area + "' and ggdelega>0  and evasa='false'  order by datacarico asc ";
+            //sql = "SELECT * FROM principale where sigla='AG' and macro_area = '" + Area + "' and matricola = '" + Matricola + "' and evasa='false'  order by datacarico asc ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1675,10 +1697,17 @@ ORDER BY LOGS.[Data Accesso] DESC";
         {
             string sql = string.Empty;
             DataTable tb = new DataTable();
+            //se val=false esclude la data di chiusura 1900-01-01, altrimenti la include
+            if (val)
 
+                sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura, a.anno, a.nr_pratica FROM principale AS a INNER JOIN " +
+                    "Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' and decr_dataChiusura <> '1900-01-01'" +
+                    "GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere, a.anno, a.nr_pratica order by a.nr_protocollo";
+            else
 
-            sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura FROM principale AS a INNER JOIN Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere order by a.nr_protocollo";
-
+                sql = "SELECT a.Nr_Protocollo, a.quartiere, a.Macro_area, MIN(b.decr_decretato) as decr_decretato, b.decr_chiuso, a.id, decr_dataChiusura, a.anno, a.nr_pratica FROM principale AS a INNER JOIN " +
+                   "Decretazione AS b ON a.Nr_Protocollo = b.decr_pratica WHERE a.Macro_area = '" + area + "' AND b.decr_chiuso ='" + val + "' " +
+                   "GROUP BY a.Nr_Protocollo, a.Macro_area, b.decr_chiuso,a.id,decr_dataChiusura, a.quartiere, a.anno, a.nr_pratica order by a.nr_protocollo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1899,7 +1928,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 sql = "SELECT * FROM Archiviotp  WHERE cognome like '%" + intestatario.Replace("'", "''").Replace("*", "%") + "%'";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
-                 tb = FillTable(sql, conn, out msg);
+                tb = FillTable(sql, conn, out msg);
                 if (!File.Exists(LogFile))
                 {
                     using (StreamWriter sw = File.CreateText(LogFile)) { }
@@ -1968,10 +1997,19 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getPraticaId(Int32 protocollo, DateTime data, string sigla, Int32 id)
+        public DataTable getPraticaProtocolloDataSiglaId(Int32 protocollo, DateTime data, string sigla, Int32 id)
         {
             DataTable tb = new DataTable();
             string sql = "SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and DataInserimento = '" + data + "' and sigla = '" + sigla + "'" + " and id = " + id;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable getPraticaId(Int32 id)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM Principale where id = " + id;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -5671,15 +5709,18 @@ ORDER BY LOGS.[Data Accesso] DESC";
             {
 
                 sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
-                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
+                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
+                    "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
                    " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
                    @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
                    @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
                    @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
                    @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
                    @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
-                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" + @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
-                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" + @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
+                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
+                   @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
+                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
+                   @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
 
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
@@ -5973,7 +6014,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
             "Nominativo, Indirizzo, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, " +
             "Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, macro_area, UlterioreTipoAtto, bu, codiceEdificio," +
-            "NumProtRicStessoCarico" +
+            "NumProtRicStessoCarico,DataDelega,GgDelega" +
 
         ") " +
         "VALUES ('" +
@@ -6006,7 +6047,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
             @p.ulterioreTipoAtto.Replace("'", "''") + "','" +
             @p.bu.Replace("'", "''") + "','" +
             @p.codiceEdificio.Replace("'", "''") + "'," +
-            @p.NumProtRicStessoCarico +
+            @p.NumProtRicStessoCarico + ",'" +
+            @p.dataDelega + "'," +
+            @p.ggDelega +
         "); " +
 
         // RESTITUISCE IL NUOVO ID GENERATO
@@ -6481,54 +6524,53 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
-        public Boolean DuplicaCarico(string carico, string sigla, int id)
-        {
-            bool resp = true;
-            string sql_principale = String.Empty;
-            string testoSql = string.Empty;
-            //arch.arch_dataInserimento = System.Convert.ToString(DateTime.Now.ToString("dd/mm/yyyy"));
-            sql_principale = "INSERT INTO principale (Nr_Protocollo, Sigla, DataArrivo, Provenienza, Tipologia_atto, Giudice, TipoProvvedimentoAG, ProcedimentoPen, Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, " +
-       "DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, Matricola, DataInserimento, Macro_area, UlterioreTipoAtto, BU, CodiceEdificio) " +
-      "SELECT[Nr_Protocollo] ,[Sigla],[DataArrivo],[Provenienza],[Tipologia_atto],[Giudice],[TipoProvvedimentoAG],[ProcedimentoPen],[Nominativo],[Indirizzo],[via],[Evasa],[EvasaData],[Inviata],[DataInvio],[Scaturito]" +
-      ",[Accertatori],[DataCarico],[nr_Pratica],[Quartiere],[Note],[Anno],[Giorno],[Rif_Prot_Gen],[Matricola],[DataInserimento],[Macro_area],[UlterioreTipoAtto],[BU],[CodiceEdificio] " +
-      "FROM principale where Id = " + id;
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                conn.Open();
-                SqlCommand command = conn.CreateCommand();
+        //  public Boolean DuplicaCarico(string carico, string sigla, int id)
+        //  {
+        //      bool resp = true;
+        //      string sql_principale = String.Empty;
+        //      string testoSql = string.Empty;
+        //      //arch.arch_dataInserimento = System.Convert.ToString(DateTime.Now.ToString("dd/mm/yyyy"));
+        //      sql_principale = "INSERT INTO principale (Nr_Protocollo, Sigla, DataArrivo, Provenienza, Tipologia_atto, Nominativo, Indirizzo, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, Matricola, DataInserimento, Macro_area, UlterioreTipoAtto, BU, CodiceEdificio) " +
+        //"SELECT[Nr_Protocollo] ,[Sigla],[DataArrivo],[Provenienza],[Tipologia_atto],[Nominativo],[Indirizzo],[Inviata],[DataInvio],[Scaturito]" +
+        //",[Accertatori],[DataCarico],[nr_Pratica],[Quartiere],[Note],[Anno],[Giorno],[Rif_Prot_Gen],[Matricola],[DataInserimento],[Macro_area],[UlterioreTipoAtto],[BU],[CodiceEdificio] " +
+        //"FROM principale where Id = " + id;
+        //      using (SqlConnection conn = new SqlConnection(ConnString))
+        //      {
+        //          conn.Open();
+        //          SqlCommand command = conn.CreateCommand();
 
-                try
-                {
-                    command.CommandText = sql_principale;
-                    testoSql = "principale";
-                    int res = command.ExecuteNonQuery();
-                }
+        //          try
+        //          {
+        //              command.CommandText = sql_principale;
+        //              testoSql = "principale";
+        //              int res = command.ExecuteNonQuery();
+        //          }
 
-                catch (Exception ex)
-                {
+        //          catch (Exception ex)
+        //          {
 
-                    if (!File.Exists(LogFile))
-                    {
-                        using (StreamWriter sw = File.CreateText(LogFile)) { }
-                    }
+        //              if (!File.Exists(LogFile))
+        //              {
+        //                  using (StreamWriter sw = File.CreateText(LogFile)) { }
+        //              }
 
-                    using (StreamWriter sw = File.AppendText(LogFile))
-                    {
-                        sw.WriteLine("carico:" + carico + ", sigla= " + sigla + ": " + ex.Message + @" - Errore in DuplicaCarico ");
-                        sw.Close();
-                    }
+        //              using (StreamWriter sw = File.AppendText(LogFile))
+        //              {
+        //                  sw.WriteLine("carico:" + carico + ", sigla= " + sigla + ": " + ex.Message + @" - Errore in DuplicaCarico ");
+        //                  sw.Close();
+        //              }
 
-                    resp = false;
+        //              resp = false;
 
 
-                }
-                conn.Close();
-                conn.Dispose();
-                return resp;
-            }
+        //          }
+        //          conn.Close();
+        //          conn.Dispose();
+        //          return resp;
+        //      }
 
-        }
-        public Boolean UpdPraticaArchivioUotp(ArchivioUotp arch)
+        //  }
+        public Boolean UpdPraticaArchivioUotp(ArchivioUotp arch, int id)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
@@ -6539,7 +6581,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                                  "', data1 = '" + @arch.arch_dataInserimento.Replace("'", "''") +
                                  "', oggetto1 = '" + @arch.arch_oggetto.Replace("'", "''") +
                                  "', oggetto2 = '" + @arch.arch_oggetto2.Replace("'", "''") + "'" +
-                                 " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";
+                                 " where id =" + id;
+            // " where cartellina = '" + @arch.arch_cartellina + "' and quartiere = '" + @arch.arch_quartiere.Replace("'", "''") + "'";
             using (SqlConnection conn = new SqlConnection(ConnStringTp))
             {
                 conn.Open();
@@ -7348,7 +7391,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -7357,11 +7400,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
  "INSERT INTO principalestorico (" +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico) " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega) " +
  "SELECT " +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega " +
  "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {

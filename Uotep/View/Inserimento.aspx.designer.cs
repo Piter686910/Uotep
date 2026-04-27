@@ -348,6 +348,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.DropDownList DdlGiudice;
 
         /// <summary>
+        /// Controllo txtDataDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDataDelega;
+
+        /// <summary>
         /// Controllo txtTipoProv.
         /// </summary>
         /// <remarks>
@@ -375,15 +384,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfTipoProv;
 
         /// <summary>
-        /// Controllo btSalvaTipoProvv.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaTipoProvv;
-
-        /// <summary>
         /// Controllo DdlTipoProvvAg.
         /// </summary>
         /// <remarks>
@@ -391,6 +391,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DdlTipoProvvAg;
+
+        /// <summary>
+        /// Controllo txtGgDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGgDelega;
+
+        /// <summary>
+        /// Controllo RegularExpressionValidator1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
         /// Controllo txtProdPenNr.
@@ -472,6 +490,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl modalHeaderColor;
+
+        /// <summary>
+        /// Controllo modalLabel1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label modalLabel1;
 
         /// <summary>
         /// Controllo Decreta.

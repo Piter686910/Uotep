@@ -915,6 +915,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtGiudice;
 
         /// <summary>
+        /// Controllo txtDataDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDataDelega;
+
+        /// <summary>
         /// Controllo TxtTipoProvvAg.
         /// </summary>
         /// <remarks>
@@ -949,6 +958,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DdlTipoProvvAg;
+
+        /// <summary>
+        /// Controllo txtGgDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGgDelega;
+
+        /// <summary>
+        /// Controllo RegularExpressionValidator1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
         /// Controllo txtProdPenNr.

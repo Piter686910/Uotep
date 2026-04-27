@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Urp.aspx.cs" Inherits="Uotep.Urp" %>
-
+<%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -409,7 +409,7 @@
                             <%-- ESEMPIO CAMPO DATA EDITABILE --%>
                             <asp:TemplateField HeaderText="Data Presentazione" ItemStyle-Width="100px">
                                 <ItemTemplate>
-                                    <%# FormatMyDate(Eval("dataPresentRichiesta", "{0:dd/MM/yyyy}") )%>
+                                    <%# Routine.FormatMyDate(Eval("dataPresentRichiesta", "{0:dd/MM/yyyy}") )%>
                                 </ItemTemplate>
                                 <EditItemTemplate>
                                     <asp:TextBox ID="txtDataPres" runat="server" Text='<%# Bind("dataPresentRichiesta", "{0:dd/MM/yyyy}") %>' CssClass="form-control input-sm" placeholder="gg/mm/yyyy"></asp:TextBox>

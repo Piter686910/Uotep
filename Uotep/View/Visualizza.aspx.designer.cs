@@ -744,6 +744,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtGiudice;
 
         /// <summary>
+        /// Controllo txtDataDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDataDelega;
+
+        /// <summary>
         /// Controllo TxtTipoProvvAg.
         /// </summary>
         /// <remarks>
@@ -751,6 +760,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TxtTipoProvvAg;
+
+        /// <summary>
+        /// Controllo txtGgDelega.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGgDelega;
 
         /// <summary>
         /// Controllo txtProdPenNr.
@@ -931,32 +949,5 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroSigla;
-
-        /// <summary>
-        /// Controllo TextMessage.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl TextMessage;
-
-        /// <summary>
-        /// Controllo btChiudiMsgModal.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btChiudiMsgModal;
-
-        /// <summary>
-        /// Controllo btOKDup.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btOKDup;
     }
 }

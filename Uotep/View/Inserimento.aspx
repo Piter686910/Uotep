@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Inserimento.aspx.cs" Inherits="Uotep.Inserimento" %>
-
+<%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -401,7 +401,7 @@
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERISCI NUOVO CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>INSERISCI NUOVO CARICO</h1>
             </div>
         </div>
 
@@ -478,7 +478,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtNumProtRicStessoCarico">Numeri protocollo</label>
-                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3"  ClientIDMode="Static" />
+                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3" ClientIDMode="Static" />
 
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Inserire numero prot." ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
                             <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
@@ -593,6 +593,10 @@
 
                                 <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
                             </div>
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtDataDelega">Data Delega</label>
+                                <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
@@ -603,11 +607,15 @@
                                     <asp:HiddenField ID="HfTipoProv" runat="server" />
 
                                 </div>
-                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />
+                                <%--<asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
                                 <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" />
                             </div>
 
-
+                            <div class="form-group mb-3">
+                                <label for="txtGgDelega">Termine gg. delega</label>
+                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
+                            </div>
 
 
                         </div>
@@ -709,21 +717,17 @@
 
     <!-- Modale Richiesta decretazione -->
 
-    <div class="modal fade" id="ModalRicDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="ModalRicDecretazione" tabindex="-1" aria-labelledby="modalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
-               <div id="modalHeaderColor" runat="server" class="modal-header">
-                    <h4 class="modal-title" id="modalLabel1">✅ Inserimento Carico</h4>
+                <div id="modalHeaderColor" runat="server" class="modal-header" style="background-color: #DFF0D8">
+                    <h4 class="modal-title">
+                        <asp:Label ID="modalLabel1" runat="server" Text="✅ Inserimento Carico" />
+                    </h4>
 
                 </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-
-                        <p id="Message" style="color: red"></p>
-
-                    </div>
-
+                <div class="modal-body text-center">
+                    <p id="Message" class="lead"></p>
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
@@ -864,7 +868,7 @@
 
                                             <asp:TemplateField HeaderText="Data Chiusura">
                                                 <ItemTemplate>
-                                                    <%# FormatMyDate(Eval("decr_dataChiusura")) %>
+                                                    <%# Routine.FormatMyDate(Eval("decr_dataChiusura")) %>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
 
@@ -1072,7 +1076,7 @@
                 document.getElementById("suggestionsListTipoAtto").style.display = "none";
             }
         });
-             
+
         // Funzione per caricare i dati (chiamata solo quando serve)
         function caricaOpzioniOperatore() {
             var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
@@ -1099,7 +1103,7 @@
 
         function filterAndHighlightOp(e) {
             var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-     
+
             var listDiv = document.getElementById("suggestionsListoperatore");
             //var filter = input.value.toUpperCase();
             var filter = (input.value || "").toUpperCase();

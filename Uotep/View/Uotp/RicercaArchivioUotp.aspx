@@ -413,6 +413,7 @@
                     </div>
                 </div>
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
+                 <asp:HiddenField ID="HfId" runat="server" />
                 <asp:HiddenField ID="HfFiltroDestinatario" runat="server" />
                 <asp:HiddenField ID="HfFiltroOggetto" runat="server" />
                 <asp:HiddenField ID="HfFiltroCognome" runat="server" />

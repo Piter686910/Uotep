@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Modifica.aspx.cs" Inherits="Uotep.Modifica" %>
-
+<%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -865,7 +865,10 @@
                             <div class="form-group mb-3">
                                 <label for="txtGiudice">Giudice</label>
                                 <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
-
+                            </div>
+                            <div class="form-group mb-3" style="margin-left: -25px">
+                                <label for="txtDataDelega">Data Delega</label>
+                                <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                             </div>
                         </div>
 
@@ -881,6 +884,11 @@
                                 <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
                                 <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
 
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="txtGgDelega">Termine gg. delega</label>
+                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -1269,7 +1277,7 @@
 
                                             <asp:TemplateField HeaderText="Data Chiusura">
                                                 <ItemTemplate>
-                                                    <%# FormatMyDate(Eval("decr_dataChiusura")) %>
+                                                    <%# Routine.FormatMyDate(Eval("decr_dataChiusura")) %>
                                                 </ItemTemplate>
                                             </asp:TemplateField>
 
