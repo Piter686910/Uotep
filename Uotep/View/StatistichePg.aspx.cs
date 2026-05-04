@@ -132,56 +132,66 @@ namespace Uotep
                         }
                         break;
                     default:
-                        dt = mn.getStatisticaByMeseAnno(ddlMese.SelectedItem.Text, anno);
+                        //dt = mn.getStatisticaByMeseAnno(ddlMese.SelectedItem.Text, anno);
 
-                        if (dt.Rows.Count > 0)
+                        resp = mn.InsStatPg(interrogatorio);
+                        if (resp)
                         {
-                            exist = true; //eseguo update del campo interrogatori
-                            interrogatori += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
-                            stat.interrogazioni = interrogatori;
-                            stat.mese = ddlMese.SelectedItem.Text;
-                            stat.anno = anno;
-                            resp = mn.InsStatPg(exist, stat, interrogatorio);
-                            if (resp)
+                            btCerca_Click(sender, e);
+                            if (myMaster != null)
                             {
-
-
-                                //if (myMaster != null)
-                                //{
-                                //    // 2. Chiamo il metodo pubblico
-                                //    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
-                                //}
-                                btCerca_Click(sender, e);
-                            }
-                            else
-                            {
-
-
-                                if (myMaster != null)
-                                {
-                                    // 2. Chiamo il metodo pubblico
-                                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "success");
-                                }
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
                             }
                         }
-                        else
-                        {
-                            //non esiste il nuovo mese anno quindi inserisco un nuovo record
-                            stat.interrogazioni = interrogatori;
-                            stat.mese = ddlMese.SelectedItem.Text;
-                            stat.anno = anno;
-                            resp = mn.InsStatPg(exist, stat, interrogatorio);
-                            if (resp)
-                            {
+                        //if (dt.Rows.Count > 0)
+                        //{
+                        //    exist = true; //eseguo update del campo interrogatori
+                        //    interrogatori += System.Convert.ToInt32(dt.Rows[0].ItemArray[19]);
+                        //    stat.interrogazioni = interrogatori;
+                        //    stat.mese = ddlMese.SelectedItem.Text;
+                        //    stat.anno = anno;
+                        //    resp = mn.InsStatPg(exist, stat, interrogatorio);
+                        //    if (resp)
+                        //    {
 
 
-                                if (myMaster != null)
-                                {
-                                    // 2. Chiamo il metodo pubblico
-                                    myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
-                                }
-                            }
-                        }
+                        //        //if (myMaster != null)
+                        //        //{
+                        //        //    // 2. Chiamo il metodo pubblico
+                        //        //    myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
+                        //        //}
+                        //        btCerca_Click(sender, e);
+                        //    }
+                        //    else
+                        //    {
+
+
+                        //        if (myMaster != null)
+                        //        {
+                        //            // 2. Chiamo il metodo pubblico
+                        //            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "success");
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    //non esiste il nuovo mese anno quindi inserisco un nuovo record
+                        //    stat.interrogazioni = interrogatori;
+                        //    stat.mese = ddlMese.SelectedItem.Text;
+                        //    stat.anno = anno;
+                        //    resp = mn.InsStatPg(exist, stat, interrogatorio);
+                        //    if (resp)
+                        //    {
+
+
+                        //        if (myMaster != null)
+                        //        {
+                        //            // 2. Chiamo il metodo pubblico
+                        //            myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
+                        //        }
+                        //    }
+                        //}
 
                         break;
                 }

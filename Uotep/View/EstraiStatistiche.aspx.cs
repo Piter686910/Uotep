@@ -151,7 +151,8 @@ namespace Uotep
             //    // 2. Chiamo il metodo pubblico
             //    myMaster.MostraMessaggio("ATTENZIONE", txtDelegheEsitate.Text, "warning");
             //}
-            txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
+            // txtInterrogatori.Text = stat.Rows[0].ItemArray[19].ToString();
+            txtInterrogatori.Text = mn.GetNumInterrogatoriByMeseAnno(txtMese.Text.Trim(), anno); //stat.Rows[0].ItemArray[19].ToString();
             txtDenunceUff.Text = stat.Rows[0].ItemArray[20].ToString();
 
             txtConvalide.Text = mn.GetNumConvalide(txtMese.Text.Trim(), anno);

@@ -846,25 +846,26 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getListDipendenti()
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola_ced, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
-                         "perm_53,perm_104,limitazioni,turni_pref,Macro_area,area,data_sorv_sanitaria FROM SchedaDipendente  ORDER BY ufficio,nominativo";
+            string sql = "SELECT ufficio, s.nominativo,matricola_ced, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
+                         "perm_53,perm_104,limitazioni,turni_pref,Macro_area,s.area,data_sorv_sanitaria, o.abilitato FROM SchedaDipendente as s left join operatore as o on s.matricola= o.matricola" +
+                         " where o.abilitato='True'  ORDER BY ufficio,nominativo";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getListDipendentiById(int id)
-        {
-            DataTable tb = new DataTable();
-            string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
-                         "perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area,data_sorv_sanitaria FROM SchedaDipendente  ORDER BY ufficio,nominativo";
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
+        //public DataTable getListDipendentiById(int id)
+        //{
+        //    DataTable tb = new DataTable();
+        //    string sql = "SELECT ufficio, nominativo,matricola, grado, data_assunzione, id_dip, autista, armato, quartina,gruppo_quartina,gruppo_reperibilita,permessi_studio," +
+        //                 "perm_53,perm_104,limitazioni,turni_pref,turni_blocc,Macro_area,area,data_sorv_sanitaria FROM SchedaDipendente where abilitato='True' ORDER BY ufficio,nominativo";
+        //    using (SqlConnection conn = new SqlConnection(ConnString))
+        //    {
 
-                return tb = FillTable(sql, conn, out msg);
-            }
-        }
+        //        return tb = FillTable(sql, conn, out msg);
+        //    }
+        //}
         public Boolean getTipoProv(string tipo)
         {
             DataTable tb = new DataTable();
@@ -1489,6 +1490,10 @@ ORDER BY LOGS.[Data Accesso] DESC";
                              "WHERE (MONTH(DataRS) = @mese AND YEAR(DataRS) = @anno) " +
                              "OR (MONTH(DataNL) = @mese AND YEAR(DataNL) = @anno)";
 
+
+
+            //sql = "SELECT gruppo, DataRS, DataNL, quartina, mese FROM RSNL WHERE (DataRS >= '2026-04-01' AND DataRS <= '2026-04-30') OR " +
+            //    "(DataNL >= '2026-04-01' AND DataNL <= '2026-04-30') OR (DataNL >= '2026-03-30' AND DataNL <= '2026-03-31')";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -2691,7 +2696,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             //     " VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
             //     scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "')  END";
             sql =
-    "IF EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola_ced = '" + scheda.Matricola + "') " +
+    "IF EXISTS (SELECT 1 FROM SchedaDipendente WHERE matricola_ced = '" + scheda.Matricola_ced + "') " +
     "BEGIN " +
         "UPDATE SchedaDipendente SET " +
             "nominativo = '" + scheda.Nominativo + "', " +
@@ -2709,14 +2714,15 @@ ORDER BY LOGS.[Data Accesso] DESC";
             "turni_pref = '" + scheda.TurnoPref + "', " +
             "Macro_area = '" + scheda.MacroArea + "', " +
             "area = '" + scheda.Area + "', " +
+            "ufficio = '" + scheda.Ufficio + "', " +
             "data_sorv_sanitaria = '" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "' " +
-        "WHERE matricola_ced = '" + scheda.Matricola + "' " +
+        "WHERE matricola_ced = '" + scheda.Matricola_ced + "' " +
     "END " +
     "ELSE " +
     "BEGIN " +
-        "INSERT INTO SchedaDipendente (matricola_ced, nominativo, grado, data_assunzione, categ_economica, autista, armato, quartina, gruppo_quartina, gruppo_reperibilita, perm_53, perm_104, limitazioni, turni_pref, Macro_area, area, data_sorv_sanitaria) " +
-        "VALUES ('" + scheda.Matricola + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
-        scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "') " +
+        "INSERT INTO SchedaDipendente (matricola_ced, nominativo, grado, data_assunzione, categ_economica, autista, armato, quartina, gruppo_quartina, gruppo_reperibilita, perm_53, perm_104, limitazioni, turni_pref, Macro_area, area,ufficio, data_sorv_sanitaria) " +
+        "VALUES ('" + scheda.Matricola_ced + "','" + scheda.Nominativo + "','" + scheda.Grado + "','" + scheda.dataAssunzione.ToString("yyyy-MM-dd") + "','" + scheda.CategoriaEconomica + "','" + scheda.IsAutista + "','" + scheda.Armato + "','" + scheda.Quartina + "','" +
+        scheda.GruppoQuartina + "','" + scheda.GruppoReperibilita + "','" + scheda.l53 + "','" + scheda.l104 + "','" + scheda.limitazione + "','" + scheda.TurnoPref + "','" + scheda.MacroArea + "','" + scheda.Area + "','" + scheda.Ufficio + "','" + scheda.dataSorveglianza.ToString("yyyy-MM-dd") + "') " +
     "END";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -3379,6 +3385,52 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     command.ExecuteNonQuery();
 
                     resp = true;
+                }
+
+
+                catch (Exception ex)
+                {
+
+
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in inserimento statistiche ");
+                        sw.Close();
+                    }
+
+                    resp = false;
+
+
+                }
+                conn.Close();
+                return resp;
+            }
+
+        }
+        public Boolean InsStatPg(Interrogatorio interr)
+        {
+            bool resp = true;
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                   
+                    resp = InsInterrogatorio(interr);
+                    if (resp == false)
+                        return false;
+                    else
+                        resp = true;
                 }
 
 
@@ -4463,6 +4515,47 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
             sql = "SELECT count(rapp_notifica) as n FROM rappuote where rapp_data_consegna_intervento >='" + @dataInizio.ToShortDateString() + "' AND rapp_data_consegna_intervento<='" + @dataFine.ToShortDateString() + "' and rapp_notifica='true'";
+            string res = null;
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand command = conn.CreateCommand();
+
+                try
+                {
+                    command.CommandText = sql;
+                    return res = command.ExecuteScalar().ToString();
+                }
+
+                catch (Exception ex)
+                {
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine("mese " + mese + ", anno: " + anno + ex.Message + @" - Errore in inserimento dati ");
+                        sw.Close();
+                    }
+
+                }
+                conn.Close();
+                conn.Dispose();
+                return res;
+            }
+
+        }
+        public string GetNumInterrogatoriByMeseAnno(string mese, int anno)
+        {
+            string sql = string.Empty;
+
+            //  trasformio stringa mese in numero;
+            string meseS = GetNumeroMeseByText(mese);
+            DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
+            DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
+            sql = "SELECT count(*) as num FROM interrogatori where mese ='" + mese + "' AND anno =" + anno ;
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -6352,7 +6445,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     // =================================================================
                     // 1. SELECT: Recupera la Matricola dal Dipendente
                     // =================================================================
-                    string querySelect = "SELECT matricola FROM SchedaDipendente WHERE id_dip = " + idDipendente;
+                    string querySelect = "SELECT matricola_ced FROM SchedaDipendente WHERE id_dip = " + idDipendente;
                     using (SqlCommand cmdSelect = new SqlCommand(querySelect, conn, transaction))
                     {
                         cmdSelect.Parameters.AddWithValue("@IDDipendente", idDipendente);
@@ -6691,7 +6784,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             try
             {
 
-                sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''") + "'" +
+                sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''") + "', decr_decretante = '" + p.decretante.Replace("'", "''") + "'" +
                     " where  decr_id = " + p.id;
 
                 //  sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
@@ -6849,13 +6942,14 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
             string sql_Upd = String.Empty;
-
+            string sql_UpdSchedaDip = String.Empty;
             int res = 0;
             try
             {
                 sql_Upd = "update operatore set abilitato= '" + !abilitato + "' " +
                      " where matricola = '" + matricola.Trim() + "'";
-
+                //sql_UpdSchedaDip = "update SchedaDipendente set abilitato= '" + !abilitato + "' " +
+                //    " where matricola = '" + matricola.Trim() + "'";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -6865,8 +6959,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     try
                     {
                         command.CommandText = sql_Upd;
-
                         res = command.ExecuteNonQuery();
+                        //command.CommandText = sql_UpdSchedaDip;
+                        //res = command.ExecuteNonQuery();
                     }
 
                     catch (Exception ex)
