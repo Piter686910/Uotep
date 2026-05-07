@@ -766,14 +766,17 @@
                         <div class="form-group mb-3">
                             <label for="DdlMacroArea">Area Competenza</label>
                             <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
-                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
-                                <asp:ListItem Text=""> </asp:ListItem>
+                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control" >
+                               <asp:ListItem Text="&nbsp;" Value=""></asp:ListItem>
+                                <asp:ListItem Text="ARCHIVIO"> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>
                                 <asp:ListItem Text="CDR"> </asp:ListItem>
+                                <asp:ListItem Text="FURERIA"> </asp:ListItem>
                                 <asp:ListItem Text="MA1"> </asp:ListItem>
                                 <asp:ListItem Text="MA2"> </asp:ListItem>
                                 <asp:ListItem Text="MA3"> </asp:ListItem>
                                 <asp:ListItem Text="NOTIFICATORI"> </asp:ListItem>
+                                <asp:ListItem Text="PG"> </asp:ListItem>
                                 <asp:ListItem Text="SOPRALLUOGO"> </asp:ListItem>
                                 <asp:ListItem Text="UFFICIO TRASMISSIONI"> </asp:ListItem>
                                 <asp:ListItem Text="URP"> </asp:ListItem>
@@ -806,7 +809,7 @@
                 </div>
 
                 <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
-                <div class="container-fluid custom-border p-3">
+                <div class="row custom-border p-3">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group mb-4">
@@ -866,7 +869,7 @@
                                 <label for="txtGiudice">Giudice</label>
                                 <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
                             </div>
-                            <div class="form-group mb-3" style="margin-left: -25px">
+                            <div class="form-group mb-3" >
                                 <label for="txtDataDelega">Data Delega</label>
                                 <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                             </div>
@@ -1220,10 +1223,24 @@
                                             <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
                                             <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
 
-                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+<%--                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+
                                                 <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
-                                            </asp:BoundField>
+                                            </asp:BoundField>--%>
+
+
+
+                                            <asp:TemplateField HeaderText="Decretante" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
+                                                <ItemTemplate>
+                                                    <%# Eval("decr_decretante") %>
+                                                </ItemTemplate>
+                                                <EditItemTemplate>
+                                                    <asp:TextBox ID="txtDecretanteMod" runat="server" Text='<%# Bind("decr_decretante") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                                </EditItemTemplate>
+                                            </asp:TemplateField>
+
+
 
 
                                             <%--<asp:BoundField DataField="decr_data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" />--%>

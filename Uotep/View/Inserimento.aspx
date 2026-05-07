@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Inserimento.aspx.cs" Inherits="Uotep.Inserimento" %>
+
 <%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -401,7 +402,7 @@
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span>INSERISCI NUOVO CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERISCI NUOVO CARICO</h1>
             </div>
         </div>
 
@@ -528,7 +529,9 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
-                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" MaxLength="50" />
+                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control"  />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txPratica" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,15}" Display="Dynamic" />
+
                         </div>
 
 
@@ -538,7 +541,6 @@
                             <label for="DdlMacroArea">Area Competenza</label>
                             <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
                             <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
-                                <asp:ListItem Text=""> </asp:ListItem>
                                 <asp:ListItem Text=""> </asp:ListItem>
                                 <asp:ListItem Text="ARCHIVIO"> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>

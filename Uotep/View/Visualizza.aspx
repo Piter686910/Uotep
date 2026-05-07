@@ -91,7 +91,7 @@
                         <asp:Button ID="btEvaseAg" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
 
-                        <asp:Button ID="btValidaPratica" runat="server" OnClick="btValidaPratica_Click" Text="Validazione pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btValidaPratica" runat="server" OnClick="btValidaPratica_Click" Text="Valida pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
 
 
                     </p>
@@ -103,6 +103,7 @@
                         <asp:Button ID="btDataCarico" runat="server" OnClick="btDataCarico_Click" Text="Data Inserimento" ToolTip="Ricerca Data Inserimento" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
+                        <asp:Button ID="btNote" runat="server" OnClick="btNote_Click" Text="Note" ToolTip="Ricerca Note" CssClass="btn btn-primary mx-2" />
                     </p>
                 </div>
 
@@ -266,6 +267,18 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA Note --%>
+                <div id="DivNote" runat="server" class="form-group text-center" style="text-align: left !important">
+
+                    <asp:Label ID="Label16" runat="server" Text="Note" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtNote" runat="server" CssClass="form-control" placeholder="Note" autofocus="" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
+
             </div>
         </div>
         <asp:Label ID="lblmessage" runat="server" ForeColor="Red"></asp:Label>
@@ -686,7 +699,18 @@
                                             <%# Eval("Accertatori3")   %>
                                         </ItemTemplate>
                                     </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Nota" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                     <HeaderTemplate>
+                                         Nota
+                                       <br />
+                                         <asp:TextBox ID="txtFilterNota" runat="server" OnTextChanged="txtFilterNota_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
 
+                                     </HeaderTemplate>
+                                     <ItemTemplate>
+                                         <%# Eval("decr_nota") %>
+                                          <%# Eval("note") %>
+                                     </ItemTemplate>
+                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Prot. Generale" ItemStyle-Width="60px" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <div style="word-break: break-all; width: 100px;">
@@ -729,7 +753,7 @@
                 <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
                 <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
                 <asp:HiddenField ID="HfFiltroSigla" runat="server" />
-
+                <asp:HiddenField ID="HfFiltroNota" runat="server" />
 
             </div>
         </div>

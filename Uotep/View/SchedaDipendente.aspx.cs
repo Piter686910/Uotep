@@ -52,9 +52,9 @@ namespace Uotep
             //String MeseCorrente = DateTime.Now.ToString("MMMM");
             //String AnnoCorrente = DateTime.Now.ToString("yyyy");
             SchedaDipendenteClass scheda = new SchedaDipendenteClass();
-            scheda.Matricola = txtMatricola.Text.Trim();
-            scheda.Nominativo = txtNominativo.Text.ToUpper().Trim();
-            scheda.Ufficio = txtUfficio.Text.ToUpper().Trim();
+            scheda.Matricola_ced = txtMatricola.Text.Trim();
+            scheda.Nominativo = txtNominativo.Text.ToLower().Trim();
+            scheda.Ufficio = txtUfficio.Text.ToLower().Trim();
             scheda.dataAssunzione = Convert.ToDateTime(TxtDataAssunzione.Text.Trim());
             DateTime dataTemp;
             if (DateTime.TryParse(txtDataProssimaSorveglianza.Text.Trim(), out dataTemp))
@@ -70,7 +70,7 @@ namespace Uotep
             scheda.MacroArea = txtMacroArea.Text.ToUpper().Trim();
             scheda.GruppoReperibilita = txtGruppoRep.Text.ToUpper().Trim();
             scheda.TurnoPref = txtTurnoPref.Text.ToUpper().Trim();
-            scheda.Grado = txtGrado.Text.ToUpper().Trim();
+            scheda.Grado = txtGrado.Text.ToLower().Trim();
             if (rdUote.Checked)
             {
                 scheda.Area = "uote";

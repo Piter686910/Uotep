@@ -48,6 +48,7 @@ namespace Uotep
         public DateTime? DataNL { get; set; }
         public int Quartina { get; set; }
         public string Mese { get; set; }
+        
     }
     public partial class Turnazione : System.Web.UI.Page
     {
@@ -371,116 +372,74 @@ namespace Uotep
             }
             sb.Append("</tr>");
         }
-        // --- LOGICA UFFICI NUMEROSI AVANZATA ---
-        // Target: 50% Turno 1. Max: 60%. Min 2 dipendenti per turno.
         private void RiempimentoUfficioMultiplo(List<DipendenteTurno> gruppo, int giorniMese)
         {
             for (int i = 1; i <= giorniMese; i++)
             {
-                // 1. STATO ATTUALE (Chi è bloccato da Q, Sabati, RF?)
-                int count1 = 0;
-                int count2 = 0;
-                List<DipendenteTurno> liberi = new List<DipendenteTurno>();
+                // 1. Identifichiamo chi ha già un turno fissato (da Quartine, Sabati, RSNL, RF, Preferenze)
+                int presentiT1 = gruppo.Count(d => d.TurniMensili[i] == "1");
+                int presentiT2 = gruppo.Count(d => d.TurniMensili[i] == "2");
 
-                foreach (var dip in gruppo)
-                {
-                    string t = dip.TurniMensili[i];
-                    if (t == "1") count1++;
-                    else if (t == "2") count2++;
-                    else if (t == null) liberi.Add(dip);
-                }
-
-                // 2. FABBISOGNO (Minimo 2 per turno)
-                int missing1 = Math.Max(0, 2 - count1);
-                int missing2 = Math.Max(0, 2 - count2);
-
-                // 3. ANALISI DEI VINCOLI CONSECUTIVI 
-                var obbligatiA1 = new List<DipendenteTurno>();
-                var obbligatiA2 = new List<DipendenteTurno>();
-                var flessibili = new List<DipendenteTurno>();
+                // 2. Prendiamo i dipendenti ancora liberi ("null")
+                // Li ordiniamo per percentuale per rispettare il 60/40
+                var liberi = gruppo.Where(d => d.TurniMensili[i] == null)
+                                   .OrderBy(d => GetPercTurno1Attuale(d.TurniMensili, i))
+                                   .ToList();
 
                 foreach (var dip in liberi)
                 {
-                    string p1 = (i > 1) ? dip.TurniMensili[i - 1] : "";
-                    string p2 = (i > 2) ? dip.TurniMensili[i - 2] : "";
+                    string turnoScelto = "";
 
-                    bool no1 = (p1 == "1" && p2 == "1"); // Vietato 1
-                    bool no2 = (p1 == "2" && p2 == "2"); // Vietato 2
-
-                    if (no1 && !no2) obbligatiA2.Add(dip);
-                    else if (no2 && !no1) obbligatiA1.Add(dip);
-                    else if (no1 && no2) flessibili.Add(dip); // Caso raro, mettiamo flessibile
-                    else flessibili.Add(dip); // Jolly: può fare tutto
-                }
-
-                // 4. ASSEGNAZIONE OBBLIGATA (Priorità massima per non rompere i turni)
-                foreach (var dip in obbligatiA1) { dip.TurniMensili[i] = "1"; if (missing1 > 0) missing1--; }
-                foreach (var dip in obbligatiA2) { dip.TurniMensili[i] = "2"; if (missing2 > 0) missing2--; }
-
-                // 5. ASSEGNAZIONE FLESSIBILI BILANCIATA (Il cuore della modifica)
-
-                // Creiamo una lista temporanea con la % attuale di ognuno per poter ordinare
-                var candidati = flessibili.Select(d => new
-                {
-                    Dip = d,
-                    Perc1 = GetPercTurno1Attuale(d.TurniMensili, i)
-                }).ToList();
-
-                // A. Copriamo i buchi del Turno 2 (missing2)
-                // Chi scegliamo? Chi ha la % di "1" PIÙ ALTA (sopra il 60% o 50%), così gli diamo un "2" e scende.
-                while (missing2 > 0 && candidati.Count > 0)
-                {
-                    // Ordiniamo Decrescente: chi ha 70% di "1" va in cima alla lista
-                    var scelto = candidati.OrderByDescending(x => x.Perc1).First();
-
-                    scelto.Dip.TurniMensili[i] = "2";
-                    candidati.Remove(scelto);
-                    missing2--;
-                }
-
-                // B. Copriamo i buchi del Turno 1 (missing1)
-                // Chi scegliamo? Chi ha la % di "1" PIÙ BASSA, così gli diamo un "1" e sale.
-                while (missing1 > 0 && candidati.Count > 0)
-                {
-                    // Ordiniamo Crescente: chi ha 30% di "1" va in cima alla lista
-                    var scelto = candidati.OrderBy(x => x.Perc1).First();
-
-                    scelto.Dip.TurniMensili[i] = "1";
-                    candidati.Remove(scelto);
-                    missing1--;
-                }
-
-                // C. Assegnazione Eccedenze (Target 50%)
-                // I minimi sono coperti, rimangono dipendenti extra. Assegniamo per bilanciare la loro media.
-                foreach (var item in candidati)
-                {
-                    // Se hai più del 50% di "1", ti do "2".
-                    // Se hai meno del 50% di "1", ti do "1".
-                    // Questo rispetta rigorosamente il limite del 60%.
-                    if (item.Perc1 > 50.0)
+                    // Priorità 1: Coprire il turno 1 se mancano persone (minimo 2)
+                    if (presentiT1 < 2 && IsTurnoConsentito(dip.TurniMensili, i, "1"))
                     {
-                        item.Dip.TurniMensili[i] = "2";
+                        turnoScelto = "1";
+                        presentiT1++;
                     }
+                    // Priorità 2: Coprire il turno 2 se mancano persone (minimo 2)
+                    else if (presentiT2 < 2 && IsTurnoConsentito(dip.TurniMensili, i, "2"))
+                    {
+                        turnoScelto = "2";
+                        presentiT2++;
+                    }
+                    // Priorità 3: Se i minimi sono coperti, distribuisci in base alla percentuale 60/40
                     else
                     {
-                        item.Dip.TurniMensili[i] = "1";
+                        string turnoPreferibile = (GetPercTurno1Attuale(dip.TurniMensili, i) > 55) ? "2" : "1";
+
+                        if (IsTurnoConsentito(dip.TurniMensili, i, turnoPreferibile))
+                            turnoScelto = turnoPreferibile;
+                        else
+                            turnoScelto = (turnoPreferibile == "1") ? "2" : "1"; // Inverte se viola i 2 giorni
                     }
+
+                    dip.TurniMensili[i] = turnoScelto;
                 }
             }
+        }
+        // Verifica che non ci siano già 2 giorni consecutivi dello stesso turno
+        // Modifica questa funzione per essere meno restrittiva
+        private bool IsTurnoConsentito(string[] turni, int giorno, string turnoDaAssegnare, bool forzaModifica = false)
+        {
+            // Se stai forzando la modifica manualmente, restituiamo sempre true
+            if (forzaModifica) return true;
+
+            // Altrimenti, per l'algoritmo automatico, manteniamo il controllo dei 2 giorni
+            if (giorno > 2)
+            {
+                if (turni[giorno - 1] == turnoDaAssegnare && turni[giorno - 2] == turnoDaAssegnare)
+                    return false;
+            }
+            return true;
         }
         private List<DipendenteTurno> ElaboraDati(DataTable dtDip, Dictionary<int, string> mappaQuartine, int anno, int mese)
         {
             var lista = new List<DipendenteTurno>();
             int giorniMese = DateTime.DaysInMonth(anno, mese);
-            string meseStringa = new DateTime(anno, mese, 1)
-                .ToString("MMMM", new System.Globalization.CultureInfo("it-IT"))
-                .Substring(0, 3)
-                .ToUpper();
-
-            // Caricamento Regole RSNL dal Database
+            string meseStringa = new DateTime(anno, mese, 1).ToString("MMMM", new CultureInfo("it-IT")).Substring(0, 3).ToUpper();
             List<RegolaRSNL> regoleRSNL = CaricaRegoleRSNL(anno, mese);
 
-            // --- PRIMA PASSATA: Creazione e Vincoli Assoluti ---
+            // --- PRIMA PASSATA: APPLICAZIONE REGOLE IN ORDINE DI PRIORITÀ ---
             foreach (DataRow row in dtDip.Rows)
             {
                 var dip = new DipendenteTurno();
@@ -490,200 +449,140 @@ namespace Uotep
                 dip.Gruppo = row["gruppo_quartina"].ToString();
                 dip.TurniMensili = new string[32];
                 dip.Area = row["area"].ToString();
-
-                // LETTURA AUTISTA
-                if (row.Table.Columns.Contains("autista") && row["autista"] != DBNull.Value)
-                {
-                    dip.IsAutista = Convert.ToBoolean(row["autista"]);
-                }
-                else
-                {
-                    dip.IsAutista = false; // Default
-                }
-
-                int idQuartina = (row.Table.Columns.Contains("quartina") && row["quartina"] != DBNull.Value)
-                                    ? Convert.ToInt32(row["quartina"]) : 0;
-                dip.QuartinaID = idQuartina;
-
-                string stringaGiorni = mappaQuartine.ContainsKey(idQuartina) ? mappaQuartine[idQuartina] : "";
+                dip.IsAutista = Convert.ToBoolean( row["Autista"].ToString()); 
+                dip.QuartinaID = Convert.ToInt32( row["quartina"].ToString());
                 dip.TurniMensili = new string[giorniMese + 1];
 
-                // --- APPLICAZIONE REGOLE VINCOLANTI ---
-
-                // 1. Quartine (Q)
+                // 1. QUARTINE
+                string stringaGiorni = mappaQuartine.ContainsKey(dip.QuartinaID) ? mappaQuartine[dip.QuartinaID] : "";
                 List<int> giorniQ = ApplicaRegolaQ(dip.TurniMensili, stringaGiorni, giorniMese);
 
-                // 2. Sabati Ancorati
+                // 2. SABATI (1° Turno e successivo 2° Turno)
                 ApplicaRegolaSabati(dip.TurniMensili, giorniQ, giorniMese, anno, mese);
 
-                // 3. Regole Speciali (RS/NL)
+                // 3. RSNL
                 ApplicaRegolaRSNL(dip, regoleRSNL, giorniMese, anno, mese, meseStringa);
 
-                // 4. Festivi (RF)
+                // 4. FESTIVITÀ (RF)
                 ApplicaRegolaFestivi(dip.TurniMensili, giorniMese, anno, mese);
 
-                // 5. NUOVA REGOLA: PREFERENZE (turni_pref)
-                // La applichiamo qui in modo che rispetti Q e RF già impostati
+                // 5. PREFERENZE
                 ApplicaRegolaPreferenze(dip, row, giorniMese, anno, mese);
 
                 lista.Add(dip);
             }
 
-            // --- SECONDA PASSATA: Riempimento per Gruppi ---
+            // --- SECONDA PASSATA: RIEMPIMENTO UFFICI (ORDINE RICHIESTO) ---
             var gruppiUfficio = lista.GroupBy(d => d.Ufficio).ToList();
 
+            // Ordiniamo l'esecuzione dei riempimenti come richiesto
             foreach (var gruppo in gruppiUfficio)
             {
                 string nomeUfficio = gruppo.Key.ToUpper().Trim();
-                List<DipendenteTurno> dipsDelGruppo = gruppo.ToList();
+                List<DipendenteTurno> dips = gruppo.ToList();
 
-                if (dipsDelGruppo.Count == 1)
-                {
-                    RiempimentoUfficioSingolo(dipsDelGruppo[0], giorniMese);
-                }
-                else if (nomeUfficio == "CDR")
-                {
-                    RiempimentoUfficioCDR(dipsDelGruppo, giorniMese);
-                }
-                else if ((nomeUfficio == "GIRO" || nomeUfficio == "NOTIFICHE") && dipsDelGruppo.Count == 2)
-                {
-                    RiempimentoUfficioGemelli(dipsDelGruppo[0], dipsDelGruppo[1], giorniMese);
-                }
-                else if (nomeUfficio.StartsWith("MACRO"))
-                {
-                    RiempimentoUfficioConAutista(dipsDelGruppo, giorniMese);
-                }
-                else if (nomeUfficio == "FURERIA")
-                {
-                    RiempimentoUfficioFureria(dipsDelGruppo, giorniMese, anno, mese);
-                }
-                else if (dipsDelGruppo.Count == 2)
-                {
-                    RiempimentoUfficioCoppia(dipsDelGruppo[0], dipsDelGruppo[1], giorniMese);
-                }
-                else
-                {
-                    RiempimentoUfficioMultiplo(dipsDelGruppo, giorniMese);
-                }
+                if (dips.Count == 1) RiempimentoUfficioSingolo(dips[0], giorniMese);
+                else if (nomeUfficio == "GIRO" || nomeUfficio == "NOTIFICHE") RiempimentoUfficioGemelli(dips[0], dips[1], giorniMese); // Invariata
+                else if (nomeUfficio.StartsWith("MACRO")) RiempimentoUfficioConAutista(dips, giorniMese);
+                else if (nomeUfficio == "FURERIA") RiempimentoUfficioFureria(dips, giorniMese, anno, mese);
+                else if (nomeUfficio == "CDR") RiempimentoUfficioCDR(dips, giorniMese); // Invariata
+                else if (dips.Count == 2) RiempimentoUfficioCoppia(dips[0], dips[1], giorniMese);
+                else RiempimentoUfficioMultiplo(dips, giorniMese);
             }
 
-            // --- TERZA PASSATA: CALCOLO STATISTICHE (%) ---
-            foreach (var dip in lista)
-            {
-                int count1 = 0;
-                int count2 = 0;
-
-                for (int i = 1; i <= giorniMese; i++)
-                {
-                    string t = dip.TurniMensili[i];
-                    if (t == "1") count1++;
-                    else if (t == "2") count2++;
-                }
-
-                int totaleLavorati = count1 + count2;
-
-                if (totaleLavorati > 0)
-                {
-                    double perc = (double)count1 / totaleLavorati * 100;
-                    dip.StatisticaPerc = perc.ToString("0") + "%";
-                }
-                else
-                {
-                    dip.StatisticaPerc = "N/A";
-                }
-            }
+            // Terza passata per calcolo statistiche finali
+            RecalcolaPercentuali(lista, giorniMese);
             return lista;
         }
         private void ApplicaRegolaPreferenze(DipendenteTurno dip, DataRow row, int giorniMese, int anno, int mese)
         {
-            // Verifica se la colonna esiste e se c'è un valore
-            if (!row.Table.Columns.Contains("turni_pref") || row["turni_pref"] == DBNull.Value)
-                return;
-
-            string preferenze = row["turni_pref"].ToString().ToUpper();
-            if (string.IsNullOrEmpty(preferenze)) return;
-
-            // CultureInfo per ottenere i nomi dei giorni in Italiano
-            var culture = new System.Globalization.CultureInfo("it-IT");
-
+            // Supponiamo che le preferenze siano in colonne nominate "G1", "G2", ecc. nel DataRow
             for (int i = 1; i <= giorniMese; i++)
             {
-                // Se il giorno è già bloccato da regole superiori (Riposo Q, Festivo RF, ecc.), saltiamo
-                string turnoAttuale = dip.TurniMensili[i];
-                if (turnoAttuale == "Q" || turnoAttuale == "RF" || turnoAttuale == "RS" || turnoAttuale == "NL")
+                string colName = "G" + i;
+                if (row.Table.Columns.Contains(colName))
                 {
-                    continue;
-                }
+                    string pref = row[colName].ToString().Trim().ToUpper();
 
-                DateTime d = new DateTime(anno, mese, i);
-                // Ottiene "LUN", "MAR", "MER", etc.
-                string giornoAbbr = d.ToString("ddd", culture).ToUpper().Replace(".", "");
-
-                // Controllo se la stringa preferenze contiene il giorno + turno (es. "LUN2")
-                if (preferenze.Contains($"{giornoAbbr}2"))
-                {
-                    dip.TurniMensili[i] = "2";
-                }
-                else if (preferenze.Contains($"{giornoAbbr}1"))
-                {
-                    dip.TurniMensili[i] = "1";
+                    // Applica la preferenza solo se:
+                    // 1. Non è vuota
+                    // 2. Il turno per quel giorno è ancora "null" (non occupato da Q, Sabati, RSNL o Festivi)
+                    if (!string.IsNullOrEmpty(pref) && dip.TurniMensili[i] == null)
+                    {
+                        // Controllo aggiuntivo: se la preferenza è un turno numerico (1 o 2),
+                        // verifichiamo la regola dei 2 giorni consecutivi prima di inserirla
+                        if (pref == "1" || pref == "2")
+                        {
+                            if (IsTurnoConsentito(dip.TurniMensili, i, pref))
+                            {
+                                dip.TurniMensili[i] = pref;
+                            }
+                            else
+                            {
+                                // Se la preferenza viola i 2 giorni consecutivi, 
+                                // lasciamo a null affinché venga gestita dal RiempimentoUfficio
+                                dip.TurniMensili[i] = null;
+                            }
+                        }
+                        else
+                        {
+                            // Se è un codice speciale (es. "P" per permesso, "C" per congedo)
+                            dip.TurniMensili[i] = pref;
+                        }
+                    }
                 }
             }
         }
         private void ApplicaRegolaRSNL(DipendenteTurno dip, List<RegolaRSNL> regole, int giorniMese, int anno, int mese, string meseStringa)
         {
-            // Filtro per Gruppo, Quartina e Prefisso Mese (es. "GEN")
-            var regoleSoggetta = regole.Where(r =>
-                r.Gruppo.Trim().Equals(dip.Gruppo.Trim(), StringComparison.OrdinalIgnoreCase) &&
-                r.Quartina == dip.QuartinaID &&
-                r.Mese.Trim().StartsWith(meseStringa, StringComparison.OrdinalIgnoreCase)
+            // 1. Filtro le regole per Gruppo, Quartina e Mese 
+            //var regoleSoggetta = regole.Where(r =>
+            //    r.Gruppo.Trim().Equals(dip.Gruppo.Trim(), StringComparison.OrdinalIgnoreCase) &&
+            //    r.Quartina == dip.QuartinaID &&
+            //    r.Mese.Trim().StartsWith(meseStringa, StringComparison.OrdinalIgnoreCase)
+            //).ToList();
 
-            ).ToList();
+            var regoleSoggetta = regole.Where(r =>
+    r.Gruppo.Trim().Equals(dip.Gruppo.Trim(), StringComparison.OrdinalIgnoreCase) &&
+    r.Quartina == dip.QuartinaID &&
+    (
+        // Controlla se DataRS o DataNL cadono nel mese/anno che stai elaborando
+        (r.DataRS.HasValue && r.DataRS.Value.Month == mese && r.DataRS.Value.Year == anno) ||
+        (r.DataNL.HasValue && r.DataNL.Value.Month == mese && r.DataNL.Value.Year == anno)
+    )
+).ToList();
             if (regoleSoggetta.Count > 0)
             {
-
-
-                if (regoleSoggetta[0].DataRS.HasValue)
+                // Ciclo su TUTTE le regole trovate (possono essere più di una per mese)
+                foreach (var r in regoleSoggetta)
                 {
-                    DateTime dtRS = regoleSoggetta[0].DataRS.Value;
-                    int g = dtRS.Day;
-
-                    if (g <= giorniMese && g < dip.TurniMensili.Length)
+                    // --- GESTIONE RS (Riposo Settimanale) ---
+                    if (r.DataRS.HasValue)
                     {
-                        // CONTROLLO SABATO: dtRS.DayOfWeek == DayOfWeek.Saturday
-                        if (dtRS.DayOfWeek == DayOfWeek.Saturday)
+                        DateTime dtRS = r.DataRS.Value;
+
+                        // Verifichiamo che la data appartenga effettivamente al mese/anno in elaborazione
+                        if (dtRS.Month == mese && dtRS.Year == anno)
                         {
-                            // Forzatura: Se è sabato, assegniamo RS comunque
-                            dip.TurniMensili[g] = "RS";
-                        }
-                        else
-                        {
-                            // Per gli altri giorni, applichiamo solo se non è già ferie (Q)
-                            if (dip.TurniMensili[g] != "Q")
+                            int g = dtRS.Day;
+                            // Assegniamo RS se il giorno è valido e non è già occupato da "Q"
+                            if (g >= 1 && g <= giorniMese && dip.TurniMensili[g] != "Q")
                             {
                                 dip.TurniMensili[g] = "RS";
                             }
                         }
                     }
-                }
 
-                // --- GESTIONE NL ---
-                if (regoleSoggetta[0].DataNL.HasValue)
-                {
-                    DateTime dtNL = regoleSoggetta[0].DataNL.Value;
-                    int g = dtNL.Day;
-
-                    if (g <= giorniMese && g < dip.TurniMensili.Length)
+                    // --- GESTIONE NL (Notturno/Smontante) ---
+                    if (r.DataNL.HasValue)
                     {
-                        // CONTROLLO SABATO: dtNL.DayOfWeek == DayOfWeek.Saturday
-                        if (dtNL.DayOfWeek == DayOfWeek.Saturday)
+                        DateTime dtNL = r.DataNL.Value;
+
+                        // Verifichiamo che la data appartenga al mese/anno in elaborazione
+                        if (dtNL.Month == mese && dtNL.Year == anno)
                         {
-                            // Forzatura: Se è sabato, assegniamo NL comunque
-                            dip.TurniMensili[g] = "NL";
-                        }
-                        else
-                        {
-                            if (dip.TurniMensili[g] != "Q")
+                            int g = dtNL.Day;
+                            if (g >= 1 && g <= giorniMese && dip.TurniMensili[g] != "Q")
                             {
                                 dip.TurniMensili[g] = "NL";
                             }
@@ -691,54 +590,36 @@ namespace Uotep
                     }
                 }
             }
-            //foreach (var regola in regoleSoggetta)
+
+            //if (regoleSoggetta.Count > 0)
             //{
-            //    // --- GESTIONE RS ---
-            //    if (regola.DataRS.HasValue)
+            //    // Prendo la prima regola valida trovata per questo dipendente/mese
+            //    var r = regoleSoggetta[0];
+
+            //    // --- GESTIONE RS (Riposo Settimanale) ---
+            //    // Uso .DataRS che è il nome corretto nella tua classe RegolaRSNL
+            //    if (r.DataRS.HasValue)
             //    {
-            //        DateTime dtRS = regola.DataRS.Value;
+            //        DateTime dtRS = r.DataRS.Value;
             //        int g = dtRS.Day;
 
-            //        if (g <= giorniMese && g < dip.TurniMensili.Length)
+            //        // Controllo che il giorno sia valido e non sia già occupato da "Q" (Quartine)
+            //        if (g >= 1 && g <= giorniMese && dip.TurniMensili[g] != "Q")
             //        {
-            //            // CONTROLLO SABATO: dtRS.DayOfWeek == DayOfWeek.Saturday
-            //            if (dtRS.DayOfWeek == DayOfWeek.Saturday)
-            //            {
-            //                // Forzatura: Se è sabato, assegniamo RS comunque
-            //                dip.TurniMensili[g] = "RS";
-            //            }
-            //            else
-            //            {
-            //                // Per gli altri giorni, applichiamo solo se non è già ferie (Q)
-            //                if (dip.TurniMensili[g] != "Q")
-            //                {
-            //                    dip.TurniMensili[g] = "RS";
-            //                }
-            //            }
+            //            dip.TurniMensili[g] = "RS";
             //        }
             //    }
 
-            //    // --- GESTIONE NL ---
-            //    if (regola.DataNL.HasValue)
+            //    // --- GESTIONE NL (Notturno/Speciale) ---
+            //    // Uso .DataNL che è il nome corretto nella tua classe RegolaRSNL
+            //    if (r.DataNL.HasValue)
             //    {
-            //        DateTime dtNL = regola.DataNL.Value;
+            //        DateTime dtNL = r.DataNL.Value;
             //        int g = dtNL.Day;
 
-            //        if (g <= giorniMese && g < dip.TurniMensili.Length)
+            //        if (g >= 1 && g <= giorniMese && dip.TurniMensili[g] != "Q")
             //        {
-            //            // CONTROLLO SABATO: dtNL.DayOfWeek == DayOfWeek.Saturday
-            //            if (dtNL.DayOfWeek == DayOfWeek.Saturday)
-            //            {
-            //                // Forzatura: Se è sabato, assegniamo NL comunque
-            //                dip.TurniMensili[g] = "NL";
-            //            }
-            //            else
-            //            {
-            //                if (dip.TurniMensili[g] != "Q")
-            //                {
-            //                    dip.TurniMensili[g] = "NL";
-            //                }
-            //            }
+            //            dip.TurniMensili[g] = "NL";
             //        }
             //    }
             //}
@@ -820,14 +701,34 @@ namespace Uotep
             }
         }
 
-        private void ApplicaRegolaFestivi(string[] turni, int maxGiorni, int anno, int mese)
+        private void ApplicaRegolaFestivi(string[] turniMensili, int giorniMese, int anno, int mese)
         {
-            for (int i = 1; i <= maxGiorni; i++)
+            // Lista festività nazionali fisse (esempio)
+            List<DateTime> festivita = new List<DateTime> {
+        new DateTime(anno, 1, 1),   // Capodanno
+        new DateTime(anno, 1, 6),   // Epifania
+        new DateTime(anno, 4, 25),  // Liberazione
+        new DateTime(anno, 5, 1),   // Lavoro
+        new DateTime(anno, 6, 2),   // Repubblica
+        new DateTime(anno, 8, 15),  // Ferragosto
+        new DateTime(anno, 11, 1),  // Ognissanti
+        new DateTime(anno, 12, 8),  // Immacolata
+        new DateTime(anno, 12, 25), // Natale
+        new DateTime(anno, 12, 26)  // S. Stefano
+    };
+
+            for (int i = 1; i <= giorniMese; i++)
             {
-                // Usa il tuo metodo IsGiornoFestivo creato prima
-                if (IsGiornoFestivo(new DateTime(anno, mese, i)))
+                DateTime dataCorrente = new DateTime(anno, mese, i);
+
+                // Se è domenica o se è una festività nazionale
+                if (dataCorrente.DayOfWeek == DayOfWeek.Sunday || festivita.Contains(dataCorrente))
                 {
-                    if (turni[i] != "Q") turni[i] = "RF";
+                    // Applica RF solo se il giorno non è già stato occupato da Quartine o Sabati
+                    if (turniMensili[i] == null)
+                    {
+                        turniMensili[i] = "RF";
+                    }
                 }
             }
         }
@@ -936,104 +837,52 @@ namespace Uotep
         /// <param name="giorniMese"></param>
         private void RiempimentoUfficioSingolo(DipendenteTurno dip, int giorniMese)
         {
-            string[] t = dip.TurniMensili;
-
             for (int i = 1; i <= giorniMese; i++)
             {
-                // Interveniamo solo dove non ci sono già regole (Q, Sabati ancorati, RF, RS, NL)
-                if (t[i] == null)
+                if (dip.TurniMensili[i] == null)
                 {
-                    // Cerchiamo l'ultimo turno effettivo (1 o 2) fatto in precedenza nel mese
-                    string ultimo = GetUltimoTurnoEffettivo(t, i);
+                    string ultimo = GetUltimoTurnoEffettivo(dip.TurniMensili, i);
+                    string turnoProposto = (ultimo == "1") ? "2" : "1";
 
-                    if (ultimo == "1")
-                    {
-                        t[i] = "2";
-                    }
-                    else if (ultimo == "2")
-                    {
-                        t[i] = "1";
-                    }
-                    else
-                    {
-                        // Se è l'inizio del mese e non c'è storico, partiamo col turno 1
-                        t[i] = "1";
-                    }
+                    // Se il cambio automatico viola i 2 giorni consecutivi (es. dopo un RF), inverti
+                    if (!IsTurnoConsentito(dip.TurniMensili, i, turnoProposto))
+                        turnoProposto = (turnoProposto == "1") ? "2" : "1";
+
+                    dip.TurniMensili[i] = turnoProposto;
                 }
             }
         }
-
-
         // --- LOGICA COPPIA (2 DIPENDENTI)  ---
         // Alterna giorno per giorno (1->2->1) e tra colleghi (A=1, B=2)
         private void RiempimentoUfficioCoppia(DipendenteTurno d1, DipendenteTurno d2, int giorniMese)
         {
-            string[] t1 = d1.TurniMensili;
-            string[] t2 = d2.TurniMensili;
-
-            // Default iniziale: se il primo giorno è vuoto, partiamo con 1 per il dipendente A
-            // (A meno che non ci siano vincoli successivi che propagano indietro, ma semplifichiamo partendo da 1)
-            string turnoAttesoD1 = "1";
-
             for (int i = 1; i <= giorniMese; i++)
             {
-                // 1. Calcoliamo quale dovrebbe essere il turno teorico per D1 oggi
-                // Guardiamo indietro: qual è stato l'ultimo turno "1" o "2" assegnato a D1?
-                string ultimo = GetUltimoTurnoEffettivo(t1, i);
-                if (ultimo == "1") turnoAttesoD1 = "2";
-                else if (ultimo == "2") turnoAttesoD1 = "1";
-                // Se ultimo è nullo (inizio mese), resta il default (es. "1" o continua dal mese prima se implementato)
-
-                // 2. Verifichiamo se ci sono blocchi (Q, RF o Sabato Ancorato)
-                bool d1Bloccato = (t1[i] != null);
-                bool d2Bloccato = (t2[i] != null);
-
-                // CASO A: Entrambi bloccati (Es. Domenica RF, o conflitti Q)
-                if (d1Bloccato && d2Bloccato)
+                if (d1.TurniMensili[i] == null && d2.TurniMensili[i] == null)
                 {
-                    // Non facciamo nulla, vincono i blocchi.
-                    // L'alternanza riprenderà dal prossimo giorno basandosi su questi valori se sono 1 o 2.
-                    continue;
+                    string u1 = GetUltimoTurnoEffettivo(d1.TurniMensili, i);
+                    string propD1 = (u1 == "1") ? "2" : "1";
+
+                    if (!IsTurnoConsentito(d1.TurniMensili, i, propD1)) propD1 = (propD1 == "1") ? "2" : "1";
+
+                    d1.TurniMensili[i] = propD1;
+                    d2.TurniMensili[i] = (propD1 == "1") ? "2" : "1"; // D2 fa l'opposto di D1
                 }
-
-                // CASO B: D1 è bloccato, D2 è libero
-                if (d1Bloccato && !d2Bloccato)
+                else if (d1.TurniMensili[i] == null) // D2 è già occupato
                 {
-                    // D2 deve essere l'opposto di D1 (se D1 è 1 o 2)
-                    if (t1[i] == "1") t2[i] = "2";
-                    else if (t1[i] == "2") t2[i] = "1";
-                    else
-                    {
-                        // Se D1 è Q o RF, D2 non ha un opposto diretto.
-                        // Facciamo continuare D2 con la sua alternanza personale
-                        string ultimoD2 = GetUltimoTurnoEffettivo(t2, i);
-                        t2[i] = (ultimoD2 == "1") ? "2" : "1";
-                    }
+                    string propD1 = (d2.TurniMensili[i] == "1") ? "2" : "1";
+                    d1.TurniMensili[i] = propD1;
                 }
-                // CASO C: D2 è bloccato, D1 è libero
-                else if (!d1Bloccato && d2Bloccato)
+                else if (d2.TurniMensili[i] == null) // D1 è già occupato
                 {
-                    // D1 deve essere l'opposto di D2
-                    if (t2[i] == "1") t1[i] = "2";
-                    else if (t2[i] == "2") t1[i] = "1";
-                    else
-                    {
-                        // Se D2 è Q o RF, D1 segue la sua alternanza teorica
-                        t1[i] = turnoAttesoD1;
-                    }
-                }
-                // CASO D: Entrambi liberi (Giornata standard)
-                else
-                {
-                    // D1 prende il suo turno atteso (calcolato dall'alternanza storica)
-                    t1[i] = turnoAttesoD1;
-
-                    // D2 prende l'opposto di D1
-                    t2[i] = (t1[i] == "1") ? "2" : "1";
+                    string propD2 = (d1.TurniMensili[i] == "1") ? "2" : "1";
+                    d2.TurniMensili[i] = propD2;
                 }
             }
         }
 
+
+       
         // Funzione Helper per trovare l'ultimo turno "vero" (1 o 2) ignorando RF, Q e buchi
         private string GetUltimoTurnoEffettivo(string[] turni, int giornoCorrente)
         {
@@ -1168,146 +1017,59 @@ namespace Uotep
         // 3. Ratio 50% (Bilanciamento generale)
         private void RiempimentoUfficioConAutista(List<DipendenteTurno> gruppo, int giorniMese)
         {
-            // 1. PRE-BILANCIAMENTO (Invariato)
-            EseguiPreBilanciamentoSabati(gruppo, giorniMese);
-
             for (int i = 1; i <= giorniMese; i++)
             {
-                // ------------------------------------------------------------
-                // NUOVA REGOLA: GESTIONE TRIPLETTO PER AREA (Prima di tutto)
-                // ------------------------------------------------------------
-                var aree = gruppo.GroupBy(d => d.Area ?? "NESSUNA").ToList();
+                // 1. Identifica la situazione attuale (vincoli già fissati)
+                int presentiT1 = gruppo.Count(d => d.TurniMensili[i] == "1");
+                int presentiT2 = gruppo.Count(d => d.TurniMensili[i] == "2");
 
-                foreach (var areaGroup in aree)
-                {
-                    // Troviamo chi lavora oggi in questa Area (escludiamo ferie/malattia)
-                    var disponibiliArea = areaGroup.Where(d =>
-                        d.TurniMensili[i] != "RF" &&
-                        d.TurniMensili[i] != "Q" &&
-                        d.TurniMensili[i] != "RS" &&
-                        d.TurniMensili[i] != "NL").ToList();
+                // 2. Prendi i dipendenti che NON hanno vincoli (Quartine, RSNL, RF, ecc.)
+                var liberi = gruppo.Where(d => d.TurniMensili[i] == null)
+                                   .OrderBy(d => GetPercTurno1Attuale(d.TurniMensili, i))
+                                   .ToList();
 
-                    // SE SONO ESATTAMENTE 3: NON POSSONO DIVIDERSI (2+1 vietato) -> UNIAMOLI
-                    if (disponibiliArea.Count == 3)
-                    {
-                        // Decidiamo il turno target:
-                        // 1. Se c'è un Autista già assegnato a 1 o 2 (da regole precedenti), seguiamo lui.
-                        // 2. Altrimenti valutiamo bilanciamento o giorni precedenti.
+                if (liberi.Count == 0) continue;
 
-                        string target = "1"; // Default Mattina
-
-                        // Se qualcuno è già fissato su "2" ed è Autista, vincono tutti su "2"
-                        if (disponibiliArea.Any(d => d.TurniMensili[i] == "2" && d.IsAutista)) target = "2";
-
-                        // Se la maggioranza è già orientata sul 2 (perché spostata da regole precedenti), andiamo tutti su 2
-                        else if (disponibiliArea.Count(d => d.TurniMensili[i] == "2") >= 2) target = "2";
-
-                        // Verifica sicurezza: Se target è "1", controlliamo che nessuno abbia fatto "2" ieri
-                        if (target == "1")
-                        {
-                            bool qualcunoHaFattoPomeIeri = disponibiliArea.Any(d => HasPrevShift(d.TurniMensili, i, "2"));
-                            if (qualcunoHaFattoPomeIeri) target = "2"; // Meglio tutti pome che rompere il riposo
-                        }
-
-                        // APPLICAZIONE FORZATA: TUTTI INSIEME
-                        foreach (var dip in disponibiliArea)
-                        {
-                            dip.TurniMensili[i] = target;
-                        }
-
-                        // Rimuoviamoli dal pool successivo per non farli toccare dall'algoritmo standard
-                        // (Li consideriamo "Sistemati")
-                    }
-                }
-
-                // ------------------------------------------------------------
-                // PROCEDURA STANDARD (PER GLI ALTRI GRUPPI)
-                // ------------------------------------------------------------
-
-                // 1. FOTOGRAFIA
-                int count1 = 0; int count2 = 0;
-                bool hasAutista1 = false; bool hasAutista2 = false;
-                List<DipendenteTurno> liberi = new List<DipendenteTurno>();
-
-                foreach (var dip in gruppo)
-                {
-                    // Se sono già stati sistemati dalla regola del 3, li contiamo e basta
-                    string t = dip.TurniMensili[i];
-                    if (t == "1") { count1++; if (dip.IsAutista) hasAutista1 = true; }
-                    else if (t == "2") { count2++; if (dip.IsAutista) hasAutista2 = true; }
-                    else if (t == null) { liberi.Add(dip); }
-                }
-
-                // 2. CONSECUTIVI E ASSEGNAZIONE STANDARD
-                // (Solo per chi è rimasto null/libero)
-                var poolLavoro = new List<DipendenteTurno>();
                 foreach (var dip in liberi)
                 {
-                    string p1 = (i > 1) ? dip.TurniMensili[i - 1] : "";
-                    string p2 = (i > 2) ? dip.TurniMensili[i - 2] : "";
-                    bool no1 = (p1 == "1" && p2 == "1");
-                    bool no2 = (p1 == "2" && p2 == "2");
+                    string turnoScelto = "";
 
-                    if (no1 && !no2) { dip.TurniMensili[i] = "2"; count2++; if (dip.IsAutista) hasAutista2 = true; }
-                    else if (no2 && !no1) { dip.TurniMensili[i] = "1"; count1++; if (dip.IsAutista) hasAutista1 = true; }
-                    else poolLavoro.Add(dip);
-                }
+                    // --- REGOLA DI FORZATURA PER COMPORRE LA PATTUGLIA (MINIMO 2) ---
 
-                // 3. GARANZIA AUTISTA STANDARD
-                var autistiDisponibili = poolLavoro.Where(d => d.IsAutista).ToList();
-                foreach (var a in autistiDisponibili) poolLavoro.Remove(a);
-
-                if (!hasAutista1 && autistiDisponibili.Count > 0)
-                {
-                    var a = autistiDisponibili.OrderBy(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
-                    a.TurniMensili[i] = "1"; hasAutista1 = true; count1++;
-                    autistiDisponibili.Remove(a);
-                }
-                if (!hasAutista2 && autistiDisponibili.Count > 0)
-                {
-                    var a = autistiDisponibili.OrderByDescending(x => GetPercTurno1Attuale(x.TurniMensili, i)).First();
-                    a.TurniMensili[i] = "2"; hasAutista2 = true; count2++;
-                    autistiDisponibili.Remove(a);
-                }
-                poolLavoro.AddRange(autistiDisponibili);
-
-                // 4. RIEMPIMENTO FINALE
-                var coda = poolLavoro.Select(d => new { Dip = d, Perc = GetPercTurno1Attuale(d.TurniMensili, i), IsDriver = d.IsAutista }).ToList();
-
-                while (coda.Count > 0)
-                {
-                    var item = coda.OrderByDescending(x => Math.Abs(x.Perc - 50.0)).First();
-                    bool canGo1 = hasAutista1 || item.IsDriver;
-                    bool canGo2 = hasAutista2 || item.IsDriver;
-                    string decisione = null;
-
-                    if (!canGo1 && !canGo2) decisione = "RF";
-                    else if (canGo1 && !canGo2) decisione = "1";
-                    else if (!canGo1 && canGo2) decisione = "2";
+                    // Se il Turno 1 è scoperto (meno di 2 persone)
+                    if (presentiT1 < 2)
+                    {
+                        // Forziamo il turno 1. 
+                        // Ignoriamo IsTurnoConsentito perché la pattuglia è prioritaria.
+                        turnoScelto = "1";
+                        presentiT1++;
+                    }
+                    // Altrimenti se il Turno 2 è scoperto
+                    else if (presentiT2 < 2)
+                    {
+                        turnoScelto = "2";
+                        presentiT2++;
+                    }
+                    // Se entrambi hanno già 2 persone, usiamo la logica standard (bilanciamento)
                     else
                     {
-                        // Controllo se nell'area del dipendente sono rimasti solo in 2 a dover decidere
-                        // Ma qui la Regola del 3 ha già agito a monte, quindi usiamo la logica standard
-                        int colleghiAreaSu1 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "1");
-                        int colleghiAreaSu2 = gruppo.Count(d => d.Area == item.Dip.Area && d.TurniMensili[i] == "2");
+                        // Qui cerchiamo di rispettare i 2 giorni se possibile
+                        string turnoIdeale = (presentiT1 <= presentiT2) ? "1" : "2";
 
-                        if (colleghiAreaSu1 > colleghiAreaSu2 + 1) decisione = "2";
-                        else if (colleghiAreaSu2 > colleghiAreaSu1 + 1) decisione = "1";
+                        // Se il turno ideale non viola i 2 giorni, bene. 
+                        // Altrimenti proviamo l'altro. Se entrambi violano, mettiamo l'ideale.
+                        if (IsTurnoConsentito(dip.TurniMensili, i, turnoIdeale))
+                            turnoScelto = turnoIdeale;
+                        else if (IsTurnoConsentito(dip.TurniMensili, i, (turnoIdeale == "1" ? "2" : "1")))
+                            turnoScelto = (turnoIdeale == "1" ? "2" : "1");
                         else
-                        {
-                            if (count1 < 2 && count2 >= 2) decisione = "1";
-                            else if (count2 < 2 && count1 >= 2) decisione = "2";
-                            else decisione = (item.Perc < 50.0) ? "1" : "2";
-                        }
-                    }
-                    item.Dip.TurniMensili[i] = decisione;
-                    if (decisione == "1") { count1++; if (item.IsDriver) hasAutista1 = true; }
-                    else if (decisione == "2") { count2++; if (item.IsDriver) hasAutista2 = true; }
-                    coda.Remove(item);
-                }
+                            turnoScelto = turnoIdeale; // Forzatura finale
 
-                // Eseguo comunque la correzione coppie standard (per gruppi > 3)
-                EseguiCorrezioneMinimoDuePerArea(gruppo, i);
+                        if (turnoScelto == "1") presentiT1++; else presentiT2++;
+                    }
+
+                    dip.TurniMensili[i] = turnoScelto;
+                }
             }
         }
 

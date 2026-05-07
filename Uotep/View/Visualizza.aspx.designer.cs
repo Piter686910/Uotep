@@ -132,6 +132,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btIndirizzo;
 
         /// <summary>
+        /// Controllo btNote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btNote;
+
+        /// <summary>
         /// Controllo DivRicerca.
         /// </summary>
         /// <remarks>
@@ -555,6 +564,33 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDatArrivoA;
 
         /// <summary>
+        /// Controllo DivNote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivNote;
+
+        /// <summary>
+        /// Controllo Label16.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label16;
+
+        /// <summary>
+        /// Controllo txtNote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNote;
+
+        /// <summary>
         /// Controllo lblmessage.
         /// </summary>
         /// <remarks>
@@ -949,5 +985,14 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroSigla;
+
+        /// <summary>
+        /// Controllo HfFiltroNota.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfFiltroNota;
     }
 }

@@ -64,7 +64,7 @@ namespace Uotep
             string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
             // Assegna il valore decodificato al Literal
-           // ProtocolloLiteral.Text = decodedText;
+            // ProtocolloLiteral.Text = decodedText;
             //int protocollo = 0;
             if (!IsPostBack)
             {
@@ -72,7 +72,7 @@ namespace Uotep
                 string idCarico = Request.QueryString["idscheda"];
                 if (!String.IsNullOrEmpty(idCarico))
                 {
-                    txtNProtocollo.Text= Request.QueryString["Nr_Protocollo"];
+                    txtNProtocollo.Text = Request.QueryString["Nr_Protocollo"];
                     txtAnnoRicerca.Text = Request.QueryString["Anno"];
                     //Ricerca_Click(sender, e);
                     Manager mn = new Manager();
@@ -151,6 +151,10 @@ namespace Uotep
             {
                 pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text, out msg);
             }
+            if (txtNote.Text != string.Empty)
+            {
+                pratica = mn.getListByNote(txtNote.Text, out msg);
+            }
             if (pratica.Rows.Count > 0)
             {
                 // Salva datatable pratica  nella Sessione
@@ -166,7 +170,7 @@ namespace Uotep
                 }
                 else
                 {
-          //          gvPopup.PageIndex = 0;
+                    //          gvPopup.PageIndex = 0;
                     gvPopup.DataSource = pratica;
                     gvPopup.DataBind();
                     DivGrid.Visible = true;
@@ -212,7 +216,7 @@ namespace Uotep
             }
 
         }
-        protected void  chiudipopup_Click(object sender, EventArgs e)
+        protected void chiudipopup_Click(object sender, EventArgs e)
         {
 
             //  ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicerca')); modal.hide();", true);
@@ -267,7 +271,7 @@ namespace Uotep
                         HidPratica.Value = values[4]; // id
 
 
-                        
+
                         //p.nrProtocollo = System.Convert.ToInt32(protocollo);
                         //p.matricola = matricola;
                         if (!String.IsNullOrEmpty(dataInserimento))
@@ -278,7 +282,7 @@ namespace Uotep
                         }
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPraticaProtocolloDataSiglaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
-                        FillScheda(pratica,mn);
+                        FillScheda(pratica, mn);
                         //if (pratica.Rows.Count > 0)
                         //{
                         //    Pulisci();
@@ -404,7 +408,7 @@ namespace Uotep
                         //    //I 23/04/2026 controllo deleghe
                         //    if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
                         //        txtDataDelega.Text = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
-                            
+
                         //    txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
                         //    //F 23/04/2026 controllo deleghe
                         //    // Salva la lista nella Sessione
@@ -447,7 +451,7 @@ namespace Uotep
                 }
             }
         }
-        protected void FillScheda(DataTable pratica,Manager mn)
+        protected void FillScheda(DataTable pratica, Manager mn)
         {
             if (pratica.Rows.Count > 0)
             {
@@ -573,8 +577,19 @@ namespace Uotep
                 }
                 //I 23/04/2026 controllo deleghe
                 if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
-                    txtDataDelega.Text = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
-
+                {
+                    //converte la data 01-01-1900 in SPACE
+                    DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()); // Recupera la data dal DataTable
+                    if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
+                    {
+                        txtDataDelega.Text = ""; // Metti una stringa vuota
+                    }
+                    else
+                    {
+                        txtDataDelega.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
+                    }
+                    // txtDataDelega.Text = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
+                }
                 txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
                 //F 23/04/2026 controllo deleghe
                 // Salva la lista nella Sessione
@@ -638,6 +653,12 @@ namespace Uotep
             //  txtAccertatori.Text = String.Empty;
             List<string> accertatoriList = new List<string>();
             CkEvasa.Checked = false;
+            txtNote.Text = String.Empty;
+            HfFiltroNota.Value = string.Empty;
+            HfFiltroIndirizzo.Value = string.Empty;
+            HfFiltroAccertatori.Value = string.Empty;
+            HfFiltroSigla.Value = string.Empty;
+            HfFiltroNominativo.Value = string.Empty;
 
 
         }
@@ -749,6 +770,12 @@ namespace Uotep
             Pulisci();
             DivDataArrivo.Visible = true;
         }
+        protected void btNote_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            Pulisci();
+            DivNote.Visible = true;
+        }
         public void NascondiDiv()
         {
             DivRicerca.Visible = true;
@@ -766,6 +793,7 @@ namespace Uotep
             DivDettagli.Visible = false;
             DivValidazione.Visible = false;
             DivGridVal.Visible = false;
+            DivNote.Visible = false;
             Session.Remove("ListPratiche");
             Session.Remove("ListRicerca");
         }
@@ -908,6 +936,10 @@ namespace Uotep
                     if (String.IsNullOrWhiteSpace(filterColumn1) && String.IsNullOrWhiteSpace(filterColumn2))
                     {
                         filterExpression = $"{filterColumn} LIKE ('%{filterValue.Replace("'", "''")}%')";
+                    }
+                    else if (String.IsNullOrWhiteSpace(filterColumn2))
+                    {
+                        filterExpression = $"{filterColumn} LIKE ('%{filterValue.Replace("'", "''")}%') or {filterColumn1} LIKE ('%{filterValue.Replace("'", "''")}%')";
                     }
                     else
                     {
@@ -1282,6 +1314,35 @@ namespace Uotep
         {
             string url = VirtualPathUtility.ToAbsolute("~/View/Inserimento.aspx?dup=y");
             Response.Redirect(url, false);
+        }
+
+        protected void txtFilterNota_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "Nota", txtNote.Text };
+
+            // Salva la lista nella Sessione
+            Session["ListRicerca"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroNota.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; //campo db
+            string columnName1 = "";
+            string columnName2 = "";
+            if (txtFilter.ID == "txtFilterNota")
+            {
+                columnName = "Note"; // 
+                columnName1 = "decr_nota";
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, columnName1, columnName2, HfFiltroNota.Value); // Esempio di funzione di filtro
+                                                                                        //            apripopup_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
     }
 }

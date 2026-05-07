@@ -1331,7 +1331,7 @@ namespace Uotep
                         if (myMaster != null)
                         {
                             // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Non è possibile modificare la scheda dell'anno precedente.", "warning");
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Non è possibile modificare la scheda del mese precedente.", "warning");
 
 
                         }

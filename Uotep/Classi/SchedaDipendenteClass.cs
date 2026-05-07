@@ -9,6 +9,7 @@ namespace Uotep.Classi
     {
 
 
+        public string Matricola_ced { get; set; }
         public string Matricola { get; set; }
         public string Nominativo { get; set; }
         public string Ufficio { get; set; }
@@ -27,6 +28,7 @@ namespace Uotep.Classi
         public bool limitazione { get; set; }
         public bool l53 { get; set; }
         public bool l104 { get; set; }
+        public bool abilitato { get; set; }
 
     }
 }

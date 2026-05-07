@@ -287,7 +287,8 @@ namespace Uotep
             txtRifProtGen.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Gen"].ToString(), @"[^0-9/]", ";");
             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
             {
-                DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                //DdlMacroArea.SelectedItem.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
+                DdlMacroArea.SelectedValue = pratica.Rows[0]["Macro_area"].ToString();//  ItemArray[27].ToString().ToUpper();
                 //txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
             }
 
@@ -767,7 +768,8 @@ namespace Uotep
             txtProvenienza.Text = String.Empty;
             txtRifProtGen.Text = String.Empty;
             txtNominativo.Text = String.Empty;
-            DdlMacroArea.ClearSelection();
+            DdlMacroArea.SelectedIndex = 0;
+            // DdlMacroArea.ClearSelection();
             txtDataCarico.Text = String.Empty;
             txtDataInsCarico.Text = String.Empty;
             //txtAccertatori.Text = string.Empty;
@@ -1406,7 +1408,7 @@ namespace Uotep
                     Decretazione decr = new Decretazione();
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                     decr.id = idDecr;
-
+                    decr.decretante = txtDecretante.Text;
                     decr.decretato = txtSearchOperatore.Value;
                     decr.nota = txtNotaDecretazione.Text;
                     Boolean resp = mn.UpdDecretazione(decr);
@@ -1453,6 +1455,7 @@ namespace Uotep
 
         protected void GVDecretazione_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
+             Decretazione decr = new Decretazione();
             try
             {
                 Isdecr = "edit";
@@ -1463,35 +1466,34 @@ namespace Uotep
                 // Devi cercare i controlli usando l'ID che hai dato nell'EditItemTemplate
                 GridViewRow row = GVDecretazione.Rows[e.RowIndex];
                 Manager mn = new Manager();
-                Decretazione decr = new Decretazione();
-                // TextBox txtDecretanteMod = (TextBox)row.FindControl("txtDecretanteMod");
+               
+                TextBox txtDecretanteMod = (TextBox)row.FindControl("txtDecretanteMod");
                 TextBox txtDataMod = (TextBox)row.FindControl("txtDataMod");
                 TextBox txtDecretatoMod = (TextBox)row.FindControl("txtDecretatoMod");
                 TextBox txtNotaMod = (TextBox)row.FindControl("txtNotaMod");
-
-
-
-
 
                 decr.data = string.IsNullOrWhiteSpace(txtDataMod.Text.Trim()) ? DateTime.MinValue : System.Convert.ToDateTime(txtDataMod.Text);
                 // decr.data = System.Convert.ToDateTime(txtDataMod.Text);
                 decr.id = idDecretazione;
 
                 decr.decretato = string.IsNullOrWhiteSpace(txtDecretatoMod.Text.Trim()) ? string.Empty : txtDecretatoMod.Text.Trim();
+                decr.decretante = string.IsNullOrWhiteSpace(txtDecretanteMod.Text.Trim()) ? string.Empty : txtDecretanteMod.Text.Trim();
                 decr.nota = string.IsNullOrWhiteSpace(txtNotaMod.Text.Trim()) ? string.Empty : txtNotaMod.Text.Trim();
+                SiteMaster myMaster = this.Master as SiteMaster;
+               
                 Boolean resp = mn.UpdDecretazione(decr);
                 if (resp)
                 {
                     //richiama popup dalla site master
-                    SiteMaster myMaster = this.Master as SiteMaster;
+                  
 
-                    if (myMaster != null)
-                    {
+                    //if (myMaster != null)
+                    //{
                         // 2. Chiamo il metodo pubblico
                         // myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroOk.GetDescription(), "success");
                         GVDecretazione.EditIndex = -1;
                         Decretazione_Click(sender, e);
-                    }
+                   // }
                 }
                 //Decretazione_Click(sender, e);
 
@@ -1519,7 +1521,7 @@ namespace Uotep
                 if (myMaster != null)
                 {
                     // 2. Chiamo il metodo pubblico
-                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UpdInterrogatorioKo.GetDescription(), "danger");
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
                     if (!File.Exists(LogFile))
                     {
                         using (StreamWriter sw = File.CreateText(LogFile)) { }
@@ -1527,7 +1529,7 @@ namespace Uotep
 
                     using (StreamWriter sw = File.AppendText(LogFile))
                     {
-                        sw.WriteLine(ex.Message + @" - Errore in gvInterrogatori_RowUpdating statistichepg.cs ");
+                        sw.WriteLine(ex.Message + @" - Errore in GVDecretazione_RowUpdating modifica.cs ");
                         sw.Close();
                     }
 
