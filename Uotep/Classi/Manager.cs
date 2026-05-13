@@ -949,8 +949,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             string setContext = "DECLARE @u VARBINARY(128) = CAST('" + sessionUser + "' AS VARBINARY(128)); SET CONTEXT_INFO @u;";
             //executeSql(setContext);
 
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "left join decretazione d ON P.id = d.decr_idPratica WHERE P.Nr_Protocollo = " + protocollo + " and anno = '" + anno +
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " WHERE P.Nr_Protocollo = " + protocollo + " and anno = '" + anno +
                 "' AND 'User:" + sessionUser + "' = 'User:" + sessionUser + "' order by dataarrivo desc"; //condizione fantasma per forzare l'uso del CONTEXT_INFO e permettere al trigger di leggere l'utente della sessione SQL
             //"SELECT * FROM Principale where Nr_Protocollo = " + protocollo + " and anno = '" + anno + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -987,8 +987,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getListProcedimento(string procedimento, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             //"SELECT * FROM Principale where ProcedimentoPen like '%" + procedimento.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1007,8 +1007,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
             DateTime dtda = System.Convert.ToDateTime(datada);
             DateTime dta = System.Convert.ToDateTime(dataa);
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
             //string sql = "SELECT * FROM Principale where EvasaData BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1026,8 +1026,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
 
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
 
             //string sql = "SELECT * FROM Principale where Rif_Prot_Gen like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1041,7 +1041,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
             string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa" +
                             ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area" +
-                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio,D.decr_nota FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id where " +
+                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p  = p.id where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
             // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
@@ -1058,8 +1058,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getListGiudice(string giudice, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                " LEFT JOIN decretazione d ON P.id = d.decr_idPratica where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
 
             //   string sql = "SELECT * FROM Principale where giudice like '" + giudice.Replace("'", "''") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1209,8 +1209,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getListProvenienza(string provenienza, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                " LEFT JOIN decretazione d ON P.id = d.decr_idPratica where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             //            string sql = "SELECT * FROM Principale where provenienza like '%" + provenienza.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1227,9 +1227,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
             // string sql = "SELECT * FROM Principale where nominativo like '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore ,P.NOTE, D.decr_nota FROM Principale P " +
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P " +
               " LEFT JOIN operatore S ON P.matricola = S.matricola " +
-              " LEFT JOIN decretazione d ON P.id = d.decr_idPratica WHERE P.nominativo LIKE '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' " +
+              " WHERE P.nominativo LIKE '" + nominativo.Replace("'", "''").Replace("*", "%") + "%' " +
               "ORDER BY P.dataarrivo DESC";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1245,8 +1245,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getListIndirizzo(string indirizzo, out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             //string sql = "SELECT * FROM Principale where indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1265,8 +1265,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DateTime dta = System.Convert.ToDateTime(dataArrivoA);
 
             //string sql = "SELECT * FROM Principale where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where DataArrivo BETWEEN '" + dtda.ToShortDateString() + "' and '" + dta.ToShortDateString() + "'  order by dataarrivo desc";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -1289,8 +1289,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             //            "ORDER BY dataarrivo DESC";
 
 
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica WHERE (" +
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " WHERE (" +
                         "Accertatori LIKE '" + valoreCerca + "%' OR " +
                         "Accertatori2 LIKE '" + valoreCerca + "%' OR " +
                         "Accertatori3 LIKE '" + valoreCerca + "%') " +
@@ -1314,19 +1314,36 @@ ORDER BY LOGS.[Data Accesso] DESC";
         {
             DataTable tb = new DataTable();
             string valoreCerca = note.Replace("'", "''").Replace("*", "%");
-            
+            try
+            {
 
-            string sql = "SELECT P.*, O.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota  FROM Principale P LEFT JOIN decretazione d ON P.id = d.decr_idPratica " +
+                string sql = "SELECT P.*, O.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota  FROM Principale P LEFT JOIN decretazione d ON P.id = d.decr_idPratica " +
                 " LEFT JOIN OPERATORE O ON P.matricola = O.matricola" +
-                " WHERE (d.decr_nota LIKE '" + valoreCerca + "%'  OR " +
-                        "p.note LIKE '" + valoreCerca + "%') " +
+                " WHERE (d.decr_nota LIKE '%" + valoreCerca + "%'  OR " +
+                        "p.note LIKE '%" + valoreCerca + "%') " +
                         "ORDER BY dataarrivo DESC";
 
-            // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                return tb = FillTable(sql, conn, out msg);
+            
+                // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    return tb = FillTable(sql, conn, out msg);
+                }
             }
+            // Sostituisci questo blocco nel metodo getListByNote
+            catch (Exception ex)
+            {
+                // Gestione specifica per timeout SqlException
+                if (ex is System.Data.SqlClient.SqlException sqlEx && sqlEx.Number == -2) // Codice errore specifico per Timeout
+                {
+                    msg = "Time out";
+                }
+                else
+                {
+                    msg = "Errore database: " + ex.Message;
+                }
+            }
+            return tb;
         }
         public DataTable getListInterrogatori(Interrogatorio interr)
         {
@@ -1364,8 +1381,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
 
-            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore,P.NOTE, D.decr_nota FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                "LEFT JOIN decretazione d ON P.id = d.decr_idPratica where nr_pratica = '" + pratica + "' order by dataarrivo desc";
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                " where nr_pratica = '" + pratica + "' order by dataarrivo desc";
 
             //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))

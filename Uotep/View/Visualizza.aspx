@@ -1,46 +1,10 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Visualizza.aspx.cs" Inherits="Uotep.Visualizza" %>
+
 <%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
- <style>
-            .grid-fissa {
-    table-layout: fixed;
-    width: auto !important;
-}
-    /* 1. Forza il font su tutta la tabella (Header e Celle) */
-    #<%= DivGrid.ClientID %>, 
-    #<%= DivGrid.ClientID %> th, 
-    #<%= DivGrid.ClientID %> td {
-        font-size: 1.405rem !important; /* Questo è circa un fs-5/fs-6 abbondante */
-        padding: 10px 8px !important;
-    }
 
-    /* 2. Stile specifico per l'Header (Titoli e Filtri) */
-    #<%= DivGrid.ClientID %> th {
-        background-color: #337ab7 !important; /* Grigio scuro Bootstrap */
-        color: white !important;
-        vertical-align: top !important;
-        font-weight: 600 !important;
-        text-transform: uppercase;
-    }
-
-    /* 3. Forza la grandezza dei TextBox di ricerca dentro l'header */
-    #<%= DivGrid.ClientID %> th input[type="text"] {
-        font-size: 1.4rem !important;
-        margin-top: 5px;
-        font-weight: normal;
-        text-transform: none; /* Evita che il filtro scriva tutto in maiuscolo */
-    }
-
-    /* 4. Ingrandisce il pulsante 'Seleziona' e i link */
-    #<%= DivGrid.ClientID %> .btn-sm {
-        font-size: 1.2rem !important;
-        padding: 5px 15px !important;
-    }
-
-    
-</style>
     <script>
         function ShowErrorMessage(message) {
             $('#errorModal').modal('show');
@@ -50,13 +14,13 @@
             document.getElementById("overlay").style.display = "block";
         }
         // Mostra il popup
-        function showMsgModal() {
-            $('#MsgModal').modal('show');
+        function showModalNote() {
+            $('#ModalRicercaNote').modal('show');
         }
 
         // Nasconde il popup
-        function hideMsgModal() {
-            $('#MsgModal').modal('hide');
+        function hideModalNote() {
+            $('#ModalRicercaNote').modal('hide');
         }
 
         // Mostra il popup ricerca
@@ -419,7 +383,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtGgDelega">Termine gg. delega</label>
-                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false"  Enabled="false"  CssClass="form-control" ></asp:TextBox>
+                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" Enabled="false" CssClass="form-control"></asp:TextBox>
                             </div>
 
                         </div>
@@ -572,6 +536,7 @@
             </PagerTemplate>
 
         </asp:GridView>
+
         <div style="margin-left: 300px">
             <!-- Bottone per avviare la ricerca -->
             <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
@@ -637,7 +602,7 @@
                                                <br />
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                           
+
                                             <asp:HyperLink ID="lnkScheda" runat="server"
                                                 NavigateUrl='<%# String.Format("~/View/GestionePratica.aspx?idscheda={0}&nrPratica={1}", Eval("ID"), Eval("nr_Pratica")) %>'
                                                 Target="_blank"
@@ -699,18 +664,7 @@
                                             <%# Eval("Accertatori3")   %>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                     <asp:TemplateField HeaderText="Nota" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                     <HeaderTemplate>
-                                         Nota
-                                       <br />
-                                         <asp:TextBox ID="txtFilterNota" runat="server" OnTextChanged="txtFilterNota_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
 
-                                     </HeaderTemplate>
-                                     <ItemTemplate>
-                                         <%# Eval("decr_nota") %>
-                                          <%# Eval("note") %>
-                                     </ItemTemplate>
-                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Prot. Generale" ItemStyle-Width="60px" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <div style="word-break: break-all; width: 100px;">
@@ -758,33 +712,100 @@
             </div>
         </div>
     </div>
-
-    <%-- popup messaggi --%>
-    <%--<div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="MsgModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
+    <div class="modal fade" id="ModalRicercaNote" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="width: 100%">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel11">ATTENZIONE</h5>
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="modalLabel2">Ricerca Note</h5>
 
                 </div>
                 <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
+                    <div id="DivRicNote" runat="server" visible="false" class="section-box">
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                            <div class="small text-muted">
+                                <asp:Label ID="lblInfoPagineNote" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <!-- GridView nel popup -->
+                            <asp:GridView ID="gvNote" runat="server" AutoGenerateColumns="False"
+                                CssClass="table table-bordered table-hover fs-1"
+                                OnRowDataBound="gvNote_RowDataBound"
+                                OnDataBound="gvNote_DataBound"
+                                AllowPaging="true" PageSize="10"
+                                OnPageIndexChanging="gvNote_PageIndexChanging"
+                                RowStyle-CssClass="GridViewRow"
+                                AlternatingRowStyle-CssClass="GridViewAlternatingRow"
+                                PagerSettings-Position="Top"
+                                PagerSettings-Mode="NextPreviousFirstLast"
+                                PagerSettings-FirstPageText="&laquo; Prima"
+                                PagerSettings-LastPageText="Ultima &raquo;"
+                                PagerSettings-NextPageText="Succ. &rsaquo;"
+                                PagerSettings-PreviousPageText="&lsaquo; Prec.">
 
-                        <p id="TextMessage" runat="server" style="color: red"></p>
+                                <Columns>
+                                    <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                    <%--<asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />--%>
+                                    <asp:TemplateField HeaderText="Carico" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true">
+                                        <HeaderTemplate>
+                                            Carico
+                                             <br />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:HyperLink ID="lnkScheda" runat="server"
+                                                NavigateUrl='<%# String.Format("~/View/Visualizza.aspx?idscheda={0}&Nr_Protocollo={1}&Anno={2}", Eval("ID"), Eval("Nr_Protocollo"), Eval("Anno")) %>'
+                                                Target="_blank"
+                                                Text='<%# Eval("Nr_Protocollo") %>'>
+                                            </asp:HyperLink>
 
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="10px" />
+
+                                    <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="10px" />
+
+                                    <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Width="10px" />
+
+                                    <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+                                    <asp:BoundField DataField="TipoProvvedimentoAG" HeaderText="Tipo Prov. AG" ItemStyle-Width="30px" />
+
+                                    <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                        <ItemStyle CssClass="uppercase-text" />
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                        <ItemStyle CssClass="uppercase-text" />
+                                    </asp:BoundField>
+
+                                    <asp:TemplateField HeaderText="Nota" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true">
+                                        <HeaderTemplate>
+                                            Nota
+                                             <br />
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                                <%# Eval("decr_nota") %> <%# Eval("note") %>
+
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
+
+                                </Columns>
+
+                                <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                            </asp:GridView>
+                            <div class="modal-footer">
+                                <!-- Bottone per avviare la ricerca -->
+                                <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                                <asp:Button ID="btChiudiPop" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiPop_Click" />
+                                <%--<asp:Button ID="Button2" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />--%>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btChiudiMsgModal" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiMsgModal_Click" />
-                    <asp:Button ID="btOKDup" runat="server" class="btn btn-secondary" Text="OK" OnClick="btOKDup_Click" />
-                </div>
+                
+
             </div>
         </div>
-    </div>--%>
+    </div>
 
-
-
+    
 </asp:Content>

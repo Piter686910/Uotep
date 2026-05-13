@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
@@ -16,6 +17,20 @@ namespace Uotep
 {
     public partial class Visualizza : Page
     {
+        // Variabile per gestire la pagina corrente (puoi salvarla in ViewState)
+        public int PaginaCorrente
+        {
+          
+
+            get
+            {
+                if (ViewState["PaginaCorrente"] == null)
+                    return 1; // Forza la partenza a 1 se è la prima volta
+
+                return (int)ViewState["PaginaCorrente"];
+            }
+            set { ViewState["PaginaCorrente"] = value; }
+        }
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
@@ -68,6 +83,7 @@ namespace Uotep
             //int protocollo = 0;
             if (!IsPostBack)
             {
+           //     PaginaCorrente = 1;
                 DivDettagli.Visible = false;
                 string idCarico = Request.QueryString["idscheda"];
                 if (!String.IsNullOrEmpty(idCarico))
@@ -154,6 +170,25 @@ namespace Uotep
             if (txtNote.Text != string.Empty)
             {
                 pratica = mn.getListByNote(txtNote.Text, out msg);
+                if (pratica.Rows.Count > 0)
+                {
+                    Session["ListPratiche"] = pratica;
+                    gvNote.DataSource = pratica;
+                    gvNote.DataBind();
+                    DivRicNote.Visible = true;
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaNote').modal('show');", true);
+                }
+                else
+                {
+                    if (!String.IsNullOrWhiteSpace(msg))
+                    {
+
+                        Routine R = new Routine();
+                        R.PagError(msg, paginaChiamante);
+                    }
+                   
+                }
+                return;
             }
             if (pratica.Rows.Count > 0)
             {
@@ -178,18 +213,7 @@ namespace Uotep
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
                 }
                 string a = pratica.Rows[0].ItemArray[1].ToString();
-                //DataTable decretazione = new DataTable();
-
-                //decretazione =  mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
-                //if (decretazione.Rows.Count > 0)
-                //{
-                //    GVDecretazione.DataSource = decretazione;
-                //    GVDecretazione.DataBind();
-                //    divDecretazione.Visible = true;
-                //}
-                //else
-                //    divDecretazione.Visible = false;
-
+               
 
             }
             else
@@ -283,155 +307,7 @@ namespace Uotep
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPraticaProtocolloDataSiglaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         FillScheda(pratica, mn);
-                        //if (pratica.Rows.Count > 0)
-                        //{
-                        //    Pulisci();
-                        //    txtProt.Text = pratica.Rows[0].ItemArray[1].ToString() + " - " + pratica.Rows[0].ItemArray[2].ToString();
-                        //    // txtSigla.Text = pratica.Rows[0].ItemArray[2].ToString();
-                        //    if (pratica.Rows[0].ItemArray[2].ToString() == Enumerate.Sigla.AG.ToString().ToUpper())
-                        //    {
-                        //        divAg.Visible = true;
-                        //    }
-                        //    else
-                        //    {
-                        //        divAg.Visible = false;
-
-                        //    }
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[3].ToString()))
-
-                        //        txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
-
-
-                        //    txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
-                        //    txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
-                        //    txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-                        //    txtTipoAtto.ToolTip = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
-                        //    txtUltTipoAtto.Text = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
-                        //    txtUltTipoAtto.ToolTip = pratica.Rows[0].ItemArray[28].ToString().ToUpper();
-                        //    txtGiudice.Text = pratica.Rows[0].ItemArray[6].ToString().ToUpper();
-                        //    TxtTipoProvvAg.Text = pratica.Rows[0].ItemArray[7].ToString();
-                        //    TxtTipoProvvAg.ToolTip = pratica.Rows[0].ItemArray[7].ToString().ToUpper();
-                        //    txtProdPenNr.Text = pratica.Rows[0].ItemArray[8].ToString();
-                        //    txtNominativo.Text = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
-                        //    txtNominativo.ToolTip = pratica.Rows[0].ItemArray[9].ToString().ToUpper();
-                        //    txtIndirizzo.Text = pratica.Rows[0].ItemArray[10].ToString().ToUpper() + " " + pratica.Rows[0].ItemArray[11].ToString().ToUpper();
-                        //    txtIndirizzo.ToolTip = pratica.Rows[0].ItemArray[10].ToString().ToUpper();
-
-                        //    CkEvasa.Checked = System.Convert.ToBoolean(pratica.Rows[0].ItemArray[12]);
-
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[13].ToString()))
-                        //    {
-                        //        //converte la data 01-01-1900 in SPACE
-                        //        DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()); // Recupera la data dal DataTable
-                        //        if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
-                        //        {
-                        //            txtDataDataEvasa.Text = ""; // Metti una stringa vuota
-                        //        }
-                        //        else
-                        //        {
-                        //            txtDataDataEvasa.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
-                        //        }
-                        //    }
-                        //    //  txtDataDataEvasa.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[13].ToString()).ToShortDateString();
-
-
-                        //    //     txtinviata.Text = pratica.Rows[0].ItemArray[14].ToString().ToUpper();
-
-                        //    //if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[15].ToString()))
-
-                        //    //    txtDataInvio.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[15].ToString()).ToShortDateString();
-
-                        //    txtEsito.Text = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-                        //    txtEsito.ToolTip = pratica.Rows[0].ItemArray[16].ToString().ToUpper();
-                        //    //if (pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("-") || pratica.Rows[0].ItemArray[17].ToString().ToUpper().StartsWith("/"))
-                        //    //{
-                        //    //    txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
-                        //    //    txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper().Substring(1);
-                        //    //}
-                        //    //else
-                        //    //{
-                        //    //    txtAccertatori.Text = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
-                        //    //    txtAccertatori.ToolTip = pratica.Rows[0].ItemArray[17].ToString().ToUpper();
-                        //    //}
-
-                        //    //I- mod 02/02/2026 accertatori in lista
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori"].ToString())) // 17
-                        //    {
-
-                        //        ListAccertatori.Items.Add(pratica.Rows[0]["accertatori"].ToString());
-                        //    }
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori2"].ToString()))
-                        //    {
-                        //        ListAccertatori.Items.Add(pratica.Rows[0]["accertatori2"].ToString());
-                        //    }
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori3"].ToString()))
-                        //    {
-                        //        ListAccertatori.Items.Add(pratica.Rows[0]["accertatori3"].ToString());
-                        //    }
-                        //    //F- mod 02/02/2026 accertatori in lista
-
-                        //    //I- mod 02/06/2026 numero esposti
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0]["NumProtRicStessoCarico"].ToString()))
-                        //    {
-                        //        txtNumProtRicStessoCarico.Text = pratica.Rows[0]["NumProtRicStessoCarico"].ToString();
-                        //    }
-
-                        //    //F- mod 02/06/2026 numero esposti
-
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
-                        //    {
-                        //        //converte la data 01-01-1900 in SPACE
-                        //        DateTime dataappo = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()); // Recupera la data dal DataTable
-                        //        if (dataappo == new DateTime(1900, 1, 1) || dataappo == new DateTime(1, 1, 1))
-                        //        {
-                        //            txtDataCarico.Text = ""; // Metti una stringa vuota
-                        //        }
-                        //        else
-                        //        {
-                        //            txtDataCarico.Text = dataappo.ToShortDateString(); // Formatta la data come preferisci
-                        //        }
-                        //    }
-                        //    //txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
-
-                        //    txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
-                        //    TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
-                        //    //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
-                        //    //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
-                        //    txtAnnoRicerca.Text = pratica.Rows[0].ItemArray[22].ToString();
-                        //    //lblGiorno.Text = pratica.Rows[0].ItemArray[21].ToString();
-                        //    txtRifProtGen.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Gen"].ToString(), @"[^0-9/]", ";");  //pratica.Rows[0].ItemArray[24].ToString();
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[27].ToString()))
-                        //    {
-                        //        txtAreaCompetenza.Text = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
-                        //        txtAreaCompetenza.ToolTip = pratica.Rows[0].ItemArray[27].ToString().ToUpper();
-                        //    }
-                        //    //I 23/04/2026 controllo deleghe
-                        //    if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
-                        //        txtDataDelega.Text = System.Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
-
-                        //    txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
-                        //    //F 23/04/2026 controllo deleghe
-                        //    // Salva la lista nella Sessione
-                        //    Session["ListRicerca"] = pratica;
-                        //    // Puoi anche chiudere il popup se necessario
-                        //    ScriptManager.RegisterStartupScript(this, GetType(), "closePopup", "$('#ModalRicerca').modal('hide');", true);
-                        //    DivDettagli.Visible = true;
-                        //    DivRicerca.Visible = false;
-
-
-                        //    DataTable decretazione = new DataTable();
-
-                        //    decretazione = mn.getListDecretazione(pratica.Rows[0].ItemArray[1].ToString(), pratica.Rows[0].ItemArray[0].ToString());
-                        //    if (decretazione.Rows.Count > 0)
-                        //    {
-                        //        GVDecretazione.DataSource = decretazione;
-                        //        GVDecretazione.DataBind();
-                        //        divDecretazione.Visible = true;
-                        //    }
-                        //    else
-                        //        divDecretazione.Visible = false;
-
-                        //}
+                        
 
                     }
                 }
@@ -1185,47 +1061,7 @@ namespace Uotep
             Response.Redirect(url, false);
         }
 
-        //protected void btDuplica_Click(object sender, EventArgs e)
-        //{
-        //    btOKDup.Enabled = true;
-        //    TextMessage.InnerText = "Sei sicuro di voler duplicare il carico corrente?";
-        //    //TextMessage.InnerHtml = "style=""";
-        //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
-
-        //}
-
-        //protected void btOKDup_Click(object sender, EventArgs e)
-        //{
-        //    Manager mn = new Manager();
-        //    String carico = txtProt.Text.Split('-')[0].Trim();
-        //    String sigla = txtProt.Text.Split('-')[1].Trim();
-
-        //    Boolean resp = mn.DuplicaCarico(carico, sigla, Convert.ToInt32(HidPratica.Value));
-        //    if (resp)
-        //    {
-        //        TextMessage.InnerText = "Carico " + carico + " duplicato";
-        //        //TextMessage.InnerHtml = "style=""";
-        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
-        //        btOKDup.Enabled = false;
-
-        //    }
-        //    else
-        //    {
-        //        TextMessage.InnerText = "Errore " + carico + " duplicato";
-        //        //TextMessage.InnerHtml = "style=""";
-        //        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#TextMessage').text('" + ".." + "'); $('#MsgModal').modal('show');", true);
-        //    }
-        //    HidPratica.Value = string.Empty;
-        //    Pulisci();
-        //}
-
-        //protected void btChiudiMsgModal_Click(object sender, EventArgs e)
-        //{
-        //    Session.Remove("ListPratiche");
-        //    Session.Remove("ListRicerca");
-        //    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
-        //    Response.Redirect(url, false);
-        //}
+      
 
         protected void btBack_Click(object sender, EventArgs e)
         {
@@ -1249,8 +1085,7 @@ namespace Uotep
                     // Opzione A: Colore diretto tramite codice
                     e.Row.BackColor = System.Drawing.Color.LightCoral;
 
-                    // Opzione B (Consigliata): Aggiungi una classe CSS per avere più controllo
-                    //  e.Row.CssClass += " riga-non-evasa";
+                   
                 }
             }
         }
@@ -1290,25 +1125,7 @@ namespace Uotep
             }
         }
 
-        //protected void lnkPratica_Click(object sender, EventArgs e)
-        //{
-        //    LinkButton btn = (LinkButton)sender;
-        //    string argument = btn.CommandArgument;
-
-        //    if (!string.IsNullOrEmpty(argument))
-        //    {
-        //        // Divido la stringa in base al separatore '|'
-        //        string[] parts = argument.Split('|');
-        //        string idScheda = parts[0];
-        //        string nrPratica = parts[1];
-
-        //        // Costruisco l'URL e reindirizzo
-        //        string url = $"~/View/GestionePratica.aspx?idscheda={idScheda}&nrPratica={nrPratica}";
-
-        //        // Se hai usato OnClientClick per il _blank, questo redirect avverrà nella nuova tab
-        //        Response.Redirect(ResolveUrl(url));
-        //    }
-        //}
+       
 
         protected void BtDuplica_Click1(object sender, EventArgs e)
         {
@@ -1342,7 +1159,60 @@ namespace Uotep
 
             PopulateGridView(columnName, columnName1, columnName2, HfFiltroNota.Value); // Esempio di funzione di filtro
                                                                                         //            apripopup_Click(sender, e);
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicercaNote').modal('show');", true);
+        }
+
+        protected void btChiudiPop_Click(object sender, EventArgs e)
+        {
+            gvNote.PageIndex = 0;
+            txtNote.Text = string.Empty;
+        }
+
+        protected void gvNote_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "Nr_Protocollo").ToString();
+
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+            }
+            if (gvNote.TopPagerRow != null)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                Label lblPageInfo = (Label)gvNote.TopPagerRow.FindControl("lblInfoPagineNote");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = gvNote.PageIndex + 1;
+                    int totalPages = gvNote.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
+
+       
+
+        protected void gvNote_DataBound(object sender, EventArgs e)
+        {
+            GridView gv = (GridView)sender;
+            if (gv.PageCount > 0)
+            {
+                lblInfoPagineNote.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+            }
+            else
+            {
+                lblInfoPagineNote.Text = "Nessun record trovato";
+            }
+        }
+
+        protected void gvNote_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvNote.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
+            Ricerca_Click(sender,e);
+                
         }
     }
 }
