@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="test.aspx.cs" Inherits="Uote.test" %>
+﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="test.aspx.cs" Inherits="Uote.test" Async="true" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -255,160 +255,183 @@
             .btn-pdf:hover {
                 background-color: #c82333;
             }
-    </style>
-    <script type="text/javascript">
-        function ricalcolaRiga(inputElement) {
-            // 1. Trova la riga (TR) a cui appartiene l'input modificato
-            var row = inputElement.closest('tr');
 
-            // 2. Colleziona tutti gli input di quella riga
-            var inputs = row.querySelectorAll('.shift-input');
+        .grid-view {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
 
-            var count1 = 0;
-            var count2 = 0;
-
-            // 3. Conta le occorrenze
-            inputs.forEach(function (inp) {
-                var val = inp.value.trim().toUpperCase();
-                if (val === '1') count1++;
-                else if (val === '2') count2++;
-            });
-
-            // 4. Calcolo Matematico
-            var totale = count1 + count2;
-            var cellaPerc = row.querySelector('.col-stats'); // La cella percentuale
-
-            if (totale > 0) {
-                var perc = (count1 / totale) * 100;
-                var percFixed = perc.toFixed(0); // Arrotonda (es 60)
-
-                cellaPerc.innerText = percFixed + '%';
-
-                // 5. Cambio Colore Dinamico
-                if (percFixed < 50 || percFixed > 60) {
-                    cellaPerc.style.color = 'red'; // Avviso fuori range
-                } else {
-                    cellaPerc.style.color = 'green'; // OK
-                }
-            } else {
-                cellaPerc.innerText = 'N/A';
-                cellaPerc.style.color = 'black';
+            .grid-view th {
+                background: #0056b3;
+                color: white;
+                padding: 10px;
+                text-align: left;
             }
 
-            // (Opzionale) Cambia colore della cella stessa in base al valore inserito
-            var cella = inputElement.parentElement;
-            cella.className = ''; // Reset classi
-            if (inputElement.value.toUpperCase() === '1') cella.classList.add('t-1');
-            else if (inputElement.value.toUpperCase() === '2') cella.classList.add('t-2');
-            else if (inputElement.value.toUpperCase() === 'Q') cella.classList.add('t-q');
-            else if (inputElement.value.toUpperCase() === 'RF') cella.classList.add('t-rf');
-            // Re-aggiunge eventuale bordo se necessario, ma base colore funziona
+            .grid-view td {
+                padding: 8px;
+                border-bottom: 1px solid #ddd;
+                font-size: 13px;
+            }
+
+        .btn-search {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            cursor: pointer;
         }
-    </script>
+    </style>
+    <!-- 1. CSS di jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- 2. jQuery Base (una versione 3.x stabile e super compatibile) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 3. Il foglio di compatibilità (MIGRATE) - RISOLVE I VECCHI SELETTORI SILENZIOSAMENTE -->
+    <script src="https://code.jquery.com/jquery-migrate-3.4.0.min.js"></script>
+
+    <!-- 4. jQuery UI (versione 1.12.1, la più stabile per Web Forms) -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <div>
         <label for="txtInput">Digita un nome:</label>
         <asp:TextBox ID="txtInput" runat="server" CssClass="form-control" AutoPostBack="false" onkeyup="filterDropdown()" Style="width: 200px;" ClientIDMode="Static"></asp:TextBox>
+        <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" AutoPostBack="false" onkeyup="filterDropdown()" Style="width: 200px;" ClientIDMode="Static"></asp:TextBox>
         <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
             <!-- Stili base per la lista suggerimenti -->
         </div>
-        <div class="container">
-            <h2>Gestione Turni Mensili</h2>
+        <div>
+            <h3>Ricerca Stradario Comune di Napoli (Real-time API)</h3>
+            <asp:TextBox ID="txtStrada" runat="server" Placeholder="Es. Toledo, Chiaia..." ClientIDMode="Static"></asp:TextBox>
+            <asp:Button ID="btnCerca" runat="server" Text="Cerca Online" OnClick="btnCerca_Click" />
 
-            <div class="controls">
-                <asp:Label ID="lblAnno" runat="server" Text="Anno: "></asp:Label>
-                <asp:TextBox ID="txtAnno" runat="server" Text="2024" Width="60"></asp:TextBox>
+            <br />
+            <br />
+            <asp:Label ID="lblInfo" runat="server" ForeColor="Green"></asp:Label>
+            <asp:Label ID="lblErrore" runat="server" ForeColor="Red"></asp:Label>
+            <br />
+            <br />
 
-                <asp:Label ID="lblMese" runat="server" Text="Mese: "></asp:Label>
-                <asp:DropDownList ID="ddlMese" runat="server">
-                    <asp:ListItem Value="1">Gennaio</asp:ListItem>
-                    <asp:ListItem Value="2">Febbraio</asp:ListItem>
-                    <asp:ListItem Value="3">Marzo</asp:ListItem>
-                    <asp:ListItem Value="4">Aprile</asp:ListItem>
-                    <asp:ListItem Value="5">Maggio</asp:ListItem>
-                    <asp:ListItem Value="6">Giugno</asp:ListItem>
-                    <asp:ListItem Value="7">Luglio</asp:ListItem>
-                    <asp:ListItem Value="8">Agosto</asp:ListItem>
-                    <asp:ListItem Value="9">Settembre</asp:ListItem>
-                    <asp:ListItem Value="10">Ottobre</asp:ListItem>
-                    <asp:ListItem Value="11">Novembre</asp:ListItem>
-                    <asp:ListItem Value="12">Dicembre</asp:ListItem>
-                </asp:DropDownList>
+            <asp:GridView ID="gvRisultati" runat="server" AutoGenerateColumns="False" CellPadding="6" AllowPaging="True" PageSize="15"
+                OnPageIndexChanging="gvRisultati_PageIndexChanging"
+                OnRowCommand="gvRisultati_RowCommand">
+                <Columns>
+                    <asp:BoundField DataField="NomeCompleto" HeaderText="Indirizzo" />
+                    <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
+                    <asp:BoundField DataField="Municipalita" HeaderText="Municipalità" />
+                    <asp:TemplateField HeaderText="Azione">
+                        <ItemTemplate>
+                            <asp:Button ID="btnSeleziona" runat="server" Text="Seleziona"
+                                CommandName="SelezionaStrada"
+                                CommandArgument='<%# Eval("NomeCompleto") + "|" + Eval("Quartiere")  %>' />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
 
-                <asp:Button ID="btnCalcola" runat="server" Text="Elabora Turni" OnClick="btnCalcola_Click" />
-                <asp:Button ID="btnSalva" runat="server" Text="💾 Salva Turni su DB"
-                    OnClick="btnSalva_Click" CssClass="btn-save" />
-                <asp:Button ID="btnVisualizzaDB" runat="server" Text="📂 Carica da DB"
-                    OnClick="btnVisualizzaDB_Click" CssClass="btn-load" />
-                <asp:Button ID="btnExportExcel" runat="server" Text="📊 Esporta Excel"
-                    OnClick="btnExportExcel_Click" CssClass="btn-excel" />
-                <asp:Button ID="btnExportPdf" runat="server" Text="📄 Stampa PDF"
-                    OnClick="btnExportPdf_Click" CssClass="btn-pdf" />
-                <asp:Label ID="lblError" runat="server" ForeColor="Red" EnableViewState="false"></asp:Label>
-            </div>
+            </asp:GridView>
 
-            <!-- Qui verrà iniettata la tabella HTML -->
-            <asp:Literal ID="ltlTabella" runat="server"></asp:Literal>
         </div>
+
+        <div class="box-ricerca">
+            <!-- 1. Campo finale in cui viene copiato l'immobile scelto -->
+            <label style="font-weight: bold; color: #333;">Immobile Selezionato: </label>
+            <%--<asp:Label ID="lbl1" runat="server" " BackColor="#e9ecef" Font-Bold="true" ReadOnly="true"></asp:Label>--%>
+            <asp:Label ID="Label1" runat="server" ForeColor="Red"></asp:Label>
+            <br />
+            <br />
+            <hr />
+            <br />
+
+            <!-- 2. Pannello di ricerca con Bottone -->
+            <label>Filtra per indirizzo o descrizione: </label>
+            <asp:TextBox ID="txtFiltro" runat="server" Width="300px" Placeholder="Es. Vittorio Emanuele, Scuola..."></asp:TextBox>
+            <asp:Button ID="Button1" runat="server" Text="Cerca Immobile" OnClick="btnCercaP_Click" Height="28px" />
+
+            <asp:GridView ID="GridView1" runat="server"
+                AutoGenerateColumns="False"
+                CssClass="grid-style"
+                GridLines="None"
+                EmptyDataText="Nessun immobile trovato con i criteri di ricerca inseriti.">
+
+                <Columns>
+                    <%-- Dati Identificativi --%>
+                    <asp:BoundField DataField="CodiceUnita" HeaderText="Cod. Unità" ItemStyle-Font-Bold="true" />
+                    <asp:BoundField DataField="Edificio" HeaderText="Edificio" />
+                    <asp:BoundField DataField="Denominazione" HeaderText="Denominazione" />
+
+                    <%-- Localizzazione --%>
+                    <asp:TemplateField HeaderText="Indirizzo">
+                        <ItemTemplate>
+                            <%# Eval("Indirizzo") %>, <%# Eval("Civico") %>
+                            <small style="color: #666;">(<%# Eval("Quartiere") %>)</small>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="Piano / Int.">
+                        <ItemTemplate>
+                            P: <%# Eval("Piano") %> / I: <%# Eval("Interno") %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <%-- Dati Catastali Raggruppati --%>
+                    <asp:TemplateField HeaderText="Dati Catastali (S/F/P/Sub)">
+                        <ItemTemplate>
+                            <span class="badge-catasto">
+                                <%# Eval("Sezione") %> / <%# Eval("Foglio") %> / <%# Eval("Particella") %> / <b><%# Eval("Sub") %></b>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+
+                <HeaderStyle CssClass="grid-header" />
+                <RowStyle CssClass="grid-row" />
+                <AlternatingRowStyle CssClass="grid-row-alt" />
+            </asp:GridView>
+        </div>
+
     </div>
     <script type="text/javascript">
-        function filterDropdown() {
-            var input, filter, dropdown, options, i, txtValue;
-            input = document.getElementById("txtInput");
-            filter = input.value.toUpperCase();
-            dropdown = document.getElementById("MainContent_DdlGiudice");
-            options = dropdown.getElementsByTagName("option");
-            var suggestionsListDiv = document.getElementById("MainContent_suggestionsList");
+        // Usiamo jQuery.noConflict() se nella pagina ci sono script di ASP.NET che sovrascrivono il simbolo $
+        var $j = jQuery.noConflict();
 
-            // Pulisci la lista dei suggerimenti precedenti
-            suggestionsListDiv.innerHTML = "";
-
-            var suggestionsFound = false; // Flag per verificare se sono stati trovati suggerimenti
-
-            for (i = 0; i < options.length; i++) {
-                txtValue = options[i].textContent || options[i].innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    suggestionsFound = true; // Trovato almeno un suggerimento
-                    var suggestionElement = document.createElement("div"); // Crea un div per ogni suggerimento
-                    suggestionElement.textContent = txtValue;
-                    suggestionElement.style.padding = "5px";
-                    suggestionElement.style.cursor = "pointer";
-                    suggestionElement.onmouseover = function () { this.style.backgroundColor = '#e0e0e0'; }; // Effetto hover
-                    suggestionElement.onmouseout = function () { this.style.backgroundColor = '#f9f9f9'; };
-
-                    //suggestionElement.onclick = function () { // Al click, inserisci il testo nel textbox
-
-                    //    console.log("Suggerimento selezionato:", this.textContent); // DEBUG: Verifica il suggerimento cliccato
-                    //    console.log("Elemento input:", input); // DEBUG: Verifica l'elemento input
-
-                    //    input.value = this.textContent; // Imposta il valore nel textbox
-
-                    //    console.log("Valore textbox dopo impostazione:", input.value); // DEBUG: Verifica il valore impostato
-
-                    //    suggestionsListDiv.style.display = "none"; // Nascondi la lista suggerimenti
-
-                    //    // Importante: Previeni l'Autopostback immediato (se è questo il problema)
-                    //    return false; // Aggiungi per prevenire l'autopostback se interferisce
-                    //};
-
-                    suggestionElement.addEventListener('click', function () {
-                        console.log("Funzione addEventListener CLICK ESEGUITA per:", this.textContent); // DEBUG: Verifica addEventListener
-                        input.value = this.textContent;
-                        suggestionsListDiv.style.display = "none";
-                        return false;
+        $j(document).ready(function () {
+            $j('#<%= txtStrada.ClientID %>').autocomplete({
+                source: function (request, response) {
+                    $j.ajax({
+                        url: 'test/CercaStradeAjax',
+                        data: JSON.stringify({ termine: request.term }),
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response(data.d);
+                        },
+                        error: function (xhr) {
+                            console.log("Errore AJAX: ", xhr.responseText);
+                        }
                     });
-                    suggestionsListDiv.appendChild(suggestionElement); // Aggiungi il suggerimento alla lista
-                }
-            }
+                },
+                minLength: 3,
+                delay: 300
+            });
+        });
 
-            // Mostra o nascondi la lista dei suggerimenti in base a se sono stati trovati suggerimenti
-            if (suggestionsFound && filter.length > 0) { // Mostra solo se ci sono suggerimenti e c'è testo nel textbox
-                suggestionsListDiv.style.display = "block";
-            } else {
-                suggestionsListDiv.style.display = "none";
-            }
-        }
+
     </script>
+
+    <style>
+        /* Forza il menu a tendina ad essere visibile e sopra tutto il resto */
+        .ui-autocomplete {
+            z-index: 99999 !important;
+            background-color: white !important;
+            border: 1px solid #ccc !important;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+    </style>
 </asp:Content>
 
 

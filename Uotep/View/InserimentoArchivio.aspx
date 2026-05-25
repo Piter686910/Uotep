@@ -286,7 +286,7 @@
             <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">INSERISCI UNA NUOVA PRATICA</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERIMENTO PRATICA IN ARCHIVIO EDILIZIA</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>INSERIMENTO PRATICA IN ARCHIVIO EDILIZIA</h1>
             </div>
         </div>
         <div class="panel panel-default">
@@ -691,11 +691,13 @@
 
                 <div class="modal-footer bg-light">
                     <asp:Button ID="btChiudi" runat="server" CssClass="btn btn-secondary" Text="Esci" OnClick="chiudipopup_Click" />
+                    <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
+
                 </div>
             </div>
         </div>
     </div>
-   
+
 
     <!-- Modale per conferma inserimento -->
     <div class="modal fade" id="confermaModal" tabindex="-1" role="dialog" aria-labelledby="confermaModalLabel" aria-hidden="true">

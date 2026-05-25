@@ -1039,9 +1039,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
         {
             DataTable tb = new DataTable();
 
-            string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo as NomeOperatore,p.Indirizzo,p.via,p.Evasa" +
+            string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa, o.nominativo as nomeoperatore" +
                             ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3" +
-                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id where " +
+                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id LEFT JOIN operatore O ON p.matricola = O.matricola where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
             // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
@@ -7534,7 +7534,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega  +
+                    ",Rif_Prot_Uscita = '" + @p.rif_Prot_Uscita.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -7543,11 +7544,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
  "INSERT INTO principalestorico (" +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega) " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita) " +
  "SELECT " +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita " +
  "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {

@@ -950,6 +950,11 @@ namespace Uotep
             apripopupPratica_Click(sender, e);
         }
 
+        protected void btBack_Click(object sender, EventArgs e)
+        {
 
+            RicercaNew(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+        }
     }
 }

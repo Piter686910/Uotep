@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows.Interop;
@@ -47,7 +48,27 @@ namespace Uotep
             //          CaricaDLL();
             if (!IsPostBack)
             {
+                Routine prot = new Routine();
+                txtProt.Text = prot.GetProtocollo();
+                txtDecretante.Text = prot.GetNomeOperatoreByMatr(Vuser);
+                
+                
+                
+                //Manager mn = new Manager();
+                //DataTable operatore = mn.getNominativoOperatore(Vuser);
+                //if (operatore.Rows.Count > 0)
+                //{
+                //    if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                //        txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+                //}
 
+
+
+                if (!string.IsNullOrEmpty(txtProt.Text))
+                {
+                    txtPraticaDecr.Text = txtProt.Text;
+                }
+                txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
 
@@ -71,9 +92,7 @@ namespace Uotep
                 //}
                 //else
                 //    divAg.Visible = false;
-                Routine prot = new Routine();
-                txtProt.Text = prot.GetProtocollo();
-
+               
                 txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
                 if (Session["ListRicerca"] != null && duplica=="y")
                 {
@@ -300,7 +319,8 @@ namespace Uotep
                     {
                         p.dataCarico = System.Convert.ToDateTime(txtDataCarico.Text).ToShortDateString();
                     }
-
+                    else
+                        p.dataCarico = null;
                     p.nominativo = txtNominativo.Text;
                     if (String.IsNullOrEmpty(txPratica.Text))
                     {
@@ -527,8 +547,7 @@ namespace Uotep
 
                     }
                     //I 23/04/2026 controllo deleghe
-                    p.dataDelega= string.IsNullOrWhiteSpace(txtDataDelega.Text) ? DateTime.MinValue.ToShortDateString() : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
-                    
+                    p.dataDelega= string.IsNullOrWhiteSpace(txtDataDelega.Text) ? null : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
                     p.ggDelega= string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
                     
                     //F 23/04/2026 controllo deleghe
@@ -566,7 +585,9 @@ namespace Uotep
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione?" + "'); $('#ModalRicDecretazione').modal('show');", true);
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione?" + "'); $('#ModalRicDecretazione').modal('show');", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione?" + "'); $('#ModalRicDecretazione').modal('show');", true);
+
                         modalLabel1.CssClass = " bg-success"; // Verde
                         
                         //Pulisci();
@@ -1016,13 +1037,14 @@ namespace Uotep
             txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
             Manager mn = new Manager();
-            DataTable operatore = mn.getNominativoOperatore(Vuser);
-            if (operatore.Rows.Count > 0)
-            {
-                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
-                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
-            }
-
+            //DataTable operatore = mn.getNominativoOperatore(Vuser);
+            //if (operatore.Rows.Count > 0)
+            //{
+            //    if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+            //        txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            //}
+            Routine r = new Routine();
+            txtDecretante.Text = r.GetNomeOperatoreByMatr(Vuser);
             DataTable decretazione = new DataTable();
             if (!string.IsNullOrEmpty(txtPraticaDecr.Text))
             {
@@ -1123,7 +1145,7 @@ namespace Uotep
         }
         protected void apripopupDecretazione_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ShowPopup", "$('#ModalDecretazione').modal('show');", true);
 
         }
         protected void chiudipopupDecretazione_Click(object sender, EventArgs e)
@@ -1190,33 +1212,35 @@ namespace Uotep
         protected void btChiudiDecretazione_Click(object sender, EventArgs e)
         {
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
+            ScriptManager.RegisterStartupScript(this, this.Page.GetType(), "ShowPopup", "$('#ModalDataEvasa').modal('show');", true);
 
         }
         protected void chiudipopupModalRicDecretazione_Click(object sender, EventArgs e)
         {
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicDecretazione')); modal.hide();", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalRicDecretazione')); modal.hide();", true);
             Pulisci();
 
         }
         protected void btChiudiAvvertenze_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalAvvertenze')); modal.hide();", true);
 
         }
         protected void Decreta_Click(object sender, EventArgs e)
         {
             txtPraticaDecr.Text = txtProt.Text;
             txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            Manager mn = new Manager();
-            DataTable operatore = mn.getNominativoOperatore(Vuser);
-            if (operatore.Rows.Count > 0)
-            {
-                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
-                    txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
-            }
-            apripopupDecretazione_Click(sender, e);
+            //Manager mn = new Manager();
+            //DataTable operatore = mn.getNominativoOperatore(Vuser);
+            //if (operatore.Rows.Count > 0)
+            //{
+            //    if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+            //        txtDecretante.Text = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            //}
+            Routine r = new Routine();
+            txtDecretante.Text = r.GetNomeOperatoreByMatr(Vuser);
+            //apripopupDecretazione_Click(sender, e);
         }
 
         /// <summary>

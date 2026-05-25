@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Modifica.aspx.cs" Inherits="Uotep.Modifica" %>
+
 <%@ Import Namespace="Uotep.Classi" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -461,10 +462,10 @@
 
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
-          <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
+            <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> MODIFICA CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>MODIFICA CARICO</h1>
             </div>
             <asp:HiddenField ID="HfButtonProv" runat="server" />
 
@@ -674,7 +675,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtRifProtGen">Protocollo Generale</label>
-                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" onkeyup="contaPuntiVirgola();" ClientIDMode="Static"/>
+                            <asp:TextBox ID="txtRifProtGen" runat="server" CssClass="form-control" autofocus="" onkeyup="contaPuntiVirgola();" ClientIDMode="Static" />
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtRifProtGen" ErrorMessage="* Inserire Riferimento Prot. Gen." ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
                         </div>
                     </div>
@@ -715,7 +716,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtNumProtRicStessoCarico">Numeri protocollo</label>
-                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3"  ClientIDMode="Static"/>
+                            <asp:TextBox ID="txtNumProtRicStessoCarico" runat="server" CssClass="form-control larghezzaText70" MaxLength="3" ClientIDMode="Static" />
 
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Inserire numero prot." ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
                             <asp:RegularExpressionValidator ID="RegularExpressionValidator6" runat="server" ControlToValidate="txtNumProtRicStessoCarico" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
@@ -766,8 +767,8 @@
                         <div class="form-group mb-3">
                             <label for="DdlMacroArea">Area Competenza</label>
                             <%--<asp:TextBox ID="txtAreaCompetenza" runat="server" CssClass="form-control mb-3" />--%>
-                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control" >
-                               <asp:ListItem Text="&nbsp;" Value=""></asp:ListItem>
+                            <asp:DropDownList ID="DdlMacroArea" runat="server" CssClass="form-control">
+                                <asp:ListItem Text="&nbsp;" Value=""></asp:ListItem>
                                 <asp:ListItem Text="ARCHIVIO"> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>
                                 <asp:ListItem Text="CDR"> </asp:ListItem>
@@ -827,29 +828,35 @@
                                 <asp:DropDownList ID="DdlEsito" runat="server" CssClass="form-control" Style="display: none" />
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row align-items-end">
-                        <div></div>
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-4">
+                                <label for="TxtDataEsito" class="fw-bold">Protocollo Uscita</label>
+                                <asp:TextBox ID="txtProtUscita" runat="server" CssClass="form-control" ClientIDMode="Static" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row ">
+
+                        <div class="col-md-4">
+                            <div class="form-group mb-4">
                                 <label class="fw-bold">Accertatore</label>
                                 <asp:DropDownList ID="DdlAccertatori" runat="server" CssClass="form-control" />
                             </div>
                         </div>
 
                         <div class="col-md-1 text-center" style="margin-top: 30px">
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-4">
                                 <asp:Button ID="btAggiungi" runat="server" Text="➕" CssClass="btn btn-success w-100" OnClick="btAggiungi_Click" ToolTip="Aggiungi" />
                             </div>
                         </div>
                         <div class="col-md-1 text-center" style="margin-top: 30px">
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-4">
                                 <asp:Button ID="btElimina" runat="server" Text="🗑️" CssClass="btn btn-danger w-100" OnClick="btElimina_Click" ToolTip="Elimina" />
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group mb-3">
+                            <div class="form-group mb-4">
                                 <label class="fw-bold text-muted small">Accertatori Selezionati</label>
                                 <asp:ListBox ID="ListAccertatori" runat="server" CssClass="form-control" Rows="2"></asp:ListBox>
                             </div>
@@ -858,75 +865,75 @@
 
 
                     </div>
-                </div>
 
-                <div id="divAg" runat="server" style="display: none;">
 
-                    <p style="font-weight: bold; font-size: medium">Dati AG</p>
-                    <div class="row custom-border">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="txtGiudice">Giudice</label>
-                                <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
+                    <div id="divAg" runat="server" style="display: none;">
+
+                        <p style="font-weight: bold; font-size: medium">Dati AG</p>
+                        <div class="row custom-border">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="txtGiudice">Giudice</label>
+                                    <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtDataDelega">Data Delega</label>
+                                    <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
+                                </div>
                             </div>
-                            <div class="form-group mb-3" >
-                                <label for="txtDataDelega">Data Delega</label>
-                                <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
-                            </div>
-                        </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
-                                <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" Visible="false"></asp:TextBox>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
+                                    <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" Visible="false"></asp:TextBox>
 
-                                <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                    <asp:HiddenField ID="HfTipoProv" runat="server" />
+                                    <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                        <asp:HiddenField ID="HfTipoProv" runat="server" />
+
+                                    </div>
+                                    <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
+                                    <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
 
                                 </div>
-                                <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
-                                <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
+                                <div class="form-group mb-3">
+                                    <label for="txtGgDelega">Termine gg. delega</label>
+                                    <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="txtProdPenNr">Procedimento Penale nr</label>
+                                    <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" />
 
+                                </div>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="txtGgDelega">Termine gg. delega</label>
-                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="txtProdPenNr">Procedimento Penale nr</label>
-                                <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" />
-
-                            </div>
-                        </div>
-                        <%--                        <div class="col-md-3" style="margin-top: -25px">
+                            <%--                        <div class="col-md-3" style="margin-top: -25px">
                             <div class="form-check">
                                 <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
                                 <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                             </div>
                         </div>--%>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
+                        <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
+                        <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
+                        <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary mt-3" />
+                        <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary mt-3" />
                     </div>
                 </div>
 
-
-            </div>
-
-
-            <div class="row">
-                <div class="col-12 text-center">
-                    <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
-                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
-                    <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                    <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary mt-3" />
-                    <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary mt-3" />
-                </div>
             </div>
 
         </div>
-
-    </div>
 
 
     <!-- Modale Bootstrap quartiere -->
@@ -1223,7 +1230,7 @@
                                             <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
                                             <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
 
-<%--                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+                                            <%--                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
 
                                                 <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
@@ -1492,7 +1499,7 @@
         // Funzione Filtro
         function filterAndHighlight(e) {
             var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
-    
+
             var listDiv = document.getElementById("suggestionsListTipoAtto");
             //var filter = input.value.toUpperCase();
             var filter = (input.value || "").toUpperCase();

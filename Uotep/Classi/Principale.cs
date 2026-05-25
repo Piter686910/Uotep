@@ -45,5 +45,8 @@ namespace Uotep.Classi
         public String dataDelega = string.Empty;
         public int ggDelega = 0;
         //F 23/04/2026 controllo deleghe
+        //I 22/05/2026 protocollo uscita
+        public String rif_Prot_Uscita = string.Empty;
+        //F 22/05/2026 protocollo uscita
     }
 }

@@ -38,6 +38,18 @@ namespace Uotep.Classi
             string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
             HttpContext.Current.Response.Redirect(url + msg.Replace("\r\n"," ").ToString());
         }
+        public string GetNomeOperatoreByMatr(String user)
+        {
+            string txt = string.Empty;
+            Manager mn = new Manager();
+            DataTable operatore = mn.getNominativoOperatore(user);
+            if (operatore.Rows.Count > 0)
+            {
+                if (!String.IsNullOrEmpty(operatore.Rows[0].ItemArray[0].ToString()))
+                    txt = operatore.Rows[0].ItemArray[0].ToString().ToUpper();
+            }
+            return txt;
+        }
         public string GetProtocollo()
         {
             string txt = string.Empty;

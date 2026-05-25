@@ -24,6 +24,15 @@ namespace Uote
         protected global::System.Web.UI.WebControls.TextBox txtInput;
 
         /// <summary>
+        /// Controllo TextBox1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+
+        /// <summary>
         /// Controllo suggestionsList.
         /// </summary>
         /// <remarks>
@@ -33,102 +42,84 @@ namespace Uote
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl suggestionsList;
 
         /// <summary>
-        /// Controllo lblAnno.
+        /// Controllo txtStrada.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAnno;
+        protected global::System.Web.UI.WebControls.TextBox txtStrada;
 
         /// <summary>
-        /// Controllo txtAnno.
+        /// Controllo btnCerca.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAnno;
+        protected global::System.Web.UI.WebControls.Button btnCerca;
 
         /// <summary>
-        /// Controllo lblMese.
+        /// Controllo lblInfo.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMese;
+        protected global::System.Web.UI.WebControls.Label lblInfo;
 
         /// <summary>
-        /// Controllo ddlMese.
+        /// Controllo lblErrore.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMese;
+        protected global::System.Web.UI.WebControls.Label lblErrore;
 
         /// <summary>
-        /// Controllo btnCalcola.
+        /// Controllo gvRisultati.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCalcola;
+        protected global::System.Web.UI.WebControls.GridView gvRisultati;
 
         /// <summary>
-        /// Controllo btnSalva.
+        /// Controllo Label1.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSalva;
+        protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
-        /// Controllo btnVisualizzaDB.
+        /// Controllo txtFiltro.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVisualizzaDB;
+        protected global::System.Web.UI.WebControls.TextBox txtFiltro;
 
         /// <summary>
-        /// Controllo btnExportExcel.
+        /// Controllo Button1.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportExcel;
+        protected global::System.Web.UI.WebControls.Button Button1;
 
         /// <summary>
-        /// Controllo btnExportPdf.
+        /// Controllo GridView1.
         /// </summary>
         /// <remarks>
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExportPdf;
-
-        /// <summary>
-        /// Controllo lblError.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblError;
-
-        /// <summary>
-        /// Controllo ltlTabella.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltlTabella;
+        protected global::System.Web.UI.WebControls.GridView GridView1;
     }
 }

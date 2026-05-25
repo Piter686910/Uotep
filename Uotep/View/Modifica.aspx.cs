@@ -668,10 +668,12 @@ namespace Uotep
                     }
                     //I 23/04/2026 controllo deleghe
                     p.dataDelega = string.IsNullOrWhiteSpace(txtDataDelega.Text) ? DateTime.MinValue.ToShortDateString() : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
-
                     p.ggDelega = string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
 
                     //F 23/04/2026 controllo deleghe
+                    //I 22/05/2026 protocollo uscita
+                    p.rif_Prot_Uscita = txtProtUscita.Text;
+                    //F 22/05/2026 protocollo uscita
 
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
@@ -782,6 +784,9 @@ namespace Uotep
             List<string> accertatoriList = new List<string>();
             DdlSigla.Items.Clear();
             ListAccertatori.Items.Clear();
+            //I 22/05/2026 protocollo uscita
+             txtProtUscita.Text=string.Empty;
+            //F 22/05/2026 protocollo uscita
 
         }
 
@@ -1200,6 +1205,10 @@ namespace Uotep
                         //{
                         //    txtAccertatori.Enabled = false;
                         //}
+                        //I 22/05/2026 protocollo uscita
+                        if (!String.IsNullOrEmpty(pratica.Rows[0]["Rif_Prot_Uscita"].ToString()))
+                            txtProtUscita.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Uscita"].ToString(), @"[^0-9/]", ";"); ;
+                        //F 22/05/2026 protocollo uscita
                         txPratica.Text = pratica.Rows[0].ItemArray[19].ToString();
                         if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[20].ToString()))
                             txtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();

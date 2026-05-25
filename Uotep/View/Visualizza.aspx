@@ -40,7 +40,7 @@
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <%--<p class="text-center lead">Ricerca Atti</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA ATTI</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>RICERCA ATTI</h1>
             </div>
             <!-- Contenitore per centrare -->
 
@@ -351,7 +351,13 @@
                             <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control data-auto" Enabled="false" />
                         </div>
                     </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-4">
+                                <label for="TxtDataEsito" class="fw-bold">Protocollo Uscita</label>
+                                <asp:TextBox ID="txtProtUscita" runat="server" CssClass="form-control" Enabled="false" />
+                            </div>
 
+                        </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="ListAccertatori">Accertatori</label>
@@ -696,7 +702,7 @@
                                 <!-- Bottone per avviare la ricerca -->
                                 <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
                                 <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
+                                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />
                             </div>
                         </div>
                     </div>
@@ -782,8 +788,7 @@
                                              <br />
                                         </HeaderTemplate>
                                         <ItemTemplate>
-                                                <%# Eval("decr_nota") %> <%# Eval("note") %>
-
+                                            <%# Eval("decr_nota") %> <%# Eval("note") %>
                                         </ItemTemplate>
                                     </asp:TemplateField>
 
@@ -801,11 +806,11 @@
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
     </div>
 
-    
+
 </asp:Content>

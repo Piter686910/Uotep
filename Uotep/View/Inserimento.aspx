@@ -402,7 +402,7 @@
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> INSERISCI NUOVO CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>INSERISCI NUOVO CARICO</h1>
             </div>
         </div>
 
@@ -415,7 +415,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtProt">Nr Carico</label>
-                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control" ForeColor="Red" Enabled="false" Font-Bold="true" />
+                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control" ForeColor="Red" Enabled="false" Font-Bold="true" ClientIDMode="Static"/>
                         </div>
                     </div>
 
@@ -529,8 +529,8 @@
                     <div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
-                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control"  />
-                            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txPratica" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,15}" Display="Dynamic" />
+                            <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                            <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txPratica" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,15}" Display="Dynamic" />--%>
 
                         </div>
 
@@ -718,7 +718,6 @@
     </div>
 
     <!-- Modale Richiesta decretazione -->
-
     <div class="modal fade" id="ModalRicDecretazione" tabindex="-1" aria-labelledby="modalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -733,7 +732,9 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Decreta" runat="server" CssClass="btn btn-primary" Text="Decreta" OnClick="Decreta_Click" />
+                    <asp:Button ID="Decreta" runat="server" CssClass="btn btn-primary" Text="Decreta"  data-toggle="modal" data-target="#ModalDecretazione" data-dismiss="modal"/>
+                    <!-- Nel pulsante "Sì" dentro il primo popup OnClick="Decreta_Click"-->
+                    <%--<button type="button" CssClass="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#ModalDecretazione">Decreta</button>--%>
                     <asp:Button ID="Button4" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupModalRicDecretazione_Click" />
                 </div>
             </div>
@@ -801,11 +802,11 @@
                         <div class="col-md-3 " style="margin-left: 20px!important">
                             <div class="form-group mb-3">
                                 <label for="txtPraticaDecr">Pratica</label>
-                                <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
+                                <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px" ClientIDMode="Static"></asp:TextBox>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDecretante">Decretante</label>
-                                <asp:TextBox ID="txtDecretante" runat="server" CssClass="form-control mb-3"></asp:TextBox>
+                                <asp:TextBox ID="txtDecretante" runat="server" CssClass="form-control mb-3" ClientIDMode="Static"></asp:TextBox>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDecretato">Decretato</label>
@@ -834,7 +835,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="txtDataDecretazione">Data</label>
-                                <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3 data-auto"></asp:TextBox>
+                                <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3 data-auto" ClientIDMode="Static"></asp:TextBox>
 
                             </div>
 
@@ -1215,5 +1216,34 @@
             }
         }
         ////
+        $(document).ready(function () {
+
+            $('#Decreta').on('click', function () {
+
+                // 1. txtPraticaDecr.Text = txtProt.Text;
+                // Prendiamo il valore dall'ID del textbox di origine e lo copiamo in quello di destinazione
+                var protocollo = $('#<%= txtProt.ClientID %>').val();
+        $('#<%= txtPraticaDecr.ClientID %>').val(protocollo);
+
+        // 2. txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+        // Calcoliamo la data di oggi in formato italiano direttamente col browser
+        var oggi = new Date();
+        var dd = String(oggi.getDate()).padStart(2, '0');
+        var mm = String(oggi.getMonth() + 1).padStart(2, '0'); // Gennaio è 0!
+        var yyyy = oggi.getFullYear();
+        var dataFormattata = dd + '/' + mm + '/' + yyyy;
+
+        $('#<%= txtDataDecretazione.ClientID %>').val(dataFormattata);
+
+        // 3. txtDecretante.Text = operatore...
+        // Recuperiamo il nome dell'operatore che C# ha stampato nella Session
+        var nomeOperatore = '<%= Session["NomeOperatore"] %>';
+        if (nomeOperatore !== '') {
+            $('#<%= txtDecretante.ClientID %>').val(nomeOperatore);
+        }
+
+    });
+
+});
     </script>
 </asp:Content>

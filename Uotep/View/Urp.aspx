@@ -359,7 +359,7 @@
                     </asp:GridView>
                     <div class="modal-footer">
                         <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClientClick="hideModal()" />
-                        <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Back" OnClick="btBack_Click" />
+                        <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" />
                     </div>
                 </div>
             </div>

@@ -468,6 +468,10 @@ namespace Uotep
                 }
                 txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
                 //F 23/04/2026 controllo deleghe
+                //I 22/05/2026 protocollo uscita
+                if (!String.IsNullOrEmpty(pratica.Rows[0]["Rif_Prot_Uscita"].ToString()))
+                    txtProtUscita.Text = Regex.Replace(pratica.Rows[0]["Rif_Prot_Uscita"].ToString(), @"[^0-9/]", ";"); ;
+                //F 22/05/2026 protocollo uscita
                 // Salva la lista nella Sessione
                 Session["ListRicerca"] = pratica;
                 // Puoi anche chiudere il popup se necessario
@@ -535,7 +539,9 @@ namespace Uotep
             HfFiltroAccertatori.Value = string.Empty;
             HfFiltroSigla.Value = string.Empty;
             HfFiltroNominativo.Value = string.Empty;
-
+            //I 22/05/2026 protocollo uscita
+            txtProtUscita.Text = string.Empty ;
+            //F 22/05/2026 protocollo uscita
 
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)

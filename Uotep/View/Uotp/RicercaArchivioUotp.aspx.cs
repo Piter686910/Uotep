@@ -731,5 +731,11 @@ namespace Uotep
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "closeModal();", true);
             }
         }
+
+        protected void btBack_Click(object sender, EventArgs e)
+        {
+            Ricerca_Click(sender, e);
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+        }
     }
 }

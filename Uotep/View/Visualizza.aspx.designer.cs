@@ -753,6 +753,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtDataDataEvasa;
 
         /// <summary>
+        /// Controllo txtProtUscita.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtProtUscita;
+
+        /// <summary>
         /// Controllo ListAccertatori.
         /// </summary>
         /// <remarks>
