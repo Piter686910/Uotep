@@ -1323,7 +1323,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         "p.note LIKE '%" + valoreCerca + "%') " +
                         "ORDER BY dataarrivo DESC";
 
-            
+
                 // string sql = "SELECT * FROM Principale where accertatori like '" + accertatori.Replace("'", "''").Replace("*", "%") + "%'  order by dataarrivo desc";
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -1541,7 +1541,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
 
-         //   sql = "SELECT gruppo, DataRS, DataNL, quartina, mese FROM RSNL WHERE  (MONTH(datanl)=" + mese + "or MONTH(datars)="+mese +")";
+            //   sql = "SELECT gruppo, DataRS, DataNL, quartina, mese FROM RSNL WHERE  (MONTH(datanl)=" + mese + "or MONTH(datars)="+mese +")";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
 
@@ -1596,12 +1596,18 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getPraticaArchivioUoteById(int id)
+        public DataTable getPraticaArchivioUoteById(int id, string storico)
         {
             string sql = string.Empty;
+            
             DataTable tb = new DataTable();
+            if (storico == "si")
+            //    sql = "SELECT * FROM ArchivioUoteStorico where id_Archivio = '" + id + "'";
 
-            sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
+             sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
+                    " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
+            else
+                sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -1974,7 +1980,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             if (!String.IsNullOrEmpty(nota))
                 sql = "SELECT * FROM Archiviotp where note like '%" + nota.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(destinatario))
-                sql = "SELECT * FROM Archiviotp  WHERE destinatario like '%" + destinatario.Replace("'", "''").Replace("*", "%") + "%'";
+                sql = "SELECT * FROM Archiviotp  WHERE destinatario1 like '%" + destinatario.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(indirizzo))
                 sql = "SELECT * FROM Archiviotp  WHERE via like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%'";
             if (!String.IsNullOrEmpty(intestatario))
@@ -1998,6 +2004,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getPraticaArchivioUote(string[] pratica, string nominativo, string indirizzo, string[] catasto, string nota, string[] annomese)
         {
             string sql = string.Empty;
+            string sql1 = string.Empty;
             DataTable tb = new DataTable();
             if (pratica != null)
             {
@@ -2005,18 +2012,31 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 {
                     case "Pratica":
                         if (pratica[1] == "Doppione")
-                            sql = "SELECT  * FROM ArchivioUote where arch_numPratica = '" + pratica[2].Replace("'", "''") + "' ORDER BY arch_datault_intervento desc ";
+                            //sql = "SELECT  * FROM ArchivioUote where arch_numPratica = '" + pratica[2].Replace("'", "''") + "' and arch_doppione in ('bis', 'tris', 'quater')  ORDER BY arch_datault_intervento desc ";
+
+                        sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null) " +
+                                " ORDER BY arch_datault_intervento DESC";
+
+                        //  sql= "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[2].Replace("'", "''")  + " AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "')";
                         else
                         {
                             if (!String.IsNullOrEmpty(pratica[1]))
-                                sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' order by id_Archivio desc";
-
+                                //sql = "SELECT top 1 * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "' order by id_Archivio desc";
+                                sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[1].Replace("'", "''") + "' AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[1].Replace("'", "''") + "')";
                         }
 
                         break;
                     case "StoricoPratica":
                         if (!String.IsNullOrEmpty(pratica[1]))
-                            sql = "SELECT * FROM ArchivioUote where arch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                        {
+                            // sql = "SELECT * FROM ArchivioUoteStorico where sarch_numPratica = '" + pratica[1].Replace("'", "''") + "'";
+                            //se non c'è in archiviostorico procedo a prendere l'ultimo inserimento in archivioUote
+                            sql = "IF EXISTS(SELECT 1 FROM ArchivioUoteStorico WHERE arch_numPratica = '" + pratica[1].Replace("'", "''") + "') BEGIN SELECT* FROM ArchivioUoteStorico WHERE arch_numPratica ='" +
+                                   pratica[1].Replace("'", "''") + "' END ELSE " +
+                                  " BEGIN " +
+                                  "SELECT* FROM ArchivioUote WHERE arch_numPratica = '" + pratica[1].Replace("'", "''") + "' AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[1].Replace("'", "''") + "') END";
+                        }
+
                         break;
                         //case "PraticaVal":
                         //    if (!String.IsNullOrEmpty(pratica[1]))
@@ -2029,20 +2049,33 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
             if (!String.IsNullOrEmpty(nominativo))
-                sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''").Replace("*", "%") + "%'";
-            if (!String.IsNullOrEmpty(indirizzo))
-                sql = "SELECT * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%'";
+                //sql = "SELECT * FROM ArchivioUote where arch_responsabile like '%" + nominativo.Replace("'", "''").Replace("*", "%") + "%'";
+                sql = "WITH PraticaRecente AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY arch_numPratica ORDER BY id_Archivio DESC) as rn" +
+                    " FROM ArchivioUote WHERE arch_responsabile LIKE '%" + nominativo.Replace("'", "''").Replace("*", "%") + "%') SELECT * FROM PraticaRecente WHERE rn = 1 ORDER BY id_Archivio DESC";
 
+            if (!String.IsNullOrEmpty(indirizzo))
+                //sql = "SELECT  * FROM ArchivioUote where arch_indirizzo like '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%'";
+                sql = "WITH PraticaRecente AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY arch_numPratica ORDER BY id_Archivio DESC) as rn" +
+                    " FROM ArchivioUote WHERE arch_indirizzo LIKE '%" + indirizzo.Replace("'", "''").Replace("*", "%") + "%') SELECT * FROM PraticaRecente WHERE rn = 1 ORDER BY id_Archivio DESC;";
             if (catasto != null)
                 sql = "SELECT * FROM ArchivioUote where arch_sezione = '" + catasto[1] + "' and arch_foglio = '" + catasto[2] + "' and arch_particella = '" + catasto[3] +
                    "' and arch_sub= '" + catasto[4] + "'";
             if (!String.IsNullOrEmpty(nota))
-                sql = "SELECT * FROM ArchivioUote where arch_note like '%" + nota.Replace("'", "''").Replace("*", "%") + "%'";
+                //sql = "SELECT * FROM ArchivioUote where arch_note like '%" + nota.Replace("'", "''").Replace("*", "%") + "%'";
+
+                sql = "WITH PraticaRecente AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY arch_numPratica ORDER BY id_Archivio DESC) as rn" +
+                    " FROM ArchivioUote WHERE arch_note LIKE '%" + nota.Replace("'", "''").Replace("*", "%") + "%') SELECT * FROM PraticaRecente WHERE rn = 1 ORDER BY id_Archivio DESC";
+
             if (annomese != null)
                 if (!String.IsNullOrEmpty(annomese[2]))
-                    sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1] + " and MONTH(arch_dataIns) =" + annomese[2];
+                    //sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1] + " and MONTH(arch_dataIns) =" + annomese[2] ;
+                    sql = "WITH PraticaRecente AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY arch_numPratica ORDER BY id_Archivio DESC) as rn" +
+                          " FROM ArchivioUote WHERE YEAR(arch_dataIns) =" + annomese[1] + " and MONTH(arch_dataIns) =" + annomese[2] + ") SELECT * FROM PraticaRecente WHERE rn = 1 ORDER BY id_Archivio DESC";
+
                 else
-                    sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1];
+                    //                    sql = "SELECT * FROM ArchivioUote  WHERE YEAR(arch_dataIns) =" + annomese[1] ;
+                    sql = "WITH PraticaRecente AS (SELECT *,ROW_NUMBER() OVER (PARTITION BY arch_numPratica ORDER BY id_Archivio DESC) as rn" +
+                          " FROM ArchivioUote WHERE YEAR(arch_dataIns) =" + annomese[1] + ") SELECT * FROM PraticaRecente WHERE rn = 1 ORDER BY id_Archivio DESC";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -3473,7 +3506,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                 try
                 {
-                   
+
                     resp = InsInterrogatorio(interr);
                     if (resp == false)
                         return false;
@@ -4249,7 +4282,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_violazioneBeniCult='true'";
                     break;
                 case "ControlliCant":
-                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contr_cantieri_seq='true' or rapp_giro_cantieri='true'";
+                    sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and (rapp_contr_cantieri_seq='true' or rapp_giro_cantieri='true')";
                     break;
                 case "ViolAmmRegCom":
                     sql = "SELECT *  from rappuote where Year(rapp_data_consegna_intervento) ='" + anno + "' AND month(rapp_data_consegna_intervento)='" + meseS + "' and rapp_contestaz_amm='true'";
@@ -4603,7 +4636,12 @@ ORDER BY LOGS.[Data Accesso] DESC";
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
-            sql = "SELECT count(*) as num FROM interrogatori where mese ='" + mese + "' AND anno =" + anno ;
+ //           sql = "SELECT count(*) as num FROM interrogatori where mese ='" + mese + "' AND anno =" + anno;
+
+
+            sql = "SELECT SUM((CASE WHEN Nominativo1 IS NOT NULL AND TRIM(Nominativo1) <> '' THEN 1 ELSE 0 END) +" +
+                " (CASE WHEN Nominativo2 IS NOT NULL AND TRIM(Nominativo2) <> '' THEN 1 ELSE 0 END) + (CASE WHEN Nominativo3 IS NOT NULL AND TRIM(Nominativo3) <> '' THEN 1 ELSE 0 END) +" +
+                " (CASE WHEN Nominativo4 IS NOT NULL AND TRIM(Nominativo4) <> '' THEN 1 ELSE 0 END)  ) AS TotaleComplessivoNominativi FROM Interrogatori where mese ='" + mese + "' AND anno =" + anno;
             string res = null;
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -6711,6 +6749,113 @@ ORDER BY LOGS.[Data Accesso] DESC";
         //      }
 
         //  }
+        /// <summary>
+        /// INSERISCE NELLA TABELLA DELLO STORICO E POI MODIFICA LA TABELLA ARCHIVIOUOTE
+        /// </summary>
+        /// <param name="arch"></param>
+        /// <param name="id"></param>
+        /// <param name="dataStor"></param>
+        /// <returns></returns>
+        public Boolean UpdPraticaArchivioUote(ArchivioUote arch, String id, DateTime dataStor)
+        {
+            bool resp = true;
+            string sql_upd = String.Empty;
+            string sql_InsStorico = String.Empty;
+            string testoSql = string.Empty;
+            string dataInizioAttivita = (arch.arch_dataInizioAttivita == DateTime.MinValue) ? "NULL" : "'" + arch.arch_dataInizioAttivita.ToString("yyyy-MM-dd HH:mm:ss") + "'";
+            try
+            {
+
+                sql_upd = "update ArchivioUote set arch_numPratica = '" + @arch.arch_numPratica + "', arch_doppione = '" + @arch.arch_bis + "', arch_dataIns = '" + @arch.arch_dataIns +
+                    "', arch_datault_intervento = '" + @arch.arch_datault_intervento + "', arch_indirizzo = '" + @arch.arch_indirizzo.Replace("'", "''") + "', arch_responsabile='" + @arch.arch_responsabile.Replace("'", "''") +
+                    "', arch_natoA='" + @arch.arch_natoA.Replace("'", "''") + "',arch_dataNascita='" + arch.arch_dataNascita + "', arch_inCarico ='" + @arch.arch_inCarico.Replace("'", "''") + "', arch_evasa='" + @arch.arch_evasa +
+                    "', arch_note='" + @arch.arch_note.Replace("'", "''") + "', arch_tipologia='" + @arch.arch_tipologia.Replace("'", "''") + "', arch_quartiere='" + @arch.arch_quartiere.Replace("'", "''") + "'" +
+                     ", arch_suoloPub='" + @arch.arch_suoloPub + "', arch_vincoli='" + @arch.arch_vincoli + "', arch_1089='" + @arch.arch_1089 + "', arch_demolita='" + @arch.arch_demolita + "', arch_allegati='" + @arch.arch_allegati.Replace("'", "''") +
+                     "',arch_matricola='" + @arch.arch_matricola + "',arch_sezione='" + @arch.arch_sezione.Replace("'", "''") + "',arch_foglio='" + @arch.arch_foglio + "',arch_particella='" + @arch.arch_particella + "',arch_sub='" + @arch.arch_sub +
+                     "',arch_dataInizioAttivita='" + @arch.arch_dataInizioAttivita + "',arch_propPriv='" + @arch.arch_propPriv + "',arch_propComune='" + @arch.arch_propComune +
+                     "',arch_propBeniCult= '" + @arch.arch_propBeniCult + "',arch_propAltriEnti='" + @arch.arch_propAltriEnti + "',arch_foglioNct='" + @arch.arch_foglioNct + "',arch_particellaNct='" + @arch.arch_particellaNct + "'" +
+                     ",arch_beniConfiscati='" + @arch.arch_beniConfiscati + "' where id_Archivio = " + Convert.ToInt32(id);
+
+                string dataStorFormattata = dataStor.ToString("yyyy-MM-dd HH:mm:ss");
+                //sql_InsStorico = "insert into ArchivioUoteStorico (Sarch_numPratica,Sarch_doppione,Sarch_dataIns,Sarch_datault_intervento,Sarch_indirizzo,Sarch_responsabile,Sarch_natoA,Sarch_dataNascita," +
+                //    "Sarch_inCarico,Sarch_evasa,Sarch_note,Sarch_tipologia,Sarch_quartiere,Sarch_suoloPub,Sarch_vincoli,Sarch_1089,Sarch_demolita,Sarch_allegati,Sarch_matricola,Sarch_sezione,Sarch_foglio," +
+                //    "Sarch_particella,Sarch_sub,Sarch_dataInizioAttivita,Sarch_propPriv,Sarch_propComune,Sarch_propBeniCult,Sarch_propAltriEnti,Sarch_foglionct,Sarch_particellanct,Sarch_beniConfiscati,Sarch_dataStoricizzazione)" +
+                //   " Values('" + @Sarch.Sarch_numPratica + "','" + @Sarch.Sarch_bis + "','" + @Sarch.Sarch_dataIns + "','" +
+                //   @Sarch.Sarch_datault_intervento + "','" + @Sarch.Sarch_indirizzo.Replace("'", "''") + "','" +
+                //   @Sarch.Sarch_responsabile.Replace("'", "''") + "','" + @Sarch.Sarch_natoA.Replace("'", "''") + "','" + @Sarch.Sarch_dataNascita + "','" +
+                //   @Sarch.Sarch_inCarico.Replace("'", "''") + "','" + @Sarch.Sarch_evasa + "','" + @Sarch.Sarch_note.Replace("'", "''") + "','" +
+                //   @Sarch.Sarch_tipologia.Replace("'", "''") + "','" + @Sarch.Sarch_quartiere.Replace("'", "''") + "','" + @Sarch.Sarch_suoloPub + "','" +
+                //   @Sarch.Sarch_vincoli + "','" + @Sarch.Sarch_1089 + "','" + @Sarch.Sarch_demolita + "','" +
+                //   @Sarch.Sarch_allegati.Replace("'", "''") + "','" + @Sarch.Sarch_matricola + "','" + @Sarch.Sarch_sezione.Replace("'", "''") + "','" + @Sarch.Sarch_foglio + "','" + @Sarch.Sarch_particella + "','" +
+                //   @Sarch.Sarch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
+                //   @Sarch.Sarch_propPriv + "','" + @Sarch.Sarch_propBeniCult + "','" + @Sarch.Sarch_propComune + "','" + @Sarch.Sarch_propAltriEnti + "','" + @Sarch.Sarch_foglioNct + "','" +
+                //   @Sarch.Sarch_particellaNct + "','" + @Sarch.Sarch_beniConfiscati + "','" + dataStorFormattata + "')";
+
+                sql_InsStorico = "insert into ArchivioUoteStorico (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
+                   "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
+                   "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati) " +
+                    "SELECT arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita,arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere," +
+                    "arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati " +
+                    "FROM ArchivioUote WHERE id_Archivio = " + Convert.ToInt32(id);
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    using (SqlTransaction tran = conn.BeginTransaction())
+                    {
+                        using (SqlCommand command = conn.CreateCommand())
+                        {
+                            command.Transaction = tran;
+
+                            try
+                            {
+
+                                // Update ArchivioUote
+                                command.CommandText = sql_InsStorico;
+                                command.Parameters.AddWithValue("@arch_dataStoricizzazione", dataStor);
+                                int res = command.ExecuteNonQuery();
+                                if (res > 0)
+                                {
+                                    command.CommandText = sql_upd;
+                                    res = command.ExecuteNonQuery();
+                                    if (res > 0)
+                                    {
+                                        tran.Commit();
+                                        tran.Dispose();
+                                        resp = true;
+                                    }
+                                    else
+                                    {
+                                        tran.Rollback();
+                                        resp = false;
+                                    }
+
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                tran.Rollback();
+                                //ScriviLog(ex.Message); // Gestione log
+                                resp = false;
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
+
+        }
+
         public Boolean UpdPraticaArchivioUotp(ArchivioUotp arch, int id)
         {
             bool resp = true;
@@ -7534,7 +7679,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega  +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
                     ",Rif_Prot_Uscita = '" + @p.rif_Prot_Uscita.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    

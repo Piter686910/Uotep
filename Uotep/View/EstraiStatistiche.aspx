@@ -123,7 +123,7 @@
                                                     CausesValidation="false"
                                                     CssClass="text-info"
                                                     Style="margin-left: 5px;">
-                                             <i class="fa fa-info-circle">ⓘ</i>
+                                             <i class="fa fa-info-circle"></i>
                                                 </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtDelegheEsitate" runat="server" CssClass="form-control larghezzaText" />
@@ -143,7 +143,7 @@
                                     CausesValidation="false"
                                     CssClass="text-info"
                                     Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                 </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtEspostiEvasi" runat="server" CssClass="form-control larghezzaText" />
@@ -168,7 +168,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtNotifiche" runat="server" CssClass="form-control larghezzaText" />
@@ -190,7 +190,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtNotificheNoAg" runat="server" CssClass="form-control larghezzaText" />
@@ -213,7 +213,7 @@
                                            CausesValidation="false"
                                            CssClass="text-info"
                                            Style="margin-left: 5px;">
-                                   <i class="fa fa-info-circle">ⓘ</i>
+                                   <i class="fa fa-info-circle"></i>
                                        </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtAccertAltriEnti" runat="server" CssClass="form-control larghezzaText" />
@@ -243,7 +243,7 @@
                                                     CausesValidation="false"
                                                     CssClass="text-info"
                                                     Style="margin-left: 5px;">
-                                            <i class="fa fa-info-circle">ⓘ</i>
+                                            <i class="fa fa-info-circle"></i>
                                                 </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtRelazioni" runat="server" CssClass="form-control larghezzaText" />
@@ -264,7 +264,7 @@
                                         CausesValidation="false"
                                         CssClass="text-info"
                                         Style="margin-left: 5px;">
-                                <i class="fa fa-info-circle">ⓘ</i>
+                                <i class="fa fa-info-circle"></i>
                                     </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtCNR" runat="server" CssClass="form-control larghezzaText" />
@@ -283,7 +283,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtControlliScia" runat="server" CssClass="form-control larghezzaText" />
@@ -310,7 +310,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtConvalide" runat="server" CssClass="form-control larghezzaText" />
@@ -331,7 +331,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtAnnotazioni" runat="server" CssClass="form-control larghezzaText" />
@@ -363,7 +363,7 @@
                                         CausesValidation="false"
                                         CssClass="text-info"
                                         Style="margin-left: 5px;">
-                                <i class="fa fa-info-circle">ⓘ</i>
+                                <i class="fa fa-info-circle"></i>
                                     </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtSequestri" runat="server" CssClass="form-control larghezzaText" />
@@ -385,7 +385,7 @@
                                                 CausesValidation="false"
                                                 CssClass="text-info"
                                                 Style="margin-left: 5px;">
-                                        <i class="fa fa-info-circle">ⓘ</i>
+                                        <i class="fa fa-info-circle"></i>
                                             </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtDissequestriTemp" runat="server" CssClass="form-control larghezzaText" />
@@ -406,7 +406,7 @@
                                         CausesValidation="false"
                                         CssClass="text-info"
                                         Style="margin-left: 5px;">
-                                <i class="fa fa-info-circle">ⓘ</i>
+                                <i class="fa fa-info-circle"></i>
                                     </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtRiapposizioneSigilli" runat="server" CssClass="form-control larghezzaText" />
@@ -431,7 +431,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtViolazioneSigilli" runat="server" CssClass="form-control larghezzaText" />
@@ -451,7 +451,7 @@
                                                 CausesValidation="false"
                                                 CssClass="text-info"
                                                 Style="margin-left: 5px;">
-                                        <i class="fa fa-info-circle">ⓘ</i>
+                                        <i class="fa fa-info-circle"></i>
                                             </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtRimozioneSigilli" runat="server" CssClass="form-control larghezzaText" />
@@ -472,7 +472,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtDissequestri" runat="server" CssClass="form-control larghezzaText" />
@@ -503,7 +503,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="TxtPonteggi" runat="server" CssClass="form-control larghezzaText" />
@@ -523,7 +523,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtDPI" runat="server" CssClass="form-control larghezzaText" />
@@ -546,7 +546,7 @@
                                         CausesValidation="false"
                                         CssClass="text-info"
                                         Style="margin-left: 5px;">
-                                <i class="fa fa-info-circle">ⓘ</i>
+                                <i class="fa fa-info-circle"></i>
                                     </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtViol_amm_reg_com" runat="server" CssClass="form-control larghezzaText" />
@@ -572,7 +572,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtOccupAbusivaAbit" runat="server" CssClass="form-control larghezzaText" />
@@ -594,7 +594,7 @@
                                                 CausesValidation="false"
                                                 CssClass="text-info"
                                                 Style="margin-left: 5px;">
-                                        <i class="fa fa-info-circle">ⓘ</i>
+                                        <i class="fa fa-info-circle"></i>
                                             </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtOccupAbusivaNoAbit" runat="server" CssClass="form-control larghezzaText" />
@@ -615,7 +615,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtCensimentoAllPubb" runat="server" CssClass="form-control larghezzaText" />
@@ -644,7 +644,7 @@
                                                 CausesValidation="false"
                                                 CssClass="text-info"
                                                 Style="margin-left: 5px;">
-                                        <i class="fa fa-info-circle">ⓘ</i>
+                                        <i class="fa fa-info-circle"></i>
                                             </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtControlliCant" runat="server" CssClass="form-control larghezzaText" />
@@ -672,7 +672,7 @@
                                             CausesValidation="false"
                                             CssClass="text-info"
                                             Style="margin-left: 5px;">
-                                    <i class="fa fa-info-circle">ⓘ</i>
+                                    <i class="fa fa-info-circle"></i>
                                         </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtControlliDLGS" runat="server" CssClass="form-control larghezzaText  " />
@@ -696,7 +696,7 @@
                                            CausesValidation="false"
                                            CssClass="text-info"
                                            Style="margin-left: 5px;">
-                                   <i class="fa fa-info-circle">ⓘ</i>
+                                   <i class="fa fa-info-circle"></i>
                                        </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtSgomberiAbus" runat="server" CssClass="form-control larghezzaText  " />
@@ -717,7 +717,7 @@
                                            CausesValidation="false"
                                            CssClass="text-info"
                                            Style="margin-left: 5px;">
-                                   <i class="fa fa-info-circle">ⓘ</i>
+                                   <i class="fa fa-info-circle"></i>
                                        </asp:LinkButton>
                                             </label>
                                             <asp:TextBox ID="txtSgomberiImmobili" runat="server" CssClass="form-control larghezzaText  " />
@@ -875,6 +875,7 @@
                     </div>
                 </div>
                 <asp:HiddenField ID="HfIdScheda" runat="server" />
+                 <asp:HiddenField ID="HfParametroRicerca" runat="server" />
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
                     <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>

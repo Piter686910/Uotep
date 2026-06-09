@@ -41,6 +41,7 @@ namespace Uotep
                 // Assegna il valore decodificato al Literal
                 //ProtocolloLiteral.Text = decodedText;
                 TxtDataIntervento.Attributes["placeholder"] = "gg/mm/aaaa";
+                txtDataConsegna.Text= DateTime.Now.Date.ToShortDateString();
                 if (Area == "uote")
                 {
                     rdUote.Checked = true;

@@ -29,7 +29,7 @@ namespace Uotep
         public String Filename = ConfigurationManager.AppSettings["CartellaFileArchivio"];
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
-       
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Session["PaginaChiamante"] = "~/View/uotp/RicercaArchivio.aspx";
@@ -50,7 +50,7 @@ namespace Uotep
                 string decodedText = HttpUtility.HtmlDecode(protocolloText);
 
                 // Assegna il valore decodificato al Literal
-               // ProtocolloLiteral.Text = decodedText;
+                // ProtocolloLiteral.Text = decodedText;
             }
 
         }
@@ -68,7 +68,7 @@ namespace Uotep
             txtIndirizzo.Text = string.Empty;
             txtIntestatario.Text = string.Empty;
             txtBuEdificio.Text = string.Empty;
-            
+
         }
 
 
@@ -167,13 +167,13 @@ namespace Uotep
                         arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1], null, null, null);
                         break;
                     case "Nota":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null,null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null, null, null);
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null,null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null, null, null, null);
                         break;
                     case "Indirizzo":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1],null, null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1], null, null);
                         break;
                     case "Intestatario":
                         arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, ar[1], null);
@@ -186,20 +186,22 @@ namespace Uotep
                 {
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
+                    lblNumRighe.Text = " - Num. righe trovate:" + arc.Rows.Count.ToString();
                     // Salva datatable pratica  nella Sessione
                     Session["ListPraticheTp"] = arc;
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+
                 }
                 else
-                { 
-//                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                {
+                    //                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
                     SiteMaster myMaster = this.Master as SiteMaster;
 
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
                         myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
-                        
+
                     }
                 }
             }
@@ -219,8 +221,11 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('myModal')); modal.hide();", true);
             Pulisci();
             GVRicercaPratica.PageIndex = 0;
+            string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/RicercaArchivioUotp.aspx");
+            Response.Redirect(url, false);
+            
         }
-       
+
 
 
         protected void btDestinatario_Click(object sender, EventArgs e)
@@ -340,7 +345,7 @@ namespace Uotep
             Nascondi();
             Pulisci();
         }
- 
+
         protected void txtFilterOggetto_TextChanged(object sender, EventArgs e)
         {
             System.Web.UI.WebControls.TextBox txtFilter = (System.Web.UI.WebControls.TextBox)sender;
@@ -357,7 +362,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroOggetto.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroOggetto.Value, "Oggetto"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
 
@@ -377,7 +382,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroNote.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroNote.Value, "Note"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
         protected void apripopupPratica_Click(object sender, EventArgs e)
@@ -402,7 +407,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroDestinatario.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroDestinatario.Value, "Destinatario"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
         protected void txtFilterCognome_TextChanged(object sender, EventArgs e)
@@ -423,7 +428,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroCognome.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroCognome.Value, "Nominativo"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
 
@@ -437,16 +442,16 @@ namespace Uotep
             txtCartellinaTp.Text = arc.Rows[0].ItemArray[111].ToString().ToUpper();
             txtNotaTp.Text = arc.Rows[0].ItemArray[104].ToString().ToUpper();
             txtNotaTp.ToolTip = arc.Rows[0].ItemArray[104].ToString().ToUpper();
-            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
-            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper() ;
+            txtOggettoTp.Text = arc.Rows[0].ItemArray[19].ToString().ToUpper();
+            txtOggettoTp.ToolTip = arc.Rows[0].ItemArray[19].ToString().ToUpper();
 
-            txtOggettoTp2.Text =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
-            txtOggettoTp2.ToolTip =  arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp2.Text = arc.Rows[0].ItemArray[20].ToString().ToUpper();
+            txtOggettoTp2.ToolTip = arc.Rows[0].ItemArray[20].ToString().ToUpper();
 
             txtDestinatarioTp.Text = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtDestinatarioTp.ToolTip = arc.Rows[0].ItemArray[27].ToString().ToUpper();
             txtQuartiereTp.Text = arc.Rows[0].ItemArray[40].ToString().ToUpper();
-           // txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            // txtDataProtProc.Text = arc.Rows[0].ItemArray[116].ToString();// data.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
             TxtIndirizzoTp.Text = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             TxtIndirizzoTp.ToolTip = arc.Rows[0].ItemArray[47].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[48].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[49].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[50].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[51].ToString().ToUpper() + " " + arc.Rows[0].ItemArray[52].ToString().ToUpper();
             txtCognomeTp.Text = arc.Rows[0].ItemArray[45].ToString();
@@ -526,7 +531,7 @@ namespace Uotep
         protected void GVRicercaPratica_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GVRicercaPratica.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroDestinatario.Value) && String.IsNullOrEmpty(HfFiltroOggetto.Value))
+            if (String.IsNullOrEmpty(HfFiltroNote.Value) && String.IsNullOrEmpty(HfFiltroDestinatario.Value) && String.IsNullOrEmpty(HfFiltroOggetto.Value) && String.IsNullOrEmpty(HfFiltroCognome.Value))
             {
                 Ricerca_Click(this, EventArgs.Empty);
             }
@@ -534,32 +539,39 @@ namespace Uotep
             {
                 if (!String.IsNullOrEmpty(HfFiltroNote.Value))
                 {
-                    PopulateGridView("note", HfFiltroNote.Value);
-                    //    apripopupPratica_Click(sender, e);
+                    PopulateGridView("note", HfFiltroNote.Value,"Note");
+                        apripopupPratica_Click(sender, e);
                 }
                 else
                 {
                     if (!String.IsNullOrEmpty(HfFiltroDestinatario.Value))
                     {
-                        PopulateGridView("detinatario1", HfFiltroDestinatario.Value);
-                        //apripopupPratica_Click(sender, e);
+                        PopulateGridView("detinatario1", HfFiltroDestinatario.Value, "Destinatario");
+                        
+                        apripopupPratica_Click(sender, e);
                     }
                     else
                     {
                         if (!String.IsNullOrEmpty(HfFiltroOggetto.Value))
                         {
-                            PopulateGridView("oggetto1", HfFiltroOggetto.Value);
-                            //          apripopupPratica_Click(sender, e);
+                            PopulateGridView("oggetto1", HfFiltroOggetto.Value,"Oggetto");
+                                      apripopupPratica_Click(sender, e);
                         }
+                    }
+                    if (!String.IsNullOrEmpty(HfFiltroCognome.Value))
+                    {
+                        PopulateGridView("Cognome", HfFiltroCognome.Value, "Nominativo");
+
+                        apripopupPratica_Click(sender, e);
                     }
                 }
             }
         }
-        private void PopulateGridView(string filterColumn = "", string filterValue = "")
+        private void PopulateGridView(string filterColumn = "", string filterValue = "", string filterType = "")
         {
 
             DataTable dt = new DataTable();
-
+            int num = 0;
             dt = GetOriginalData(); // ricerco la lista nuovamente
             try
             {
@@ -567,18 +579,20 @@ namespace Uotep
                 if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterValue))
                 {
 
-
+                    
 
                     string filterExpression = $"{filterColumn} LIKE ('%{filterValue.Replace("'", "''")}%')";
                     DataRow[] filteredRows = dt.Select(filterExpression);
 
                     if (filteredRows.Length > 0)
                     {
+                        num = filteredRows.Length;
                         DataTable filteredDt = dt.Clone();
                         foreach (DataRow row in filteredRows)
                         {
                             filteredDt.ImportRow(row);
                         }
+                  //      GVRicercaPratica.PageIndex = 0;
                         GVRicercaPratica.DataSource = filteredDt;
                     }
                     else
@@ -592,6 +606,8 @@ namespace Uotep
                     GVRicercaPratica.DataSource = dt; // Nessun filtro
                 }
                 GVRicercaPratica.DataBind();
+                lblNumRighe.Text = " - Num. righe trovate:" + num;
+                lblMessage.Text = "Filtrato per " + filterType + ":" + filterValue.ToUpper(); ;
             }
             catch (Exception)
             {
@@ -620,37 +636,41 @@ namespace Uotep
                 switch (ar[0])
                 {
                     case "Pratica":
-                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null,null, null, null);
+                        arc = mn.getPraticaArchivioUotp(ar, null, null, null, null, null, null, null);
                         break;
                     case "Oggetto":
                         //arc = mn.getPraticaArchivioUotp(0, ar[1], null, null, null);
-                        filtro = $"Oggetto1 LIKE '%{HfFiltroOggetto.Value}%'";
-                        dv = new DataView(arc);
+                        arc = mn.getPraticaArchivioUotp(null, ar[1], null, null, null, null, null, null);
+                        //filtro = $"Oggetto1 LIKE '%{HfFiltroOggetto.Value}%'";
+                        //dv = new DataView(arc);
 
-                        dv.RowFilter = filtro;
+                        //dv.RowFilter = filtro;
+                        
                         break;
                     case "Destinatario":
                         //arc = mn.getPraticaArchivioUotp(0, null, null, null, ar[1]);
-                        filtro = $"destinatario1 LIKE '%{HfFiltroNote.Value}%'";
-                        dv = new DataView(arc);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, ar[1], null, null, null);
+                        //filtro = $"destinatario1 LIKE '%{HfFiltroDestinatario.Value}%'";
+                        //dv = new DataView(arc);
+                        //dv.RowFilter = filtro;
                         break;
                     case "Nota":
                         //                        arc = mn.getPraticaArchivioUotp(0, null, null, ar[1], null);
-                        filtro = $"note LIKE '%{HfFiltroNote.Value}%'";
-                        dv = new DataView(arc);
-
+                        //filtro = $"note LIKE '%{HfFiltroNote.Value}%'";
+                        //dv = new DataView(arc);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, ar[1], null, null, null, null);
                         break;
                     case "BU":
-                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null,null,null,null);
+                        arc = mn.getPraticaArchivioUotp(null, null, ar[1], null, null, null, null, null);
                         break;
                     case "Indirizzo":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1], null,null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, ar[1], null, null);
                         break;
                     case "Intestatario":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, ar[1],null);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, ar[1], null);
                         break;
                     case "Edificio":
-                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null,null,ar[1]);
+                        arc = mn.getPraticaArchivioUotp(null, null, null, null, null, null, null, ar[1]);
                         break;
 
                 }
@@ -659,6 +679,7 @@ namespace Uotep
                     //   apripopupPratica_Click(sender, e);
                     GVRicercaPratica.DataSource = arc;
                     GVRicercaPratica.DataBind();
+                    lblNumRighe.Text = " - Num. righe trovate:" + arc.Rows.Count.ToString();
                     //segnalo he sono in modifica prartica
                     // txtPratN.Enabled = false;
                 }
@@ -683,7 +704,30 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/Uotp/InserimentoArchivioUotp.aspx?status=M&id=" + HfId.Value);
             Response.Redirect(url, false);
         }
+        protected void GVRicercaPratica_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Ottieni il valore della colonna "ID"
+                string id = DataBinder.Eval(e.Row.DataItem, "id").ToString();
 
+                // Aggiungi l'attributo per il doppio clic
+                e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
+                e.Row.Style["cursor"] = "pointer";
+            }
+            if (GVRicercaPratica.TopPagerRow != null && GVRicercaPratica.TopPagerRow.Visible)
+            {
+                // Trova il controllo Label all'interno del PagerTemplate
+                System.Web.UI.WebControls.Label lblPageInfo = (System.Web.UI.WebControls.Label)GVRicercaPratica.TopPagerRow.FindControl("lblPageInfo");
+                if (lblPageInfo != null)
+                {
+                    // Calcola e imposta il testo
+                    int currentPage = GVRicercaPratica.PageIndex + 1;
+                    int totalPages = GVRicercaPratica.PageCount;
+                    lblPageInfo.Text = $"Pagina {currentPage} di {totalPages}";
+                }
+            }
+        }
         protected void GVRicercaPratica_DataBound(object sender, EventArgs e)
         {
             GridView gv = (GridView)sender;
@@ -706,8 +750,8 @@ namespace Uotep
 
 
                 string[] args = e.CommandArgument.ToString().Split(';');
-               int idP = System.Convert.ToInt32(args[0]);
-                HfId.Value= args[0];
+                int idP = System.Convert.ToInt32(args[0]);
+                HfId.Value = args[0];
                 string Npratica = args[1];
 
 
@@ -734,8 +778,44 @@ namespace Uotep
 
         protected void btBack_Click(object sender, EventArgs e)
         {
+            HfFiltroDestinatario.Value = string.Empty;
+            HfFiltroNote.Value = string.Empty;
+            HfFiltroOggetto.Value = string.Empty;
+            HfFiltroCognome.Value = string.Empty;
+            lblMessage.Text = string.Empty;
             Ricerca_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+        }
+
+        protected void btReturn_Click(object sender, EventArgs e)
+        {
+
+
+            // verifico se provengo da un filtro per riproporre la stessa ricerca altrimenti effettuo ricerca completa
+
+            if (!String.IsNullOrEmpty(HfFiltroCognome.Value))
+            {
+                PopulateGridView("Cognome", HfFiltroCognome.Value, "Nominativo");
+            }
+            else if (!String.IsNullOrEmpty(HfFiltroOggetto.Value))
+            {
+                PopulateGridView("oggetto1", HfFiltroOggetto.Value, "Oggetto");
+                apripopupPratica_Click(sender, e);
+            }
+            else if (!String.IsNullOrEmpty(HfFiltroDestinatario.Value))
+            {
+                PopulateGridView("destinatario1", HfFiltroDestinatario.Value, "Destinatario");
+                apripopupPratica_Click(sender, e);
+            }
+            else if (!String.IsNullOrEmpty(HfFiltroNote.Value))
+            {
+                PopulateGridView("note", HfFiltroNote.Value, "Note");
+                apripopupPratica_Click(sender, e);
+            }
+            else
+
+
+                Ricerca_Click(sender, e);
         }
     }
 }

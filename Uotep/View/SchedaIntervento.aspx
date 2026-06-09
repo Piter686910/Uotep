@@ -217,7 +217,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtDataConsegna" class="fw-bold">Data Consegna</label>
-                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" placeholder="gg/mm/yyyy" />
+                                <asp:TextBox ID="txtDataConsegna" runat="server" CssClass="form-control data-auto" ClientIDMode="Static" Enabled="false" Font-Bold="true"/>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtDataConsegna" ValidationGroup="bt" ErrorMessage="Inserire data consegna" ForeColor="Red" Display="Dynamic" />
                                 <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txtDataConsegna" ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$" ErrorMessage="Formato dd/mm/aaaa" ForeColor="Red" ValidationGroup="bt" Display="Dynamic" />
                             </div>

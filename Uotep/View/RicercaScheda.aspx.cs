@@ -1238,9 +1238,19 @@ namespace Uotep
                                 if (ckControlliOccupazioneAbus.Checked)
                                 {
                                     if (ckAbitativo.Checked)
+                                    {
+                                        rap.NumAbusiAbitatSi = Convert.ToInt32(txtNumAbusiAbitatSi.Text);
+                                        rap.NumAbusiAbitatNo = Convert.ToInt32(txtNumAbusiAbitatNo.Text);
                                         stat.Abitativo = 1;
+                                    }
+
                                     if (ckNonAbitativo.Checked)
-                                        stat.NonAbitativo = 1;
+                                    {
+                                        rap.NumAbusiNoAbitatSi = Convert.ToInt32(txtNumAbusiNoAbitatSi.Text);
+                                        rap.NumAbusiNoAbitatNo = Convert.ToInt32(txtNumAbusiNoAbitatNo.Text);
+                                    stat.NonAbitativo = 1;
+                                    }
+
                                 }
                                 rap.contr_occupazione_abus = ckControlliOccupazioneAbus.Checked;
                                 rap.contr_occ_abitativo = ckAbitativo.Checked;

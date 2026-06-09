@@ -311,9 +311,9 @@ namespace Uotep
         protected void BtnInfo_Click(object sender, EventArgs e)
         {
             LinkButton btn = (LinkButton)sender;
-            string parametro = btn.CommandArgument;
+            HfParametroRicerca.Value = btn.CommandArgument;
             Manager mn = new Manager();
-            DataTable schede = mn.GetSchedeInfo(parametro, txtMese.Text, txtAnno.Text);
+            DataTable schede = mn.GetSchedeInfo(HfParametroRicerca.Value, txtMese.Text, txtAnno.Text);
 
             if (schede.Rows.Count > 0)
             {
@@ -374,7 +374,7 @@ namespace Uotep
             if (!String.IsNullOrEmpty(txtMese.Text.Trim()))
 
 
-                dt = mn.GetSchedeInfo("ControlliCant", txtMese.Text.Trim(), txtAnno.Text.Trim());
+                dt = mn.GetSchedeInfo(HfParametroRicerca.Value, txtMese.Text.Trim(), txtAnno.Text.Trim());
 
             if (dt.Rows.Count > 0)
             {

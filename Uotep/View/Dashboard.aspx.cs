@@ -35,12 +35,8 @@ namespace Uotep
             }
             if (!IsPostBack)
             {
-                Manager mn = new Manager();
-                DataTable CaricaOperatori = mn.getListOperatore(out msg);
-                DdlPersonale.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
-                DdlPersonale.DataTextField = "Nominativo"; // Il campo visibile
-                DdlPersonale.Items.Insert(0, new ListItem("", "0"));
-                DdlPersonale.DataBind();
+                
+                CaricaPersonale();
                 CaricaListOperatori();
             }
         }
@@ -112,7 +108,7 @@ namespace Uotep
                 {
                     // 2. Chiamo il metodo pubblico
                     myMaster.MostraMessaggio("✅ ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
-
+                    CaricaListOperatori();
                 }
 
             }
@@ -381,6 +377,15 @@ namespace Uotep
             DataTable CaricaListOperatori = mn.getListOperatoreCompleta(out msg);
             rptOperatori.DataSource = CaricaListOperatori;
             rptOperatori.DataBind();
+        }
+        private void CaricaPersonale()
+        {
+            Manager mn = new Manager();
+            DataTable CaricaOperatori = mn.getListOperatore(out msg);
+            DdlPersonale.DataSource = CaricaOperatori; // Imposta il DataSource della DropDownList
+            DdlPersonale.DataTextField = "Nominativo"; // Il campo visibile
+            DdlPersonale.Items.Insert(0, new ListItem("", "0"));
+            DdlPersonale.DataBind();
         }
         protected void EliminaMatricola_Click(object sender, EventArgs e)
         {

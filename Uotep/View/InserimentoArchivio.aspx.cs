@@ -49,7 +49,14 @@ namespace Uotep
 
             if (!IsPostBack)
             {
-
+                String[] ar;
+                List<string> ListRicerca = (List<string>)Session["ListRicerca"];
+                if (ListRicerca != null)
+                {
+                    ar = ListRicerca.ToArray();
+                    // Se ar[2] esiste altrimenti space
+                    HfStorico.Value = (ar != null && ar.Length > 2) ? ar[2]?.ToString() ?? "" : "";
+                }
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["TitoloArchivioUote"];
 
@@ -80,6 +87,7 @@ namespace Uotep
                 }
             }
 
+
         }
         private void RicercaNew(object sender, EventArgs e)
         {
@@ -99,6 +107,7 @@ namespace Uotep
                         break;
                     case "StoricoPratica":
                         arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
+
                         break;
 
                     case "Nominativo":
@@ -127,6 +136,7 @@ namespace Uotep
                     //segnalo he sono in modifica prartica
                     HfStato.Value = "Mod";
                     txtPratica.Enabled = false;
+                    lblNumRighe.Text = " - Num. righe trovate:" + arc.Rows.Count.ToString();
                 }
                 else
                 {
@@ -155,6 +165,7 @@ namespace Uotep
             if (gv.PageCount > 0)
             {
                 lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
+
             }
             else
             {
@@ -204,14 +215,17 @@ namespace Uotep
 
                 Manager mn = new Manager();
                 //DataTable scheda = mn.GetScheda(txtPratica.Text.Trim(), txtNominativo.Text, LPattugliaCompleta.Items[0].Text);
-
-                DataTable pratica = mn.getPraticaArchivioUoteById(idP);
+                string storico = HfStorico.Value;
+                DataTable pratica = mn.getPraticaArchivioUoteById(idP, storico);
+                HfStorico.Value = string.Empty;
+                storico = string.Empty;
                 if (pratica.Rows.Count > 0)
                 {
                     FillScheda(pratica);
+                    HfID.Value = idP.ToString();
 
                 }
-                Session.Remove("ListRicerca");
+                //  Session.Remove("ListRicerca");
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModal();", true);
             }
@@ -456,9 +470,14 @@ namespace Uotep
 
                             arch.arch_foglioNct = txtFoglioNct.Text;
                             arch.arch_particellaNct = txtParticellaNct.Text;
-
-
-                            Boolean ins = mn.SavePraticaArchivioUote(arch);
+                            Boolean ins = false;
+                            DateTime dataStor = DateTime.Now;
+                            if (HfStato.Value == "Mod") //SE MODIFICA INSERISCO PRIMA LO STORICO
+                            {
+                                ins = mn.UpdPraticaArchivioUote(arch, HfID.Value, dataStor);
+                            }
+                            else
+                                ins = mn.SavePraticaArchivioUote(arch);
                             SiteMaster myMaster = this.Master as SiteMaster;
                             if (!ins)
                             {
@@ -479,7 +498,7 @@ namespace Uotep
                                     messaggioPopup = "Pratica " + arch.arch_numPratica + " " + Enumerate.MsgOutput.ModificaCorretta.GetDescription();
 
                                 else
-                                    messaggioPopup     = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
+                                    messaggioPopup = "Pratica " + arch.arch_numPratica + " inserita correttamente .";
                                 //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Pratica " + arch.arch_numPratica + " inserita correttamente ." + "'); $('#errorModal').modal('show');", true);
                                 if (myMaster != null)
                                 {
@@ -527,6 +546,7 @@ namespace Uotep
 
             }
         }
+
         private void Pulisci()
         {
 
@@ -629,20 +649,21 @@ namespace Uotep
             string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
             Response.Redirect(url);
         }
-    //    protected void chiudipopupErrore_Click(object sender, EventArgs e)
-    //    {
-    //        // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
-    //        string script = @"
-    //var modalElement = document.getElementById('errorModal');
-    //if (modalElement) {
-    //    var modalInstance = bootstrap.Modal.getInstance(modalElement);
-    //    if (!modalInstance) {
-    //        modalInstance = new bootstrap.Modal(modalElement);
-    //    }
-    //    modalInstance.hide();
-    //}";
-    //        ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
-    //    }
+
+        //    protected void chiudipopupErrore_Click(object sender, EventArgs e)
+        //    {
+        //        // ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('errorModal')); modal.hide();", true);
+        //        string script = @"
+        //var modalElement = document.getElementById('errorModal');
+        //if (modalElement) {
+        //    var modalInstance = bootstrap.Modal.getInstance(modalElement);
+        //    if (!modalInstance) {
+        //        modalInstance = new bootstrap.Modal(modalElement);
+        //    }
+        //    modalInstance.hide();
+        //}";
+        //        ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", script, true);
+        //    }
         protected void RicercaQuartiere_Click(object sender, EventArgs e)
         {
             string indirizzo = string.Empty;
@@ -789,6 +810,7 @@ namespace Uotep
         // esecuzione del filtro ulteriore sulla colonna NOTE
         protected void txtFilterNote_TextChanged(object sender, EventArgs e)
         {
+
             TextBox txtFilter = (TextBox)sender;
             string filterValue = txtFilter.Text.Trim();
             HfFiltroNote.Value = filterValue;
@@ -803,15 +825,15 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroNote.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroNote.Value, "Note"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
         // Funzione di esempio che carica i dati e applica il filtro
-        private void PopulateGridView(string filterColumn = "", string filterValue = "")
+        private void PopulateGridView(string filterColumn = "", string filterValue = "", string filterType = "")
         {
 
             DataTable dt = new DataTable();
-
+            int num = 0;
             dt = GetOriginalData(); // ricerco la lista nuovamente
             try
             {
@@ -826,6 +848,7 @@ namespace Uotep
 
                     if (filteredRows.Length > 0)
                     {
+                        num = filteredRows.Length;
                         DataTable filteredDt = dt.Clone();
                         foreach (DataRow row in filteredRows)
                         {
@@ -844,6 +867,8 @@ namespace Uotep
                     GVRicercaPratica.DataSource = dt; // Nessun filtro
                 }
                 GVRicercaPratica.DataBind();
+                lblNumRighe.Text = " - Num. righe trovate:" + num;
+                lblMessage.Text = "Filtrato per " + filterType + ":" + filterValue.ToUpper();
             }
             catch (Exception)
             {
@@ -869,6 +894,7 @@ namespace Uotep
                         arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
                         break;
                     case "StoricoPratica":
+
                         arc = mn.getPraticaArchivioUote(ar, null, null, null, null, null);
                         break;
 
@@ -898,6 +924,7 @@ namespace Uotep
                     //segnalo he sono in modifica prartica
                     HfStato.Value = "Mod";
                     txtPratica.Enabled = false;
+                    lblNumRighe.Text = " - Num. righe trovate:" + arc.Rows.Count.ToString();
                 }
             }
             else
@@ -926,7 +953,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroIndirizzo.Value, "Indirizzo"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
 
@@ -946,15 +973,41 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, HfFiltroResponsabile.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, HfFiltroResponsabile.Value, "Nominativo"); // Esempio di funzione di filtro
             apripopupPratica_Click(sender, e);
         }
 
         protected void btBack_Click(object sender, EventArgs e)
         {
-
+            HfFiltroResponsabile.Value = string.Empty;
+            HfFiltroNote.Value = string.Empty;
+            HfFiltroIndirizzo.Value = string.Empty;
+            lblMessage.Text = string.Empty;
             RicercaNew(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalPratica').modal('show');", true);
+        }
+
+        protected void btReturn_Click(object sender, EventArgs e)
+        {
+            // verifico se provengo da un filtro per riproporre la stessa ricerca altrimenti effettuo ricerca completa
+
+            if (!String.IsNullOrEmpty(HfFiltroNote.Value))
+            {
+                PopulateGridView("arch_note", HfFiltroNote.Value, "Note");
+                apripopupPratica_Click(sender, e);
+            }
+            else if (!String.IsNullOrEmpty(HfFiltroIndirizzo.Value))
+            {
+                PopulateGridView("arch_indirizzo", HfFiltroIndirizzo.Value, "Indirizzo");
+                apripopupPratica_Click(sender, e);
+            }
+            else if (!String.IsNullOrEmpty(HfFiltroResponsabile.Value))
+            {
+                PopulateGridView("arch_responsabile", HfFiltroResponsabile.Value, "Nominativo");
+                apripopupPratica_Click(sender, e);
+            }
+            else
+                RicercaNew(sender, e);
         }
     }
 }

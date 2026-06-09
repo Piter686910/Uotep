@@ -310,6 +310,8 @@
                     </div>
                     <asp:Button ID="BtNewRicerca" Text="Nuova Ricerca" runat="server" OnClick="BtNewRicerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
+                     <asp:Button id="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
+
 
                 </div>
             </div>
@@ -328,14 +330,17 @@
                     <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                         <div class="small text-muted">
                             <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                            <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                         </div>
+                        <strong> <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>            
                     </div>
                     <div class="table-responsive">
                         <!-- GridView nel popup -->
                         <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-hover"
-                            OnRowDataBound="gvPopup_RowDataBoundP" OnRowCommand="GVRicercaPratica_RowCommand" AllowPaging="true" PageSize="10"
+                            OnRowCommand="GVRicercaPratica_RowCommand" AllowPaging="true" PageSize="10"
                             OnPageIndexChanging="GVRicercaPratica_PageIndexChanging"
                             OnDataBound="GVRicercaPratica_DataBound"
+                            OnRowDataBound="GVRicercaPratica_RowDataBound"
                             RowStyle-CssClass="GridViewRow"
                             AlternatingRowStyle-CssClass="GridViewAlternatingRow"
                             PagerSettings-Position="Top"

@@ -438,6 +438,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btCercaQuartiere;
 
         /// <summary>
+        /// Controllo btReturn.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btReturn;
+
+        /// <summary>
         /// Controllo txtIndirizzoQuartiere.
         /// </summary>
         /// <remarks>
@@ -492,6 +501,24 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label lblInfoPagine;
 
         /// <summary>
+        /// Controllo lblNumRighe.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNumRighe;
+
+        /// <summary>
+        /// Controllo lblMessage.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
+
+        /// <summary>
         /// Controllo GVRicercaPratica.
         /// </summary>
         /// <remarks>
@@ -535,6 +562,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroResponsabile;
+
+        /// <summary>
+        /// Controllo HfID.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfID;
+
+        /// <summary>
+        /// Controllo HfStorico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfStorico;
 
         /// <summary>
         /// Controllo btChiudi.

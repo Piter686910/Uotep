@@ -539,9 +539,9 @@
                 <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
                 <div class="col-12 text-center">
                     <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
-                    <%--<asp:Button Text="Modifica" runat="server" OnClick="Modifica_Click" CssClass="btn btn-primary mt-3" />--%>
+                    
                     <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-
+                    <asp:Button id="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
                 </div>
             </div>
         </div>
@@ -606,7 +606,9 @@
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <div class="small text-muted">
                                 <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                                <strong> <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                             </div>
+                            <strong> <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>
                         </div>
                         <div class="table-responsive">
                             <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False"
@@ -624,7 +626,7 @@
                                 PagerSettings-LastPageText="Ultima &raquo;"
                                 PagerSettings-NextPageText="Succ. &rsaquo;"
                                 PagerSettings-PreviousPageText="&lsaquo; Prec.">
-
+                                
                                 <Columns>
                                     <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
                                     <asp:BoundField DataField="arch_numPratica" HeaderText="N° Pratica" ItemStyle-Font-Bold="true" />
@@ -688,7 +690,8 @@
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
                 <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
                 <asp:HiddenField ID="HfFiltroResponsabile" runat="server" />
-
+                <asp:HiddenField ID="HfID" runat="server" />
+                <asp:HiddenField ID="HfStorico" runat="server" />
                 <div class="modal-footer bg-light">
                     <asp:Button ID="btChiudi" runat="server" CssClass="btn btn-secondary" Text="Esci" OnClick="chiudipopup_Click" />
                     <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" />

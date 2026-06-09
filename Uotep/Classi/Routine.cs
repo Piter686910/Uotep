@@ -245,7 +245,7 @@ namespace Uotep.Classi
                             document.Add(new Paragraph($"Scheda Intervento del: {dataFormattata} , Quartiere:" + schede.Rows[0].ItemArray[56].ToString())
                                 .SetFixedPosition(70, 800, 400)
                                 .SetTextAlignment(TextAlignment.LEFT)
-                                .SetFontSize(14));
+                                .SetFontSize(8));
 
                             // Prima riga: Numero Pratica, Nominativo
                             document.Add(new Paragraph($"Numero Pratica: {schede.Rows[0].ItemArray[1]}").SetFixedPosition(70, 780, 200));
@@ -1349,24 +1349,34 @@ namespace Uotep.Classi
                             //document.Add(new Paragraph($"Con  {contrConDpiString}").SetFixedPosition(350, 250, 70));
                             if (abitativoString == "X")
                             {
-                                stampaX(startX_350, startY_contrOccupazione, document, true);
+                                stampaX(startX_350, startY_contrOccupazione + 1, document, true);
 
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Abitativo:");
+                                Paragraph descriptionParagraph = new Paragraph("Abitat.:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_350 + boxSize + 5, startY_contrOccupazione - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_350 + boxSize + 5, startY_contrOccupazione - 1, 100); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
-
+                                startY -= lineHeight;
+                                //abusi si
+                                object sumObject = schede.Compute("SUM(rapp_NumAbusiAbitatSi)", "");
+                                string totaleSomma = (sumObject != DBNull.Value) ? sumObject.ToString() : "0";
+                                document.Add(new Paragraph("S" + totaleSomma).SetFixedPosition(410, startY_contrOccupazione, 20));
+                                //no abusi
+                                object sumObject1 = schede.Compute("SUM(rapp_NumAbusiAbitatNo)", "");
+                                string totaleSomma1 = (sumObject1 != DBNull.Value) ? sumObject1.ToString() : "0";
+                                document.Add(new Paragraph("N" + totaleSomma1).SetFixedPosition(430, startY_contrOccupazione, 20));
                             }
                             else
                             {
                                 stampaX(startX_350, startY_contrOccupazione, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-                                Paragraph descriptionParagraph = new Paragraph("Abitativo:");
+                                Paragraph descriptionParagraph = new Paragraph("Abitat.:");
                                 descriptionParagraph.SetFixedPosition(startX_370, startY_contrOccupazione, 100);
                                 document.Add(descriptionParagraph);
                             }
+                            
+
                             // no abitativo
                             bool? NoabitativoNullable = schede.Rows[0].ItemArray[51] as bool?;
                             string NoabitativoString = NoabitativoNullable.HasValue && NoabitativoNullable.Value ? "X" : "";
@@ -1376,21 +1386,29 @@ namespace Uotep.Classi
                                 stampaX(startX_450, startY_contrOccupazione, document, true);
 
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Non Abitativo:");
+                                Paragraph descriptionParagraph = new Paragraph("Non Abit:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
-                                descriptionParagraph.SetFixedPosition(startX_470 + boxSize + 5, startY_contrOccupazione - 5, 100); // Spazio di 5 pixel tra riquadro e descrizione
+                                descriptionParagraph.SetFixedPosition(startX_450 + boxSize + 5, startY_contrOccupazione - 1, 80); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
-
+                                //abusi si
+                                object sumObject = schede.Compute("SUM(rapp_NumAbusiNoAbitatSi)", "");
+                                string totaleSomma = (sumObject != DBNull.Value) ? sumObject.ToString() : "0";
+                                document.Add(new Paragraph("S" + totaleSomma).SetFixedPosition(520, startY_contrOccupazione, 20));
+                                //no abusi
+                                object sumObject1 = schede.Compute("SUM(rapp_NumAbusiNoAbitatNo)", "");
+                                string totaleSomma1 = (sumObject1 != DBNull.Value) ? sumObject1.ToString() : "0";
+                                document.Add(new Paragraph("N" + totaleSomma1).SetFixedPosition(540, startY_contrOccupazione, 20));
                             }
                             else
                             {
                                 stampaX(startX_450, startY_contrOccupazione, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-                                Paragraph descriptionParagraph = new Paragraph("Non Abitativo:");
-                                descriptionParagraph.SetFixedPosition(startX_470, startY_contrOccupazione, 100);
+                                Paragraph descriptionParagraph = new Paragraph("Non Abit:");
+                                descriptionParagraph.SetFixedPosition(startX_450, startY_contrOccupazione, 5);
                                 document.Add(descriptionParagraph);
                             }
+                            
                             //***
                             startY -= lineHeight; // Move to the next line
 
@@ -1417,6 +1435,11 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_cenrimentoNucFam, 200);
                                 document.Add(descriptionParagraph);
                             }
+                            object sumObjectpubb = schede.Compute("SUM(rapp_num_censimento_all_pubb)", "");
+                            string totaleSommapubb = (sumObjectpubb != DBNull.Value) ? sumObjectpubb.ToString() : "0";
+                            document.Add(new Paragraph(totaleSommapubb).SetFixedPosition(280, startY_cenrimentoNucFam -5, 200));
+
+                            
                             startY -= lineHeight; // Move to the next line
 
                             // controllo nato da accertamenti
@@ -1446,7 +1469,7 @@ namespace Uotep.Classi
                                                   // float startY_NumCensimenti = startY_430; //
 
 
-                            document.Add(new Paragraph($"Num. Acc. Rich: {schede.Rows[0]["rapp_NumcontrNatoDaAcc"]}").SetFixedPosition(300, startY_contrNatoDaAcc, 200));
+                            document.Add(new Paragraph($"Num. Acc. Rich: {schede.Rows[0]["rapp_NumcontrNatoDaAcc"]}").SetFixedPosition(300, startY_contrNatoDaAcc -5, 200));
 
                             startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione

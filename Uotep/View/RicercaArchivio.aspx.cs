@@ -113,6 +113,7 @@ namespace Uotep
                 {
                     ListRicerca.Add("StoricoPratica");
                     ListRicerca.Add(txtPratica.Text);
+                    ListRicerca.Add("si");
                 }
                 else
                 {

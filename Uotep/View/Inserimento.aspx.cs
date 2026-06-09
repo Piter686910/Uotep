@@ -569,6 +569,7 @@ namespace Uotep
                         return;
                     }
                     Hid.Value = System.Convert.ToString(idN);
+                    txtPraticaDecr.Text = txtProt.Text;
                     if (!ins)
                     {
                         //ricalcolo il protocollo
@@ -580,6 +581,7 @@ namespace Uotep
                         {
                             // 2. Chiamo il metodo pubblico
                             myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text, "danger");
+                           
                         }
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }
@@ -1257,6 +1259,7 @@ namespace Uotep
                 decr.Npratica = txtPraticaDecr.Text;
                 decr.decretante = txtDecretante.Text.ToUpper();
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
+                decr.decretato = txtSearchOperatore.Value.ToUpper();
                 if (!String.IsNullOrEmpty(txtDataDecretazione.Text))
                     decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.chiuso = true;
