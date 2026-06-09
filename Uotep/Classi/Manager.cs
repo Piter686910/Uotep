@@ -2014,7 +2014,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         if (pratica[1] == "Doppione")
                             //sql = "SELECT  * FROM ArchivioUote where arch_numPratica = '" + pratica[2].Replace("'", "''") + "' and arch_doppione in ('bis', 'tris', 'quater')  ORDER BY arch_datault_intervento desc ";
 
-                        sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null) " +
+                        sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null or arch_doppione='') " +
                                 " ORDER BY arch_datault_intervento DESC";
 
                         //  sql= "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[2].Replace("'", "''")  + " AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "')";
