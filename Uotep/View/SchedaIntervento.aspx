@@ -238,7 +238,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div id="divQuartiere" runat="server" class="form-group" style="display: none;">
+                            <div id="divQuartiere" runat="server" class="form-group" >
                                 <label for="DdlQuartiere" class="fw-bold">Quartiere</label>
                                 <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;"></div>
                                 <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" />
@@ -715,7 +715,7 @@ Servizi e Amministrazioni</label>
             }
         }
         //al caricamento della pagian effettua il primno controllo
-        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+    //    document.addEventListener('DOMContentLoaded', gestisciVisibilita);
 
 
 
@@ -741,6 +741,6 @@ Servizi e Amministrazioni</label>
             }
         }
         //al caricamento della pagian effettua il primno controllo
-        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+       // document.addEventListener('DOMContentLoaded', gestisciVisibilita);
     </script>
 </asp:Content>
