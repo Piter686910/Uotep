@@ -112,6 +112,10 @@ namespace Uotep
             Manager mn = new Manager();
             Boolean validazione = false;
             DataTable pratica = new DataTable();
+            if (String.IsNullOrEmpty(txtAnnoRicerca.Text))
+            {
+                txtAnnoRicerca.Text = DateTime.Now.Year.ToString();
+            }
             if (txtRicPraticaVal.Text != string.Empty && txtRicAnnoVal.Text != string.Empty)
             {
                 pratica = mn.getListPraticheVal(txtRicPraticaVal.Text, txtRicAnnoVal.Text, out msg);

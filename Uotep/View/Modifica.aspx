@@ -465,7 +465,7 @@
             <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span>MODIFICA CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> MODIFICA CARICO</h1>
             </div>
             <asp:HiddenField ID="HfButtonProv" runat="server" />
 
@@ -863,62 +863,62 @@
                         </div>
 
 
-
                     </div>
+                </div>
 
 
-                    <div id="divAg" runat="server" style="display: none;">
+                <div id="divAg" runat="server" style="display: none;">
 
-                        <p style="font-weight: bold; font-size: medium">Dati AG</p>
-                        <div class="row custom-border">
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="txtGiudice">Giudice</label>
-                                    <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtDataDelega">Data Delega</label>
-                                    <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
-                                </div>
+                    <p style="font-weight: bold; font-size: medium">Dati AG</p>
+                    <div class="row custom-border">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="txtGiudice">Giudice</label>
+                                <asp:TextBox ID="txtGiudice" runat="server" CssClass="form-control mb-3" />
                             </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
-                                    <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" Visible="false"></asp:TextBox>
-
-                                    <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
-                                        <asp:HiddenField ID="HfTipoProv" runat="server" />
-
-                                    </div>
-                                    <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
-                                    <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
-
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="txtGgDelega">Termine gg. delega</label>
-                                    <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
-                                </div>
+                            <div class="form-group mb-3">
+                                <label for="txtDataDelega">Data Delega</label>
+                                <asp:TextBox ID="txtDataDelega" runat="server" CssClass="form-control data-auto"></asp:TextBox>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="txtProdPenNr">Procedimento Penale nr</label>
-                                    <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="TxtTipoProvvAg">Tipo Provvedimento AG</label>
+                                <asp:TextBox ID="TxtTipoProvvAg" runat="server" CssClass="form-control mb-3" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" Visible="false"></asp:TextBox>
+
+                                <div id="suggestionsListTipoProv" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    <asp:HiddenField ID="HfTipoProv" runat="server" />
 
                                 </div>
+                                <%--                                <asp:Button ID="btSalvaTipoProvv" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaTipoProvv_Click" Visible="false" />--%>
+                                <asp:DropDownList ID="DdlTipoProvvAg" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlTipoProvvAg_SelectedIndexChanged" AutoPostBack="true" />
+
                             </div>
-                            <%--                        <div class="col-md-3" style="margin-top: -25px">
+                            <div class="form-group mb-3">
+                                <label for="txtGgDelega">Termine gg. delega</label>
+                                <asp:TextBox ID="txtGgDelega" runat="server" AutoPostBack="false" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtGgDelega" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,3}" Display="Dynamic" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="txtProdPenNr">Procedimento Penale nr</label>
+                                <asp:TextBox ID="txtProdPenNr" runat="server" CssClass="form-control mb-3" />
+
+                            </div>
+                        </div>
+                        <%--                        <div class="col-md-3" style="margin-top: -25px">
                             <div class="form-check">
                                 <asp:CheckBox ID="CkEvasa" runat="server" CssClass="form-check-input" Enabled="false" />
                                 <label class="form-check-label ms-2" for="CkEvasa">Evasa</label>
                             </div>
                         </div>--%>
-                        </div>
                     </div>
-
-
                 </div>
+
+
+
 
 
                 <div class="row">
@@ -936,301 +936,301 @@
         </div>
 
 
-    <!-- Modale Bootstrap quartiere -->
+        <!-- Modale Bootstrap quartiere -->
 
-    <div class="modal fade" id="ModalQuartiere" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel1">Ricerca quartiere</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-                        <label for="txtIndirizzoQuartiere">Indirizzo:</label>
-                        <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
+        <div class="modal fade" id="ModalQuartiere" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel1">Ricerca quartiere</h5>
 
                     </div>
-                    <%--<div class="form-group">
+                    <div class="modal-body">
+                        <!-- Campi di input per la ricerca -->
+                        <div class="form-group">
+                            <label for="txtIndirizzoQuartiere">Indirizzo:</label>
+                            <asp:TextBox ID="txtIndirizzoQuartiere" runat="server" CssClass="form-control" placeholder="Campo obbligatorio" />
+
+                        </div>
+                        <%--<div class="form-group">
                                 <label for="txtSpecie">Toponimo:</label>
                                 <asp:TextBox ID="txtSpecie" runat="server" CssClass="form-control" />
                             </div>--%>
-                    <div class="form-group">
-                        <!-- GridView nel popup -->
-                        <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
-                            OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
-                            <Columns>
-                                <asp:BoundField DataField="ID_quartiere" HeaderText="ID" />
-                                <asp:BoundField DataField="Toponimo" HeaderText="Toponimo" />
-                                <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
-                                <asp:BoundField DataField="Specie" HeaderText="Specie" />
-                                <asp:BoundField DataField="Nota" HeaderText="Nota" />
-                                <asp:TemplateField ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Button ID="Button1" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
-                    <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <%-- Modale ricerca fascicolo --%>
-    <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" style="width: 100%">
-            <%--<div class="container" id="DivDettagli" runat="server">--%>
-            <div class="modal-content">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
-
-                </div>
-                <div class="modal-body">
-                    <div id="DivGrid" runat="server" class="section-box" visible="false">
-                        <div class="table-responsive">
+                        <div class="form-group">
                             <!-- GridView nel popup -->
-                            <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-hover"
-                                OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupD_PageIndexChanging" RowStyle-CssClass="GridViewRow"
-                                AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                            <asp:GridView ID="gvPopup" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered"
+                                OnRowDataBound="gvPopup_RowDataBound" OnRowCommand="gvPopup_RowCommand">
                                 <Columns>
-                                    <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
-                                    <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
-                                    <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" />
-                                    <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
-                                    <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
-
-                                    <%--                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>--%>
-
-                                    <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                        <HeaderTemplate>
-                                            Nominativo
-                                          <br />
-                                            <asp:TextBox ID="txtFilterNominativo" runat="server" OnTextChanged="txtFilterNominativo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
-
-                                        </HeaderTemplate>
+                                    <asp:BoundField DataField="ID_quartiere" HeaderText="ID" />
+                                    <asp:BoundField DataField="Toponimo" HeaderText="Toponimo" />
+                                    <asp:BoundField DataField="Quartiere" HeaderText="Quartiere" />
+                                    <asp:BoundField DataField="Specie" HeaderText="Specie" />
+                                    <asp:BoundField DataField="Nota" HeaderText="Nota" />
+                                    <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
-                                            <%# Eval("Nominativo") %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <%-- <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>--%>
-
-                                    <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                        <HeaderTemplate>
-                                            Indirizzo
-                                          <br />
-                                            <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
-
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <%# Eval("indirizzo") %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-
-                                    <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-                                    <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                        <ItemStyle CssClass="uppercase-text" />
-                                    </asp:BoundField>
-                                    <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
-                                    <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
-                                        <HeaderTemplate>
-                                            Accertatori
-                                          <br />
-                                            <asp:TextBox ID="txtFilterAccertatori" runat="server" OnTextChanged="txtFilterAccertatori_TextChanged" AutoPostBack="True"></asp:TextBox>
-                                            Filtro
-                                        </HeaderTemplate>
-                                        <ItemTemplate>
-                                            <%# Eval("Accertatori") %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-
-                                    <%-- <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
-                                    <ItemStyle CssClass="uppercase-text" />
-                                </asp:BoundField>--%>
-                                    <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
-                                    <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                    <asp:BoundField DataField="Matricola" HeaderText="Matricola" Visible="false" />
-                                    <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px" />
-                                    <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
-                                    <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
-                                                CommandName="Select"
-                                                CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
-                                                CssClass="btn btn-success btn-sm" />
+                                            <asp:Button ID="Button1" runat="server" Text="Seleziona" CommandName="Select" CommandArgument='<%# Eval("Quartiere") %>' CssClass="btn btn-success btn-sm" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
-                                <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                                <PagerStyle HorizontalAlign="Center" />
-                                <PagerTemplate>
-                                    <table width="100%">
-                                        <tr>
-                                            <td style="width: 50%; text-align: left;">
-                                                <asp:Label ID="lblPageInfo" runat="server" />
-                                            </td>
-
-                                        </tr>
-                                    </table>
-                                    <div style="padding: 5px;">
-                                        <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                                        <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
-
-                                        <span style="margin: 0 10px;">Pagina:
-               
-                                        </span>
-
-                                        <%-- Contenitore per i link numerici delle pagine --%>
-                                        <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
-
-                                        <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                                        <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
-                                    </div>
-                                </PagerTemplate>
-                                <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
                             </asp:GridView>
 
                         </div>
                     </div>
-                </div>
-                <%-- campi nascosti --%>
-                <asp:HiddenField ID="Holdmat" runat="server" />
-                <asp:HiddenField ID="HolDate" runat="server" />
-                <asp:HiddenField ID="Hid" runat="server" />
-                <asp:HiddenField ID="HfFiltroNote" runat="server" />
-                <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
-                <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
-                <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
-                <asp:HiddenField ID="Hfdecretazione" runat="server" />
-
-                <%-- campi nascosti --%>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-                    <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <%-- popup avvertenze --%>
-    <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Campi di input per la ricerca -->
-                    <div class="form-group">
-
-                        <p id="errorAvvertenze" style="color: red"></p>
-
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="RicercaQuartiere_Click" />
+                        <asp:Button ID="btnchiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+            </div>
+        </div>
+
+        <%-- Modale ricerca fascicolo --%>
+        <div class="modal fade" id="ModalRicerca" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" style="width: 100%">
+                <%--<div class="container" id="DivDettagli" runat="server">--%>
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="modalLabel2">Ricerca Fascicolo</h5>
+
+                    </div>
+                    <div class="modal-body">
+                        <div id="DivGrid" runat="server" class="section-box" visible="false">
+                            <div class="table-responsive">
+                                <!-- GridView nel popup -->
+                                <asp:GridView ID="gvPopupD" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered table-hover"
+                                    OnRowDataBound="gvPopupD_RowDataBound" OnRowCommand="gvPopupD_RowCommand" AllowPaging="true" PageSize="10" OnPageIndexChanging="gvPopupD_PageIndexChanging" RowStyle-CssClass="GridViewRow"
+                                    AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                                    <Columns>
+                                        <asp:BoundField DataField="ID" HeaderText="ID" Visible="false" />
+                                        <asp:BoundField DataField="Nr_Protocollo" HeaderText="Nr. Carico" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="50px" />
+                                        <asp:BoundField DataField="Anno" HeaderText="Anno" ItemStyle-Width="20px" />
+                                        <asp:BoundField DataField="Sigla" HeaderText="Sigla" ItemStyle-Width="20px" Visible="false" />
+                                        <asp:BoundField DataField="nr_Pratica" HeaderText="N. Pratica" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
+
+                                        <%--                                <asp:BoundField DataField="Nominativo" HeaderText="Nominativo" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                    <ItemStyle CssClass="uppercase-text" />
+                                </asp:BoundField>--%>
+
+                                        <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                            <HeaderTemplate>
+                                                Nominativo
+                                          <br />
+                                                <asp:TextBox ID="txtFilterNominativo" runat="server" OnTextChanged="txtFilterNominativo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <%# Eval("Nominativo") %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <%-- <asp:BoundField DataField="Indirizzo" HeaderText="Indirizzo" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                    <ItemStyle CssClass="uppercase-text" />
+                                </asp:BoundField>--%>
+
+                                        <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                            <HeaderTemplate>
+                                                Indirizzo
+                                          <br />
+                                                <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <%# Eval("indirizzo") %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+
+                                        <asp:BoundField DataField="ProcedimentoPen" HeaderText="Proc. Penale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+                                        <asp:BoundField DataField="Tipologia_atto" HeaderText="Tipologia Atto" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                            <ItemStyle CssClass="uppercase-text" />
+                                        </asp:BoundField>
+                                        <asp:BoundField DataField="UlterioreTipoAtto" HeaderText="Ulteriore Tipo Atto" ItemStyle-Width="50px" ItemStyle-HorizontalAlign="Center" />
+                                        <asp:TemplateField HeaderText="Accertatori" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                            <HeaderTemplate>
+                                                Accertatori
+                                          <br />
+                                                <asp:TextBox ID="txtFilterAccertatori" runat="server" OnTextChanged="txtFilterAccertatori_TextChanged" AutoPostBack="True"></asp:TextBox>
+                                                Filtro
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <%# Eval("Accertatori") %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+
+                                        <%-- <asp:BoundField DataField="Accertatori" HeaderText="Accertatori" ItemStyle-Wrap="true" ItemStyle-Width="50px">
+                                    <ItemStyle CssClass="uppercase-text" />
+                                </asp:BoundField>--%>
+                                        <asp:BoundField DataField="Rif_Prot_Gen" HeaderText="Prot. Generale" ItemStyle-Width="30px" ItemStyle-HorizontalAlign="Center" />
+                                        <asp:TemplateField HeaderText="Evasa" ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <%# Eval("evasa").ToString() == "True" ? "Si" : "No" %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="Matricola" HeaderText="Matricola" Visible="false" />
+                                        <asp:BoundField DataField="NomeOperatore" HeaderText="Operatore" Visible="true" ItemStyle-Width="20px" />
+                                        <asp:BoundField DataField="DataInserimento" HeaderText="Data Inserimento" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-Width="20px" Visible="false" />
+                                        <asp:TemplateField ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <asp:Button ID="btnSelect" runat="server" Text="Seleziona"
+                                                    CommandName="Select"
+                                                    CommandArgument='<%# Eval("Nr_Protocollo") + "|" + Eval("Matricola") + "|" + Eval("DataInserimento") + "|" + Eval("Sigla") + "|" + Eval("ID")  %>'
+                                                    CssClass="btn btn-success btn-sm" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                    <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                    <PagerStyle HorizontalAlign="Center" />
+                                    <PagerTemplate>
+                                        <table width="100%">
+                                            <tr>
+                                                <td style="width: 50%; text-align: left;">
+                                                    <asp:Label ID="lblPageInfo" runat="server" />
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                        <div style="padding: 5px;">
+                                            <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                            <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+
+                                            <span style="margin: 0 10px;">Pagina:
+               
+                                            </span>
+
+                                            <%-- Contenitore per i link numerici delle pagine --%>
+                                            <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+
+                                            <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                            <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                        </div>
+                                    </PagerTemplate>
+                                    <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
+                                </asp:GridView>
+
+                            </div>
+                        </div>
+                    </div>
+                    <%-- campi nascosti --%>
+                    <asp:HiddenField ID="Holdmat" runat="server" />
+                    <asp:HiddenField ID="HolDate" runat="server" />
+                    <asp:HiddenField ID="Hid" runat="server" />
+                    <asp:HiddenField ID="HfFiltroNote" runat="server" />
+                    <asp:HiddenField ID="HfFiltroIndirizzo" runat="server" />
+                    <asp:HiddenField ID="HfFiltroNominativo" runat="server" />
+                    <asp:HiddenField ID="HfFiltroAccertatori" runat="server" />
+                    <asp:HiddenField ID="Hfdecretazione" runat="server" />
+
+                    <%-- campi nascosti --%>
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                        <asp:Button ID="btChiudi" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopup_Click" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <%-- Modale ModalDecretazione --%>
-    <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 100%">
-            <%--<div class="container" id="DivDettagli" runat="server">--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel3">Decretazione</h5>
+        <%-- popup avvertenze --%>
+        <div class="modal fade" id="ModalAvvertenze" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog"
+                role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel6">ATTENZIONE</h5>
 
+                    </div>
+                    <div class="modal-body">
+                        <!-- Campi di input per la ricerca -->
+                        <div class="form-group">
+
+                            <p id="errorAvvertenze" style="color: red"></p>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <asp:Button ID="btChiudiAvvertenze" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="btChiudiAvvertenze_Click" />
+                    </div>
                 </div>
-                <div id="DivDecretazione" runat="server">
-                    <div class="row custom-border" style="margin-left: 0px!important">
-                        <div class="col-md-3 " style="margin-left: 20px!important">
-                            <div class="form-group mb-3">
-                                <label for="txtPraticaDecr">Pratica</label>
-                                <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="txtDecretante">Decretante</label>
-                                <asp:TextBox ID="txtDecretante" runat="server" CssClass="form-control mb-3"></asp:TextBox>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="txtDecretato">Decretato</label>
-                                <%--<asp:TextBox ID="txtDecretato" runat="server" CssClass="form-control mb-3"></asp:TextBox>--%>
+            </div>
+        </div>
+
+        <%-- Modale ModalDecretazione --%>
+        <div class="modal fade" id="ModalDecretazione" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 100%">
+                <%--<div class="container" id="DivDettagli" runat="server">--%>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel3">Decretazione</h5>
+
+                    </div>
+                    <div id="DivDecretazione" runat="server">
+                        <div class="row custom-border" style="margin-left: 0px!important">
+                            <div class="col-md-3 " style="margin-left: 20px!important">
+                                <div class="form-group mb-3">
+                                    <label for="txtPraticaDecr">Pratica</label>
+                                    <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtDecretante">Decretante</label>
+                                    <asp:TextBox ID="txtDecretante" runat="server" CssClass="form-control mb-3"></asp:TextBox>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtDecretato">Decretato</label>
+                                    <%--<asp:TextBox ID="txtDecretato" runat="server" CssClass="form-control mb-3"></asp:TextBox>--%>
 
 
-                                <input type="text" id="txtSearchOperatore" runat="server" class="form-control"
-                                    placeholder="cerca..."
-                                    onkeyup="filterAndHighlightOp(event)"
-                                    autocomplete="off" />
+                                    <input type="text" id="txtSearchOperatore" runat="server" class="form-control"
+                                        placeholder="cerca..."
+                                        onkeyup="filterAndHighlightOp(event)"
+                                        autocomplete="off" />
 
-                                <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
-                                <asp:DropDownList ID="ddlOperatore" runat="server" Style="display: none"></asp:DropDownList>
-                                <ul id="suggestionsListoperatore"></ul>
-                                <!-- 3. LISTA VISIVA (Finta Dropdown) -->
-                                <div id="dropdownList1" class="dropdown-content">
-                                    <!-- Verrà riempita da Javascript -->
+                                    <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
+                                    <asp:DropDownList ID="ddlOperatore" runat="server" Style="display: none"></asp:DropDownList>
+                                    <ul id="suggestionsListoperatore"></ul>
+                                    <!-- 3. LISTA VISIVA (Finta Dropdown) -->
+                                    <div id="dropdownList1" class="dropdown-content">
+                                        <!-- Verrà riempita da Javascript -->
+                                    </div>
+
+
+
+
+                                    <asp:RequiredFieldValidator ID="RfDecretato" runat="server" ControlToValidate="txtSearchOperatore" ValidationGroup="btDecretazione" ErrorMessage="Inserire decretato" ForeColor="Red">
+                                    </asp:RequiredFieldValidator>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtDataDecretazione">Data</label>
+                                    <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3 data-auto"></asp:TextBox>
+
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="txtNotaDecretazione">Nota</label>
+                                    <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" MaxLength="255" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
                                 </div>
 
-
-
-
-                                <asp:RequiredFieldValidator ID="RfDecretato" runat="server" ControlToValidate="txtSearchOperatore" ValidationGroup="btDecretazione" ErrorMessage="Inserire decretato" ForeColor="Red">
-                                </asp:RequiredFieldValidator>
+                                <div class="form-group mb-3">
+                                    <asp:Button ID="btAggiungiDecretazione" runat="server" CssClass="btn btn-primary mt-3" Text="Aggiungi" OnClick="btAggiungiDecretazione_Click" ValidationGroup="btDecretazione" />
+                                </div>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="txtDataDecretazione">Data</label>
-                                <asp:TextBox ID="txtDataDecretazione" runat="server" CssClass="form-control mb-3 data-auto"></asp:TextBox>
+                            <div class="col-md-3">
+                                <div class="form-group mb-3">
+                                    <div class="form-group">
+                                        <!-- GridView nel popup -->
+                                        <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit" DataKeyNames="decr_id"
+                                            OnRowDataBound="GVDecretazione_RowDataBound"
+                                            OnRowCommand="GVDecretazione_RowCommand"
+                                            AllowPaging="true" PageSize="5"
+                                            OnRowEditing="GVDecretazione_RowEditing"
+                                            OnRowCancelingEdit="GVDecretazione_RowCancelingEdit"
+                                            OnRowUpdating="GVDecretazione_RowUpdating"
+                                            OnPageIndexChanging="GVDecretazione_PageIndexChanging"
+                                            AlternatingRowStyle-CssClass="GridViewAlternatingRow">
+                                            <Columns>
+                                                <asp:BoundField DataField="decr_id" HeaderText="ID" Visible="false" />
+                                                <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
+                                                <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
 
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="txtNotaDecretazione">Nota</label>
-                                <asp:TextBox ID="txtNotaDecretazione" runat="server" CssClass="form-control mb-3" TextMode="MultiLine" MaxLength="255" Rows="12" Style="width: 100%; max-width: 600px;"></asp:TextBox>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <asp:Button ID="btAggiungiDecretazione" runat="server" CssClass="btn btn-primary mt-3" Text="Aggiungi" OnClick="btAggiungiDecretazione_Click" ValidationGroup="btDecretazione" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group mb-3">
-                                <div class="form-group">
-                                    <!-- GridView nel popup -->
-                                    <asp:GridView ID="GVDecretazione" runat="server" AutoGenerateColumns="False" CssClass="table table-bordered gridview-autofit" DataKeyNames="decr_id"
-                                        OnRowDataBound="GVDecretazione_RowDataBound"
-                                        OnRowCommand="GVDecretazione_RowCommand"
-                                        AllowPaging="true" PageSize="5"
-                                        OnRowEditing="GVDecretazione_RowEditing"
-                                        OnRowCancelingEdit="GVDecretazione_RowCancelingEdit"
-                                        OnRowUpdating="GVDecretazione_RowUpdating"
-                                        OnPageIndexChanging="GVDecretazione_PageIndexChanging"
-                                        AlternatingRowStyle-CssClass="GridViewAlternatingRow">
-                                        <Columns>
-                                            <asp:BoundField DataField="decr_id" HeaderText="ID" Visible="false" />
-                                            <asp:BoundField DataField="decr_idPratica" HeaderText="ID" Visible="false" />
-                                            <asp:BoundField DataField="decr_pratica" HeaderText="Pratica" Visible="false" />
-
-                                            <%--                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
+                                                <%--                                            <asp:BoundField DataField="decr_decretante" HeaderText="Decretante">
 
                                                 <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
@@ -1238,46 +1238,46 @@
 
 
 
-                                            <asp:TemplateField HeaderText="Decretante" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
-                                                <ItemTemplate>
-                                                    <%# Eval("decr_decretante") %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtDecretanteMod" runat="server" Text='<%# Bind("decr_decretante") %>' CssClass="form-control input-sm"></asp:TextBox>
-                                                </EditItemTemplate>
-                                            </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Decretante" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
+                                                    <ItemTemplate>
+                                                        <%# Eval("decr_decretante") %>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtDecretanteMod" runat="server" Text='<%# Bind("decr_decretante") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
 
 
 
 
-                                            <%--<asp:BoundField DataField="decr_data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" />--%>
+                                                <%--<asp:BoundField DataField="decr_data" HeaderText="Data" DataFormatString="{0:dd/MM/yyyy}" />--%>
 
 
-                                            <%--  CAMPO EDITABILE: Decretato --%>
-                                            <asp:TemplateField HeaderText="Decretato" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
-                                                <ItemTemplate>
-                                                    <%# Eval("decr_decretato") %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtDecretatoMod" runat="server" Text='<%# Bind("decr_decretato") %>' CssClass="form-control input-sm"></asp:TextBox>
-                                                </EditItemTemplate>
-                                            </asp:TemplateField>
+                                                <%--  CAMPO EDITABILE: Decretato --%>
+                                                <asp:TemplateField HeaderText="Decretato" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
+                                                    <ItemTemplate>
+                                                        <%# Eval("decr_decretato") %>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtDecretatoMod" runat="server" Text='<%# Bind("decr_decretato") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
 
-                                            <%--  CAMPO EDITABILE: data --%>
-                                            <asp:TemplateField HeaderText="Data">
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblData" runat="server"
-                                                        Text='<%# Eval("decr_data", "{0:dd/MM/yyyy}") %>'></asp:Label>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtDataMod" runat="server" Text='<%# Bind("decr_data", "{0:dd/MM/yyyy}") %>' CssClass="form-control input-sm" Width="100px"></asp:TextBox>
-                                                </EditItemTemplate>
-                                            </asp:TemplateField>
-
-
+                                                <%--  CAMPO EDITABILE: data --%>
+                                                <asp:TemplateField HeaderText="Data">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblData" runat="server"
+                                                            Text='<%# Eval("decr_data", "{0:dd/MM/yyyy}") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtDataMod" runat="server" Text='<%# Bind("decr_data", "{0:dd/MM/yyyy}") %>' CssClass="form-control input-sm" Width="100px"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
 
 
-                                            <%--   <asp:BoundField DataField="decr_decretato" HeaderText="Decretato">
+
+
+                                                <%--   <asp:BoundField DataField="decr_decretato" HeaderText="Decretato">
                                                 <HeaderStyle CssClass="colonna-descrizione" />
                                                 <ItemStyle CssClass="uppercase-text" />
                                             </asp:BoundField>
@@ -1286,48 +1286,48 @@
                                                 <ItemStyle CssClass="uppercase-text colonna-descrizione" />
                                             </asp:BoundField>--%>
 
-                                            <%--  CAMPO EDITABILE: Nota --%>
-                                            <asp:TemplateField HeaderText="Nota" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
-                                                <ItemTemplate>
-                                                    <%# Eval("decr_nota") %>
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <asp:TextBox ID="txtNotaMod" runat="server" Text='<%# Bind("decr_nota") %>' CssClass="form-control input-sm"></asp:TextBox>
-                                                </EditItemTemplate>
-                                            </asp:TemplateField>
+                                                <%--  CAMPO EDITABILE: Nota --%>
+                                                <asp:TemplateField HeaderText="Nota" ItemStyle-Width="150px" ItemStyle-CssClass="uppercase-text" HeaderStyle-CssClass="colonna-descrizione">
+                                                    <ItemTemplate>
+                                                        <%# Eval("decr_nota") %>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtNotaMod" runat="server" Text='<%# Bind("decr_nota") %>' CssClass="form-control input-sm"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
 
 
-                                            <%--<asp:BoundField DataField="decr_dataChiusura" HeaderText="Data Chiusura" DataFormatString="{0:dd/MM/yyyy}" />--%>
+                                                <%--<asp:BoundField DataField="decr_dataChiusura" HeaderText="Data Chiusura" DataFormatString="{0:dd/MM/yyyy}" />--%>
 
-                                            <asp:TemplateField HeaderText="Data Chiusura">
-                                                <ItemTemplate>
-                                                    <%# Routine.FormatMyDate(Eval("decr_dataChiusura")) %>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-
-
-
-
-
-                                            <%-- COLONNA COMANDI (MODIFICA / SALVA / ANNULLA) --%>
-                                            <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="80px">
-                                                <ItemTemplate>
-                                                    <!-- Il pulsante per entrare in modifica deve avere CommandName="Edit" -->
-                                                    <asp:Button ID="btnModifica" runat="server" Text="Mod." CommandName="Edit" CssClass="btn btn-warning btn-sm" />
-                                                </ItemTemplate>
-                                                <EditItemTemplate>
-                                                    <!-- Pulsanti visibili quando sei in modifica -->
-                                                    <asp:Button ID="btnSalva" runat="server" Text="Salva" CommandName="Update" CssClass="btn btn-primary btn-sm" ValidationGroup="EditVG" />
-                                                    <asp:Button ID="btnAnnulla" runat="server" Text="X" CommandName="Cancel" CssClass="btn btn-secondary btn-sm" />
-                                                </EditItemTemplate>
-                                            </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Data Chiusura">
+                                                    <ItemTemplate>
+                                                        <%# Routine.FormatMyDate(Eval("decr_dataChiusura")) %>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
 
 
 
 
+                                                <%-- COLONNA COMANDI (MODIFICA / SALVA / ANNULLA) --%>
+                                                <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="80px">
+                                                    <ItemTemplate>
+                                                        <!-- Il pulsante per entrare in modifica deve avere CommandName="Edit" -->
+                                                        <asp:Button ID="btnModifica" runat="server" Text="Mod." CommandName="Edit" CssClass="btn btn-warning btn-sm" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <!-- Pulsanti visibili quando sei in modifica -->
+                                                        <asp:Button ID="btnSalva" runat="server" Text="Salva" CommandName="Update" CssClass="btn btn-primary btn-sm" ValidationGroup="EditVG" />
+                                                        <asp:Button ID="btnAnnulla" runat="server" Text="X" CommandName="Cancel" CssClass="btn btn-secondary btn-sm" />
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
 
-                                            <%--                                            <asp:TemplateField ItemStyle-HorizontalAlign="Center">
+
+
+
+
+
+                                                <%--                                            <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                                                 <ItemTemplate>
                                                     <asp:Button ID="Button1" runat="server" Text="Modifica" CommandName="Select" CommandArgument='<%# Eval("decr_id") + "|" + Eval("decr_decretato") + "|" + Eval("decr_data") + "|" + Eval("decr_nota")%>' CssClass="btn btn-success btn-sm" />
 
@@ -1339,102 +1339,102 @@
 
                                                 </ItemTemplate>
                                             </asp:TemplateField>--%>
-                                        </Columns>
-                                        <PagerSettings Mode="NumericFirstLast" Position="Top" />
-                                        <PagerStyle HorizontalAlign="Center" />
-                                        <PagerTemplate>
-                                            <table width="100%">
-                                                <tr>
-                                                    <td style="width: 50%; text-align: left;">
-                                                        <asp:Label ID="lblPageInfo" runat="server" />
-                                                    </td>
+                                            </Columns>
+                                            <PagerSettings Mode="NumericFirstLast" Position="Top" />
+                                            <PagerStyle HorizontalAlign="Center" />
+                                            <PagerTemplate>
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td style="width: 50%; text-align: left;">
+                                                            <asp:Label ID="lblPageInfo" runat="server" />
+                                                        </td>
 
-                                                </tr>
-                                            </table>
-                                            <div style="padding: 5px;">
-                                                <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
-                                                <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
+                                                    </tr>
+                                                </table>
+                                                <div style="padding: 5px;">
+                                                    <asp:Button ID="btnFirst" runat="server" CommandName="Page" CommandArgument="First" Text="<< Prima" CssClass="pager-button" />
+                                                    <asp:Button ID="btnPrev" runat="server" CommandName="Page" CommandArgument="Prev" Text="< Precedente" CssClass="pager-button" />
 
-                                                <span style="margin: 0 10px;">Pagina:
+                                                    <span style="margin: 0 10px;">Pagina:
                
-                                                </span>
+                                                    </span>
 
-                                                <%-- Contenitore per i link numerici delle pagine --%>
-                                                <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
+                                                    <%-- Contenitore per i link numerici delle pagine --%>
+                                                    <asp:PlaceHolder ID="phPagerNumbers" runat="server" />
 
-                                                <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
-                                                <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
-                                            </div>
-                                        </PagerTemplate>
+                                                    <asp:Button ID="btnNext" runat="server" CommandName="Page" CommandArgument="Next" Text="Successiva >" CssClass="pager-button" />
+                                                    <asp:Button ID="btnLast" runat="server" CommandName="Page" CommandArgument="Last" Text="Ultima >>" CssClass="pager-button" />
+                                                </div>
+                                            </PagerTemplate>
 
-                                    </asp:GridView>
-                                    <asp:Button ID="btChiudiDecretazione" runat="server" Text="Chiudi Decretazione" OnClick="btChiudiDecretazione_Click" CommandName="Select" CommandArgument='<%# Eval("decr_pratica") + "|" + Eval("decr_idPratica") %>' CssClass="btn btn-success btn-sm" />
+                                        </asp:GridView>
+                                        <asp:Button ID="btChiudiDecretazione" runat="server" Text="Chiudi Decretazione" OnClick="btChiudiDecretazione_Click" CommandName="Select" CommandArgument='<%# Eval("decr_pratica") + "|" + Eval("decr_idPratica") %>' CssClass="btn btn-success btn-sm" />
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
-                </div>
-
-                <div class="modal-footer">
-                    <!-- Bottone per avviare la ricerca -->
-                    <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
-                    <asp:Button ID="Button3" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupDecretazione_Click" />
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare la ricerca -->
+                        <%--<asp:Button ID="btRicScheda" runat="server" CssClass="btn btn-primary" Text="Cerca" OnClick="btRicScheda_Click" />--%>
+                        <asp:Button ID="Button3" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupDecretazione_Click" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Popup Modale inserimento data evasa -->
-    <div class="modal fade" id="ModalDataEvasa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 20%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel4">Inserisci La Data Evasa</h5>
+        <!-- Popup Modale inserimento data evasa -->
+        <div class="modal fade" id="ModalDataEvasa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width: 20%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel4">Inserisci La Data Evasa</h5>
 
-                </div>
-                <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
-                    <div class="form-group mb-3">
-                        <label for="txtdataEvasaPopup">Data Evasa</label>
-                        <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control data-auto" autofocus=""></asp:TextBox>
                     </div>
-                </div>
-
-                <div class="modal-footer">
-                    <!-- Bottone per avviare chiousura decretazione -->
-                    <asp:Button ID="ModalChiudiDecretazione" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDecretazione_Click" />
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup Modale Richiesta salva -->
-    <div class="modal fade" id="ModalRichiestaSalva" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" role="dialog">
-        <div class="modal-dialog" style="width: 50%"
-            role="document">
-            <div class="modal-content">
-                <div class="modal-header" id="modalHeaderColor" runat="server">
-                    <h4 class="modal-title" id="ModalLabel">
-                        <asp:Label ID="lblModalTitolo" runat="server" Text="Avviso"></asp:Label>
-                    </h4>
-
-                </div>
-                <div class="modal-body">
-                    <div id="Div1" runat="server" class="row" style="margin-left: 30px!important">
+                    <div id="Div3" runat="server" class="row" style="margin-left: 30px!important">
                         <div class="form-group mb-3">
-
-                            <p id="TxtMessage" runat="server" style="color: red"></p>
+                            <label for="txtdataEvasaPopup">Data Evasa</label>
+                            <asp:TextBox ID="txtdataEvasaPopup" runat="server" CssClass="form-control data-auto" autofocus=""></asp:TextBox>
                         </div>
                     </div>
+
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare chiousura decretazione -->
+                        <asp:Button ID="ModalChiudiDecretazione" runat="server" class="btn btn-secondary" Text="Salva" OnClick="ModalChiudiDecretazione_Click" />
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <!-- Bottone per avviare chiousura decretazione -->
-                    <asp:Button ID="BtConferma" runat="server" class="btn btn-secondary" Text="Si" OnClick="BtConferma_Click" />
-                    <asp:Button ID="BtNo" runat="server" class="btn btn-secondary" Text="No" OnClick="BtNo_Click" />
+            </div>
+        </div>
+        <!-- Popup Modale Richiesta salva -->
+        <div class="modal fade" id="ModalRichiestaSalva" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" role="dialog">
+            <div class="modal-dialog" style="width: 50%"
+                role="document">
+                <div class="modal-content">
+                    <div class="modal-header" id="modalHeaderColor" runat="server">
+                        <h4 class="modal-title" id="ModalLabel">
+                            <asp:Label ID="lblModalTitolo" runat="server" Text="Avviso"></asp:Label>
+                        </h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div id="Div1" runat="server" class="row" style="margin-left: 30px!important">
+                            <div class="form-group mb-3">
+
+                                <p id="TxtMessage" runat="server" style="color: red"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bottone per avviare chiousura decretazione -->
+                        <asp:Button ID="BtConferma" runat="server" class="btn btn-secondary" Text="Si" OnClick="BtConferma_Click" />
+                        <asp:Button ID="BtNo" runat="server" class="btn btn-secondary" Text="No" OnClick="BtNo_Click" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
         // Funzione per gestire la visibilità
         function gestisciVisibilita() {

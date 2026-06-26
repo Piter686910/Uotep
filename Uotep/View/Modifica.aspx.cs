@@ -300,6 +300,9 @@ namespace Uotep
 
             txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
             //F 23/04/2026 controllo deleghe
+            //I 22/05/2026 protocollo uscita
+            txtProtUscita.Text = pratica.Rows[0]["Rif_Prot_Uscita"].ToString();
+            //F 22/05/2026 protocollo uscita
 
 
         }

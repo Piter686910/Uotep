@@ -35,12 +35,13 @@
 
     </script>
 
+    
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <%--<p class="text-center lead">Ricerca Atti</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span>RICERCA ATTI</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA ATTI</h1>
             </div>
             <!-- Contenitore per centrare -->
 
@@ -89,9 +90,9 @@
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
-                    <asp:RequiredFieldValidator ID="rqanno" runat="server" ControlToValidate="txtAnnoRicerca" ErrorMessage="Inserire l'anno per la ricerca" ForeColor="Red" ValidationGroup="bt">
+                   <%-- <asp:RequiredFieldValidator ID="rqanno" runat="server" ControlToValidate="txtAnnoRicerca" ErrorMessage="Inserire l'anno per la ricerca" ForeColor="Red" ValidationGroup="bt">
 
-                    </asp:RequiredFieldValidator>
+                    </asp:RequiredFieldValidator>--%>
                     <asp:TextBox ID="txtAnnoRicerca" runat="server" CssClass="form-control" placeholder="Anno" />
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
