@@ -503,7 +503,7 @@ Servizi e Amministrazioni</label>
 
                     <div class="form-group">
                         <label for="txtModDataIntervento">Data Intervento:</label>
-                        <asp:TextBox ID="txtModDataIntervento" runat="server" CssClass="form-control" placeholder="gg/mm/aaaa" />
+                        <asp:TextBox ID="txtModDataIntervento" runat="server" CssClass="form-control data-auto" placeholder="gg/mm/aaaa" />
                     </div>
                     <div class="form-group">
                         <label for="txtModAttivitàInterna">Attività Interna:</label>

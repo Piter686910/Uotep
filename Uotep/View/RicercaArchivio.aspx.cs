@@ -38,6 +38,21 @@ namespace Uotep
             }
             Session["PaginaChiamante"] = "~/View/RicercaArchivio.aspx?user=" + Vuser + "";
 
+            if (!String.IsNullOrEmpty(Session["rec"] as string))
+            {
+                
+                    //richiama popup dalla site master
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.PraticaNotFound.GetDescription(), "warning");
+                    }
+                Session.Remove("rec");
+            }
+
+           
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config

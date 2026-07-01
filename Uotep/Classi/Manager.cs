@@ -606,7 +606,7 @@ namespace Uotep.Classi
         public DataTable getListOperatore(out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT nominativo FROM operatore where nominativo <> '' order by nominativo ";
+            string sql = "SELECT nominativo FROM operatore where nominativo <> '' and abilitato=1 order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -644,13 +644,13 @@ namespace Uotep.Classi
             }
         }
         /// <summary>
-        /// ricerca solo gli accertatori
+        /// ricerca solo gli accertatori abilitati
         /// </summary>
         /// <returns></returns>
         public DataTable getListAccertatori(out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "' order by nominativo ";
+            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "' and abilitato=1 order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);

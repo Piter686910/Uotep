@@ -810,6 +810,10 @@ namespace Uotep
             Manager mn = new Manager();
 
             DataTable pratica = new DataTable();
+            if (String.IsNullOrEmpty(txtAnnoRicerca.Text))
+            {
+                txtAnnoRicerca.Text = DateTime.Now.Year.ToString();
+            }
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
             {
                 pratica = mn.getListPrototocollo(Vuser, txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);
@@ -900,6 +904,10 @@ namespace Uotep
             Manager mn = new Manager();
 
             DataTable pratica = new DataTable();
+            if (String.IsNullOrEmpty(txtAnnoRicerca.Text))
+            {
+                txtAnnoRicerca.Text = DateTime.Now.Year.ToString();
+            }
             if (!string.IsNullOrEmpty(txtNProtocollo.Text))
             {
                 pratica = mn.getListPrototocollo(Vuser, txtNProtocollo.Text, txtAnnoRicerca.Text, out msg);

@@ -141,6 +141,7 @@ namespace Uotep
                 else
                 {
                     //  ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "nessun dato trovato" + "'); $('#errorModal').modal('show');", true);
+                    Session["rec"] = "0"; // serve per mostrare popup in ricerca archivio se non trova nulla
                     string url = VirtualPathUtility.ToAbsolute("~/View/RicercaArchivio.aspx");
                     Response.Redirect(url, false);
 
