@@ -1,4 +1,4 @@
-﻿\<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SchedaIntervento.aspx.cs" Inherits="Uotep.SchedaIntervento" %>
+﻿<%@ Page Title="Comandi" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SchedaIntervento.aspx.cs" Inherits="Uotep.SchedaIntervento" %>
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
