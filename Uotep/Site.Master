@@ -255,7 +255,7 @@
                             </ul>
                         </li>
                         <li><a id="menuSicurezza" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
-                        <li id="menuManTabelle" runat="server" visible="false"><a href="~/View/ManutenzioneTabelle">Tabelle</a></li>
+                        <li> <a id="menuManTabelle" runat="server" visible="false" href="~/View/ManutenzioneTabelle">Tabelle</a></li>
                         <li><a id="Urp" runat="server" visible="false" href="~/View/Urp">Urp</a></li>
 
                         <li>
