@@ -906,6 +906,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Label lblInfoPagine;
 
         /// <summary>
+        /// Controllo lblNumRighe.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblNumRighe;
+
+        /// <summary>
         /// Controllo gvPopup.
         /// </summary>
         /// <remarks>

@@ -198,6 +198,7 @@ namespace Uotep
             {
                 // Salva datatable pratica  nella Sessione
                 Session["ListPratiche"] = pratica;
+                lblNumRighe.Text = " - Num. righe trovate: " + pratica.Rows.Count.ToString();
                 //gvPopup.DataSource = pratica;
                 //gvPopup.DataBind();
                 if (validazione)

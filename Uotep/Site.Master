@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Uotep.SiteMaster" %>
+
 <%@ Import Namespace="Uotep.Classi" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -253,8 +254,8 @@
                                 <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
                             </ul>
                         </li>
-
-                        <li id="menuManTabelle" runat="server" visible="false"><a href="~/View/ManutenzioneTabelle" runat="server">Tabelle</a></li>
+                        <li><a id="menuSicurezza" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
+                        <li id="menuManTabelle" runat="server" visible="false"><a href="~/View/ManutenzioneTabelle">Tabelle</a></li>
                         <li><a id="Urp" runat="server" visible="false" href="~/View/Urp">Urp</a></li>
 
                         <li>
@@ -287,7 +288,7 @@
 
             <footer class="text-center" style="margin-top: 40px; padding: 20px; border-top: 1px solid #eee;">
                 <asp:Label ID="lblMsg" runat="server" CssClass="label label-danger" Style="display: block; margin-bottom: 10px;"></asp:Label>
-                <p>&copy; <%: DateTime.Now.Year %> - <strong>U.O.T.E.P.</strong> | Powered by <i style="color:red">Pietro Antonacci</i></p>
+                <p>&copy; <%: DateTime.Now.Year %> - <strong>U.O.T.E.P.</strong> | Powered by <i style="color: red">Pietro Antonacci</i></p>
             </footer>
         </div>
         <%-- area popup --%>
@@ -342,7 +343,7 @@
                     <div class="modal-body p-4 ">
                         <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
                             <div class="dashboard-header">
-                                <h1><span class="fa-solid fa-gear fa-spin"></span> DELEGHE AG IN SCADENZA</h1>
+                                <h1><span class="fa-solid fa-gear fa-spin"></span>DELEGHE AG IN SCADENZA</h1>
                             </div>
                             <asp:LinkButton ID="btnPrecedente" runat="server" CssClass="btn btn-outline-primary btn-sm" OnClick="btnPrecedente_Click">
                                  <i class="bi bi-chevron-left"></i> Precedente
@@ -368,22 +369,22 @@
                                                 <th runat="server" scope="col" visible="false">Termine giorni</th>
                                                 <th scope="col">N. Carico</th>
                                                 <th scope="col">Anno</th>
-                                             <th scope="col" style="white-space: nowrap;">
-                                                 <span style="display: inline-block; vertical-align: bottom;">Macro Area</span>
-                                                 <asp:TextBox ID="txtFiltroMacroArea" runat="server"
-                                                     CssClass="form-control form-control-sm larghezzaText70"
-                                                     Style="display: inline-block; vertical-align: middle; margin-left: 5px;"
-                                                     placeholder="Filtra..."
-                                                     AutoPostBack="True"
-                                                     OnTextChanged="txtFiltroMacroArea_TextChanged">
-                                                 </asp:TextBox>
-                                             </th>
+                                                <th scope="col" style="white-space: nowrap;">
+                                                    <span style="display: inline-block; vertical-align: bottom;">Macro Area</span>
+                                                    <asp:TextBox ID="txtFiltroMacroArea" runat="server"
+                                                        CssClass="form-control form-control-sm larghezzaText70"
+                                                        Style="display: inline-block; vertical-align: middle; margin-left: 5px;"
+                                                        placeholder="Filtra..."
+                                                        AutoPostBack="True"
+                                                        OnTextChanged="txtFiltroMacroArea_TextChanged">
+                                                    </asp:TextBox>
+                                                </th>
                                                 <th scope="col">N. Pratica</th>
                                                 <%--<th scope="col" style="width: 10%;">Sigla</th>--%>
                                                 <th scope="col">Proc. Penale</th>
                                                 <th scope="col">Data Scadenza</th>
                                                 <th scope="col" class="text-center">N. gg alla scadenza</th>
-   
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -435,7 +436,7 @@
                                             </div>
                                         </td>--%>
                                         <td>
-                                            <span style="color:orangered"><%# Routine.FormatMyDate(Eval("DataDelega")) %> </span>
+                                            <span style="color: orangered"><%# Routine.FormatMyDate(Eval("DataDelega")) %> </span>
                                         </td>
                                         <td>
                                             <span>

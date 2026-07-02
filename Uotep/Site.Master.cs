@@ -51,6 +51,10 @@ namespace Uotep
                         // LiHelp.Visible = true;
                         switch (Ricerca.Rows[0].ItemArray[6].ToString())
                         {
+                            case "sicurezza":
+                                menuSicurezza.Visible = true;
+                                menuEsci.Visible = true;
+                                break;
                             case "coordinamentopg":
                             case "MasterAG":
                             case "coordinamentoatti":
@@ -65,6 +69,7 @@ namespace Uotep
                                 menuAmministratore.Visible = false;
                                 menuManTabelle.Visible = true;
                                 menuSegreteria.Visible = false;
+                                menuSicurezza.Visible = false;
                                 menuEsci.Visible = true;
                                 GestionePraticaUote.Visible = true;
                                 //menuHome.Visible = true;
@@ -86,6 +91,7 @@ namespace Uotep
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
+                                menuSicurezza.Visible = false;
                                 menuCoordinamentoAtti.Visible = false;
                                 menuAccertatori.Visible = true;
                                 menuSegreteria.Visible = true;
@@ -122,6 +128,7 @@ namespace Uotep
                                 break;
                             case "urp":
                                 // Mostra voci per utenti standard
+                                menuSicurezza.Visible = false;
                                 menuCoordinamentoAtti.Visible = false;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = false;
@@ -154,6 +161,7 @@ namespace Uotep
                             case "PG":
                                 // Mostra voci per utenti standard
                                 //menuCoordinamentoAtti.Visible = false;
+                                menuSicurezza.Visible = false;
                                 menuAccertatori.Visible = false;
                                 menuSegreteria.Visible = true;
                                 menuAmministratore.Visible = false;
@@ -178,6 +186,7 @@ namespace Uotep
                             case "archivio":
                                 // Mostra voci per utenti standard
                                 // menuHome.Visible = true;
+                                menuSicurezza.Visible = false;
                                 menuArchivio.Visible = true;
                                 menuCoordinamentoAtti.Visible = true;
                                 RicercaAtti.Visible = true;
@@ -212,6 +221,7 @@ namespace Uotep
                             case "admin":
 
                                 // Mostra voci per utenti standard
+                                menuSicurezza.Visible = false;
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
@@ -256,6 +266,7 @@ namespace Uotep
                                 break;
                             case "superAdmin":
                                 // Mostra voci per utenti standard
+                                menuSicurezza.Visible = false;
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
@@ -284,6 +295,7 @@ namespace Uotep
                                 //*
                                 break;
                             case "fureria":
+                                menuSicurezza.Visible = false;
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
                                 menuEsci.Visible = true;
@@ -349,15 +361,15 @@ namespace Uotep
 
 
             // 3. Applica il filtro se è stato scritto qualcosa
-             if (!string.IsNullOrEmpty(filtroTesto))
+            if (!string.IsNullOrEmpty(filtroTesto))
             {
                 DataView dv = CaricaListDelegheScadenza.DefaultView;
                 dv.RowFilter = string.Format("Macro_area LIKE '%{0}%'", filtroTesto.Replace("'", "''"));
                 CaricaListDelegheScadenza = dv.ToTable();
             }
-           
-                // paginazione
-                PagedDataSource pds = new PagedDataSource();
+
+            // paginazione
+            PagedDataSource pds = new PagedDataSource();
             pds.DataSource = CaricaListDelegheScadenza.DefaultView;
             pds.AllowPaging = true;
             pds.PageSize = 15; // Quanti record vuoi per pagina?

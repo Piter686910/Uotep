@@ -1,4 +1,4 @@
-﻿using AjaxControlToolkit.HtmlEditor.Popups;
+﻿    using AjaxControlToolkit.HtmlEditor.Popups;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
@@ -292,6 +292,7 @@ namespace Uotep
             if (listaAuto.Rows.Count > 0)
             {
                 Session["ListRicercaGestioneAuto"] = listaAuto;
+                lblNumRighe.Text = " - Num. righe trovate: " + listaAuto.Rows.Count.ToString();
                 gvDett.DataSource = listaAuto;
                 gvDett.DataBind();
 
@@ -551,6 +552,18 @@ namespace Uotep
             // return dt;
         }
 
+        protected void gvDett_DataBound(object sender, EventArgs e)
+        {
+            GridView gv = (GridView)sender;
+            if (gv.PageCount > 0)
+            {
+                lblInfoPagine.Text = $"Pagina {gv.PageIndex + 1} di {gv.PageCount}";
 
+            }
+            else
+            {
+                lblInfoPagine.Text = "Nessun record trovato";
+            }
+        }
     }
 }

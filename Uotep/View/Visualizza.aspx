@@ -564,7 +564,8 @@
                     <div id="DivGrid" runat="server" visible="false" class="section-box">
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <div class="small text-muted">
-                                <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
+                                <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina"></asp:Label>
+                                 <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                             </div>
                         </div>
                         <div class="table-responsive">

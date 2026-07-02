@@ -130,13 +130,15 @@
         <div id="DivGrid" runat="server" class="section-box">
             <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                 <div class="small text-muted">
-                    <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10"></asp:Label>
+                    <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina"></asp:Label>
+                     <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                 </div>
             </div>
             <div class="table-responsive">
                 <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False"
                     CssClass="table table-bordered table-hover"
                     OnRowDataBound="gvDett_RowDataBound" OnRowCommand="gvDett_RowCommand"
+                    OnDataBound="gvDett_DataBound"
                     AllowPaging="true" PageSize="10" OnPageIndexChanging="gvDett_PageIndexChanging"
                     RowStyle-CssClass="GridViewRow"
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow"

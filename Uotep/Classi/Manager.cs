@@ -650,7 +650,7 @@ namespace Uotep.Classi
         public DataTable getListAccertatori(out string msg)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT nominativo FROM operatore where ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "' and abilitato=1 order by nominativo ";
+            string sql = "SELECT nominativo FROM operatore where (ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "') and abilitato=1 order by nominativo ";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
