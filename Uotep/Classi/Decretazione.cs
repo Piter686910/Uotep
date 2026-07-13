@@ -16,5 +16,6 @@ namespace Uotep.Classi
         public String nota = string.Empty;
         public DateTime dataChiusura;
         public Boolean chiuso;
+        public Boolean unire;
     }
 }

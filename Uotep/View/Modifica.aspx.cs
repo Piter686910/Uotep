@@ -121,6 +121,7 @@ namespace Uotep
                                 GVDecretazione.DataSource = decretazione;
                                 GVDecretazione.DataBind();
                                 Hfdecretazione.Value = decretazione.Rows[0]["decr_chiuso"].ToString();
+                                ckUnire.Checked = Convert.ToBoolean(decretazione.Rows[0]["decr_unire"]);
                                 if (Hfdecretazione.Value == "True")
                                 {
                                     //btAggiungiDecretazione.Enabled = false;
@@ -143,6 +144,7 @@ namespace Uotep
                         {
                             if (!String.IsNullOrEmpty(operatore.Rows[0]["nominativo"].ToString()))
                                 txtDecretante.Text = operatore.Rows[0]["nominativo"].ToString().ToUpper();
+                            
                         }
 
                         apripopupDecretazione_Click(sender, e);
@@ -303,6 +305,7 @@ namespace Uotep
             //I 22/05/2026 protocollo uscita
             txtProtUscita.Text = pratica.Rows[0]["Rif_Prot_Uscita"].ToString();
             //F 22/05/2026 protocollo uscita
+            
 
 
         }
@@ -1767,6 +1770,7 @@ namespace Uotep
                 decr.decretato = txtSearchOperatore.Value.ToUpper();
                 decr.data = System.Convert.ToDateTime(txtDataDecretazione.Text);
                 decr.nota = txtNotaDecretazione.Text.ToUpper();
+                decr.unire = ckUnire.Checked;
                 SiteMaster myMaster = this.Master as SiteMaster;
                 Boolean ins = mn.InsDecretazione(decr);
                 if (!ins)
@@ -1835,6 +1839,7 @@ namespace Uotep
         protected void Decretazione_Click(object sender, EventArgs e)
         {
             HfButtonProv.Value = "Decretazione";
+
             //I- 04/03/2026 decretazione 
             if (Isdecr == "false")
             {
@@ -2309,6 +2314,7 @@ namespace Uotep
                 GVDecretazione.DataSource = decretazione;
                 GVDecretazione.DataBind();
                 Hfdecretazione.Value = decretazione.Rows[0].ItemArray[8].ToString();
+                ckUnire.Checked = Convert.ToBoolean(decretazione.Rows[0]["decr_unire"]);
                 if (Hfdecretazione.Value == "True")
                 {
                     btAggiungiDecretazione.Enabled = false;

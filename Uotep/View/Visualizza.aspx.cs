@@ -18,6 +18,7 @@ namespace Uotep
     public partial class Visualizza : Page
     {
         // Variabile per gestire la pagina corrente (puoi salvarla in ViewState)
+        
         public int PaginaCorrente
         {
           
@@ -36,10 +37,12 @@ namespace Uotep
         String Ruolo = String.Empty;
         String Profilo = String.Empty;
         Principale p = new Principale(); public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-        string paginaChiamante = "~/View/Visualizza.aspx";
+         string paginaChiamante = "~/View/Visualizza.aspx";
         protected void Page_Load(object sender, EventArgs e)
         {
+           
             Session["PaginaChiamante"] = paginaChiamante;
+
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
@@ -83,7 +86,8 @@ namespace Uotep
             //int protocollo = 0;
             if (!IsPostBack)
             {
-           //     PaginaCorrente = 1;
+                //     PaginaCorrente = 1;
+            
                 DivDettagli.Visible = false;
                 string idCarico = Request.QueryString["idscheda"];
                 if (!String.IsNullOrEmpty(idCarico))
@@ -112,6 +116,7 @@ namespace Uotep
             Manager mn = new Manager();
             Boolean validazione = false;
             DataTable pratica = new DataTable();
+            
             if (String.IsNullOrEmpty(txtAnnoRicerca.Text))
             {
                 txtAnnoRicerca.Text = DateTime.Now.Year.ToString();
@@ -170,6 +175,16 @@ namespace Uotep
             if (txtDatArrivoDa.Text != string.Empty && txtDatArrivoA.Text != string.Empty)
             {
                 pratica = mn.getListDataArrivo(txtDatArrivoDa.Text, txtDatArrivoA.Text, out msg);
+            }
+            if (!String.IsNullOrEmpty(txtStampaDataCarico.Text))
+            {
+                DataTable carico = new DataTable();
+                carico = mn.getListCarico(DdlMacroArea.SelectedItem.Text, txtCapoArea.Text , txtStampaDataCarico.Text, DdlSigla.SelectedItem.Text);
+                if (carico.Rows.Count > 0)
+                {
+                    Routine stampa = new Routine();
+                    stampa.CreaPdfCarichi(carico);
+                }
             }
             if (txtNote.Text != string.Empty)
             {
@@ -503,6 +518,9 @@ namespace Uotep
         }
         private void Pulisci()
         {
+            txtStampaDataCarico.Text = String.Empty;
+            txtCapoArea.Text = String.Empty;
+           // DdlMacroArea.Items.Clear();
             txtAnnoRicerca.Text = String.Empty;
             txtNProtocollo.Text = String.Empty;
             txtProcPenale.Text = String.Empty;
@@ -547,6 +565,7 @@ namespace Uotep
             //I 22/05/2026 protocollo uscita
             txtProtUscita.Text = string.Empty ;
             //F 22/05/2026 protocollo uscita
+            
 
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -667,6 +686,7 @@ namespace Uotep
         {
             DivRicerca.Visible = true;
             DivProtocollo.Visible = false;
+            DivCarico.Visible = false;
             DivProcPenale.Visible = false;
             DivEvasaAg.Visible = false;
             DivProtGen.Visible = false;
@@ -1224,6 +1244,22 @@ namespace Uotep
             gvNote.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
             Ricerca_Click(sender,e);
                 
+        }
+
+        protected void btcarico_Click(object sender, EventArgs e)
+        {
+
+            NascondiDiv();
+            Pulisci();
+            DivCarico.Visible = true;
+
+            
+            
+        }
+        protected void DdlMacroArea_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            txtCapoArea.Text = mn.getCapoArea(DdlMacroArea.SelectedValue);
         }
     }
 }

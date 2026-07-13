@@ -33,20 +33,22 @@
             $('#ModalRicerca').modal('hide');
         }
 
+
+
     </script>
 
-    
+
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <%--<asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>--%>
             <%--<p class="text-center lead">Ricerca Atti</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA ATTI</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>RICERCA ATTI</h1>
             </div>
             <!-- Contenitore per centrare -->
 
-            <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
-                <div class="d-flex justify-content-center mt-4">
+            <asp:Panel ID="pnlButton" runat="server" CssClass="" Visible="true">
+                <div class="d-flex justify-content-start mt-4">
 
                     <p>
                         <!-- Pulsanti -->
@@ -69,6 +71,10 @@
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNote" runat="server" OnClick="btNote_Click" Text="Note" ToolTip="Ricerca Note" CssClass="btn btn-primary mx-2" />
+
+                    </p>
+                    <p>
+                        <asp:Button ID="btcarico" runat="server" OnClick="btcarico_Click" Text="Stampa Carico" ToolTip="Stampa Carico" CssClass="btn btn-primary mx-2" />
                     </p>
                 </div>
 
@@ -90,7 +96,7 @@
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
-                   <%-- <asp:RequiredFieldValidator ID="rqanno" runat="server" ControlToValidate="txtAnnoRicerca" ErrorMessage="Inserire l'anno per la ricerca" ForeColor="Red" ValidationGroup="bt">
+                    <%-- <asp:RequiredFieldValidator ID="rqanno" runat="server" ControlToValidate="txtAnnoRicerca" ErrorMessage="Inserire l'anno per la ricerca" ForeColor="Red" ValidationGroup="bt">
 
                     </asp:RequiredFieldValidator>--%>
                     <asp:TextBox ID="txtAnnoRicerca" runat="server" CssClass="form-control" placeholder="Anno" />
@@ -232,6 +238,33 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA PER STAMPARE IL CARICO --%>
+                <div id="DivCarico" runat="server" class="form-group text-center" style="text-align: left !important">
+
+                    <label cssclass="form-label d-block mb-2" for="DdlMacroArea">Area Competenza</label>
+                    <asp:DropDownList ID="DdlMacroArea" runat="server" AutoPostBack="true" CssClass="form-control" OnSelectedIndexChanged="DdlMacroArea_SelectedIndexChanged">
+                        <asp:ListItem></asp:ListItem>
+                        <asp:ListItem>MA1</asp:ListItem>
+                        <asp:ListItem>MA2</asp:ListItem>
+                        <asp:ListItem>MA3</asp:ListItem>
+                    </asp:DropDownList>
+                    <asp:Label ID="Label19" runat="server" Text="Responsabile Area" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:TextBox ID="txtCapoArea" runat="server" CssClass="form-control" placeholder="Responsabile" autofocus="" />
+
+                    <label cssclass="form-label d-block mb-2" for="DdlSigla">Sigla</label>
+                    <asp:DropDownList ID="DdlSigla" runat="server" AutoPostBack="true" CssClass="form-control" >
+                        <asp:ListItem>AG</asp:ListItem>
+                        <asp:ListItem>ED</asp:ListItem>
+                        <asp:ListItem>TP</asp:ListItem>
+                    </asp:DropDownList>
+                    <asp:Label ID="Label17" runat="server" Text="Data Carico" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:TextBox ID="txtStampaDataCarico" runat="server" CssClass="form-control data-auto" placeholder="Data Carico" autofocus="" />
+
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
                 <%-- DIV RICERCA Note --%>
                 <div id="DivNote" runat="server" class="form-group text-center" style="text-align: left !important">
 
@@ -352,13 +385,13 @@
                             <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control data-auto" Enabled="false" />
                         </div>
                     </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-4">
-                                <label for="TxtDataEsito" class="fw-bold">Protocollo Uscita</label>
-                                <asp:TextBox ID="txtProtUscita" runat="server" CssClass="form-control" Enabled="false" />
-                            </div>
-
+                    <div class="col-md-4">
+                        <div class="form-group mb-4">
+                            <label for="TxtDataEsito" class="fw-bold">Protocollo Uscita</label>
+                            <asp:TextBox ID="txtProtUscita" runat="server" CssClass="form-control" Enabled="false" />
                         </div>
+
+                    </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="ListAccertatori">Accertatori</label>
@@ -565,7 +598,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <div class="small text-muted">
                                 <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina"></asp:Label>
-                                 <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
+                                <strong>
+                                    <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -724,7 +758,7 @@
         <div class="modal-dialog modal-xl" style="width: 100%">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="modalLabel2">Ricerca Note</h5>
+                    <h5 class="modal-title" id="modalLabel22">Ricerca Note</h5>
 
                 </div>
                 <div class="modal-body">

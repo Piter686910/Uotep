@@ -566,6 +566,37 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        public DataTable getListCarico(string ma, string capoarea, string dataCarico,string sigla)
+        {
+            DataTable tb = new DataTable();
+            //string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo as carico, d.decr_pratica , d.[decr_decretato],d.[decr_data],d.[decr_nota] as Note,d.[decr_chiuso],p.Macro_area, p.DataCarico," +
+            //    " p.Tipologia_atto,p.nr_pratica AS pratica,QUARTIERE as località," +
+            //" ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data ASC) AS rn FROM [DB_ArchivioPratiche].[dbo].[Decretazione] AS d JOIN [DB_ArchivioPratiche].[dbo].[principale] AS p ON d.decr_pratica = p.Nr_Protocollo" +
+            //" WHERE p.DataCarico = '" + dataCarico + "' AND p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "' AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "') " +
+            //"SELECT carico,pratica,DataCarico,località,Note,decr_decretato,macro_area" +
+            //" FROM Classificata WHERE rn = 1 order by carico;";
+
+
+
+
+
+
+            string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
+                " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
+                "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
+                "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, p.DataInserimento) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
+                " DATEPART(iso_week, p.DataInserimento) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
+                " FROM Classificata WHERE rn = 1 ORDER BY carico;";
+
+
+
+
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
         public DataTable getListQuartina(Int32 anno)
         {
             DataTable tb = new DataTable();
@@ -588,6 +619,23 @@ namespace Uotep.Classi
             {
                 return tb = FillTable(sql, conn, out msg);
             }
+        }
+        public String getCapoArea(string area)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT nominativo FROM operatore where macroarea = '" + area.Replace("'", "''") + "' and profilo like '%R%'";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                tb = FillTable(sql, conn, out string msg);
+
+                // 2. Controlliamo se la tabella contiene almeno una riga
+                if (tb != null && tb.Rows.Count > 0)
+                {
+                    // Restituisce il nominativo della prima riga trovata
+                    return tb.Rows[0]["nominativo"].ToString();
+                }
+            }
+            return string.Empty;
         }
         /// <summary>
         /// ottiene la matricola dal nominativo
@@ -2871,9 +2919,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
             try
             {
                 sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota," +
-                    "decr_dataChiusura, decr_chiuso)" +
+                    "decr_dataChiusura, decr_chiuso,decr_unire)" +
                    " Values('" + decr.idPratica + "','" + decr.Npratica + "','" + decr.decretante.Replace("'", "''") + "','" + decr.decretato.Replace("'", "''") +
-                   "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "')";
+                   "','" + decr.data + "','" + decr.nota.Replace("'", "''") + "','" + null + "','" + decr.chiuso + "','" + decr.unire + "')";
 
                 //sql_update = "update principale set accertatori= accertatori '" + decr.decretato.Replace("'", "''") + "'";
                 //+ "where  and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
@@ -6603,9 +6651,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
             int res1 = 0;
             try
             {
-                sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota, decr_dataChiusura, decr_chiuso)" +
+                sql_decretazione = "insert into decretazione (decr_idPratica, decr_pratica,decr_decretante, decr_decretato,decr_data,decr_nota, decr_dataChiusura, decr_chiuso,decr_unire)" +
                                     " Values('" + @p.idPratica + "','" + @p.Npratica + "','" + @p.decretante.Replace("'", "''") + "','" + @p.decretato.Replace("'", "''") +
-                                    "','" + @p.data + "','" + @p.nota.Replace("'", "''") + "','" + @p.dataChiusura + "','" + @p.chiuso + "')";
+                                    "','" + @p.data + "','" + @p.nota.Replace("'", "''") + "','" + @p.dataChiusura + "','" + @p.chiuso + "','" + @p.unire + "')";
 
 
 
@@ -6978,7 +7026,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             {
 
                 sql_updDecretazione = "update decretazione set decr_data = '" + @p.data + "', decr_nota = '" + p.nota.Replace("'", "''") + "', decr_decretato = '" + p.decretato.Replace("'", "''") + "', decr_decretante = '" + p.decretante.Replace("'", "''") + "'" +
-                    " where  decr_id = " + p.id;
+                    " , decr_unire = '" + p.unire + "' where  decr_id = " + p.id;
 
                 //  sql_updPrincipale = "update principale set Evasa = 'True' , EvasaData = '" + @p.dataChiusura + "' where  id = " + p.idPratica + " and Nr_Protocollo = " + p.Npratica;
 

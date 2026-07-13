@@ -504,7 +504,7 @@ Patrimonio, Beni Confiscati, A.C.E.R. e altri Enti o Servizi)</label>
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckControlliCant" runat="server" CssClass="form-check-input" />
-                                <label class="form-check-label" for="ckControlliCant">Controllo Cantiere (rientrano i controlli dei cantieri sottoposti a sequestro)</label>
+                                <label class="form-check-label" for="ckControlliCant">Controllo Cantiere (rientrano i controlli anche dei cantieri sottoposti a sequestro)</label>
                             </div>
                             <div class="form-check mb-2">
                                 <asp:CheckBox ID="ckControlloDaEsposti" runat="server" CssClass="form-check-input" />

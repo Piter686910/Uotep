@@ -13,30 +13,31 @@ using iText.Layout.Properties;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Configuration;
+using static System.Windows.Forms.AxHost;
 using Paragraph = iText.Layout.Element.Paragraph;
 using Table = iText.Layout.Element.Table;
-using System.Runtime.Remoting.Contexts;
 
 
 namespace Uotep.Classi
 {
     public class Routine
     {
-        public void Reindirizzamento(string msg,string pagchiamante)
+        public void Reindirizzamento(string msg, string pagchiamante)
         {
             HttpContext.Current.Session["MessaggioErrore"] = msg;
             HttpContext.Current.Session["PaginaChiamante"] = pagchiamante;
             string url = VirtualPathUtility.ToAbsolute("~/Contact.aspx?errore=");
-            HttpContext.Current.Response.Redirect(url + msg.Replace("\r\n"," ").ToString());
+            HttpContext.Current.Response.Redirect(url + msg.Replace("\r\n", " ").ToString());
         }
         public string GetNomeOperatoreByMatr(String user)
         {
@@ -1174,7 +1175,7 @@ namespace Uotep.Classi
                                 stampaX(startX_50, startY_contrSeq, document, true);
 
                                 // --- Paragrafo per la descrizione, posizionato *A DESTRA* del riquadro ---
-                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli anche dei cantieri a sequestro:");
                                 // La descrizione inizia *dopo* la X e il riquadro: startX + boxSize + spazio
                                 descriptionParagraph.SetFixedPosition(startX_55 + boxSize + 5, startY_contrSeq - 5, 800); // Spazio di 5 pixel tra riquadro e descrizione
                                 document.Add(descriptionParagraph);
@@ -1185,7 +1186,7 @@ namespace Uotep.Classi
                                 stampaX(startX_50, startY_contrSeq, document, false);
                                 // --- Solo la descrizione, nella posizione originale ---rel
                                 // La descrizione inizia a startX ora (senza X e riquadro a sinistra)
-                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli dei cantieri a sequestro:");
+                                Paragraph descriptionParagraph = new Paragraph("Controllo Cantiere rientrano i controlli anche dei cantieri a sequestro:");
                                 descriptionParagraph.SetFixedPosition(startX_70, startY_contrSeq, 800);
                                 document.Add(descriptionParagraph);
                             }
@@ -1375,7 +1376,7 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_370, startY_contrOccupazione, 100);
                                 document.Add(descriptionParagraph);
                             }
-                            
+
 
                             // no abitativo
                             bool? NoabitativoNullable = schede.Rows[0].ItemArray[51] as bool?;
@@ -1408,7 +1409,7 @@ namespace Uotep.Classi
                                 descriptionParagraph.SetFixedPosition(startX_450, startY_contrOccupazione, 5);
                                 document.Add(descriptionParagraph);
                             }
-                            
+
                             //***
                             startY -= lineHeight; // Move to the next line
 
@@ -1437,9 +1438,9 @@ namespace Uotep.Classi
                             }
                             object sumObjectpubb = schede.Compute("SUM(rapp_num_censimento_all_pubb)", "");
                             string totaleSommapubb = (sumObjectpubb != DBNull.Value) ? sumObjectpubb.ToString() : "0";
-                            document.Add(new Paragraph(totaleSommapubb).SetFixedPosition(280, startY_cenrimentoNucFam -5, 200));
+                            document.Add(new Paragraph(totaleSommapubb).SetFixedPosition(280, startY_cenrimentoNucFam - 5, 200));
 
-                            
+
                             startY -= lineHeight; // Move to the next line
 
                             // controllo nato da accertamenti
@@ -1469,7 +1470,7 @@ namespace Uotep.Classi
                                                   // float startY_NumCensimenti = startY_430; //
 
 
-                            document.Add(new Paragraph($"Num. Acc. Rich: {schede.Rows[0]["rapp_NumcontrNatoDaAcc"]}").SetFixedPosition(300, startY_contrNatoDaAcc -5, 200));
+                            document.Add(new Paragraph($"Num. Acc. Rich: {schede.Rows[0]["rapp_NumcontrNatoDaAcc"]}").SetFixedPosition(300, startY_contrNatoDaAcc - 5, 200));
 
                             startY -= lineHeight; // Move to the next line
                             //riga interruzione sezione
@@ -2003,7 +2004,269 @@ namespace Uotep.Classi
             c.SetPaddingLeft(2);
             table.AddCell(c);
         }
+        public void CreaPdfCarichi(DataTable decretazione)
+        {
+            // Usa il namespace corretto per la risorsa
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Uotep.FileComuni.LetteraAccompagnamento.pdf";
+            float startY = 630;
+            using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (resourceStream == null)
+                {
+                    throw new Exception($"La risorsa incorporata '{resourceName}' non è stata trovata.");
+                }
 
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    using (PdfReader reader = new PdfReader(resourceStream))
+                    {
+                        using (PdfWriter writer = new PdfWriter(stream))
+                        {
+                            using (PdfDocument pdf = new PdfDocument(reader, writer))
+                            {
+                                // =========================================================================
+                                // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
+                                // =========================================================================
+                                using (Document document = new Document(pdf, PageSize.A4.Rotate()))
+                                {
+
+
+                                    // =========================================================================
+                                    // PAGINA 1: LETTERA DI ACCOMPAGNAMENTO
+                                    // Il testo viene aggiunto alla prima pagina, che è la carta intestata.
+                                    // =========================================================================
+                                    document.Add(new Paragraph($"CARICO A.G. EDILIZIA ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + "\n" + "\n")
+                                                                    .SetFixedPosition(10, 680, 800)
+                                                                    .SetTextAlignment(TextAlignment.LEFT)
+                                                                    .SetFontSize(12));
+
+                                 
+                                    document.Add(new Paragraph(" - " + decretazione.Rows[0].ItemArray[7].ToString() + " Referente: " + decretazione.Rows[0].ItemArray[6].ToString().ToUpper())
+                                        .SetFixedPosition(15, 670, 700)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFontSize(12));
+
+                                   
+
+                                    // =========================================================================
+                                    // PAGINA 2: REPORT CON TABELLA
+                                    // =========================================================================
+                                    // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+                                    float pageWidth = PageSize.A4.Rotate().GetWidth();
+                                    float leftMargin = 36;
+                                    float usableWidth = pageWidth - (leftMargin * 2);
+                                    float currentY = 550; // Inizia dall'alto della nuova pagina
+                                    float lineHeight = 20f;
+                                    // --- TITOLI DEL REPORT ---
+                                    //document.Add(new Paragraph($"Prot.: PG/" + decretazione.Rows[0].ItemArray[0].ToString() + "/__________________ di " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
+                                    //    .SetFixedPosition(leftMargin, currentY, 500)
+                                    //    .SetTextAlignment(TextAlignment.LEFT)
+                                    //    .SetFontSize(12));
+
+                                    //document.Add(new Paragraph($"U.O.TUTELA EDILIZIA E PATRIMONIO")
+                                    //    .SetFixedPosition(leftMargin, currentY, usableWidth) // Area a tutta larghezza per allineare a destra
+                                    //    .SetTextAlignment(TextAlignment.RIGHT)
+                                    //    .SetFontSize(12));
+
+                                    currentY -= (lineHeight * 2);
+
+                                    //document.Add(new Paragraph("Riepilogo rifornimento carburante mese di: " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
+                                    //    .SetFixedPosition(leftMargin, currentY, usableWidth)
+                                    //    .SetTextAlignment(TextAlignment.CENTER)
+                                    //    .SetFontSize(12));
+
+                                    //currentY -= lineHeight;
+
+                                    //document.Add(new Paragraph("AUTO ASSEGNATE AL PERSONALE UOTEP")
+                                    //    .SetFixedPosition(leftMargin, currentY, usableWidth)
+                                    //    .SetTextAlignment(TextAlignment.CENTER)
+                                    //    .SetFontSize(12));
+
+                                    currentY -= 20; // Spazio prima della tabella
+                                    
+                                    // --- TABELLA ---
+                                    const int colonneDati = 7;
+                                    const int colonneTotali = colonneDati ;
+
+                                    UnitValue[] columnWidths = new UnitValue[colonneTotali];
+                                    columnWidths[0] = UnitValue.CreatePercentValue(5);
+                                    for (int j = 1; j < colonneTotali; j++) { columnWidths[j] = UnitValue.CreatePercentValue(95f / colonneDati); }
+
+                                    Table table = new Table(columnWidths);
+
+                                    table.SetMarginTop(150);
+                                    // Intestazione
+                                    table.AddHeaderCell(new Cell().Add(new Paragraph("#")).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetFontSize(10));
+                                    for (int i = 0; i <= colonneDati; i++) // Ciclo corretto: da 1 a 7
+                                    {
+                                        if (decretazione.Columns[i].ColumnName.ToUpper() != "MACRO_AREA" && decretazione.Columns[i].ColumnName.ToUpper() != "DECR_DECRETATO" && decretazione.Columns[i].ColumnName.ToUpper() != "DECR_unire")
+                                        {
+
+
+                                            table.AddHeaderCell(new Cell().Add(new Paragraph(decretazione.Columns[i].ColumnName.ToUpper())).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER)
+                                                .SetPaddingTop(2)    // <-- PADDING SUPERIORE
+                                                .SetPaddingBottom(2) // <-- PADDING INFERIORE
+                                                );
+                                        }
+                                    }
+
+                                    // Dati
+                                    int contatoreRiga = 1;
+                                    foreach (DataRow riga in decretazione.Rows)
+                                    {
+
+                                        table.AddCell(new Cell().Add(new Paragraph(contatoreRiga.ToString())).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER));
+                                        for (int i = 0; i < riga.ItemArray.Length - 1; i++)
+                                        {
+                                            object item = riga.ItemArray[i];
+                                            string cellText;
+                                            if (item == null || item is DBNull) { cellText = ""; }
+                                            else if (i == 2) { cellText = item is DateTime ? ((DateTime)item).ToString("dd/MM/yyyy") : item.ToString(); }
+                                            //else if (i == 5) { cellText = item is TimeSpan ? ((TimeSpan)item).ToString("hh\\:mm") : item.ToString(); }
+                                         //  else if (i == 5) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
+                                            else { cellText = item.ToString(); }
+                                            if (i != 6 )
+                                            {
+
+                                                if (cellText == "True")
+                                                {
+
+                                                    cellText = "SI"; // Sostituisci "true" (stringa) con "si"
+                                                }
+                                                else if (cellText == "False")
+                                                {
+                                                    cellText = ""; // Sostituisci "false" (stringa) con "no"
+                                                }
+                                                table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER)
+                                                    .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
+                                                    .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
+                                                    .SetHeight(15)
+                                                    );
+                                            }
+                                        }
+                                        contatoreRiga++;
+                                    }
+                                    document.Add(table);
+
+                                    // Firma
+                                    //float signatureTextY = 80;
+                                   // float signatureLineY = 60;
+                                    //document.Add(new Paragraph("Il Responsabile Macro Area").SetFixedPosition(leftMargin, signatureTextY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
+                                    //document.Add(new Paragraph("_______________________").SetFixedPosition(leftMargin, signatureLineY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
+
+
+                                    // Rimuovendo SetFixedPosition, il paragrafo si posiziona subito dopo l'ultimo elemento aggiunto
+                                    document.Add(new Paragraph("Il Responsabile Macro Area\n\n__________________________________")
+                                        .SetMarginTop(30) // Crea uno spazio di sicurezza dai dettagli variabili sopra
+                                        .SetTextAlignment(TextAlignment.RIGHT)); 
+                                } 
+                            }
+                        }
+                    }
+
+                    // Invia l'output PDF direttamente al browser.
+                    byte[] pdfBytes = stream.ToArray();
+                    HttpResponse response = HttpContext.Current.Response;
+                    response.Clear();
+                    response.ContentType = "application/pdf";
+                    response.AddHeader("Content-Disposition", "inline; filename=SchedaCarburante.pdf");
+                    response.BinaryWrite(pdfBytes);
+                    response.Flush();
+                    response.End();
+                }
+            }
+        }
+        //public void CreaPdfCarichi(DataTable decretazione)
+        //{
+        //    float startY = 400;
+        //    float lineHeight = 20f;
+        //    var assembly = Assembly.GetExecutingAssembly();
+        //    var resourceName = "Uotep.FileComuni.LetteraAccompagnamento.pdf";
+
+
+
+        //    float boxSize = 10;
+        //    //float boxVerticalOffset = 4f;
+        //    float startX_270 = 270;
+        //    float startX_290 = 290;
+        //    float startX_70 = 70;
+        //    float startX_55 = 55;
+        //    float startX_50 = 50;
+        //    float startX_400 = 400;
+        //    float startX_350 = 350;
+        //    float startX_370 = 370;
+        //    float startX_450 = 450;
+        //    float startX_470 = 470;
+        //    float startY_430 = 430;
+
+
+        //    float lineHeight1 = 30f;
+
+
+        //    using (MemoryStream stream = new MemoryStream())
+        //    {
+        //        using (PdfWriter writer = new PdfWriter(stream))
+        //        {
+        //            using (PdfDocument pdf = new PdfDocument(writer))
+        //            {
+        //                using (Document document = new Document(pdf))
+        //                {
+        //                    // --- Creazione del Contenuto del Documento ---
+
+        //                    // Titolo
+        //                    //DateTime dataIntervento = System.Convert.ToDateTime(schede.Rows[0].ItemArray[2].ToString());
+        //                    //string dataFormattata = dataIntervento.ToString("dd/MM/yyyy");
+
+        //                    document.Add(new Paragraph($"CARICO A.G. EDILIZIA ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + " - " + decretazione.Rows[0].ItemArray[6].ToString() + " Referente: " + decretazione.Rows[0].ItemArray[1].ToString().ToUpper())
+        //                        .SetFixedPosition(10, 800, 800)
+        //                        .SetTextAlignment(TextAlignment.LEFT)
+        //                        .SetFontSize(12));
+
+        //                    // Prima riga: Numero Pratica, Nominativo
+        //                    document.Add(new Paragraph($"Numero Carico: {decretazione.Rows[0].ItemArray[0]}").SetFixedPosition(10, 780, 500));
+
+        //                    startY -= lineHeight; // Move to the next line
+
+
+
+        //                    // --- Posizione di riferimento per "Resa" ---
+        //                    // float startX_70_Resa = 70; // Use startX_70 for single column
+        //                    float startY_Resa = startY; // Use the dynamic startY
+
+
+
+
+        //                    startY -= lineHeight1; // Move to the next line
+        //                    // La PG Operante - Sezione firma
+        //                    document.Add(new Paragraph($"La PG Operante").SetFixedPosition(280, startY, 500));
+        //                    startY -= lineHeight1; // Move to the next line
+        //                    document.Add(new Paragraph($"_______________________/_______________________/_______________________").SetFixedPosition(55, startY, 500));
+        //                    //startY -= lineHeight1; // Move to the next line
+        //                    //document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
+
+        //                    document.Close(); // Chiude il documento.
+
+
+        //                }
+
+        //            }
+        //        }
+
+        //        // Invia l'output PDF direttamente al browser.
+        //        byte[] pdfBytes = stream.ToArray();
+        //        HttpResponse response = HttpContext.Current.Response;
+        //        response.Clear();
+        //        response.ContentType = "application/pdf";
+        //        response.AddHeader("Content-Disposition", "inline; filename=SchedaIntervento.pdf");
+        //        response.BinaryWrite(pdfBytes);
+        //        response.Flush();
+        //        response.End();
+        //    }
+
+
+        //}
         public void CreaPdfSchedaCarburante(DataTable schede)
         {
             // Usa il namespace corretto per la risorsa

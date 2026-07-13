@@ -1167,6 +1167,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtPraticaDecr;
 
         /// <summary>
+        /// Controllo ckUnire.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ckUnire;
+
+        /// <summary>
         /// Controllo txtDecretante.
         /// </summary>
         /// <remarks>

@@ -1169,6 +1169,8 @@
                                 <div class="form-group mb-3">
                                     <label for="txtPraticaDecr">Pratica</label>
                                     <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
+                                    <asp:CheckBox ID="ckUnire" runat="server" CssClass="form-check-input" />
+<label class="form-check-label" for="ckUnire">Unire</label>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="txtDecretante">Decretante</label>
