@@ -87,6 +87,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtAutista;
 
         /// <summary>
+        /// Controllo RequiredFieldValidator5.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
+
+        /// <summary>
         /// Controllo txtTarga.
         /// </summary>
         /// <remarks>
@@ -249,6 +258,15 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.GridView gvDett;
 
         /// <summary>
+        /// Controllo btBack.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btBack;
+
+        /// <summary>
         /// Controllo Hfuser.
         /// </summary>
         /// <remarks>
@@ -274,6 +292,15 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField HfFiltroSigla;
+
+        /// <summary>
+        /// Controllo HfProgressivo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HfProgressivo;
 
         /// <summary>
         /// Controllo btChiudiAvvertenze.

@@ -1,4 +1,5 @@
-﻿    using AjaxControlToolkit.HtmlEditor.Popups;
+﻿using AjaxControlToolkit.HtmlEditor.Popups;
+using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,9 @@ namespace Uotep
         {
             try
             {
+                Boolean ins = false;
+                int num = 0;
+                Manager mn = new Manager();
                 GestAuto auto = new GestAuto();
                 auto.sigla = DdlSigla.SelectedItem.Text;
                 auto.targa = txtTarga.Text;
@@ -118,6 +122,13 @@ namespace Uotep
                 auto.mese = txtMese.Text;
                 auto.anno = System.Convert.ToInt16(txtAnno.Text);
                 auto.verificato = false;
+                DataTable prog = mn.MaxProgressivoGestioneAuto(auto.anno,auto.mese);
+                num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
+                if (num==0)
+                {
+                    num++;
+                }
+                auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
                 if (!string.IsNullOrEmpty(Vuser))
                 {
                     auto.matricola = Vuser;
@@ -129,20 +140,47 @@ namespace Uotep
                     string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                     Response.Redirect(url, false);
                 }
-
-                Manager mn = new Manager();
-                Boolean ins = mn.InsGestioneAuto(auto);
+                SiteMaster myMaster = this.Master as SiteMaster;
+                Int32 idN = 0;
+                ins = mn.InsGestioneAuto(auto, out idN);
                 if (!ins)
                 {
+                    if (idN == -1)
+                    {
+                        prog = mn.MaxProgressivoGestioneAuto(auto.anno, auto.mese);
+                        num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
+                        auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
+                        ins = mn.InsGestioneAuto(auto, out idN);
+                        if (ins)
+                        {
+                            if (myMaster != null)
+                            {
+                                // 2. Chiamo il metodo pubblico
+                                myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Il numero progressivo è " + auto.progressivo + ", inserire sulla ricevuta la Sigla, il cognome e progressivo. Grazie", "success");
+                                Pulisci();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento non riuscito" + "'); $('#errorModal').modal('show');", true);
+                        if (myMaster != null)
 
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InsKo.GetDescription(), "danger");
 
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento non riuscito" + "'); $('#errorModal').modal('show');", true);
+                    }
+
                 }
+
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#txtAvvertenze').text('" + "Sigla " + auto.sigla + " inserita correttamente.\\n Inserire sulla ricevuta la Sigla, il cognome e la lettera R.\\n Grazie" + "'); $('#ModalAvvertenze').modal('show');", true);
-                    Pulisci();
-
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Il numero progressivo è " + auto.progressivo + ", inserire sulla ricevuta la Sigla, il cognome e progressivo. Grazie", "success");
+                        Pulisci();
+                    }
                 }
             }
             catch (Exception ex)
@@ -295,7 +333,7 @@ namespace Uotep
                 lblNumRighe.Text = " - Num. righe trovate: " + listaAuto.Rows.Count.ToString();
                 gvDett.DataSource = listaAuto;
                 gvDett.DataBind();
-
+                btBack.Visible = true;
                 DivGrid.Visible = true;
             }
         }
@@ -393,6 +431,28 @@ namespace Uotep
                     }
                 }
             }
+        }
+        protected void txtFilterProgressivo_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtFilter = (TextBox)sender;
+            // Crea una lista
+            List<string> ListRicerca = new List<string> { "progressivo", DdlSigla.SelectedItem.Text };
+            // Salva la lista nella Sessione
+            Session["ListAuto"] = ListRicerca;
+            string filterValue = txtFilter.Text.Trim();
+            HfProgressivo.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterProgressivo")
+            {
+                columnName = "progressivo";
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfProgressivo.Value);
         }
         protected void txtFilterSigla_TextChanged(object sender, EventArgs e)
         {
@@ -523,15 +583,21 @@ namespace Uotep
 
                         dv.RowFilter = filtro;
                         break;
-                        //case "Accertatori":
+                    //case "Accertatori":
 
-                        //    filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
-                        //    dv = new DataView(pratica);
+                    //    filtro = $"Accertatori LIKE '%{HfFiltroAccertatori.Value}%'";
+                    //    dv = new DataView(pratica);
 
-                        //    dv.RowFilter = filtro;
+                    //    dv.RowFilter = filtro;
 
-                        //    break;
+                    //    break;
+                    case "progressivo":
 
+                        filtro = $"progressivo LIKE '%{HfProgressivo.Value}%'";
+                        dv = new DataView(auto);
+
+                        dv.RowFilter = filtro;
+                        break;
 
                 }
                 if (auto.Rows.Count > 0)
@@ -564,6 +630,13 @@ namespace Uotep
             {
                 lblInfoPagine.Text = "Nessun record trovato";
             }
+        }
+
+        protected void btBack_Click(object sender, EventArgs e)
+        {
+            gvDett.DataSource = Session["ListRicercaGestioneAuto"];
+            gvDett.DataBind();
+            DivGrid.Visible = true;
         }
     }
 }

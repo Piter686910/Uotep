@@ -27,7 +27,7 @@
 
     <div class="container-fluid mt-4">
         <div class="dashboard-header">
-            <h1><span class="fa-solid fa-gear fa-spin"></span> GESTIONE CARTE CARBURANTE</h1>
+            <h1><span class="fa-solid fa-gear fa-spin"></span>GESTIONE CARTE CARBURANTE</h1>
         </div>
 
         <div class="section-box">
@@ -64,6 +64,8 @@
                     <div class="form-group">
                         <label for="txtAutista">Autista</label>
                         <asp:TextBox ID="txtAutista" runat="server" CssClass="form-control" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtAutista" ValidationGroup="bt" ErrorMessage="Inserire il nome dell'autista" ForeColor="Red" Display="Dynamic" />
+
                     </div>
                 </div>
 
@@ -131,7 +133,8 @@
             <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                 <div class="small text-muted">
                     <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina"></asp:Label>
-                     <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
+                    <strong>
+                        <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                 </div>
             </div>
             <div class="table-responsive">
@@ -181,6 +184,15 @@
                         <asp:BoundField DataField="euro" HeaderText="Euro" />
                         <asp:BoundField DataField="indirizzo" HeaderText="Indirizzo" />
 
+
+                        <asp:TemplateField HeaderText="progressivo">
+                            <HeaderTemplate>
+                                Progressivo<br />
+                                <asp:TextBox ID="txtFilterProgressivo" runat="server" OnTextChanged="txtFilterProgressivo_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("progressivo") %></ItemTemplate>
+                        </asp:TemplateField>
+
                         <asp:TemplateField HeaderText="Verificato" ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>
                                 <span>
@@ -201,12 +213,18 @@
 
                     <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
                 </asp:GridView>
+
+            </div>
+            <div class="modal-footer bg-light">
+                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" Visible="false"/>
+
             </div>
         </div>
 
         <asp:HiddenField ID="Hfuser" runat="server" />
         <asp:HiddenField ID="HfFiltroData" runat="server" />
         <asp:HiddenField ID="HfFiltroSigla" runat="server" />
+        <asp:HiddenField ID="HfProgressivo" runat="server" />
 
     </div>
 

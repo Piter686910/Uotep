@@ -10,6 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Cerca tutti gli elementi con la classe 'data-auto-trattino' e aggiunge l'evento
+    var inputs = document.querySelectorAll('.data-auto-trattino');
+
+    inputs.forEach(function (input) {
+        input.addEventListener('keyup', function () {
+            formattaDataTrattini(this);
+        });
+    });
+});
 
 // La funzione aggiunge 30 giorni alla data inserita nella TextBox 
 function aggiungi30Giorni(source, targetId) {
@@ -91,7 +102,25 @@ function isFestivo(data) {
     return false;
 }
 
+function formattaDataTrattini(event, input) {
+    // Permetti sempre tasti di controllo come Backspace, Canc, Frecce
+    if (event.key === 'Backspace' || event.key === 'Delete' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        return;
+    }
 
+    // Blocca l'inserimento se non è un numero
+    if (/\D/.test(event.key)) {
+        event.preventDefault();
+        return;
+    }
+
+    var valore = input.value;
+
+    // Se l'utente ha scritto 2 cifre (gg), aggiunge il trattino prima del terzo carattere
+    if (valore.length === 2 || valore.length === 5) {
+        input.value = valore + '-';
+    }
+}
 // La funzione inserisce / automatici nella data
 function formattaData(input) {
     var numeri = input.value.replace(/\D/g, '');
