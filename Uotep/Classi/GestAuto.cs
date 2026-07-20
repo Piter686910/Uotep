@@ -24,6 +24,6 @@ namespace Uotep.Classi
         public string matricola = string.Empty;
         public DateTime dataVerifica;
         public Boolean verificato;
-
+        public string progressivo = string.Empty;
     }
 }

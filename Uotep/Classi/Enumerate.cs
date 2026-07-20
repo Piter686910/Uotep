@@ -101,9 +101,11 @@ namespace Uotep.Classi
             [Description("Nessuna Corrispondenza trovata.")]
             Notfound = 25,
             [Description("Inserire Matricola o Nominativo.")]
-            FiledRegìquired = 26
+            FiledRegìquired = 26,
             //F 26/03/2024:  utente disabilitato
             //F 26/03/2024:  utente disabilitato
+            [Description("Inserimento non effettuato.")]
+            InsKo = 27
         }
         public enum Sigla
         {

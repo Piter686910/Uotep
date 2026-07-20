@@ -15,6 +15,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Forms.Form.Element;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
+using Org.BouncyCastle.Asn1.X500;
 using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
@@ -520,6 +521,31 @@ namespace Uotep.Classi
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
+            }
+        }
+
+        /// <summary>
+        /// preleva il max pregressivo per l'anno corrente
+        /// </summary>
+        /// <param name="anno"></param>
+        /// <returns></returns>
+        public DataTable MaxProgressivoGestioneAuto(int anno, string mese)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT count(*) AS MaxNumero FROM gestioneauto  WHERE ANNO = " + anno + " and mese = '" +mese+ "'";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da;
+                DataSet ds;
+                da = new SqlDataAdapter(sql, conn);
+                ds = new DataSet();
+                da.Fill(ds);
+
+                tb = ds.Tables[0];
+                conn.Close();
+                conn.Dispose();
+                return tb;
             }
         }
         public DataTable MaxNPr(string anno)
@@ -2724,12 +2750,12 @@ ORDER BY LOGS.[Data Accesso] DESC";
         /// </summary>
         /// <param name="auto"></param>
         /// <returns></returns>
-        public Boolean InsGestioneAuto(GestAuto auto)
+        public Boolean InsGestioneAuto(GestAuto auto, out Int32 idN )
         {
             bool resp = true;
             string sql = String.Empty;
             string testoSql = string.Empty;
-
+            idN = 0;
             try
             {
                 string inputlitri = auto.litri.ToString();
@@ -2757,9 +2783,23 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     decimal valoreArrotondatoE = Math.Round(importoFloat, 2);
                     decimal valoreArrotondatoL = Math.Round(litriFloat, 2);
 
-                    sql = "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota)" +
-                          " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante + "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "'," + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "')";
 
+                  sql = "IF NOT EXISTS (SELECT 1 FROM gestioneauto WHERE progressivo = '" + @auto.progressivo + "') " +
+                                 "BEGIN " +
+                                    // 2. SE NON ESISTE -> ESEGUI INSERT
+                           "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota,progressivo)" +
+                          " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante +
+                          "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "'," 
+                          + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "','" + auto.progressivo + "')" +
+
+                                   // RESTITUISCE IL NUOVO ID GENERATO
+                                   "SELECT SCOPE_IDENTITY(); " +
+            "END " +
+            "ELSE " +
+            "BEGIN " +
+                // 3. SE ESISTE GIÀ -> RESTITUISCE -1
+                "SELECT -1; " +
+            "END";
 
                     using (SqlConnection conn = new SqlConnection(ConnString))
                     {
@@ -2774,6 +2814,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
                             command.CommandText = sql;
                             testoSql = "gestioneauto";
                             int res = command.ExecuteNonQuery();
+                            idN = Convert.ToInt32(res);
+                            if (idN==-1)
+                            {
+                                resp = false;
+                            }
                         }
 
                         catch (Exception ex)
@@ -2785,7 +2830,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                             using (StreamWriter sw = File.AppendText(LogFile))
                             {
-                                sw.WriteLine("Sigla:" + auto.sigla + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
+                                sw.WriteLine("Sigla:" + auto.progressivo + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
                                 sw.Close();
                             }
 

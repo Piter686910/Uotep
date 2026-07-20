@@ -2366,8 +2366,8 @@ namespace Uotep.Classi
                                     currentY -= 20; // Spazio prima della tabella
 
                                     // --- TABELLA ---
-                                    const int colonneDati = 10;
-                                    const int colonneTotali = colonneDati + 1;
+                                    const int colonneDati = 10; //colonne da stampare
+                                    const int colonneTotali = colonneDati + 1; //stampa progressivo del record stamapato
 
                                     UnitValue[] columnWidths = new UnitValue[colonneTotali];
                                     columnWidths[0] = UnitValue.CreatePercentValue(5);
@@ -2394,7 +2394,7 @@ namespace Uotep.Classi
                                     {
 
                                         table.AddCell(new Cell().Add(new Paragraph(contatoreRiga.ToString())).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER));
-                                        for (int i = 1; i < riga.ItemArray.Length - 6; i++)
+                                        for (int i = 1; i < riga.ItemArray.Length - 7; i++) // totale colonne 18 e tolgo le ultime 7
                                         {
                                             object item = riga.ItemArray[i];
                                             string cellText;
