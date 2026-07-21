@@ -591,7 +591,7 @@
                                 <div id="suggestionsList" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     <asp:HiddenField ID="HfGiudice" runat="server" />
                                 </div>
-                                <asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />
+                                <%--<asp:Button ID="btSalvaGiudice" runat="server" CssClass="btn btn-primary" Text="Inserisci il nuovo valore" OnClick="btSalvaGiudice_Click" Visible="false" />--%>
 
                                 <asp:DropDownList ID="DdlGiudice" runat="server" Style="display: none;" CssClass="form-control" />
                             </div>

@@ -330,15 +330,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.HiddenField HfGiudice;
 
         /// <summary>
-        /// Controllo btSalvaGiudice.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btSalvaGiudice;
-
-        /// <summary>
         /// Controllo DdlGiudice.
         /// </summary>
         /// <remarks>

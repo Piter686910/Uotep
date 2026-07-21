@@ -156,8 +156,8 @@ namespace Uotep
         public void Convalida()
         {
 
-            if (!String.IsNullOrEmpty(HfGiudice.Value))
-                btSalvaGiudice.Visible = true;
+            //if (!String.IsNullOrEmpty(HfGiudice.Value))
+            //    btSalvaGiudice.Visible = true;
 
             //if (!String.IsNullOrEmpty(HfTipoProv.Value))
             //    btSalvaTipoProvv.Visible = true;
