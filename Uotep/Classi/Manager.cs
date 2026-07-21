@@ -610,8 +610,8 @@ namespace Uotep.Classi
             string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
                 " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
                 "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
-                "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, p.DataInserimento) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
-                " DATEPART(iso_week, p.DataInserimento) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
+                "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, d.decr_data) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
+                " DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
                 " FROM Classificata WHERE rn = 1 ORDER BY carico;";
 
 
