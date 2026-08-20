@@ -124,10 +124,12 @@ namespace Uotep
                 auto.verificato = false;
                 DataTable prog = mn.MaxProgressivoGestioneAuto(auto.anno,auto.mese);
                 num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
-                if (num==0)
-                {
+                if (num == 0)
+
+                    num = 1;
+                else
                     num++;
-                }
+                
                 auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
                 if (!string.IsNullOrEmpty(Vuser))
                 {
@@ -145,31 +147,31 @@ namespace Uotep
                 ins = mn.InsGestioneAuto(auto, out idN);
                 if (!ins)
                 {
-                    if (idN == -1)
-                    {
-                        prog = mn.MaxProgressivoGestioneAuto(auto.anno, auto.mese);
-                        num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
-                        auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
-                        ins = mn.InsGestioneAuto(auto, out idN);
-                        if (ins)
-                        {
-                            if (myMaster != null)
-                            {
-                                // 2. Chiamo il metodo pubblico
-                                myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Il numero progressivo è " + auto.progressivo + ", inserire sulla ricevuta la Sigla, il cognome e progressivo. Grazie", "success");
-                                Pulisci();
-                            }
-                        }
-                    }
-                    else
-                    {
+                    //if (idN == -1)
+                    //{
+                    //    prog = mn.MaxProgressivoGestioneAuto(auto.anno, auto.mese);
+                    //    num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
+                    //    auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
+                    //    ins = mn.InsGestioneAuto(auto, out idN);
+                    //    if (ins)
+                    //    {
+                    //        if (myMaster != null)
+                    //        {
+                    //            // 2. Chiamo il metodo pubblico
+                    //            myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Il numero progressivo è " + auto.progressivo + ", inserire sulla ricevuta la Sigla, il cognome e progressivo. Grazie", "success");
+                    //            Pulisci();
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento non riuscito" + "'); $('#errorModal').modal('show');", true);
                         if (myMaster != null)
 
                             // 2. Chiamo il metodo pubblico
                             myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InsKo.GetDescription(), "danger");
 
-                    }
+                   // }
 
                 }
 

@@ -166,6 +166,7 @@ namespace Uotep
 
 
             }
+            
 
         }
         protected void FillScheda(DataTable pratica)
@@ -2375,5 +2376,7 @@ namespace Uotep
 
             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "ModalRichiestaSalva", script, true);
         }
+
+       
     }
 }

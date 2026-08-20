@@ -465,7 +465,7 @@
             <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">MODIFICA CARICO</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> MODIFICA CARICO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>MODIFICA CARICO</h1>
             </div>
             <asp:HiddenField ID="HfButtonProv" runat="server" />
 
@@ -508,7 +508,7 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtNProtocollo" ErrorMessage="Inserire numero pratica" ForeColor="Red" ValidationGroup="bt" autofocus="">
 
                     </asp:RequiredFieldValidator>
-                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" autofocus=""/>
+                    <asp:TextBox ID="txtNProtocollo" runat="server" CssClass="form-control" placeholder="Nr Protocollo" autofocus="" />
 
 
                     <asp:Label ID="Label1" runat="server" Text="Anno" CssClass="form-label d-block mb-2"></asp:Label>
@@ -525,7 +525,7 @@
 
                     <asp:Label ID="Label2" runat="server" Text="Nr Procediemnto Penale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" autofocus=""/>
+                    <asp:TextBox ID="txtProcPenale" runat="server" CssClass="form-control" placeholder="Nr Procedimento Penale" autofocus="" />
 
 
 
@@ -538,7 +538,7 @@
 
                     <asp:Label ID="Label3" runat="server" Text="Data Inizio Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" autofocus=""/>
+                    <asp:TextBox ID="txtDataDa" runat="server" CssClass="form-control data-auto" placeholder="Data Inizio" autofocus="" />
 
                     <asp:Label ID="Label4" runat="server" Text="Data Fine Ricerca" CssClass="form-label d-block mb-2"></asp:Label>
 
@@ -553,7 +553,7 @@
 
                     <asp:Label ID="Label5" runat="server" Text="Rif. Protocollo Generale" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." autofocus=""/>
+                    <asp:TextBox ID="txtProtGen" runat="server" CssClass="form-control" placeholder="Rif. Prot. Gen." autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -564,7 +564,7 @@
 
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus=""/>
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -575,7 +575,7 @@
 
                     <asp:Label ID="Label7" runat="server" Text="Giudice" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus=""/>
+                    <asp:TextBox ID="txtRicGiudice" runat="server" CssClass="form-control" placeholder="Giudice" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -586,7 +586,7 @@
 
                     <asp:Label ID="Label8" runat="server" Text="Provenienza" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus=""/>
+                    <asp:TextBox ID="txtRicProvenienza" runat="server" CssClass="form-control" placeholder="Provenienza" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -597,7 +597,7 @@
 
                     <asp:Label ID="Label9" runat="server" Text="Nominativo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" autofocus=""/>
+                    <asp:TextBox ID="txtRicNominativo" runat="server" CssClass="form-control" placeholder="Nominativo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -608,7 +608,7 @@
 
                     <asp:Label ID="Label10" runat="server" Text="Accertatori" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" autofocus=""/>
+                    <asp:TextBox ID="txtRicAccertatori" runat="server" CssClass="form-control" placeholder="Accertatori" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -619,7 +619,7 @@
 
                     <asp:Label ID="Label11" runat="server" Text="Indirizzo" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus=""/>
+                    <asp:TextBox ID="txtRicIndirizzo" runat="server" CssClass="form-control" placeholder="Indirizzo" autofocus="" />
 
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
@@ -1170,7 +1170,7 @@
                                     <label for="txtPraticaDecr">Pratica</label>
                                     <asp:TextBox ID="txtPraticaDecr" runat="server" Enabled="false" CssClass="form-control mb-3" Width="120px"></asp:TextBox>
                                     <asp:CheckBox ID="ckUnire" runat="server" CssClass="form-check-input" />
-<label class="form-check-label" for="ckUnire">Unire</label>
+                                    <label class="form-check-label" for="ckUnire">Unire</label>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="txtDecretante">Decretante</label>
@@ -1184,6 +1184,7 @@
                                     <input type="text" id="txtSearchOperatore" runat="server" class="form-control"
                                         placeholder="cerca..."
                                         onkeyup="filterAndHighlightOp(event)"
+                                        onblur="validaOperatoreOnBlur()"
                                         autocomplete="off" />
 
                                     <!-- 2. DROPDOWNLIST REALE (NASCOSTA) - Serve per il C# -->
@@ -1435,7 +1436,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+
     </div>
     <script type="text/javascript">
         // Funzione per gestire la visibilità
@@ -1616,13 +1617,11 @@
 
         function filterAndHighlightOp(e) {
             var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            //var input = '<%= txtSearchOperatore.ClientID %>';
             var listDiv = document.getElementById("suggestionsListoperatore");
-            //var filter = input.value.toUpperCase();
             var filter = (input.value || "").toUpperCase();
 
             // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-            if (allOptionsOp.length === 0) {
+            if (typeof allOptionsOp !== "undefined" && allOptionsOp.length === 0) {
                 caricaOpzioniOperatore();
             }
 
@@ -1630,17 +1629,18 @@
             if (e.keyCode === 13) {
                 var activeItem = listDiv.querySelector(".active");
                 if (activeItem) {
-                    // Simula il click
-                    activeItem.click();
-                    e.preventDefault(); // Ferma il postback del form se presente
+                    activeItem.click(); // Simula il click
+                    e.preventDefault(); // Ferma il postback del form
                 }
                 return;
             }
 
             listDiv.innerHTML = "";
 
-            // Se input vuoto, nascondi
+            // Se input vuoto, svuota anche la DDL nascosta e nascondi la lista
             if (filter.length === 0) {
+                var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                if (ddl) ddl.value = "";
                 listDiv.style.display = "none";
                 return;
             }
@@ -1656,17 +1656,16 @@
                     var div = document.createElement("div");
                     div.className = "suggestion-item";
                     div.innerText = item.text;
-
-                    // Usiamo attributi data- per passare il valore
                     div.setAttribute("data-val", item.value);
 
-                    // Evidenzia il primo risultato
+                    // Evidenzia il primo risultato per permettere l'invio rapido
                     if (foundCount === 0) {
                         div.classList.add("active");
                     }
 
-                    // Click Mouse
-                    div.onclick = function () {
+                    // mouse down, evita che al primo click sulla selezione scatti l'alert
+                    div.onmousedown = function () {
+                        e.preventDefault();
                         selezionaOperatore(this.innerText, this.getAttribute("data-val"));
                     };
 
@@ -1675,14 +1674,14 @@
                 }
             }
 
-            console.log("Risultati trovati: " + foundCount);
-
             if (foundCount > 0) {
                 listDiv.style.display = "block";
             } else {
                 listDiv.style.display = "none";
             }
         }
+        var eSelezioneValida = false; //evita che al primo click sulla selezione scatti l'alert
+
         function selezionaOperatore(text, value) {
             console.log("Selezionato: " + text + " (ID: " + value + ")");
 
@@ -1692,8 +1691,61 @@
 
             input.value = text;
             if (ddl) ddl.value = value;
+            eSelezioneValida = true;
             listDiv.style.display = "none";
         }
+
+        // -------------------------------------------------------------
+        // NUOVA FUNZIONE: Valida l'input quando l'utente esce dal campo (blur)
+        // -------------------------------------------------------------
+        function validaOperatoreOnBlur() {
+
+            // Se l'utente ha appena cliccato su un elemento, ignoriamo il controllo di blur
+            if (eSelezioneValida) {
+                eSelezioneValida = false; // Resettiamo per le future modifiche
+                return;
+            }
+
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+    var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+            var testoDigitato = (input.value || "").trim().toUpperCase();
+
+            if (testoDigitato === "") {
+                if (ddl) ddl.value = "";
+                return;
+            }
+
+            var trovato = false;
+
+            // Cerca una corrispondenza ESATTA tra il testo scritto e le opzioni
+            for (var i = 0; i < allOptionsOp.length; i++) {
+                if (allOptionsOp[i].text.trim().toUpperCase() === testoDigitato) {
+                    // Trovato! Assicuriamoci che la DDL e l'Input abbiano il valore corretto
+                    selezionaOperatore(allOptionsOp[i].text, allOptionsOp[i].value);
+                    trovato = true;
+                    break;
+                }
+            }
+
+            // Se l'utente ha scritto del testo non presente nell'elenco (o parziale senza cliccare)
+            if (!trovato) {
+                alert("Attenzione: Selezionare un operatore valido presente nell'elenco.");
+                input.value = "";
+                if (ddl) ddl.value = "";
+            }
+            
+        }
+        // -------------------------------------------------------------
+        // Gestione della chiusura del popup se si clicca fuori dall'input/lista
+        // -------------------------------------------------------------
+        document.addEventListener('click', function (e) {
+            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            var listDiv = document.getElementById("suggestionsListoperatore");
+
+            if (input && listDiv && e.target !== input && !listDiv.contains(e.target)) {
+                listDiv.style.display = "none";
+            }
+        });
 
         // Chiudi se clicchi fuori
         document.addEventListener('click', function (e) {

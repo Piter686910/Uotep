@@ -43,7 +43,7 @@ namespace Uotep
                     string area = Session["area"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
-
+                    
                     if (Ricerca.Rows.Count > 0)
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
@@ -88,6 +88,7 @@ namespace Uotep
                                     EstraiStatistiche.Visible = true;
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
+                                
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
@@ -219,7 +220,8 @@ namespace Uotep
 
                                 break;
                             case "admin":
-
+                                //
+                               // CaricaScheda.Visible = true;
                                 // Mostra voci per utenti standard
                                 menuSicurezza.Visible = false;
                                 menuCoordinamentoAtti.Visible = true;

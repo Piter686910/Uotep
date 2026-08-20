@@ -235,6 +235,7 @@
                                 <li><a id="menuRicercaScheda" runat="server" visible="false" href="~/View/RicercaScheda">Ricerca Scheda</a></li>
                                 <li><a id="mnGestioneAuto" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
                                 <li><a id="EstraiStatistiche" runat="server" visible="false" href="~/View/EstraiStatistiche">Statistiche</a></li>
+                                <li><%--<a id="CaricaScheda" runat="server" visible="false" href="~/View/CaricaScheda">Carica Scheda</a>--%></li>
                             </ul>
                         </li>
 

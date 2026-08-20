@@ -525,14 +525,14 @@ namespace Uotep.Classi
         }
 
         /// <summary>
-        /// preleva il max pregressivo per l'anno corrente
+        /// preleva il max pregressivo per l'anno e mese corrente per la gestione auto
         /// </summary>
         /// <param name="anno"></param>
         /// <returns></returns>
         public DataTable MaxProgressivoGestioneAuto(int anno, string mese)
         {
             DataTable tb = new DataTable();
-            string sql = "SELECT count(*) AS MaxNumero FROM gestioneauto  WHERE ANNO = " + anno + " and mese = '" +mese+ "'";
+            string sql = "SELECT count(*) AS MaxNumero FROM gestioneauto  WHERE ANNO = " + anno + " and mese = '" + mese + "'";
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -592,7 +592,7 @@ namespace Uotep.Classi
                 return tb;
             }
         }
-        public DataTable getListCarico(string ma, string capoarea, string dataCarico,string sigla)
+        public DataTable getListCarico(string ma, string capoarea, string dataCarico, string sigla)
         {
             DataTable tb = new DataTable();
             //string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo as carico, d.decr_pratica , d.[decr_decretato],d.[decr_data],d.[decr_nota] as Note,d.[decr_chiuso],p.Macro_area, p.DataCarico," +
@@ -1673,13 +1673,13 @@ ORDER BY LOGS.[Data Accesso] DESC";
         public DataTable getPraticaArchivioUoteById(int id, string storico)
         {
             string sql = string.Empty;
-            
+
             DataTable tb = new DataTable();
             if (storico == "si")
-            //    sql = "SELECT * FROM ArchivioUoteStorico where id_Archivio = '" + id + "'";
+                //    sql = "SELECT * FROM ArchivioUoteStorico where id_Archivio = '" + id + "'";
 
-             sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
-                    " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
+                sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
+                       " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
             else
                 sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
 
@@ -2088,8 +2088,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         if (pratica[1] == "Doppione")
                             //sql = "SELECT  * FROM ArchivioUote where arch_numPratica = '" + pratica[2].Replace("'", "''") + "' and arch_doppione in ('bis', 'tris', 'quater')  ORDER BY arch_datault_intervento desc ";
 
-                        sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null or arch_doppione='') " +
-                                " ORDER BY arch_datault_intervento DESC";
+                            sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null or arch_doppione='') " +
+                                    " ORDER BY arch_datault_intervento DESC";
 
                         //  sql= "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[2].Replace("'", "''")  + " AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "')";
                         else
@@ -2750,115 +2750,255 @@ ORDER BY LOGS.[Data Accesso] DESC";
         /// </summary>
         /// <param name="auto"></param>
         /// <returns></returns>
-        public Boolean InsGestioneAuto(GestAuto auto, out Int32 idN )
+        public bool InsGestioneAuto(GestAuto auto, out int idN)
         {
             bool resp = true;
-            string sql = String.Empty;
-            string testoSql = string.Empty;
             idN = 0;
+            string msg = string.Empty;
             try
             {
                 string inputlitri = auto.litri.ToString();
                 string inputEuro = auto.euro.ToString();
                 decimal importoFloat;
                 decimal litriFloat;
-                // 1. Definisci la cultura di parsing (italiana: virgola come decimale)
+
                 CultureInfo culturaItaliana = new CultureInfo("it-IT");
 
-                // 2. Pulizia: Rimuovi il simbolo € e spazi, poi tenta la conversione C#
-                if (decimal.TryParse(
-                        inputEuro.Replace("€", "").Trim(),
-                        NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
-                        culturaItaliana,
-                        out importoFloat) &&
-
-
-                        decimal.TryParse(
-                        inputlitri.Replace("€", "").Trim(),
-                        NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
-                        culturaItaliana,
-                        out litriFloat))
-
+                // Conversione numerica
+                if (decimal.TryParse(inputEuro.Replace("€", "").Trim(), NumberStyles.Any, culturaItaliana, out importoFloat) &&
+                    decimal.TryParse(inputlitri.Replace("€", "").Trim(), NumberStyles.Any, culturaItaliana, out litriFloat))
                 {
                     decimal valoreArrotondatoE = Math.Round(importoFloat, 2);
                     decimal valoreArrotondatoL = Math.Round(litriFloat, 2);
 
+                    // Query parametrizzata con stringa verbatim (@) per leggibilità
+                    string sql = @"
+                IF NOT EXISTS (SELECT 1 FROM gestioneauto WHERE progressivo = @progressivo)
+                BEGIN
+                    INSERT INTO gestioneauto (
+                        sigla, targa, stan, data, ora, litri, tipoCarburante, euro, 
+                        indirizzo, autista, mese, anno, nota, progressivo
+                    ) 
+                    VALUES (
+                        @sigla, @targa, @stan, @data, @ora, @litri, @tipoCarburante, @euro, 
+                        @indirizzo, @autista, @mese, @anno, @nota, @progressivo
+                    );
 
-                  sql = "IF NOT EXISTS (SELECT 1 FROM gestioneauto WHERE progressivo = '" + @auto.progressivo + "') " +
-                                 "BEGIN " +
-                                    // 2. SE NON ESISTE -> ESEGUI INSERT
-                           "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota,progressivo)" +
-                          " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante +
-                          "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "'," 
-                          + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "','" + auto.progressivo + "')" +
-
-                                   // RESTITUISCE IL NUOVO ID GENERATO
-                                   "SELECT SCOPE_IDENTITY(); " +
-            "END " +
-            "ELSE " +
-            "BEGIN " +
-                // 3. SE ESISTE GIÀ -> RESTITUISCE -1
-                "SELECT -1; " +
-            "END";
+                    SELECT SCOPE_IDENTITY();
+                END
+                ELSE
+                BEGIN
+                    SELECT -1;
+                END;";
 
                     using (SqlConnection conn = new SqlConnection(ConnString))
                     {
                         conn.Open();
 
-                        SqlCommand command = conn.CreateCommand();
-                        command.Parameters.Add("@valore1", SqlDbType.Float).Value = (double)importoFloat;
-                        command.Parameters.Add("@valore", SqlDbType.Float).Value = (double)litriFloat;
-
-                        try
+                        using (SqlCommand command = new SqlCommand(sql, conn))
                         {
-                            command.CommandText = sql;
-                            testoSql = "gestioneauto";
-                            int res = command.ExecuteNonQuery();
-                            idN = Convert.ToInt32(res);
-                            if (idN==-1)
+                            // Aggiunta sicura dei parametri
+                            command.Parameters.AddWithValue("@sigla", auto.sigla ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@targa", auto.targa ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@stan", auto.stan ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@data", auto.data);
+                            command.Parameters.AddWithValue("@ora", auto.ora);
+                            command.Parameters.AddWithValue("@litri", (double)valoreArrotondatoL);
+                            command.Parameters.AddWithValue("@tipoCarburante", auto.tipoCarburante ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@euro", (double)valoreArrotondatoE);
+                            command.Parameters.AddWithValue("@indirizzo", auto.indirizzo ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@autista", auto.autista ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@mese", auto.mese ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@anno", auto.anno);
+                            command.Parameters.AddWithValue("@nota", auto.nota ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@progressivo", auto.progressivo ?? (object)DBNull.Value);
+
+                            try
                             {
+                                // Uso  ExecuteScalar() per leggere SCOPE_IDENTITY() o -1
+                                object result = command.ExecuteScalar();
+
+                                if (result != null && result != DBNull.Value)
+                                {
+                                    idN = Convert.ToInt32(result);
+                                }
+
+                                if (idN == -1)
+                                {
+                                    resp = false; // Il record esisteva già
+                                    msg = "Il record esisteva già";
+                                    // Scrittura Log KO
+                                    LogMessage("Sigla: " + auto.progressivo + ", msg: " + msg + "- Errore in inserimento tabella gestione auto");
+                                }
+
+                                // Scrittura Log OK
+                                //LogMessage("Sigla: " + auto.progressivo + ", msg: " + msg + "- Errore in inserimento tabella gestione auto");
+                            }
+                            catch (Exception ex)
+                            {
+                                // Scrittura Log Errore
+                                LogMessage("Sigla:" + auto.progressivo + ", " + ex.Message + " - Errore in inserimento tabella gestione auto");
                                 resp = false;
                             }
                         }
-
-                        catch (Exception ex)
-                        {
-                            if (!File.Exists(LogFile))
-                            {
-                                using (StreamWriter sw = File.CreateText(LogFile)) { }
-                            }
-
-                            using (StreamWriter sw = File.AppendText(LogFile))
-                            {
-                                sw.WriteLine("Sigla:" + auto.progressivo + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
-                                sw.Close();
-                            }
-
-                            resp = false;
-
-
-                        }
-                        conn.Close();
-                        conn.Dispose();
-                        return resp;
-
                     }
-
+                }
+                else
+                {
+                    resp = false; // Fallita la conversione decimal dei litri o dell'importo
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!File.Exists(LogFile))
+                {
+                    using (StreamWriter sw = File.CreateText(LogFile)) { }
                 }
 
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine("Sigla:" + auto.progressivo + ", msg: " + msg + " - " + ex.Message + " - Errore in inserimento tabella gestione auto");
+                    sw.Close();
+                }
 
-
-            }
-            catch (Exception)
-            {
                 resp = false;
-
-
-
             }
-            return resp;
 
+            return resp;
         }
+
+        // Helper per semplificare la scrittura del Log ed evitare ridondanze
+        private void LogMessage(string message)
+        {
+            try
+            {
+                using (StreamWriter sw = File.AppendText(LogFile))
+                {
+                    sw.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}");
+                }
+            }
+            catch { /* Gestione silenziosa errori di log */ }
+        }
+        //public Boolean InsGestioneAuto(GestAuto auto, out Int32 idN )
+        //{
+        //    bool resp = true;
+        //    string sql = String.Empty;
+        //    string testoSql = string.Empty;
+        //    idN = 0;
+        //    try
+        //    {
+        //        string inputlitri = auto.litri.ToString();
+        //        string inputEuro = auto.euro.ToString();
+        //        decimal importoFloat;
+        //        decimal litriFloat;
+        //        // 1. Definisci la cultura di parsing (italiana: virgola come decimale)
+        //        CultureInfo culturaItaliana = new CultureInfo("it-IT");
+
+        //        // 2. Pulizia: Rimuovi il simbolo € e spazi, poi tenta la conversione C#
+        //        if (decimal.TryParse(
+        //                inputEuro.Replace("€", "").Trim(),
+        //                NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
+        //                culturaItaliana,
+        //                out importoFloat) &&
+
+
+        //                decimal.TryParse(
+        //                inputlitri.Replace("€", "").Trim(),
+        //                NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
+        //                culturaItaliana,
+        //                out litriFloat))
+
+        //        {
+        //            decimal valoreArrotondatoE = Math.Round(importoFloat, 2);
+        //            decimal valoreArrotondatoL = Math.Round(litriFloat, 2);
+
+
+        //            sql = "IF NOT EXISTS (SELECT 1 FROM gestioneauto WHERE progressivo = '" + @auto.progressivo + "') " +
+        //                           "BEGIN " +
+        //                     // 2. SE NON ESISTE -> ESEGUI INSERT
+        //                     "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota,progressivo)" +
+        //                    " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante +
+        //                    "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "',"
+        //                    + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "','" + auto.progressivo + "')" +
+
+        //                             // RESTITUISCE IL NUOVO ID GENERATO
+        //                             "SELECT SCOPE_IDENTITY(); " +
+        //      "END " +
+        //      "ELSE " +
+        //      "BEGIN " +
+        //          // 3. SE ESISTE GIÀ -> RESTITUISCE -1
+        //          "SELECT -1; " +
+        //      "END";
+
+
+        //            using (SqlConnection conn = new SqlConnection(ConnString))
+        //            {
+        //                conn.Open();
+
+        //                SqlCommand command = conn.CreateCommand();
+        //                command.Parameters.Add("@valore1", SqlDbType.Float).Value = (double)valoreArrotondatoE;
+        //                command.Parameters.Add("@valore", SqlDbType.Float).Value = (double)valoreArrotondatoL;
+
+        //                try
+        //                {
+        //                    command.CommandText = sql;
+        //                    testoSql = "gestioneauto";
+        //                    int res = command.ExecuteNonQuery();
+        //                    idN = Convert.ToInt32(res);
+        //                    if (idN==-1)
+        //                    {
+        //                        resp = false;
+        //                    }
+        //                    if (!File.Exists(LogFile))
+        //                    {
+        //                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+        //                    }
+
+        //                    using (StreamWriter sw = File.AppendText(LogFile))
+        //                    {
+        //                        sw.WriteLine("Sql:" + sql );
+        //                        sw.Close();
+        //                    }
+        //                }
+
+        //                catch (Exception ex)
+        //                {
+        //                    if (!File.Exists(LogFile))
+        //                    {
+        //                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+        //                    }
+
+        //                    using (StreamWriter sw = File.AppendText(LogFile))
+        //                    {
+        //                        sw.WriteLine("Sigla:" + auto.progressivo + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
+        //                        sw.Close();
+        //                    }
+
+        //                    resp = false;
+
+
+        //                }
+        //                conn.Close();
+        //                conn.Dispose();
+        //                return resp;
+
+        //            }
+
+        //        }
+
+
+
+        //    }
+        //    catch (Exception)
+        //    {
+        //        resp = false;
+
+
+
+        //    }
+        //    return resp;
+
+        //}
         public Boolean InsSchedaDipendente(SchedaDipendenteClass scheda)
         {
             Boolean resp = true;
@@ -4729,7 +4869,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             string meseS = GetNumeroMeseByText(mese);
             DateTime dataInizio = new DateTime(anno, System.Convert.ToInt32(meseS), 1);
             DateTime dataFine = new DateTime(anno, System.Convert.ToInt32(meseS), DateTime.DaysInMonth(anno, System.Convert.ToInt32(meseS)));
- //           sql = "SELECT count(*) as num FROM interrogatori where mese ='" + mese + "' AND anno =" + anno;
+            //           sql = "SELECT count(*) as num FROM interrogatori where mese ='" + mese + "' AND anno =" + anno;
 
 
             sql = "SELECT SUM((CASE WHEN Nominativo1 IS NOT NULL AND TRIM(Nominativo1) <> '' THEN 1 ELSE 0 END) +" +
