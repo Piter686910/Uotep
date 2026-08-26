@@ -48,5 +48,8 @@ namespace Uotep.Classi
         //I 22/05/2026 protocollo uscita
         public String rif_Prot_Uscita = string.Empty;
         //F 22/05/2026 protocollo uscita
+        //I 26/08/2026 cartellina patrimonio
+        public String cartellina = string.Empty;
+        //F 26/08/2026 cartellina patrimonio
     }
 }

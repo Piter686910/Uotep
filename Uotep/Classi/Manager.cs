@@ -1464,6 +1464,70 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
+
+        /// <summary>
+        /// ricerca per cartellina e quartiere
+        /// </summary>
+        /// <param name="cartellina"></param>
+        /// <param name="quartiere"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public DataTable getListCartellina(string cartellina, string quartiere, out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = string.Empty;
+            if (!String.IsNullOrWhiteSpace (quartiere))
+            {
+
+                 sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                    " where cartellina = '" + cartellina + "' and quartiere = '" + quartiere + "'  order by dataarrivo desc OPTION (RECOMPILE)";
+            }
+            else
+            {
+                 sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                    " where cartellina = '" + cartellina + "' order by dataarrivo desc OPTION (RECOMPILE)";
+            }
+            //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    return tb = FillTable(sql, conn, out msg);
+                }
+        }
+
+        /// <summary>
+        /// ricerca per BU
+        /// </summary>
+        /// <param name="bu"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public DataTable getListBu(string bu, out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                   " where bu = '" + bu + "' order by dataarrivo desc OPTION (RECOMPILE)";
+            //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        /// <summary>
+        /// ricerca per codice edificio
+        /// </summary>
+        /// <param name="codEd"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public DataTable getListCodEdificio(string codEd, out string msg)
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                   " where CodiceEdificio = '" + codEd + "' order by dataarrivo desc OPTION (RECOMPILE)";
+            //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
         public DataTable GetFileByOperatore(string matricola)
         {
             string sql = string.Empty;
@@ -6426,7 +6490,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
             "Nominativo, Indirizzo, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, " +
             "Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, macro_area, UlterioreTipoAtto, bu, codiceEdificio," +
-            "NumProtRicStessoCarico,DataDelega,GgDelega" +
+            "NumProtRicStessoCarico,DataDelega,GgDelega,cartellina" +
 
         ") " +
         "VALUES ('" +
@@ -6461,7 +6525,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
             @p.codiceEdificio.Replace("'", "''") + "'," +
             @p.NumProtRicStessoCarico + ",'" +
             @p.dataDelega + "'," +
-            @p.ggDelega +
+            @p.ggDelega + ",'" +
+            @p.cartellina + "'"+
         "); " +
 
         // RESTITUISCE IL NUOVO ID GENERATO
@@ -7913,6 +7978,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
                     "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
+                    ",cartellina = '" + @p.cartellina + "'" +
                     ",Rif_Prot_Uscita = '" + @p.rif_Prot_Uscita.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
                 //accoda senza ripetere quelli esistenti    
@@ -7922,11 +7988,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
  "INSERT INTO principalestorico (" +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita) " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
  "SELECT " +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
  "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {

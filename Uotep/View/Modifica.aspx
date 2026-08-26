@@ -745,14 +745,11 @@
                             <asp:TextBox ID="txPratica" runat="server" CssClass="form-control mb-3" MaxLength="50" />
 
                         </div>
-                        <div class="form-group mb-3" id="divbu" runat="server" style="display: none;">
-                            <div class="form-group mb-3">
-                                <label for="txtBU">BU</label>
-                                <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" />
-                            </div>
-
-
+                        <div class="form-group mb-3">
+                            <label for="txtCartellina">Cartellina Patrimonio</label>
+                            <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" />
                         </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
@@ -787,10 +784,13 @@
 
                             <%--<asp:Button ID="Add" Text="+" runat="server" ToolTip="Aggiungi accertatore 2" CssClass="btn btn-primary mt-3" OnClick="Add_Click" />--%>
                         </div>
-                        <div class="form-group mb-3" id="divcd" runat="server" style="display: none;">
-                            <label for="txtCodEdificio">Codice Edificio</label>
-                            <asp:TextBox ID="txtCodEdificio" runat="server" CssClass="form-control" />
+                        <div class="form-group mb-3" id="divbu" runat="server" style="display: none;">
+                            <div class="form-group mb-3">
+                                <label for="txtBU">BU</label>
+                                <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" />
+                            </div>
                         </div>
+
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
@@ -803,7 +803,10 @@
                             <label for="txtDataCarico">Data Carico</label>
                             <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3 data-auto" ClientIDMode="Static" />
                         </div>
-
+                        <div class="form-group mb-3" id="divcd" runat="server" style="display: none;">
+                            <label for="txtCodEdificio">Codice Edificio</label>
+                            <asp:TextBox ID="txtCodEdificio" runat="server" CssClass="form-control" />
+                        </div>
                     </div>
 
 
@@ -1437,11 +1440,11 @@
                 </div>
             </div>
 
-    </div>
-    <script type="text/javascript">
-        // Funzione per gestire la visibilità
-        function gestisciVisibilita() {
-            var divag = document.getElementById('<%= divAg.ClientID %>');
+        </div>
+        <script type="text/javascript">
+            // Funzione per gestire la visibilità
+            function gestisciVisibilita() {
+                var divag = document.getElementById('<%= divAg.ClientID %>');
             var divbu = document.getElementById('<%= divbu.ClientID %>');
             var divcd = document.getElementById('<%= divcd.ClientID %>');
            <%-- var txtgiudice = document.getElementById('<%= txtGiudice.ClientID %>');
@@ -1450,173 +1453,173 @@
             // Recupera gli altri elementi, verificando sempre
             var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
 
-            // mostrare/nascondere
-            if (ddl.value === 'AG') {
-                divag.style.display = 'block';
-            } else {
-                divag.style.display = 'none';
-            }
-            if (ddl.value === 'TP') {
-                //txtgiudice.value = '';
-                //txtprocpen.value = '';
-                //ddlProvAg.selectedIndex = 0;
-                divbu.style.display = 'block';
-                divcd.style.display = 'block';
-            } else {
-                divbu.style.display = 'none';
-                divcd.style.display = 'none';
-            }
-        }
-        //al caricamento della pagian effettua il primno controllo
-        document.addEventListener('DOMContentLoaded', gestisciVisibilita);
-        var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
-        if (ddl) {
-            ddl.onchange = gestisciVisibilita;
-        }
-        ///////////////
-        var allOptions = [];
-
-        // Funzione per caricare i dati (chiamata solo quando serve)
-        function caricaOpzioni() {
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-
-            if (!ddl) {
-                console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
-                return;
-            }
-
-            var options = ddl.options;
-            allOptions = []; // Resetta
-
-            for (var i = 0; i < options.length; i++) {
-                // Carica tutto tranne i valori vuoti
-                if (options[i].value !== "" && options[i].value !== "0") {
-                    allOptions.push({ text: options[i].text, value: options[i].value });
+                // mostrare/nascondere
+                if (ddl.value === 'AG') {
+                    divag.style.display = 'block';
+                } else {
+                    divag.style.display = 'none';
+                }
+                if (ddl.value === 'TP') {
+                    //txtgiudice.value = '';
+                    //txtprocpen.value = '';
+                    //ddlProvAg.selectedIndex = 0;
+                    divbu.style.display = 'block';
+                    divcd.style.display = 'block';
+                } else {
+                    divbu.style.display = 'none';
+                    divcd.style.display = 'none';
                 }
             }
-            console.log("Opzioni caricate in memoria: " + allOptions.length);
-        }
-
-        // Carica i dati appena la pagina è pronta
-        document.addEventListener("DOMContentLoaded", caricaOpzioni);
-        // Funzione Filtro
-        function filterAndHighlight(e) {
-            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
-
-            var listDiv = document.getElementById("suggestionsListTipoAtto");
-            //var filter = input.value.toUpperCase();
-            var filter = (input.value || "").toUpperCase();
-
-            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-            if (allOptions.length === 0) {
-                caricaOpzioni();
+            //al caricamento della pagian effettua il primno controllo
+            document.addEventListener('DOMContentLoaded', gestisciVisibilita);
+            var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
+            if (ddl) {
+                ddl.onchange = gestisciVisibilita;
             }
+            ///////////////
+            var allOptions = [];
 
-            // Tasto INVIO (13)
-            if (e.keyCode === 13) {
-                var activeItem = listDiv.querySelector(".active");
-                if (activeItem) {
-                    // Simula il click
-                    activeItem.click();
-                    e.preventDefault(); // Ferma il postback del form se presente
+            // Funzione per caricare i dati (chiamata solo quando serve)
+            function caricaOpzioni() {
+                var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+
+                if (!ddl) {
+                    console.error("Errore: DropDownList 'DdlTipoAtto' non trovata!");
+                    return;
                 }
-                return;
-            }
 
-            listDiv.innerHTML = "";
+                var options = ddl.options;
+                allOptions = []; // Resetta
 
-            // Se input vuoto, nascondi
-            if (filter.length === 0) {
-                listDiv.style.display = "none";
-                return;
-            }
-
-            var foundCount = 0;
-
-            for (var i = 0; i < allOptions.length; i++) {
-                var item = allOptions[i];
-
-                // LOGICA DI FILTRO (Contiene il testo?)
-                if (item.text.toUpperCase().indexOf(filter) > -1) {
-
-                    var div = document.createElement("div");
-                    div.className = "suggestion-item";
-                    div.innerText = item.text;
-
-                    // Usiamo attributi data- per passare il valore
-                    div.setAttribute("data-val", item.value);
-
-                    // Evidenzia il primo risultato
-                    if (foundCount === 0) {
-                        div.classList.add("active");
+                for (var i = 0; i < options.length; i++) {
+                    // Carica tutto tranne i valori vuoti
+                    if (options[i].value !== "" && options[i].value !== "0") {
+                        allOptions.push({ text: options[i].text, value: options[i].value });
                     }
+                }
+                console.log("Opzioni caricate in memoria: " + allOptions.length);
+            }
 
-                    // Click Mouse
-                    div.onclick = function () {
-                        seleziona(this.innerText, this.getAttribute("data-val"));
-                    };
+            // Carica i dati appena la pagina è pronta
+            document.addEventListener("DOMContentLoaded", caricaOpzioni);
+            // Funzione Filtro
+            function filterAndHighlight(e) {
+                var input = document.getElementById('<%= txtSearchAtto.ClientID %>');
 
-                    listDiv.appendChild(div);
-                    foundCount++;
+                var listDiv = document.getElementById("suggestionsListTipoAtto");
+                //var filter = input.value.toUpperCase();
+                var filter = (input.value || "").toUpperCase();
+
+                // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+                if (allOptions.length === 0) {
+                    caricaOpzioni();
+                }
+
+                // Tasto INVIO (13)
+                if (e.keyCode === 13) {
+                    var activeItem = listDiv.querySelector(".active");
+                    if (activeItem) {
+                        // Simula il click
+                        activeItem.click();
+                        e.preventDefault(); // Ferma il postback del form se presente
+                    }
+                    return;
+                }
+
+                listDiv.innerHTML = "";
+
+                // Se input vuoto, nascondi
+                if (filter.length === 0) {
+                    listDiv.style.display = "none";
+                    return;
+                }
+
+                var foundCount = 0;
+
+                for (var i = 0; i < allOptions.length; i++) {
+                    var item = allOptions[i];
+
+                    // LOGICA DI FILTRO (Contiene il testo?)
+                    if (item.text.toUpperCase().indexOf(filter) > -1) {
+
+                        var div = document.createElement("div");
+                        div.className = "suggestion-item";
+                        div.innerText = item.text;
+
+                        // Usiamo attributi data- per passare il valore
+                        div.setAttribute("data-val", item.value);
+
+                        // Evidenzia il primo risultato
+                        if (foundCount === 0) {
+                            div.classList.add("active");
+                        }
+
+                        // Click Mouse
+                        div.onclick = function () {
+                            seleziona(this.innerText, this.getAttribute("data-val"));
+                        };
+
+                        listDiv.appendChild(div);
+                        foundCount++;
+                    }
+                }
+
+                console.log("Risultati trovati: " + foundCount);
+
+                if (foundCount > 0) {
+                    listDiv.style.display = "block";
+                } else {
+                    listDiv.style.display = "none";
                 }
             }
+            // Funzione Filtro
 
-            console.log("Risultati trovati: " + foundCount);
 
-            if (foundCount > 0) {
-                listDiv.style.display = "block";
-            } else {
+            function seleziona(text, value) {
+                console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+                var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
+            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+                var listDiv = document.getElementById("suggestionsListTipoAtto");
+
+                input.value = text;
+                if (ddl) ddl.value = value;
                 listDiv.style.display = "none";
             }
-        }
-        // Funzione Filtro
 
-
-        function seleziona(text, value) {
-            console.log("Selezionato: " + text + " (ID: " + value + ")");
-
-            var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListTipoAtto");
-
-            input.value = text;
-            if (ddl) ddl.value = value;
-            listDiv.style.display = "none";
-        }
-
-        // Chiudi se clicchi fuori
-        document.addEventListener('click', function (e) {
-            if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
+            // Chiudi se clicchi fuori
+            document.addEventListener('click', function (e) {
+                if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
                 document.getElementById("suggestionsListTipoAtto").style.display = "none";
             }
         });
 
-        // Funzione per caricare i dati (chiamata solo quando serve)
-        function caricaOpzioniOperatore() {
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+            // Funzione per caricare i dati (chiamata solo quando serve)
+            function caricaOpzioniOperatore() {
+                var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
 
-            if (!ddl) {
-                console.error("Errore: DropDownList 'ddlOperatore' non trovata!");
-                return;
-            }
-
-            var optionsOp = ddl.options;
-            allOptionsOp = []; // Resetta
-
-            for (var i = 0; i < optionsOp.length; i++) {
-                // Carica tutto tranne i valori vuoti
-                if (optionsOp[i].value !== "" && optionsOp[i].value !== "0") {
-                    allOptionsOp.push({ text: optionsOp[i].text, value: optionsOp[i].value });
+                if (!ddl) {
+                    console.error("Errore: DropDownList 'ddlOperatore' non trovata!");
+                    return;
                 }
+
+                var optionsOp = ddl.options;
+                allOptionsOp = []; // Resetta
+
+                for (var i = 0; i < optionsOp.length; i++) {
+                    // Carica tutto tranne i valori vuoti
+                    if (optionsOp[i].value !== "" && optionsOp[i].value !== "0") {
+                        allOptionsOp.push({ text: optionsOp[i].text, value: optionsOp[i].value });
+                    }
+                }
+                console.log("Opzioni caricate in memoria: " + allOptionsOp.length);
             }
-            console.log("Opzioni caricate in memoria: " + allOptionsOp.length);
-        }
 
-        // Carica i dati appena la pagina è pronta
-        document.addEventListener("DOMContentLoaded", caricaOpzioniOperatore);
+            // Carica i dati appena la pagina è pronta
+            document.addEventListener("DOMContentLoaded", caricaOpzioniOperatore);
 
-        function filterAndHighlightOp(e) {
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            function filterAndHighlightOp(e) {
+                var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
             var listDiv = document.getElementById("suggestionsListoperatore");
             var filter = (input.value || "").toUpperCase();
 
@@ -1640,106 +1643,106 @@
             // Se input vuoto, svuota anche la DDL nascosta e nascondi la lista
             if (filter.length === 0) {
                 var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
-                if (ddl) ddl.value = "";
-                listDiv.style.display = "none";
-                return;
-            }
+                    if (ddl) ddl.value = "";
+                    listDiv.style.display = "none";
+                    return;
+                }
 
-            var foundCount = 0;
+                var foundCount = 0;
 
-            for (var i = 0; i < allOptionsOp.length; i++) {
-                var item = allOptionsOp[i];
+                for (var i = 0; i < allOptionsOp.length; i++) {
+                    var item = allOptionsOp[i];
 
-                // LOGICA DI FILTRO (Contiene il testo?)
-                if (item.text.toUpperCase().indexOf(filter) > -1) {
+                    // LOGICA DI FILTRO (Contiene il testo?)
+                    if (item.text.toUpperCase().indexOf(filter) > -1) {
 
-                    var div = document.createElement("div");
-                    div.className = "suggestion-item";
-                    div.innerText = item.text;
-                    div.setAttribute("data-val", item.value);
+                        var div = document.createElement("div");
+                        div.className = "suggestion-item";
+                        div.innerText = item.text;
+                        div.setAttribute("data-val", item.value);
 
-                    // Evidenzia il primo risultato per permettere l'invio rapido
-                    if (foundCount === 0) {
-                        div.classList.add("active");
+                        // Evidenzia il primo risultato per permettere l'invio rapido
+                        if (foundCount === 0) {
+                            div.classList.add("active");
+                        }
+
+                        // mouse down, evita che al primo click sulla selezione scatti l'alert
+                        div.onmousedown = function () {
+                            e.preventDefault();
+                            selezionaOperatore(this.innerText, this.getAttribute("data-val"));
+                        };
+
+                        listDiv.appendChild(div);
+                        foundCount++;
                     }
+                }
 
-                    // mouse down, evita che al primo click sulla selezione scatti l'alert
-                    div.onmousedown = function () {
-                        e.preventDefault();
-                        selezionaOperatore(this.innerText, this.getAttribute("data-val"));
-                    };
-
-                    listDiv.appendChild(div);
-                    foundCount++;
+                if (foundCount > 0) {
+                    listDiv.style.display = "block";
+                } else {
+                    listDiv.style.display = "none";
                 }
             }
+            var eSelezioneValida = false; //evita che al primo click sulla selezione scatti l'alert
 
-            if (foundCount > 0) {
-                listDiv.style.display = "block";
-            } else {
+            function selezionaOperatore(text, value) {
+                console.log("Selezionato: " + text + " (ID: " + value + ")");
+
+                var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                var listDiv = document.getElementById("suggestionsListoperatore");
+
+                input.value = text;
+                if (ddl) ddl.value = value;
+                eSelezioneValida = true;
                 listDiv.style.display = "none";
             }
-        }
-        var eSelezioneValida = false; //evita che al primo click sulla selezione scatti l'alert
 
-        function selezionaOperatore(text, value) {
-            console.log("Selezionato: " + text + " (ID: " + value + ")");
+            // -------------------------------------------------------------
+            // NUOVA FUNZIONE: Valida l'input quando l'utente esce dal campo (blur)
+            // -------------------------------------------------------------
+            function validaOperatoreOnBlur() {
 
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListoperatore");
-
-            input.value = text;
-            if (ddl) ddl.value = value;
-            eSelezioneValida = true;
-            listDiv.style.display = "none";
-        }
-
-        // -------------------------------------------------------------
-        // NUOVA FUNZIONE: Valida l'input quando l'utente esce dal campo (blur)
-        // -------------------------------------------------------------
-        function validaOperatoreOnBlur() {
-
-            // Se l'utente ha appena cliccato su un elemento, ignoriamo il controllo di blur
-            if (eSelezioneValida) {
-                eSelezioneValida = false; // Resettiamo per le future modifiche
-                return;
-            }
-
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-    var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
-            var testoDigitato = (input.value || "").trim().toUpperCase();
-
-            if (testoDigitato === "") {
-                if (ddl) ddl.value = "";
-                return;
-            }
-
-            var trovato = false;
-
-            // Cerca una corrispondenza ESATTA tra il testo scritto e le opzioni
-            for (var i = 0; i < allOptionsOp.length; i++) {
-                if (allOptionsOp[i].text.trim().toUpperCase() === testoDigitato) {
-                    // Trovato! Assicuriamoci che la DDL e l'Input abbiano il valore corretto
-                    selezionaOperatore(allOptionsOp[i].text, allOptionsOp[i].value);
-                    trovato = true;
-                    break;
+                // Se l'utente ha appena cliccato su un elemento, ignoriamo il controllo di blur
+                if (eSelezioneValida) {
+                    eSelezioneValida = false; // Resettiamo per le future modifiche
+                    return;
                 }
-            }
 
-            // Se l'utente ha scritto del testo non presente nell'elenco (o parziale senza cliccare)
-            if (!trovato) {
-                alert("Attenzione: Selezionare un operatore valido presente nell'elenco.");
-                input.value = "";
-                if (ddl) ddl.value = "";
+                var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                var testoDigitato = (input.value || "").trim().toUpperCase();
+
+                if (testoDigitato === "") {
+                    if (ddl) ddl.value = "";
+                    return;
+                }
+
+                var trovato = false;
+
+                // Cerca una corrispondenza ESATTA tra il testo scritto e le opzioni
+                for (var i = 0; i < allOptionsOp.length; i++) {
+                    if (allOptionsOp[i].text.trim().toUpperCase() === testoDigitato) {
+                        // Trovato! Assicuriamoci che la DDL e l'Input abbiano il valore corretto
+                        selezionaOperatore(allOptionsOp[i].text, allOptionsOp[i].value);
+                        trovato = true;
+                        break;
+                    }
+                }
+
+                // Se l'utente ha scritto del testo non presente nell'elenco (o parziale senza cliccare)
+                if (!trovato) {
+                    alert("Attenzione: Selezionare un operatore valido presente nell'elenco.");
+                    input.value = "";
+                    if (ddl) ddl.value = "";
+                }
+
             }
-            
-        }
-        // -------------------------------------------------------------
-        // Gestione della chiusura del popup se si clicca fuori dall'input/lista
-        // -------------------------------------------------------------
-        document.addEventListener('click', function (e) {
-            var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
+            // -------------------------------------------------------------
+            // Gestione della chiusura del popup se si clicca fuori dall'input/lista
+            // -------------------------------------------------------------
+            document.addEventListener('click', function (e) {
+                var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
             var listDiv = document.getElementById("suggestionsListoperatore");
 
             if (input && listDiv && e.target !== input && !listDiv.contains(e.target)) {
@@ -1747,36 +1750,36 @@
             }
         });
 
-        // Chiudi se clicchi fuori
-        document.addEventListener('click', function (e) {
-            if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
+            // Chiudi se clicchi fuori
+            document.addEventListener('click', function (e) {
+                if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
                 suggestionsListoperatore
             }
         });
-        function contaPuntiVirgola() {
-            var sorgente = document.getElementById('<%= txtRifProtGen.ClientID %>');
+            function contaPuntiVirgola() {
+                var sorgente = document.getElementById('<%= txtRifProtGen.ClientID %>');
             var destinazione = document.getElementById('<%= txtNumProtRicStessoCarico.ClientID %>');
 
-            if (sorgente && destinazione) {
-                var testo = sorgente.value.trim();
+                if (sorgente && destinazione) {
+                    var testo = sorgente.value.trim();
 
-                // Se il campo è vuoto, il conteggio è 0
-                if (testo === "") {
-                    destinazione.value = 0;
-                } else {
-                    // Dividiamo per ";"
-                    // Esempio: "A;B" -> ["A", "B"] -> lunghezza 2
-                    // Esempio: "A"   -> ["A"]      -> lunghezza 1
-                    var parti = testo.split(";");
+                    // Se il campo è vuoto, il conteggio è 0
+                    if (testo === "") {
+                        destinazione.value = 0;
+                    } else {
+                        // Dividiamo per ";"
+                        // Esempio: "A;B" -> ["A", "B"] -> lunghezza 2
+                        // Esempio: "A"   -> ["A"]      -> lunghezza 1
+                        var parti = testo.split(";");
 
-                    // Opzionale: filtriamo eventuali spazi vuoti se l'utente mette ;; per errore
-                    // var conteggio = parti.filter(function(x) { return x.trim() !== "" }).length;
+                        // Opzionale: filtriamo eventuali spazi vuoti se l'utente mette ;; per errore
+                        // var conteggio = parti.filter(function(x) { return x.trim() !== "" }).length;
 
-                    var conteggio = parti.length;
-                    destinazione.value = conteggio;
+                        var conteggio = parti.length;
+                        destinazione.value = conteggio;
+                    }
                 }
             }
-        }
-        //////////////
-    </script>
+            //////////////
+        </script>
 </asp:Content>

@@ -306,8 +306,10 @@ namespace Uotep
             //I 22/05/2026 protocollo uscita
             txtProtUscita.Text = pratica.Rows[0]["Rif_Prot_Uscita"].ToString();
             //F 22/05/2026 protocollo uscita
-            
 
+            //I mod 26/08/2026 cartellina patrimonio
+            txtCartellina.Text = pratica.Rows[0]["cartellina"].ToString();
+            //F mod 26/08/2026 cartellina patrimonio
 
         }
         private void CaricaDLL()
@@ -682,6 +684,10 @@ namespace Uotep
                     p.rif_Prot_Uscita = txtProtUscita.Text;
                     //F 22/05/2026 protocollo uscita
 
+                    //I mod 26/08/2026 cartellina patrimonio
+                    p.cartellina = string.IsNullOrWhiteSpace(txtCartellina.Text) ? String.Empty : txtCartellina.Text.Trim();
+                    //F mod 26/08/2026 cartellina patrimonio
+
                     // id proveniente dalla selezione della pratica
                     int ID = System.Convert.ToInt32(Hid.Value);
                     SiteMaster myMaster = this.Master as SiteMaster;
@@ -740,6 +746,7 @@ namespace Uotep
         }
         private void Pulisci()
         {
+            txtCartellina.Text = string.Empty;
             txtEsito.Text = string.Empty;
             HfEsito.Value = string.Empty;
             txtQuartiere.Text = string.Empty;

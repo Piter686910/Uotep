@@ -415,7 +415,7 @@
                     <div class="col-md-3">
                         <div class="form-group mb-3">
                             <label for="txtProt">Nr Carico</label>
-                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control" ForeColor="Red" Enabled="false" Font-Bold="true" ClientIDMode="Static"/>
+                            <asp:TextBox ID="txtProt" runat="server" CssClass="form-control" ForeColor="Red" Enabled="false" Font-Bold="true" ClientIDMode="Static" />
                         </div>
                     </div>
 
@@ -525,17 +525,33 @@
 
 
                     </div>
-
                     <div class="col-md-4">
+                        <div class="row">
+                            <!-- Prima TextBox -->
+                            <div class="col-6">
+                                <div class="form-group mb-3" style="margin-left: -10px">
+                                    <label for="txPratica">Pratica Edilizia</label>
+                                    <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
+                                </div>
+                            </div>
+
+                            <!-- Nuova TextBox -->
+                            <div class="col-6">
+                                <div class="form-group mb-3" style="margin-left: -10px">
+                                    <label for="txtCartellina">Cartellina Patrimonio</label>
+                                    <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%--<div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txPratica">Pratica</label>
                             <asp:TextBox ID="txPratica" runat="server" CssClass="form-control" />
-                            <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" ControlToValidate="txPratica" ErrorMessage="* Solo numeri" ForeColor="Red" ValidationExpression="\d{1,15}" Display="Dynamic" />--%>
-
                         </div>
 
 
-                    </div>
+                    </div>--%>
                     <div class="col-md-4">
                         <div class="form-group mb-3">
                             <label for="DdlMacroArea">Area Competenza</label>
@@ -566,7 +582,7 @@
 
                     </div>
                     <div class="col-md-4" id="divbu" runat="server" style="display: none;">
-                        <div class="form-group mb-3" style="margin-left: -25px">
+                        <div class="form-group mb-3" >
                             <label for="txtBU">BU</label>
                             <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" />
                         </div>
@@ -732,7 +748,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
-                    <asp:Button ID="Decreta" runat="server" CssClass="btn btn-primary" Text="Decreta"  data-toggle="modal" data-target="#ModalDecretazione" data-dismiss="modal"/>
+                    <asp:Button ID="Decreta" runat="server" CssClass="btn btn-primary" Text="Decreta" data-toggle="modal" data-target="#ModalDecretazione" data-dismiss="modal" />
                     <!-- Nel pulsante "Sì" dentro il primo popup OnClick="Decreta_Click"-->
                     <%--<button type="button" CssClass="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#ModalDecretazione">Decreta</button>--%>
                     <asp:Button ID="Button4" runat="server" class="btn btn-secondary" Text="Chiudi" OnClick="chiudipopupModalRicDecretazione_Click" />
@@ -1223,27 +1239,27 @@
                 // 1. txtPraticaDecr.Text = txtProt.Text;
                 // Prendiamo il valore dall'ID del textbox di origine e lo copiamo in quello di destinazione
                 var protocollo = $('#<%= txtProt.ClientID %>').val();
-        $('#<%= txtPraticaDecr.ClientID %>').val(protocollo);
+                $('#<%= txtPraticaDecr.ClientID %>').val(protocollo);
 
-        // 2. txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
-        // Calcoliamo la data di oggi in formato italiano direttamente col browser
-        var oggi = new Date();
-        var dd = String(oggi.getDate()).padStart(2, '0');
-        var mm = String(oggi.getMonth() + 1).padStart(2, '0'); // Gennaio è 0!
-        var yyyy = oggi.getFullYear();
-        var dataFormattata = dd + '/' + mm + '/' + yyyy;
+                // 2. txtDataDecretazione.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                // Calcoliamo la data di oggi in formato italiano direttamente col browser
+                var oggi = new Date();
+                var dd = String(oggi.getDate()).padStart(2, '0');
+                var mm = String(oggi.getMonth() + 1).padStart(2, '0'); // Gennaio è 0!
+                var yyyy = oggi.getFullYear();
+                var dataFormattata = dd + '/' + mm + '/' + yyyy;
 
-        $('#<%= txtDataDecretazione.ClientID %>').val(dataFormattata);
+                $('#<%= txtDataDecretazione.ClientID %>').val(dataFormattata);
 
-        // 3. txtDecretante.Text = operatore...
-        // Recuperiamo il nome dell'operatore che C# ha stampato nella Session
-        var nomeOperatore = '<%= Session["NomeOperatore"] %>';
-        if (nomeOperatore !== '') {
-            $('#<%= txtDecretante.ClientID %>').val(nomeOperatore);
-        }
+                // 3. txtDecretante.Text = operatore...
+                // Recuperiamo il nome dell'operatore che C# ha stampato nella Session
+                var nomeOperatore = '<%= Session["NomeOperatore"] %>';
+                if (nomeOperatore !== '') {
+                    $('#<%= txtDecretante.ClientID %>').val(nomeOperatore);
+                }
 
-    });
+            });
 
-});
+        });
     </script>
 </asp:Content>

@@ -107,6 +107,9 @@ namespace Uotep
                     txtQuartiere.Text = pratica.Rows[0]["Quartiere"].ToString();
                     txtNominativo.Text = pratica.Rows[0]["Nominativo"].ToString();
                     txPratica.Text = pratica.Rows[0]["nr_Pratica"].ToString();
+                    //I mod 26/08/2026 cartellina patrimonio
+                    txtCartellina.Text = pratica.Rows[0]["cartellina"].ToString();
+                    //F mod 26/08/2026 cartellina patrimonio
                     if (!string.IsNullOrWhiteSpace(pratica.Rows[0]["DataCarico"].ToString()))
                     {
 
@@ -553,6 +556,10 @@ namespace Uotep
                     //F 23/04/2026 controllo deleghe
                     stat.mese = mese;
                     stat.anno = DateTime.Now.Year;
+
+                    //I mod 26/08/2026 cartellina patrimonio
+                    p.cartellina= string.IsNullOrWhiteSpace(txtCartellina.Text) ? String.Empty : txtCartellina.Text.Trim();
+                    //F mod 26/08/2026 cartellina patrimonio
                     Int32 idN = 0;
                     Boolean ins = mn.InsCarico(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
 
@@ -675,6 +682,7 @@ namespace Uotep
             txtDataDelega.Text= String.Empty;
             txtGgDelega.Text = String.Empty;
             //F 23/04/2026 controllo deleghe
+            txtCartellina.Text = string.Empty;
         }
         //popup giudice
         //protected void apripopupGiudice_Click(object sender, EventArgs e)

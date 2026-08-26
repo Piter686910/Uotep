@@ -71,9 +71,11 @@
                         <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btNote" runat="server" OnClick="btNote_Click" Text="Note" ToolTip="Ricerca Note" CssClass="btn btn-primary mx-2" />
+                        
 
                     </p>
                     <p>
+                        <asp:Button ID="btBuCodEd" runat="server" OnClick="btBuCodEd_Click" Text="Cod. BU/Edificio" ToolTip="Ricerca Cod. BU/Edificio" CssClass="btn btn-primary mx-2" />
                         <asp:Button ID="btcarico" runat="server" OnClick="btcarico_Click" Text="Stampa Carico" ToolTip="Stampa Carico" CssClass="btn btn-primary mx-2" />
                     </p>
                 </div>
@@ -148,8 +150,17 @@
 
                     <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
 
-                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica" autofocus="" />
+                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica Edilizia" autofocus="" />
+                    <%-- I mod 26/08/2026 ricerca per numero cartellina patrimonio --%>
+                    <asp:Label ID="Label18" runat="server" Text="Nr. Cartellina" CssClass="form-label d-block mb-2"></asp:Label>
 
+                    <asp:TextBox ID="txtCartellinaRic" runat="server" CssClass="form-control" placeholder="Nr. Cartellina Patrimonio" />
+                    <asp:Label ID="Label20" runat="server" Text="Quartiere" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtQuart" runat="server" CssClass="form-control" placeholder="Quartiere" />
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtQuart" ErrorMessage="* Inserire Quartiere" ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
+
+                    <%-- F mod 26/08/2026 ricerca per numero cartellina patrimonio --%>
                     <div style="margin-left: 1px!important; margin-top: 30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
@@ -252,7 +263,7 @@
                     <asp:TextBox ID="txtCapoArea" runat="server" CssClass="form-control" placeholder="Responsabile" autofocus="" />
 
                     <label cssclass="form-label d-block mb-2" for="DdlSigla">Sigla</label>
-                    <asp:DropDownList ID="DdlSigla" runat="server" AutoPostBack="true" CssClass="form-control" >
+                    <asp:DropDownList ID="DdlSigla" runat="server" AutoPostBack="true" CssClass="form-control">
                         <asp:ListItem>AG</asp:ListItem>
                         <asp:ListItem>ED</asp:ListItem>
                         <asp:ListItem>TP</asp:ListItem>
@@ -276,7 +287,21 @@
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
                 </div>
+                <%-- DIV RICERCA BU / CODICE EDIFICIO --%>
+                <div id="DivBuCodEd" runat="server" class="form-group text-center" style="text-align: left !important">
 
+                    <asp:Label ID="Label21" runat="server" Text="Cod. BU" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtBuRic" runat="server" CssClass="form-control" placeholder="Codice BU" autofocus="" />
+                    
+                    <asp:Label ID="Label22" runat="server" Text="Cod. Edificio" CssClass="form-label d-block mb-2"></asp:Label>
+
+                    <asp:TextBox ID="txtCodEdRic" runat="server" CssClass="form-control" placeholder="Codice Edificio" />
+
+                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+                        <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
+                    </div>
+                </div>
             </div>
         </div>
         <asp:Label ID="lblmessage" runat="server" ForeColor="Red"></asp:Label>
@@ -337,10 +362,24 @@
                             <asp:TextBox ID="txtIndirizzo" runat="server" CssClass="form-control mb-3" Enabled="false" />
 
                         </div>
-                        <div class="form-group mb-3" style="margin-left: -25px">
+                        <%--                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtPraticaOut">Pratica</label>
                             <asp:TextBox ID="txtPraticaOut" runat="server" CssClass="form-control mb-3" Enabled="false" />
                         </div>
+                        --%>
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtPraticaOut">Pratica Edilizia</label>
+                            <asp:TextBox ID="txtPraticaOut" runat="server" CssClass="form-control" Enabled="false" />
+                        </div>
+
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtCartellina">Cartellina Patrimonio</label>
+                            <asp:TextBox ID="txtCartellina" runat="server" CssClass="form-control" Enabled="false" />
+                        </div>
+
+
+
+
                     </div>
                     <div class="col-md-4">
                         <div class="form-group mb-3" style="margin-left: -25px">
@@ -362,13 +401,26 @@
                             <asp:TextBox ID="txtDataCarico" runat="server" CssClass="form-control mb-3 data-auto" Enabled="false" />
                         </div>
                     </div>
+                    <div class="col-md-4" id="divbu" runat="server" style="display: none;">
+                        <div class="form-group mb-3" style="margin-left: -25px">
+                            <label for="txtBU">BU</label>
+                            <asp:TextBox ID="txtBU" runat="server" CssClass="form-control" Enabled="false" />
+                        </div>
 
+                    </div>
+
+                    <div class="col-md-4" id="divcd" runat="server" style="display: none;">
+                        <div class="form-group mb-3">
+                            <label for="txtCodEdificio">Codice Edificio</label>
+                            <asp:TextBox ID="txtCodEdificio" runat="server" CssClass="form-control" Enabled="false" />
+                        </div>
+                    </div>
                 </div>
 
                 <p style="font-weight: bold; font-size: medium">Esito Accertamento</p>
                 <div class="row custom-border">
                     <div class="col-md-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtEsito">Esito</label>
                             <asp:TextBox ID="txtEsito" runat="server" CssClass="form-control" Enabled="false" />
                         </div>
@@ -380,7 +432,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3" style="margin-left: -25px">
                             <label for="txtDataDataEvasa">Data Esito</label>
                             <asp:TextBox ID="txtDataDataEvasa" runat="server" CssClass="form-control data-auto" Enabled="false" />
                         </div>

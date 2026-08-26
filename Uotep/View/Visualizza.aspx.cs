@@ -150,6 +150,24 @@ namespace Uotep
             {
                 pratica = mn.getListPratica(txtPratica.Text.Trim(), out msg);
             }
+            //I mod 26/08/2026 ricerca per numero cartellina patrimonio
+            if (txtCartellinaRic.Text != string.Empty)
+            {
+                pratica = mn.getListCartellina(txtCartellinaRic.Text.Trim(), txtQuart.Text.Trim(), out msg);
+            }
+            if (txtCartellinaRic.Text != string.Empty)
+            {
+                pratica = mn.getListCartellina(txtCartellinaRic.Text.Trim(), txtQuart.Text.Trim(), out msg);
+            }
+            if (txtBuRic.Text != string.Empty)
+            {
+                pratica = mn.getListBu(txtBuRic.Text.Trim(), out msg);
+            }
+            if (txtCodEdRic.Text != string.Empty)
+            {
+                pratica = mn.getListCodEdificio(txtCodEdRic.Text.Trim(), out msg);
+            }
+            //F mod 26/08/2026 ricerca per numero cartellina patrimonio
             if (txtRicGiudice.Text != string.Empty)
             {
                 pratica = mn.getListGiudice(txtRicGiudice.Text, out msg);
@@ -367,7 +385,13 @@ namespace Uotep
 
                     txtDataInsCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[3].ToString()).ToShortDateString();
 
-
+                if (pratica.Rows[0]["sigla"].ToString() == "TP")
+                {
+                    divbu.Style["display"] = "inline";
+                    divcd.Style["display"] = "inline";
+                    txtBU.Text = pratica.Rows[0]["bu"].ToString();
+                    txtCodEdificio.Text = pratica.Rows[0]["CodiceEdificio"].ToString();
+                }
                 txtProvenienza.Text = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                 txtProvenienza.ToolTip = pratica.Rows[0].ItemArray[4].ToString().ToUpper();
                 txtTipoAtto.Text = pratica.Rows[0].ItemArray[5].ToString().ToUpper();
@@ -460,6 +484,9 @@ namespace Uotep
                 //txtDataCarico.Text = System.Convert.ToDateTime(pratica.Rows[0].ItemArray[18].ToString()).ToShortDateString();
 
                 txtPraticaOut.Text = pratica.Rows[0].ItemArray[19].ToString();
+                //I mod 26/08/2026 cartellina patrimonio
+                txtCartellina.Text = pratica.Rows[0]["cartellina"].ToString();
+                //F mod 26/08/2026 cartellina patrimonio
                 TxtQuartiere.Text = pratica.Rows[0].ItemArray[20].ToString();
                 //txtNote.Text = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
                 //txtNote.ToolTip = pratica.Rows[0].ItemArray[21].ToString().ToUpper();
@@ -565,6 +592,13 @@ namespace Uotep
             //I 22/05/2026 protocollo uscita
             txtProtUscita.Text = string.Empty ;
             //F 22/05/2026 protocollo uscita
+            //I mod 26/08/2026 cartellina patrimonio
+            txtCartellinaRic.Text = string.Empty;
+            txtQuart.Text = string.Empty;
+            txtBuRic.Text = string.Empty;
+            txtCodEdRic.Text = string.Empty;
+            //F mod 26/08/2026 cartellina patrimonio
+
             
 
         }
@@ -701,6 +735,7 @@ namespace Uotep
             DivValidazione.Visible = false;
             DivGridVal.Visible = false;
             DivNote.Visible = false;
+            DivBuCodEd.Visible = false;
             Session.Remove("ListPratiche");
             Session.Remove("ListRicerca");
         }
@@ -1256,10 +1291,18 @@ namespace Uotep
             
             
         }
+        protected void btBuCodEd_Click(object sender, EventArgs e)
+        {
+            NascondiDiv();
+            Pulisci();
+            DivBuCodEd.Visible = true;
+        }
         protected void DdlMacroArea_SelectedIndexChanged(object sender, EventArgs e)
         {
             Manager mn = new Manager();
             txtCapoArea.Text = mn.getCapoArea(DdlMacroArea.SelectedValue);
         }
+
+       
     }
 }
