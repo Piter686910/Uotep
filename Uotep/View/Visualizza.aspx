@@ -703,7 +703,21 @@
                                                 Text='<%# Eval("nr_Pratica") %>' />
                                         </ItemTemplate>
                                     </asp:TemplateField>
+                                   <%-- I mod 26/08/2026 cartellina patrimonio --%>
+                                    <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
+                                       <HeaderTemplate>
+                                           N. Cartellina
+                                              <br />
+                                       </HeaderTemplate>
+                                       <ItemTemplate>
 
+                                           <asp:HyperLink ID="lnkSchedaCartellina" runat="server"
+                                               NavigateUrl='<%# String.Format("~/View/GestionePratica.aspx?idscheda={0}&nrPratica={1}", Eval("ID"), Eval("cartellina")) %>'
+                                               Target="_blank"
+                                               Text='<%# Eval("cartellina") %>' />
+                                       </ItemTemplate>
+                                   </asp:TemplateField>
+                                    <%-- F mod 26/08/2026 cartellina patrimonio --%>
                                     <asp:TemplateField HeaderText="Nominativo" ItemStyle-CssClass="uppercase-text" ItemStyle-Wrap="true" ItemStyle-Width="80px">
                                         <HeaderTemplate>
                                             Nominativo
