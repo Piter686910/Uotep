@@ -148,17 +148,17 @@
                 <%-- DIV RICERCA pratica --%>
                 <div id="DivPratica" runat="server" class="form-group text-center" style="text-align: left !important">
 
-                    <asp:Label ID="Label6" runat="server" Text="Nr. Pratica" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label6" runat="server" Text="Nr. Pratica Edilizia" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" placeholder="Nr. Pratica Edilizia" autofocus="" />
                     <%-- I mod 26/08/2026 ricerca per numero cartellina patrimonio --%>
-                    <asp:Label ID="Label18" runat="server" Text="Nr. Cartellina" CssClass="form-label d-block mb-2"></asp:Label>
+                    <asp:Label ID="Label18" runat="server" Text="Nr. Cartellina Patrimonio" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtCartellinaRic" runat="server" CssClass="form-control" placeholder="Nr. Cartellina Patrimonio" />
                     <asp:Label ID="Label20" runat="server" Text="Quartiere" CssClass="form-label d-block mb-2"></asp:Label>
 
                     <asp:TextBox ID="txtQuart" runat="server" CssClass="form-control" placeholder="Quartiere" />
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtQuart" ErrorMessage="* Inserire Quartiere" ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />
+                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtQuart" ErrorMessage="* Inserire Quartiere" ValidationGroup="bt" ForeColor="Red" Display="Dynamic" />--%>
 
                     <%-- F mod 26/08/2026 ricerca per numero cartellina patrimonio --%>
                     <div style="margin-left: 1px!important; margin-top: 30px!important">

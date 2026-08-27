@@ -384,15 +384,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtQuart;
 
         /// <summary>
-        /// Controllo RequiredFieldValidator2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
-
-        /// <summary>
         /// Controllo DivValidazione.
         /// </summary>
         /// <remarks>

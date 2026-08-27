@@ -105,7 +105,9 @@ namespace Uotep.Classi
             //F 26/03/2024:  utente disabilitato
             //F 26/03/2024:  utente disabilitato
             [Description("Inserimento non effettuato.")]
-            InsKo = 27
+            InsKo = 27,
+            [Description("Inserire Quartiere.")]
+            InserireQuartiere = 28
         }
         public enum Sigla
         {

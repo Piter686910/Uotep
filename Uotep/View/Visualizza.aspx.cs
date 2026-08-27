@@ -84,10 +84,11 @@ namespace Uotep
             // Assegna il valore decodificato al Literal
             // ProtocolloLiteral.Text = decodedText;
             //int protocollo = 0;
+            lblmessage.Text = string.Empty;
             if (!IsPostBack)
             {
                 //     PaginaCorrente = 1;
-            
+                
                 DivDettagli.Visible = false;
                 string idCarico = Request.QueryString["idscheda"];
                 if (!String.IsNullOrEmpty(idCarico))
@@ -153,7 +154,20 @@ namespace Uotep
             //I mod 26/08/2026 ricerca per numero cartellina patrimonio
             if (txtCartellinaRic.Text != string.Empty)
             {
-                pratica = mn.getListCartellina(txtCartellinaRic.Text.Trim(), txtQuart.Text.Trim(), out msg);
+                if (txtQuart.Text != string.Empty)
+                    pratica = mn.getListCartellina(txtCartellinaRic.Text.Trim(), txtQuart.Text.Trim(), out msg);
+                else
+                {
+                   
+                    SiteMaster myMaster = this.Master as SiteMaster;
+
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InserireQuartiere.GetDescription(), "warning");
+                    }
+                    return;
+                }
             }
             if (txtCartellinaRic.Text != string.Empty)
             {
