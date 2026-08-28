@@ -3,11 +3,42 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
+        /* 1. Sgancia tutti i contenitori padri di Bootstrap compresa la MasterPage */
+        html, body, form, .container, .body-content, main, [class*="container"] {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        /* 2. Forza le schede bianche interne ad allargarsi completamente */
+        .section-box, #DivGrid, .jumbotron {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 3. Estende la tabella a tutto lo spazio disponibile */
+        .table-responsive {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
+
+        #gvDett, .gridview-full {
+            width: 100% !important;
+            max-width: 100% !important;
+            table-layout: auto !important; /* Espande le colonne su tutta la larghezza */
+        }
+
+        /* 4. Filtri sulle intestazioni */
         .larghezzaText {
-            width: 100%;
-            font-size: 0.9rem !important;
-            padding: 5px !important;
-            color: #333;
+            width: 100% !important;
+            box-sizing: border-box;
+            font-size: 0.8rem !important;
+            padding: 2px 4px !important;
         }
     </style>
 
@@ -25,12 +56,14 @@
         }
     </script>
 
-    <div class="container-fluid mt-4">
-        <div class="dashboard-header">
+    <!-- Usato container-fluid full-width per occupare il 100% effettivo della pagina -->
+    <div class="container-fluid full-width-container">
+
+        <div class="dashboard-header mt-3">
             <h1><span class="fa-solid fa-gear fa-spin"></span>GESTIONE CARTE CARBURANTE</h1>
         </div>
 
-        <div class="section-box">
+        <div class="section-box w-100">
             <div class="row d-flex align-items-end">
                 <div class="col-md-2">
                     <div class="form-group mb-0">
@@ -39,7 +72,6 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-
                     <div class="form-group mb-0">
                         <label>Anno</label>
                         <asp:TextBox ID="txtAnno" runat="server" CssClass="form-control" Enabled="false" />
@@ -51,10 +83,9 @@
                     <asp:Button ID="btStampa" Text="Stampa" runat="server" OnClick="btStampa_Click" ToolTip="Stampa" CssClass="btn btn-primary ml-2" />
                 </div>
             </div>
-
         </div>
 
-        <div class="section-box" id="divInserimento" runat="server">
+        <div class="section-box w-100" id="divInserimento" runat="server">
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -65,7 +96,6 @@
                         <label for="txtAutista">Autista</label>
                         <asp:TextBox ID="txtAutista" runat="server" CssClass="form-control" />
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtAutista" ValidationGroup="bt" ErrorMessage="Inserire il nome dell'autista" ForeColor="Red" Display="Dynamic" />
-
                     </div>
                 </div>
 
@@ -129,20 +159,29 @@
             </div>
         </div>
 
-        <div id="DivGrid" runat="server" class="section-box">
+        <!-- Sezione GridView estesa a 100% -->
+        <div id="DivGrid" runat="server" class="section-box w-100">
             <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                 <div class="small text-muted">
                     <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina"></asp:Label>
                     <strong>
-                        <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
+                        <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label>
+                    </strong>
                 </div>
             </div>
-            <div class="table-responsive">
+
+            <div class="table-responsive w-100">
                 <asp:GridView ID="gvDett" runat="server" AutoGenerateColumns="False"
-                    CssClass="table table-bordered table-hover"
-                    OnRowDataBound="gvDett_RowDataBound" OnRowCommand="gvDett_RowCommand"
+                    CssClass="table table-bordered gridview-autofit gridview-full"
+                    DataKeyNames="id" Width="100%"
+                    OnRowDataBound="gvDett_RowDataBound"
+                    OnRowCommand="gvDett_RowCommand"
                     OnDataBound="gvDett_DataBound"
-                    AllowPaging="true" PageSize="10" OnPageIndexChanging="gvDett_PageIndexChanging"
+                    OnRowEditing="gvDett_RowEditing"
+                    OnRowCancelingEdit="gvDett_RowCancelingEdit"
+                    OnRowUpdating="gvDett_RowUpdating"
+                    AllowPaging="true" PageSize="10"
+                    OnPageIndexChanging="gvDett_PageIndexChanging"
                     RowStyle-CssClass="GridViewRow"
                     AlternatingRowStyle-CssClass="GridViewAlternatingRow"
                     PagerSettings-Position="Top"
@@ -161,10 +200,30 @@
                                 <asp:TextBox ID="txtFilterSigla" runat="server" OnTextChanged="txtFilterSigla_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("sigla") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtSiglaMod" runat="server" Text='<%# Bind("sigla") %>' CssClass="form-control input-sm" OnTextChanged="txtSiglaMod_TextChanged"></asp:TextBox>
+                            </EditItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:BoundField DataField="targa" HeaderText="Targa" />
-                        <asp:BoundField DataField="stan" HeaderText="STAN" ItemStyle-HorizontalAlign="Center" />
+                        <asp:TemplateField HeaderText="Targa">
+                            <HeaderTemplate>
+                                Targa<br />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("Targa") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtTargaMod" runat="server" Text='<%# Bind("Targa") %>' CssClass="form-control input-sm" Enabled="false" ></asp:TextBox>
+                            </EditItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Stan">
+                            <HeaderTemplate>
+                                Stan<br />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("Stan") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtStanMod" runat="server" Text='<%# Bind("Stan") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
+                        </asp:TemplateField>
 
                         <asp:TemplateField HeaderText="Data">
                             <HeaderTemplate>
@@ -172,25 +231,61 @@
                                 <asp:TextBox ID="txtFilterData" runat="server" OnTextChanged="txtFilterData_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("data", "{0:dd/MM/yyyy}") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtDataMod" runat="server" Text='<%# Bind("data", "{0:dd/MM/yyyy}") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
                         </asp:TemplateField>
 
                         <asp:TemplateField HeaderText="Ora">
                             <ItemTemplate>
-                                '<%# Eval("ora") != null ? Eval("ora").ToString().Substring(0, 5) : "" %>'
+                                <%# Eval("ora") != null ? Eval("ora").ToString().Substring(0, 5) : "" %>
                             </ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtOraMod" runat="server" Text='<%# Bind("ora") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:BoundField DataField="litri" HeaderText="Litri" />
-                        <asp:BoundField DataField="euro" HeaderText="Euro" />
-                        <asp:BoundField DataField="indirizzo" HeaderText="Indirizzo" />
+                        <asp:TemplateField HeaderText="Litri">
+                            <HeaderTemplate>
+                                Litri<br />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("litri") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtLitriMod" runat="server" Text='<%# Bind("litri") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
+                        </asp:TemplateField>
 
+                        <asp:TemplateField HeaderText="Euro">
+                            <HeaderTemplate>
+                                Euro<br />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("euro") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtEuroMod" runat="server" Text='<%# Bind("euro") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
+                        </asp:TemplateField>
 
-                        <asp:TemplateField HeaderText="progressivo">
+                        <asp:TemplateField HeaderText="Indirizzo">
+                            <HeaderTemplate>
+                                Indirizzo<br />
+                            </HeaderTemplate>
+                            <ItemTemplate><%# Eval("indirizzo") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtindirizzoMod" runat="server" Text='<%# Bind("indirizzo") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
+                        </asp:TemplateField>
+
+                        <%--<asp:BoundField DataField="indirizzo" HeaderText="Indirizzo" />--%>
+
+                        <asp:TemplateField HeaderText="Progressivo">
                             <HeaderTemplate>
                                 Progressivo<br />
                                 <asp:TextBox ID="txtFilterProgressivo" runat="server" OnTextChanged="txtFilterProgressivo_TextChanged" AutoPostBack="True" CssClass="larghezzaText" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("progressivo") %></ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtProgressivoMod" runat="server" Text='<%# Bind("progressivo") %>' CssClass="form-control input-sm"></asp:TextBox>
+                            </EditItemTemplate>
                         </asp:TemplateField>
 
                         <asp:TemplateField HeaderText="Verificato" ItemStyle-HorizontalAlign="Center">
@@ -209,15 +304,24 @@
                                     CssClass="btn btn-success btn-sm" />
                             </ItemTemplate>
                         </asp:TemplateField>
+
+                        <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="100px">
+                            <ItemTemplate>
+                                <asp:Button ID="btnModifica" runat="server" Text="Mod." CommandName="Edit" CssClass="btn btn-warning btn-sm" CommandArgument='<%# Eval("id")%>' />
+                            </ItemTemplate>
+                            <EditItemTemplate>
+                                <asp:Button ID="btnSalva" runat="server" Text="Salva" CommandName="Update" CssClass="btn btn-primary btn-sm" ValidationGroup="EditVG" />
+                                <asp:Button ID="btnAnnulla" runat="server" Text="X" CommandName="Cancel" CssClass="btn btn-secondary btn-sm" />
+                            </EditItemTemplate>
+                        </asp:TemplateField>
                     </Columns>
 
                     <PagerStyle HorizontalAlign="Center" CssClass="pagination-ys" />
                 </asp:GridView>
-
             </div>
-            <div class="modal-footer bg-light">
-                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" Visible="false"/>
 
+            <div class="modal-footer bg-light">
+                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" Visible="false" />
             </div>
         </div>
 
@@ -225,9 +329,11 @@
         <asp:HiddenField ID="HfFiltroData" runat="server" />
         <asp:HiddenField ID="HfFiltroSigla" runat="server" />
         <asp:HiddenField ID="HfProgressivo" runat="server" />
+        <asp:HiddenField ID="Hfid" runat="server" />
 
     </div>
 
+    <!-- Modali -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -259,5 +365,4 @@
             </div>
         </div>
     </div>
-
 </asp:Content>

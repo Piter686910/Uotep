@@ -1,3 +1,4 @@
+using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.CustomXmlSchemaReferences;
 using DocumentFormat.OpenXml.Drawing;
@@ -8,6 +9,7 @@ using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Office2010.CustomUI;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
@@ -1985,6 +1987,19 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
             sql = "SELECT * FROM ScadenziarioUrp order by nr_carico, dataArrivo";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable getAutoById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM GestioneAuto where id =" + id ;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -7245,6 +7260,66 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
                             sw.WriteLine("targa:" + p.targa + ",data ins:" + p.dataVerifica + ", id riga= " + p.id + ": " + ex.Message + @" - Errore in update gestione auto ");
+                            sw.Close();
+                        }
+
+                        resp = false;
+
+
+                    }
+                    conn.Close();
+                    conn.Dispose();
+                    return resp;
+                }
+            }
+            catch (Exception)
+            {
+                resp = false;
+            }
+            return resp;
+
+        }
+
+        public Boolean UpdGestioneAuto(GestAuto auto)
+        {
+            bool resp = true;
+            string sql_UpdGestioneAuto = String.Empty;
+            string testoSql = string.Empty;
+            int res = 0;
+            try
+            {
+                // Converti virgole in punti per i numeri decimali
+                string litriFormatted = auto.litri.ToString().Replace(",", ".");
+                string euroFormatted = auto.euro.ToString().Replace(",", ".");
+                sql_UpdGestioneAuto = "update GestioneAuto set data = '" + @auto.data + "', ora = '" + auto.ora + "', sigla = '" + auto.sigla + "', stan = '" + auto.stan.Replace("'", "''") + "'" +
+                    ", progressivo = '" + auto.progressivo.Replace("'", "''") + "', litri = " + litriFormatted + ", euro = " + euroFormatted + ", matricola = '" + auto.matricola + "'" + ", indirizzo = '" + auto.indirizzo.Replace("'", "''") + "'" + 
+                    " where  id = " + auto.id;
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand command = conn.CreateCommand();
+                    try
+                    {
+
+                        command.CommandText = sql_UpdGestioneAuto;
+                        res = command.ExecuteNonQuery();
+                        testoSql = "gestione auto";
+
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("Stan:" + auto.stan + ": " + ex.Message + @" - Errore in update gestione auto");
                             sw.Close();
                         }
 

@@ -25,6 +25,7 @@ namespace Uotep
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+        string Isdecr = string.Empty;
 
 
         protected void Page_Load(object sender, EventArgs e)
@@ -48,6 +49,13 @@ namespace Uotep
 
             if (!IsPostBack)
             {
+                //if (Session["ListRicercaGestioneAuto"] != null)
+                //{
+                //    DataTable auto = (DataTable)Session["ListRicercaGestioneAuto"];
+
+                //    Hfid.Value = auto.Rows[0]["id"].ToString();
+
+                //}
 
                 // Legge il valore dal Web.config
                 string protocolloText = ConfigurationManager.AppSettings["Titolo"];
@@ -122,14 +130,14 @@ namespace Uotep
                 auto.mese = txtMese.Text;
                 auto.anno = System.Convert.ToInt16(txtAnno.Text);
                 auto.verificato = false;
-                DataTable prog = mn.MaxProgressivoGestioneAuto(auto.anno,auto.mese);
+                DataTable prog = mn.MaxProgressivoGestioneAuto(auto.anno, auto.mese);
                 num = Convert.ToInt32(prog.Rows[0].ItemArray[0].ToString());
                 if (num == 0)
 
                     num = 1;
                 else
                     num++;
-                
+
                 auto.progressivo = DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString("D2") + "/" + num;
                 if (!string.IsNullOrEmpty(Vuser))
                 {
@@ -165,13 +173,13 @@ namespace Uotep
                     //}
                     //else
                     //{
-                        //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento non riuscito" + "'); $('#errorModal').modal('show');", true);
-                        if (myMaster != null)
+                    //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento non riuscito" + "'); $('#errorModal').modal('show');", true);
+                    if (myMaster != null)
 
-                            // 2. Chiamo il metodo pubblico
-                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InsKo.GetDescription(), "danger");
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InsKo.GetDescription(), "danger");
 
-                   // }
+                    // }
 
                 }
 
@@ -306,9 +314,19 @@ namespace Uotep
         {
             Manager mn = new Manager();
             DataTable scheda = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
+            // Ordina i dati per Sigla (numerica) e poi per Data (più recente prima)
+            var datiOrdinati = scheda.AsEnumerable()
+            .OrderBy(row =>
+            {
+                string sigla = row.Field<string>("Sigla");
+                string soloNumeri = System.Text.RegularExpressions.Regex.Replace(sigla ?? "", @"\D", "");
+                return int.TryParse(soloNumeri, out int num) ? num : 0;
+            })
+            .ThenByDescending(row => row.Field<DateTime>("Data")) // Ordina per Data (più recente prima)
+            .CopyToDataTable();
 
             Routine stampa = new Routine();
-            stampa.CreaPdfSchedaCarburante(scheda);
+            stampa.CreaPdfSchedaCarburante(datiOrdinati);
             // stampa.CreaPdfLetteraAccompagnamento(scheda, PathLetteraAccompagnamento, "LetteraAccompagnamento.pdf");
         }
 
@@ -331,9 +349,20 @@ namespace Uotep
 
             if (listaAuto.Rows.Count > 0)
             {
-                Session["ListRicercaGestioneAuto"] = listaAuto;
+                // Ordina i dati per Sigla (numerica) e poi per Data (più recente prima)
+                var datiOrdinati = listaAuto.AsEnumerable()
+                .OrderBy(row =>
+                {
+                    string sigla = row.Field<string>("Sigla");
+                    string soloNumeri = System.Text.RegularExpressions.Regex.Replace(sigla ?? "", @"\D", "");
+                    return int.TryParse(soloNumeri, out int num) ? num : 0;
+                })
+                .ThenByDescending(row => row.Field<DateTime>("Data")) // Ordina per Data (più recente prima)
+                .CopyToDataTable();
+
+                Session["ListRicercaGestioneAuto"] = datiOrdinati;
                 lblNumRighe.Text = " - Num. righe trovate: " + listaAuto.Rows.Count.ToString();
-                gvDett.DataSource = listaAuto;
+                gvDett.DataSource = datiOrdinati;
                 gvDett.DataBind();
                 btBack.Visible = true;
                 DivGrid.Visible = true;
@@ -367,8 +396,6 @@ namespace Uotep
             //    e.Row.Attributes["ondblclick"] = $"selectRow('{id}')";
             //    e.Row.Style["cursor"] = "pointer";
             //}
-
-
 
 
 
@@ -431,6 +458,29 @@ namespace Uotep
                         ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Errore in modifica tabella gestione auto." + "'); $('#errorModal').modal('show');", true);
 
                     }
+                }
+            }
+            if (e.CommandName == "Edit")
+            {
+                // Ottieni il valore del CommandArgument
+                string commandArgument = e.CommandArgument.ToString();
+
+                // Separare i valori del CommandArgument usando il delimitatore "|"
+                string[] values = commandArgument.Split('|');
+
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 1)
+                {
+                    Hfid.Value = values[0]; // id
+
+                    //Manager mn = new Manager();
+                    //DataTable auto = mn.getAutoById(System.Convert.ToInt32(Hfid.Value));
+                    //if (auto.Rows.Count > 0)
+                    //{
+                    //    txtProgressivoMod.text = auto.Rows[0]["progressivo"].ToString();    
+
+
+                    //}
                 }
             }
         }
@@ -639,6 +689,145 @@ namespace Uotep
             gvDett.DataSource = Session["ListRicercaGestioneAuto"];
             gvDett.DataBind();
             DivGrid.Visible = true;
+        }
+
+        protected void gvDett_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            //edito il rigo selezionato
+            gvDett.EditIndex = e.NewEditIndex;
+            Manager mn = new Manager();
+            DataTable auto = new DataTable();
+            auto = mn.getListAuto(txtMese.Text, Convert.ToInt32(txtAnno.Text));
+            if (auto.Rows.Count > 0)
+            {
+                // Ordina i dati per Sigla (numerica) e poi per Data (più recente prima)
+                var datiOrdinati = auto.AsEnumerable()
+                .OrderBy(row =>
+                {
+                    string sigla = row.Field<string>("Sigla");
+                    string soloNumeri = System.Text.RegularExpressions.Regex.Replace(sigla ?? "", @"\D", "");
+                    return int.TryParse(soloNumeri, out int num) ? num : 0;
+                })
+                .ThenByDescending(row => row.Field<DateTime>("Data")) // Ordina per Data (più recente prima)
+                .CopyToDataTable();
+
+                gvDett.DataSource = datiOrdinati;
+                gvDett.DataBind();
+            }
+        }
+
+        protected void gvDett_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Esce dalla modalità modifica
+            gvDett.EditIndex = -1;
+            // Ricarica i dati per mostrare le TextBox
+            // Decretazione_Click(sender, e);
+            btCerca_Click(sender, e);
+        }
+
+        protected void gvDett_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            GestAuto auto = new GestAuto();
+            try
+            {
+
+                // A. Recupera l'ID del record (da DataKeyNames)
+                int idRifAuto = Convert.ToInt32(gvDett.DataKeys[e.RowIndex].Value);
+
+                // B. Recupera i nuovi valori inseriti nelle TextBox
+                // Devi cercare i controlli usando l'ID che hai dato nell'EditItemTemplate
+                GridViewRow row = gvDett.Rows[e.RowIndex];
+                Manager mn = new Manager();
+
+                TextBox txtProgressivoMod = (TextBox)row.FindControl("txtProgressivoMod");
+                TextBox txtTargaMod = (TextBox)row.FindControl("txtTargaMod");
+                TextBox txtOraMod = (TextBox)row.FindControl("txtOraMod");
+                TextBox txtDataMod = (TextBox)row.FindControl("txtDataMod");
+                TextBox txtSiglaMod = (TextBox)row.FindControl("txtSiglaMod");
+                TextBox txtStanMod = (TextBox)row.FindControl("txtStanMod");
+                TextBox txtLitriMod = (TextBox)row.FindControl("txtLitriMod");
+                TextBox txtEuroMod = (TextBox)row.FindControl("txtEuroMod");
+                TextBox txtIndirizzoMod = (TextBox)row.FindControl("txtIndirizzoMod");
+
+                auto.matricola = string.IsNullOrWhiteSpace(Session["user"].ToString()) ? string.Empty : Session["user"].ToString();
+                auto.data = string.IsNullOrWhiteSpace(txtDataMod.Text.Trim()) ? DateTime.MinValue : System.Convert.ToDateTime(txtDataMod.Text);
+                // decr.data = System.Convert.ToDateTime(txtDataMod.Text);
+                auto.id = idRifAuto;
+                auto.targa = string.IsNullOrWhiteSpace(txtTargaMod.Text.Trim()) ? string.Empty : txtTargaMod.Text.Trim();
+                auto.progressivo = string.IsNullOrWhiteSpace(txtProgressivoMod.Text.Trim()) ? string.Empty : txtProgressivoMod.Text.Trim();
+                auto.sigla = string.IsNullOrWhiteSpace(txtSiglaMod.Text.Trim()) ? string.Empty : txtSiglaMod.Text.Trim();
+                auto.ora = Convert.ToDateTime(string.IsNullOrWhiteSpace(txtOraMod.Text.Trim()) ? string.Empty : txtOraMod.Text.Trim());
+                auto.stan = string.IsNullOrWhiteSpace(txtStanMod.Text.Trim()) ? string.Empty : txtStanMod.Text.Trim();
+                auto.litri = ConvertiStringaInFloat(string.IsNullOrWhiteSpace(txtLitriMod.Text.Trim()) ? string.Empty : txtLitriMod.Text.Trim());
+                auto.euro = ConvertiStringaInFloat(string.IsNullOrWhiteSpace(txtEuroMod.Text.Trim()) ? string.Empty : txtEuroMod.Text.Trim());
+                auto.indirizzo = string.IsNullOrWhiteSpace(txtIndirizzoMod.Text.Trim()) ? string.Empty : txtIndirizzoMod.Text.Trim();
+
+
+
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                Boolean resp = mn.UpdGestioneAuto(auto);
+                if (resp)
+                {
+                    //richiama popup dalla site master
+
+
+                    //if (myMaster != null)
+                    //{
+                    // 2. Chiamo il metodo pubblico
+                    // myMaster.MostraMessaggio("ATTENZIONE", Enumerate.MsgOutput.UpdRegistroOk.GetDescription(), "success");
+                    gvDett.EditIndex = -1;
+                    btCerca_Click(sender, e);
+                    // }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                // Gestione Errore
+                //richiama popup dalla site master
+                SiteMaster myMaster = this.Master as SiteMaster;
+
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.ErrorLog.GetDescription(), "danger");
+                    if (!File.Exists(LogFile))
+                    {
+                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    }
+
+                    using (StreamWriter sw = File.AppendText(LogFile))
+                    {
+                        sw.WriteLine(ex.Message + @" - Errore in GVDecretazione_RowUpdating modifica.cs ");
+                        sw.Close();
+                    }
+
+                }
+            }
+        }
+
+
+        protected void txtSiglaMod_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txtSiglaMod = (TextBox)sender;
+
+            // 2. riga della GridView che contiene questa TextBox
+            GridViewRow row = (GridViewRow)txtSiglaMod.NamingContainer;
+
+            // 3. Preleva il valore modificato
+            string siglaInserita = txtSiglaMod.Text;
+            Manager mn = new Manager();
+            DataTable Sigla = mn.getAutoBySigla(siglaInserita);
+
+            if (Sigla.Rows.Count > 0)
+            {
+                // 5. Cerca la TextBox "txtTarga" all'interno della stessa riga
+                TextBox txtTargaMod = (TextBox)row.FindControl("txtTargaMod");
+                txtTargaMod.Text = Sigla.Rows[0]["targa"].ToString();
+
+            }
         }
     }
 }
