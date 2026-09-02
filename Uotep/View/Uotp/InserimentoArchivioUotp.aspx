@@ -149,7 +149,7 @@
                                 </div>
                                 <div class="form-check mb-2">
                                     <label for="txtCartellinaTp">Cartellina</label>
-                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" />
+                                    <asp:TextBox ID="txtCartellinaTp" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" />
                                 </div>
 
 
