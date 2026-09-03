@@ -459,7 +459,17 @@
         }
 
     </script>
-
+    <style>
+        .btn-custom-size {
+            width: 160px !important; /* Larghezza fissa uguale per tutti */
+            height: 45px !important; /* Altezza fissa uguale per tutti */
+            white-space: nowrap; /* Impedisce al testo di andare su due righe */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.08rem; /* Regola la dimensione del testo se necessario */
+        }
+    </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <%--  <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
@@ -473,25 +483,39 @@
 
             <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
                 <div class="d-flex justify-content-center mt-4">
+                    <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
+                        <tr>
+                            <td>
+                                <asp:Button ID="btNProtocollo" runat="server" OnClick="btNProtocollo_Click" Text="Nr. Carico" CssClass="btn btn-primary btn-custom-size" ToolTip="Ricerca per numero carico" /></td>
+                            <td>
+                                <asp:Button ID="btProcPenale" runat="server" OnClick="btProcPenale_Click" Text="Proc. Penale" ToolTip="Ricerca Procedimento Penale" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btProtGen" runat="server" OnClick="btProtGen_Click" Text="Rif. Prot. Gen." ToolTip="Ricerca Protocollo Generale" CssClass="btn btn-primary btn-custom-size" />
+                            </td>
+                            <td>
+                                <asp:Button ID="Button2" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary btn-custom-size" /></td>
 
-                    <p>
-                        <!-- Pulsanti -->
-                        <asp:Button ID="btNProtocollo" runat="server" OnClick="btNProtocollo_Click" Text="Nr. Carico" CssClass="btn btn-primary mx-2" ToolTip="Ricerca per numero carico" />
-                        <asp:Button ID="btProcPenale" runat="server" OnClick="btProcPenale_Click" Text="Proc. Penale" ToolTip="Ricerca Procedimento Penale" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btProtGen" runat="server" OnClick="btProtGen_Click" Text="Rif. Prot. Gen." ToolTip="Ricerca Protocollo Generale" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btEvaseAg" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary mx-2" />
+                            <td>
+                                <asp:Button ID="btEvaseAg" runat="server" OnClick="btEvaseAg_Click" Text="Evase Ag." ToolTip="Ricerca Evase AG" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btNpratica" runat="server" OnClick="btNpratica_Click" Text="Nr. Pratica" ToolTip="Ricerca Pratica" CssClass="btn btn-primary btn-custom-size" /></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btDataArrivo" runat="server" OnClick="btDataArrivo_Click" Text="Data Inserimento" ToolTip="Ricerca Data Inserimento" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary btn-custom-size" /></td>
 
-                    </p>
-                    <p>
-                        <!-- Pulsanti -->
-                        <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Giudice" ToolTip="Ricerca Giudice" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text="Provenienza" ToolTip="Ricerca Per ProvenienzaG" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btNominativo" runat="server" OnClick="btNominativo_Click" Text="Nominativo" ToolTip="Ricerca Nominativo" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btDataArrivo" runat="server" OnClick="btDataArrivo_Click" Text="Data Inserimento" ToolTip="Ricerca Data Inserimento" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btAccertatori" runat="server" OnClick="btAccertatori_Click" Text="Accertatori" ToolTip="Ricerca Accertatori" CssClass="btn btn-primary mx-2" />
-                        <asp:Button ID="btIndirizzo" runat="server" OnClick="btIndirizzo_Click" Text="Indirizzo" ToolTip="Ricerca Per Indirizzo" CssClass="btn btn-primary mx-2" />
-                    </p>
+                        </tr>
+                    </table>
                 </div>
 
             </asp:Panel>
@@ -925,19 +949,32 @@
 
 
                 <div class="row">
-                    <div class="col-12 text-center">
-                        <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
-                        <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary mt-3" />
-                        <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                        <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary mt-3" />
-                        <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary mt-3" />
-                    </div>
+                    <%--<div class="col-12 text-center">--%>
+
+
+                        <div class="d-flex justify-content-center align-items-center w-100 my-4">
+                            <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
+                                <tr>
+                                    <td><asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary btn-custom-size" /></td>
+                                      <td><asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
+                                      <td><asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary btn-custom-size" /></td>
+                                      <td><asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
+                                </tr>
+                            </table>
+
+
+                            <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
+                            
+                            
+                            
+                            
+                        </div>
+                    <%--</div>--%>
+
                 </div>
 
             </div>
-
         </div>
-
 
         <!-- Modale Bootstrap quartiere -->
 

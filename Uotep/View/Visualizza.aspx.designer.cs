@@ -69,15 +69,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btNpratica;
 
         /// <summary>
-        /// Controllo btValidaPratica.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btValidaPratica;
-
-        /// <summary>
         /// Controllo btGiudice.
         /// </summary>
         /// <remarks>
@@ -103,6 +94,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btNominativo;
+
+        /// <summary>
+        /// Controllo btBuCodEd.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btBuCodEd;
+
+        /// <summary>
+        /// Controllo btNote.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btNote;
 
         /// <summary>
         /// Controllo btDataCarico.
@@ -132,24 +141,6 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.Button btIndirizzo;
 
         /// <summary>
-        /// Controllo btNote.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btNote;
-
-        /// <summary>
-        /// Controllo btBuCodEd.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btBuCodEd;
-
-        /// <summary>
         /// Controllo btcarico.
         /// </summary>
         /// <remarks>
@@ -157,6 +148,24 @@ namespace Uotep
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btcarico;
+
+        /// <summary>
+        /// Controllo btValidaPratica.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btValidaPratica;
+
+        /// <summary>
+        /// Controllo ckRicercaGeneralizzata.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ckRicercaGeneralizzata;
 
         /// <summary>
         /// Controllo DivRicerca.
