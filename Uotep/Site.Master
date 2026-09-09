@@ -17,6 +17,15 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
     <style>
+        .btn-custom-size {
+            width: 160px !important; /* Larghezza fissa uguale per tutti */
+            height: 45px !important; /* Altezza fissa uguale per tutti */
+            white-space: wrap; /* Impedisce al testo di andare su due righe */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem; /* Regola la dimensione del testo se necessario */
+        }
         /* Inserisci questo nella Site.Master o nel file .css */
         .modal-custom-wide {
             width: 95% !important;
@@ -256,7 +265,7 @@
                             </ul>
                         </li>
                         <li><a id="menuSicurezza" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
-                        <li> <a id="menuManTabelle" runat="server" visible="false" href="~/View/ManutenzioneTabelle">Tabelle</a></li>
+                        <li><a id="menuManTabelle" runat="server" visible="false" href="~/View/ManutenzioneTabelle">Tabelle</a></li>
                         <li><a id="Urp" runat="server" visible="false" href="~/View/Urp">Urp</a></li>
 
                         <li>

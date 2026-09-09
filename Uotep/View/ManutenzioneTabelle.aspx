@@ -11,19 +11,13 @@
 
     </script>
     <style>
-        .custom-border {
-            border: 2px solid #007bff; /* Cornice blu */
-            border-radius: 8px; /* Angoli arrotondati */
-            padding: 15px; /* Spazio interno */
-            margin: 5px 0; /* Spazio esterno */
-            margin-left: -10px;
-        }
+        
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
 
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> MANUTENZIONE TABELLE</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>MANUTENZIONE TABELLE</h1>
             </div>
         </div>
 
@@ -32,23 +26,22 @@
     <%-- --%>
 
     <asp:Panel ID="pnlButton" runat="server" CssClass="text-center" Visible="true">
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center align-items-center w-100 my-4">
+            <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
+                <tr>
+                    <td><asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Tabella dei Giudici"  CssClass="btn btn-primary btn-custom-size" ToolTip="Inserisci nuovo giudice" /></td>
+                    <td><asp:Button ID="btScaturito" runat="server" OnClick="btScaturito_Click" Text="Tabella Scaturito" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                    <td><asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text=" Tabella Provenienza" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                    <td><asp:Button ID="btTipologia" runat="server" OnClick="btTipologia_Click" Text="Tabella Tipologia" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                </tr>
+                <tr>
+                    <td><asp:Button ID="btTipologiaNotaAg" runat="server" OnClick="btTipologiaNotaAg_Click" Text="Tabella Tipologia Ag" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                    <td><asp:Button ID="btInviati" runat="server" OnClick="btInviati_Click" Text="Tabella Inviata" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                    <td><asp:Button ID="btTipoAbuso" runat="server" OnClick="btTipoAbuso_Click" Text="Tabella Tipo Abuso" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary btn-custom-size" /></td>
+                    <td><asp:Button ID="btDecretazione" runat="server" OnClick="btDecretazione_Click" Text="Tabella Decretazione" ToolTip="Riapri Decretazione" CssClass="btn btn-primary btn-custom-size" /></td>
+                </tr>
+            </table>
 
-            <p>
-                <!-- Pulsanti -->
-                <asp:Button ID="btGiudice" runat="server" OnClick="btGiudice_Click" Text="Tabella dei Giudici" CssClass="btn btn-primary mx-2" ToolTip="Inserisci nuovo giudice" />
-                <asp:Button ID="btScaturito" runat="server" OnClick="btScaturito_Click" Text="Tabella Scaturito" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-                <asp:Button ID="btProvenienza" runat="server" OnClick="btProvenienza_Click" Text=" Tabella Provenienza" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-                <asp:Button ID="btTipologia" runat="server" OnClick="btTipologia_Click" Text="Tabella Tipologia" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-            </p>
-            <p>
-                <asp:Button ID="btTipologiaNotaAg" runat="server" OnClick="btTipologiaNotaAg_Click" Text="Tabella Tipologia Ag" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-                <asp:Button ID="btInviati" runat="server" OnClick="btInviati_Click" Text="Tabella Inviata" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-                <asp:Button ID="btTipoAbuso" runat="server" OnClick="btTipoAbuso_Click" Text="Tabella Tipo Abuso" ToolTip="Inserisci nuovo elemento" CssClass="btn btn-primary mx-2" />
-                <asp:Button ID="btDecretazione" runat="server" OnClick="btDecretazione_Click" Text="Tabella Decretazione" ToolTip="Riapri Decretazione" CssClass="btn btn-primary mx-2" />
-
-
-            </p>
         </div>
 
     </asp:Panel>

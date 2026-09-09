@@ -38,15 +38,7 @@
     </script>
 
     <style>
-        .btn-custom-size {
-            width: 160px !important; /* Larghezza fissa uguale per tutti */
-            height: 45px !important; /* Altezza fissa uguale per tutti */
-            white-space: nowrap; /* Impedisce al testo di andare su due righe */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.08rem; /* Regola la dimensione del testo se necessario */
-        }
+        
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">

@@ -460,15 +460,7 @@
 
     </script>
     <style>
-        .btn-custom-size {
-            width: 160px !important; /* Larghezza fissa uguale per tutti */
-            height: 45px !important; /* Altezza fissa uguale per tutti */
-            white-space: nowrap; /* Impedisce al testo di andare su due righe */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.08rem; /* Regola la dimensione del testo se necessario */
-        }
+        
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
@@ -944,32 +936,22 @@
                     </div>
                 </div>
 
-
-
-
-
                 <div class="row">
-                    <%--<div class="col-12 text-center">--%>
+                    <div class="d-flex justify-content-center align-items-center w-100 my-4">
+                        <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
+                            <tr>
+                                <td>
+                                    <asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary btn-custom-size" /></td>
+                                <td>
+                                    <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
+                                <td>
+                                    <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary btn-custom-size" /></td>
+                                <td>
+                                    <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
+                            </tr>
+                        </table>
 
-
-                        <div class="d-flex justify-content-center align-items-center w-100 my-4">
-                            <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
-                                <tr>
-                                    <td><asp:Button ID="btSalva" Text="Salva" runat="server" OnClick="Salva_Click" ToolTip="salva" CssClass="btn btn-primary btn-custom-size" /></td>
-                                      <td><asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
-                                      <td><asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary btn-custom-size" /></td>
-                                      <td><asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
-                                </tr>
-                            </table>
-
-
-                            <%-- <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary mt-3" />--%>
-                            
-                            
-                            
-                            
-                        </div>
-                    <%--</div>--%>
+                    </div>
 
                 </div>
 
@@ -1482,13 +1464,13 @@
             // Funzione per gestire la visibilità
             function gestisciVisibilita() {
                 var divag = document.getElementById('<%= divAg.ClientID %>');
-            var divbu = document.getElementById('<%= divbu.ClientID %>');
-            var divcd = document.getElementById('<%= divcd.ClientID %>');
+                var divbu = document.getElementById('<%= divbu.ClientID %>');
+                var divcd = document.getElementById('<%= divcd.ClientID %>');
            <%-- var txtgiudice = document.getElementById('<%= txtGiudice.ClientID %>');
             var txtprocpen = document.getElementById('<%= txtProdPenNr.ClientID %>');
             var ddlProvAg = document.getElementById('<%= DdlTipoProvvAg.ClientID %>');--%>
-            // Recupera gli altri elementi, verificando sempre
-            var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
+                // Recupera gli altri elementi, verificando sempre
+                var ddl = document.getElementById('<%= DdlSigla.ClientID %>');
 
                 // mostrare/nascondere
                 if (ddl.value === 'AG') {
@@ -1616,7 +1598,7 @@
                 console.log("Selezionato: " + text + " (ID: " + value + ")");
 
                 var input = document.getElementById('<%= txtSearchAtto.ClientID %>');//document.getElementById("txtSearchAtto");
-            var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
+                var ddl = document.getElementById('<%= DdlTipoAtto.ClientID %>');
                 var listDiv = document.getElementById("suggestionsListTipoAtto");
 
                 input.value = text;
@@ -1627,9 +1609,9 @@
             // Chiudi se clicchi fuori
             document.addEventListener('click', function (e) {
                 if (e.target.id !== document.getElementById('<%= txtSearchAtto.ClientID %>')) {
-                document.getElementById("suggestionsListTipoAtto").style.display = "none";
-            }
-        });
+                    document.getElementById("suggestionsListTipoAtto").style.display = "none";
+                }
+            });
 
             // Funzione per caricare i dati (chiamata solo quando serve)
             function caricaOpzioniOperatore() {
@@ -1657,29 +1639,29 @@
 
             function filterAndHighlightOp(e) {
                 var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListoperatore");
-            var filter = (input.value || "").toUpperCase();
+                var listDiv = document.getElementById("suggestionsListoperatore");
+                var filter = (input.value || "").toUpperCase();
 
-            // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
-            if (typeof allOptionsOp !== "undefined" && allOptionsOp.length === 0) {
-                caricaOpzioniOperatore();
-            }
-
-            // Tasto INVIO (13)
-            if (e.keyCode === 13) {
-                var activeItem = listDiv.querySelector(".active");
-                if (activeItem) {
-                    activeItem.click(); // Simula il click
-                    e.preventDefault(); // Ferma il postback del form
+                // Se l'array è vuoto (es. UpdatePanel ha resettato), ricaricalo
+                if (typeof allOptionsOp !== "undefined" && allOptionsOp.length === 0) {
+                    caricaOpzioniOperatore();
                 }
-                return;
-            }
 
-            listDiv.innerHTML = "";
+                // Tasto INVIO (13)
+                if (e.keyCode === 13) {
+                    var activeItem = listDiv.querySelector(".active");
+                    if (activeItem) {
+                        activeItem.click(); // Simula il click
+                        e.preventDefault(); // Ferma il postback del form
+                    }
+                    return;
+                }
 
-            // Se input vuoto, svuota anche la DDL nascosta e nascondi la lista
-            if (filter.length === 0) {
-                var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                listDiv.innerHTML = "";
+
+                // Se input vuoto, svuota anche la DDL nascosta e nascondi la lista
+                if (filter.length === 0) {
+                    var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
                     if (ddl) ddl.value = "";
                     listDiv.style.display = "none";
                     return;
@@ -1726,7 +1708,7 @@
                 console.log("Selezionato: " + text + " (ID: " + value + ")");
 
                 var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
                 var listDiv = document.getElementById("suggestionsListoperatore");
 
                 input.value = text;
@@ -1747,7 +1729,7 @@
                 }
 
                 var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
+                var ddl = document.getElementById('<%= ddlOperatore.ClientID %>');
                 var testoDigitato = (input.value || "").trim().toUpperCase();
 
                 if (testoDigitato === "") {
@@ -1780,22 +1762,22 @@
             // -------------------------------------------------------------
             document.addEventListener('click', function (e) {
                 var input = document.getElementById('<%= txtSearchOperatore.ClientID %>');
-            var listDiv = document.getElementById("suggestionsListoperatore");
+                var listDiv = document.getElementById("suggestionsListoperatore");
 
-            if (input && listDiv && e.target !== input && !listDiv.contains(e.target)) {
-                listDiv.style.display = "none";
-            }
-        });
+                if (input && listDiv && e.target !== input && !listDiv.contains(e.target)) {
+                    listDiv.style.display = "none";
+                }
+            });
 
             // Chiudi se clicchi fuori
             document.addEventListener('click', function (e) {
                 if (e.target.id !== document.getElementById('<%= txtSearchOperatore.ClientID %>')) {
-                suggestionsListoperatore
-            }
-        });
+                    suggestionsListoperatore
+                }
+            });
             function contaPuntiVirgola() {
                 var sorgente = document.getElementById('<%= txtRifProtGen.ClientID %>');
-            var destinazione = document.getElementById('<%= txtNumProtRicStessoCarico.ClientID %>');
+                var destinazione = document.getElementById('<%= txtNumProtRicStessoCarico.ClientID %>');
 
                 if (sorgente && destinazione) {
                     var testo = sorgente.value.trim();
