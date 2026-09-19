@@ -1034,9 +1034,10 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 using (SqlCommand cmd = new SqlCommand(setContext, conn))
                 {
 
-                }
 
-                return tb = FillTable(sql, conn, out msg);
+
+                    return tb = FillTable(sql, conn, out msg);
+                }
             }
         }
         /// <summary>
@@ -1478,22 +1479,22 @@ ORDER BY LOGS.[Data Accesso] DESC";
         {
             DataTable tb = new DataTable();
             string sql = string.Empty;
-            if (!String.IsNullOrWhiteSpace (quartiere))
+            if (!String.IsNullOrWhiteSpace(quartiere))
             {
 
-                 sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                    " where cartellina = '" + cartellina + "' and quartiere = '" + quartiere + "'  order by dataarrivo desc OPTION (RECOMPILE)";
+                sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                   " where cartellina = '" + cartellina + "' and quartiere = '" + quartiere + "'  order by dataarrivo desc OPTION (RECOMPILE)";
             }
             else
             {
-                 sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
-                    " where cartellina = '" + cartellina + "' order by dataarrivo desc OPTION (RECOMPILE)";
+                sql = "SELECT P.*, S.Nominativo AS NomeOperatore FROM Principale P LEFT JOIN operatore S ON P.matricola = S.matricola " +
+                   " where cartellina = '" + cartellina + "' order by dataarrivo desc OPTION (RECOMPILE)";
             }
             //string sql = "SELECT * FROM Principale where nr_pratica = '" + pratica + "' order by dataarrivo desc";
             using (SqlConnection conn = new SqlConnection(ConnString))
-                {
-                    return tb = FillTable(sql, conn, out msg);
-                }
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
         }
 
         /// <summary>
@@ -1999,7 +2000,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
 
-            sql = "SELECT * FROM GestioneAuto where id =" + id ;
+            sql = "SELECT * FROM GestioneAuto where id =" + id;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -6541,7 +6542,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             @p.NumProtRicStessoCarico + ",'" +
             @p.dataDelega + "'," +
             @p.ggDelega + ",'" +
-            @p.cartellina + "'"+
+            @p.cartellina + "'" +
         "); " +
 
         // RESTITUISCE IL NUOVO ID GENERATO
@@ -7292,7 +7293,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 string litriFormatted = auto.litri.ToString().Replace(",", ".");
                 string euroFormatted = auto.euro.ToString().Replace(",", ".");
                 sql_UpdGestioneAuto = "update GestioneAuto set data = '" + @auto.data + "', ora = '" + auto.ora + "', sigla = '" + auto.sigla + "', stan = '" + auto.stan.Replace("'", "''") + "'" +
-                    ", progressivo = '" + auto.progressivo.Replace("'", "''") + "', litri = " + litriFormatted + ", euro = " + euroFormatted + ", matricola = '" + auto.matricola + "'" + ", indirizzo = '" + auto.indirizzo.Replace("'", "''") + "'" + 
+                    ", progressivo = '" + auto.progressivo.Replace("'", "''") + "', litri = " + litriFormatted + ", euro = " + euroFormatted + ", matricola = '" + auto.matricola + "'" + ", indirizzo = '" + auto.indirizzo.Replace("'", "''") + "'" +
                     " where  id = " + auto.id;
 
 

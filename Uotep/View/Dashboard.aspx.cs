@@ -15,6 +15,17 @@ namespace Uotep
         String Vuser = String.Empty;
         String ruolo = String.Empty;
         string msg = String.Empty;
+        // Proprietà per mantenere la pagina corrente nel ViewState
+        public int CurrentPage
+        {
+            get
+            {
+                if (ViewState["CurrentPage"] == null)
+                    return 0;
+                return (int)ViewState["CurrentPage"];
+            }
+            set { ViewState["CurrentPage"] = value; }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -35,7 +46,7 @@ namespace Uotep
             }
             if (!IsPostBack)
             {
-                
+                CurrentPage = 0;
                 CaricaPersonale();
                 CaricaListOperatori();
             }
@@ -154,7 +165,7 @@ namespace Uotep
             CaricaListOperatori();
 
         }
-       
+
         protected void Elimina_Click(object sender, EventArgs e)
         {
             Manager mn = new Manager();
@@ -195,6 +206,7 @@ namespace Uotep
 
         protected void Cerca_Click(object sender, EventArgs e)
         {
+            //CurrentPage = 0; // Torna alla prima pagina quando si applica un filtro
             Manager mn = new Manager();
             DataTable dt = mn.getCheck(txtPratica.Text.Trim(), txtAnno.Text.Trim());
             if (dt.Rows.Count > 0)
@@ -373,10 +385,78 @@ namespace Uotep
         private void CaricaListOperatori()
         {
             //
+
             Manager mn = new Manager();
             DataTable CaricaListOperatori = mn.getListOperatoreCompleta(out msg);
-            rptOperatori.DataSource = CaricaListOperatori;
+            // 2. Applica i filtri se inseriti
+            DataView dv = CaricaListOperatori.DefaultView;
+
+            string filtro = "1=1";
+
+            if (!string.IsNullOrEmpty(txtFiltroNominativo.Text.Trim()))
+            {
+                filtro += string.Format(" AND Nominativo LIKE '%{0}%'", txtFiltroNominativo.Text.Trim().Replace("'", "''"));
+            }
+
+            if (!string.IsNullOrEmpty(txtFiltroMatricola.Text.Trim()))
+            {
+                filtro += string.Format(" AND Matricola LIKE '%{0}%'", txtFiltroMatricola.Text.Trim().Replace("'", "''"));
+            }
+
+            dv.RowFilter = filtro;
+            // 3. Gestione Paginazione con PagedDataSource
+            PagedDataSource pds = new PagedDataSource
+            {
+                DataSource = CaricaListOperatori.DefaultView,
+                AllowPaging = true,
+                PageSize = 15 // <--- IMPOSTATO RIGIDAMENTE A 15 RECORD
+            }
+            ;
+            if (CurrentPage >= pds.PageCount)
+            {
+                CurrentPage = Math.Max(0, pds.PageCount - 1);
+            }
+            pds.CurrentPageIndex = CurrentPage;
+
+            // Gestione abilitazione pulsanti paginazione
+            btnPrev.Enabled = !pds.IsFirstPage;
+            btnNext.Enabled = !pds.IsLastPage;
+            // Info Pagina
+            lblPageInfo.Text = string.Format("Pagina <b>{0}</b> di <b>{1}</b> (Totale record: {2})",
+                pds.PageCount == 0 ? 0 : CurrentPage + 1,
+                pds.PageCount,
+                dv.Count);
+
+            //if (pds.PageCount > 0)
+            //{
+            //    lblPageInfo.Text = string.Format("Pagina <b>{0}</b> di <b>{1}</b> (Totale record: {2})", CurrentPage + 1, pds.PageCount, dv.Count);
+            //}
+            //else
+            //{
+            //    lblPageInfo.Text = "Nessun risultato trovato.";
+            //}
+            rptOperatori.DataSource = pds;
             rptOperatori.DataBind();
+        }
+        protected void btnResetFiltri_Click(object sender, EventArgs e)
+        {
+            txtFiltroNominativo.Text = string.Empty;
+            txtFiltroMatricola.Text = string.Empty;
+            CurrentPage = 0;
+            CaricaListOperatori();
+        }
+
+        // Eventi Paginazione
+        protected void btnPrev_Click(object sender, EventArgs e)
+        {
+            CurrentPage -= 1;
+            CaricaListOperatori();
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            CurrentPage += 1;
+            CaricaListOperatori();
         }
         private void CaricaPersonale()
         {
@@ -426,6 +506,12 @@ namespace Uotep
             //}
             //else
             //    ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Matricola non trovata." + "'); $('#errorModal').modal('show');", true);
+        }
+
+        protected void btnCercaFiltri_Click(object sender, EventArgs e)
+        {
+            CurrentPage = 0; // Torna alla prima pagina quando si applica un filtro
+            CaricaListOperatori();
         }
         //F 26/03/2026 - aggiunta variabile per abilitazione operatore
 

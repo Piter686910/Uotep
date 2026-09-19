@@ -5,7 +5,7 @@
 
     <div class="container-fluid mt-4">
         <div class="dashboard-header">
-            <h1><span class="fa-solid fa-gear fa-spin"></span> DASHBOARD AMMINISTRATORE</h1>
+            <h1><span class="fa-solid fa-gear fa-spin"></span>DASHBOARD AMMINISTRATORE</h1>
         </div>
 
         <asp:Panel ID="pnlGestUtenti" runat="server">
@@ -54,7 +54,7 @@
                                 <asp:ListItem Text="coordinamentopg" />
                                 <asp:ListItem Text="Fureria" />
                                 <asp:ListItem Text="PG" />
-                                
+
                             </asp:DropDownList>
                         </div>
                         <div class="form-group mb-4">
@@ -125,6 +125,33 @@
             </div>
 
             <%-- Repeater operatori --%>
+            <!-- FILTRI DI RICERCA -->
+            <div class="card mb-3 p-3 shadow-sm bg-light">
+                            <!-- CONTROLLI PAGINAZIONE -->
+            <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+                <div>
+                    <asp:Label ID="lblPageInfo" runat="server" CssClass="text-muted large" ForeColor="Red"></asp:Label>
+                </div>
+                <div>
+                    <asp:Button ID="btnPrev" runat="server" Text="« Precedente" OnClick="btnPrev_Click" CssClass="btn btn-sm btn-outline-secondary me-1" />
+                    <asp:Button ID="btnNext" runat="server" Text="Successivo »" OnClick="btnNext_Click" CssClass="btn btn-sm btn-outline-secondary" />
+                </div>
+            </div>
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4">
+                        <asp:TextBox ID="txtFiltroNominativo" runat="server" CssClass="form-control" Placeholder="Filtra per Nominativo..."></asp:TextBox>
+                    </div>
+                    <div class="col-md-3">
+                        <asp:TextBox ID="txtFiltroMatricola" runat="server" CssClass="form-control" Placeholder="Filtra per Matricola..."></asp:TextBox>
+                    </div>
+                    <div class="col-md-5 d-flex gap-2">
+                        <asp:Button ID="btnCercaFiltri" runat="server" Text="Cerca" CssClass="btn btn-primary" OnClick="btnCercaFiltri_Click" />
+                        <asp:Button ID="btnResetFiltri" runat="server" Text="Reset" CssClass="btn btn-outline-secondary" OnClick="btnResetFiltri_Click" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELLA REPEATER -->
             <div id="divRepeater" runat="server" class="table-responsive shadow-sm rounded">
                 <asp:Repeater ID="rptOperatori" runat="server" OnItemCommand="rptOperatori_ItemCommand">
                     <HeaderTemplate>
@@ -170,16 +197,16 @@
                             <i class="bi bi-pencil-square"></i>Modifica
                                     </asp:LinkButton>
                                     <asp:LinkButton ID="btnDisabilita" runat="server" CssClass="btn btn-sm btn-outline-primary ms-1"
-                                        CommandArgument='<%# Eval("Matricola") + "|" + Eval("abilitato")  %>' OnClick="btnDisabilita_Click">
-                                        <i class="bi bi-power"></i>Abilita/Disabilita
+                                        CommandArgument='<%# Eval("Matricola") + "|" + Eval("abilitato") %>' OnClick="btnDisabilita_Click">
+                            <i class="bi bi-power"></i>Abilita/Disabilita
                                     </asp:LinkButton>
                                     <asp:LinkButton ID="btnReset" runat="server" CssClass="btn btn-sm btn-outline-primary ms-1"
-                                        CommandArgument='<%# Eval("Matricola")  %>' OnClick="ModificaPass_Click">
-                                        <i class="bi bi-power"></i>Reset Password
+                                        CommandArgument='<%# Eval("Matricola") %>' OnClick="ModificaPass_Click">
+                            <i class="bi bi-power"></i>Reset Password
                                     </asp:LinkButton>
                                     <asp:LinkButton ID="LinkButton1" runat="server" CssClass="btn btn-sm btn-outline-primary ms-1"
-                                        CommandArgument='<%# Eval("Matricola")  %>' OnClick="EliminaMatricola_Click">
-                                        <i class="bi bi-power" style="color:orangered"></i>Elimina
+                                        CommandArgument='<%# Eval("Matricola") %>' OnClick="EliminaMatricola_Click">
+                            <i class="bi bi-power" style="color:orangered"></i>Elimina
                                     </asp:LinkButton>
                                 </td>
                             </asp:PlaceHolder>
@@ -219,9 +246,11 @@
             </div>
 
 
+
+
         </asp:Panel>
     </div>
 
-  
+
 
 </asp:Content>

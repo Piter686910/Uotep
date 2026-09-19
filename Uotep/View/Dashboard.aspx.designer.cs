@@ -267,6 +267,69 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtResetMatricola;
 
         /// <summary>
+        /// Controllo lblPageInfo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPageInfo;
+
+        /// <summary>
+        /// Controllo btnPrev.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPrev;
+
+        /// <summary>
+        /// Controllo btnNext.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNext;
+
+        /// <summary>
+        /// Controllo txtFiltroNominativo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFiltroNominativo;
+
+        /// <summary>
+        /// Controllo txtFiltroMatricola.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFiltroMatricola;
+
+        /// <summary>
+        /// Controllo btnCercaFiltri.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCercaFiltri;
+
+        /// <summary>
+        /// Controllo btnResetFiltri.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnResetFiltri;
+
+        /// <summary>
         /// Controllo divRepeater.
         /// </summary>
         /// <remarks>
