@@ -1118,7 +1118,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
             string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa, o.nominativo as nomeoperatore" +
                             ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3" +
-                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id LEFT JOIN operatore O ON p.matricola = O.matricola where " +
+                            ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio,p.cartellina FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id LEFT JOIN operatore O ON p.matricola = O.matricola where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
             // string sql = "SELECT decr_idPratica FROM decretazione where decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'  order by decr_data desc";
