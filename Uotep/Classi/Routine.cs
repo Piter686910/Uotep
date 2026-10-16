@@ -2171,7 +2171,7 @@ namespace Uotep.Classi
                     HttpResponse response = HttpContext.Current.Response;
                     response.Clear();
                     response.ContentType = "application/pdf";
-                    response.AddHeader("Content-Disposition", "inline; filename=SchedaCarburante.pdf");
+                    response.AddHeader("Content-Disposition", "inline; filename=CaricoAGEdilizia.pdf");
                     response.BinaryWrite(pdfBytes);
                     response.Flush();
                     response.End();
