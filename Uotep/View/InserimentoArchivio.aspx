@@ -118,7 +118,7 @@
             }
         }
         //quartiere
-        function filterDropdownQuartiere() {
+        <%--function filterDropdownQuartiere() {
             var input, filter, dropdown, options, i, txtValue;
             input = document.getElementById("txtQuartiere");
             filter = input.value.toUpperCase();
@@ -156,7 +156,7 @@
             } else {
                 suggestionsListDiv.style.display = "none";
             }
-        }
+        }--%>
         //tipo atto
        <%-- function filterDropdownTipoAtto() {
             var input, filter, dropdown, options, i, txtValue;
@@ -300,7 +300,7 @@
                             <div class="col-md-3">
 
                                 <label for="txtPratica">Nr Pratica</label>
-                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" autofocus="" />
+                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false"/>
                                 <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
                                 <label class="form-check-label ms-2" for="CkBis">Bis</label>
                                 <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
@@ -316,7 +316,7 @@
 
                             <div class="col-md-3">
                                 <label for="txtDataInizioAttivita">Data Inizio Attività</label>
-                                <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" />
+                                <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" autofocus=""/>
                                 <asp:RegularExpressionValidator
                                     ID="RegularExpressionValidator2"
                                     runat="server"
@@ -344,10 +344,10 @@
 
                                 <div class="form-group mb-3">
                                     <label for="txtQuartiere">Quartiere</label>
-                                    <asp:TextBox ID="txtQuartiere" runat="server" AutoPostBack="false" onkeyup="filterDropdownQuartiere()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                    <div id="suggestionsListQ" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
+                                    <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
-                                    <asp:DropDownList ID="DdlQuartiereI" runat="server" CssClass="form-control" Style="display: none" />
+                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" style="margin-top: -20px" />
 
                                 </div>
                             </div>
@@ -539,9 +539,9 @@
                 <asp:Label ID="lblRisultatoAzione" runat="server" Text="" Visible="false" ForeColor="Green"></asp:Label>
                 <div class="col-12 text-center">
                     <asp:Button Text="Salva" runat="server" OnClick="Salva_Click" CssClass="btn btn-primary mt-3" ID="btSalva" ValidationGroup="bt" />
-                    
+
                     <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" />
-                    <asp:Button id="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
                 </div>
             </div>
         </div>
@@ -606,9 +606,11 @@
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <div class="small text-muted">
                                 <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
-                                <strong> <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
+                                <strong>
+                                    <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                             </div>
-                            <strong> <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>
+                            <strong>
+                                <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>
                         </div>
                         <div class="table-responsive">
                             <asp:GridView ID="GVRicercaPratica" runat="server" AutoGenerateColumns="False"
@@ -626,7 +628,7 @@
                                 PagerSettings-LastPageText="Ultima &raquo;"
                                 PagerSettings-NextPageText="Succ. &rsaquo;"
                                 PagerSettings-PreviousPageText="&lsaquo; Prec.">
-                                
+
                                 <Columns>
                                     <asp:BoundField DataField="id_Archivio" HeaderText="ID" Visible="false" />
                                     <asp:BoundField DataField="arch_numPratica" HeaderText="N° Pratica" ItemStyle-Font-Bold="true" />

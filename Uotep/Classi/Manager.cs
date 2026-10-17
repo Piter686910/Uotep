@@ -1647,7 +1647,18 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return progressivo + 1;
             }
         }
+        public DataTable GetNumPraticaByQuartiere(string quartiere)
+        {
+            string sql = string.Empty;
 
+            DataTable tb = new DataTable();
+            sql = "SELECT progressivo,codicemun FROM ProgrPratica where quartiere like '%" + quartiere.Replace("'", "''") + "%'";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
         public DataTable GetFileByFascicoloData(CaricaFile fl)
         {
             string sql = string.Empty;
@@ -6191,40 +6202,104 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
         }
-        public Boolean SavePraticaArchivioUote(ArchivioUote arch)
+        public Boolean SavePraticaArchivioUote(ArchivioUote arch, out string msg)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
             string testoSql = string.Empty;
+            int res = 0;
+            msg = string.Empty;
 
-            try
+            sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
+                "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
+                "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
+               " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
+               @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
+               @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
+               @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
+               @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
+               @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
+               @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
+               @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
+               @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
+               @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
+
+            string numpratica = @arch.arch_numPratica.Substring(@arch.arch_numPratica.IndexOf('-')+1);
+            string sql_UpdProgrPratica = "update ProgrPratica set progressivo = " + numpratica + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
+            string sql_Verificacartellina = "SELECT CASE  WHEN EXISTS( SELECT 1 FROM ProgrPratica WHERE progressivo = " + numpratica + "  AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%' ) " +
+                 "THEN -1  ELSE 0 END AS Esito; ";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
             {
-
-                sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
-                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
-                    "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
-                   " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
-                   @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
-                   @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
-                   @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
-                   @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
-                   @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
-                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
-                   @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
-                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
-                   @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
-
-
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                conn.Open();
+                using (SqlTransaction tran = conn.BeginTransaction())
                 {
-                    conn.Open();
                     SqlCommand command = conn.CreateCommand();
-
+                    command.Transaction = tran;
                     try
                     {
-                        command.CommandText = sql_pratica;
+
+                        command.CommandText = sql_Verificacartellina;
+                        object result = command.ExecuteScalar();
+                        int codice = Convert.ToInt32(result);
+                        if (codice == -1) //esiste già una numero pratica con lo stesso progressivo e quartiere, non procedere con l'update e l'insert
+                        {
+                            res = -1; // La numero pratica esiste già, non procedere con l'update e l'insert
+                            msg = "DUPLICATO";
+                            tran.Rollback();
+                            tran.Dispose();
+                            return false;
+                        }
+                        else
+                        {
+                            res = 1;
+                        }
+                        if (res > 0)
+                        {
+                            command.CommandText = sql_pratica;
+
+
+                            res = command.ExecuteNonQuery();
+                            if (res > 0)
+                            {
+                                command.CommandText = sql_UpdProgrPratica;
+                                res = command.ExecuteNonQuery();
+                                if (res > 0)
+                                {
+
+                                    tran.Commit();
+                                    resp = true;
+                                }
+                                else
+                                {
+                                    msg = "errore in update numero progressivo pratica" + res.ToString();
+                                    tran.Rollback();
+                                    tran.Dispose();
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                msg = "errore in insert numero progressivo pratica" + res.ToString();
+                                tran.Rollback();
+                                tran.Dispose();
+                                return false;
+                            }
+
+
+
+                        }
+
+                        else
+                        {
+                            // Se l'UPDATE fallisce, esegui il rollback e imposta la risposta a false
+                            tran.Rollback();
+                            tran.Dispose();
+                            resp = false;
+                        }
+                        // command.CommandText = sql_pratica;
                         testoSql = "ArchivioUote";
-                        int res = command.ExecuteNonQuery();
+                        //int res = command.ExecuteNonQuery();
                     }
 
                     catch (Exception ex)
@@ -6236,7 +6311,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento dati ");
+                            sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento SavePraticaArchivioUote ");
                             sw.Close();
                         }
 
@@ -6244,22 +6319,14 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
                     }
-                    conn.Close();
-                    conn.Dispose();
+                    
+                    tran.Rollback();
+                    tran.Dispose();
                     return resp;
                 }
 
-
-
             }
-            catch (Exception)
-            {
-                resp = false;
 
-
-
-            }
-            return resp;
 
         }
         /// <summary>
@@ -6365,6 +6432,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         {
                             msg = ex.ToString();
                             tran.Rollback();
+                            tran.Dispose();
                             //ScriviLog(ex.Message); // Gestione log
                             resp = false;
                         }

@@ -285,8 +285,9 @@ namespace Uotep
             txtNote.Text = arc.Rows[0].ItemArray[11].ToString();
             //txtTipoAtto.Text = arc.Rows[0].ItemArray[12].ToString();
             DdlTipoAttoI.SelectedItem.Text = arc.Rows[0].ItemArray[12].ToString();
-            txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
-            CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
+            //txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
+
+            DdlQuartiere.SelectedItem.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper(); CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
             CkVincoli.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[15]);
             Ck1089.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[16]);
             CkDemolita.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[17]);
@@ -447,7 +448,7 @@ namespace Uotep
                             //arch.arch_tipologia = txtTipoAtto.Text;
                             arch.arch_tipologia = DdlTipoAttoI.SelectedItem.Text;
                             arch.arch_note = txtNote.Text;
-                            arch.arch_quartiere = txtQuartiere.Text;
+                            arch.arch_quartiere = DdlQuartiere.SelectedItem.Text;
                             //arch.arch_matricola = Session["user"].ToString();
                             arch.arch_matricola = Vuser;
                             arch.arch_indirizzo = txtIndirizzo.Text;
@@ -473,13 +474,35 @@ namespace Uotep
                             arch.arch_particellaNct = txtParticellaNct.Text;
                             Boolean ins = false;
                             DateTime dataStor = DateTime.Now;
+                            SiteMaster myMaster = this.Master as SiteMaster;
                             if (HfStato.Value == "Mod") //SE MODIFICA INSERISCO PRIMA LO STORICO
                             {
                                 ins = mn.UpdPraticaArchivioUote(arch, HfID.Value, dataStor);
                             }
                             else
-                                ins = mn.SavePraticaArchivioUote(arch);
-                            SiteMaster myMaster = this.Master as SiteMaster;
+                            {
+                                ins = mn.SavePraticaArchivioUote(arch, out msg);
+                                if (!string.IsNullOrEmpty(msg))
+                                {
+                                    if (msg == "DUPLICATO")
+                                    {
+
+                                        int pratica = txtPratica.Text != string.Empty ? Convert.ToInt32(txtPratica.Text) : 0;
+                                        pratica++;
+                                        txtPratica.Text = pratica.ToString();
+                                        if (myMaster != null)
+                                        {
+                                            // 2. Chiamo il metodo pubblico
+                                            myMaster.MostraMessaggio("?? ATTENZIONE", txtPratica.Text + ":" + Enumerate.MsgOutput.DupPratica.GetDescription() + ":" + pratica, "danger");
+                                        }
+
+                                        return;
+
+                                    }
+                                }
+                            }
+
+
                             if (!ins)
                             {
                                 //messaggioPopup = "Inserimento della pratica non riuscito, controllare il log.";
@@ -553,7 +576,7 @@ namespace Uotep
 
             txtPratica.Text = String.Empty;
             txtGiudice.Text = string.Empty;
-            txtQuartiere.Text = string.Empty;
+            DdlQuartiere.SelectedItem.Text = string.Empty;
             txtInCarico.Text = string.Empty;
             //txtTipoAtto.Text = string.Empty;
             DdlTipoAttoI.SelectedIndex = 0;
@@ -699,10 +722,11 @@ namespace Uotep
             {
                 Manager mn = new Manager();
                 DataTable RicercaQuartiere = mn.getListQuartiere(out msg);
-                DdlQuartiereI.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
-                DdlQuartiereI.DataTextField = "Quartiere"; // Il campo visibile
-                DdlTipoAttoI.DataValueField = "id_quartiere";
-                DdlQuartiereI.DataBind();
+                DdlQuartiere.DataSource = RicercaQuartiere; // Imposta il DataSource della DropDownList
+                DdlQuartiere.DataTextField = "Quartiere"; // Il campo visibile
+                DdlQuartiere.DataValueField = "id_quartiere";
+                DdlQuartiere.DataBind();
+                DdlQuartiere.Items.Insert(0, new ListItem("-- Seleziona un'opzione --", "0"));
 
                 DataTable RicercaIndirizzo = mn.getListIndirizzo(out msg);
                 DdlIndirizzoI.DataSource = RicercaIndirizzo; // Imposta il DataSource della DropDownList
@@ -764,8 +788,8 @@ namespace Uotep
                 // Ottieni il valore dell'ID dalla CommandArgument
                 string selectedValue = e.CommandArgument.ToString();
 
-                // Imposta il valore nel TextBox
-                txtQuartiere.Text = selectedValue;
+                // Imposta il valore nel DropDownList
+                DdlQuartiere.SelectedItem.Text = selectedValue;
                 // Chiudi il popup
                 ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "hideModalQ();", true);
                 gvPopup.DataSource = null;
@@ -930,7 +954,7 @@ namespace Uotep
             }
             else
             {
-                txtPratica.Enabled = true;
+                //txtPratica.Enabled = true;
                 txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
             }
             return arc;
@@ -1009,6 +1033,15 @@ namespace Uotep
             }
             else
                 RicercaNew(sender, e);
+        }
+
+        protected void DdlQuartiere_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Manager mn = new Manager();
+            //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+            DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
+            Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) +1; 
+            txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
         }
     }
 }
