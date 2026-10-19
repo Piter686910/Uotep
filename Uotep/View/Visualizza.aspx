@@ -294,6 +294,7 @@
                         <asp:ListItem>MA1</asp:ListItem>
                         <asp:ListItem>MA2</asp:ListItem>
                         <asp:ListItem>MA3</asp:ListItem>
+                        <asp:ListItem>NOTIFICATORI</asp:ListItem>
                     </asp:DropDownList>
                     <asp:Label ID="Label19" runat="server" Text="Responsabile Area" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:TextBox ID="txtCapoArea" runat="server" CssClass="form-control" placeholder="Responsabile" autofocus="" />
@@ -307,10 +308,34 @@
                     <asp:Label ID="Label17" runat="server" Text="Data Carico" CssClass="form-label d-block mb-2"></asp:Label>
                     <asp:TextBox ID="txtStampaDataCarico" runat="server" CssClass="form-control data-auto" placeholder="Data Carico" autofocus="" />
 
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <asp:RadioButton ID="RbEdilizia" runat="server" GroupName="Categoria" />
+                                <asp:Label runat="server" AssociatedControlID="RbEdilizia" Text="Edilizia" CssClass="ms-2 mb-0" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <asp:RadioButton ID="RbPatrimonio" runat="server" GroupName="Categoria" />
+                                <asp:Label runat="server" AssociatedControlID="RbPatrimonio" Text="Patrimonio" CssClass="ms-2 mb-0" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <asp:RadioButton ID="RbNotifiche" runat="server" GroupName="Categoria" />
+                                <asp:Label runat="server" AssociatedControlID="RbNotifiche" Text="Notifiche" CssClass="ms-2 mb-0" />
+                            </div>
+                        </div>
+                    </div>
 
-                    <div style="margin-left: 1px!important; margin-top: 30px!important">
+
+                    <div style="margin-left: 1px!important; margin-top: -30px!important">
                         <asp:Button Text="Ricerca" runat="server" OnClick="Ricerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     </div>
+
+
+
                 </div>
                 <%-- DIV RICERCA Note --%>
                 <div id="DivNote" runat="server" class="form-group text-center" style="text-align: left !important">
@@ -601,17 +626,21 @@
                 <div class="d-flex justify-content-center align-items-center w-100 my-4">
                     <table style="margin: 0 auto; border-collapse: separate; border-spacing: 6px;">
                         <tr>
-                            <td><asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
-                            <td> <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
-                            <td><asp:Button ID="btDecreta" Text="Decreta" runat="server" OnClick="btDecreta_Click" ToolTip="Decreta" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button Text="Nuova Ricerca" runat="server" OnClick="NuovaRicerca_Click" ToolTip="Nuova Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="btDecreta" Text="Decreta" runat="server" OnClick="btDecreta_Click" ToolTip="Decreta" CssClass="btn btn-primary btn-custom-size" /></td>
 
-                            <td><asp:Button ID="BtDuplica" Text="Duplica" runat="server" OnClick="BtDuplica_Click1" ToolTip="Copia il contenuto in un nuovo carico" CssClass="btn btn-primary btn-custom-size" /></td>
+                            <td>
+                                <asp:Button ID="BtDuplica" Text="Duplica" runat="server" OnClick="BtDuplica_Click1" ToolTip="Copia il contenuto in un nuovo carico" CssClass="btn btn-primary btn-custom-size" /></td>
                         </tr>
                     </table>
-                    
-                   
-                    
-                    
+
+
+
+
                 </div>
                 <%--</div>--%>
             </div>

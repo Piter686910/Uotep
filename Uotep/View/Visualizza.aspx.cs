@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Interop;
 using Uotep.Classi;
 using WebGrease.Activities;
@@ -214,8 +215,17 @@ namespace Uotep
                 carico = mn.getListCarico(DdlMacroArea.SelectedItem.Text, txtCapoArea.Text , txtStampaDataCarico.Text, DdlSigla.SelectedItem.Text);
                 if (carico.Rows.Count > 0)
                 {
+                    string testo = string.Empty;
+                    if (RbEdilizia.Checked)
+                    {
+                        testo = "EDILIZIA";
+                    }
+                    else if (RbPatrimonio.Checked)
+                        testo = "PATRIMONIO";
+                    else if (RbNotifiche.Checked)
+                        testo = "NOTIFICHE";
                     Routine stampa = new Routine();
-                    stampa.CreaPdfCarichi(carico);
+                    stampa.CreaPdfCarichi(carico, DdlSigla.SelectedItem.Text,testo);
                 }
             }
             if (txtNote.Text != string.Empty)

@@ -560,6 +560,7 @@
                                 <asp:ListItem Text=""> </asp:ListItem>
                                 <asp:ListItem Text="ARCHIVIO"> </asp:ListItem>
                                 <asp:ListItem Text="ATTI"> </asp:ListItem>
+                                <asp:ListItem Text="AVVOCATURA"> </asp:ListItem>
                                 <asp:ListItem Text="CDR"> </asp:ListItem>
                                 <asp:ListItem Text="FURERIA"> </asp:ListItem>
                                 <asp:ListItem Text="MA1"> </asp:ListItem>

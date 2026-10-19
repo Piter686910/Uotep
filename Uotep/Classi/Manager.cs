@@ -606,25 +606,88 @@ namespace Uotep.Classi
 
 
 
+            string capoareaPulito = (capoarea ?? "").Trim();
+
+
+            //string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
+            //    " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
+            //    "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
+            //    "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, d.decr_data) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
+            //    " DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
+            //    " FROM Classificata WHERE rn = 1 ORDER BY carico;";
 
 
 
-            string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
-                " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
-                "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
-                "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, d.decr_data) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
-                " DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
-                " FROM Classificata WHERE rn = 1 ORDER BY carico;";
-
-
-
-
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            var sql = new StringBuilder(@"
+WITH Classificata AS (
+    SELECT p.Nr_Protocollo AS carico,
+           p.nr_pratica    AS pratica,
+           p.DataCarico,
+           p.QUARTIERE     AS località,
+           d.decr_nota     AS Note,
+           d.decr_unire    AS UNIRE,
+           d.decr_decretato,
+           p.Macro_area,
+           ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn
+    FROM Decretazione AS d
+    JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo
+    WHERE p.Macro_area = @ma
+      AND p.Sigla = @sigla
+      AND d.decr_chiuso = 0
+      AND (NULLIF(LTRIM(RTRIM(@capoarea)), '') IS NULL OR d.decr_decretato = @capoarea)
+      AND (CAST(p.DataCarico AS DATE) = @dataCarico   OR (DATEPART(year, d.decr_data) = DATEPART(year, @dataCarico) AND
+        DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, @dataCarico)))
+)
+SELECT carico, pratica, DataCarico, località, Note, UNIRE, decr_decretato, Macro_area
+FROM Classificata
+WHERE rn = 1
+ORDER BY carico;");
+            try
             {
-                return tb = FillTable(sql, conn, out msg);
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    using (var cmd = new SqlCommand(sql.ToString(), conn))
+                    {
+                        cmd.Parameters.Add("@ma", SqlDbType.VarChar, 50).Value = ma;
+                        cmd.Parameters.Add("@sigla", SqlDbType.VarChar, 10).Value = sigla;
+                        DateTime dataCaricoDt = DateTime.ParseExact(dataCarico, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+
+                        cmd.Parameters.Add("@dataCarico", SqlDbType.DateTime).Value = dataCaricoDt;
+
+                        //if (!string.IsNullOrWhiteSpace(capoarea))
+                        //cmd.Parameters.Add("@capoarea", SqlDbType.VarChar, 100).Value = capoarea;
+                        SqlParameter pCapo = cmd.Parameters.Add("@capoarea", SqlDbType.VarChar, 100);
+                        pCapo.Value = capoareaPulito.Length == 0 ? (object)DBNull.Value : capoareaPulito;
+
+
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd); // Usa il cmd che ha i parametri!
+
+
+
+                        conn.Open();
+                        da.Fill(tb); // Riempie il datatable usando il comando configurato
+                    }
+
+
+                    //return tb = FillTable(sql.ToString(), conn, out msg);
+                }
             }
+            catch (Exception ex)
+            {
+                // Gestione specifica per timeout SqlException
+                if (ex is System.Data.SqlClient.SqlException sqlEx && sqlEx.Number == -2) // Codice errore specifico per Timeout
+                {
+                    msg = "Time out";
+                }
+                else
+                {
+                    msg = "Errore database: " + ex.Message;
+                }
+            }
+            return tb;
         }
+
         public DataTable getListQuartina(Int32 anno)
         {
             DataTable tb = new DataTable();

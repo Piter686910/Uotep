@@ -2004,7 +2004,7 @@ namespace Uotep.Classi
             c.SetPaddingLeft(2);
             table.AddCell(c);
         }
-        public void CreaPdfCarichi(DataTable decretazione)
+        public void CreaPdfCarichi(DataTable decretazione, string sigla,string ed_patr)
         {
             // Usa il namespace corretto per la risorsa
             var assembly = Assembly.GetExecutingAssembly();
@@ -2023,20 +2023,32 @@ namespace Uotep.Classi
                     {
                         using (PdfWriter writer = new PdfWriter(stream))
                         {
-                            using (PdfDocument pdf = new PdfDocument(reader, writer))
+                            using (PdfDocument pdf = new PdfDocument(reader, writer))   
                             {
                                 // =========================================================================
                                 // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
                                 // =========================================================================
-                                using (Document document = new Document(pdf, PageSize.A4.Rotate()))
+                                using (Document document = new Document(pdf, PageSize.A4))
                                 {
-
-
+                                    switch (sigla)
+                                    {
+                                        case "ED":
+                                        case "TP":
+                                            sigla = "ESPOSTI";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    if (ed_patr == "NOTIFICHE")
+                                    {
+                                        sigla = "";
+                                    }
                                     // =========================================================================
                                     // PAGINA 1: LETTERA DI ACCOMPAGNAMENTO
                                     // Il testo viene aggiunto alla prima pagina, che è la carta intestata.
                                     // =========================================================================
-                                    document.Add(new Paragraph($"CARICO A.G. EDILIZIA ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + "\n" + "\n")
+
+                                    document.Add(new Paragraph($"CARICO {sigla} {ed_patr} ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + "\n" + "\n")
                                                                     .SetFixedPosition(10, 680, 800)
                                                                     .SetTextAlignment(TextAlignment.LEFT)
                                                                     .SetFontSize(12));
@@ -2054,11 +2066,11 @@ namespace Uotep.Classi
                                     // =========================================================================
                                     // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                    float pageWidth = PageSize.A4.Rotate().GetWidth();
-                                    float leftMargin = 36;
-                                    float usableWidth = pageWidth - (leftMargin * 2);
-                                    float currentY = 550; // Inizia dall'alto della nuova pagina
-                                    float lineHeight = 20f;
+                                   // float pageWidth = PageSize.A4.Rotate().GetWidth();
+                                    //float leftMargin = 36;
+                                    //float usableWidth = pageWidth - (leftMargin * 2);
+                                    //float currentY = 550; // Inizia dall'alto della nuova pagina
+                                    //float lineHeight = 20f;
                                     // --- TITOLI DEL REPORT ---
                                     //document.Add(new Paragraph($"Prot.: PG/" + decretazione.Rows[0].ItemArray[0].ToString() + "/__________________ di " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
                                     //    .SetFixedPosition(leftMargin, currentY, 500)
@@ -2070,7 +2082,7 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.RIGHT)
                                     //    .SetFontSize(12));
 
-                                    currentY -= (lineHeight * 2);
+                                   // currentY -= (lineHeight * 2);
 
                                     //document.Add(new Paragraph("Riepilogo rifornimento carburante mese di: " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
                                     //    .SetFixedPosition(leftMargin, currentY, usableWidth)
@@ -2084,7 +2096,7 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.CENTER)
                                     //    .SetFontSize(12));
 
-                                    currentY -= 20; // Spazio prima della tabella
+                                   // currentY -= 20; // Spazio prima della tabella
                                     
                                     // --- TABELLA ---
                                     const int colonneDati = 7;
@@ -2142,9 +2154,17 @@ namespace Uotep.Classi
                                                 table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER)
                                                     .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
                                                     .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
-                                                    .SetHeight(15)
+                                                    .SetMinHeight(15)
                                                     );
                                             }
+                                            //if (i==4)
+                                            //{
+                                            //    table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER)
+                                            //        .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
+                                            //        .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
+                                            //        .SetMinHeight(15)
+                                            //        );
+                                            //}
                                         }
                                         contatoreRiga++;
                                     }
