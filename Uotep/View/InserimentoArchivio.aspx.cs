@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -18,6 +19,30 @@ namespace Uotep
 {
     public partial class InserimentoArchivio : Page
     {
+        [Serializable] // Fondamentale per poterla salvare nel ViewState
+        public class ResponsabileModel
+        {
+            public string Responsabile { get; set; }
+            public string ComuneNascita { get; set; }
+            public string DataNascita { get; set; }
+        }
+
+        private List<ResponsabileModel> ListaResponsabili
+        {
+            get
+            {
+                if (ViewState["ListaResponsabili"] == null)
+                {
+                    ViewState["ListaResponsabili"] = new List<ResponsabileModel>();
+                }
+                return (List<ResponsabileModel>)ViewState["ListaResponsabili"];
+            }
+            set
+            {
+                ViewState["ListaResponsabili"] = value;
+            }
+        }
+
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String Ruolo = String.Empty;
@@ -49,6 +74,7 @@ namespace Uotep
 
             if (!IsPostBack)
             {
+                AggiornaGriglia();
                 String[] ar;
                 List<string> ListRicerca = (List<string>)Session["ListRicerca"];
                 if (ListRicerca != null)
@@ -89,6 +115,61 @@ namespace Uotep
 
 
         }
+        //***************
+        // 1. CLIC SU AGGIUNGI: Prende i dati dai TextBox e li aggiunge in memoria
+        protected void btAggiungi_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtResponsabile.Text))
+            {
+                var nuovo = new ResponsabileModel
+                {
+                    Responsabile = txtResponsabile.Text,
+                    //Quartiere = txtQuartiere.Text,
+                    ComuneNascita = txtNatoA.Text,
+                    DataNascita = txtDataNascita.Text
+                };
+
+                // Aggiunge alla lista locale
+                var lista = ListaResponsabili;
+                lista.Add(nuovo);
+                ListaResponsabili = lista;
+
+                // Pulisce i campi e aggiorna la tabella
+                PulisciCampi();
+                AggiornaGriglia();
+            }
+        }
+
+        // 2. RIMUOVERE UNA RIGA Responsabili
+        protected void gvResponsabili_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Rimuovi")
+            {
+                int index = Convert.ToInt32(e.CommandArgument);
+                var lista = ListaResponsabili;
+
+                if (index >= 0 && index < lista.Count)
+                {
+                    lista.RemoveAt(index);
+                    ListaResponsabili = lista;
+                    AggiornaGriglia();
+                }
+            }
+        }
+        private void AggiornaGriglia()
+        {
+            gvResponsabili.DataSource = ListaResponsabili;
+            gvResponsabili.DataBind();
+        }
+
+        private void PulisciCampi()
+        {
+            txtResponsabile.Text = string.Empty;
+            txtNatoA.Text = string.Empty;
+            
+            txtDataNascita.Text = string.Empty;
+        }
+        //****************
         private void RicercaNew(object sender, EventArgs e)
         {
 
@@ -274,12 +355,59 @@ namespace Uotep
             txtIndirizzo.Text = arc.Rows[0].ItemArray[5].ToString().ToUpper();
             txtResponsabile.Text = arc.Rows[0].ItemArray[6].ToString().ToUpper();
             txtNatoA.Text = arc.Rows[0].ItemArray[7].ToString().ToUpper();
-            if (!string.IsNullOrEmpty(arc.Rows[0].ItemArray[8].ToString()))
+            //I 20/10/26 responsabili
+            foreach (DataRow item in arc.Rows)
             {
-                DateTime dataNascita = System.Convert.ToDateTime(arc.Rows[0].ItemArray[8].ToString()); // Recupera la data dal DataTable
-                txtDataNascita.Text = dataNascita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
-                                                                          //  TxtDataIntervento.Text = rap.Rows[0].ItemArray[2].ToString();
+                if (item["responsabile"] != DBNull.Value && item["responsabile"] != null)
+                {
+
+
+                    var nuovo = new ResponsabileModel
+                    {
+                        Responsabile = item["responsabile"].ToString(),
+                        ComuneNascita = item["comunenascita"].ToString(),
+                        DataNascita = Convert.ToDateTime(item["data_nascita"]).ToString("dd/MM/yyyy")
+                    };
+
+                    // Aggiunge alla lista locale
+                    var lista = ListaResponsabili;
+                    lista.Add(nuovo);
+                    ListaResponsabili = lista;
+                }
+
             }
+            if (ListaResponsabili.Count > 0)
+            {
+                gvResponsabili.DataSource = ListaResponsabili;
+                gvResponsabili.DataBind();
+            }
+            //if (!string.IsNullOrEmpty(arc.Rows[0]["arch_dataNascita"].ToString()))
+            //{
+            //    DateTime dataNascita = System.Convert.ToDateTime(arc.Rows[0]["arch_dataNascita"].ToString()); // Recupera la data dal DataTable
+            //    txtDataNascita.Text = dataNascita.ToString("dd/MM/yyyy"); // Formatta la data e imposta il testo del TextBox
+            //}
+
+
+            if (arc.Rows[0]["arch_dataNascita"] != DBNull.Value && arc.Rows[0]["arch_dataNascita"] != null)
+            {
+                DateTime data = Convert.ToDateTime(arc.Rows[0]["arch_dataNascita"]);
+
+                // Se l'anno è 1 (cioè 01/01/0001), restituisce una stringa vuota o uno spazio
+                if (data.Year <= 1)
+                {
+                    txtDataNascita.Text = string.Empty; // Oppure " " se vuoi uno spazio vuoto
+                }
+                else
+                {
+                    // Altrimenti formatta regolarmente la data
+                    txtDataNascita.Text = data.ToString("dd/MM/yyyy");
+                }
+            }
+            else
+            {
+                txtDataNascita.Text = string.Empty;
+            }
+            //F 20/10/26 responsabili
             txtInCarico.Text = arc.Rows[0].ItemArray[9].ToString();
             CkEvasa.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[10]);
             txtNote.Text = arc.Rows[0].ItemArray[11].ToString();
@@ -287,7 +415,32 @@ namespace Uotep
             DdlTipoAttoI.SelectedItem.Text = arc.Rows[0].ItemArray[12].ToString();
             //txtQuartiere.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
 
-            DdlQuartiere.SelectedItem.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper(); CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
+           // DdlQuartiere.SelectedItem.Text = arc.Rows[0].ItemArray[13].ToString().ToUpper();
+
+
+
+
+            // 1. Recuperi il valore dal DataTable usando il nome della colonna
+            string quartiereDb = arc.Rows[0]["arch_quartiere"]?.ToString().ToUpper() ?? string.Empty;
+
+            // 2. Cerchi la voce corrispondente nella DropDownList e la selezioni
+            ListItem voceQuartiere = DdlQuartiere.Items.FindByText(quartiereDb); // O FindByValue se usi i codici
+
+            if (voceQuartiere != null)
+            {
+                DdlQuartiere.ClearSelection(); // Pulisce eventuali selezioni precedenti
+                voceQuartiere.Selected = true;  // Seleziona correttamente la voce
+            }
+            else
+            {
+                // Se il quartiere salvato non esiste nella lista, metti il default (es. indice 0)
+                DdlQuartiere.SelectedIndex = 0;
+            }
+
+
+
+
+            CkSuoloPubblico.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[14]);
             CkVincoli.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[15]);
             Ck1089.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[16]);
             CkDemolita.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[17]);
@@ -312,6 +465,9 @@ namespace Uotep
             if (!String.IsNullOrEmpty(arc.Rows[0].ItemArray[30].ToString()))
                 txtParticellaNct.Text = arc.Rows[0].ItemArray[30].ToString();
             CkBeniConfiscati.Checked = System.Convert.ToBoolean(arc.Rows[0].ItemArray[31]);
+            //I 20/10/26
+
+            //F
 
         }
         public Boolean Convalida()
@@ -397,7 +553,7 @@ namespace Uotep
                         arch.arch_numPratica = txtPratica.Text;
                         if (CkBis.Checked && CkTris.Checked && CkQuater.Checked)
                         {
-                            messaggioPopup = @"Non è possibile selezionare BIS, TRIS E QUATER contemporaneamente.";
+                            messaggioPopup = @"Non è possibile selezionare BIS, TRIS E QUATER conResponsabilimente.";
                             apripopuperrorModal_Click(sender, e);
 
                         }
@@ -452,8 +608,15 @@ namespace Uotep
                             //arch.arch_matricola = Session["user"].ToString();
                             arch.arch_matricola = Vuser;
                             arch.arch_indirizzo = txtIndirizzo.Text;
+
+
+
                             arch.arch_natoA = txtNatoA.Text;
                             arch.arch_responsabile = txtResponsabile.Text;
+                            foreach (var item in ListaResponsabili)
+                            {
+                                arch.arch_responsabile += item.Responsabile.ToString() + " ";
+                            }
                             arch.arch_vincoli = CkVincoli.Checked;
                             arch.arch_suoloPub = CkSuoloPubblico.Checked;
                             arch.arch_1089 = Ck1089.Checked;
@@ -472,16 +635,23 @@ namespace Uotep
 
                             arch.arch_foglioNct = txtFoglioNct.Text;
                             arch.arch_particellaNct = txtParticellaNct.Text;
+
+                            //I 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
+
+                            //F 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
                             Boolean ins = false;
                             DateTime dataStor = DateTime.Now;
                             SiteMaster myMaster = this.Master as SiteMaster;
                             if (HfStato.Value == "Mod") //SE MODIFICA INSERISCO PRIMA LO STORICO
                             {
-                                ins = mn.UpdPraticaArchivioUote(arch, HfID.Value, dataStor);
+                                ins = mn.UpdPraticaArchivioUote(arch, HfID.Value, dataStor, ListaResponsabili);
                             }
                             else
                             {
-                                ins = mn.SavePraticaArchivioUote(arch, out msg);
+                                //I 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
+                                ins = mn.SavePraticaArchivioUote(arch, ListaResponsabili, out msg);
+                                //F 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
+
                                 if (!string.IsNullOrEmpty(msg))
                                 {
                                     if (msg == "DUPLICATO")
@@ -1040,8 +1210,10 @@ namespace Uotep
             Manager mn = new Manager();
             //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
             DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
-            Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) +1; 
+            Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) + 1;
             txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
         }
+
+       
     }
 }

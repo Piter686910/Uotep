@@ -681,6 +681,33 @@ namespace Uotep
         protected global::System.Web.UI.WebControls.TextBox txtStampaDataCarico;
 
         /// <summary>
+        /// Controllo RbEdilizia.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RbEdilizia;
+
+        /// <summary>
+        /// Controllo RbPatrimonio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RbPatrimonio;
+
+        /// <summary>
+        /// Controllo RbNotifiche.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RbNotifiche;
+
+        /// <summary>
         /// Controllo DivNote.
         /// </summary>
         /// <remarks>

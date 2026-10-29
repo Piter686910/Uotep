@@ -43,6 +43,7 @@ using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static System.Windows.Forms.AxHost;
 using static Uote.test;
 using static Uotep.Classi.Enumerate;
+using static Uotep.InserimentoArchivio;
 using DataTable = System.Data.DataTable;
 
 namespace Uotep.Classi
@@ -1756,11 +1757,31 @@ ORDER BY LOGS.[Data Accesso] DESC";
             if (storico == "si")
                 //    sql = "SELECT * FROM ArchivioUoteStorico where id_Archivio = '" + id + "'";
 
-                sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
-                       " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
-            else
-                sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
+                //sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
+                //       " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
+                sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio = {id}) 
+         BEGIN 
+             SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita 
+             FROM ArchivioUoteStorico a 
+             LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio 
+             WHERE a.id_Archivio = {id}
+         END 
+         ELSE 
+         BEGIN 
+             SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita 
+             FROM ArchivioUote a 
+             LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio 
+             WHERE a.id_Archivio = {id}
+         END";
 
+
+
+            else
+                //    sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
+                sql = "SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita " +
+                 "FROM ArchivioUote a " +
+                 "LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio " +
+                 "WHERE a.id_Archivio = " + id;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2181,6 +2202,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                             sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null or arch_doppione='') " +
                                     " ORDER BY arch_datault_intervento DESC";
+
+
 
                         //  sql= "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[2].Replace("'", "''")  + " AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "')";
                         else
@@ -6202,13 +6225,14 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
         }
-        public Boolean SavePraticaArchivioUote(ArchivioUote arch, out string msg)
+        public Boolean SavePraticaArchivioUote(ArchivioUote arch, List<ResponsabileModel> ListaResponsabili, out string msg)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
             string testoSql = string.Empty;
             int res = 0;
             msg = string.Empty;
+            long nuovoIdArchivio = 0;
 
             sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
                 "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
@@ -6222,12 +6246,21 @@ ORDER BY LOGS.[Data Accesso] DESC";
                @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
                @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
                @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
-               @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
+               @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "'); SELECT SCOPE_IDENTITY();";
 
-            string numpratica = @arch.arch_numPratica.Substring(@arch.arch_numPratica.IndexOf('-')+1);
+            string numpratica = @arch.arch_numPratica.Substring(@arch.arch_numPratica.IndexOf('-') + 1);
             string sql_UpdProgrPratica = "update ProgrPratica set progressivo = " + numpratica + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
             string sql_Verificacartellina = "SELECT CASE  WHEN EXISTS( SELECT 1 FROM ProgrPratica WHERE progressivo = " + numpratica + "  AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%' ) " +
                  "THEN -1  ELSE 0 END AS Esito; ";
+
+
+
+            string Responsabili = @"INSERT INTO ResponsabiliPratiche (Responsabile,  data_nascita,nr_pratica,data_caricamento,comunenascita,id_archivio) 
+                                     VALUES (@Responsabile, @DataNascita,@nr_pratica,@data_inserimento,@comune,@id_archivio)";
+
+
+
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -6252,31 +6285,54 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         }
                         else
                         {
-                            res = 1;
-                        }
-                        if (res > 0)
-                        {
+
                             command.CommandText = sql_pratica;
+                            object result1 = command.ExecuteScalar();
 
-
-                            res = command.ExecuteNonQuery();
-                            if (res > 0)
+                            if (result1 != null && result1 != DBNull.Value)
                             {
+                                nuovoIdArchivio = Convert.ToInt64(result1);
+
+
                                 command.CommandText = sql_UpdProgrPratica;
                                 res = command.ExecuteNonQuery();
+
                                 if (res > 0)
                                 {
-
-                                    tran.Commit();
-                                    resp = true;
+                                    foreach (var list in ListaResponsabili)
+                                    {
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@Responsabile", list.Responsabile ?? (object)DBNull.Value);
+                                        command.Parameters.AddWithValue("@DataNascita", string.IsNullOrEmpty(list.DataNascita) ? (object)DBNull.Value : DateTime.Parse(list.DataNascita));
+                                        command.Parameters.AddWithValue("@comune", list.ComuneNascita ?? (object)DBNull.Value);
+                                        command.Parameters.AddWithValue("@nr_pratica", @arch.arch_numPratica ?? (object)DBNull.Value);
+                                        command.Parameters.AddWithValue("@data_inserimento", DateTime.Now);
+                                        command.Parameters.AddWithValue("@id_archivio", nuovoIdArchivio);
+                                        command.CommandText = Responsabili;
+                                        res = command.ExecuteNonQuery();
+                                    }
+                                    if (res > 0)
+                                    {
+                                        tran.Commit();
+                                        resp = true;
+                                    }
+                                    else
+                                    {
+                                        msg = "errore in insert ResponsabiliPratiche salva archivio uote pratica" + res.ToString();
+                                        tran.Rollback();
+                                        tran.Dispose();
+                                        return false;
+                                    }
                                 }
+
                                 else
                                 {
-                                    msg = "errore in update numero progressivo pratica" + res.ToString();
+                                    msg = "errore in sql_UpdProgrPratica salva archivio uote pratica" + res.ToString();
                                     tran.Rollback();
                                     tran.Dispose();
                                     return false;
                                 }
+
                             }
                             else
                             {
@@ -6286,20 +6342,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                                 return false;
                             }
 
-
-
                         }
-
-                        else
-                        {
-                            // Se l'UPDATE fallisce, esegui il rollback e imposta la risposta a false
-                            tran.Rollback();
-                            tran.Dispose();
-                            resp = false;
-                        }
-                        // command.CommandText = sql_pratica;
                         testoSql = "ArchivioUote";
-                        //int res = command.ExecuteNonQuery();
                     }
 
                     catch (Exception ex)
@@ -6319,8 +6363,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
                     }
-                    
-                    tran.Rollback();
+
+                    //tran.Rollback();
                     tran.Dispose();
                     return resp;
                 }
@@ -6565,10 +6609,10 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     return false;
                 }
                 sql_pratica =
-    // 1. CONTROLLO ESISTENZA
-    // Verifica se esiste già una riga con lo stesso Protocollo e lo stesso Anno
-    "IF NOT EXISTS (SELECT 1 FROM principale WHERE nr_protocollo = '" + @p.nrProtocollo + "' AND Anno = '" + @p.anno + "') " +
-    "BEGIN " +
+        // 1. CONTROLLO ESISTENZA
+        // Verifica se esiste già una riga con lo stesso Protocollo e lo stesso Anno
+        "IF NOT EXISTS (SELECT 1 FROM principale WHERE nr_protocollo = '" + @p.nrProtocollo + "' AND Anno = '" + @p.anno + "') " +
+        "BEGIN " +
         // 2. SE NON ESISTE -> ESEGUI INSERT
         "INSERT INTO principale (" +
             "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
@@ -6615,12 +6659,12 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
         // RESTITUISCE IL NUOVO ID GENERATO
         "SELECT SCOPE_IDENTITY(); " +
-    "END " +
-    "ELSE " +
-    "BEGIN " +
+        "END " +
+        "ELSE " +
+        "BEGIN " +
         // 3. SE ESISTE GIÀ -> RESTITUISCE -1
         "SELECT -1; " +
-    "END";
+        "END";
                 //sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
                 //    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, " +
                 //    "macro_area,UlterioreTipoAtto,bu,codiceEdificio)" +
@@ -7138,7 +7182,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
         /// <param name="id"></param>
         /// <param name="dataStor"></param>
         /// <returns></returns>
-        public Boolean UpdPraticaArchivioUote(ArchivioUote arch, String id, DateTime dataStor)
+        public Boolean UpdPraticaArchivioUote(ArchivioUote arch, String id, DateTime dataStor, List<ResponsabileModel> ListaResponsabili)
         {
             bool resp = true;
             string sql_upd = String.Empty;
@@ -7159,19 +7203,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                      ",arch_beniConfiscati='" + @arch.arch_beniConfiscati + "' where id_Archivio = " + Convert.ToInt32(id);
 
                 string dataStorFormattata = dataStor.ToString("yyyy-MM-dd HH:mm:ss");
-                //sql_InsStorico = "insert into ArchivioUoteStorico (Sarch_numPratica,Sarch_doppione,Sarch_dataIns,Sarch_datault_intervento,Sarch_indirizzo,Sarch_responsabile,Sarch_natoA,Sarch_dataNascita," +
-                //    "Sarch_inCarico,Sarch_evasa,Sarch_note,Sarch_tipologia,Sarch_quartiere,Sarch_suoloPub,Sarch_vincoli,Sarch_1089,Sarch_demolita,Sarch_allegati,Sarch_matricola,Sarch_sezione,Sarch_foglio," +
-                //    "Sarch_particella,Sarch_sub,Sarch_dataInizioAttivita,Sarch_propPriv,Sarch_propComune,Sarch_propBeniCult,Sarch_propAltriEnti,Sarch_foglionct,Sarch_particellanct,Sarch_beniConfiscati,Sarch_dataStoricizzazione)" +
-                //   " Values('" + @Sarch.Sarch_numPratica + "','" + @Sarch.Sarch_bis + "','" + @Sarch.Sarch_dataIns + "','" +
-                //   @Sarch.Sarch_datault_intervento + "','" + @Sarch.Sarch_indirizzo.Replace("'", "''") + "','" +
-                //   @Sarch.Sarch_responsabile.Replace("'", "''") + "','" + @Sarch.Sarch_natoA.Replace("'", "''") + "','" + @Sarch.Sarch_dataNascita + "','" +
-                //   @Sarch.Sarch_inCarico.Replace("'", "''") + "','" + @Sarch.Sarch_evasa + "','" + @Sarch.Sarch_note.Replace("'", "''") + "','" +
-                //   @Sarch.Sarch_tipologia.Replace("'", "''") + "','" + @Sarch.Sarch_quartiere.Replace("'", "''") + "','" + @Sarch.Sarch_suoloPub + "','" +
-                //   @Sarch.Sarch_vincoli + "','" + @Sarch.Sarch_1089 + "','" + @Sarch.Sarch_demolita + "','" +
-                //   @Sarch.Sarch_allegati.Replace("'", "''") + "','" + @Sarch.Sarch_matricola + "','" + @Sarch.Sarch_sezione.Replace("'", "''") + "','" + @Sarch.Sarch_foglio + "','" + @Sarch.Sarch_particella + "','" +
-                //   @Sarch.Sarch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
-                //   @Sarch.Sarch_propPriv + "','" + @Sarch.Sarch_propBeniCult + "','" + @Sarch.Sarch_propComune + "','" + @Sarch.Sarch_propAltriEnti + "','" + @Sarch.Sarch_foglioNct + "','" +
-                //   @Sarch.Sarch_particellaNct + "','" + @Sarch.Sarch_beniConfiscati + "','" + dataStorFormattata + "')";
+
 
                 sql_InsStorico = "insert into ArchivioUoteStorico (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
@@ -7179,6 +7211,14 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "SELECT arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita,arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere," +
                     "arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati " +
                     "FROM ArchivioUote WHERE id_Archivio = " + Convert.ToInt32(id);
+                // -- 1. Elimina il record esistente per questa pratica e archivio (se presente)
+                //-- 2. Inserisce sempre il nuovo record aggiornato
+                string sqlDeleteResp = "DELETE FROM ResponsabiliPratiche WHERE id_archivio = @id_archivio_param AND nr_pratica = @nr_pratica_param;";
+                string sqlInsertResp = @"
+        INSERT INTO ResponsabiliPratiche (Responsabile, data_nascita, nr_pratica, data_caricamento, comunenascita, id_archivio) 
+        VALUES (@Responsabile, @DataNascita, @nr_pratica, @data_inserimento, @comune, @id_archivio);";
+
+
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -7195,24 +7235,36 @@ ORDER BY LOGS.[Data Accesso] DESC";
                                 // Update ArchivioUote
                                 command.CommandText = sql_InsStorico;
                                 command.Parameters.AddWithValue("@arch_dataStoricizzazione", dataStor);
-                                int res = command.ExecuteNonQuery();
-                                if (res > 0)
+                                command.ExecuteNonQuery();
+                                command.CommandText = sql_upd;
+                                command.ExecuteNonQuery();
+
+                                //cancello i responsabili esistenti per questa pratica e archivio
+                                command.CommandText = sqlDeleteResp;
+                                command.Parameters.Clear();
+                                command.Parameters.AddWithValue("@id_archivio_param", id);
+                                command.Parameters.AddWithValue("@nr_pratica_param", @arch.arch_numPratica ?? (object)DBNull.Value);
+                                command.ExecuteNonQuery();
+
+                                foreach (var list in ListaResponsabili)
                                 {
-                                    command.CommandText = sql_upd;
-                                    res = command.ExecuteNonQuery();
-                                    if (res > 0)
-                                    {
-                                        tran.Commit();
-                                        tran.Dispose();
-                                        resp = true;
-                                    }
-                                    else
-                                    {
-                                        tran.Rollback();
-                                        resp = false;
-                                    }
+                                    command.Parameters.Clear();
+                                    command.Parameters.AddWithValue("@Responsabile", list.Responsabile ?? (object)DBNull.Value);
+                                    command.Parameters.AddWithValue("@DataNascita", string.IsNullOrEmpty(list.DataNascita) ? (object)DBNull.Value : DateTime.Parse(list.DataNascita));
+                                    command.Parameters.AddWithValue("@comune", list.ComuneNascita ?? (object)DBNull.Value);
+                                    command.Parameters.AddWithValue("@nr_pratica", @arch.arch_numPratica ?? (object)DBNull.Value);
+                                    command.Parameters.AddWithValue("@data_inserimento", DateTime.Now);
+                                    command.Parameters.AddWithValue("@id_archivio", id);
+                                    command.CommandText = sqlInsertResp;
+                                    command.ExecuteNonQuery();
 
                                 }
+
+                                tran.Commit();
+                                resp = true;
+
+
+
                             }
                             catch (Exception)
                             {
@@ -7223,9 +7275,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         }
                     }
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -8129,15 +8178,15 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
 
                 string sql_storico =
- "INSERT INTO principalestorico (" +
- "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
- "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
- "SELECT " +
- "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
- "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
- "FROM principale WHERE id = " + ID;
+        "INSERT INTO principalestorico (" +
+        "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+        "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+        "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
+        "SELECT " +
+        "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+        "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+        "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
+        "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();

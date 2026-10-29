@@ -78,7 +78,7 @@
             });
         });
 
-
+        //////////////
 
         //giudice
         function filterDropdownGiudice() {
@@ -295,93 +295,66 @@
 
                 <div class="container">
                     <div class="tab-content">
-                        <div class="row  custom-border">
+                        <div class="custom-border p-3">
 
-                            <div class="col-md-3">
-
-                                <label for="txtPratica">Nr Pratica</label>
-                                <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false"/>
-                                <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
-                                <label class="form-check-label ms-2" for="CkBis">Bis</label>
-                                <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
-                                <label class="form-check-label ms-2" for="CkTris">Tris</label>
-                                <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
-                                <label class="form-check-label ms-2" for="CkQuater">Quater</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="txtDataInserimento">Data Inserimento</label>
-                                <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
-                            </div>
+                            <!-- PRIMA RIGA: 3 elementi (col-md-4) -->
+                            <div class="row mb-3">
 
 
-                            <div class="col-md-3">
-                                <label for="txtDataInizioAttivita">Data Inizio Attività</label>
-                                <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" autofocus=""/>
-                                <asp:RegularExpressionValidator
-                                    ID="RegularExpressionValidator2"
-                                    runat="server"
-                                    ControlToValidate="txtDataInizioAttivita"
-                                    ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
-                                    ErrorMessage="la data deve essere dd/mm/aaaa"
-                                    ForeColor="Red"
-                                    ValidationGroup="bt"
-                                    Display="Static">
+                                <!-- 1. Quartiere -->
+                                <div class="col-md-4">
+                                    <label for="DdlQuartiere">Quartiere</label>
+                                    <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt" Display="Dynamic"> </asp:RequiredFieldValidator>
 
-
-                                </asp:RegularExpressionValidator>
-                            </div>
-                        </div>
-                        <div class="row  custom-border">
-                            <div class="col-md-4">
-
-                                <div class="form-group mb-3">
-                                    <label for="txtResponsabile">Responsabile</label>
-                                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
-                                    <asp:RequiredFieldValidator ID="rqResponsabile" runat="server" ControlToValidate="txtResponsabile" ErrorMessage="inserire un nominativo" ForeColor="Red" ValidationGroup="bt">
-                                    </asp:RequiredFieldValidator>
-
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="txtQuartiere">Quartiere</label>
-                                    <asp:RequiredFieldValidator ID="RqFile" runat="server" ControlToValidate="DdlQuartiere" InitialValue="0" ErrorMessage="Selezionare un quartiere" ForeColor="Red" ValidationGroup="bt"> </asp:RequiredFieldValidator>
                                     <div id="suggestionsListQuartiere" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
                                     </div>
-                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" style="margin-top: -20px" />
 
+                                    <asp:DropDownList ID="DdlQuartiere" runat="server" CssClass="form-control mt-1" OnSelectedIndexChanged="DdlQuartiere_SelectedIndexChanged" AutoPostBack="true" />
                                 </div>
+
+                                <!-- 2. Data Inserimento -->
+                                <div class="col-md-4">
+                                    <label for="txtDataInserimento">Data Inserimento</label>
+                                    <asp:TextBox ID="txtDataInserimento" runat="server" CssClass="form-control data-auto" Enabled="false" Font-Bold="true" />
+                                </div>
+
+                                <!-- 3. Data Inizio Attività -->
+                                <div class="col-md-4">
+                                    <label for="txtDataInizioAttivita">Data Inizio Attività</label>
+                                    <asp:TextBox ID="txtDataInizioAttivita" runat="server" CssClass="form-control data-auto" Font-Bold="true" autofocus="" />
+                                    <asp:RegularExpressionValidator
+                                        ID="RegularExpressionValidator2"
+                                        runat="server"
+                                        ControlToValidate="txtDataInizioAttivita"
+                                        ValidationExpression="^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$"
+                                        ErrorMessage="la data deve essere dd/mm/aaaa"
+                                        ForeColor="Red"
+                                        ValidationGroup="bt"
+                                        Display="Static">
+                                    </asp:RegularExpressionValidator>
+                                </div>
+
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group mb-3">
-                                    <label for="txtNatoA">Nato A</label>
-                                    <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
 
-                                </div>
-                                <!-- Indirizzo e TextBox sulla stessa riga -->
-                                <div class="form-group mb-3" style="margin-top: 35px">
-                                    <label for="DdlIndirizzo">Indirizzo</label>
+                            <!-- SECONDA RIGA: 2 elementi (col-md-4) -->
+                            <div class="row">
 
-                                    <!-- DropDownList occupa metà spazio -->
-
-                                    <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
-                                    <div id="suggestionsListI" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                <!-- 5. Nr Pratica -->
+                                <div class="col-md-4">
+                                    <label for="txtPratica">Nr Pratica</label>
+                                    <asp:TextBox ID="txtPratica" runat="server" CssClass="form-control" ForeColor="Red" Font-Bold="true" Enabled="false" />
+                                    <div class="mt-2">
+                                        <asp:CheckBox ID="CkBis" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label ms-1 me-2" for="CkBis">Bis</label>
+                                        <asp:CheckBox ID="CkTris" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label ms-1 me-2" for="CkTris">Tris</label>
+                                        <asp:CheckBox ID="CkQuater" runat="server" CssClass="form-check-input" />
+                                        <label class="form-check-label ms-1" for="CkQuater">Quater</label>
                                     </div>
-
-                                    <asp:DropDownList ID="DdlIndirizzoI" runat="server" CssClass="form-control" Style="display: none" />
-
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-
-                                <div class="form-group mb-3">
-                                    <label for="txtDataNascita">Data Nascita</label>
-
-                                    <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control data-auto"></asp:TextBox>
-
                                 </div>
 
-
-                                <div class="form-group mb-3" style="margin-top: 35px">
+                                <!-- 4. Data Ultimo Intervento -->
+                                <div class="col-md-4">
                                     <label for="txtDataUltimoIntervento">Data Ultimo Intervento</label>
                                     <asp:TextBox ID="txtDataUltimoIntervento" runat="server" CssClass="form-control data-auto" />
                                     <asp:RegularExpressionValidator
@@ -394,10 +367,80 @@
                                         ValidationGroup="bt"
                                         Display="Static">
                                     </asp:RegularExpressionValidator>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="DdlIndirizzo">Indirizzo</label>
+
+                                    <!-- DropDownList occupa metà spazio -->
+
+                                    <asp:TextBox ID="txtIndirizzo" runat="server" AutoPostBack="false" onkeyup="filterDropdownIndirizzo()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control"></asp:TextBox>
+                                    <div id="suggestionsListI" runat="server" style="display: none; border: 1px solid #ccc; background-color: #f9f9f9; position: absolute; z-index: 1000; width: 200px;">
+                                    </div>
+
+                                    <asp:DropDownList ID="DdlIndirizzoI" runat="server" CssClass="form-control" Style="display: none" />
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row  custom-border">
+                            <div class="col-md-4">
+
+                                <div class="form-group mb-3">
+                                    <label for="txtResponsabile">Responsabile</label>
+                                    <asp:TextBox ID="txtResponsabile" runat="server" CssClass="form-control" />
+
+
+                                </div>
+                                <!-- Indirizzo e TextBox sulla stessa riga -->
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label for="txtNatoA">Nato A</label>
+                                    <asp:TextBox ID="txtNatoA" runat="server" CssClass="form-control" />
+
+                                </div>
+                                <div class="form-group mb-3" style="margin-top: 60px">
+                                    <!-- Pulsante per aggiungere alla lista Responsabili -->
+                                    <asp:Button ID="btAggiungi" runat="server" Text="+ Aggiungi alla Lista"
+                                        CssClass="btn btn-primary mt-3" OnClick="btAggiungi_Click" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group mb-3">
+                                    <label for="txtDataNascita">Data Nascita</label>
+
+                                    <asp:TextBox ID="txtDataNascita" runat="server" AutoPostBack="false" onkeyup="filterDropdownTipoProv()" Style="width: 300px;" ClientIDMode="Static" CssClass="form-control data-auto"></asp:TextBox>
 
                                 </div>
 
+
                             </div>
+                        </div>
+                        <%-- responsabili --%>
+                        <div class="row  custom-border">
+
+                            <!-- Tabella Responsabili (GridView) -->
+                            <asp:GridView ID="gvResponsabili" runat="server" AutoGenerateColumns="false"
+                                CssClass="table table-bordered table-striped" OnRowCommand="gvResponsabili_RowCommand">
+                                <Columns>
+                                    <asp:BoundField DataField="Responsabile" HeaderText="Responsabile" />
+                                    <asp:BoundField DataField="comuneNascita" HeaderText="Comune di Nascita" />
+                                    <asp:BoundField DataField="DataNascita" HeaderText="Data Nascita" />
+                                    <asp:TemplateField HeaderText="Cancella">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="btnRimuovi" runat="server" CommandName="Rimuovi"
+                                                CommandArgument='<%# Container.DataItemIndex %>'
+                                                CssClass="btn btn-danger btn-sm">Rimuovi</asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+
                         </div>
                         <%-- dati catastali --%>
                         <div class="row  custom-border">
@@ -423,6 +466,7 @@
                                 </div>
 
                             </div>
+
                         </div>
                         <div class="row  custom-border">
                             <div class="col-md-12" style="display: inline-block">

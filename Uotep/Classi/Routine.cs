@@ -2004,7 +2004,7 @@ namespace Uotep.Classi
             c.SetPaddingLeft(2);
             table.AddCell(c);
         }
-        public void CreaPdfCarichi(DataTable decretazione)
+        public void CreaPdfCarichi(DataTable decretazione, string sigla, string ed_patr)
         {
             // Usa il namespace corretto per la risorsa
             var assembly = Assembly.GetExecutingAssembly();
@@ -2028,37 +2028,49 @@ namespace Uotep.Classi
                                 // =========================================================================
                                 // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
                                 // =========================================================================
-                                using (Document document = new Document(pdf, PageSize.A4.Rotate()))
+                                using (Document document = new Document(pdf, PageSize.A4))
                                 {
-
-
+                                    switch (sigla)
+                                    {
+                                        case "ED":
+                                        case "TP":
+                                            sigla = "ESPOSTI";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    if (ed_patr == "NOTIFICHE")
+                                    {
+                                        sigla = "";
+                                    }
                                     // =========================================================================
                                     // PAGINA 1: LETTERA DI ACCOMPAGNAMENTO
                                     // Il testo viene aggiunto alla prima pagina, che è la carta intestata.
                                     // =========================================================================
-                                    document.Add(new Paragraph($"CARICO A.G. EDILIZIA ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + "\n" + "\n")
+
+                                    document.Add(new Paragraph($"CARICO {sigla} {ed_patr} ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + "\n" + "\n")
                                                                     .SetFixedPosition(10, 680, 800)
                                                                     .SetTextAlignment(TextAlignment.LEFT)
                                                                     .SetFontSize(12));
 
-                                 
+
                                     document.Add(new Paragraph(" - " + decretazione.Rows[0].ItemArray[7].ToString() + " Referente: " + decretazione.Rows[0].ItemArray[6].ToString().ToUpper())
                                         .SetFixedPosition(15, 670, 700)
                                         .SetTextAlignment(TextAlignment.LEFT)
                                         .SetFontSize(12));
 
-                                   
+
 
                                     // =========================================================================
                                     // PAGINA 2: REPORT CON TABELLA
                                     // =========================================================================
                                     // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                    float pageWidth = PageSize.A4.Rotate().GetWidth();
-                                    float leftMargin = 36;
-                                    float usableWidth = pageWidth - (leftMargin * 2);
-                                    float currentY = 550; // Inizia dall'alto della nuova pagina
-                                    float lineHeight = 20f;
+                                    // float pageWidth = PageSize.A4.Rotate().GetWidth();
+                                    //float leftMargin = 36;
+                                    //float usableWidth = pageWidth - (leftMargin * 2);
+                                    //float currentY = 550; // Inizia dall'alto della nuova pagina
+                                    //float lineHeight = 20f;
                                     // --- TITOLI DEL REPORT ---
                                     //document.Add(new Paragraph($"Prot.: PG/" + decretazione.Rows[0].ItemArray[0].ToString() + "/__________________ di " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
                                     //    .SetFixedPosition(leftMargin, currentY, 500)
@@ -2070,7 +2082,7 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.RIGHT)
                                     //    .SetFontSize(12));
 
-                                    currentY -= (lineHeight * 2);
+                                    // currentY -= (lineHeight * 2);
 
                                     //document.Add(new Paragraph("Riepilogo rifornimento carburante mese di: " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
                                     //    .SetFixedPosition(leftMargin, currentY, usableWidth)
@@ -2084,11 +2096,11 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.CENTER)
                                     //    .SetFontSize(12));
 
-                                    currentY -= 20; // Spazio prima della tabella
-                                    
+                                    // currentY -= 20; // Spazio prima della tabella
+
                                     // --- TABELLA ---
                                     const int colonneDati = 7;
-                                    const int colonneTotali = colonneDati ;
+                                    const int colonneTotali = colonneDati;
 
                                     UnitValue[] columnWidths = new UnitValue[colonneTotali];
                                     columnWidths[0] = UnitValue.CreatePercentValue(5);
@@ -2125,9 +2137,9 @@ namespace Uotep.Classi
                                             if (item == null || item is DBNull) { cellText = ""; }
                                             else if (i == 2) { cellText = item is DateTime ? ((DateTime)item).ToString("dd/MM/yyyy") : item.ToString(); }
                                             //else if (i == 5) { cellText = item is TimeSpan ? ((TimeSpan)item).ToString("hh\\:mm") : item.ToString(); }
-                                         //  else if (i == 5) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
+                                            //  else if (i == 5) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
                                             else { cellText = item.ToString(); }
-                                            if (i != 6 )
+                                            if (i != 6)
                                             {
 
                                                 if (cellText == "True")
@@ -2142,9 +2154,17 @@ namespace Uotep.Classi
                                                 table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER)
                                                     .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
                                                     .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
-                                                    .SetHeight(15)
+                                                    .SetMinHeight(15)
                                                     );
                                             }
+                                            //if (i==4)
+                                            //{
+                                            //    table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER)
+                                            //        .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
+                                            //        .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
+                                            //        .SetMinHeight(15)
+                                            //        );
+                                            //}
                                         }
                                         contatoreRiga++;
                                     }
@@ -2152,7 +2172,7 @@ namespace Uotep.Classi
 
                                     // Firma
                                     //float signatureTextY = 80;
-                                   // float signatureLineY = 60;
+                                    // float signatureLineY = 60;
                                     //document.Add(new Paragraph("Il Responsabile Macro Area").SetFixedPosition(leftMargin, signatureTextY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
                                     //document.Add(new Paragraph("_______________________").SetFixedPosition(leftMargin, signatureLineY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
 
@@ -2160,8 +2180,8 @@ namespace Uotep.Classi
                                     // Rimuovendo SetFixedPosition, il paragrafo si posiziona subito dopo l'ultimo elemento aggiunto
                                     document.Add(new Paragraph("Il Responsabile Macro Area\n\n__________________________________")
                                         .SetMarginTop(30) // Crea uno spazio di sicurezza dai dettagli variabili sopra
-                                        .SetTextAlignment(TextAlignment.RIGHT)); 
-                                } 
+                                        .SetTextAlignment(TextAlignment.RIGHT));
+                                }
                             }
                         }
                     }
@@ -2178,6 +2198,11 @@ namespace Uotep.Classi
                 }
             }
         }
+
+
+
+        /////////////////////////////
+
         //public void CreaPdfCarichi(DataTable decretazione)
         //{
         //    float startY = 400;
