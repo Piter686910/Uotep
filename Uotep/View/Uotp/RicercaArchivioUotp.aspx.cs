@@ -817,5 +817,24 @@ namespace Uotep
 
                 Ricerca_Click(sender, e);
         }
+        protected void txtFilterIndirizzo_TextChanged(object sender, EventArgs e)
+        {
+            System.Web.UI.WebControls.TextBox txtFilter = (System.Web.UI.WebControls.TextBox)sender;
+            string filterValue = txtFilter.Text.Trim();
+            HfFiltroindirizzo.Value = filterValue;
+            // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
+            string columnName = ""; // Devi decidere su quale campo del DB filtrare
+            if (txtFilter.ID == "txtFilterIndirizzo")
+            {
+                columnName = "via"; // 
+            }
+            // Puoi aggiungere altri if/else per altre TextBox di filtro
+
+            // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
+            // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
+
+            PopulateGridView(columnName, HfFiltroindirizzo.Value, "indirizzo"); // Esempio di funzione di filtro
+            apripopupPratica_Click(sender, e);
+        }
     }
 }

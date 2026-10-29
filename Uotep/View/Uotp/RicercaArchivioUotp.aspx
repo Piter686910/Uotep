@@ -21,32 +21,32 @@
         /* Proprietà essenziale per spezzare parole lunghe e senza spazi */
         /*}*/
         /* Stile per centrare orizzontalmente un elemento a blocco come una tabella */
-                .center-table {
-    margin-left: auto;
-    margin-right: auto;
-    /* In breve: margin: 0 auto; */
-    /* Opzionale: potresti voler collassare i bordi se li usi */
-    /* border-collapse: collapse; */
-    /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
-    /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
-}
+        .center-table {
+            margin-left: auto;
+            margin-right: auto;
+            /* In breve: margin: 0 auto; */
+            /* Opzionale: potresti voler collassare i bordi se li usi */
+            /* border-collapse: collapse; */
+            /* Puoi usare border-spacing se vuoi spazio tra le celle (sia riga che colonna) */
+            /* border-spacing: 0 15px; /* 0 orizzontale, 15px verticale */
+        }
 
-    /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
-    /* Aggiunge padding a tutte le celle della tabella con classe center-table */
-    .center-table td {
-        padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
-        padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
-        /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
-        /* padding-left: 5px; */
-        /* padding-right: 5px; */
-    }
+            /* Stile per aggiungere spazio interno alle celle (padding), crea distanza tra i bottoni */
+            /* Aggiunge padding a tutte le celle della tabella con classe center-table */
+            .center-table td {
+                padding-bottom: 15px; /* Aggiunge 15px di spazio SOTTO il contenuto della cella */
+                padding-top: 5px; /* Opzionale: Aggiunge un po' di spazio SOPRA */
+                /* Puoi anche aggiungere padding orizzontale se necessario, ma mx-2 sul bottone già lo fa */
+                /* padding-left: 5px; */
+                /* padding-right: 5px; */
+            }
     </style>
     <div class="jumbotron">
         <div style="margin-top: -50px!important">
             <%-- <asp:Literal ID="ProtocolloLiteral" runat="server"></asp:Literal>
             <p class="text-center lead">RICERCA UNA PRATICA</p>--%>
             <div class="dashboard-header">
-                <h1><span class="fa-solid fa-gear fa-spin"></span> RICERCA UNA PRATICA IN ARCHIVIO PATRIMONIO</h1>
+                <h1><span class="fa-solid fa-gear fa-spin"></span>RICERCA UNA PRATICA IN ARCHIVIO PATRIMONIO</h1>
             </div>
             <!-- Contenitore per centrare -->
 
@@ -59,7 +59,7 @@
                 <div class="d-flex justify-content-center mt-4">
                     <%-- Inizio Tabella per i Pulsanti --%>
                     <table class="center-table">
-                        
+
                         <tr>
                             <%-- Prima riga: 4 pulsanti --%>
                             <td>
@@ -310,7 +310,7 @@
                     </div>
                     <asp:Button ID="BtNewRicerca" Text="Nuova Ricerca" runat="server" OnClick="BtNewRicerca_Click" ToolTip="Ricerca" CssClass="btn btn-primary mt-3" ValidationGroup="bt" />
                     <asp:Button ID="btModifica" Text="Modifica" runat="server" OnClick="btModifica_Click" ToolTip="Modifica" CssClass="btn btn-primary mt-3" />
-                     <asp:Button id="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
+                    <asp:Button ID="btReturn" runat="server" Text="<< Back" OnClick="btReturn_Click" CssClass="btn btn-primary mt-3" />
 
 
                 </div>
@@ -330,9 +330,11 @@
                     <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                         <div class="small text-muted">
                             <asp:Label ID="lblInfoPagine" runat="server" Text="Pagina 1 di 10 "></asp:Label>
-                            <strong><asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
+                            <strong>
+                                <asp:Label ID="lblNumRighe" runat="server" Text=""></asp:Label></strong>
                         </div>
-                        <strong> <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>            
+                        <strong>
+                            <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label></strong>
                     </div>
                     <div class="table-responsive">
                         <!-- GridView nel popup -->
@@ -392,6 +394,17 @@
                                         <%# Eval("Cognome") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text wrap-text">
+                                    <HeaderTemplate>
+                                        Indirizzo
+          <br />
+                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("via") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Destinatario" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Destinatario
@@ -418,10 +431,11 @@
                     </div>
                 </div>
                 <asp:HiddenField ID="HfFiltroNote" runat="server" />
-                 <asp:HiddenField ID="HfId" runat="server" />
+                <asp:HiddenField ID="HfId" runat="server" />
                 <asp:HiddenField ID="HfFiltroDestinatario" runat="server" />
                 <asp:HiddenField ID="HfFiltroOggetto" runat="server" />
                 <asp:HiddenField ID="HfFiltroCognome" runat="server" />
+                <asp:HiddenField ID="HfFiltroindirizzo" runat="server" />
 
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
