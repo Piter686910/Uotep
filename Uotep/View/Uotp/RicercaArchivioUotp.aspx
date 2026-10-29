@@ -392,6 +392,17 @@
                                         <%# Eval("Cognome") %>
                                     </ItemTemplate>
                                 </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Indirizzo" ItemStyle-CssClass="uppercase-text wrap-text">
+                                    <HeaderTemplate>
+                                        Indirizzo
+                                         <br />
+                                        <asp:TextBox ID="txtFilterIndirizzo" runat="server" OnTextChanged="txtFilterIndirizzo_TextChanged" AutoPostBack="True" CssClass="form-control form-control-sm" placeholder="Filtra..."></asp:TextBox>
+
+                                    </HeaderTemplate>
+                                    <ItemTemplate>
+                                        <%# Eval("via") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Destinatario" ItemStyle-CssClass="uppercase-text wrap-text">
                                     <HeaderTemplate>
                                         Destinatario
@@ -422,6 +433,7 @@
                 <asp:HiddenField ID="HfFiltroDestinatario" runat="server" />
                 <asp:HiddenField ID="HfFiltroOggetto" runat="server" />
                 <asp:HiddenField ID="HfFiltroCognome" runat="server" />
+                <asp:HiddenField ID="HfFiltroindirizzo" runat="server" />
 
                 <div class="modal-footer">
                     <!-- Bottone per avviare la ricerca -->
