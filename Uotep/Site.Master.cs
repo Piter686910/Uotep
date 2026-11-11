@@ -53,6 +53,8 @@ namespace Uotep
                         {
                             case "sicurezza":
                                 menuSicurezza.Visible = true;
+                                Inventario.Visible = true;
+                                GestAuto.Visible = true;
                                 menuEsci.Visible = true;
                                 break;
                             case "coordinamentopg":
@@ -223,7 +225,7 @@ namespace Uotep
                                 //
                                // CaricaScheda.Visible = true;
                                 // Mostra voci per utenti standard
-                                menuSicurezza.Visible = false;
+                               
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
@@ -245,7 +247,9 @@ namespace Uotep
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
                                 FSchedaDipendente.Visible = true;
-
+                                menuSicurezza.Visible=true;
+                                Inventario.Visible = true;
+                                GestAuto.Visible = true;
 
                                 //A1.Visible = true;
 
@@ -263,39 +267,10 @@ namespace Uotep
                                 menuAttivita.Visible = true;
                                 Amministratore.Visible = true;
                                 SchedaCarburante.Visible = true;
-                                Urp.Visible = true;
+                                Urp.Visible = false;
                                 //*
                                 break;
-                            case "superAdmin":
-                                // Mostra voci per utenti standard
-                                menuSicurezza.Visible = false;
-                                menuCoordinamentoAtti.Visible = true;
-                                menuArchivio.Visible = true;
-                                menuAccertatori.Visible = true;
-                                menuNuovaScheda.Visible = true;
-                                menuRicercaScheda.Visible = true;
-                                menuSegreteria.Visible = true;
-                                menuAmministratore.Visible = false;
-                                menuManTabelle.Visible = true;
-                                menuEsci.Visible = true;
-                                // menuHome.Visible = true;
-                                StatistichePg.Visible = true;
-                                PG.Visible = true;
-
-                                //*
-                                InserimentoAtti.Visible = true;
-                                //ModificaAtti.Visible = true;
-                                //ModificaRiservata.Visible = true;
-                                RicercaAtti.Visible = true;
-                                GestionePraticaUote.Visible = true;
-                                subMenuUOTE.Visible = true;
-                                subMenuUOTP.Visible = true;
-                                InserimentoArchivioUotp.Visible = true;
-                                RicercaArchivioUotp.Visible = true;
-                                menuAttivita.Visible = true;
-                                SchedaCarburante.Visible = true;
-                                //*
-                                break;
+                           
                             case "fureria":
                                 menuSicurezza.Visible = false;
                                 menuFureria.Visible = true;
@@ -337,6 +312,8 @@ namespace Uotep
             Session.Remove("TurniMensili");
             Session.Remove("ListScadenziario");
             Session.Remove("ListRicercaFiltro");
+            Session.Remove("ListInventario");
+            Session.Remove("ListFiltrataInventario");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

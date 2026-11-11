@@ -265,6 +265,10 @@ namespace Uotep
             {
                 ListAccertatori.Items.Add(pratica.Rows[0]["accertatori3"].ToString());
             }
+            if (!string.IsNullOrWhiteSpace(pratica.Rows[0]["accertatori4"].ToString()))
+            {
+                ListAccertatori.Items.Add(pratica.Rows[0]["accertatori4"].ToString());
+            }
 
 
             if (!String.IsNullOrEmpty(pratica.Rows[0].ItemArray[18].ToString()))
@@ -610,6 +614,12 @@ namespace Uotep
                             p.accertatori = accer[0];
                             p.accertatori2 = accer[1];
                             p.accertatori3 = accer[2];
+                            break;
+                        case "4":
+                            p.accertatori = accer[0];
+                            p.accertatori2 = accer[1];
+                            p.accertatori3 = accer[2];
+                            p.accertatori4 = accer[3];
                             break;
                         default:
                             break;
@@ -1214,6 +1224,10 @@ namespace Uotep
                         if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori3"].ToString()))
                         {
                             ListAccertatori.Items.Add(pratica.Rows[0]["accertatori3"].ToString());
+                        }
+                        if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori4"].ToString()))
+                        {
+                            ListAccertatori.Items.Add(pratica.Rows[0]["accertatori4"].ToString());
                         }
                         //I- mod 02/06/2026 numero esposti
                         if (!String.IsNullOrEmpty(pratica.Rows[0]["NumProtRicStessoCarico"].ToString()))
@@ -2252,7 +2266,7 @@ namespace Uotep
 
             // Verifica se l'elemento è già presente nella ListView
             bool itemExists = false;
-            if (ListAccertatori.Items.Count > 3)
+            if (ListAccertatori.Items.Count > 4)
             {
                 SiteMaster myMaster = this.Master as SiteMaster;
 

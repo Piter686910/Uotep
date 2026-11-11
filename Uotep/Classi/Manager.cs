@@ -1,3 +1,4 @@
+using AjaxControlToolkit;
 using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.CustomXmlSchemaReferences;
@@ -9,6 +10,7 @@ using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Office2010.CustomUI;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -17,6 +19,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Forms.Form.Element;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using Org.BouncyCastle.Asn1.X500;
 using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
@@ -43,6 +46,8 @@ using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static System.Windows.Forms.AxHost;
 using static Uote.test;
 using static Uotep.Classi.Enumerate;
+using Boolean = System.Boolean;
+using DataSet = System.Data.DataSet;
 using DataTable = System.Data.DataTable;
 
 namespace Uotep.Classi
@@ -550,6 +555,53 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        public int MaxNInventarioByCodep(string codep)
+        {
+            int maxNum = 1;
+            //se il codep non ha altri restituisce 0 altrimenti max +1
+            string query = @" SELECT   CASE 
+        WHEN MAX(progr_codep) IS NULL OR MAX(progr_codep) = 0 THEN 1 
+        ELSE  MAX(progr_codep) + 1 
+    END AS MaxProgr
+FROM inventario 
+WHERE codep = @codep";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Passaggio sicuro del parametro per evitare SQL Injection
+                    cmd.Parameters.AddWithValue("@codep", codep);
+
+                    try
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            maxNum = Convert.ToInt32(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("codep:" + codep + ", " + ex.Message + @" MaxNInventarioByCodep" + "; " + ConnString);
+                            sw.Close();
+                        }
+                        return 0;
+                    }
+                }
+            }
+
+            return maxNum;
+        }
         public DataTable MaxNPr(string anno)
         {
             DataTable tb = new DataTable();
@@ -790,6 +842,40 @@ ORDER BY carico;");
         {
             DataTable tb = new DataTable();
             string sql = "SELECT nominativo FROM operatore where (ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "') and abilitato=1 order by nominativo ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetlistInventario()
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM inventario order by codep ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetlistInventarioToPdf()
+        {
+            DataTable tb = new DataTable();
+            //string sql = "SELECT  CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+            //    "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario " +
+            //    "GROUP BY tipologia, categoria UNION ALL "+
+            //    "SELECT  'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+            //        "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario  ";
+
+
+
+
+            string sql = ";WITH DatiRaggruppati AS ( SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) " +
+                "AS BeniNoEtichettati, SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario GROUP BY tipologia, categoria ) "+
+                " SELECT tipologia_categoria,BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali FROM DatiRaggruppati " +
+                "UNION ALL SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(BeniNoEtichettati) AS BeniNoEtichettati,  SUM(BeniEtichettati) AS BeniEtichettati, SUM(BeniNoEtichettati + BeniEtichettati) AS totali "+
+                "FROM DatiRaggruppati; ";
+
+
+
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1180,7 +1266,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
             string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa, o.nominativo as nomeoperatore" +
-                            ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3" +
+                            ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3,p.Accertatori4" +
                             ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio,p.cartellina FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id LEFT JOIN operatore O ON p.matricola = O.matricola where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
@@ -1433,7 +1519,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 " WHERE (" +
                         "Accertatori LIKE '" + valoreCerca + "%' OR " +
                         "Accertatori2 LIKE '" + valoreCerca + "%' OR " +
-                        "Accertatori3 LIKE '" + valoreCerca + "%') " +
+                        "Accertatori3 LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatori4 LIKE '" + valoreCerca + "%') " +
                         "ORDER BY dataarrivo DESC";
 
 
@@ -2064,6 +2151,19 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
             sql = "SELECT * FROM GestioneAuto where id =" + id;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetInventarioById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM inventario where id_inventario =" + id;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2888,6 +2988,54 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
+        public bool InserisciInventario(InventarioObj inv)
+        {
+            string query = @"INSERT INTO inventario 
+                     (codep, categoria, data_inserimento, progr_codep, ufficio, etichetta, descrizione, dismesso, tipologia, seriale, note)
+                     VALUES 
+                     (@codep, @categoria, @data_inserimento, @progr_codep, @ufficio, @etichetta, @descrizione, @dismesso, @tipologia, @seriale, @note)";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Aggiunta sicura dei parametri (gestisce anche eventuali stringhe vuote/null)
+                    cmd.Parameters.AddWithValue("@codep", (object)inv.codep ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@categoria", (object)inv.categoria ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@data_inserimento", inv.data_inserimento);
+                    cmd.Parameters.AddWithValue("@progr_codep", inv.progr_codep);
+                    cmd.Parameters.AddWithValue("@ufficio", (object)inv.ufficio ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@etichetta", (object)inv.etichetta ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@descrizione", (object)inv.descrizione ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dismesso", inv.dismesso);
+                    cmd.Parameters.AddWithValue("@tipologia", (object)inv.tipologia ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@seriale", (object)inv.seriale ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", (object)inv.note ?? DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        int righeInserite = cmd.ExecuteNonQuery();
+                        return righeInserite > 0; // Restituisce true se l'inserimento è riuscito
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("codep:" + inv.codep + ", " + ex.Message + @" MaxNInventarioByCodep" + "; " + ConnString);
+                            sw.Close();
+                        }
+                        return false;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// inserisce una gestione auto e converte string in float
         /// </summary>
@@ -7722,6 +7870,54 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
+        public bool updInventarioById(string id, InventarioObj inv)
+        {
+            Boolean resp = true;
+            int Nid = Convert.ToInt32(id);
+            string query = @"UPDATE inventario SET 
+                     codep = @codep, 
+                     categoria = @categoria, 
+                     progr_codep = @progr_codep, 
+                     ufficio = @ufficio, 
+                     etichetta = @etichetta, 
+                     descrizione = @descrizione, 
+                     dismesso = @dismesso, 
+                     tipologia = @tipologia, 
+                     seriale = @seriale, 
+                     note = @note
+                     WHERE id_inventario = @id_inventario";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Passaggio dei parametri in modo sicuro
+                    cmd.Parameters.AddWithValue("@id_inventario", Nid);
+                    cmd.Parameters.AddWithValue("@codep", (object)inv.codep ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@categoria", (object)inv.categoria ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@progr_codep", inv.progr_codep);
+                    cmd.Parameters.AddWithValue("@ufficio", (object)inv.ufficio ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@etichetta", (object)inv.etichetta ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@descrizione", (object)inv.descrizione ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dismesso", inv.dismesso);
+                    cmd.Parameters.AddWithValue("@tipologia", (object)inv.tipologia ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@seriale", (object)inv.seriale ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", (object)inv.note ?? DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        int righeAggiornate = cmd.ExecuteNonQuery();
+                        return righeAggiornate > 0; // Restituisce true se l'aggiornamento è andato a buon fine
+                    }
+                    catch (Exception ex)
+                    {
+                        // Gestione dell'errore (puoi loggarlo)
+                        return false;
+                    }
+                }
+            }
+        }
         public Boolean UpdateRegistroById(int id, UrpRegistro reg)
         {
             bool resp = true;
@@ -8116,7 +8312,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "',accertatori4 ='" + @p.accertatori4.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
                     ",cartellina = '" + @p.cartellina + "'" +
                     ",Rif_Prot_Uscita = '" + @p.rif_Prot_Uscita.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
@@ -8127,11 +8323,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
  "INSERT INTO principalestorico (" +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, accertatori4, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
  "SELECT " +
  "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
  "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
- "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, accertatori4, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
  "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {

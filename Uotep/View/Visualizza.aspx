@@ -845,6 +845,7 @@
                                                 <%# Eval("Accertatori")   %>
                                                 <%# Eval("Accertatori2")   %>
                                                 <%# Eval("Accertatori3")   %>
+                                                <%# Eval("Accertatori4")   %>
                                             </ItemTemplate>
                                         </asp:TemplateField>
 

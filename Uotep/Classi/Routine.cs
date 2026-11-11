@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
@@ -2004,7 +2005,7 @@ namespace Uotep.Classi
             c.SetPaddingLeft(2);
             table.AddCell(c);
         }
-        public void CreaPdfCarichi(DataTable decretazione, string sigla,string ed_patr)
+        public void CreaPdfCarichi(DataTable decretazione, string sigla, string ed_patr)
         {
             // Usa il namespace corretto per la risorsa
             var assembly = Assembly.GetExecutingAssembly();
@@ -2023,7 +2024,7 @@ namespace Uotep.Classi
                     {
                         using (PdfWriter writer = new PdfWriter(stream))
                         {
-                            using (PdfDocument pdf = new PdfDocument(reader, writer))   
+                            using (PdfDocument pdf = new PdfDocument(reader, writer))
                             {
                                 // =========================================================================
                                 // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
@@ -2053,20 +2054,20 @@ namespace Uotep.Classi
                                                                     .SetTextAlignment(TextAlignment.LEFT)
                                                                     .SetFontSize(12));
 
-                                 
+
                                     document.Add(new Paragraph(" - " + decretazione.Rows[0].ItemArray[7].ToString() + " Referente: " + decretazione.Rows[0].ItemArray[6].ToString().ToUpper())
                                         .SetFixedPosition(15, 670, 700)
                                         .SetTextAlignment(TextAlignment.LEFT)
                                         .SetFontSize(12));
 
-                                   
+
 
                                     // =========================================================================
                                     // PAGINA 2: REPORT CON TABELLA
                                     // =========================================================================
                                     // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                   // float pageWidth = PageSize.A4.Rotate().GetWidth();
+                                    // float pageWidth = PageSize.A4.Rotate().GetWidth();
                                     //float leftMargin = 36;
                                     //float usableWidth = pageWidth - (leftMargin * 2);
                                     //float currentY = 550; // Inizia dall'alto della nuova pagina
@@ -2082,7 +2083,7 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.RIGHT)
                                     //    .SetFontSize(12));
 
-                                   // currentY -= (lineHeight * 2);
+                                    // currentY -= (lineHeight * 2);
 
                                     //document.Add(new Paragraph("Riepilogo rifornimento carburante mese di: " + schede.Rows[0].ItemArray[11].ToString() + " " + schede.Rows[0].ItemArray[12].ToString())
                                     //    .SetFixedPosition(leftMargin, currentY, usableWidth)
@@ -2096,11 +2097,11 @@ namespace Uotep.Classi
                                     //    .SetTextAlignment(TextAlignment.CENTER)
                                     //    .SetFontSize(12));
 
-                                   // currentY -= 20; // Spazio prima della tabella
-                                    
+                                    // currentY -= 20; // Spazio prima della tabella
+
                                     // --- TABELLA ---
                                     const int colonneDati = 7;
-                                    const int colonneTotali = colonneDati ;
+                                    const int colonneTotali = colonneDati;
 
                                     UnitValue[] columnWidths = new UnitValue[colonneTotali];
                                     columnWidths[0] = UnitValue.CreatePercentValue(5);
@@ -2137,9 +2138,9 @@ namespace Uotep.Classi
                                             if (item == null || item is DBNull) { cellText = ""; }
                                             else if (i == 2) { cellText = item is DateTime ? ((DateTime)item).ToString("dd/MM/yyyy") : item.ToString(); }
                                             //else if (i == 5) { cellText = item is TimeSpan ? ((TimeSpan)item).ToString("hh\\:mm") : item.ToString(); }
-                                         //  else if (i == 5) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
+                                            //  else if (i == 5) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
                                             else { cellText = item.ToString(); }
-                                            if (i != 6 )
+                                            if (i != 6)
                                             {
 
                                                 if (cellText == "True")
@@ -2172,7 +2173,7 @@ namespace Uotep.Classi
 
                                     // Firma
                                     //float signatureTextY = 80;
-                                   // float signatureLineY = 60;
+                                    // float signatureLineY = 60;
                                     //document.Add(new Paragraph("Il Responsabile Macro Area").SetFixedPosition(leftMargin, signatureTextY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
                                     //document.Add(new Paragraph("_______________________").SetFixedPosition(leftMargin, signatureLineY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
 
@@ -2180,8 +2181,8 @@ namespace Uotep.Classi
                                     // Rimuovendo SetFixedPosition, il paragrafo si posiziona subito dopo l'ultimo elemento aggiunto
                                     document.Add(new Paragraph("Il Responsabile Macro Area\n\n__________________________________")
                                         .SetMarginTop(30) // Crea uno spazio di sicurezza dai dettagli variabili sopra
-                                        .SetTextAlignment(TextAlignment.RIGHT)); 
-                                } 
+                                        .SetTextAlignment(TextAlignment.RIGHT));
+                                }
                             }
                         }
                     }
@@ -2198,95 +2199,277 @@ namespace Uotep.Classi
                 }
             }
         }
-        //public void CreaPdfCarichi(DataTable decretazione)
-        //{
-        //    float startY = 400;
-        //    float lineHeight = 20f;
-        //    var assembly = Assembly.GetExecutingAssembly();
-        //    var resourceName = "Uotep.FileComuni.LetteraAccompagnamento.pdf";
+        /// <summary>
+        /// stampa pdf inventario
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <exception cref="Exception"></exception>
+        public void CreaPdfInventario(DataTable inv, string anno, string protocollo,string data, string protocolloRiscontro, string dataRiscontro)
+        {
+            // Usa il namespace corretto per la risorsa
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "Uotep.FileComuni.LetteraAccompagnamento.pdf";
+
+            using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (resourceStream == null)
+                {
+                    throw new Exception($"La risorsa incorporata '{resourceName}' non è stata trovata.");
+                }
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    using (PdfReader reader = new PdfReader(resourceStream))
+                    {
+                        using (PdfWriter writer = new PdfWriter(stream))
+                        {
+                            using (PdfDocument pdf = new PdfDocument(reader, writer))
+                            {
+                                // =========================================================================
+                                // CREA UN UNICO OGGETTO DOCUMENT PER GESTIRE TUTTO
+                                // =========================================================================
+                                using (Document document = new Document(pdf, PageSize.A4))
+                                {
+                                    // =========================================================================
+                                    // PAGINA 1: LETTERA DI ACCOMPAGNAMENTO
+                                    // Il testo viene aggiunto alla prima pagina, che è la carta intestata.
+                                    // =========================================================================
+                                    document.Add(new Paragraph("Al Servizio Attività Amministrative U.O. Amministrativa\nUfficio Risorse Materiali")
+                                        .SetFixedPosition(260, 650, 300) // Coordinate aggiustate per pagina verticale
+                                        .SetTextAlignment(TextAlignment.RIGHT)
+                                        .SetFontSize(12));
+                                   
+                                    document.Add(new Paragraph("Cod. Prot. 21.56.0.0.0")
+                                      .SetFixedPosition(460, 635, 100) // Coordinate aggiustate per pagina verticale
+                                      .SetTextAlignment(TextAlignment.RIGHT)
+                                      .SetFontSize(10));
+                                    
+                                    document.Add(new Paragraph($"" + protocollo.ToUpper() + " del " + data + ".")
+                                       .SetFixedPosition(30, 611, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
+                                       .SetTextAlignment(TextAlignment.LEFT)
+                                       .SetFontSize(12));
+
+                                    document.Add(new Paragraph("BENI MOBILI ANNO " + anno )
+                                      .SetFixedPosition(180, 600, 200) // Coordinate aggiustate per pagina verticale
+                                      .SetTextAlignment(TextAlignment.CENTER)
+                                      .SetFontSize(12));
+
+                                    document.Add(new Paragraph($" Oggetto: Riscontro a nota prot. " + protocolloRiscontro .ToUpper() + " del "+ dataRiscontro + "\n– Trasmissione Statistica riepilogativa con elenco beni mobili e dotazioni informatiche U.O.T.E.P. in carico alla Unità Operativa Tutela Edilizia e Patrimonio - Corso Chiaiano 50.")
+                                        .SetFixedPosition(30, 520, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFontSize(12));
+
+                                    document.Add(new Paragraph("In esito alle attività di riscontro dei beni mobili in dotazione a questa Unità Operativa Tutela Edilizia e Patrimonio (U.O.T.E.P.), si trasmette la statistica riepilogativa dei Beni Mobili indicati nella sottostante tabella sinottica nonché i prospetti analitici dei Beni Mobili presenti presso l’U.O.T.E.P. contraddistinti in:")
+                                        .SetFixedPosition(30, 430, 535)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFontSize(12));
+
+                                    document.Add(new Paragraph("1) Beni Etichettati e Non Etichettati\n2) Beni inerenti Dotazioni Informatiche ed Elettroniche con numeri di seriale.")
+                                        .SetFixedPosition(30, 390, 535)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFontSize(10));
+
+
+                                    // =========================================================================
+                                    // PAGINA 2: REPORT CON TABELLA
+                                    // =========================================================================
+                                    // =========================================================================
+                                    // PAGINA 2: REPORT CON TABELLA
+                                    // =========================================================================
+                                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+                                    float pageWidth = PageSize.A4.GetWidth();
+                                    float leftMargin = 36;
+                                    float usableWidth = pageWidth - (leftMargin * 2);
+
+                                    // --- TABELLA ---
+                                    const int colonneDati = 3; // Corrisponde agli indici 0, 1, 2, 3 della query (4 colonne in totale)
+
+                                    // 1. Definiamo le larghezze percentuali per le 4 colonne della query SQL
+                                    float[] columnLarghezza = { 52f, 16f, 16f, 16f }; // La somma deve fare 100%
+
+                                    Table table = new Table(UnitValue.CreatePercentArray(columnLarghezza));
+                                    table.SetWidth(UnitValue.CreatePercentValue(100)); // Occupa tutta la larghezza utile della pagina
+                                    table.SetHorizontalAlignment(HorizontalAlignment.CENTER);
+
+                                    // ⚠️ RIMOSSO SetFixedPosition sulla tabella per permetterle di fluire correttamente 
+                                    // ed evitare sovrapposizioni con le firme in basso.
+
+                                    // --- INTESTAZIONI ---
+                                    for (int i = 0; i <= colonneDati; i++)
+                                    {
+                                        table.AddHeaderCell(new Cell()
+                                            .Add(new Paragraph(inv.Columns[i].ColumnName.ToUpper()))
+                                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                                            .SetFontSize(9)
+                                            .SetTextAlignment(TextAlignment.CENTER)
+                                            .SetPaddingTop(3)
+                                            .SetPaddingBottom(3)
+                                        );
+                                    }
+
+                                    // --- DATI E RIGA FINALE DEL TOTALE ---
+                                    int totaleRighe = inv.Rows.Count;
+                                    int indiceCorrente = 0;
+
+                                    foreach (DataRow riga in inv.Rows)
+                                    {
+                                        indiceCorrente++;
+                                        bool isUltimaRiga = (indiceCorrente == totaleRighe); // Riconosce la riga del TOTALE COMPLESSIVO
+
+                                        for (int i = 0; i < riga.ItemArray.Length; i++)
+                                        {
+                                            object item = riga.ItemArray[i];
+                                            string cellText = (item == null || item is DBNull) ? "" : item.ToString();
+
+                                            Cell cell = new Cell().Add(new Paragraph(cellText))
+                                                .SetFontSize(8)
+                                                .SetPaddingTop(2)
+                                                .SetPaddingBottom(2);
+
+                                            // Allineamento a sinistra per la categoria, a destra/centro per i numeri
+                                            if (i == 0)
+                                            {
+                                                cell.SetTextAlignment(TextAlignment.LEFT);
+                                            }
+                                            else
+                                            {
+                                                cell.SetTextAlignment(TextAlignment.CENTER);
+                                            }
+
+                                            // STYLING SPECIALE PER L'ULTIMA RIGA (Totale Complessivo)
+                                            if (isUltimaRiga)
+                                            {
+                                                
+                                                cell.SetBackgroundColor(new DeviceRgb(220, 220, 220)); // Grigio evidenziato per il totale
+                                            }
+
+                                            table.AddCell(cell);
+                                        }
+                                    }
+
+                                    // Aggiungiamo la tabella al documento (flusso normale)
+                                    PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                                    document.Add(table);
+                                    document.Add(new Paragraph("Allegati in file PDF")
+                                        .SetFixedPosition(30, 400, 200)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                       .SetFont(fontBold)
+                                        .SetFontSize(12));
+                                    document.Add(new Paragraph("1. Prospetto analitico Beni Mobili U.O.T.E.P. (Beni Etichettati e Non Etichettati).\n 2. Prospetto analitico Dotazioni Informatiche ed Elettroniche con numeri di seriale.")
+                                       .SetFixedPosition(30, 350, 700)
+                                       .SetTextAlignment(TextAlignment.LEFT)
+                                       .SetFontSize(10));
+                                    // --- FIRME (Posizionate in fondo alla pagina in modo sicuro) ---
+                                    document.Add(new Paragraph("Estensore: Cap. Scafaro G.")
+                                        .SetFixedPosition(30, 150, 100)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFontSize(8));
+
+                                    document.Add(new Paragraph("Il Comandante di Reparto")
+                                        .SetFixedPosition(leftMargin, 80, usableWidth)
+                                        .SetTextAlignment(TextAlignment.RIGHT)
+                                        .SetFontSize(9));
+
+                                    document.Add(new Paragraph("_______________________")
+                                        .SetFixedPosition(leftMargin, 60, usableWidth)
+                                        .SetTextAlignment(TextAlignment.RIGHT)
+                                        .SetFontSize(9));
+                                    //                                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+                                    //                                    float pageWidth = PageSize.A4.GetWidth();
+                                    //                                    float leftMargin = 36;
+                                    //                                    float usableWidth = pageWidth - (leftMargin * 2);
+
+                                    //                                    // --- TABELLA ---
+                                    //                                    const int colonneDati = 3; //colonne da stampare
+                                    //                                   // const int colonneTotali = colonneDati + 1; //stampa progressivo del record stamapato
 
 
 
-        //    float boxSize = 10;
-        //    //float boxVerticalOffset = 4f;
-        //    float startX_270 = 270;
-        //    float startX_290 = 290;
-        //    float startX_70 = 70;
-        //    float startX_55 = 55;
-        //    float startX_50 = 50;
-        //    float startX_400 = 400;
-        //    float startX_350 = 350;
-        //    float startX_370 = 370;
-        //    float startX_450 = 450;
-        //    float startX_470 = 470;
-        //    float startY_430 = 430;
+                                    ////                                    Vuoi scendere verso il basso --> Diminuisci la Y(es.da 700 a 500). salire verso l'alto--> Aumenta la Y (es. da 500 a 700, avvicinandoti a 842).
+                                    //                                    float[] columnLarghezza = { 50f, 16f, 16f, 18f };
+
+                                    //                                    float sx = 10f;
+                                    //                                    float y = 700f - 500f; // 742 punti dal fondo (cioè 100 punti dal bordo superiore)
+                                    //                                    float l = 535f;
 
 
-        //    float lineHeight1 = 30f;
+                                    //                                    Table table = new Table(UnitValue.CreatePercentArray(columnLarghezza));
+                                    //                                   // Table table = new Table(columnWidths);
+                                    //                                    table.SetWidth(UnitValue.CreatePercentValue(50));
+                                    //                                    table.SetHorizontalAlignment(HorizontalAlignment.CENTER);
+
+                                    //                                    table.SetFixedPosition(sx, y, l); // Posiziona la tabella con coordinate corrette
+                                    //                                    //table.SetMarginTop(1);
+                                    //                                    // Intestazione
+                                    //                                    //table.AddHeaderCell(new Cell().Add(new Paragraph("#")).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetFontSize(10));
+                                    //                                    for (int i = 0; i <= colonneDati; i++)
+                                    //                                    {
+                                    //                                        table.AddHeaderCell(new Cell()
+                                    //                                            .Add(new Paragraph(inv.Columns[i].ColumnName.ToUpper()))
+                                    //                                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                                    //                                            .SetFontSize(10)
+                                    //                                            .SetPaddingTop(2)
+                                    //                                            .SetPaddingBottom(2)
+                                    //                                        );
+                                    //                                    }
 
 
-        //    using (MemoryStream stream = new MemoryStream())
-        //    {
-        //        using (PdfWriter writer = new PdfWriter(stream))
-        //        {
-        //            using (PdfDocument pdf = new PdfDocument(writer))
-        //            {
-        //                using (Document document = new Document(pdf))
-        //                {
-        //                    // --- Creazione del Contenuto del Documento ---
+                                    //                                    // Dati
+                                    //                                    int contatoreRiga = 1;
+                                    //                                    foreach (DataRow riga in inv.Rows)
+                                    //                                    {
 
-        //                    // Titolo
-        //                    //DateTime dataIntervento = System.Convert.ToDateTime(schede.Rows[0].ItemArray[2].ToString());
-        //                    //string dataFormattata = dataIntervento.ToString("dd/MM/yyyy");
+                                    //                                        //table.AddCell(new Cell().Add(new Paragraph(contatoreRiga.ToString())).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER));
+                                    //                                        for (int i = 0; i < riga.ItemArray.Length ; i++) // totale colonne 
+                                    //                                        {
+                                    //                                            object item = riga.ItemArray[i];
+                                    //                                            string cellText;
+                                    //                                            if (item == null || item is DBNull) { cellText = ""; }
+                                    //                                            //else if (i == 4) { cellText = item is DateTime ? ((DateTime)item).ToString("dd/MM/yyyy") : item.ToString(); }
+                                    //                                            //else if (i == 5) { cellText = item is TimeSpan ? ((TimeSpan)item).ToString("hh\\:mm") : item.ToString(); }
+                                    //                                            //else if (i == 6) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
+                                    //                                            //else { cellText = item.ToString(); }
+                                    //                                            cellText = item.ToString();
+                                    //                                            table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8)
+                                    //                                                .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
+                                    //                                                .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
+                                    //                                                .SetHeight(30)
+                                    //                                                );
 
-        //                    document.Add(new Paragraph($"CARICO A.G. EDILIZIA ANNO " + decretazione.Rows[0].ItemArray[2].ToString().Substring(6, 4) + " - " + decretazione.Rows[0].ItemArray[6].ToString() + " Referente: " + decretazione.Rows[0].ItemArray[1].ToString().ToUpper())
-        //                        .SetFixedPosition(10, 800, 800)
-        //                        .SetTextAlignment(TextAlignment.LEFT)
-        //                        .SetFontSize(12));
+                                    //                                        }
+                                    //                                        contatoreRiga++;
+                                    //                                    }
+                                    //                                    document.Add(table);
 
-        //                    // Prima riga: Numero Pratica, Nominativo
-        //                    document.Add(new Paragraph($"Numero Carico: {decretazione.Rows[0].ItemArray[0]}").SetFixedPosition(10, 780, 500));
+                                    //                                    // Firma
+                                    //                                    float signatureTextY = 80;
+                                    //                                    float signatureLineY = 60;
+                                    //                                    document.Add(new Paragraph("Estensore : Cap. Scafaro G.")
+                                    //                                      .SetFixedPosition(72, 150, 300)
+                                    //                                      .SetTextAlignment(TextAlignment.RIGHT)
+                                    //                                      .SetFontSize(8));
 
-        //                    startY -= lineHeight; // Move to the next line
+                                    //                                    document.Add(new Paragraph("Il Comandante di Reparto").SetFixedPosition(leftMargin, signatureTextY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
+                                    //                                    document.Add(new Paragraph("_______________________").SetFixedPosition(leftMargin, signatureLineY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
+                                } 
+                            }
+                        }
+                    }
 
-
-
-        //                    // --- Posizione di riferimento per "Resa" ---
-        //                    // float startX_70_Resa = 70; // Use startX_70 for single column
-        //                    float startY_Resa = startY; // Use the dynamic startY
-
-
-
-
-        //                    startY -= lineHeight1; // Move to the next line
-        //                    // La PG Operante - Sezione firma
-        //                    document.Add(new Paragraph($"La PG Operante").SetFixedPosition(280, startY, 500));
-        //                    startY -= lineHeight1; // Move to the next line
-        //                    document.Add(new Paragraph($"_______________________/_______________________/_______________________").SetFixedPosition(55, startY, 500));
-        //                    //startY -= lineHeight1; // Move to the next line
-        //                    //document.Add(new Paragraph($"_______________________").SetFixedPosition(260, startY, 500));
-
-        //                    document.Close(); // Chiude il documento.
-
-
-        //                }
-
-        //            }
-        //        }
-
-        //        // Invia l'output PDF direttamente al browser.
-        //        byte[] pdfBytes = stream.ToArray();
-        //        HttpResponse response = HttpContext.Current.Response;
-        //        response.Clear();
-        //        response.ContentType = "application/pdf";
-        //        response.AddHeader("Content-Disposition", "inline; filename=SchedaIntervento.pdf");
-        //        response.BinaryWrite(pdfBytes);
-        //        response.Flush();
-        //        response.End();
-        //    }
-
-
-        //}
+                    // Invia l'output PDF direttamente al browser.
+                    byte[] pdfBytes = stream.ToArray();
+                    HttpResponse response = HttpContext.Current.Response;
+                    response.Clear();
+                    response.ContentType = "application/pdf";
+                    response.AddHeader("Content-Disposition", "inline; filename=Inventario.pdf");
+                    response.BinaryWrite(pdfBytes);
+                    response.Flush();
+                    response.End();
+                }
+            }
+        }
         public void CreaPdfSchedaCarburante(DataTable schede)
         {
             // Usa il namespace corretto per la risorsa

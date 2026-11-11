@@ -482,6 +482,10 @@ namespace Uotep
                 {
                     ListAccertatori.Items.Add(pratica.Rows[0]["accertatori3"].ToString());
                 }
+                if (!String.IsNullOrEmpty(pratica.Rows[0]["accertatori4"].ToString()))
+                {
+                    ListAccertatori.Items.Add(pratica.Rows[0]["accertatori4"].ToString());
+                }
                 //F- mod 02/02/2026 accertatori in lista
 
                 //I- mod 02/06/2026 numero esposti
@@ -840,18 +844,20 @@ namespace Uotep
             string columnName = ""; //campo db
             string columnName1 = "";
             string columnName2 = "";
+            string columnName3 = "";
             if (txtFilter.ID == "txtFilterAccertatori")
             {
                 columnName = "Accertatori"; // Assumi che "arch_note" sia il campo del tuo DataSource
                 columnName1 = "Accertatori2";
                 columnName2 = "Accertatori3";
+                columnName3 = "Accertatori4";
             }
             // Puoi aggiungere altri if/else per altre TextBox di filtro
 
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-            PopulateGridView(columnName, columnName1, columnName2, HfFiltroAccertatori.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, columnName1, columnName2, columnName3, HfFiltroAccertatori.Value); // Esempio di funzione di filtro
                                                                                                //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
@@ -871,6 +877,7 @@ namespace Uotep
             string columnName = ""; // Devi decidere su quale campo del DB filtrare
             string columnName1 = "";
             string columnName2 = "";
+            string columnName3 = "";
             if (txtFilter.ID == "txtFilterIndirizzo")
             {
                 columnName = "indirizzo"; // Assumi che "arch_note" sia il campo del tuo DataSource
@@ -879,14 +886,14 @@ namespace Uotep
 
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
-            PopulateGridView(columnName, columnName1, columnName2, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+            PopulateGridView(columnName, columnName1, columnName2,columnName3, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
                                                                                              //PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
                                                                                              //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
 
         }
         // Funzione  che carica i dati e applica il filtro
-        private void PopulateGridView(string filterColumn = "", string filterColumn1 = "", string filterColumn2 = "", string filterValue = "")
+        private void PopulateGridView(string filterColumn = "", string filterColumn1 = "", string filterColumn2 = "", string filterColumn3 = "", string filterValue = "")
         {
 
             DataTable dt = new DataTable();
@@ -1056,7 +1063,8 @@ namespace Uotep
                         string valoreCerca = HfFiltroAccertatori.Value.Replace("'", "''");
                         filtro = $"(Accertatori LIKE '%{valoreCerca}%' OR " +
                                  $"Accertatori2 LIKE '%{valoreCerca}%' OR " +
-                                $"Accertatori3 LIKE '%{valoreCerca}%')";
+                                 $"Accertatori3 LIKE '%{valoreCerca}%' OR " +
+                                $"Accertatori4 LIKE '%{valoreCerca}%')";
                         dv = new DataView(pratica);
 
                         dv.RowFilter = filtro;
