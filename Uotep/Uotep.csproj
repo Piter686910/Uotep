@@ -330,6 +330,7 @@
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="View\Inventario.aspx" />
     <Content Include="View\GestionePratica.aspx" />
     <Content Include="View\GestioneAuto.aspx" />
     <Content Include="View\Urp.aspx" />
@@ -397,6 +398,7 @@
       <DependentUpon>About.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classi\InventarioObj.cs" />
     <Compile Include="Classi\Patrimonio.cs" />
     <Compile Include="Classi\StradeNapoli.cs" />
     <Compile Include="Classi\Interrogatorio.cs" />
@@ -426,6 +428,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="View\Inventario.aspx.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Inventario.aspx.designer.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\GestionePratica.aspx.cs">
       <DependentUpon>GestionePratica.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

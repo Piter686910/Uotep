@@ -945,7 +945,7 @@
                                 <td>
                                     <asp:Button ID="btCercaQuartiere" Text="Cerca Quartiere" runat="server" OnClick="apripopup_Click" ToolTip="Ricerca" CssClass="btn btn-primary btn-custom-size" /></td>
                                 <td>
-                                    <asp:Button Text="Decretazione" runat="server" OnClick="Decretazione_Click" ToolTip="Decrertazione" CssClass="btn btn-primary btn-custom-size" /></td>
+                                    <asp:Button Text="Decreta" runat="server" OnClick="Decretazione_Click" ToolTip="Decreta" CssClass="btn btn-primary btn-custom-size" /></td>
                                 <td>
                                     <asp:Button Text="Nuova Modifica" runat="server" OnClick="NuovaModifica_Click" ToolTip="Nuova Modifica" CssClass="btn btn-primary btn-custom-size" /></td>
                             </tr>

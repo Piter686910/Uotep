@@ -1,3 +1,4 @@
+using AjaxControlToolkit;
 using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.CustomXmlSchemaReferences;
@@ -9,6 +10,7 @@ using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Office2010.CustomUI;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -17,6 +19,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Forms.Form.Element;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using Org.BouncyCastle.Asn1.X500;
 using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
@@ -43,7 +46,8 @@ using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using static System.Windows.Forms.AxHost;
 using static Uote.test;
 using static Uotep.Classi.Enumerate;
-using static Uotep.InserimentoArchivio;
+using Boolean = System.Boolean;
+using DataSet = System.Data.DataSet;
 using DataTable = System.Data.DataTable;
 
 namespace Uotep.Classi
@@ -551,6 +555,53 @@ namespace Uotep.Classi
                 return tb;
             }
         }
+        public int MaxNInventarioByCodep(string codep)
+        {
+            int maxNum = 1;
+            //se il codep non ha altri restituisce 0 altrimenti max +1
+            string query = @" SELECT   CASE 
+        WHEN MAX(progr_codep) IS NULL OR MAX(progr_codep) = 0 THEN 1 
+        ELSE  MAX(progr_codep) + 1 
+    END AS MaxProgr
+FROM inventario 
+WHERE codep = @codep";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Passaggio sicuro del parametro per evitare SQL Injection
+                    cmd.Parameters.AddWithValue("@codep", codep);
+
+                    try
+                    {
+                        conn.Open();
+                        object result = cmd.ExecuteScalar();
+
+                        if (result != null && result != DBNull.Value)
+                        {
+                            maxNum = Convert.ToInt32(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("codep:" + codep + ", " + ex.Message + @" MaxNInventarioByCodep" + "; " + ConnString);
+                            sw.Close();
+                        }
+                        return 0;
+                    }
+                }
+            }
+
+            return maxNum;
+        }
         public DataTable MaxNPr(string anno)
         {
             DataTable tb = new DataTable();
@@ -607,25 +658,88 @@ namespace Uotep.Classi
 
 
 
+            string capoareaPulito = (capoarea ?? "").Trim();
+
+
+            //string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
+            //    " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
+            //    "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
+            //    "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, d.decr_data) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
+            //    " DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
+            //    " FROM Classificata WHERE rn = 1 ORDER BY carico;";
 
 
 
-            string sql = "WITH Classificata AS (SELECT p.Nr_Protocollo AS carico,d.decr_pratica, d.[decr_decretato],  d.[decr_data], d.[decr_nota] AS Note, d.[decr_chiuso], p.Macro_area, p.DataCarico, p.Tipologia_atto," +
-                " p.nr_pratica AS pratica,p.QUARTIERE AS località, p.DataInserimento,d.decr_unire as UNIRE, ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn FROM Decretazione " +
-                "AS d JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo WHERE p.Macro_area = '" + ma + "' AND p.Sigla = '" + sigla + "'  AND d.decr_chiuso = 0 AND d.decr_decretato = '" + capoarea.Replace("'", "''") + "' " +
-                "AND (CAST(p.DataCarico AS DATE) = '" + dataCarico + "'   OR (DATEPART(year, d.decr_data) = DATEPART(year, CAST('" + dataCarico + "' AS DATE)) AND" +
-                " DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, CAST('" + dataCarico + "' AS DATE))))) SELECT carico, pratica,DataCarico,località,Note,UNIRE,decr_decretato,macro_area" +
-                " FROM Classificata WHERE rn = 1 ORDER BY carico;";
-
-
-
-
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            var sql = new StringBuilder(@"
+WITH Classificata AS (
+    SELECT p.Nr_Protocollo AS carico,
+           p.nr_pratica    AS pratica,
+           p.DataCarico,
+           p.QUARTIERE     AS località,
+           d.decr_nota     AS Note,
+           d.decr_unire    AS UNIRE,
+           d.decr_decretato,
+           p.Macro_area,
+           ROW_NUMBER() OVER (PARTITION BY d.decr_pratica ORDER BY d.decr_data DESC) AS rn
+    FROM Decretazione AS d
+    JOIN principale AS p ON d.decr_pratica = p.Nr_Protocollo
+    WHERE p.Macro_area = @ma
+      AND p.Sigla = @sigla
+      AND d.decr_chiuso = 0
+      AND (NULLIF(LTRIM(RTRIM(@capoarea)), '') IS NULL OR d.decr_decretato = @capoarea)
+      AND (CAST(p.DataCarico AS DATE) = @dataCarico   OR (DATEPART(year, d.decr_data) = DATEPART(year, @dataCarico) AND
+        DATEPART(iso_week, d.decr_data) = DATEPART(iso_week, @dataCarico)))
+)
+SELECT carico, pratica, DataCarico, località, Note, UNIRE, decr_decretato, Macro_area
+FROM Classificata
+WHERE rn = 1
+ORDER BY carico;");
+            try
             {
-                return tb = FillTable(sql, conn, out msg);
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    using (var cmd = new SqlCommand(sql.ToString(), conn))
+                    {
+                        cmd.Parameters.Add("@ma", SqlDbType.VarChar, 50).Value = ma;
+                        cmd.Parameters.Add("@sigla", SqlDbType.VarChar, 10).Value = sigla;
+                        DateTime dataCaricoDt = DateTime.ParseExact(dataCarico, "dd/MM/yyyy", CultureInfo.InvariantCulture).Date;
+
+                        cmd.Parameters.Add("@dataCarico", SqlDbType.DateTime).Value = dataCaricoDt;
+
+                        //if (!string.IsNullOrWhiteSpace(capoarea))
+                        //cmd.Parameters.Add("@capoarea", SqlDbType.VarChar, 100).Value = capoarea;
+                        SqlParameter pCapo = cmd.Parameters.Add("@capoarea", SqlDbType.VarChar, 100);
+                        pCapo.Value = capoareaPulito.Length == 0 ? (object)DBNull.Value : capoareaPulito;
+
+
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd); // Usa il cmd che ha i parametri!
+
+
+
+                        conn.Open();
+                        da.Fill(tb); // Riempie il datatable usando il comando configurato
+                    }
+
+
+                    //return tb = FillTable(sql.ToString(), conn, out msg);
+                }
             }
+            catch (Exception ex)
+            {
+                // Gestione specifica per timeout SqlException
+                if (ex is System.Data.SqlClient.SqlException sqlEx && sqlEx.Number == -2) // Codice errore specifico per Timeout
+                {
+                    msg = "Time out";
+                }
+                else
+                {
+                    msg = "Errore database: " + ex.Message;
+                }
+            }
+            return tb;
         }
+
         public DataTable getListQuartina(Int32 anno)
         {
             DataTable tb = new DataTable();
@@ -728,6 +842,40 @@ namespace Uotep.Classi
         {
             DataTable tb = new DataTable();
             string sql = "SELECT nominativo FROM operatore where (ruolo = '" + Enumerate.Ruolo.accertatori.GetDescription() + "' or ruolo= '" + Enumerate.Ruolo.PG.GetDescription() + "') and abilitato=1 order by nominativo ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetlistInventario()
+        {
+            DataTable tb = new DataTable();
+            string sql = "SELECT * FROM inventario order by codep ";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
+        public DataTable GetlistInventarioToPdf()
+        {
+            DataTable tb = new DataTable();
+            //string sql = "SELECT  CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+            //    "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario " +
+            //    "GROUP BY tipologia, categoria UNION ALL "+
+            //    "SELECT  'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+            //        "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario  ";
+
+
+
+
+            string sql = ";WITH DatiRaggruppati AS ( SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) " +
+                "AS BeniNoEtichettati, SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario GROUP BY tipologia, categoria ) "+
+                " SELECT tipologia_categoria,BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali FROM DatiRaggruppati " +
+                "UNION ALL SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(BeniNoEtichettati) AS BeniNoEtichettati,  SUM(BeniEtichettati) AS BeniEtichettati, SUM(BeniNoEtichettati + BeniEtichettati) AS totali "+
+                "FROM DatiRaggruppati; ";
+
+
+
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
@@ -1118,7 +1266,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             DataTable tb = new DataTable();
 
             string sql = "SELECT p.Id,p.Nr_Protocollo,p.Sigla,p.DataArrivo,p.Provenienza,p.Tipologia_atto,p.Giudice,p.TipoProvvedimentoAG,p.ProcedimentoPen,p.Nominativo,p.Indirizzo,p.via,p.Evasa, o.nominativo as nomeoperatore" +
-                            ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3" +
+                            ",p.EvasaData,p.Inviata,p.DataInvio,p.Scaturito,p.Accertatori,p.DataCarico,p.nr_Pratica,p.Quartiere,p.Note,p.Anno,p.Giorno,p.Rif_Prot_Gen,p.Matricola,p.DataInserimento,p.Macro_area,p.Accertatori2,p.Accertatori3,p.Accertatori4" +
                             ",p.UlterioreTipoAtto,p.BU,p.CodiceEdificio,p.cartellina FROM principale p LEFT JOIN decretazione d ON d.decr_idPratica = p.id LEFT JOIN operatore O ON p.matricola = O.matricola where " +
                             "d.decr_nota like '%" + protgen.Replace("'", "''").Replace("*", "%") + "%'" + "ORDER BY p.dataarrivo";
 
@@ -1371,7 +1519,8 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 " WHERE (" +
                         "Accertatori LIKE '" + valoreCerca + "%' OR " +
                         "Accertatori2 LIKE '" + valoreCerca + "%' OR " +
-                        "Accertatori3 LIKE '" + valoreCerca + "%') " +
+                        "Accertatori3 LIKE '" + valoreCerca + "%' OR " +
+                        "Accertatori4 LIKE '" + valoreCerca + "%') " +
                         "ORDER BY dataarrivo DESC";
 
 
@@ -1648,18 +1797,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return progressivo + 1;
             }
         }
-        public DataTable GetNumPraticaByQuartiere(string quartiere)
-        {
-            string sql = string.Empty;
 
-            DataTable tb = new DataTable();
-            sql = "SELECT progressivo,codicemun FROM ProgrPratica where quartiere like '%" + quartiere.Replace("'", "''") + "%'";
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                return tb = FillTable(sql, conn, out msg);
-            }
-        }
         public DataTable GetFileByFascicoloData(CaricaFile fl)
         {
             string sql = string.Empty;
@@ -1757,31 +1895,11 @@ ORDER BY LOGS.[Data Accesso] DESC";
             if (storico == "si")
                 //    sql = "SELECT * FROM ArchivioUoteStorico where id_Archivio = '" + id + "'";
 
-                //sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
-                //       " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
-                sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio = {id}) 
-         BEGIN 
-             SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita 
-             FROM ArchivioUoteStorico a 
-             LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio 
-             WHERE a.id_Archivio = {id}
-         END 
-         ELSE 
-         BEGIN 
-             SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita 
-             FROM ArchivioUote a 
-             LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio 
-             WHERE a.id_Archivio = {id}
-         END";
-
-
-
+                sql = $@"IF EXISTS (SELECT 1 FROM ArchivioUoteStorico WHERE id_Archivio =" + id + ") BEGIN SELECT * FROM ArchivioUoteStorico WHERE id_Archivio = " + id +
+                       " END ELSE BEGIN SELECT * FROM ArchivioUote WHERE id_Archivio =" + id + " END";
             else
-                //    sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
-                sql = "SELECT a.*, r.responsabile, r.comunenascita, r.data_nascita " +
-                 "FROM ArchivioUote a " +
-                 "LEFT JOIN ResponsabiliPratiche r ON a.arch_numPratica = r.nr_pratica AND a.id_Archivio = r.id_archivio " +
-                 "WHERE a.id_Archivio = " + id;
+                sql = "SELECT * FROM ArchivioUote where id_Archivio = '" + id + "'";
+
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -2039,6 +2157,19 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
+        public DataTable GetInventarioById(int id)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+
+            sql = "SELECT * FROM inventario where id_inventario =" + id;
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                return tb = FillTable(sql, conn, out msg);
+            }
+        }
         public DataTable getListAuto(string mese, int anno)
         {
             string sql = string.Empty;
@@ -2202,8 +2333,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                             sql = "SELECT * FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "' AND(arch_doppione = 'bis' OR arch_doppione = 'ter' OR arch_doppione = 'quater' OR arch_doppione is null or arch_doppione='') " +
                                     " ORDER BY arch_datault_intervento DESC";
-
-
 
                         //  sql= "SELECT * FROM ArchivioUote WHERE arch_numPratica =  '" + pratica[2].Replace("'", "''")  + " AND id_Archivio = (SELECT MAX(id_Archivio) FROM ArchivioUote WHERE arch_numPratica = '" + pratica[2].Replace("'", "''") + "')";
                         else
@@ -2859,6 +2988,54 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
+        public bool InserisciInventario(InventarioObj inv)
+        {
+            string query = @"INSERT INTO inventario 
+                     (codep, categoria, data_inserimento, progr_codep, ufficio, etichetta, descrizione, dismesso, tipologia, seriale, note)
+                     VALUES 
+                     (@codep, @categoria, @data_inserimento, @progr_codep, @ufficio, @etichetta, @descrizione, @dismesso, @tipologia, @seriale, @note)";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Aggiunta sicura dei parametri (gestisce anche eventuali stringhe vuote/null)
+                    cmd.Parameters.AddWithValue("@codep", (object)inv.codep ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@categoria", (object)inv.categoria ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@data_inserimento", inv.data_inserimento);
+                    cmd.Parameters.AddWithValue("@progr_codep", inv.progr_codep);
+                    cmd.Parameters.AddWithValue("@ufficio", (object)inv.ufficio ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@etichetta", (object)inv.etichetta ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@descrizione", (object)inv.descrizione ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dismesso", inv.dismesso);
+                    cmd.Parameters.AddWithValue("@tipologia", (object)inv.tipologia ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@seriale", (object)inv.seriale ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", (object)inv.note ?? DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        int righeInserite = cmd.ExecuteNonQuery();
+                        return righeInserite > 0; // Restituisce true se l'inserimento è riuscito
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("codep:" + inv.codep + ", " + ex.Message + @" MaxNInventarioByCodep" + "; " + ConnString);
+                            sw.Close();
+                        }
+                        return false;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// inserisce una gestione auto e converte string in float
         /// </summary>
@@ -6225,125 +6402,40 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
         }
-        public Boolean SavePraticaArchivioUote(ArchivioUote arch, List<ResponsabileModel> ListaResponsabili, out string msg)
+        public Boolean SavePraticaArchivioUote(ArchivioUote arch)
         {
             bool resp = true;
             string sql_pratica = String.Empty;
             string testoSql = string.Empty;
-            int res = 0;
-            msg = string.Empty;
-            long nuovoIdArchivio = 0;
 
-            sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
-                "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
-                "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
-               " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
-               @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
-               @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
-               @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
-               @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
-               @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
-               @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
-               @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
-               @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
-               @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "'); SELECT SCOPE_IDENTITY();";
-
-            string numpratica = @arch.arch_numPratica.Substring(@arch.arch_numPratica.IndexOf('-') + 1);
-            string sql_UpdProgrPratica = "update ProgrPratica set progressivo = " + numpratica + " where quartiere like '%" + @arch.arch_quartiere.Replace("'", "''") + "%'";
-            string sql_Verificacartellina = "SELECT CASE  WHEN EXISTS( SELECT 1 FROM ProgrPratica WHERE progressivo = " + numpratica + "  AND quartiere LIKE '%" + @arch.arch_quartiere.Replace("'", "''") + "%' ) " +
-                 "THEN -1  ELSE 0 END AS Esito; ";
-
-
-
-            string Responsabili = @"INSERT INTO ResponsabiliPratiche (Responsabile,  data_nascita,nr_pratica,data_caricamento,comunenascita,id_archivio) 
-                                     VALUES (@Responsabile, @DataNascita,@nr_pratica,@data_inserimento,@comune,@id_archivio)";
-
-
-
-
-
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            try
             {
-                conn.Open();
-                using (SqlTransaction tran = conn.BeginTransaction())
+
+                sql_pratica = "insert into ArchivioUote (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
+                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
+                    "arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati)" +
+                   " Values('" + @arch.arch_numPratica + "','" + @arch.arch_bis + "','" + @arch.arch_dataIns + "','" +
+                   @arch.arch_datault_intervento + "','" + @arch.arch_indirizzo.Replace("'", "''") + "','" +
+                   @arch.arch_responsabile.Replace("'", "''") + "','" + @arch.arch_natoA.Replace("'", "''") + "','" + @arch.arch_dataNascita + "','" +
+                   @arch.arch_inCarico.Replace("'", "''") + "','" + @arch.arch_evasa + "','" + @arch.arch_note.Replace("'", "''") + "','" +
+                   @arch.arch_tipologia.Replace("'", "''") + "','" + @arch.arch_quartiere.Replace("'", "''") + "','" + @arch.arch_suoloPub + "','" +
+                   @arch.arch_vincoli + "','" + @arch.arch_1089 + "','" + @arch.arch_demolita + "','" +
+                   @arch.arch_allegati.Replace("'", "''") + "','" + @arch.arch_matricola + "','" + @arch.arch_sezione.Replace("'", "''") + "','" + @arch.arch_foglio + "','" + @arch.arch_particella + "','" +
+                   @arch.arch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
+                   @arch.arch_propPriv + "','" + @arch.arch_propBeniCult + "','" + @arch.arch_propComune + "','" + @arch.arch_propAltriEnti + "','" + @arch.arch_foglioNct + "','" +
+                   @arch.arch_particellaNct + "','" + @arch.arch_beniConfiscati + "')";
+
+
+                using (SqlConnection conn = new SqlConnection(ConnString))
                 {
+                    conn.Open();
                     SqlCommand command = conn.CreateCommand();
-                    command.Transaction = tran;
+
                     try
                     {
-
-                        command.CommandText = sql_Verificacartellina;
-                        object result = command.ExecuteScalar();
-                        int codice = Convert.ToInt32(result);
-                        if (codice == -1) //esiste già una numero pratica con lo stesso progressivo e quartiere, non procedere con l'update e l'insert
-                        {
-                            res = -1; // La numero pratica esiste già, non procedere con l'update e l'insert
-                            msg = "DUPLICATO";
-                            tran.Rollback();
-                            tran.Dispose();
-                            return false;
-                        }
-                        else
-                        {
-
-                            command.CommandText = sql_pratica;
-                            object result1 = command.ExecuteScalar();
-
-                            if (result1 != null && result1 != DBNull.Value)
-                            {
-                                nuovoIdArchivio = Convert.ToInt64(result1);
-
-
-                                command.CommandText = sql_UpdProgrPratica;
-                                res = command.ExecuteNonQuery();
-
-                                if (res > 0)
-                                {
-                                    foreach (var list in ListaResponsabili)
-                                    {
-                                        command.Parameters.Clear();
-                                        command.Parameters.AddWithValue("@Responsabile", list.Responsabile ?? (object)DBNull.Value);
-                                        command.Parameters.AddWithValue("@DataNascita", string.IsNullOrEmpty(list.DataNascita) ? (object)DBNull.Value : DateTime.Parse(list.DataNascita));
-                                        command.Parameters.AddWithValue("@comune", list.ComuneNascita ?? (object)DBNull.Value);
-                                        command.Parameters.AddWithValue("@nr_pratica", @arch.arch_numPratica ?? (object)DBNull.Value);
-                                        command.Parameters.AddWithValue("@data_inserimento", DateTime.Now);
-                                        command.Parameters.AddWithValue("@id_archivio", nuovoIdArchivio);
-                                        command.CommandText = Responsabili;
-                                        res = command.ExecuteNonQuery();
-                                    }
-                                    if (res > 0)
-                                    {
-                                        tran.Commit();
-                                        resp = true;
-                                    }
-                                    else
-                                    {
-                                        msg = "errore in insert ResponsabiliPratiche salva archivio uote pratica" + res.ToString();
-                                        tran.Rollback();
-                                        tran.Dispose();
-                                        return false;
-                                    }
-                                }
-
-                                else
-                                {
-                                    msg = "errore in sql_UpdProgrPratica salva archivio uote pratica" + res.ToString();
-                                    tran.Rollback();
-                                    tran.Dispose();
-                                    return false;
-                                }
-
-                            }
-                            else
-                            {
-                                msg = "errore in insert numero progressivo pratica" + res.ToString();
-                                tran.Rollback();
-                                tran.Dispose();
-                                return false;
-                            }
-
-                        }
+                        command.CommandText = sql_pratica;
                         testoSql = "ArchivioUote";
+                        int res = command.ExecuteNonQuery();
                     }
 
                     catch (Exception ex)
@@ -6355,7 +6447,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
                         using (StreamWriter sw = File.AppendText(LogFile))
                         {
-                            sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento SavePraticaArchivioUote ");
+                            sw.WriteLine("pratica " + arch.arch_numPratica + ", matricola:" + arch.arch_matricola + ", data ins:" + arch.arch_dataIns + ", " + ex.Message + @" - Errore in inserimento dati ");
                             sw.Close();
                         }
 
@@ -6363,14 +6455,22 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
 
                     }
-
-                    //tran.Rollback();
-                    tran.Dispose();
+                    conn.Close();
+                    conn.Dispose();
                     return resp;
                 }
 
-            }
 
+
+            }
+            catch (Exception)
+            {
+                resp = false;
+
+
+
+            }
+            return resp;
 
         }
         /// <summary>
@@ -6476,7 +6576,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         {
                             msg = ex.ToString();
                             tran.Rollback();
-                            tran.Dispose();
                             //ScriviLog(ex.Message); // Gestione log
                             resp = false;
                         }
@@ -6609,10 +6708,10 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     return false;
                 }
                 sql_pratica =
-        // 1. CONTROLLO ESISTENZA
-        // Verifica se esiste già una riga con lo stesso Protocollo e lo stesso Anno
-        "IF NOT EXISTS (SELECT 1 FROM principale WHERE nr_protocollo = '" + @p.nrProtocollo + "' AND Anno = '" + @p.anno + "') " +
-        "BEGIN " +
+    // 1. CONTROLLO ESISTENZA
+    // Verifica se esiste già una riga con lo stesso Protocollo e lo stesso Anno
+    "IF NOT EXISTS (SELECT 1 FROM principale WHERE nr_protocollo = '" + @p.nrProtocollo + "' AND Anno = '" + @p.anno + "') " +
+    "BEGIN " +
         // 2. SE NON ESISTE -> ESEGUI INSERT
         "INSERT INTO principale (" +
             "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
@@ -6659,12 +6758,12 @@ ORDER BY LOGS.[Data Accesso] DESC";
 
         // RESTITUISCE IL NUOVO ID GENERATO
         "SELECT SCOPE_IDENTITY(); " +
-        "END " +
-        "ELSE " +
-        "BEGIN " +
+    "END " +
+    "ELSE " +
+    "BEGIN " +
         // 3. SE ESISTE GIÀ -> RESTITUISCE -1
         "SELECT -1; " +
-        "END";
+    "END";
                 //sql_pratica = "insert into principale (nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen," +
                 //    "Nominativo,Indirizzo,Evasa,EvasaData,Inviata,DataInvio,Scaturito,Accertatori,DataCarico,nr_Pratica,Quartiere,Note,Anno,Giorno,Rif_Prot_Gen,matricola,DataInserimento, " +
                 //    "macro_area,UlterioreTipoAtto,bu,codiceEdificio)" +
@@ -7182,7 +7281,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
         /// <param name="id"></param>
         /// <param name="dataStor"></param>
         /// <returns></returns>
-        public Boolean UpdPraticaArchivioUote(ArchivioUote arch, String id, DateTime dataStor, List<ResponsabileModel> ListaResponsabili)
+        public Boolean UpdPraticaArchivioUote(ArchivioUote arch, String id, DateTime dataStor, List<InserimentoArchivio.ResponsabileModel> listaResponsabili)
         {
             bool resp = true;
             string sql_upd = String.Empty;
@@ -7203,7 +7302,19 @@ ORDER BY LOGS.[Data Accesso] DESC";
                      ",arch_beniConfiscati='" + @arch.arch_beniConfiscati + "' where id_Archivio = " + Convert.ToInt32(id);
 
                 string dataStorFormattata = dataStor.ToString("yyyy-MM-dd HH:mm:ss");
-
+                //sql_InsStorico = "insert into ArchivioUoteStorico (Sarch_numPratica,Sarch_doppione,Sarch_dataIns,Sarch_datault_intervento,Sarch_indirizzo,Sarch_responsabile,Sarch_natoA,Sarch_dataNascita," +
+                //    "Sarch_inCarico,Sarch_evasa,Sarch_note,Sarch_tipologia,Sarch_quartiere,Sarch_suoloPub,Sarch_vincoli,Sarch_1089,Sarch_demolita,Sarch_allegati,Sarch_matricola,Sarch_sezione,Sarch_foglio," +
+                //    "Sarch_particella,Sarch_sub,Sarch_dataInizioAttivita,Sarch_propPriv,Sarch_propComune,Sarch_propBeniCult,Sarch_propAltriEnti,Sarch_foglionct,Sarch_particellanct,Sarch_beniConfiscati,Sarch_dataStoricizzazione)" +
+                //   " Values('" + @Sarch.Sarch_numPratica + "','" + @Sarch.Sarch_bis + "','" + @Sarch.Sarch_dataIns + "','" +
+                //   @Sarch.Sarch_datault_intervento + "','" + @Sarch.Sarch_indirizzo.Replace("'", "''") + "','" +
+                //   @Sarch.Sarch_responsabile.Replace("'", "''") + "','" + @Sarch.Sarch_natoA.Replace("'", "''") + "','" + @Sarch.Sarch_dataNascita + "','" +
+                //   @Sarch.Sarch_inCarico.Replace("'", "''") + "','" + @Sarch.Sarch_evasa + "','" + @Sarch.Sarch_note.Replace("'", "''") + "','" +
+                //   @Sarch.Sarch_tipologia.Replace("'", "''") + "','" + @Sarch.Sarch_quartiere.Replace("'", "''") + "','" + @Sarch.Sarch_suoloPub + "','" +
+                //   @Sarch.Sarch_vincoli + "','" + @Sarch.Sarch_1089 + "','" + @Sarch.Sarch_demolita + "','" +
+                //   @Sarch.Sarch_allegati.Replace("'", "''") + "','" + @Sarch.Sarch_matricola + "','" + @Sarch.Sarch_sezione.Replace("'", "''") + "','" + @Sarch.Sarch_foglio + "','" + @Sarch.Sarch_particella + "','" +
+                //   @Sarch.Sarch_sub + "','" + @arch.arch_dataInizioAttivita + "','" +
+                //   @Sarch.Sarch_propPriv + "','" + @Sarch.Sarch_propBeniCult + "','" + @Sarch.Sarch_propComune + "','" + @Sarch.Sarch_propAltriEnti + "','" + @Sarch.Sarch_foglioNct + "','" +
+                //   @Sarch.Sarch_particellaNct + "','" + @Sarch.Sarch_beniConfiscati + "','" + dataStorFormattata + "')";
 
                 sql_InsStorico = "insert into ArchivioUoteStorico (arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita," +
                    "arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere,arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio," +
@@ -7211,14 +7322,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "SELECT arch_numPratica,arch_doppione,arch_dataIns,arch_datault_intervento,arch_indirizzo,arch_responsabile,arch_natoA,arch_dataNascita,arch_inCarico,arch_evasa,arch_note,arch_tipologia,arch_quartiere," +
                     "arch_suoloPub,arch_vincoli,arch_1089,arch_demolita,arch_allegati,arch_matricola,arch_sezione,arch_foglio,arch_particella,arch_sub,arch_dataInizioAttivita,arch_propPriv,arch_propComune,arch_propBeniCult,arch_propAltriEnti,arch_foglionct,arch_particellanct,arch_beniConfiscati " +
                     "FROM ArchivioUote WHERE id_Archivio = " + Convert.ToInt32(id);
-                // -- 1. Elimina il record esistente per questa pratica e archivio (se presente)
-                //-- 2. Inserisce sempre il nuovo record aggiornato
-                string sqlDeleteResp = "DELETE FROM ResponsabiliPratiche WHERE id_archivio = @id_archivio_param AND nr_pratica = @nr_pratica_param;";
-                string sqlInsertResp = @"
-        INSERT INTO ResponsabiliPratiche (Responsabile, data_nascita, nr_pratica, data_caricamento, comunenascita, id_archivio) 
-        VALUES (@Responsabile, @DataNascita, @nr_pratica, @data_inserimento, @comune, @id_archivio);";
-
-
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
@@ -7235,36 +7338,24 @@ ORDER BY LOGS.[Data Accesso] DESC";
                                 // Update ArchivioUote
                                 command.CommandText = sql_InsStorico;
                                 command.Parameters.AddWithValue("@arch_dataStoricizzazione", dataStor);
-                                command.ExecuteNonQuery();
-                                command.CommandText = sql_upd;
-                                command.ExecuteNonQuery();
-
-                                //cancello i responsabili esistenti per questa pratica e archivio
-                                command.CommandText = sqlDeleteResp;
-                                command.Parameters.Clear();
-                                command.Parameters.AddWithValue("@id_archivio_param", id);
-                                command.Parameters.AddWithValue("@nr_pratica_param", @arch.arch_numPratica ?? (object)DBNull.Value);
-                                command.ExecuteNonQuery();
-
-                                foreach (var list in ListaResponsabili)
+                                int res = command.ExecuteNonQuery();
+                                if (res > 0)
                                 {
-                                    command.Parameters.Clear();
-                                    command.Parameters.AddWithValue("@Responsabile", list.Responsabile ?? (object)DBNull.Value);
-                                    command.Parameters.AddWithValue("@DataNascita", string.IsNullOrEmpty(list.DataNascita) ? (object)DBNull.Value : DateTime.Parse(list.DataNascita));
-                                    command.Parameters.AddWithValue("@comune", list.ComuneNascita ?? (object)DBNull.Value);
-                                    command.Parameters.AddWithValue("@nr_pratica", @arch.arch_numPratica ?? (object)DBNull.Value);
-                                    command.Parameters.AddWithValue("@data_inserimento", DateTime.Now);
-                                    command.Parameters.AddWithValue("@id_archivio", id);
-                                    command.CommandText = sqlInsertResp;
-                                    command.ExecuteNonQuery();
+                                    command.CommandText = sql_upd;
+                                    res = command.ExecuteNonQuery();
+                                    if (res > 0)
+                                    {
+                                        tran.Commit();
+                                        tran.Dispose();
+                                        resp = true;
+                                    }
+                                    else
+                                    {
+                                        tran.Rollback();
+                                        resp = false;
+                                    }
 
                                 }
-
-                                tran.Commit();
-                                resp = true;
-
-
-
                             }
                             catch (Exception)
                             {
@@ -7275,6 +7366,9 @@ ORDER BY LOGS.[Data Accesso] DESC";
                         }
                     }
                 }
+
+
+
             }
             catch (Exception)
             {
@@ -7776,6 +7870,54 @@ ORDER BY LOGS.[Data Accesso] DESC";
             return resp;
 
         }
+        public bool updInventarioById(string id, InventarioObj inv)
+        {
+            Boolean resp = true;
+            int Nid = Convert.ToInt32(id);
+            string query = @"UPDATE inventario SET 
+                     codep = @codep, 
+                     categoria = @categoria, 
+                     progr_codep = @progr_codep, 
+                     ufficio = @ufficio, 
+                     etichetta = @etichetta, 
+                     descrizione = @descrizione, 
+                     dismesso = @dismesso, 
+                     tipologia = @tipologia, 
+                     seriale = @seriale, 
+                     note = @note
+                     WHERE id_inventario = @id_inventario";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    // Passaggio dei parametri in modo sicuro
+                    cmd.Parameters.AddWithValue("@id_inventario", Nid);
+                    cmd.Parameters.AddWithValue("@codep", (object)inv.codep ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@categoria", (object)inv.categoria ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@progr_codep", inv.progr_codep);
+                    cmd.Parameters.AddWithValue("@ufficio", (object)inv.ufficio ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@etichetta", (object)inv.etichetta ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@descrizione", (object)inv.descrizione ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@dismesso", inv.dismesso);
+                    cmd.Parameters.AddWithValue("@tipologia", (object)inv.tipologia ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@seriale", (object)inv.seriale ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@note", (object)inv.note ?? DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        int righeAggiornate = cmd.ExecuteNonQuery();
+                        return righeAggiornate > 0; // Restituisce true se l'aggiornamento è andato a buon fine
+                    }
+                    catch (Exception ex)
+                    {
+                        // Gestione dell'errore (puoi loggarlo)
+                        return false;
+                    }
+                }
+            }
+        }
         public Boolean UpdateRegistroById(int id, UrpRegistro reg)
         {
             bool resp = true;
@@ -8170,7 +8312,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
                     "',dataarrivo = '" + @p.dataArrivo + "', Tipologia_atto ='" + p.tipologia_atto.Replace("'", "''") + "', provenienza ='" + @p.provenienza.Replace("'", "''") + "',TipoProvvedimentoAG ='" + @p.tipoProvvedimentoAG.Replace("'", "''") +
                     "',UlterioreTipoAtto ='" + @p.ulterioreTipoAtto.Replace("'", "''") + "',evasadata = '" + @p.evasaData +
                     "',bu ='" + @p.bu.Replace("'", "''") + "',codiceEdificio ='" + @p.codiceEdificio.Replace("'", "''") + "',accertatori2 ='" + @p.accertatori2.Replace("'", "''") +
-                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
+                    "',accertatori3 ='" + @p.accertatori3.Replace("'", "''") + "',accertatori4 ='" + @p.accertatori4.Replace("'", "''") + "'" + ",NumProtRicStessoCarico =" + @p.NumProtRicStessoCarico + ",DataDelega ='" + @p.dataDelega + "', GgDelega= " + p.ggDelega +
                     ",cartellina = '" + @p.cartellina + "'" +
                     ",Rif_Prot_Uscita = '" + @p.rif_Prot_Uscita.Replace("'", "''") + "'" +
                     " where  ID = " + ID;
@@ -8178,15 +8320,15 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 //+ " and  CHARINDEX('" + @p.accertatori.Replace("'", "''") + "', accertatori) = 0";
 
                 string sql_storico =
-        "INSERT INTO principalestorico (" +
-        "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
-        "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
-        "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
-        "SELECT " +
-        "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
-        "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
-        "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
-        "FROM principale WHERE id = " + ID;
+ "INSERT INTO principalestorico (" +
+ "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+ "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+ "DataStoricizzazione, MatricolaStoricizzazione, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, accertatori4, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina) " +
+ "SELECT " +
+ "nr_protocollo, sigla, DataArrivo, Provenienza, Tipologia_atto, giudice, TipoProvvedimentoAG, ProcedimentoPen, " +
+ "Nominativo, Indirizzo, via, Evasa, EvasaData, Inviata, DataInvio, Scaturito, Accertatori, DataCarico, nr_Pratica, Quartiere, Note, Anno, Giorno, Rif_Prot_Gen, matricola, DataInserimento, " +
+ "getdate(), @MatricolaOperatore, UlterioreTipoAtto, bu, CodiceEdificio, accertatori2, accertatori3, accertatori4, NumProtRicStessoCarico,DataDelega,GgDelega,Rif_Prot_Uscita,cartellina " +
+ "FROM principale WHERE id = " + ID;
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();

@@ -649,7 +649,7 @@ namespace Uotep
                             else
                             {
                                 //I 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
-                                ins = mn.SavePraticaArchivioUote(arch, ListaResponsabili, out msg);
+                                ins = mn.SavePraticaArchivioUote(arch);
                                 //F 20/10/2026 salva responsabili nella tabella dei ResponsabiliPratiche 1:n
 
                                 if (!string.IsNullOrEmpty(msg))
@@ -1207,11 +1207,11 @@ namespace Uotep
 
         protected void DdlQuartiere_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Manager mn = new Manager();
-            //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
-            DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
-            Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) + 1;
-            txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
+            //Manager mn = new Manager();
+            ////  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+            //DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
+            //Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) + 1;
+            //txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
         }
 
        

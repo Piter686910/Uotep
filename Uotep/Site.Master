@@ -264,7 +264,20 @@
                                 <li><a id="PG" runat="server" visible="false" href="~/View/Segreteria">Ufficio PG</a></li>
                             </ul>
                         </li>
-                        <li><a id="menuSicurezza" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
+
+
+
+                        <li id="menuSicurezza" runat="server" visible="false" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sicurezza <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a id="Inventario" runat="server" visible="false" href="~/View/Inventario">Inventario</a></li>
+                                <li><a id="GestAuto" runat="server" visible="false" href="~/View/GestioneAuto">Scheda Carburante</a></li>
+
+                            </ul>
+                        </li>
+
+
+
                         <li><a id="menuManTabelle" runat="server" visible="false" href="~/View/ManutenzioneTabelle">Tabelle</a></li>
                         <li><a id="Urp" runat="server" visible="false" href="~/View/Urp">Urp</a></li>
 

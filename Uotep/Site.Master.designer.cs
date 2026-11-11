@@ -309,7 +309,25 @@ namespace Uotep
         /// Campo generato automaticamente.
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor menuSicurezza;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSicurezza;
+
+        /// <summary>
+        /// Controllo Inventario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor Inventario;
+
+        /// <summary>
+        /// Controllo GestAuto.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor GestAuto;
 
         /// <summary>
         /// Controllo menuManTabelle.

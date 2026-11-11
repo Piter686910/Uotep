@@ -61,7 +61,7 @@ namespace Uotep.Classi
             ErrorLog = 6,
             [Description("modifica effettuata correttamente.")]
             ModificaCorretta = 7,
-            [Description("E' possibile inserire max 3 accertatori.")]
+            [Description("E' possibile inserire max 4 accertatori.")]
             Maxaccertatori = 8,
             [Description("Pratica non trovata.")]
             PraticaNotFound = 9,
@@ -107,7 +107,9 @@ namespace Uotep.Classi
             [Description("Inserimento non effettuato.")]
             InsKo = 27,
             [Description("Inserire Quartiere.")]
-            InserireQuartiere = 28
+            InserireQuartiere = 28,
+            [Description("Progressivo bene mancante, ricalcolarlo.")]
+            InserireProgressivoBene = 29
         }
         public enum Sigla
         {

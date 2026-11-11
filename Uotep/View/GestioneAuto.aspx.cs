@@ -611,7 +611,6 @@ namespace Uotep
 
                 List<string> ListRicerca = (List<string>)Session["ListAuto"];
                 String[] ar = ListRicerca.ToArray();
-                // ArchivioUote arc = new ArchivioUote();
                 if (Session["ListRicercaGestioneAuto"] != null)
                 {
                     // Recupera la DataTable originale dalla Sessione
