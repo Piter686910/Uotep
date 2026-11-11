@@ -25,6 +25,7 @@ using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -2029,7 +2030,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-
         public DataTable getGestionePraticaByFascicolo(string fascicolo)
         {
             string sql = string.Empty;
@@ -2042,6 +2042,51 @@ ORDER BY LOGS.[Data Accesso] DESC";
             {
                 return tb = FillTable(sql, conn, out msg);
             }
+        }
+        public DataTable GetNumPraticaByQuartiere(string quartiere)
+        {
+            string sql = string.Empty;
+            DataTable tb = new DataTable();
+
+            
+            sql = "SELECT * FROM ProgrPratica WHERE quartiere LIKE @quartiere";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    
+                    string valoreRicerca = "%" + quartiere + "%";
+
+                    cmd.Parameters.AddWithValue("@quartiere", (object)valoreRicerca ?? DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!File.Exists(LogFile))
+                        {
+                            using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        }
+
+                        using (StreamWriter sw = File.AppendText(LogFile))
+                        {
+                            sw.WriteLine("quartiere:" + quartiere + ", " + ex.Message + @" MaxProgrPratica" + "; " + ConnString);
+                        }
+
+                        return tb;
+                    }
+                }
+            }
+
+            return tb;
         }
         public DataTable getAttivitaAdmin(string area, Boolean val)
         {

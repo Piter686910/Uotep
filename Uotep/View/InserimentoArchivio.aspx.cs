@@ -1207,11 +1207,11 @@ namespace Uotep
 
         protected void DdlQuartiere_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Manager mn = new Manager();
-            ////  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
-            //DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
-            //Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) + 1;
-            //txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
+            Manager mn = new Manager();
+            //  int cartellina = mn.GetCartellinaByQuartiere(txtQuartiereTp.Text.ToUpper());
+            DataTable pratica = mn.GetNumPraticaByQuartiere(DdlQuartiere.SelectedItem.Text.ToUpper());
+            Int32 progressivo = Convert.ToInt32(pratica.Rows[0]["progressivo"].ToString()) + 1;
+            txtPratica.Text = pratica.Rows[0]["codicemun"].ToString() + progressivo;
         }
 
        
