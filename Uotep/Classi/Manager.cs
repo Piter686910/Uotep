@@ -17,6 +17,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using iText.Forms.Form.Element;
+using iText.StyledXmlParser.Jsoup.Select;
 using Microsoft.Ajax.Utilities;
 using Microsoft.Reporting.Map.WebForms.BingMaps;
 using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
@@ -25,6 +26,7 @@ using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -856,23 +858,87 @@ ORDER BY carico;");
                 return tb = FillTable(sql, conn, out msg);
             }
         }
+        public DataTable GetlistInventarioToPdfByFilter(string a, string b)
+        {
+            DataTable tb = new DataTable();
+            string msg = string.Empty;
+
+            string sql = ";WITH DatiRaggruppati AS ( " +
+               "    SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, " +
+               "    SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+               "    SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniEtichettati " +
+               "    FROM inventario " +
+               "    WHERE " +  a + " like @b " +
+               "    GROUP BY tipologia, categoria " +
+               ") " +
+               "SELECT tipologia_categoria, BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali " +
+               "FROM DatiRaggruppati " +
+               "UNION ALL " +
+               "SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, " +
+               "       SUM(BeniNoEtichettati) AS BeniNoEtichettati, " +
+               "       SUM(BeniEtichettati) AS BeniEtichettati, " +
+               "       SUM(BeniNoEtichettati + BeniEtichettati) AS totali " +
+               "FROM DatiRaggruppati;";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    // Assicurati che 'b' non sia null o vuoto
+                    string valoreFiltro = "%" + b + "%";
+
+                    cmd.Parameters.AddWithValue("@b", b != null ? valoreFiltro : (object)DBNull.Value);
+                    //cmd.Parameters.AddWithValue("@b", b ?? (object)DBNull.Value);
+                   //cmd.Parameters.AddWithValue("@a", a ?? (object)DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Metti un punto interruzione (breakpoint) qui per leggere l'errore esatto!
+                        string errore = ex.Message;
+                    }
+                }
+            }
+            return tb;
+        }
+        /// <summary>
+        /// seleziona la lista inventario raggruppata per tipologia e categoria, con conteggio dei beni etichettati e non etichettati
+        /// </summary>
+        /// <returns></returns>
         public DataTable GetlistInventarioToPdf()
         {
             DataTable tb = new DataTable();
-            //string sql = "SELECT  CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
-            //    "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario " +
-            //    "GROUP BY tipologia, categoria UNION ALL "+
-            //    "SELECT  'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
-            //        "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario  ";
+            
+
+            string sql = ";WITH DatiRaggruppati AS ( SELECT  tipologia AS categoria_tipologia, " +
+                "SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+                "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario " +
+                " where tipologia NOT IN ('STAMPANTE TABLET', 'TABLET','TELEFONO AVAYA')  GROUP BY tipologia)" +
+                " SELECT categoria_tipologia, BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali " +
+                "FROM DatiRaggruppati " +
+                "UNION ALL " +
+                "SELECT 'TOTALE COMPLESSIVO' AS categoria_tipologia, " +
+                "SUM(BeniNoEtichettati) AS BeniNoEtichettati, " +
+                "SUM(BeniEtichettati) AS BeniEtichettati, " +
+                "SUM(BeniNoEtichettati + BeniEtichettati) AS totali " +
+                "FROM DatiRaggruppati;";
 
 
-
-
-            string sql = ";WITH DatiRaggruppati AS ( SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) " +
-                "AS BeniNoEtichettati, SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario GROUP BY tipologia, categoria ) "+
-                " SELECT tipologia_categoria,BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali FROM DatiRaggruppati " +
-                "UNION ALL SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(BeniNoEtichettati) AS BeniNoEtichettati,  SUM(BeniEtichettati) AS BeniEtichettati, SUM(BeniNoEtichettati + BeniEtichettati) AS totali "+
-                "FROM DatiRaggruppati; ";
+            //string sql = ";WITH DatiRaggruppati AS ( SELECT CONCAT(LEFT(categoria, 7), ' - ', tipologia) AS categoria_tipologia, " +
+            //    "SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS Beni_No_Etichettati, " +
+            //    "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS Beni_Etichettati FROM inventario GROUP BY tipologia, categoria ) " +
+            //    "SELECT categoria_tipologia,BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali FROM DatiRaggruppati " +
+            //    "UNION ALL SELECT 'TOTALE COMPLESSIVO' AS categoria_tipologia, SUM(BeniNoEtichettati) AS Beni_No_Etichettati,  SUM(BeniEtichettati) AS Beni_Etichettati, " +
+            //    "SUM(BeniNoEtichettati + BeniEtichettati) AS totali " +
+            //    "FROM DatiRaggruppati; ";
 
 
 
@@ -880,6 +946,43 @@ ORDER BY carico;");
             {
                 return tb = FillTable(sql, conn, out msg);
             }
+        }
+        
+        public DataTable GetlistInventarioHardwareToPdf(string[]ar)
+        {
+            DataTable tb = new DataTable();
+
+
+            string sql = "SELECT tipologia,seriale "+
+                        "FROM Inventario where tipologia in (@pc, @monitor, @stampante,@stamtablet)";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    
+
+                    cmd.Parameters.AddWithValue("@pc", ar[0] != null ? ar[0] : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@monitor", ar[1] != null ? ar[1] : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@stampante", ar[2] != null ? ar[2] :  (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@stamtablet", ar[3] != null ? ar[3] : (object)DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Metti un punto interruzione (breakpoint) qui per leggere l'errore esatto!
+                        string errore = ex.Message;
+                    }
+                }
+            }
+            return tb;
         }
         public DataTable GetListRegistro(out string msg)
         {

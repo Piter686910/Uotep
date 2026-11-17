@@ -56,12 +56,12 @@
         }
         function VisibleDiv() {
             var div = document.getElementById('<%= DivEstraiInventario.ClientID %>');
-    if (div.style.display === "none" || div.style.display === "") {
-        div.style.display = "block"; // Mostra il div
-    } else {
-        div.style.display = "none";  // Nasconde il div
-    }
-}
+            if (div.style.display === "none" || div.style.display === "") {
+                div.style.display = "block"; // Mostra il div
+            } else {
+                div.style.display = "none";  // Nasconde il div
+            }
+        }
     </script>
 
     <!-- Usato container-fluid full-width per occupare il 100% effettivo della pagina -->
@@ -226,7 +226,7 @@
                             <label class="form-check-label ms-2" for="CkBandiera">Bandiera</label>
                         </div>
                         <div style="margin-right: 55px">
-                            
+
                             <asp:CheckBox ID="CkCassaforte" runat="server" CssClass="form-check-input" />
                             <label class="form-check-label ms-2" for="CkCassaforte">Cassaforte</label>
                         </div>
@@ -316,7 +316,7 @@
 
                         <asp:TemplateField HeaderText="CodStanza">
                             <HeaderTemplate>
-                                Codice Stanza<br />
+                                Cod.Uff.<br />
                                 <asp:TextBox ID="txtFilterCodep" runat="server" OnTextChanged="txtFilterCodep_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("codep") %></ItemTemplate>
@@ -346,7 +346,7 @@
                         <asp:TemplateField HeaderText="Descrizione">
                             <HeaderTemplate>
                                 Descrizione<br />
-                                <asp:TextBox ID="txtFilterDescrizione" runat="server" OnTextChanged="txtFilterDescrizione_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                <asp:TextBox ID="txtFilterDescrizione" runat="server" OnTextChanged="txtFilterDescrizione_TextChanged" AutoPostBack="True" ToolTip="Filtra..." CssClass="form-control form-control-sm" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("Descrizione") %></ItemTemplate>
 
@@ -355,7 +355,7 @@
                         <asp:TemplateField HeaderText="Categoria">
                             <HeaderTemplate>
                                 Categoria<br />
-                                <asp:TextBox ID="txtFilterCategoria" runat="server" OnTextChanged="txtFilterCategoria_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                <asp:TextBox ID="txtFilterCategoria" runat="server" OnTextChanged="txtFilterCategoria_TextChanged" AutoPostBack="True" ToolTip="Filtra..." CssClass="form-control form-control-sm" placeholder="Filtra..." />
 
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("Categoria") %></ItemTemplate>
@@ -365,7 +365,7 @@
                         <asp:TemplateField HeaderText="Tipologia">
                             <HeaderTemplate>
                                 Tipologia<br />
-                                <asp:TextBox ID="txtFilterTipologia" runat="server" OnTextChanged="txtFilterTipologia_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                <asp:TextBox ID="txtFilterTipologia" runat="server" OnTextChanged="txtFilterTipologia_TextChanged" AutoPostBack="True" ToolTip="Filtra..." CssClass="form-control form-control-sm" placeholder="Filtra..." />
 
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("Tipologia") %></ItemTemplate>
@@ -375,7 +375,7 @@
                         <asp:TemplateField HeaderText="Seriale">
                             <HeaderTemplate>
                                 Seriale<br />
-                                <asp:TextBox ID="txtFilterSeriale" runat="server" OnTextChanged="txtFilterSeriale_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                <asp:TextBox ID="txtFilterSeriale" runat="server" OnTextChanged="txtFilterSeriale_TextChanged" AutoPostBack="True" ToolTip="Filtra..." CssClass="form-control form-control-sm" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("Seriale") %></ItemTemplate>
 
@@ -393,7 +393,7 @@
                         <asp:TemplateField HeaderText="Note">
                             <HeaderTemplate>
                                 Note<br />
-                                <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True" ToolTip="Filtra..." Width="50px" CssClass="form-control form-control-sm" placeholder="Filtra..." />
+                                <asp:TextBox ID="txtFilterNote" runat="server" OnTextChanged="txtFilterNote_TextChanged" AutoPostBack="True" ToolTip="Filtra..." CssClass="form-control form-control-sm" placeholder="Filtra..." />
                             </HeaderTemplate>
                             <ItemTemplate><%# Eval("Note") %></ItemTemplate>
 
@@ -401,22 +401,19 @@
 
                         <asp:TemplateField ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>
-                                <asp:Button ID="btnSelect" runat="server" Text="Modifica"
-                                    CommandName="Select"
+                                <asp:Button ID="btnModifica" runat="server" Text="✏️"
+                                    CommandName="Edit"
                                     CommandArgument='<%# Eval("id_inventario") %>'
-                                    CssClass="btn btn-success btn-sm" />
+                                    CssClass="btn btn-sm mr-2" ToolTip="Modifica" />
+
+                                <asp:Button ID="btnSelect" runat="server" Text="🔍"
+                                    CommandName="Print"
+                                    CommandArgument='<%# Eval("id_inventario") %>'
+                                    CssClass="btn btn-warning btn-sm" ToolTip="Stampa scheda" />
                             </ItemTemplate>
 
                         </asp:TemplateField>
-                        <asp:TemplateField ItemStyle-HorizontalAlign="Center">
-                            <ItemTemplate>
-                                <asp:Button ID="btnSelect" runat="server" Text="Visualizza"
-                                    CommandName="View"
-                                    CommandArgument='<%# Eval("id_inventario") %>'
-                                    CssClass="btn btn-success btn-sm" />
-                            </ItemTemplate>
 
-                        </asp:TemplateField>
                         <%--<asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width="100px">
                             <ItemTemplate>
                                 <asp:Button ID="btnModifica" runat="server" Text="Mod." CommandName="Edit" CssClass="btn btn-warning btn-sm" CommandArgument='<%# Eval("id_inventario")%>' />
@@ -430,7 +427,7 @@
             </div>
 
             <div class="modal-footer bg-light">
-                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa" Visible="false" />
+                <asp:Button ID="btBack" runat="server" class="btn btn-secondary" Text="Azzera Filtri" OnClick="btBack_Click" ToolTip="Torna alla lista completa"  />
             </div>
         </div>
 

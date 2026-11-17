@@ -314,6 +314,7 @@ namespace Uotep
             Session.Remove("ListRicercaFiltro");
             Session.Remove("ListInventario");
             Session.Remove("ListFiltrataInventario");
+            Session.Remove("ListInventarioDopoFiltro");
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);
