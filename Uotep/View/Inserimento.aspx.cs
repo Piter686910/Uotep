@@ -23,6 +23,7 @@ namespace Uotep
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
         String ruolo = String.Empty;
+        string profilo = string.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         string msg = string.Empty;
         string pagchiamante = "~/View/Inserimento.aspx";
@@ -36,16 +37,38 @@ namespace Uotep
             {
                 Vuser = Session["user"].ToString();
                 ruolo = Session["ruolo"].ToString();
-
+                profilo = Session["profilo"].ToString();
             }
             else
             {
+                //I 18/11/2026 AUTORIZZAZIONI
                 string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                 Response.Redirect(url);
-
-                //                Response.Redirect("Default.aspx?user=true");
             }
-            //          CaricaDLL();
+            string valoreProfiloTre = ((int)Enumerate.Profilo.tre).ToString(); // oppure Enumerate.Profilo.tre.ToString()
+            bool IsAccertatoreOk = false;
+            IsAccertatoreOk =
+                ruolo.ToUpper() == Enumerate.Ruolo.accertatori.GetDescription().ToUpper() &&
+                profilo != null &&
+                profilo.Contains(valoreProfiloTre);
+
+
+            if (IsAccertatoreOk == false && ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper() &&
+                   ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoPg.GetDescription().ToUpper())
+                if (!profilo.Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()) || ruolo.ToUpper() == Enumerate.Ruolo.PG.GetDescription().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
+                {
+
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                        Session.Abandon();
+                        return;
+                    }
+                    //F 18/11/2026 AUTORIZZAZIONI
+
+                }
             if (!IsPostBack)
             {
                 Routine prot = new Routine();
