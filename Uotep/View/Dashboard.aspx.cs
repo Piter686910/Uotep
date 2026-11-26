@@ -62,7 +62,8 @@ namespace Uotep
 
                 }
                 //F 18/11/2026 - aggiunta variabile per abilitazione operatore
-                if (!IsPostBack)
+            }
+            if (!IsPostBack)
             {
                 CurrentPage = 0;
                 CaricaPersonale();
