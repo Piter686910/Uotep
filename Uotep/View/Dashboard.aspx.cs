@@ -37,14 +37,32 @@ namespace Uotep
             }
             if (!String.IsNullOrEmpty(ruolo))
             {
-                if (ruolo != "admin")
+                //I 18/11/2026- aggiunta variabile per abilitazione operatore
+                //if (ruolo != "admin")
+                //{
+                //    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
+                //    Response.Redirect(url, false);
+                //    // Response.Redirect("~/View/default.aspx");
+                //}
+
+                if (ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper())
+
                 {
-                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
-                    Response.Redirect(url, false);
-                    // Response.Redirect("~/View/default.aspx");
+
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                        Session.Abandon();
+                        string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                        Response.Redirect(url);
+                        return;
+                    }
+
                 }
-            }
-            if (!IsPostBack)
+                //F 18/11/2026 - aggiunta variabile per abilitazione operatore
+                if (!IsPostBack)
             {
                 CurrentPage = 0;
                 CaricaPersonale();
