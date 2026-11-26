@@ -41,10 +41,12 @@ namespace Uotep
             }
             else
             {
+                //I 18/11/2026: Aggiunto redirect a default.aspx con parametro user=true per gestire la sessione scaduta
                 string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                 Response.Redirect(url);
 
                 //                Response.Redirect("Default.aspx?user=true");
+                //F 18/11/2026 
             }
             Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
