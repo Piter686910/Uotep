@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -49,12 +50,28 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
                 Profilo = Session["profilo"].ToString();
                 //btOKDup.Visible = true;
-                if (Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
-                    //{
+                //I 18/11/2026 GESTIONE FRONT OFFICE E AUTORIZZAZIONI
+                if (Ruolo.ToUpper() == Enumerate.Ruolo.frontoffice.GetDescription().ToUpper())
+                {
                     btModifica.Visible = false;
-                //}
-                //else
-                //    btDuplica.Visible = true;
+                    btDecreta.Visible = false;
+                    BtDuplica.Visible = false;
+                }
+                if (Ruolo.ToUpper() != Enumerate.Ruolo.accertatori.GetDescription().ToUpper() && Ruolo.ToUpper() == Enumerate.Ruolo.Admin.GetDescription().ToUpper() &&
+                    Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.GetDescription().ToUpper())
+                    if (!Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                    {
+                        SiteMaster myMaster = this.Master as SiteMaster;
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                            Session.Abandon();
+                            return;
+                        }
+
+                    }
+                //F 18/11/2026 GESTIONE FRONT OFFICE E AUTORIZZAZIONI
             }
             else
             {
