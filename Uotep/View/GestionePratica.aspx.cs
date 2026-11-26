@@ -41,16 +41,19 @@ namespace Uotep
             }
             else
             {
+                //I 18/11/2026: Aggiunto redirect a default.aspx con parametro user=true per gestire la sessione scaduta
                 string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                 Response.Redirect(url);
 
                 //                Response.Redirect("Default.aspx?user=true");
+                //F 18/11/2026 
             }
             Session["PaginaChiamante"] = "~/View/GestionePratica.aspx";
             if (!IsPostBack)
             {
                 if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper() ||
-                    ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.urp.ToString().ToUpper())
+                    ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.PG.ToString().ToUpper() || ruolo.ToUpper() == Enumerate.Ruolo.urp.ToString().ToUpper()
+                    || ruolo.ToUpper() == Enumerate.Ruolo.frontoffice.ToString().ToUpper())
                 {
                     btSalva.Enabled = false;
                     btModifica.Enabled = false;
@@ -92,7 +95,7 @@ namespace Uotep
                 }
             }
         }
-    
+
         protected void chiudipopup_Click(object sender, EventArgs e)
         {
             //ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "$('#myModal').modal('hide');", true);
@@ -160,14 +163,14 @@ namespace Uotep
                 //}
                 if (resp)
                 {
-                   // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
                     SiteMaster myMaster = this.Master as SiteMaster;
 
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
                         myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.InsOk.GetDescription(), "success");
-                     
+
                     }
                     Pulisci();
                     getPratica(pratica);
@@ -195,7 +198,7 @@ namespace Uotep
                 //Response.Redirect("~/Contact.aspx");
             }
         }
-      
+
         private void Pulisci()
         {
             // txtFascicolo.Text = string.Empty;
@@ -297,7 +300,7 @@ namespace Uotep
             string dtS = string.Empty;
             if (String.IsNullOrEmpty(txtFascicolo.Text))
             {
-               // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire il Fascicolo." + "'); $('#errorModal').modal('show');", true);
+                // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserire il Fascicolo." + "'); $('#errorModal').modal('show');", true);
                 //richiama popup dalla site master
                 SiteMaster myMaster = this.Master as SiteMaster;
 
@@ -305,7 +308,7 @@ namespace Uotep
                 {
                     // 2. Chiamo il metodo pubblico
                     myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.InserireFascicolo.GetDescription(), "warning");
-                   
+
                 }
             }
             else
@@ -332,14 +335,14 @@ namespace Uotep
 
                 if (resp)
                 {
-                   // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
+                    // ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Modifica della pratica effettuato." + "'); $('#errorModal').modal('show');", true);
                     SiteMaster myMaster = this.Master as SiteMaster;
 
                     if (myMaster != null)
                     {
                         // 2. Chiamo il metodo pubblico
                         myMaster.MostraMessaggio("✅  ATTENZIONE", Enumerate.MsgOutput.ModificaCorretta.GetDescription(), "success");
-                        
+
                     }
                     //Pulisci();
                     getPratica(pratica);
@@ -374,11 +377,11 @@ namespace Uotep
             DataTable dt = new DataTable();
             dt = mn.getGestionePraticaByFascicolo(p.fascicolo.Trim());
             if (dt.Rows.Count > 0)
-             {
-            GVRicercaFascicolo.DataSource = dt;
-            GVRicercaFascicolo.DataBind();
+            {
+                GVRicercaFascicolo.DataSource = dt;
+                GVRicercaFascicolo.DataBind();
 
-              }
+            }
             else
             {
                 SiteMaster myMaster = this.Master as SiteMaster;

@@ -2358,6 +2358,13 @@ namespace Uotep.Classi
                                         .SetFont(fontBold)
                                         .SetFontSize(12)
                                         .SetMarginTop(20));
+
+
+                                    document.Add(new Paragraph("Si precisa che i Beni Etichettati e Non Etichettati di cui al punto 1 comprendono la totalità dei beni mobili riscontrati presso la U.O.T.E.P., mentre le Dotazioni Informatiche ed Elettroniche con numeri di seriale di cui al punto 2 costituiscono un sottoinsieme già ricompreso nel punto 1, qui estrapolato ed esposto a parte per maggiore dettaglio identificativo, senza quindi sommarsi al totale generale.")
+                                        .SetFixedPosition(30, 200, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                        .SetFontSize(12).SetMarginTop(30));
                                     document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                                     float pageWidthH = PageSize.A4.GetWidth();
@@ -2365,10 +2372,10 @@ namespace Uotep.Classi
                                     float usableWidthH = pageWidthH - (leftMarginH * 2);
 
                                     // --- TABELLA ---
-                                    const int colonneDatiH = 1; // Corrisponde agli indici 0, 1, 2, 3 della query (2 colonne in totale)
+                                    const int colonneDatiH = 2; // Corrisponde agli indici 0, 1, 2, 3 della query (3 colonne in totale)
 
                                     // 1. Definiamo le larghezze percentuali per le 2 colonne della query SQL
-                                    float[] columnLarghezzaH = { 50f, 50f }; // La somma deve fare 100% indica quante colonne dettagli stampare
+                                    float[] columnLarghezzaH = { 33.33f, 33.33f, 33.33f }; // La somma deve fare 100% indica quante colonne dettagli stampare
 
                                     Table tableH = new Table(UnitValue.CreatePercentArray(columnLarghezzaH));
                                     tableH.SetWidth(UnitValue.CreatePercentValue(100)); // Occupa tutta la larghezza utile della pagina

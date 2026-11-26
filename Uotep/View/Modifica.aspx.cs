@@ -76,7 +76,33 @@ namespace Uotep
 
             }
             Session["PaginaChiamante"] = pagchiamante;
+            if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
+            {
+                if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                    btChiudiDecretazione.Visible = true;
+                else
+                {
+                    //btChiudiDecretazione.Visible = false;
+                    btSalva.Visible = false;
+                    btCercaQuartiere.Visible = false;
+                    btChiudiDecretazione.Visible = false;
+                }
+            }
+            //I 18/11/2026 AUTORIZZAZIONI
+            if (!Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+            {
+                
+                SiteMaster myMaster = this.Master as SiteMaster;
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                    Session.Abandon();
+                    return;
+                }
 
+            }
+            //F 18/11/2026 AUTORIZZAZIONI
             if (!IsPostBack)
             {
                 // Legge il valore dal Web.config
@@ -90,18 +116,7 @@ namespace Uotep
                 DivRicerca.Visible = false;
                 NascondiDiv();
                 CaricaDLL();
-                if (ruolo.ToUpper() == Enumerate.Ruolo.accertatori.ToString().ToUpper())
-                {
-                    if (Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
-                        btChiudiDecretazione.Visible = true;
-                    else
-                    { 
-                        //btChiudiDecretazione.Visible = false;
-                    btSalva.Visible = false;
-                    btCercaQuartiere.Visible = false;
-                    btChiudiDecretazione.Visible = false;
-                    }
-                }
+                
                 if (Session["ListRicerca"] != null)
                 {
                     DataTable pratica = (DataTable)Session["ListRicerca"];

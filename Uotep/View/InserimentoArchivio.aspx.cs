@@ -65,11 +65,21 @@ namespace Uotep
 
                 // Assegna il valore decodificato al Literal
                 //  ProtocolloLiteral.Text = decodedText;
-                if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.SuperAdmin.ToString().ToUpper())
-                {
-                    btSalva.Visible = false;
-                    btCercaQuartiere.Visible = false;
-                }
+                //I 18/11/2026 AUTORIZZAZIONI
+                //if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper())
+                //{
+                //   // btSalva.Visible = false;
+                //   // btCercaQuartiere.Visible = false;
+                //    SiteMaster myMaster = this.Master as SiteMaster;
+                //    if (myMaster != null)
+                //    {
+                //        // 2. Chiamo il metodo pubblico
+                //        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                //        Session.Abandon();
+                //        return;
+                //    }
+                //}
+                //F 18/11/2026 AUTORIZZAZIONI
                 RicercaNew(sender, e);
 
                 CaricaDLL();

@@ -22,7 +22,8 @@ namespace Uotep
     {
         String annoCorr = DateTime.Now.Year.ToString();
         String Vuser = String.Empty;
-        String ruolo = String.Empty;
+        String Ruolo = String.Empty;
+        string profilo = string.Empty;
         String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         string msg = string.Empty;
         string pagchiamante = "~/View/Inserimento.aspx";
@@ -35,25 +36,47 @@ namespace Uotep
             if (Session["user"] != null)
             {
                 Vuser = Session["user"].ToString();
-                ruolo = Session["ruolo"].ToString();
-
+                Ruolo = Session["ruolo"].ToString();
+                profilo = Session["profilo"].ToString();
             }
             else
             {
+                //I 18/11/2026 AUTORIZZAZIONI
                 string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
                 Response.Redirect(url);
-
-                //                Response.Redirect("Default.aspx?user=true");
             }
-            //          CaricaDLL();
+            string valoreProfiloTre = ((int)Enumerate.Profilo.tre).ToString(); // oppure Enumerate.Profilo.tre.ToString()
+            bool IsAccertatoreOk = false;
+            IsAccertatoreOk =
+                Ruolo.ToUpper() == Enumerate.Ruolo.accertatori.GetDescription().ToUpper() &&
+                profilo != null &&
+                profilo.Contains(valoreProfiloTre);
+
+
+            if (IsAccertatoreOk==false  && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.GetDescription().ToUpper() &&
+                   Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.CoordinamentoPg.GetDescription().ToUpper())
+                if (!profilo.Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()) || Ruolo.ToUpper() == Enumerate.Ruolo.PG.GetDescription().ToUpper() || Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
+                {
+
+                    SiteMaster myMaster = this.Master as SiteMaster;
+                    if (myMaster != null)
+                    {
+                        // 2. Chiamo il metodo pubblico
+                        myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                        Session.Abandon();
+                        return;
+                    }
+                    //F 18/11/2026 AUTORIZZAZIONI
+
+                }
             if (!IsPostBack)
             {
                 Routine prot = new Routine();
                 txtProt.Text = prot.GetProtocollo();
                 txtDecretante.Text = prot.GetNomeOperatoreByMatr(Vuser);
-                
-                
-                
+
+
+
                 //Manager mn = new Manager();
                 //DataTable operatore = mn.getNominativoOperatore(Vuser);
                 //if (operatore.Rows.Count > 0)
@@ -92,9 +115,9 @@ namespace Uotep
                 //}
                 //else
                 //    divAg.Visible = false;
-               
+
                 txtDataInsCarico.Text = DateTime.Now.Date.ToShortDateString();
-                if (Session["ListRicerca"] != null && duplica=="y")
+                if (Session["ListRicerca"] != null && duplica == "y")
                 {
                     DataTable pratica = (DataTable)Session["ListRicerca"];
                     txtSearchAtto.Value = pratica.Rows[0]["Tipologia_atto"].ToString();
@@ -145,12 +168,12 @@ namespace Uotep
                     //I 23/04/2026 controllo deleghe
                     if (!String.IsNullOrEmpty(pratica.Rows[0]["DataDelega"].ToString()))
                     {
-                    txtDataDelega.Text = Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
+                        txtDataDelega.Text = Convert.ToDateTime(pratica.Rows[0]["DataDelega"].ToString()).ToShortDateString();
 
                     }
                     txtGgDelega.Text = pratica.Rows[0]["GgDelega"].ToString();
                     //F 23/04/2026 controllo deleghe
-                    
+
                 }
                 Session.Remove("ListRicerca");
             }
@@ -178,40 +201,40 @@ namespace Uotep
         public Boolean ControlloCampiObbligatori()
         {
             Boolean ret = true;
-            if (String.IsNullOrEmpty(txtProdPenNr.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProdPenNr.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtTipoProv.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtTipoProv.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
 
-            if (String.IsNullOrEmpty(txtGiudice.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtGiudice.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtQuartiere.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtQuartiere.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtProvenienza.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtProvenienza.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtRifProtGen.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtRifProtGen.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtIndirizzo.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtIndirizzo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txtNominativo.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txtNominativo.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
-            if (String.IsNullOrEmpty(txPratica.Text) && ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
+            if (String.IsNullOrEmpty(txPratica.Text) && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.ToString().ToUpper())
             {
                 return false;
             }
@@ -550,15 +573,15 @@ namespace Uotep
 
                     }
                     //I 23/04/2026 controllo deleghe
-                    p.dataDelega= string.IsNullOrWhiteSpace(txtDataDelega.Text) ? null : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
-                    p.ggDelega= string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
-                    
+                    p.dataDelega = string.IsNullOrWhiteSpace(txtDataDelega.Text) ? null : System.Convert.ToDateTime(txtDataDelega.Text).ToShortDateString();
+                    p.ggDelega = string.IsNullOrWhiteSpace(txtGgDelega.Text) ? 0 : Convert.ToInt32(txtGgDelega.Text);
+
                     //F 23/04/2026 controllo deleghe
                     stat.mese = mese;
                     stat.anno = DateTime.Now.Year;
 
                     //I mod 26/08/2026 cartellina patrimonio
-                    p.cartellina= string.IsNullOrWhiteSpace(txtCartellina.Text) ? String.Empty : txtCartellina.Text.Trim();
+                    p.cartellina = string.IsNullOrWhiteSpace(txtCartellina.Text) ? String.Empty : txtCartellina.Text.Trim();
                     //F mod 26/08/2026 cartellina patrimonio
                     Int32 idN = 0;
                     Boolean ins = mn.InsCarico(p, System.Convert.ToInt32(txtProt.Text), stat, exist, out idN);
@@ -588,7 +611,7 @@ namespace Uotep
                         {
                             // 2. Chiamo il metodo pubblico
                             myMaster.MostraMessaggio("⚠️ ATTENZIONE", "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " già esistente, il nuovo protocollo è " + txtProt.Text, "danger");
-                           
+
                         }
                         //ClientScript.RegisterStartupScript(this.GetType(), "modalScript", "$('#errorMessage').text('" + "Inserimento della pratica non riuscito, numero protocollo " + p.nrProtocollo + " con anno " + p.anno + " e sigla " + p.sigla + " già esistente, il nuovo protocollo è " + txtProt.Text + "'); $('#errorModal').modal('show');", true);
                     }
@@ -598,7 +621,7 @@ namespace Uotep
                         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "modalScript", "$('#Message').text('" + "Protocollo " + p.nrProtocollo + " inserito correttamente, vuoi inserire una decretazione?" + "'); $('#ModalRicDecretazione').modal('show');", true);
 
                         modalLabel1.CssClass = " bg-success"; // Verde
-                        
+
                         //Pulisci();
                         btNewIns.Visible = true;
                         btSalva.Visible = false;
@@ -679,7 +702,7 @@ namespace Uotep
             // CkEvasa.Checked = false;
             CaricaDLL();
             //I 23/04/2026 controllo deleghe
-            txtDataDelega.Text= String.Empty;
+            txtDataDelega.Text = String.Empty;
             txtGgDelega.Text = String.Empty;
             //F 23/04/2026 controllo deleghe
             txtCartellina.Text = string.Empty;
@@ -1163,7 +1186,7 @@ namespace Uotep
             ScriptManager.RegisterStartupScript(this, GetType(), "ClosePopup", "var modal = bootstrap.Modal.getInstance(document.getElementById('ModalDecretazione')); modal.hide();", true);
             // Pulisci();
         }
-       
+
         //gridview per decretazione
         protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -1331,6 +1354,6 @@ namespace Uotep
 
         }
 
-        
+
     }
 }

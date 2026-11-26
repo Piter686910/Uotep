@@ -358,23 +358,41 @@ namespace Uotep.Classi
             try
             {
                 DataTable tb = new DataTable();
-                string sql = "SELECT passw FROM Operatore where Matricola= '" + user + "'";
-                //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
+                string sql = "SELECT passw FROM Operatore where Matricola= @user";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
-                    tb = FillTable(sql, conn, out msg);
-                    if (!File.Exists(LogFile))
+
+
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        // Passaggio sicuro del parametro per evitare SQL Injection
+                        cmd.Parameters.Add("@user", SqlDbType.NChar,10).Value= user;
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
                     }
 
-                    using (StreamWriter sw = File.AppendText(LogFile))
-                    {
-                        sw.WriteLine("connessione:" + ConnString + " out;" + msg);
-                        sw.Close();
-                    }
-                    return tb;
+                    return tb; //= FillTable(sql, conn, out msg);
+
+                    //*************************** se voglio scrivere un file per gli accessi*********************
+
+                    //tb = FillTable(sql, conn, out msg);
+                    //if (!File.Exists(LogFile))
+                    //{
+                    //    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    //}
+
+                    //using (StreamWriter sw = File.AppendText(LogFile))
+                    //{
+                    //    sw.WriteLine("connessione:" + ConnString + " out;" + msg);
+                    //    sw.Close();
+                    //}
+                    //return tb;
                 }
             }
 
@@ -407,17 +425,29 @@ namespace Uotep.Classi
 
 
         }
-        public DataTable getUserByUserPassw(String user, string pasw)
+        public DataTable getUserByUserPassw(String user, string passw)
         {
             try
             {
                 DataTable tb = new DataTable();
-                string sql = "SELECT * FROM Operatore where Matricola= '" + user + "' and passw = '" + pasw + "'";
+                string sql = "SELECT * FROM Operatore where Matricola= @user and passw = @passw";
                 //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        // Passaggio sicuro del parametro per evitare SQL Injection
+                        cmd.Parameters.Add("@passw", SqlDbType.VarChar, -1).Value = passw;
+                        cmd.Parameters.Add("@user", SqlDbType.NChar, 10).Value = user;
+                        conn.Open();
+                            // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                            using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                            {
+                                da.Fill(tb);
+                            }
+                    }
 
-                    return tb = FillTable(sql, conn, out msg);
+                    return tb; //= FillTable(sql, conn, out msg);
                 }
             }
             catch (Exception ex)
@@ -573,7 +603,7 @@ WHERE codep = @codep";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     // Passaggio sicuro del parametro per evitare SQL Injection
-                    cmd.Parameters.AddWithValue("@codep", codep);
+                    cmd.Parameters.Add("@codep", SqlDbType.VarChar,10).Value= codep;
 
                     try
                     {
@@ -868,7 +898,7 @@ ORDER BY carico;");
                "    SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
                "    SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniEtichettati " +
                "    FROM inventario " +
-               "    WHERE " +  a + " like @b " +
+               "    WHERE " + a + " like @b " +
                "    GROUP BY tipologia, categoria " +
                ") " +
                "SELECT tipologia_categoria, BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali " +
@@ -888,8 +918,6 @@ ORDER BY carico;");
                     string valoreFiltro = "%" + b + "%";
 
                     cmd.Parameters.AddWithValue("@b", b != null ? valoreFiltro : (object)DBNull.Value);
-                    //cmd.Parameters.AddWithValue("@b", b ?? (object)DBNull.Value);
-                   //cmd.Parameters.AddWithValue("@a", a ?? (object)DBNull.Value);
 
                     try
                     {
@@ -916,7 +944,7 @@ ORDER BY carico;");
         public DataTable GetlistInventarioToPdf()
         {
             DataTable tb = new DataTable();
-            
+
 
             string sql = ";WITH DatiRaggruppati AS ( SELECT  tipologia AS categoria_tipologia, " +
                 "SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
@@ -947,24 +975,24 @@ ORDER BY carico;");
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-        
-        public DataTable GetlistInventarioHardwareToPdf(string[]ar)
+
+        public DataTable GetlistInventarioHardwareToPdf(string[] ar)
         {
             DataTable tb = new DataTable();
 
 
-            string sql = "SELECT tipologia,seriale "+
-                        "FROM Inventario where tipologia in (@pc, @monitor, @stampante,@stamtablet)";
+            string sql = "SELECT tipologia,descrizione,seriale " +
+                        "FROM Inventario where tipologia in (@pc, @monitor, @stampante) order by tipologia";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    
+
 
                     cmd.Parameters.AddWithValue("@pc", ar[0] != null ? ar[0] : (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@monitor", ar[1] != null ? ar[1] : (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@stampante", ar[2] != null ? ar[2] :  (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@stamtablet", ar[3] != null ? ar[3] : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@stampante", ar[2] != null ? ar[2] : (object)DBNull.Value);
+                    //cmd.Parameters.AddWithValue("@stamtablet", ar[3] != null ? ar[3] : (object)DBNull.Value);
 
                     try
                     {

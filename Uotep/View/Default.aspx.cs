@@ -90,7 +90,7 @@ namespace Uotep
 
         protected void trova_Click(object sender, EventArgs e)
         {
-            String Vpassw = "";
+            String Vpassw = string.Empty    ;
             Vuser = TxtMatricola.Text.ToUpper();
             Hmatricola.Value = TxtMatricola.Text.ToUpper();
             Vpassw = TxtPassw.Text;

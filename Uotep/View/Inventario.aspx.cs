@@ -265,11 +265,11 @@ namespace Uotep
             {
                 // Recupera dal database/metodo
                 listaInventario = mn.GetlistInventarioToPdf();
-                String[] arHardware = new String[4];
+                String[] arHardware = new String[3];
                 arHardware[0] = "MONITOR";
                 arHardware[1] = "PC";
                 arHardware[2] = "STAMPANTE";
-                arHardware[3] = "STAMPANTE TABLET";
+               // arHardware[3] = "STAMPANTE TABLET";
                 listaHardware = mn.GetlistInventarioHardwareToPdf(arHardware);
             }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -40,8 +40,25 @@ namespace Uotep
             }
             else
             {
-
-                Response.Redirect("Default.aspx?user=true");
+                string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                Response.Redirect(url, false);
+                //Response.Redirect("View/Default.aspx?user=true");
+                return;
+            }
+            if (Ruolo.ToUpper() != Enumerate.Ruolo.Archivio.ToString().ToUpper() && Ruolo.ToUpper() != Enumerate.Ruolo.Admin.ToString().ToUpper())
+            {
+                // btSalva.Visible = false;
+                // btCercaQuartiere.Visible = false;
+                SiteMaster myMaster = this.Master as SiteMaster;
+                if (myMaster != null)
+                {
+                    // 2. Chiamo il metodo pubblico
+                    myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                    Session.Abandon();
+                    string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx?user=true");
+                    Response.Redirect(url, false);
+                    return;
+                }
             }
 
             if (!IsPostBack)

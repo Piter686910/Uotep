@@ -43,7 +43,7 @@ namespace Uotep
                     string area = Session["area"].ToString();
                     Manager mn = new Manager();
                     DataTable Ricerca = mn.getUserRules(Vuser);
-                    
+
                     if (Ricerca.Rows.Count > 0)
                     {
                         lblUser.Text = "Benvenuto " + Ricerca.Rows[0].ItemArray[9].ToString().ToUpper() + " - Matricola: " + Ricerca.Rows[0].ItemArray[0].ToString();
@@ -57,9 +57,8 @@ namespace Uotep
                                 GestAuto.Visible = true;
                                 menuEsci.Visible = true;
                                 break;
-                            case "coordinamentopg":
-                            case "MasterAG":
                             case "coordinamentoatti":
+                            case "coordinamentopg":
                                 // Mostra voci specifiche per coordinamento pg
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
@@ -90,7 +89,7 @@ namespace Uotep
                                     EstraiStatistiche.Visible = true;
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
-                                
+
                                 break;
                             case "accertatori":
                                 // Mostra voci per utenti standard
@@ -186,6 +185,16 @@ namespace Uotep
                                     RicercaAtti.Visible = true;
                                 }
                                 break;
+                            //I 18/11/2026 GESTIONE FRONT OFFICE
+                            case "frontoffice":
+                                // Mostra voci per utenti standard
+                                menuArchivio.Visible = true;
+                                GestionePraticaUote.Visible = true;
+                                menuCoordinamentoAtti.Visible = true;
+                                RicercaAtti.Visible = true;
+                                menuEsci.Visible = true;
+                                break;
+                            //F 18/11/2026 GESTIONE FRONT OFFICE
                             case "archivio":
                                 // Mostra voci per utenti standard
                                 // menuHome.Visible = true;
@@ -223,9 +232,9 @@ namespace Uotep
                                 break;
                             case "admin":
                                 //
-                               // CaricaScheda.Visible = true;
+                                // CaricaScheda.Visible = true;
                                 // Mostra voci per utenti standard
-                               
+
                                 menuCoordinamentoAtti.Visible = true;
                                 menuArchivio.Visible = true;
                                 menuAccertatori.Visible = true;
@@ -247,7 +256,7 @@ namespace Uotep
                                 menuFureria.Visible = true;
                                 TurnoMensile.Visible = true;
                                 FSchedaDipendente.Visible = true;
-                                menuSicurezza.Visible=true;
+                                menuSicurezza.Visible = true;
                                 Inventario.Visible = true;
                                 GestAuto.Visible = true;
 
@@ -270,7 +279,7 @@ namespace Uotep
                                 Urp.Visible = false;
                                 //*
                                 break;
-                           
+
                             case "fureria":
                                 menuSicurezza.Visible = false;
                                 menuFureria.Visible = true;
@@ -314,7 +323,7 @@ namespace Uotep
             Session.Remove("ListRicercaFiltro");
             Session.Remove("ListInventario");
             Session.Remove("ListFiltrataInventario");
-            Session.Remove("ListInventarioDopoFiltro");
+
             Session.Abandon();
             string url = VirtualPathUtility.ToAbsolute("~/View/Default.aspx");
             Response.Redirect(url, false);

@@ -21,7 +21,10 @@ namespace Uotep.Classi
             PG = 5,
             SuperAdmin = 6,
             CoordinamentoPg = 7,
-            urp = 8
+            urp = 8,
+            //i 18/11/2026: Aggiunto ruolo frontoffice
+            frontoffice = 9
+            //F 18/11/2026: Aggiunto ruolo frontoffice
         }
         public enum Profilo
         {

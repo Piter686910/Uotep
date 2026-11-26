@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -19,10 +20,10 @@ namespace Uotep
     public partial class Visualizza : Page
     {
         // Variabile per gestire la pagina corrente (puoi salvarla in ViewState)
-        
+
         public int PaginaCorrente
         {
-          
+
 
             get
             {
@@ -38,10 +39,10 @@ namespace Uotep
         String Ruolo = String.Empty;
         String Profilo = String.Empty;
         Principale p = new Principale(); public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
-         string paginaChiamante = "~/View/Visualizza.aspx";
+        string paginaChiamante = "~/View/Visualizza.aspx";
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+
             Session["PaginaChiamante"] = paginaChiamante;
 
             if (Session["user"] != null)
@@ -50,10 +51,29 @@ namespace Uotep
                 Ruolo = Session["ruolo"].ToString();
                 Profilo = Session["profilo"].ToString();
                 //btOKDup.Visible = true;
-                if (Ruolo.ToUpper() == Enumerate.Ruolo.Archivio.GetDescription().ToUpper())
-                    //{
+                
+                //I 18/11/2026 GESTIONE FRONT OFFICE E AUTORIZZAZIONI
+                if (Ruolo.ToUpper() == Enumerate.Ruolo.frontoffice.GetDescription().ToUpper())
+                {
                     btModifica.Visible = false;
-                //}
+                    btDecreta.Visible = false;
+                    BtDuplica.Visible = false;
+                }
+                if (Ruolo.ToUpper() != Enumerate.Ruolo.accertatori.GetDescription().ToUpper() && Ruolo.ToUpper() == Enumerate.Ruolo.Admin.GetDescription().ToUpper() &&
+                    Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoAtti.GetDescription().ToUpper() && Ruolo.ToUpper() == Enumerate.Ruolo.CoordinamentoPg.GetDescription().ToUpper())
+                    if (!Session["profilo"].ToString().Contains(Enumerate.Profilo.tre.GetHashCode().ToStringInvariant()))
+                    {
+                        SiteMaster myMaster = this.Master as SiteMaster;
+                        if (myMaster != null)
+                        {
+                            // 2. Chiamo il metodo pubblico
+                            myMaster.MostraMessaggio("⚠️ ATTENZIONE", Enumerate.MsgOutput.UserDisable.GetDescription(), "danger");
+                            Session.Abandon();
+                            return;
+                        }
+
+                    }
+                //F 18/11/2026 GESTIONE FRONT OFFICE E AUTORIZZAZIONI
                 //else
                 //    btDuplica.Visible = true;
             }
@@ -89,7 +109,7 @@ namespace Uotep
             if (!IsPostBack)
             {
                 //     PaginaCorrente = 1;
-                
+
                 DivDettagli.Visible = false;
                 string idCarico = Request.QueryString["idscheda"];
                 if (!String.IsNullOrEmpty(idCarico))
@@ -118,7 +138,7 @@ namespace Uotep
             Manager mn = new Manager();
             Boolean validazione = false;
             DataTable pratica = new DataTable();
-            
+
             if (String.IsNullOrEmpty(txtAnnoRicerca.Text))
             {
                 txtAnnoRicerca.Text = DateTime.Now.Year.ToString();
@@ -159,7 +179,7 @@ namespace Uotep
                     pratica = mn.getListCartellina(txtCartellinaRic.Text.Trim(), txtQuart.Text.Trim(), out msg);
                 else
                 {
-                   
+
                     SiteMaster myMaster = this.Master as SiteMaster;
 
                     if (myMaster != null)
@@ -212,7 +232,7 @@ namespace Uotep
             if (!String.IsNullOrEmpty(txtStampaDataCarico.Text))
             {
                 DataTable carico = new DataTable();
-                carico = mn.getListCarico(DdlMacroArea.SelectedItem.Text, txtCapoArea.Text , txtStampaDataCarico.Text, DdlSigla.SelectedItem.Text);
+                carico = mn.getListCarico(DdlMacroArea.SelectedItem.Text, txtCapoArea.Text, txtStampaDataCarico.Text, DdlSigla.SelectedItem.Text);
                 if (carico.Rows.Count > 0)
                 {
                     string testo = string.Empty;
@@ -225,7 +245,7 @@ namespace Uotep
                     else if (RbNotifiche.Checked)
                         testo = "NOTIFICHE";
                     Routine stampa = new Routine();
-                    stampa.CreaPdfCarichi(carico, DdlSigla.SelectedItem.Text,testo);
+                    stampa.CreaPdfCarichi(carico, DdlSigla.SelectedItem.Text, testo);
                 }
             }
             if (txtNote.Text != string.Empty)
@@ -247,7 +267,7 @@ namespace Uotep
                         Routine R = new Routine();
                         R.PagError(msg, paginaChiamante);
                     }
-                   
+
                 }
                 return;
             }
@@ -275,7 +295,7 @@ namespace Uotep
                     ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "showModal();", true);
                 }
                 string a = pratica.Rows[0].ItemArray[1].ToString();
-               
+
 
             }
             else
@@ -369,7 +389,7 @@ namespace Uotep
                         Manager mn = new Manager();
                         DataTable pratica = mn.getPraticaProtocolloDataSiglaId(protocollo, System.Convert.ToDateTime(dataInserimento), sigla, System.Convert.ToInt32(HidPratica.Value));
                         FillScheda(pratica, mn);
-                        
+
 
                     }
                 }
@@ -575,7 +595,7 @@ namespace Uotep
         {
             txtStampaDataCarico.Text = String.Empty;
             txtCapoArea.Text = String.Empty;
-           // DdlMacroArea.Items.Clear();
+            // DdlMacroArea.Items.Clear();
             txtAnnoRicerca.Text = String.Empty;
             txtNProtocollo.Text = String.Empty;
             txtProcPenale.Text = String.Empty;
@@ -618,7 +638,7 @@ namespace Uotep
             HfFiltroSigla.Value = string.Empty;
             HfFiltroNominativo.Value = string.Empty;
             //I 22/05/2026 protocollo uscita
-            txtProtUscita.Text = string.Empty ;
+            txtProtUscita.Text = string.Empty;
             //F 22/05/2026 protocollo uscita
             //I mod 26/08/2026 cartellina patrimonio
             txtCartellinaRic.Text = string.Empty;
@@ -627,7 +647,7 @@ namespace Uotep
             txtCodEdRic.Text = string.Empty;
             //F mod 26/08/2026 cartellina patrimonio
 
-            
+
 
         }
         protected void gvPopup_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -858,7 +878,7 @@ namespace Uotep
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
             PopulateGridView(columnName, columnName1, columnName2, columnName3, HfFiltroAccertatori.Value); // Esempio di funzione di filtro
-                                                                                               //            apripopup_Click(sender, e);
+                                                                                                            //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
         }
         // esecuzione del filtro ulteriore sulla colonna indirizzo
@@ -886,9 +906,9 @@ namespace Uotep
 
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
-            PopulateGridView(columnName, columnName1, columnName2,columnName3, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
-                                                                                             //PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
-                                                                                             //            apripopup_Click(sender, e);
+            PopulateGridView(columnName, columnName1, columnName2, columnName3, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+                                                                                                          //PopulateGridView(columnName, HfFiltroIndirizzo.Value); // Esempio di funzione di filtro
+                                                                                                          //            apripopup_Click(sender, e);
             ScriptManager.RegisterStartupScript(this, GetType(), "ShowPopup", "$('#ModalRicerca').modal('show');", true);
 
         }
@@ -981,7 +1001,7 @@ namespace Uotep
 
 
             GVDecretazione.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            //Decretazione_Click(sender, e);
+                                                       //Decretazione_Click(sender, e);
 
         }
         protected void GVDecretazione_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1159,7 +1179,7 @@ namespace Uotep
             Response.Redirect(url, false);
         }
 
-      
+
 
         protected void btBack_Click(object sender, EventArgs e)
         {
@@ -1183,7 +1203,7 @@ namespace Uotep
                     // Opzione A: Colore diretto tramite codice
                     e.Row.BackColor = System.Drawing.Color.LightCoral;
 
-                   
+
                 }
             }
         }
@@ -1223,7 +1243,7 @@ namespace Uotep
             }
         }
 
-       
+
 
         protected void BtDuplica_Click1(object sender, EventArgs e)
         {
@@ -1291,7 +1311,7 @@ namespace Uotep
             }
         }
 
-       
+
 
         protected void gvNote_DataBound(object sender, EventArgs e)
         {
@@ -1309,8 +1329,8 @@ namespace Uotep
         protected void gvNote_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvNote.PageIndex = e.NewPageIndex; // Imposta il nuovo indice di pagina
-            Ricerca_Click(sender,e);
-                
+            Ricerca_Click(sender, e);
+
         }
 
         protected void btcarico_Click(object sender, EventArgs e)
@@ -1320,8 +1340,8 @@ namespace Uotep
             Pulisci();
             DivCarico.Visible = true;
 
-            
-            
+
+
         }
         protected void btBuCodEd_Click(object sender, EventArgs e)
         {
@@ -1335,6 +1355,6 @@ namespace Uotep
             txtCapoArea.Text = mn.getCapoArea(DdlMacroArea.SelectedValue);
         }
 
-       
+
     }
 }
