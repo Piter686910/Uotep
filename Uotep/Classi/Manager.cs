@@ -64,105 +64,11 @@ namespace Uotep.Classi
         public String LogFile = ConfigurationManager.AppSettings["LogFile"] + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
         public string msg = string.Empty;
         //delete
-        public Boolean DeleteTran(String numero_pratica)
-        {
-
-            String Del_ana = "delete from anagrafica1 where numero_pratica_accertamenti = '" + numero_pratica + "'";
-            String Del_acc = "delete from Accertamenti where num_pratica_accertamenti = '" + numero_pratica + "'";
-            String testoSql = String.Empty;
-            //OleDbTransaction Tran;
-            //OleDbConnection conn = new OleDbConnection(ConnString);
-            //Tran = conn.BeginTransaction();
-            // conn.Open();
-            //OleDbCommand cmd;
-            Boolean resp = false;
-
-            using (SqlConnection conn1 = new SqlConnection(ConnString))
-            {
-                conn1.Open();
-                SqlCommand command = conn1.CreateCommand();
-                SqlTransaction tran;
-                tran = conn1.BeginTransaction("trans");
-                command.Transaction = tran;
-                try
-                {
-
-                    command.CommandText = Del_ana;
-                    testoSql = "Anagrafica";
-                    int res = command.ExecuteNonQuery();
-                    if (res > 0)
-                    {
-                        command.CommandText = Del_acc;
-                        //comm.Parameters.AddWithValue("@LastRun", DateTime.Now);
-                        testoSql = "Accertamenti";
-                        command.ExecuteNonQuery();
-
-                        tran.Commit();
-                        tran.Dispose();
-                        resp = true;
-                    }
-                    else
-                    {
-                        //MessageBox.Show("La pratica selezionata non esiste in archivio", "Attenzione!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                    }
-
-                }
-
-                catch (Exception)
-                {
-
-                    tran.Rollback();
-
-                    resp = false;
-
-
-                }
-                conn1.Close();
-                return resp;
-            }
-        }
-        //delete
-        public Boolean DeleteRappUote(String numero_pratica)
-        {
-
-            String Del_RappUote = "delete from RappUote where rapp_numero_pratica = '" + numero_pratica + "'";
-
-            String testoSql = String.Empty;
-
-            Boolean resp = false;
-
-            using (SqlConnection conn1 = new SqlConnection(ConnString))
-            {
-                conn1.Open();
-                SqlCommand command = conn1.CreateCommand();
-
-                try
-                {
-
-                    command.CommandText = Del_RappUote;
-                    testoSql = "RappUote";
-                    int res = command.ExecuteNonQuery();
-                    if (res > 0)
-                    {
-
-                        resp = true;
-                    }
-
-
-                }
-
-                catch (Exception)
-                {
-                    resp = false;
-                }
-                conn1.Close();
-                return resp;
-            }
-        }
+      
         public Boolean DeleteMatricola(String matricola)
         {
 
-            String Del_operatore = "delete from operatore where matricola = '" + matricola + "'";
+            String Del_operatore = "delete from operatore where matricola = @matricola";
 
             String testoSql = String.Empty;
 
@@ -175,7 +81,7 @@ namespace Uotep.Classi
 
                 try
                 {
-
+                    command.Parameters.Add("@matricola", SqlDbType.NChar, 10).Value = matricola;
                     command.CommandText = Del_operatore;
                     testoSql = "operatore";
                     int res = command.ExecuteNonQuery();
@@ -199,7 +105,7 @@ namespace Uotep.Classi
         public Boolean DeleteFileCaricati(String nomefile)
         {
 
-            String Del_FileCaricati = "delete from File_Caricati where nomefile = '" + nomefile + "'";
+            String Del_FileCaricati = "delete from File_Caricati where nomefile = @nomefile";
 
             String testoSql = String.Empty;
 
@@ -212,7 +118,7 @@ namespace Uotep.Classi
 
                 try
                 {
-
+                    command.Parameters.Add("@nomefile", SqlDbType.VarChar, -1).Value = nomefile;
                     command.CommandText = Del_FileCaricati;
                     testoSql = "FileCaricati";
                     int res = command.ExecuteNonQuery();
@@ -259,7 +165,7 @@ namespace Uotep.Classi
         public Boolean DelRegistroById(int id)
         {
             string sql = string.Empty;
-            string Del_Registro = "delete  FROM RegistroUrp where id_registro = " + id;
+            string Del_Registro = "delete  FROM RegistroUrp where id_registro = @id";
             Boolean resp = false;
 
             using (SqlConnection conn = new SqlConnection(ConnString))
@@ -268,7 +174,7 @@ namespace Uotep.Classi
                 SqlCommand command = conn.CreateCommand();
                 try
                 {
-
+                    command.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     command.CommandText = Del_Registro;
                     //testoSql = "Registro";
                     int res = command.ExecuteNonQuery();
@@ -357,23 +263,41 @@ namespace Uotep.Classi
             try
             {
                 DataTable tb = new DataTable();
-                string sql = "SELECT passw FROM Operatore where Matricola= '" + user + "'";
-                //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
+                string sql = "SELECT passw FROM Operatore where Matricola= @user";
 
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
-                    tb = FillTable(sql, conn, out msg);
-                    if (!File.Exists(LogFile))
+
+
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        using (StreamWriter sw = File.CreateText(LogFile)) { }
+                        // Passaggio sicuro del parametro per evitare SQL Injection
+                        cmd.Parameters.Add("@user", SqlDbType.NChar, 10).Value = user;
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
                     }
 
-                    using (StreamWriter sw = File.AppendText(LogFile))
-                    {
-                        sw.WriteLine("connessione:" + ConnString + " out;" + msg);
-                        sw.Close();
-                    }
-                    return tb;
+                    return tb; //= FillTable(sql, conn, out msg);
+
+                    //*************************** se voglio scrivere un file per gli accessi*********************
+
+                    //tb = FillTable(sql, conn, out msg);
+                    //if (!File.Exists(LogFile))
+                    //{
+                    //    using (StreamWriter sw = File.CreateText(LogFile)) { }
+                    //}
+
+                    //using (StreamWriter sw = File.AppendText(LogFile))
+                    //{
+                    //    sw.WriteLine("connessione:" + ConnString + " out;" + msg);
+                    //    sw.Close();
+                    //}
+                    //return tb;
                 }
             }
 
@@ -406,17 +330,29 @@ namespace Uotep.Classi
 
 
         }
-        public DataTable getUserByUserPassw(String user, string pasw)
+        public DataTable getUserByUserPassw(String user, string passw)
         {
             try
             {
                 DataTable tb = new DataTable();
-                string sql = "SELECT * FROM Operatore where Matricola= '" + user + "' and passw = '" + pasw + "'";
-                //string sql = "SELECT * FROM Operatore where Matricola= '" + user + "'";
+                string sql = "SELECT * FROM Operatore where Matricola= @user and passw = @passw";
+
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        // Passaggio sicuro del parametro per evitare SQL Injection
+                        cmd.Parameters.Add("@passw", SqlDbType.VarChar, -1).Value = passw;
+                        cmd.Parameters.Add("@user", SqlDbType.NChar, 10).Value = user;
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
 
-                    return tb = FillTable(sql, conn, out msg);
+                    return tb; //= FillTable(sql, conn, out msg);
                 }
             }
             catch (Exception ex)
@@ -504,7 +440,6 @@ namespace Uotep.Classi
         public DataTable getListQuartiere(out string msg)
         {
             DataTable tb = new DataTable();
-            // string sql = "SELECT distinct quartiere FROM Quart order by quartiere";
             string sql = "SELECT MIN(id_quartiere) AS id_quartiere, quartiere FROM Quart GROUP BY quartiere ORDER BY quartiere";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -572,7 +507,7 @@ WHERE codep = @codep";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     // Passaggio sicuro del parametro per evitare SQL Injection
-                    cmd.Parameters.AddWithValue("@codep", codep);
+                    cmd.Parameters.Add("@codep", SqlDbType.VarChar, 10).Value = codep;
 
                     try
                     {
@@ -607,7 +542,6 @@ WHERE codep = @codep";
         {
             DataTable tb = new DataTable();
 
-            //string sql = " SELECT anno, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO ='" + anno + "'";
             string sql = "SELECT ANNO, MAX(CAST(nr_protocollo AS INT)) AS MaxNumero FROM principale WHERE ISNUMERIC(nr_protocollo) = 1 AND ANNO = '" + anno + "' GROUP BY ANNO";
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
@@ -857,30 +791,113 @@ ORDER BY carico;");
                 return tb = FillTable(sql, conn, out msg);
             }
         }
+        public DataTable GetlistInventarioToPdfByFilter(string a, string b)
+        {
+            DataTable tb = new DataTable();
+            string msg = string.Empty;
+
+            string sql = ";WITH DatiRaggruppati AS ( " +
+               "    SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, " +
+               "    SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+               "    SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniEtichettati " +
+               "    FROM inventario " +
+               "    WHERE " + a + " like @b " +
+               "    GROUP BY tipologia, categoria " +
+               ") " +
+               "SELECT tipologia_categoria, BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali " +
+               "FROM DatiRaggruppati " +
+               "UNION ALL " +
+               "SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, " +
+               "       SUM(BeniNoEtichettati) AS BeniNoEtichettati, " +
+               "       SUM(BeniEtichettati) AS BeniEtichettati, " +
+               "       SUM(BeniNoEtichettati + BeniEtichettati) AS totali " +
+               "FROM DatiRaggruppati;";
+
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    // Assicurati che 'b' non sia null o vuoto
+                    string valoreFiltro = "%" + b + "%";
+
+                    cmd.Parameters.AddWithValue("@b", b != null ? valoreFiltro : (object)DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Metti un punto interruzione (breakpoint) qui per leggere l'errore esatto!
+                        string errore = ex.Message;
+                    }
+                }
+            }
+            return tb;
+        }
         public DataTable GetlistInventarioToPdf()
         {
             DataTable tb = new DataTable();
-            //string sql = "SELECT  CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
-            //    "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario " +
-            //    "GROUP BY tipologia, categoria UNION ALL "+
-            //    "SELECT  'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = '' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
-            //        "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati, COUNT(*) AS totali FROM inventario  ";
 
 
-
-
-            string sql = ";WITH DatiRaggruppati AS ( SELECT CONCAT(tipologia, ' - ', categoria) AS tipologia_categoria, SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) " +
-                "AS BeniNoEtichettati, SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> '' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario GROUP BY tipologia, categoria ) "+
-                " SELECT tipologia_categoria,BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali FROM DatiRaggruppati " +
-                "UNION ALL SELECT 'TOTALE COMPLESSIVO' AS tipologia_categoria, SUM(BeniNoEtichettati) AS BeniNoEtichettati,  SUM(BeniEtichettati) AS BeniEtichettati, SUM(BeniNoEtichettati + BeniEtichettati) AS totali "+
-                "FROM DatiRaggruppati; ";
-
+            string sql = ";WITH DatiRaggruppati AS ( SELECT  tipologia AS categoria_tipologia, " +
+                "SUM(CASE WHEN etichetta IS NULL OR etichetta = 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniNoEtichettati, " +
+                "SUM(CASE WHEN etichetta IS NOT NULL AND etichetta<> 'BENE NON ETICHETTATO' THEN 1 ELSE 0 END) AS BeniEtichettati FROM inventario " +
+                " where tipologia NOT IN ('STAMPANTE TABLET', 'TABLET','TELEFONO AVAYA')  GROUP BY tipologia)" +
+                " SELECT categoria_tipologia, BeniNoEtichettati, BeniEtichettati, (BeniNoEtichettati + BeniEtichettati) AS totali " +
+                "FROM DatiRaggruppati " +
+                "UNION ALL " +
+                "SELECT 'TOTALE COMPLESSIVO' AS categoria_tipologia, " +
+                "SUM(BeniNoEtichettati) AS BeniNoEtichettati, " +
+                "SUM(BeniEtichettati) AS BeniEtichettati, " +
+                "SUM(BeniNoEtichettati + BeniEtichettati) AS totali " +
+                "FROM DatiRaggruppati;";
 
 
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 return tb = FillTable(sql, conn, out msg);
             }
+        }
+        public DataTable GetlistInventarioHardwareToPdf(string[] ar)
+        {
+            DataTable tb = new DataTable();
+
+
+            string sql = "SELECT tipologia,descrizione,seriale " +
+                        "FROM Inventario where tipologia in (@pc, @monitor, @stampante) order by tipologia";
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+
+
+                    cmd.Parameters.AddWithValue("@pc", ar[0] != null ? ar[0] : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@monitor", ar[1] != null ? ar[1] : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@stampante", ar[2] != null ? ar[2] : (object)DBNull.Value);
+
+                    try
+                    {
+                        conn.Open();
+                        // Se usi un SqlDataAdapter per riempire la tabella direttamente con il comando:
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(tb);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Metti un punto interruzione (breakpoint) qui per leggere l'errore esatto!
+                        string errore = ex.Message;
+                    }
+                }
+            }
+            return tb;
         }
         public DataTable GetListRegistro(out string msg)
         {
@@ -2472,16 +2489,6 @@ ORDER BY LOGS.[Data Accesso] DESC";
                 return tb = FillTable(sql, conn, out msg);
             }
         }
-        public DataTable getPraticaModificaRiservata(string protocollo, string anno)
-        {
-            DataTable tb = new DataTable();
-            string sql = "SELECT * FROM Principale where Nr_Protocollo = '" + protocollo + "' and anno = '" + anno + "'";
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                return tb = FillTable(sql, conn, out msg);
-            }
-        }
-
 
         private DataTable FillTable(String sql, SqlConnection conn, out string msg)
         {
@@ -3215,126 +3222,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             }
             catch { /* Gestione silenziosa errori di log */ }
         }
-        //public Boolean InsGestioneAuto(GestAuto auto, out Int32 idN )
-        //{
-        //    bool resp = true;
-        //    string sql = String.Empty;
-        //    string testoSql = string.Empty;
-        //    idN = 0;
-        //    try
-        //    {
-        //        string inputlitri = auto.litri.ToString();
-        //        string inputEuro = auto.euro.ToString();
-        //        decimal importoFloat;
-        //        decimal litriFloat;
-        //        // 1. Definisci la cultura di parsing (italiana: virgola come decimale)
-        //        CultureInfo culturaItaliana = new CultureInfo("it-IT");
-
-        //        // 2. Pulizia: Rimuovi il simbolo € e spazi, poi tenta la conversione C#
-        //        if (decimal.TryParse(
-        //                inputEuro.Replace("€", "").Trim(),
-        //                NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
-        //                culturaItaliana,
-        //                out importoFloat) &&
-
-
-        //                decimal.TryParse(
-        //                inputlitri.Replace("€", "").Trim(),
-        //                NumberStyles.Any, // Accetta formati diversi (separatori di migliaia, ecc.)
-        //                culturaItaliana,
-        //                out litriFloat))
-
-        //        {
-        //            decimal valoreArrotondatoE = Math.Round(importoFloat, 2);
-        //            decimal valoreArrotondatoL = Math.Round(litriFloat, 2);
-
-
-        //            sql = "IF NOT EXISTS (SELECT 1 FROM gestioneauto WHERE progressivo = '" + @auto.progressivo + "') " +
-        //                           "BEGIN " +
-        //                     // 2. SE NON ESISTE -> ESEGUI INSERT
-        //                     "insert into gestioneauto (sigla, targa,stan,data,ora,litri,tipoCarburante,euro,indirizzo,autista,mese,anno,nota,progressivo)" +
-        //                    " Values('" + auto.sigla + "','" + auto.targa + "','" + auto.stan + "','" + auto.data + "','" + auto.ora + "', @valore ,'" + auto.tipoCarburante +
-        //                    "', @valore1 ,'" + auto.indirizzo.Replace("'", "''") + "','" + auto.autista.Replace("'", "''") + "','" + auto.mese + "',"
-        //                    + auto.anno + "," + "'" + auto.nota.Replace("'", "''") + "','" + auto.progressivo + "')" +
-
-        //                             // RESTITUISCE IL NUOVO ID GENERATO
-        //                             "SELECT SCOPE_IDENTITY(); " +
-        //      "END " +
-        //      "ELSE " +
-        //      "BEGIN " +
-        //          // 3. SE ESISTE GIÀ -> RESTITUISCE -1
-        //          "SELECT -1; " +
-        //      "END";
-
-
-        //            using (SqlConnection conn = new SqlConnection(ConnString))
-        //            {
-        //                conn.Open();
-
-        //                SqlCommand command = conn.CreateCommand();
-        //                command.Parameters.Add("@valore1", SqlDbType.Float).Value = (double)valoreArrotondatoE;
-        //                command.Parameters.Add("@valore", SqlDbType.Float).Value = (double)valoreArrotondatoL;
-
-        //                try
-        //                {
-        //                    command.CommandText = sql;
-        //                    testoSql = "gestioneauto";
-        //                    int res = command.ExecuteNonQuery();
-        //                    idN = Convert.ToInt32(res);
-        //                    if (idN==-1)
-        //                    {
-        //                        resp = false;
-        //                    }
-        //                    if (!File.Exists(LogFile))
-        //                    {
-        //                        using (StreamWriter sw = File.CreateText(LogFile)) { }
-        //                    }
-
-        //                    using (StreamWriter sw = File.AppendText(LogFile))
-        //                    {
-        //                        sw.WriteLine("Sql:" + sql );
-        //                        sw.Close();
-        //                    }
-        //                }
-
-        //                catch (Exception ex)
-        //                {
-        //                    if (!File.Exists(LogFile))
-        //                    {
-        //                        using (StreamWriter sw = File.CreateText(LogFile)) { }
-        //                    }
-
-        //                    using (StreamWriter sw = File.AppendText(LogFile))
-        //                    {
-        //                        sw.WriteLine("Sigla:" + auto.progressivo + ", " + ex.Message + @" - Errore in inserimento tabella gestione auto ");
-        //                        sw.Close();
-        //                    }
-
-        //                    resp = false;
-
-
-        //                }
-        //                conn.Close();
-        //                conn.Dispose();
-        //                return resp;
-
-        //            }
-
-        //        }
-
-
-
-        //    }
-        //    catch (Exception)
-        //    {
-        //        resp = false;
-
-
-
-        //    }
-        //    return resp;
-
-        //}
+       
         public Boolean InsSchedaDipendente(SchedaDipendenteClass scheda)
         {
             Boolean resp = true;
@@ -4616,118 +4504,7 @@ ORDER BY LOGS.[Data Accesso] DESC";
             }
 
         }
-        /// <summary>
-        /// inserisce scheda intervento
-        /// </summary>
-        /// <param name="rapp"></param>
-        /// <returns></returns>
-        //public Boolean InsRappUote(RappUote rapp, out Int32 idN)
-        //{
-        //    bool resp = true;
-        //    string sql_insRap = String.Empty;
-        //    string sql_Statistiche = String.Empty;
-
-        //    using (SqlConnection conn = new SqlConnection(ConnString))
-        //    {
-        //        conn.Open();
-
-        //        //SqlTransaction transaction = null;
-        //        SqlCommand command = conn.CreateCommand();
-
-        //        // transaction = conn.BeginTransaction("trans");
-        //        //command.Transaction = transaction;
-        //        idN = -1;
-
-        //        try
-        //        {
-
-        //            sql_insRap = "insert into RappUote (rapp_numero_pratica, rapp_data,	rapp_nominativo,rapp_indirizzo,rapp_pattuglia," +
-        //             "rapp_delegaAG,	rapp_resa,	rapp_segnalazione,	rapp_esposto,rapp_numEsposti,rapp_notifica,	rapp_iniziativa,rapp_comandante," +
-        //             "rapp_coordinatore,	rapp_relazione,	rapp_cnr,rapp_annotazionePG,rapp_verbale_seq,rapp_esito_delega,	rapp_contestaz_amm," +
-        //             "rapp_convalida,rapp_disseq_def,rapp_disseq_temp,rapp_disseq_temp_Rim,rapp_disseq_temp_Riapp,rapp_violazione_sigilli," +
-        //             "rapp_controlliScia,rapp_accert_avvenuto,rapp_totale,rapp_parziale,	rapp_violazioneBeniCult,rapp_contr_cantiere_suolo_pubb," +
-        //             "rapp_contr_lavori_edili,rapp_contr_cantieri_seq,rapp_contr_da_esposti,rapp_contr_da_segn,rapp_attivita_interna,rapp_nota,rapp_data_consegna_intervento, rapp_capopattuglia,rapp_uote,rapp_uotp,rapp_dataInserimento, " +
-        //             "rapp_con_protezioni,rapp_senza_protezioni,rapp_matricola,rapp_non_avvenuto," +
-        //             "rapp_censimento_all_pubb,rapp_contr_occupazione_abus,rapp_contr_occ_abitativo,rapp_contr_occ_no_abitativo,rapp_sgomberi,rapp_sgomberi_abus,rapp_sgomberi_immobili,rapp_notifica_no_ag, " +
-        //             "rapp_quartiere,rapp_num_censimento_all_pubb,rapp_numero_controlli_cant_seq,rapp_giro_cantieri,rapp_accRichiesti,rapp_numAccRichiesti,rapp_verbOccCensimento,rapp_contrNatoDaAcc,rapp_NumcontrNatoDaAcc,rapp_NumNotificheNoAg)" +
-        //" Values('" + rapp.pratica + "','" +
-        ////@rapp.ora + "','" +
-        //@rapp.data + "','" +
-        //@rapp.nominativo.Replace("'", "''") + "','" +
-        //@rapp.indirizzo.Replace("'", "''") + "','" +
-        //@rapp.pattuglia.Replace("'", "''") + "','" +
-        //@rapp.delegaAG + "','" +
-        //@rapp.resa + "','" +
-        //@rapp.segnalazione + "','" +
-        //@rapp.esposti + "','" +
-        //@rapp.num_esposti + "','" +
-        //@rapp.notifica + "','" +
-        //@rapp.iniziativa + "','" +
-        //@rapp.cdr + "','" +
-        //@rapp.coordinatore + "','" +
-        //@rapp.relazione + "','" +
-        //@rapp.cnr + "','" +
-        //@rapp.annotazionePG + "','" +
-        //@rapp.verbaleSeq + "','" +
-        //@rapp.esitoDelega + "','" +
-        //@rapp.contestazioneAmm + "','" +
-        //@rapp.convalida + "','" +
-        //@rapp.dissequestroDef + "','" +
-        //@rapp.dissequestroTemp + "','" +
-        //@rapp.rimozione + "','" +
-        //@rapp.riapposizione + "','" +
-        //@rapp.violazioneSigilli + "','" +
-        //@rapp.controlliScia + "','" +
-        //@rapp.accertAvvenutoRip + "','" +
-        //@rapp.totale + "','" +
-        //@rapp.parziale + "','" +
-        //@rapp.violazioneBeniCult + "','" +
-        //@rapp.contrCantSuoloPubb + "','" +
-        //@rapp.contrEdiliDPI + "','" +
-        //@rapp.contr_cantiereSeq + "','" +
-        //@rapp.contrDaEsposti + "','" +
-        //@rapp.contrDaSegn + "','" +
-        //@rapp.attività_interna + "','" +
-        //@rapp.nota.Replace("'", "''") + "','" +
-        //@rapp.data_consegna_intervento + "','" + @rapp.capopattuglia.Replace("'", "''") + "','" +
-        //@rapp.uote + "','" + @rapp.uotp + "','" + @rapp.dataInserimento + "','" + @rapp.conProt + "','" + @rapp.senzaProt + "','" +
-        //@rapp.matricola.Replace("'", "''") + "','" + @rapp.non_avvenuto + "','" +
-        //@rapp.censimento_all_pubb + "','" + @rapp.contr_occupazione_abus + "','" + @rapp.contr_occ_abitativo + "','" + @rapp.contr_occ_no_abitativo + "','" + @rapp.sgomberi + "','" +
-        //@rapp.sgomberi_abus + "','" + @rapp.sgomberi_immobili + "','" + @rapp.notifica_no_ag + "','" + @rapp.quartiere.Replace("'", "''") + "'," +
-        //@rapp.num_censimento_all_pubb + "," + @rapp.numero_controlli_cant_seq + ",'" + @rapp.giro_controlli +
-        //         //I- mod 31/01/2026 scheda int
-        //         "','" + @rapp.accRichiesti + "','" + @rapp.numAccRichiesti + "','" + @rapp.verbOccCensimento + "','" +
-        //         @rapp.contrNatoDaAcc + "','" + @rapp.NumcontrNatoDaAcc + "'" +
-        //         //F- mod 31/01/2026 scheda int
-        //         "); SELECT SCOPE_IDENTITY();";
-
-        //            command.CommandText = sql_insRap;
-        //            object a = command.ExecuteScalar();
-        //            idN = Convert.ToInt32(a);
-        //            resp = true;
-        //        }
-
-        //        catch (Exception ex)
-        //        {
-        //            if (!File.Exists(LogFile))
-        //            {
-        //                using (StreamWriter sw = File.CreateText(LogFile)) { }
-        //            }
-
-        //            using (StreamWriter sw = File.AppendText(LogFile))
-        //            {
-        //                sw.WriteLine("matricola:" + rapp.matricola + ",data ins:" + rapp.data + ", " + ex.Message + @" - Errore in inserimento scheda intervento uote ");
-        //                sw.Close();
-        //            }
-        //            resp = false;
-
-
-        //        }
-        //        conn.Close();
-        //        return resp;
-        //    }
-
-        //}
+        
 
         public Boolean InsGestionePratica(GestionePratiche pr)
         {
