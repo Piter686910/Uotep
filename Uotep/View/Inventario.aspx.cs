@@ -1,6 +1,7 @@
 ﻿using AjaxControlToolkit.HtmlEditor.Popups;
 using DocumentFormat.OpenXml.Bibliography;
 using Microsoft.Ajax.Utilities;
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -251,17 +252,55 @@ namespace Uotep
             string protocolloRiscontro = txtProtocolloRiscontro.Text;
             string dataRiscontro = txtDataProtRiscontro.Text;
             Manager mn = new Manager();
-            DataTable listaInventario = mn.GetlistInventarioToPdf();
-            // Ordina i dati per codep
-            var datiOrdinati = listaInventario.AsEnumerable()
-              .OrderBy(row => row.Field<string>("tipologia_categoria"))
-              .CopyToDataTable();
+            DataTable listaInventario = new DataTable();
+            DataTable listaHardware = new DataTable();
 
+            if (Session["ListFiltrataInventario"] != null)
+            {
+                // Recupera dalla sessione
+                List<string> ar = (List<string>)Session["ListFiltrataInventario"];
+                listaInventario = mn.GetlistInventarioToPdfByFilter(ar[0].ToString(), ar[1].ToString());
+            }
+            else
+            {
+                // Recupera dal database/metodo
+                listaInventario = mn.GetlistInventarioToPdf();
+                String[] arHardware = new String[3];
+                arHardware[0] = "MONITOR";
+                arHardware[1] = "PC";
+                arHardware[2] = "STAMPANTE";
+                // arHardware[3] = "STAMPANTE TABLET";
+                listaHardware = mn.GetlistInventarioHardwareToPdf(arHardware);
+            }
+
+            // Crea la DataTable ordinata in modo sicuro (funziona anche se la tabella è vuota)
+            DataTable datiOrdinati = listaInventario != null ? listaInventario.DefaultView.ToTable() : new DataTable();
+
+
+            //DataTable listaInventario = new DataTable();
+            //if (Session["ListInventarioDopoFiltro"] != null)
+            //{
+            //    listaInventario = (DataTable)Session["ListInventarioDopoFiltro"];
+            //    var datiOrdinati = listaInventario.AsEnumerable()
+            //   .OrderBy(row => row.Field<string>("codep"))
+            //   .CopyToDataTable();
+            //}
+            //else
+            //{
+            //    listaInventario = mn.GetlistInventarioToPdf();
+            //    // Ordina i dati per tipologia_categoria prima di passarli alla funzione CreaPdfInventario
+            //    var datiOrdinati = listaInventario.AsEnumerable()
+            //      .OrderBy(row => row.Field<string>("tipologia_categoria"))
+            //      .CopyToDataTable();
+            //}
             string anno = DateTime.Now.ToString("yyyy");
             Routine stampa = new Routine();
-            stampa.CreaPdfInventario(datiOrdinati, anno, protocollo, data, protocolloRiscontro,dataRiscontro);
+            Session.Remove("ListFiltrataInventario");
+
+            stampa.CreaPdfInventario(datiOrdinati, anno, protocollo, data, protocolloRiscontro, dataRiscontro, listaHardware);
+
         }
-       
+
 
         protected void gvDett_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
@@ -309,7 +348,7 @@ namespace Uotep
         }
         protected void gvDett_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "Select")
+            if (e.CommandName == "Edit")
             {
                 // Ottieni il valore del CommandArgument
                 string commandArgument = e.CommandArgument.ToString();
@@ -335,8 +374,8 @@ namespace Uotep
                         txtEtichetta.Text = inv.Rows[0]["etichetta"].ToString();
                         DdlCodep.SelectedItem.Text = inv.Rows[0]["codep"].ToString();
                         DdlUfficio.SelectedItem.Text = inv.Rows[0]["ufficio"].ToString();
-                       //
-                       //CkDismesso.Checked = System.Convert.ToBoolean(inv.Rows[0]["dismesso"]);
+                        //
+                        //CkDismesso.Checked = System.Convert.ToBoolean(inv.Rows[0]["dismesso"]);
                         CkDismesso.Checked = inv.Rows[0]["dismesso"] != DBNull.Value ? Convert.ToBoolean(inv.Rows[0]["dismesso"]) : false;
                         txtProgrBene.Text = inv.Rows[0]["progr_codep"].ToString();
                         hfMod.Value = "si";
@@ -344,7 +383,41 @@ namespace Uotep
                     }
                 }
             }
+            if (e.CommandName == "Print")
+            {
+                // Ottieni il valore del CommandArgument
+                string commandArgument = e.CommandArgument.ToString();
 
+                // Separare i valori del CommandArgument usando il delimitatore "|"
+                string[] values = commandArgument.Split('|');
+
+
+                // Assicurati che ci siano almeno 5 valori
+                if (values.Length == 1)
+                {
+                    Hfid.Value = values[0]; // id
+
+                    Manager mn = new Manager();
+                    DataTable inv = mn.GetInventarioById(System.Convert.ToInt32(Hfid.Value));
+                    if (inv.Rows.Count > 0)
+                    {
+                        txtCategoria.Text = inv.Rows[0]["categoria"].ToString();
+                        txtDescrizione.Text = inv.Rows[0]["descrizione"].ToString();
+                        txtNote.Text = inv.Rows[0]["note"].ToString();
+                        txtTipologia.Text = inv.Rows[0]["tipologia"].ToString();
+                        txtSeriale.Text = inv.Rows[0]["seriale"].ToString();
+                        txtEtichetta.Text = inv.Rows[0]["etichetta"].ToString();
+                        DdlCodep.SelectedItem.Text = inv.Rows[0]["codep"].ToString();
+                        DdlUfficio.SelectedItem.Text = inv.Rows[0]["ufficio"].ToString();
+                        //
+                        //CkDismesso.Checked = System.Convert.ToBoolean(inv.Rows[0]["dismesso"]);
+                        CkDismesso.Checked = inv.Rows[0]["dismesso"] != DBNull.Value ? Convert.ToBoolean(inv.Rows[0]["dismesso"]) : false;
+                        txtProgrBene.Text = inv.Rows[0]["progr_codep"].ToString();
+                        hfMod.Value = "si";
+
+                    }
+                }
+            }
         }
 
         private void PopulateGridView(string filterColumn = "", string filterValue = "")
@@ -374,6 +447,8 @@ namespace Uotep
                             filteredDt.ImportRow(row);
                         }
                         gvDett.DataSource = filteredDt;
+                        lblNumRighe.Text = " - Num. righe trovate: " + filteredDt.Rows.Count.ToString();
+
                     }
                     else
                     {
@@ -399,7 +474,7 @@ namespace Uotep
             DataView dv = new DataView();
             Manager mn = new Manager();
             string filtro = string.Empty;
-            ////verifico se provengo da ricerca archivio nel caso procedo con la ricerca in db
+            //verifico se provengo da ricerca inventario nel caso procedo con la ricerca in db
             if (Session["ListInventario"] != null)
             {
 
@@ -448,7 +523,7 @@ namespace Uotep
                         break;
                     case "Etichetta":
 
-                        filtro = $"etichetta LIKE '%{HfFiltroEtichetta  .Value}%'";
+                        filtro = $"etichetta LIKE '%{HfFiltroEtichetta.Value}%'";
                         dv = new DataView(inventario);
 
                         dv.RowFilter = filtro;
@@ -464,7 +539,7 @@ namespace Uotep
                         break;
                     case "Categoria":
 
-                        filtro = $"categoria LIKE '%{HfFiltroCategoria  .Value}%'";
+                        filtro = $"categoria LIKE '%{HfFiltroCategoria.Value}%'";
                         dv = new DataView(inventario);
 
                         dv.RowFilter = filtro;
@@ -485,7 +560,7 @@ namespace Uotep
                     gvDett.DataSource = dv;
                     gvDett.DataBind();
 
-                    
+
                 }
             }
             else
@@ -494,7 +569,7 @@ namespace Uotep
                 //txtDataInserimento.Text = DateTime.Now.Date.ToShortDateString();
             }
             return inventario;
-          
+
         }
 
         protected void gvDett_DataBound(object sender, EventArgs e)
@@ -538,7 +613,7 @@ namespace Uotep
             // Crea una lista
             List<string> ListRicerca = new List<string> { "codep", txtFilter.Text };
             // Salva la lista nella Sessione
-            Session["ListAuto"] = ListRicerca;
+            Session["ListFiltrataInventario"] = ListRicerca;
             string filterValue = txtFilter.Text.Trim();
             HfFiltroCodep.Value = filterValue;
             // Trova l'ID della TextBox che ha scatenato l'evento per sapere quale colonna filtrare
@@ -598,7 +673,7 @@ namespace Uotep
             // Ora puoi usare 'filterValue' e 'columnName' per rifiltrare i tuoi dati
             // e ribindare la GridView, in modo simile a quanto mostrato nella precedente risposta programmatica.
 
-             PopulateGridView(columnName, HfFiltroSeriale.Value);
+            PopulateGridView(columnName, HfFiltroSeriale.Value);
         }
 
         protected void txtFilterNote_TextChanged(object sender, EventArgs e)
@@ -618,13 +693,16 @@ namespace Uotep
             }
 
 
-              PopulateGridView(columnName, HfFiltroNote.Value);
+            PopulateGridView(columnName, HfFiltroNote.Value);
         }
 
         protected void btBack_Click(object sender, EventArgs e)
         {
             gvDett.DataSource = Session["ListInventario"];
+            int a = ((DataTable)Session["ListInventario"]).Rows.Count; // riprende il count dei record 
             gvDett.DataBind();
+            lblNumRighe.Text = " - Num. righe trovate: " + a.ToString();
+            Session.Remove("ListFiltrataInventario");
         }
 
         protected void DdlCodep_SelectedIndexChanged(object sender, EventArgs e)
@@ -736,7 +814,7 @@ namespace Uotep
 
         }
 
-       
+
         protected void btEstrai_Click(object sender, EventArgs e)
         {
 
