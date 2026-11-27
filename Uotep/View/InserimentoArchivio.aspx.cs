@@ -358,15 +358,15 @@ namespace Uotep
             //I 20/10/26 responsabili
             foreach (DataRow item in arc.Rows)
             {
-                if (item["responsabile"] != DBNull.Value && item["responsabile"] != null)
+                if (item["arch_responsabile"] != DBNull.Value && item["arch_responsabile"] != null)
                 {
 
 
                     var nuovo = new ResponsabileModel
                     {
-                        Responsabile = item["responsabile"].ToString(),
-                        ComuneNascita = item["comunenascita"].ToString(),
-                        DataNascita = Convert.ToDateTime(item["data_nascita"]).ToString("dd/MM/yyyy")
+                        Responsabile = item["arch_responsabile"].ToString(),
+                        ComuneNascita = item["arch_natoA"].ToString(),
+                        DataNascita = Convert.ToDateTime(item["arch_dataNascita"]).ToString("dd/MM/yyyy")
                     };
 
                     // Aggiunge alla lista locale
