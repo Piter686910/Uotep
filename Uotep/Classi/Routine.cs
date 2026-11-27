@@ -2204,9 +2204,9 @@ namespace Uotep.Classi
         /// </summary>
         /// <param name="inv"></param>
         /// <exception cref="Exception"></exception>
-        public void CreaPdfInventario(DataTable inv, string anno, string protocollo,string data, string protocolloRiscontro, string dataRiscontro)
+        public void CreaPdfInventario(DataTable inv, string anno, string protocollo, string data, string protocolloRiscontro, string dataRiscontro, DataTable listaHardware)
         {
-            // Usa il namespace corretto per la risorsa
+
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "Uotep.FileComuni.LetteraAccompagnamento.pdf";
 
@@ -2238,23 +2238,23 @@ namespace Uotep.Classi
                                         .SetFixedPosition(260, 650, 300) // Coordinate aggiustate per pagina verticale
                                         .SetTextAlignment(TextAlignment.RIGHT)
                                         .SetFontSize(12));
-                                   
+
                                     document.Add(new Paragraph("Cod. Prot. 21.56.0.0.0")
                                       .SetFixedPosition(460, 635, 100) // Coordinate aggiustate per pagina verticale
                                       .SetTextAlignment(TextAlignment.RIGHT)
                                       .SetFontSize(10));
-                                    
+
                                     document.Add(new Paragraph($"" + protocollo.ToUpper() + " del " + data + ".")
-                                       .SetFixedPosition(30, 611, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
+                                       .SetFixedPosition(30, 621, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
                                        .SetTextAlignment(TextAlignment.LEFT)
                                        .SetFontSize(12));
 
-                                    document.Add(new Paragraph("BENI MOBILI ANNO " + anno )
-                                      .SetFixedPosition(180, 600, 200) // Coordinate aggiustate per pagina verticale
+                                    document.Add(new Paragraph("BENI MOBILI E HARDWARE ANNO " + anno)
+                                      .SetFixedPosition(100, 600, 400) // Coordinate aggiustate per pagina verticale
                                       .SetTextAlignment(TextAlignment.CENTER)
                                       .SetFontSize(12));
 
-                                    document.Add(new Paragraph($" Oggetto: Riscontro a nota prot. " + protocolloRiscontro .ToUpper() + " del "+ dataRiscontro + "\n– Trasmissione Statistica riepilogativa con elenco beni mobili e dotazioni informatiche U.O.T.E.P. in carico alla Unità Operativa Tutela Edilizia e Patrimonio - Corso Chiaiano 50.")
+                                    document.Add(new Paragraph($" Oggetto: Riscontro a nota prot. " + protocolloRiscontro.ToUpper() + " del " + dataRiscontro + "\n– Trasmissione Statistica riepilogativa con elenco beni mobili e dotazioni informatiche U.O.T.E.P. in carico alla Unità Operativa Tutela Edilizia e Patrimonio - Corso Chiaiano 50.")
                                         .SetFixedPosition(30, 520, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
                                         .SetTextAlignment(TextAlignment.LEFT)
                                         .SetFontSize(12));
@@ -2269,13 +2269,16 @@ namespace Uotep.Classi
                                         .SetTextAlignment(TextAlignment.LEFT)
                                         .SetFontSize(10));
 
-
+                                    PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
                                     // =========================================================================
-                                    // PAGINA 2: REPORT CON TABELLA
+                                    // PAGINA 2: REPORT CON TABELLA BENI IMMOBILI
                                     // =========================================================================
-                                    // =========================================================================
-                                    // PAGINA 2: REPORT CON TABELLA
-                                    // =========================================================================
+                                    document.Add(new Paragraph("1 - Tabella Elenco Beni in Dotazione ")
+                                        .SetFixedPosition(30, 370, 535)
+                                        .SetTextAlignment(TextAlignment.LEFT)
+                                        .SetFont(fontBold)
+                                        .SetFontSize(12)
+                                        );
                                     document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                                     float pageWidth = PageSize.A4.GetWidth();
@@ -2340,7 +2343,6 @@ namespace Uotep.Classi
                                             // STYLING SPECIALE PER L'ULTIMA RIGA (Totale Complessivo)
                                             if (isUltimaRiga)
                                             {
-                                                
                                                 cell.SetBackgroundColor(new DeviceRgb(220, 220, 220)); // Grigio evidenziato per il totale
                                             }
 
@@ -2348,112 +2350,145 @@ namespace Uotep.Classi
                                         }
                                     }
 
-                                    // Aggiungiamo la tabella al documento (flusso normale)
-                                    PdfFont fontBold = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                                    // 1. Aggiungiamo la tabella al documento (flusso normale)
+
                                     document.Add(table);
-                                    document.Add(new Paragraph("Allegati in file PDF")
-                                        .SetFixedPosition(30, 400, 200)
+                                    ////////////////////////////////////////////////////////////////////////////
+                                    // =========================================================================
+                                    // PAGINA 3: REPORT CON TABELLA HARDWARE
+                                    // =========================================================================
+                                    // 2. "
+                                    document.Add(new Paragraph("2 - Tabella Elenco Dotazioni Informatiche")
                                         .SetTextAlignment(TextAlignment.LEFT)
-                                       .SetFont(fontBold)
-                                        .SetFontSize(12));
-                                    document.Add(new Paragraph("1. Prospetto analitico Beni Mobili U.O.T.E.P. (Beni Etichettati e Non Etichettati).\n 2. Prospetto analitico Dotazioni Informatiche ed Elettroniche con numeri di seriale.")
-                                       .SetFixedPosition(30, 350, 700)
-                                       .SetTextAlignment(TextAlignment.LEFT)
-                                       .SetFontSize(10));
-                                    // --- FIRME (Posizionate in fondo alla pagina in modo sicuro) ---
-                                    document.Add(new Paragraph("Estensore: Cap. Scafaro G.")
-                                        .SetFixedPosition(30, 150, 100)
+                                        .SetFont(fontBold)
+                                        .SetFontSize(12)
+                                        .SetMarginTop(20));
+
+
+                                    document.Add(new Paragraph("Si precisa che i Beni Etichettati e Non Etichettati di cui al punto 1 comprendono la totalità dei beni mobili riscontrati presso la U.O.T.E.P., mentre le Dotazioni Informatiche ed Elettroniche con numeri di seriale di cui al punto 2 costituiscono un sottoinsieme già ricompreso nel punto 1, qui estrapolato ed esposto a parte per maggiore dettaglio identificativo, senza quindi sommarsi al totale generale.")
+                                        .SetFixedPosition(30, 200, 535) // 535 pt limita la larghezza all'interno della pagina A4 (595 pt di larghezza totale - 30 pt margine sinistro - 30 pt margine destro)
                                         .SetTextAlignment(TextAlignment.LEFT)
-                                        .SetFontSize(8));
+                                        .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                        .SetFontSize(12).SetMarginTop(30));
+                                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
-                                    document.Add(new Paragraph("Il Comandante di Reparto")
-                                        .SetFixedPosition(leftMargin, 80, usableWidth)
+                                    float pageWidthH = PageSize.A4.GetWidth();
+                                    float leftMarginH = 36;
+                                    float usableWidthH = pageWidthH - (leftMarginH * 2);
+
+                                    // --- TABELLA ---
+                                    const int colonneDatiH = 2; // Corrisponde agli indici 0, 1, 2, 3 della query (3 colonne in totale)
+
+                                    // 1. Definiamo le larghezze percentuali per le 2 colonne della query SQL
+                                    float[] columnLarghezzaH = { 33.33f, 33.33f, 33.33f }; // La somma deve fare 100% indica quante colonne dettagli stampare
+
+                                    Table tableH = new Table(UnitValue.CreatePercentArray(columnLarghezzaH));
+                                    tableH.SetWidth(UnitValue.CreatePercentValue(100)); // Occupa tutta la larghezza utile della pagina
+                                    tableH.SetHorizontalAlignment(HorizontalAlignment.CENTER);
+
+                                    // --- INTESTAZIONI ---
+                                    for (int i = 0; i <= colonneDatiH; i++)
+                                    {
+                                        tableH.AddHeaderCell(new Cell()
+                                            .Add(new Paragraph(listaHardware.Columns[i].ColumnName.ToUpper()))
+                                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                                            .SetFontSize(9)
+                                            .SetTextAlignment(TextAlignment.CENTER)
+                                            .SetPaddingTop(3)
+                                            .SetPaddingBottom(3)
+                                        );
+                                    }
+
+                                    // --- DATI E RIGA FINALE DEL TOTALE ---
+                                    int totaleRigheH = listaHardware.Rows.Count;
+                                    int indiceCorrenteH = 0;
+
+                                    foreach (DataRow rigaH in listaHardware.Rows)
+                                    {
+                                        indiceCorrenteH++;
+                                        bool isUltimaRiga = (indiceCorrenteH == totaleRigheH); // Riconosce la riga del TOTALE COMPLESSIVO
+
+                                        for (int i = 0; i < rigaH.ItemArray.Length; i++)
+                                        {
+                                            object item = rigaH.ItemArray[i];
+                                            string cellText = (item == null || item is DBNull) ? "" : item.ToString();
+
+                                            Cell cell = new Cell().Add(new Paragraph(cellText))
+                                                .SetFontSize(8)
+                                                .SetPaddingTop(2)
+                                                .SetPaddingBottom(2);
+
+                                            // Allineamento a sinistra per la categoria, a destra/centro per i numeri
+                                            if (i == 0)
+                                            {
+                                                cell.SetTextAlignment(TextAlignment.LEFT);
+                                            }
+                                            else
+                                            {
+                                                cell.SetTextAlignment(TextAlignment.CENTER);
+                                            }
+
+                                            // STYLING SPECIALE PER L'ULTIMA RIGA (Totale Complessivo)
+                                            //if (isUltimaRiga)
+                                            //{
+                                            //    cell.SetBackgroundColor(new DeviceRgb(220, 220, 220)); // Grigio evidenziato per il totale
+                                            //}
+
+                                            tableH.AddCell(cell);
+                                        }
+                                    }
+
+                                    // 1. Aggiungiamo la tabella al documento (flusso normale)
+                                    PdfFont fontBoldH = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                                    document.Add(tableH);
+
+
+                                    //// 3. Elenco degli allegati - FLUSSO NATURALE (subito sotto il titolo degli allegati)
+                                    //document.Add(new Paragraph("1. Prospetto analitico Beni Mobili U.O.T.E.P. (Beni Etichettati e Non Etichettati).\n2. Prospetto analitico Dotazioni Informatiche ed Elettroniche con numeri di seriale.")
+                                    //    .SetTextAlignment(TextAlignment.LEFT)
+                                    //    .SetFontSize(10)
+                                    //    .SetMarginTop(5));
+
+                                    // --- FIRME (Queste rimangono a posizione fissa in fondo alla pagina, poiché sono i piè di pagina) ---
+                                    //document.Add(new Paragraph("Estensore: Cap. Scafaro G.")
+                                    //   // .SetFixedPosition(70, 150, 100)
+                                    //    .SetTextAlignment(TextAlignment.LEFT)
+                                    //    .SetFontSize(8));
+
+                                    //document.Add(new Paragraph("Il Comandante di Reparto")
+                                    //    //.SetFixedPosition(leftMargin, 80, usableWidth)
+                                    //    .SetTextAlignment(TextAlignment.RIGHT)
+                                    //    .SetFontSize(9)
+                                    //    );
+                                    // 1. Creiamo una tabella a 2 colonne (50% e 50% della larghezza)
+                                    Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 50f, 50f }));
+                                    signatureTable.SetWidth(UnitValue.CreatePercentValue(100));
+
+                                    // 2. Cella di sinistra (Estensore)
+                                    Cell leftCell = new Cell()
+                                        .Add(new Paragraph("Estensore: Cap. Scafaro G.").SetFontSize(8))
+                                        .SetTextAlignment(TextAlignment.LEFT)
+
+                                        .SetBorder(null);
+
+                                    // 3. Cella di destra (Comandante)
+                                    Cell rightCell = new Cell()
+                                        .Add(new Paragraph("Il Comandante di Reparto").SetFontSize(9))
                                         .SetTextAlignment(TextAlignment.RIGHT)
-                                        .SetFontSize(9));
+                                        .SetBorder(null);
 
-                                    document.Add(new Paragraph("_______________________")
-                                        .SetFixedPosition(leftMargin, 60, usableWidth)
-                                        .SetTextAlignment(TextAlignment.RIGHT)
-                                        .SetFontSize(9));
-                                    //                                    document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                                    // 4. Aggiungiamo le celle alla tabella e la tabella al documento
+                                    signatureTable.AddCell(leftCell);
+                                    signatureTable.AddCell(rightCell);
 
-                                    //                                    float pageWidth = PageSize.A4.GetWidth();
-                                    //                                    float leftMargin = 36;
-                                    //                                    float usableWidth = pageWidth - (leftMargin * 2);
+                                    document.Add(signatureTable);
 
-                                    //                                    // --- TABELLA ---
-                                    //                                    const int colonneDati = 3; //colonne da stampare
-                                    //                                   // const int colonneTotali = colonneDati + 1; //stampa progressivo del record stamapato
+                                    //document.Add(new Paragraph("_______________________")
+                                    //    //.SetFixedPosition(leftMargin, 60, usableWidth)
+                                    //    .SetTextAlignment(TextAlignment.RIGHT)
+                                    //    .SetFontSize(9));
 
-
-
-                                    ////                                    Vuoi scendere verso il basso --> Diminuisci la Y(es.da 700 a 500). salire verso l'alto--> Aumenta la Y (es. da 500 a 700, avvicinandoti a 842).
-                                    //                                    float[] columnLarghezza = { 50f, 16f, 16f, 18f };
-
-                                    //                                    float sx = 10f;
-                                    //                                    float y = 700f - 500f; // 742 punti dal fondo (cioè 100 punti dal bordo superiore)
-                                    //                                    float l = 535f;
-
-
-                                    //                                    Table table = new Table(UnitValue.CreatePercentArray(columnLarghezza));
-                                    //                                   // Table table = new Table(columnWidths);
-                                    //                                    table.SetWidth(UnitValue.CreatePercentValue(50));
-                                    //                                    table.SetHorizontalAlignment(HorizontalAlignment.CENTER);
-
-                                    //                                    table.SetFixedPosition(sx, y, l); // Posiziona la tabella con coordinate corrette
-                                    //                                    //table.SetMarginTop(1);
-                                    //                                    // Intestazione
-                                    //                                    //table.AddHeaderCell(new Cell().Add(new Paragraph("#")).SetBackgroundColor(ColorConstants.LIGHT_GRAY).SetFontSize(10));
-                                    //                                    for (int i = 0; i <= colonneDati; i++)
-                                    //                                    {
-                                    //                                        table.AddHeaderCell(new Cell()
-                                    //                                            .Add(new Paragraph(inv.Columns[i].ColumnName.ToUpper()))
-                                    //                                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-                                    //                                            .SetFontSize(10)
-                                    //                                            .SetPaddingTop(2)
-                                    //                                            .SetPaddingBottom(2)
-                                    //                                        );
-                                    //                                    }
-
-
-                                    //                                    // Dati
-                                    //                                    int contatoreRiga = 1;
-                                    //                                    foreach (DataRow riga in inv.Rows)
-                                    //                                    {
-
-                                    //                                        //table.AddCell(new Cell().Add(new Paragraph(contatoreRiga.ToString())).SetFontSize(8).SetTextAlignment(TextAlignment.CENTER));
-                                    //                                        for (int i = 0; i < riga.ItemArray.Length ; i++) // totale colonne 
-                                    //                                        {
-                                    //                                            object item = riga.ItemArray[i];
-                                    //                                            string cellText;
-                                    //                                            if (item == null || item is DBNull) { cellText = ""; }
-                                    //                                            //else if (i == 4) { cellText = item is DateTime ? ((DateTime)item).ToString("dd/MM/yyyy") : item.ToString(); }
-                                    //                                            //else if (i == 5) { cellText = item is TimeSpan ? ((TimeSpan)item).ToString("hh\\:mm") : item.ToString(); }
-                                    //                                            //else if (i == 6) { cellText = item is double ? ((double)item).ToString("N2") : item.ToString(); }
-                                    //                                            //else { cellText = item.ToString(); }
-                                    //                                            cellText = item.ToString();
-                                    //                                            table.AddCell(new Cell().Add(new Paragraph(cellText)).SetFontSize(8)
-                                    //                                                .SetPaddingTop(2)    // <-- PADDING SUPERIORE RIDOTTO
-                                    //                                                .SetPaddingBottom(2) // <-- PADDING INFERIORE RIDOTTO
-                                    //                                                .SetHeight(30)
-                                    //                                                );
-
-                                    //                                        }
-                                    //                                        contatoreRiga++;
-                                    //                                    }
-                                    //                                    document.Add(table);
-
-                                    //                                    // Firma
-                                    //                                    float signatureTextY = 80;
-                                    //                                    float signatureLineY = 60;
-                                    //                                    document.Add(new Paragraph("Estensore : Cap. Scafaro G.")
-                                    //                                      .SetFixedPosition(72, 150, 300)
-                                    //                                      .SetTextAlignment(TextAlignment.RIGHT)
-                                    //                                      .SetFontSize(8));
-
-                                    //                                    document.Add(new Paragraph("Il Comandante di Reparto").SetFixedPosition(leftMargin, signatureTextY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
-                                    //                                    document.Add(new Paragraph("_______________________").SetFixedPosition(leftMargin, signatureLineY, usableWidth).SetTextAlignment(TextAlignment.RIGHT));
-                                } 
+                                }
                             }
                         }
                     }
